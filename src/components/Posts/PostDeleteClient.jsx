@@ -1,0 +1,42 @@
+"use client";
+
+import React from "react";
+import { useRouter } from "next/navigation";
+import { deletePost } from "../../service/post";
+import ImageButton from "../shared/ImageButton";
+import TrashcanIcon from "../ui/TrashcanIcon";
+import PencilIcon from "../ui/PencilIcon";
+
+export default function PostDeleteClient({ boardType, postid }) {
+  const router = useRouter();
+
+  const onClickPostDeleteCancel = () => {
+    router.push(`/posts/${postid}`);
+  };
+
+  const onClickPostDeleteConfirm = async () => {
+    const res = await deletePost(postid);
+    if (res) {
+      // Updated status code to represent successful deletion
+      // need to fix: should go remember its board name
+      router.push(`/boards/${boardType}`);
+    } else {
+      console.error(res);
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <ImageButton
+        icon={<PencilIcon color="gray" />}
+        text="취소"
+        onClick={onClickPostDeleteCancel}
+      />
+      <ImageButton
+        icon={<TrashcanIcon color="gray" />}
+        text="삭제"
+        onClick={onClickPostDeleteConfirm}
+      />
+    </div>
+  );
+}
