@@ -10,8 +10,8 @@ export async function POST(request) {
   const transport = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.NEXT_PUBLIC_KISA_EMAIL,
-      pass: process.env.NEXT_PUBLIC_KISA_PASSWORD,
+      user: process.env.KISA_EMAIL,
+      pass: process.env.KISA_PASSWORD,
     },
   });
 
