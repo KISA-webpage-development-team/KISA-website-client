@@ -1,18 +1,28 @@
+import Image from "next/image";
 import React from "react";
-import SectionTitle from "../../../../../components/Info/SectionTitle";
+
+// sub-ui components
+import DetailThumbnail from "../../../../../components/Info/DetailThumbnail";
+import DetailTitle from "../../../../../components/Info/DetailTitle";
+import DetailDescription from "../../../../../components/Info/DetailDescription";
+
+import { campusCentralData } from "../../../../../config/static/detailPageData";
 
 export default function CentralCampusDetail() {
-  const infoType = "Campus";
-  const sectionCentral = "central";
-  const centralText = "Central Campus";
-
   return (
-    <div className="flex justify-center">
-      <SectionTitle
-        infoType={infoType.toLowerCase()}
-        sectionName={sectionCentral}
-        sectionText={centralText}
-      />
+    <div className="flex flex-col items-center w-full gap-48 pb-36">
+      {campusCentralData.map(({ id, title, desc }, _) => (
+        <div id={id} key={id} className="flex flex-col w-full items-center ">
+          {/* 1. Detail Thumbnail Image */}
+          <DetailThumbnail id={id} />
+          <div className="mt-12 flex flex-col items-center gap-16 w-full px-36">
+            {/* 2. Detail Section Title */}
+            <DetailTitle title={title} />
+            {/* 3. Detail Section Description  */}
+            <DetailDescription desc={desc} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

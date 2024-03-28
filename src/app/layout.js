@@ -28,7 +28,7 @@ export default async function RootLayout({ children }) {
           </header>
 
           {/* Main Content */}
-          <main className="grow ">
+          <main className="grow">
             <div className="max-w-screen-2xl px-[75px] h-full mx-auto">
               {children}
             </div>
