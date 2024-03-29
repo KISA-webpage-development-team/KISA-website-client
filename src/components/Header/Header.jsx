@@ -54,9 +54,9 @@ export default function Header() {
             />
           </div>
         )}
-        <div className="ml-3">
+        {/* <div className="ml-3">
           <LoginButton session={session} />
-        </div>
+        </div> */}
 
         {/* mobile header menu button */}
         <div className="xl:hidden">
