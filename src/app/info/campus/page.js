@@ -10,7 +10,7 @@ import { campusPageData } from "../../../config/static/infoPageData";
 import SectionIntro from "../../../components/Info/SectionIntro";
 
 export default function CampusInfoPage() {
-  const { infoType, sections } = campusPageData;
+  const { infoType, infoTitle, sections } = campusPageData;
 
   return (
     <section
@@ -18,7 +18,7 @@ export default function CampusInfoPage() {
     pb-[100px] md:pb-[125px] lg:pb-[150px]"
     >
       {/* Information title section divider */}
-      <InfoTitle infoType={infoType} />
+      <InfoTitle title={infoTitle} />
 
       {/* Intro + Description */}
       <div

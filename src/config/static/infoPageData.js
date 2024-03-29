@@ -1,7 +1,8 @@
 // infoPageData: /info page들에 들어가는 각종 data들이 JSON 형태로 저장됩니다.
 
 // ** JSON structure **
-// infoType: 페이지의 제목
+// infoType: 페이지의 제목 id
+// infoTitle: 페이지의 제목
 // sections: 배열로 이루어진 페이지 섹션들
 //      sectionName: 페이지의 Link url을 위한 텍스트 (/info/sectionName)
 //      sectionText: 페이지의 서브 제목
@@ -12,6 +13,7 @@
 // /info/campus/page.js
 const campusPageData = {
   infoType: "Campus",
+  infoTitle: "Campus",
   sections: [
     // Central Campus
     {
@@ -134,7 +136,8 @@ const campusPageData = {
 // [TRAVEL]
 // /info/travel/page.js
 const travelPageData = {
-  infoType: "여행",
+  infoType: "travel",
+  infoTitle: "여행",
   // Ann Arbor + Detroit + 근교 도시 및 명소
   sections: [
     // Ann Arbor
@@ -165,6 +168,8 @@ const travelPageData = {
     {
       sectionName: "detroit",
       sectionText: "Detroit",
+      sectionIntro:
+        "앤아버 근교에 있는 대도시인 디트로이트는 관광 명소가 다른 대도시보다 많지는 않지만 버스 타고 40분이면 갈 수 있는 만큼 당일치기로 여행하기 적합한 장소입니다. 근래에 D2A2라는 디트로이트와 앤아버를 왕복하는 버스 노선이 생겨 편도 $6이라는 저렴한 가격으로 당일치기 여행을 갈 수 있습니다.",
       contentList: [
         {
           name: "Comercia Park",
@@ -217,7 +222,8 @@ const travelPageData = {
 // [SPORTS]
 // /info/sports/page.js
 const sportsPageData = {
-  infoType: "스포츠",
+  infoType: "sports",
+  infoTitle: "스포츠",
   sections: [
     // 운동시설
     {
@@ -274,7 +280,8 @@ const sportsPageData = {
 // [RESTAURANTS]
 // /info/restaurants/page.js
 const restaurantsPageData = {
-  infoType: "맛집",
+  infoType: "restaurants",
+  infoTitle: "맛집",
   // 한식 + 아시안 + 햄버거 & 피자 + 디저트 + 파인 다이닝 + 기타
   sections: [
     // 한식

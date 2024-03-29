@@ -11,7 +11,7 @@ import SectionGrid from "../../../components/Info/SectionGrid";
 import SectionIntro from "../../../components/Info/SectionIntro";
 
 export default function SportsPage() {
-  const { infoType, sections } = sportsPageData;
+  const { infoType, infoTitle, sections } = sportsPageData;
 
   return (
     <section
@@ -19,7 +19,7 @@ export default function SportsPage() {
 pb-[100px] md:pb-[125px] lg:pb-[150px]"
     >
       {/* Information title section divider */}
-      <InfoTitle infoType={infoType} />
+      <InfoTitle title={infoTitle} />
 
       {/* Description */}
       <div

@@ -6,7 +6,7 @@ export default function SectionIntro({ sectionIntro }) {
 
   return (
     <p
-      className={`${sejongHospitalLight.className} text-center text-base md:text-lg lg:text-xl`}
+      className={`${sejongHospitalLight.className} text-center text-base md:text-lg lg:text-xl max-w-4xl mx-auto`}
     >
       {sectionIntro}
     </p>

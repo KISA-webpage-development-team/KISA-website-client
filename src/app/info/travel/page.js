@@ -6,7 +6,7 @@ import { travelPageData } from "../../../config/static/infoPageData";
 import SectionIntro from "../../../components/Info/SectionIntro";
 
 export default function TravelPage() {
-  const { infoType, sections } = travelPageData;
+  const { infoType, infoTitle, sections } = travelPageData;
 
   return (
     <section
@@ -14,7 +14,7 @@ export default function TravelPage() {
   pb-[100px] md:pb-[125px] lg:pb-[150px]"
     >
       {/* Information title section divider */}
-      <InfoTitle infoType={infoType} />
+      <InfoTitle title={infoTitle} />
 
       {/* Sections: Ann Arbor + Detroit + 근교 도시 및 명소 */}
       <div className="flex flex-col gap-48 md:gap-64 lg:gap-72 mt-8 md:mt-10 lg:mt-12">

@@ -10,7 +10,7 @@ import { campusCentralData } from "../../../../../config/static/detailPageData";
 
 export default function CentralCampusDetail() {
   return (
-    <div className="flex flex-col items-center w-full gap-48 pb-36">
+    <section className="flex flex-col items-center w-full gap-48 pb-36">
       {campusCentralData.map(({ id, title, desc }, _) => (
         <div id={id} key={id} className="flex flex-col w-full items-center ">
           {/* 1. Detail Thumbnail Image */}
@@ -23,6 +23,6 @@ export default function CentralCampusDetail() {
           </div>
         </div>
       ))}
-    </div>
+    </section>
   );
 }
