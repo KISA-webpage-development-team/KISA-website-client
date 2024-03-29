@@ -3,27 +3,18 @@ import InfoTitle from "../../../components/shared/InfoTitle";
 
 import SectionGrid from "../../../components/Info/SectionGrid";
 import SectionTitle from "../../../components/Info/SectionTitle";
+import SectionIntro from "../../../components/Info/SectionIntro";
+
+import {
+  housingPageOnCampusData,
+  housingPageOffCampusData,
+} from "../../../config/static/infoPageData";
 
 export default function HousingPage() {
-  const infoType = "Housing";
+  const infoType = "housing";
+  const { sections: onCampusSections } = housingPageOnCampusData;
 
-  const sectionOnCampus = "On-Campus Housing";
-  const onCampusText = "On-Campus Housing";
-  const onCampusContents = [];
-
-  const sectionCentral = "Central Campus";
-  const centralText = "Central Campus";
-  const centralContents = [];
-
-  const sectionHill = "Hill Area";
-  const hillText = "Hill Area";
-
-  const sectionNorth = "North Campus";
-  const northText = "North Campus";
-
-  const sectionOffCampus = "Off-Campus Housing";
-  const offCampusText = "Off-Campus Housing";
-  const offCampusContents = [];
+  const { sections: offCampusSections } = housingPageOffCampusData;
 
   return (
     <section
@@ -31,36 +22,74 @@ export default function HousingPage() {
 pb-[100px] md:pb-[125px] lg:pb-[150px]"
     >
       {/* Information title section divider */}
-      <InfoTitle infoType={infoType} />
+      <InfoTitle title="Housing" />
       {/* Sections: On Campus + Off Campus */}
+      <div className="mt-8 md:mt-10 lg:mt-12">
+        <SectionTitle
+          infoType={infoType.toLowerCase()}
+          sectionName="on-campus"
+          sectionText="On-Campus Housing"
+        />
+      </div>
+
       <div className="flex flex-col gap-48 md:gap-64 lg:gap-72 mt-8 md:mt-10 lg:mt-12">
         {/* On-Campus Housing */}
-        <div className="flex flex-col gap-6 md:gap-10 lg:gap-12 bg-yellow-300">
-          <SectionTitle
-            infoType={infoType.toLowerCase()}
-            sectionName={sectionOnCampus}
-            sectionText={onCampusText}
-          />
-          {/* Sub Sections: Central + Hill + North */}
-          {/* Central Campus */}
 
-          {/* Hill Campus */}
+        {/* Sub Sections: Central + Hill + North */}
+        {onCampusSections.map((section, index) => {
+          const { sectionName, sectionText, sectionIntro, contentList } =
+            section;
+          return (
+            <div
+              key={index}
+              className="flex flex-col gap-6 md:gap-10 lg:gap-12"
+            >
+              <SectionTitle
+                align="left"
+                infoType={infoType.toLowerCase()}
+                sectionName={sectionName}
+                sectionText={sectionText}
+              />
+              <SectionIntro sectionIntro={sectionIntro} />
+              <SectionGrid
+                infoType={infoType.toLowerCase()}
+                sectionName={sectionName}
+                contentList={contentList}
+              />
+            </div>
+          );
+        })}
+      </div>
 
-          {/* North Campus */}
-        </div>
-        {/* Off-Campus Housing */}
-        <div className="flex flex-col gap-6 md:gap-10 lg:gap-12">
-          <SectionTitle
-            infoType={infoType.toLowerCase()}
-            sectionName={sectionOffCampus}
-            sectionText={offCampusText}
-          />
-          <SectionGrid
-            infoType={infoType.toLowerCase()}
-            sectionName={sectionOffCampus}
-            contentList={offCampusContents}
-          />
-        </div>
+      <div className="mt-24 md:mt-28 lg:mt-32">
+        <SectionTitle
+          infoType={infoType.toLowerCase()}
+          sectionName="off-campus"
+          sectionText="Off-Campus Housing"
+        />
+      </div>
+
+      <div className="flex flex-col gap-48 md:gap-64 lg:gap-72 mt-8 md:mt-10 lg:mt-12">
+        {/* On-Campus Housing */}
+
+        {/* Sub Sections: Central + Hill + North */}
+        {offCampusSections.map((section, index) => {
+          const { sectionName, sectionText, sectionIntro, contentList } =
+            section;
+          return (
+            <div
+              key={index}
+              className="flex flex-col gap-6 md:gap-10 lg:gap-12"
+            >
+              <SectionIntro sectionIntro={sectionIntro} />
+              <SectionGrid
+                infoType={infoType.toLowerCase()}
+                sectionName={sectionName}
+                contentList={contentList}
+              />
+            </div>
+          );
+        })}
       </div>
     </section>
   );

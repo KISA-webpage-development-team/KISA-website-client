@@ -133,6 +133,123 @@ const campusPageData = {
   ],
 };
 
+// [HOUSING]
+// /info/housing/page.js
+
+const housingPageOnCampusData = {
+  infoType: "housing",
+  infoTitle: "On-Campus Housing",
+  sections: [
+    // Central
+    {
+      sectionName: "on-campus",
+      sectionText: "Central",
+      contentList: [
+        {
+          name: "South Quad",
+          id: "south_quad",
+        },
+        {
+          name: "West Quad",
+          id: "west_quad",
+        },
+        {
+          name: "North Quad",
+          id: "north_quad",
+        },
+        {
+          name: "East Quad",
+          id: "east_quad",
+        },
+      ],
+    },
+
+    // Hill
+    {
+      sectionName: "on-campus",
+      sectionText: "Hill",
+      contentList: [
+        {
+          name: "Mosher Jordan\n(MOJO)",
+          id: "mosher_jordan",
+        },
+        {
+          name: "Alice Lloyd",
+          id: "alice_lloyd",
+        },
+        {
+          name: "Couzens",
+          id: "couzens",
+        },
+        {
+          name: "Stockwell",
+          id: "stockwell",
+        },
+        {
+          name: "Markley",
+          id: "markley",
+        },
+        {
+          name: "Oxford",
+          id: "oxford",
+        },
+      ],
+    },
+    // North
+    {
+      sectionName: "on-campus",
+      sectionText: "North",
+      contentList: [
+        {
+          name: "Bursley",
+          id: "bursley",
+        },
+        {
+          name: "Baits",
+          id: "baits",
+        },
+        {
+          name: "Michigan Learning Community\n(MLC)",
+          id: "michigan_learning_community",
+        },
+      ],
+    },
+  ],
+};
+const housingPageOffCampusData = {
+  infoType: "housing",
+  infoTitle: "Off-Campus Housing",
+  sections: [
+    // Central
+    {
+      sectionName: "off-campus",
+      sectionText: "Off-Campus Housing",
+      contentList: [
+        {
+          name: "Tower Plaza",
+          id: "tower_plaza",
+        },
+        {
+          name: "Landmark",
+          id: "landmark",
+        },
+        {
+          name: "University Tower\n(UT) ",
+          id: "university_tower",
+        },
+        {
+          name: "Saga Ann Arbor",
+          id: "saga_ann_arbor",
+        },
+        {
+          name: "HUB",
+          id: "hub",
+        },
+      ],
+    },
+  ],
+};
+
 // [TRAVEL]
 // /info/travel/page.js
 const travelPageData = {
@@ -450,4 +567,11 @@ const restaurantsPageData = {
   ],
 };
 
-export { campusPageData, travelPageData, sportsPageData, restaurantsPageData };
+export {
+  campusPageData,
+  housingPageOnCampusData,
+  housingPageOffCampusData,
+  travelPageData,
+  sportsPageData,
+  restaurantsPageData,
+};
