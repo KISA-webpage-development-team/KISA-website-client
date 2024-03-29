@@ -125,11 +125,11 @@ export default function Menu() {
           </button>
         </div>
       ))}
-      <Link key={"/contact"} href={"/contact"}>
+      {/* <Link key={"/contact"} href={"/contact"}>
         <p className="cursor-pointer text-black hover:text-gray-600">
           {"CONTACT"}
         </p>
-      </Link>
+      </Link> */}
     </div>
   );
 }
