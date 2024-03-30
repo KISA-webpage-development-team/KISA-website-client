@@ -14,7 +14,7 @@ export default function RestaurantsPage() {
 pb-[100px] md:pb-[125px] lg:pb-[150px]"
     >
       {/* Information title section divider */}
-      <InfoTitle infoType={infoType} />
+      <InfoTitle title={infoType} />
 
       {/* Sections: 한식 + 아시안 + 햄버거 & 피자 + 디저트 + 파인 다이닝 + 기타 */}
       <div className="flex flex-col gap-48 md:gap-64 lg:gap-72 mt-8 md:mt-10 lg:mt-12">

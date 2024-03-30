@@ -366,7 +366,7 @@ const sportsPageData = {
 
     // 종목별 안내
     {
-      sectionName: "miscSports",
+      sectionName: "misc-sports",
       sectionText: "종목별 안내",
       contentList: [
         {
