@@ -10,7 +10,7 @@ export default function RulePage() {
       className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
   pb-[100px] md:pb-[125px] lg:pb-[150px]"
     >
-      <InfoTitle infoType="회칙" />
+      <InfoTitle title="회칙" />
       <p
         className={`${sejongHospitalLight.className} px-28 mt-16 md:mt:20 lg:mt-24 
       text-base md:text-lg lg:text-xl`}

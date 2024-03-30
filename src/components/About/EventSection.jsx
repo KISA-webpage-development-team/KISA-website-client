@@ -15,7 +15,7 @@ export default function EventSection({ event }) {
         <EventSectionDesc desc={desc} />
       </div>
 
-      <div>
+      <div className="flex sm:block w-full justify-center">
         <EventSectionImage id={id} imageTitle={imageTitle} />
       </div>
     </div>
