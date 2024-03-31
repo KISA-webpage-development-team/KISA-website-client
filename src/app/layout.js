@@ -38,6 +38,10 @@ export default async function RootLayout({ children }) {
           <footer className="bottom-0 z-0">
             <Footer />
           </footer>
+
+          {/* <section className="w-full h-full flex justify-center items-center">
+            <h1 className="text-5xl font-bold">Under Construction...</h1>
+          </section> */}
         </body>
       </SessionProvider>
     </html>
