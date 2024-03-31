@@ -4,7 +4,7 @@ import { backendUrl } from "../config/backendUrl";
 // pass user email to check whether user is admin
 export async function getIsAdmin(email) {
   try {
-    const url = `http://127.0.0.1:8000/api/v1/auth/isAdmin/`;
+    const url = `${backendUrl}/auth/isAdmin/`;
     // const data = { email: email };
     const response = await axios.get(url, { params: { email: email } });
     // console.log("HELLO");
@@ -19,7 +19,7 @@ export async function getIsAdmin(email) {
     // console.log("HEEEEEE");
     return false;
   }
-  // const url = `http://127.0.0.1:8000/api/v1/auth/isAdmin/`;
+  // const url = `${backendUrl}/auth/isAdmin/`;
   // axios.get(url, {params: { email: email } })
   //   .then((response) => {
   //     if (response.status === 200){
@@ -48,7 +48,7 @@ export function getIsAdminFake(email) {
 }
 
 export async function getUserInfo(email) {
-  const url = `http://127.0.0.1:8000/api/v1/users/${email}/`;
+  const url = `${backendUrl}/users/${email}/`;
   try {
     const response = await axios.get(url);
     console.log(response.data);
@@ -59,7 +59,7 @@ export async function getUserInfo(email) {
 }
 
 export async function getPostsByUser(email) {
-  const url = `http://127.0.0.1:8000/api/v1/users/${email}/posts`;
+  const url = `${backendUrl}/users/${email}/posts`;
   try {
     const response = await axios.get(url);
     // console.log(response.data);
@@ -70,7 +70,7 @@ export async function getPostsByUser(email) {
 }
 
 export async function getCommentsByUser(email) {
-  const url = `http://127.0.0.1:8000/api/v1/users/${email}/comments`;
+  const url = `${backendUrl}/users/${email}/comments`;
   try {
     const response = await axios.get(url);
     // console.log(response.data);

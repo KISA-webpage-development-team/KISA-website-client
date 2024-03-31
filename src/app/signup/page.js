@@ -34,7 +34,7 @@ export default function SignUpPage() {
 
     // send /auth/signup api call to create a new user
 
-    const url = `http://127.0.0.1:8000/api/v1/auth/signup/`; // not working with backendUrl.js...
+    const url = `${backendUrl}/auth/signup/`; // not working with backendUrl.js...
     try {
       const res = await axios.post(url, userData);
       if (res.status === 201) {

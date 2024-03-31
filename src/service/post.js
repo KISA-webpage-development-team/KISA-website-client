@@ -2,7 +2,7 @@ import axios from "axios";
 import { backendUrl } from "../config/backendUrl";
 
 export async function createReadCountCookie(postid) {
-  const url = `http://127.0.0.1:8000/api/v1/cookies/post/${postid}/`;
+  const url = `${backendUrl}/cookies/post/${postid}/`;
   try {
     const response = await axios.post(url, null, {
       withCredentials: true,
@@ -25,7 +25,7 @@ export async function createReadCountCookie(postid) {
 export async function createPost(data) {
   console.log(data);
   // const url = `${backendUrl}/posts/`;
-  const url = `http://127.0.0.1:8000/api/v1/posts/`; // currently env doesn't work
+  const url = `${backendUrl}/posts/`; // currently env doesn't work
   try {
     const response = await axios.post(url, data);
     // console.log(response.data);
@@ -36,7 +36,7 @@ export async function createPost(data) {
 }
 
 export async function getSinglePost(postid) {
-  const url = `http://127.0.0.1:8000/api/v1/posts/${postid}/`;
+  const url = `${backendUrl}/posts/${postid}/`;
 
   try {
     const response = await axios.get(url);
@@ -48,7 +48,7 @@ export async function getSinglePost(postid) {
 
 export async function updatePost(postid, data) {
   // const url = `${backendUrl}/posts/${postid}/`;
-  const url = `http://127.0.0.1:8000/api/v1/posts/${postid}/`; // currently env doesn't work
+  const url = `${backendUrl}/posts/${postid}/`; // currently env doesn't work
   try {
     const response = await axios.patch(url, data);
     return response;
@@ -59,7 +59,7 @@ export async function updatePost(postid, data) {
 
 export async function deletePost(postid) {
   // const url = `${backendUrl}/posts/${postid}`;
-  const url = `http://127.0.0.1:8000/api/v1/posts/${postid}/`; // currently env doesn't work
+  const url = `${backendUrl}/posts/${postid}/`; // currently env doesn't work
   try {
     const response = await axios.delete(url);
     console.log(response);
@@ -71,7 +71,7 @@ export async function deletePost(postid) {
 
 export async function incrementReadCount(postid) {
   // const url = `${backendUrl}/posts/${postid}/readcount`;
-  const url = `http://127.0.0.1:8000/api/v1/posts/readCount/${postid}/`; // currently env doesn't work
+  const url = `${backendUrl}/posts/readCount/${postid}/`; // currently env doesn't work
   try {
     const response = await axios.patch(url);
     return response;
