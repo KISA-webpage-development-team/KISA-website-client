@@ -509,14 +509,6 @@ const restaurantsPageData = {
           id: "milk_and_froth",
         },
         {
-          name: "Cannelle",
-          id: "cannelle",
-        },
-        {
-          name: "RoosRoast Liberty",
-          id: "roosroast_liberty",
-        },
-        {
           name: "Comet Coffee",
           id: "comet_coffee",
         },
