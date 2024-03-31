@@ -114,6 +114,198 @@ const campusCentralData = [
       </p>
     ),
   },
+  {
+    id: "mason_angell_hall",
+    title: "Mason Hall (MH)/\nAngell Hall (AH)",
+    desc: (
+      <p>
+        (1) 캠퍼스 내에서 단연코 가장 다양한 전공의 강의들이 진행되는
+        빌딩입니다. Angell Hall Auditorium에서는 강의 및 시험들이 자주 열리고
+        Mason Hall 에서는 20 - 30명 규모의 학생들이 수강하는 과목의 강의들이
+        진행됩니다.
+        <br />
+        <br />
+        (2) Mason Hall 1층에는 엄청난 규모의 컴퓨터 랩인 Fishbowl 이 있으며
+        컴퓨터 및 다양한 용도의 프린터들이 있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "ross_school_of_business",
+    title: "Ross School of Business",
+    desc: (
+      <p>
+        (1) 학교에서 가장 좋고 새로운 시설을 갖춘 빌딩인 경영학과 빌딩입니다.
+        대부분의 경영학 수업들이 여기서 진행되고 교수와 학생들 간의 소통을
+        중요시하기 때문에 강의실의 형태가 보통의 강의실과는 다릅니다. 교실 화면
+        스크린도 매우 크기 때문에 슬라이드를 보기에 매우 편합니다.
+        <br />
+        <br />
+        (2) 경영대이기 때문에 경영 동아리 학생들이 종종 정장을 입고 돌아다니는
+        모습을 볼 수 있는데 Ross에서만 진행하는 Career Fair가 별도로 있습니다.
+        만약, 컨설팅이나 IB 등 유명한 대기업들에 관심이 있으시다면 가보는 것을
+        추천합니다. (웹사이트에 일정은 별도로 안내됩니다.)
+        <br />
+        <br />
+        (3) 스터디룸 예약은 Ross 학생들만 할 수 있습니다.
+        <br />
+        <br />
+        (4) 학교 캠퍼스 건물 중 유일하게 스타벅스가 있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "kinesiology_building",
+    title: "School of Kinesiology Building\n(SKB)",
+    desc: (
+      <p>
+        다소 중후한 겉모습과는 달리 내부는 현대적으로 디자인되어 있습니다.
+        중앙이 뚫려 있고 모든 층에서 Atrium을 볼 수 있게 하여 개방감이 있는
+        곳에서 공부를 하고 싶으시다면 한 번쯤은 가보셔도 좋습니다. 더불어 공부할
+        곳도 많습니다.
+      </p>
+    ),
+  },
+  {
+    id: "cctc",
+    title: "Central Campus Transit Center\n(CCTC)",
+    desc: (
+      <p>
+        (1) 캠퍼스를 가로지르는 다수의 지역 버스와 학교 버스가 정차하며 캠퍼스
+        내의 가장 큰 버스 정류장입니다.
+        <br />
+        <br />
+        (2) Northwood 및 Bursley Baits 버스 모두 North Campus 로 향해가지만
+        Bursley Baits 는 Chemistry Building 앞쪽에 있는 정거장에서 탑승해야 하며
+        Northwood 는 Bursley Baits 의 맞은편 정류장에서 탑승해야 합니다. 각 버스
+        모두 North Campus 의 Pierpoint 까지 약 10~15분 정도 소요됩니다.
+        <br />
+        <br />
+        (3) M bus 라는 애플리케이션을 다운 받으면 모든 버스의 동선, 루트, 및
+        실시간 위치와 시간까지 확인 가능합니다.
+      </p>
+    ),
+  },
+  {
+    id: "chemistry_building",
+    title: "Chemistry Building",
+    desc: (
+      <p>
+        (1) CCTC 바로 옆에 위치한 화학과 빌딩은 건물 3개를 붙여놓은 엄청나게 큰
+        건물로 각자 건물의 층고가 다릅니다.
+        <br />
+        <br />
+        (2) CHEM 180: 건물에서 가장 큰 강의실이며 건물이 자체가 크고 캠퍼스
+        중앙에 있다보니 경제학과 디스커션 등 다른 전공 수업들도 종종 열리기
+        합니다.
+        <br />
+        <br />
+        (3) Atrium: 만약 CHEM 빌딩 교실이 A로 시작한다면 지하에 있는 Atrium에
+        수업이 있습니다. Atrium에는 실험 강의들이 진행되는 랩들이 모여있습니다.
+        지하의 한쪽은 600대 랩이고 다른 한쪽은 700대 랩입니다.
+        <br />
+        <br />
+        (4) 지상 1층: 1층 중앙에 위치한 Science Learning Center (SLC)에서 주로
+        자연 과학 계열 오피스 아워가 많이 열립니다.
+        <br />
+        <br />
+        (5) 지상 3,4층: 강의실보단 주로 리서치랩들과 교수님 오피스가 있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "randall_laboratory",
+    title: "Randall Laboratory",
+    desc: (
+      <p>
+        (1) 이름에서 알 수 있듯이 대학원생들을 위한 도서관입니다. 하지만
+        학부생들이 출입해도 무관합니다.
+        <br />
+        <br />
+        (1) Physics 교수님들의 오피스와 Physics Help Room이 있습니다.
+        <br />
+        <br />
+        (2) 해당 건물 뒤쪽으로 “Homer A. Neal Laboratory” 가 붙어있는데,
+        이곳에선 CoE 학생들이라면 필수로 들어야 하는 Physics 141 과 Physics 241
+        실험 수업들이 진행됩니다.
+        <br />
+        <br />
+        (3) 지하에는 실험실들이 많이 위치해있는데, 복도가 어둡고 으스스합니다.
+        또, 거의 모든 방문 앞에 붙어있는 빨간색 “DANGER” 경고 문구들은 으스스한
+        분위기를 한층 더 고조시켜줍니다.
+        <br />
+        <br />
+        (4) 중앙 엘리베이터가 매우 큽니다.
+        <br />
+        <br />
+        (5) Randall Laboratory 와 West Hall 을 연결해 주는 계단이 있는데, 양쪽
+        면이 유리로 되어있어서 마치 온실에 들어와있는 듯한 따뜻한 분위기를
+        느끼게 해줍니다.
+      </p>
+    ),
+  },
+  {
+    id: "cccb",
+    title: "Central Campus Classroom Building\n(CCCB)",
+    desc: (
+      <p>
+        2022년 지어진 새 건물로, 다양한 형태의 강의실이 존재하며 대부분이 큰
+        강의실 입니다.
+      </p>
+    ),
+  },
+  {
+    id: "east_hall",
+    title: "East Hall\n(EH)",
+    desc: (
+      <p>
+        (1) 수학과 빌딩으로 대학교에서 오래된 빌딩 중 하나입니다. 수재라고 부를
+        수 있는 수학과 학생들의 건물이기에 쉽게 쓰고 지울 수 있는 화이트보드
+        따위 쓰지 않는다는 마인드로 모든 곳에 화이트 보드와 마카 대신 칠판과
+        분필이 있습니다.
+        <br />
+        <br />
+        (2) 일요일 아침에 무료로 베이글을 나누어 줍니다. 일요일 아침부터 열심히
+        공부하는 모범생 느낌을 받고 싶다면 베이글 추천합니다.
+      </p>
+    ),
+  },
+  {
+    id: "lorch_hall",
+    title: "Lorch Hall\n(LORCH)",
+    desc: (
+      <p>
+        (1) 경제학과 빌딩이지만 빌딩 규모가 작기에 모든 경제학과 학생을 수용하기
+        어렵습니다.
+        <br />
+        <br />
+        (2) ECON 인트로 수업들은 이 빌딩에서 진행되고 시험들은 Lorch 140에서
+        진행되는 경우가 많습니다. 참고로 높은 레벨 수업들은 대부분 다른
+        빌딩들에서 진행됩니다.
+        <br />
+        <br />
+        (3) 경제학과 부서가 위치해 있고, 교수님들의 오피스아워가 종종 열립니다.
+      </p>
+    ),
+  },
+  {
+    id: "bell_tower",
+    title: "Bell Tower",
+    desc: (
+      <p>
+        (1) 캠퍼스 중앙에 위치한 상징적인 건축물입니다. 종을 치는 건물임에도
+        불구하고 건물 내 수업을 진행하는 교실이 있습니다.
+        <br />
+        <br />
+        (2) 보통 동일한 종소리가 나지만 특수한 경우, 하울의 움직이는 성 OST나
+        유명한 클래식 음악이 학생들에 의해 연주되는 경우도 있습니다.
+        <br />
+        <br />
+        (3) 실제로도 올라갈 수 있어 관심이 있으시면 한 번 올라가보시는 것도
+        추천드립니다.
+      </p>
+    ),
+  },
 ];
 const campusNorthData = [
   {
@@ -167,7 +359,7 @@ const campusNorthData = [
   },
   {
     id: "duderstadt_library",
-    title: "Duderstadt Library",
+    title: "Duderstadt Center / Library",
     desc: (
       <p>
         (1) 노스 캠퍼스에 있는 지상 3층, 지하 1층으로 이루어진 최대 규모의
@@ -193,6 +385,126 @@ const campusNorthData = [
         <br />
         <br />
         (5) Study Spaces 웹사이트에서 다인용 테이블을 예약할 수 있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "dow_engineering_building",
+    title: "Dow Engineering Building\n(DOW)",
+    desc: (
+      <p>
+        (1) 제법 많은 엔지니어링 수업이 진행되는 건물입니다. 바로 옆에 BBB
+        건물과 실내 통로로 연결되어 있으며, 사실상 붙어있는 한 건물로
+        취급합니다.
+        <br />
+        <br />
+        (2) 교실 밖에 있는 벤치 외에는 머물거나 공부할 수 있는 공간이
+        한정적이라, 대부분 수업을 위한 용도 외에는 방문할 일이 거의 없습니다.
+      </p>
+    ),
+  },
+  {
+    id: "bob_and_betty_beyster_building",
+    title: "Bob and Betty Beyster Building\n(BBB)",
+    desc: (
+      <p>
+        (1) DOW 빌딩과 연결되어 있으며, 1층에서 오피스 아워가 다분하게
+        이루어집니다.
+        <br />
+        <br />
+        (2) 1층에는 따로 조용하게 공부할 수 있는 공간이 마련되어 있으며, 그 외
+        공용 공간에 있는 벤치나 테이블은 주로 꽉 차 있습니다.
+        <br />
+        <br />
+        (3) 1층 외 고층들은 주로 오피스나 미팅룸으로 구성되어 있어, 교수님과
+        면담 혹은 오피스 아워를 위해 방문하게 됩니다.
+      </p>
+    ),
+  },
+  {
+    id: "george_g_brown_laboratories",
+    title: "George G. Brown Laboratories\n(GGBL)",
+    desc: (
+      <p>
+        (1) 간혹 수업이 존재하지만, 거의 학생들의 이동이 없는 건물입니다. 그런
+        만큼 공용 공간에서도 조용히 시간을 보낼 수 있는 숨겨진 공부 장소입니다.
+        <br />
+        <br />
+        (2) 전공에 따라 간혹 지도 교수님들의 오피스가 위치할 수 있습니다. 건물
+        내부 구조가 복잡하고 생소할 수 있어서 방문 계획이 있다면 시간을 넉넉하게
+        잡는 것을 추천합니다.
+      </p>
+    ),
+  },
+  {
+    id: "electrical_engineering_and_computer_science_building",
+    title: "Electrical Engineering and Computer Science Building\n(EECS)",
+    desc: (
+      <p>
+        (1) 많은 전기공학과 컴퓨터 관련 수업이 진행되는 건물입니다.
+        <br />
+        <br />
+        (2) 1층에는 미팅이나 공부를 위한 다인용 테이블이 구비되어 있지만 개수가
+        많지 않아 이용하기 어려워 오랫동안 공부하기보다는 주로 수업 전 대기 하기
+        위해 사용합니다.
+        <br />
+        <br />
+        (3) 1층 외에 층에는 오피스 아워가 존재하며, ECE (Electrical and Computer
+        Engineering) Advising Office 또한 존재합니다. Walk-in advising도
+        가능하기 때문에 ECE 전공 학생은 종종 방문합니다.
+      </p>
+    ),
+  },
+  {
+    id: "ford_motor_company_robotics_building",
+    title: "Ford Motor Company Robotics Building\n(FMCRB)",
+    desc: (
+      <p>
+        (1) Robotics 관련 수업이나 프로젝트 팀을 위하여 자주 방문하게 되는
+        건물입니다. 노스 캠퍼스의 다른 건물들이 밀집되어 있는 위치와 다소 떨어져
+        있어 방문해야 한다면 동선을 점검하는 걸 추천합니다.
+        <br />
+        <br />
+        (2) 근처에 버스 정류장 또한 존재하기 때문에 위치에 따라 다양한 버스로
+        통학이 가능합니다.
+      </p>
+    ),
+  },
+  {
+    id: "industrial_and_operations_engineering_building",
+    title: "Industrial and Operations Engineering Building\n(IOE)",
+    desc: (
+      <p>
+        (1) Lurie Engineering 바로 옆에 있으며 계단을 따라 내려가 보면 아름다운
+        Lurie Fountain 도 볼 수 있습니다. Duderstadt 도서관과 가까워 공강이 있을
+        때 가기 편리합니다. <br />
+        <br />
+        (2) 강의실이 많은 1층과 랩 수업들이 많은 지하로 나누어져 있습니다. IOE
+        수업들이 이 건물에서 진행되며 건물 규모가 크지 않아 교실을 찾기
+        용이합니다. <br />
+        <br />
+        (3) 많은 오피스 아워들이 (특히 IOE 201, 202, 265) IOE 1824에서
+        진행됩니다. <br />
+        <br />
+        (4) NERS Department 과 연결되어 있어 해당 출구로 나가면 센트럴로 가는
+        버스들을 (Northwood, Commuter South, Diag-to-Diag, etc) 바로 탑승할 수
+        있습니다. 그 전 정류장에서 사람들이 많이 타지 않기 때문에 앉아서 편하게
+        갈 수 있습니다
+      </p>
+    ),
+  },
+  {
+    id: "earl_v_moore_building",
+    title: "Earl V. Moore Building, School of Music\n(SM)",
+    desc: (
+      <p>
+        (1) Pierpont Commons 건너편에 있으며 음대생들의 주 빌딩입니다. 빌딩에
+        들어가면 라운지 느낌의 공간이 있으며 휴식 및 간식을 즐길 수 있는 공간이
+        있습니다.
+        <br />
+        <br />
+        (2) 건물이 꽤 크기에 강의실이 지하에 있으면 찾기가 어려울 수 있습니다.
+        하지만 각 방마다 세팅이 잘되어 있어 악기를 연주하기에 적합합니다.
       </p>
     ),
   },
@@ -986,6 +1298,286 @@ const sportsMiscSportsData = [
 ];
 // -------------------------------------------------------
 
+// [RESTAURANTS] ----------------------------------------------
+const restaurantsKoreanData = [
+  {
+    id: "tomukun_bbq",
+    title: "Tomukun BBQ",
+    desc: (
+      <p>
+        다양한 메뉴로 구성되어 있으며, 고기, 면류, 등등 선택지가 많아서
+        좋습니다. 점심 특선메뉴는 적당한 가격에 배불리 먹을 수 있으며 또한
+        공기밥이 무한리필입니다.
+      </p>
+    ),
+  },
+  {
+    id: "tomukun_noodle_bar",
+    title: "Tomukun Noodle Bar",
+    desc: (
+      <p>
+        대표 메뉴로는 쌀국수가 있으며 단일 메뉴 음식점과 다를 바 없을 정도로 타
+        메뉴의 성공률이 낮은 편입니다. 하지만 쌀국수를 시키신다면 한국
+        쌀국수집의 맛을 볼 수 있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "seoul_garden",
+    title: "Seoul Garden",
+    desc: (
+      <p>
+        센트럴 캠퍼스와 거리는 조금 있지만 맛있으며 고기를 구워 먹을 때 자주
+        방문하는 식당입니다.
+      </p>
+    ),
+  },
+  {
+    id: "the_seoul",
+    title: "The Seoul",
+    desc: (
+      <p>
+        센트럴 캠퍼스와 거리는 조금 있지만 맛있으며 고기를 구워 먹을 때 자주
+        방문하는 식당입니다.
+      </p>
+    ),
+  },
+  {
+    id: "hola_seoul",
+    title: "Hola Seoul",
+    desc: (
+      <p>
+        규모가 작은 식당이라 앉을 자리는 많이 없지만 가격도 높지 않고 팝콘치킨,
+        벤토박스, 컵밥 등이 인기 메뉴입니다.
+      </p>
+    ),
+  },
+  {
+    id: "mama_satto",
+    title: "Mama Satto",
+    desc: (
+      <p>
+        양이 다른 한식당보다 많습니다. 돈까스 시키면 얼굴만한 돈까스 두 덩이가
+        나옵니다. 일식 위주(초밥, 롤, 우동, 라멘 등)로 판매합니다.
+      </p>
+    ),
+  },
+  {
+    id: "rich_jc",
+    title: "Rich JC",
+    desc: <p>찌개류가 맛있으며 특별한 메뉴는 떡꼬치가 있습니다.</p>,
+  },
+  {
+    id: "kangs_restaurant",
+    title: "Kang's Restaurant",
+    desc: <p>양도 꽤 많은편이며 가격도 나쁘지 않습니다.</p>,
+  },
+  {
+    id: "noori_chicken",
+    title: "Noori Chicken",
+    desc: (
+      <p>
+        한국식 치킨을 팔고 소스도 종류가 많아서 취향대로 골라 먹을 수 있습니다.
+        특히 런치 메뉴들이 있는데 가격도 합리적이고 양도 괜찮습니다.
+      </p>
+    ),
+  },
+];
+const restaurantsAsianData = [
+  {
+    id: "no_thai",
+    title: "No Thai!",
+    desc: (
+      <p>
+        앤아버 한정 가성비 최고인 태국 음식점입니다. 노스 캠퍼스, 캐리 타운,
+        센트럴 캠퍼스에 각각 분점이 있어 접근성도 좋습니다.
+      </p>
+    ),
+  },
+  {
+    id: "kanbu",
+    title: "Kanbu",
+    desc: (
+      <p>
+        깐부에서만 파는 스시 브리토가 맛있습니다. 브리토 특성 상 많이 내용물이
+        흘러 나올 수 밖에 없어서 관심 있는 이성과 단둘이 하는 식사라면 스시
+        브리토는 지양하는 편이 좋습니다.
+      </p>
+    ),
+  },
+  {
+    id: "evergreen",
+    title: "Evergreen",
+    desc: (
+      <p>다운 타운에 위치한 중국 음식점으로 맛있는 마라 치킨이 있습니다.</p>
+    ),
+  },
+  {
+    id: "asian_legend",
+    title: "Asian Legend",
+    desc: (
+      <p>
+        가성비가 좋은 중국 음식점입니다. Diag 근처에 위치해 접근성도 좋습니다.
+      </p>
+    ),
+  },
+  {
+    id: "slurping_turtle",
+    title: "Slurping Turtle",
+    desc: (
+      <p>
+        일본식 라멘이 주력 메뉴입니다. 웨이팅이 길어 바쁜 시간 대에 가면 1시간은
+        기본으로 기다려야 합니다.
+      </p>
+    ),
+  },
+];
+const restaurantsHamburgerPizzaData = [
+  {
+    id: "joes_pizza",
+    title: "Joe's Pizza",
+    desc: (
+      <p>
+        뉴욕의 명물 피자로 스파이더맨이 배달하던 피자입니다. 한 조각에 4-5불로
+        가격이 조금 나가긴 하지만 가끔 먹고 싶은 생각이 드는 피자입니다.
+      </p>
+    ),
+  },
+  {
+    id: "nypd",
+    title: "NYPD",
+    desc: <p>평일 5pm 전에 Snackpass 로 주문하면 25% 됩니다.</p>,
+  },
+  {
+    id: "frita_batidos",
+    title: "Frita Batidos",
+    desc: (
+      <p>
+        다운타운에 위치한 쿠바 스타일 햄버거 및 스트리트 푸드를 드셔 보실 수
+        있습니다. 감자튀김과 계란 후라이가 들어간 햄버거 (Frita)가 과연 얼마나
+        맛있을지 의문을 품을 수 있지만 육즙을 품은 고기 패티와 환상의 조합을
+        자랑합니다. 쿠바 전통 밀크 셰이크 (Batidos) 도 추천합니다!
+      </p>
+    ),
+  },
+  {
+    id: "hop_cat",
+    title: "Hop Cat",
+    desc: (
+      <p>
+        햄버거 맛집으로 한 입에 다 들어가지 않는 사이즈의 버거들이 있습니다.
+        또한 양념이 많이 된 감자튀김도 매력적입니다.
+      </p>
+    ),
+  },
+];
+const restaurantsDessertsData = [
+  {
+    id: "blank_slate",
+    title: "Blank Slate",
+    desc: (
+      <p>
+        대표적인 아이스크림 맛집으로 캐리타운에 위치하고 있습니다. 다양하고
+        한국인들에게 생소한 메뉴들이 많아 사전조사 없이 가면 맛을 고르는데
+        상당한 시간이 걸립니다.
+      </p>
+    ),
+  },
+  {
+    id: "milk_and_froth",
+    title: "Milk and Froth",
+    desc: (
+      <p>
+        Blank Slate 못지 않게 맛있는 아이스크림 집입니다. 메뉴가 한정적이지만
+        맛이 중독성이 있어 한번가면 되돌아 올 수 없습니다. 흑임자 그리고
+        얼그레이 맛 아이스크림도 있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "comet_coffee",
+    title: "Comet Coffee",
+    desc: (
+      <p>
+        Nichels Arcade에 위치한 커피 맛집입니다. 다양한 메뉴를 즐길 순 없지만
+        날씨가 좋을 때 Arcade에 비치된 의자에 앉아 커피를 마시며 낭만을 즐길 수
+        있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "sweeting",
+    title: "Sweeting",
+    desc: (
+      <p>
+        버블티, 마라탕 등 중국 디저트들을 파는 가게입니다. 캠퍼스 내 마라 요리를
+        파는 가게 중 한국의 마라탕과 가장 비슷한 맛을 느낄 수 있는 곳입니다.
+      </p>
+    ),
+  },
+];
+const restaurantsFineDiningData = [
+  {
+    id: "aventura",
+    title: "Aventura",
+    desc: (
+      <p>
+        고급 스페인 레스토랑으로 분위기가 좋으며, 다양한 종류의 타파스와
+        빠에야를 메인으로 합니다. 가격대는 높지만 중요한 약속이 있을 때 방문하기
+        좋은 식당입니다. 디저트류에 포함되는 츄러스가 정말 맛있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "mani_osteria_bar",
+    title: "Mani Osteria Bar",
+    desc: (
+      <p>
+        이탈리안 음식점으로 다양하고 색다른 피자 & 파스타를 맛볼 수 있습니다.
+      </p>
+    ),
+  },
+  {
+    id: "savas",
+    title: "Sava's",
+    desc: (
+      <p>
+        가장 번화가인 State St. 삼거리에 위치하고 있으며 고급진 분위기에서
+        다양한 나라의 음식을 맛볼 수 있습니다. 다만 가성비면에서는 조금 떨어지긴
+        합니다.
+      </p>
+    ),
+  },
+  {
+    id: "pacific_rim_by_kana",
+    title: "Pacific Rim by Kana",
+    desc: (
+      <p>
+        본래 한국 음식점이었지만 현재는 현대식 Pan-Asian 음식을 제공하는
+        음식점입니다.
+      </p>
+    ),
+  },
+];
+const restaurantsOthersData = [
+  {
+    id: "zingermans_delicatessen",
+    title: "Zingerman's Delicatessen",
+    desc: (
+      <p>
+        샌드위치 및 델리 집이며 산처럼 쌓인 햄 샌드위치가 주력 메뉴입니다.
+        미국식 음식을 드셔보고 싶다면 한 번 정도는 가볼 만한 곳입니다.
+      </p>
+    ),
+  },
+  {
+    id: "culantro",
+    title: "Culantro",
+    desc: <p>페루 음식점입니다.</p>,
+  },
+];
+// -------------------------------------------------------
+
 export {
   campusCentralData,
   campusNorthData,
@@ -996,4 +1588,10 @@ export {
   travelNearbyData,
   sportsFacilityData,
   sportsMiscSportsData,
+  restaurantsKoreanData,
+  restaurantsAsianData,
+  restaurantsHamburgerPizzaData,
+  restaurantsDessertsData,
+  restaurantsFineDiningData,
+  restaurantsOthersData,
 };
