@@ -58,32 +58,32 @@ const menu = [
     ],
   },
 
-  // {
-  //   name: "게시판",
-  //   href: "/boards",
-  //   dropdowns: [
-  //     {
-  //       name: "공지사항",
-  //       href: "/boards/announcement",
-  //     },
-  //     {
-  //       name: "자유게시판",
-  //       href: "/boards/community",
-  //     },
-  //     {
-  //       name: "채용공고",
-  //       href: "/boards/job",
-  //     },
-  //     {
-  //       name: "Alumni",
-  //       href: "/boards/alumni",
-  //     },
-  //     {
-  //       name: "KISA 스폰서",
-  //       href: "/boards/sponsor",
-  //     },
-  //   ],
-  // },
+  {
+    name: "게시판",
+    href: "/boards",
+    dropdowns: [
+      {
+        name: "공지사항",
+        href: "/boards/announcement",
+      },
+      {
+        name: "자유게시판",
+        href: "/boards/community",
+      },
+      {
+        name: "채용공고",
+        href: "/boards/job",
+      },
+      {
+        name: "Alumni",
+        href: "/boards/alumni",
+      },
+      {
+        name: "KISA 스폰서",
+        href: "/boards/sponsor",
+      },
+    ],
+  },
 ];
 
 export default function Menu() {
