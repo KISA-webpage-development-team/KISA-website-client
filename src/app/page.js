@@ -5,7 +5,7 @@ import HomeBackground from "../components/Home/HomeBackground";
 export default function Home() {
   return (
     <section className="min-h-[847px] h-full w-full flex flex-col items-center">
-      <h1 className="text-5xl font-bold">Under Construction...</h1>
+      {/* <h1 className="text-5xl font-bold">Under Construction...</h1> */}
 
       {/* <HomeBackground /> */}
       {/* background */}
