@@ -23,17 +23,19 @@ export default function CheckListItem({ title, desc, index }) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start">
         {/* left: index. title */}
         <div
           onClick={handleClick}
-          className={`text-left ${sejongHospitalBold.className} cursor-pointer 
+          className={`text-left ${
+            sejongHospitalBold.className
+          } cursor-pointer mr-1
        ${
          isOpened
            ? "text-michigan-blue"
            : "hover:text-michigan-maize text-michigan-blue"
        }
-          text-2xl`}
+       text-lg md:text-xl lg:text-2xl`}
         >{`${index}. ${title}`}</div>
         {/* right: plus / minus icon */}
 
@@ -51,7 +53,8 @@ export default function CheckListItem({ title, desc, index }) {
       {/* content */}
 
       <div
-        className={`${sejongHospitalLight.className} text-xl pr-16 
+        className={`${sejongHospitalLight.className} 
+        text-base md:text-lg lg:text-xl pr-12 md:pr-14 lg:pr-16 
           ${accordionContentStyles}`}
       >
         {desc}

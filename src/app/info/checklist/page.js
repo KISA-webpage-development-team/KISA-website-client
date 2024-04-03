@@ -44,7 +44,7 @@ mt-8 md:mt-10 lg:mt-12 w-11/12 md:w-10/12 lg:w-9/12 px-2 md:px-4 lg:px-6"
 
       <div
         className="flex flex-col items-center gap-12 w-full
-      mt-12 md:mt-14 lg:mt-16 px-16"
+      mt-12 md:mt-14 lg:mt-16 px-10"
       >
         <h
           className={`${sejongHospitalBold.className} text-xl md:text-2xl lg:text-3xl`}
