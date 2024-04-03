@@ -20,7 +20,7 @@ export default function EventsPages() {
       mt-8 md:mt-12 lg:mt-16"
       >
         {eventsPageData.map((data, _) => (
-          <div key={data.id} className="w-full bg-yellow-200">
+          <div key={data.id} className="w-full">
             <EventSection event={data} />
           </div>
         ))}

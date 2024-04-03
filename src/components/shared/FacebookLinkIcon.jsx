@@ -6,14 +6,14 @@ import FacebookIcon from "../ui/FacebookIcon";
 
 const FacebookURL = "https://www.facebook.com/umich.kisa";
 
-export default function FacebookLinkIcon() {
+export default function FacebookLinkIcon({ color = "none" }) {
   const navigateToFacebook = () => {
     window.open(FacebookURL, "_blank");
   };
 
   return (
     <button onClick={navigateToFacebook}>
-      <FacebookIcon />
+      <FacebookIcon color={color} />
     </button>
   );
 }
