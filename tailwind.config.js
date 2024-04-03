@@ -15,6 +15,10 @@ module.exports = {
       objectPosition: {
         "center-bottom": "center bottom",
       },
+      colors: {
+        "michigan-blue": "#00274C",
+        "michigan-maize": "#FFCB05",
+      },
     },
   },
   plugins: [],

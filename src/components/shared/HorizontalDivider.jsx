@@ -1,5 +1,11 @@
 import React from "react";
 
-export default function HorizontalDivider() {
-  return <div className="border border-gray-100 rounded-lg"></div>;
+export default function HorizontalDivider({ color = "light" }) {
+  return (
+    <div
+      className={`border ${
+        color === "light" ? "border-gray-100" : "border-gray-500"
+      } rounded-lg`}
+    ></div>
+  );
 }
