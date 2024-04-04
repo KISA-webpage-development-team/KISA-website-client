@@ -5,7 +5,7 @@ export default function InfoTitle({ title }) {
   return (
     <h className="w-full flex flex-col gap-4">
       <p
-        className={`${sejongHospitalBold.className} text-3xl md:text-[34px] lg:text-[40px] text-left`}
+        className={`${sejongHospitalBold.className} text-2xl sm:text-3xl md:text-[34px] lg:text-[40px] text-left`}
       >
         {title}
       </p>
