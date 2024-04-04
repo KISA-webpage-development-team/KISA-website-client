@@ -29,7 +29,7 @@ export default async function RootLayout({ children }) {
 
           {/* Main Content */}
           <main className="grow">
-            <div className="max-w-screen-2xl px-[35px] sm:px-[40px] md:px-[60px] lg:px-[75px] h-full mx-auto">
+            <div className="max-w-screen-2xl px-[30px] md:px-[60px] lg:px-[75px] h-full mx-auto">
               {children}
             </div>
           </main>

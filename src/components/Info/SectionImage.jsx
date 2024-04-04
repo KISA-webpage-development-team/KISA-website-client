@@ -30,7 +30,7 @@ export default function SectionImage({
         {name.split("\n").map((line, index) => (
           <span
             key={index}
-            className={`${sejongHospitalBold.className} text-[#FFFDFD] text-base md:text-xl lg:text-[26px] leading-none text-center break-words`}
+            className={`${sejongHospitalBold.className} text-[#FFFDFD] text-sm sm:text-lg md:text-xl lg:text-2xl leading-none text-center break-words`}
           >
             {line}
           </span>

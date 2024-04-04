@@ -32,7 +32,7 @@ pb-[100px] md:pb-[125px] lg:pb-[150px]"
         />
       </div>
 
-      <div className="flex flex-col gap-48 md:gap-64 lg:gap-72 mt-8 md:mt-10 lg:mt-12">
+      <div className="flex flex-col gap-24 sm:gap-36 md:gap-48 lg:gap-64 mt-12 md:mt-20 lg:mt-28">
         {/* On-Campus Housing */}
 
         {/* Sub Sections: Central + Hill + North */}

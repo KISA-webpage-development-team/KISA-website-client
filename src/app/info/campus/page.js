@@ -43,7 +43,7 @@ export default function CampusInfoPage() {
       </div>
 
       {/* Sections: Central Campus + North Campus */}
-      <div className="flex flex-col gap-48 md:gap-64 lg:gap-72 mt-24 md:mt-32 lg:mt-36">
+      <div className="flex flex-col gap-24 sm:gap-36 md:gap-48 lg:gap-64 mt-12 md:mt-20 lg:mt-28">
         {sections.map((section, index) => {
           const { sectionName, sectionText, sectionIntro, contentList } =
             section;

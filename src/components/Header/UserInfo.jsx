@@ -14,7 +14,7 @@ export default function UserInfo({ email, image, name }) {
           alt="user profile"
         />
       </div>
-      <p className="text-lg ml-3 mr-3">{name}</p>
+      <p className="hidden sm:block text-lg ml-3 mr-3">{name}</p>
     </Link>
   );
 }
