@@ -12,7 +12,7 @@ export default function RulePage() {
     >
       <InfoTitle title="회칙" />
       <p
-        className={`${sejongHospitalLight.className} px-28 mt-16 md:mt:20 lg:mt-24 
+        className={`${sejongHospitalLight.className} px-4 sm:px-8 md:px-16 lg:px-24 mt-16 md:mt:20 lg:mt-24 
       text-base md:text-lg lg:text-xl`}
       >
         <p className={`${sejongHospitalBold.className}`}>제 1조</p>

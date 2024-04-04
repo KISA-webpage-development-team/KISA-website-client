@@ -9,13 +9,18 @@ import styles from "./aboutMainText.module.css";
 export default function AboutMainText() {
   return (
     <div className="flex flex-col items-center">
-      <h1 className={`${styles.arialCaption} ${arial.className}`}>
+      <h1
+        className={`${styles.arialCaption} ${arial.className} text-4xl md:text-5xl lg:text-6xl`}
+      >
         About KISA
       </h1>
-      <h3 className={`${sejongHospitalBold.className} mt-[88px] text-[28px]`}>
+      <h3
+        className={`${sejongHospitalBold.className} mt-12 md:mt-16 lg:mt-20 text-xl md:text-2xl lg:text-3xl 
+        break-words text-center`}
+      >
         Korean International Students Association at the University of Michigan
       </h3>
-      <div className="flex flex-col mt-[50px] gap-[50px] text-center px-[60px] text-[24px]">
+      <div className="flex flex-col mt-[50px] gap-[50px] text-center px-6 md:px-16 lg:px-20 text-lg md:text-xl lg:text-2xl">
         <p className={`${sejongHospitalLight.className}`}>
           안녕하십니까, 미시간 대학교 학부 한인 학생회 KISA입니다. 00년에 설립된
           이래, 현재 000명 가량의 학부생들을 대표하고 있는 KISA는 미시간
@@ -24,7 +29,7 @@ export default function AboutMainText() {
           노력합니다.
         </p>
 
-        <p className={`${arial.className}  italic w-[900px] mx-auto`}>
+        <p className={`${arial.className} italic mx-auto`}>
           “KISA is a student-driven organization dedicated to empowering Korean
           international students by fostering a tight-knit community and
           providing valuable opportunities and resources.”

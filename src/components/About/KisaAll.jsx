@@ -4,9 +4,9 @@ import styles from "./kisaAll.module.css";
 
 export default function KisaAll() {
   return (
-    <div className="relative flex justify-center h-[450px]">
+    <div className="relative flex justify-center h-[250px] md:h-[400px] lg:h-[450px]">
       <Image
-        className={`${styles.testImg} object-cover`}
+        className={`${styles.testImg} object-cover flex`}
         src="/images/kisa_all.png"
         alt="23-24 KISA 단체사진"
         width={1252}
