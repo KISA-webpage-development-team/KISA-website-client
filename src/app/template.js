@@ -7,16 +7,21 @@ export default function Template({ children }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="flex flex-col">
+    <div className="grow flex flex-col h-full">
       <header className="top-0 z-40">
-        <div className="max-w-[1920px] mx-auto">
+        <div className="max-w-[1920px] mx-auto px-[15px] md:px-[60px] lg:px-[75px]">
           <Header
             isMobileMenuOpen={isMobileMenuOpen}
             setIsMobileMenuOpen={setIsMobileMenuOpen}
           />
         </div>
       </header>
-      {children}
+      <main
+        className="grow max-w-screen-2xl
+       md:px-[60px] lg:px-[75px]"
+      >
+        {children}
+      </main>
     </div>
   );
 }

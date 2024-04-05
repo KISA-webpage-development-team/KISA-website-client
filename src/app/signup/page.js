@@ -53,7 +53,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
+    <div className="flex flex-col items-center justify-center h-full px-[20px] md:px-[60px] lg:px-[75px]">
       <h1 className="text-xl mb-4">키사에 처음 오신걸 환영합니다!</h1>
       <form
         onSubmit={handleSubmit}

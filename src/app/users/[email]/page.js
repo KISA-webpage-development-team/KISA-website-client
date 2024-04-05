@@ -16,7 +16,7 @@ export default async function UserPage({ params }) {
 
   if (decodedEmail !== userInfo.email) {
     return (
-      <div className="flex flex-col items-center py-10">
+      <div className="flex flex-col items-center py-10 px-[20px] md:px-[60px] lg:px-[75px]">
         <h1 className="text-2xl font-bold">
           You are not authorized to view this page
         </h1>
@@ -25,7 +25,7 @@ export default async function UserPage({ params }) {
   }
 
   return (
-    <div className="flex flex-col items-center py-10">
+    <div className="flex flex-col items-center py-10 px-[20px] md:px-[60px] lg:px-[75px]">
       <>
         <UserBasicInfo email={userInfo.email} fullname={userInfo.fullname} />
       </>

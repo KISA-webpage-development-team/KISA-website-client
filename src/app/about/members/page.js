@@ -10,6 +10,7 @@ export default function MemberPage() {
   return (
     <section
       className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
+      px-[20px] md:px-[60px] lg:px-[75px]
 pb-[100px] md:pb-[125px] lg:pb-[150px] gap-16 md:gap-20 lg:gap-24 "
     >
       <InfoTitle title="23-24 Board" />

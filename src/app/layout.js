@@ -28,11 +28,11 @@ export default async function RootLayout({ children }) {
           </header> */}
 
           {/* Main Content */}
-          <main className="grow">
-            <div className="max-w-screen-2xl px-[30px] md:px-[60px] lg:px-[75px] h-full mx-auto">
-              {children}
-            </div>
-          </main>
+
+          {/* <div className="max-w-screen-2xl px-0 md:px-[60px] lg:px-[75px] h-full mx-auto"> */}
+          <div>{children}</div>
+
+          {/* </div> */}
 
           {/* Footer */}
           <footer className="bottom-0 z-0">

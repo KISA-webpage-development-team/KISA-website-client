@@ -44,15 +44,6 @@ export default function MobileBoardTable({ boardType }) {
   return (
     <div className="flex flex-col gap-4 w-full">
       <table className="border border-gray-300 w-full">
-        {/* <thead className="">
-          <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center">
-            <th className="py-2 w-16">번호</th>
-            <th className="grow">제목</th>
-            <th className="w-36">글쓴이</th>
-            <th className="w-16">조회수</th>
-            <th className="w-28">날짜</th>
-          </tr>
-        </thead> */}
         <tbody className="">
           {announcementPosts.map(
             (

@@ -123,7 +123,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         <div className="flex items-center pb-1">
           <label htmlFor="title">제목</label>
           <input
-            className="ml-2 border-2 border-gray-300 w-1/4 px-1"
+            className="ml-2 border-2 border-gray-300 w-1/2 md:w-1/4 px-1"
             id="title"
             type="text"
             value={mode === "update" ? title : null}

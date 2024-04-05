@@ -54,10 +54,10 @@ export default function CommentItem({
         {/* Comment contents */}
         <div className="flex items-center justify-between w-full ml-2">
           <div className="flex flex-col">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2 md:gap-4">
               {/* need to change fullname to fullname's username */}
-              <p className="text-black font-bold text-sm mr-4">{fullname}</p>
-              <p className="text-gray-500 text-sm">{created}</p>
+              <p className="text-black font-bold text-sm">{fullname}</p>
+              <p className="text-gray-500 text-xs md:text-sm">{created}</p>
             </div>
             <div className={`${isAuthor && "text-blue-500"} pb-3`}>{text}</div>
           </div>
