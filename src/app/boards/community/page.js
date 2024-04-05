@@ -20,7 +20,7 @@ export default async function CommunityPage() {
       </div> */}
 
       {/* 게시판 search bar */}
-      <div className=" py-3">
+      <div className="px-4 md:px-0 py-3">
         <BoardBar boardType={boardType} />
       </div>
 
