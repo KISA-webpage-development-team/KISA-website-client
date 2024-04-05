@@ -21,11 +21,11 @@ export default async function RootLayout({ children }) {
       <SessionProvider session={session}>
         <body className="flex flex-col overflow-x-hidden relative">
           {/* Header */}
-          <header className="top-0 z-10">
+          {/* <header className="top-0 z-10">
             <div className="max-w-[1920px] mx-auto">
               <Header />
             </div>
-          </header>
+          </header> */}
 
           {/* Main Content */}
           <main className="grow">

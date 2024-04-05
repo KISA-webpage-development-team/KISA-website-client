@@ -11,7 +11,10 @@ export default function MobileMenuButton({
   };
 
   return (
-    <button onClick={handleClick} className="z-20">
+    <button
+      onClick={handleClick}
+      className="z-20 focus:outline-none focus:bg-transparent"
+    >
       {isMobileMenuOpen ? <CancelIcon /> : <BurgerMenuIcon />}
     </button>
   );

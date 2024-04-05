@@ -12,15 +12,12 @@ import UserInfo from "./UserInfo";
 import MobileMenuButton from "./MobileMenuButton";
 import MobileMenu from "./MobileMenu";
 
-export default function Header() {
+export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   // get logged in user session
   const { data: session } = useSession();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // get user's fullname
 
   return (
-    <div className="flex items-center justify-between px-4 md:px-12 lg:px-20 xl:px-32 py-8">
+    <div className="flex items-center justify-between px-0 md:px-12 lg:px-20 xl:px-32 py-8">
       {/* Left portion: Logo, Website Name, Menu */}
       <div className="flex items-center">
         <div>
@@ -48,7 +45,7 @@ export default function Header() {
         </div>
 
         {session && (
-          <div className="ml-3 flex items-center">
+          <div className="ml-3 hidden md:flex items-center">
             <UserInfo
               email={session.user.email}
               image={session.user.image}
@@ -56,12 +53,12 @@ export default function Header() {
             />
           </div>
         )}
-        <div className="hidden sm:block ml-3">
+        <div className="hidden md:block ml-3">
           <LoginButton session={session} />
         </div>
 
         {/* mobile header menu button */}
-        <div className="flex items-center sm:hidden ml-4 mr-2">
+        <div className="flex items-center md:hidden ml-4 mr-2">
           <MobileMenuButton
             isMobileMenuOpen={isMobileMenuOpen}
             setIsMobileMenuOpen={setIsMobileMenuOpen}
@@ -69,8 +66,8 @@ export default function Header() {
         </div>
       </div>
 
-      {isMobileMenuOpen && (
-        <div className="absolute w-full left-0 top-0">
+      {isMobileMenuOpen === true && (
+        <div className="absolute w-full right-0 top-0 bottom-0">
           <MobileMenu session={session} />
         </div>
       )}

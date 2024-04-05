@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import menu from "../../config/NavigationMenu";
 import Link from "next/link";
 
+import DownIcon from "../ui/DownIcon";
+import UpIcon from "../ui/UpIcon";
+
 export default function MobileMenuList() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(null);
@@ -14,27 +17,47 @@ export default function MobileMenuList() {
       setDropdownIndex(idx);
     }
   };
+  const accordionContentStyles = showDropdown
+    ? "max-h-[1000px] transition-max-height duration-300 ease"
+    : "max-h-0 overflow-hidden transition-max-height duration-300 ease";
 
   return (
-    <div className="flex flex-col items-start gap-8">
+    <div className="flex flex-col items-start gap-8 w-full">
       {menu.map(({ name, dropdowns }, idx) => (
-        <div className="relative" key={idx}>
+        <div className="relative text-sm w-full" key={idx}>
           <button
-            onMouseEnter={() => handleDropdownClick(idx)}
-            onMouseLeave={() => setShowDropdown(false)}
+            // onMouseEnter={() => handleDropdownClick(idx)}
+            // onMouseLeave={() => setShowDropdown(false)}
+            onClick={() => handleDropdownClick(idx)}
+            className="relative w-full"
           >
-            <p
-              className="text-left cursor-pointer
-             text-michigan-blue hover:text-gray-600"
-            >
-              {name}
-            </p>
+            <div className="w-full flex items-center justify-between">
+              <p
+                className={`text-left cursor-pointer hover:text-michigan-maize
+              ${
+                showDropdown && dropdownIndex === idx
+                  ? "text-michigan-maize"
+                  : "text-white"
+              }`}
+              >
+                {name}
+              </p>
+              {showDropdown && dropdownIndex === idx ? (
+                <UpIcon />
+              ) : (
+                <DownIcon />
+              )}
+            </div>
 
             {dropdowns && dropdownIndex === idx && showDropdown && (
-              <div className="w-48 top-full left-0 py-2 ">
+              <div
+                className={`w-48 top-full left-0 py-2 bg-inherit ${accordionContentStyles}`}
+              >
                 {dropdowns.map(({ name, href }) => (
                   <Link key={href} href={href}>
-                    <p className="cursor-pointer text-michigan-blue px-3 py-2 text-left">
+                    <p
+                      className={`cursor-pointer text-white hover:text-michigan-maize px-3 py-2 text-left`}
+                    >
                       {name}
                     </p>
                   </Link>
