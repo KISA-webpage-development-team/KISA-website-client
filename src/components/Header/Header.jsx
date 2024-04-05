@@ -81,7 +81,11 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
         unmountOnExit
       >
         <div className={styles.menuContainer}>
-          <MobileMenu session={session} />
+          <MobileMenu
+            session={session}
+            isMobileMenuOpen={isMobileMenuOpen}
+            setIsMobileMenuOpen={setIsMobileMenuOpen}
+          />
         </div>
       </CSSTransition>
     </div>

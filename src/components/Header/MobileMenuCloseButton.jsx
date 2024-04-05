@@ -1,12 +1,12 @@
 import React from "react";
-import BurgerMenuIcon from "../ui/BurgerMenuIcon";
+import CancelIcon from "../ui/CancelIcon";
 
-export default function MobileMenuButton({
+export default function MobileMenuCloseButton({
   isMobileMenuOpen,
   setIsMobileMenuOpen,
 }) {
   const handleClick = () => {
-    setIsMobileMenuOpen(true);
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -14,7 +14,7 @@ export default function MobileMenuButton({
       onClick={handleClick}
       className="z-20 focus:outline-none focus:bg-transparent"
     >
-      {!isMobileMenuOpen && <BurgerMenuIcon />}
+      {isMobileMenuOpen && <CancelIcon />}
     </button>
   );
 }

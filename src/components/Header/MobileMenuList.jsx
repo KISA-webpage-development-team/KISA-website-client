@@ -5,6 +5,8 @@ import Link from "next/link";
 import DownIcon from "../ui/DownIcon";
 import UpIcon from "../ui/UpIcon";
 
+import styles from "./header.module.css";
+
 export default function MobileMenuList() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(null);
@@ -24,12 +26,15 @@ export default function MobileMenuList() {
   return (
     <div className="flex flex-col items-start gap-8 w-full">
       {menu.map(({ name, dropdowns }, idx) => (
-        <div className="relative text-sm w-full" key={idx}>
-          <button
+        <div
+          className="relative text-sm w-full outline-none focus:outline-none"
+          key={idx}
+        >
+          <div
             // onMouseEnter={() => handleDropdownClick(idx)}
             // onMouseLeave={() => setShowDropdown(false)}
             onClick={() => handleDropdownClick(idx)}
-            className="relative w-full"
+            className="relative w-full outline-none focus:outline-none"
           >
             <div className="w-full flex items-center justify-between">
               <p
@@ -64,7 +69,7 @@ export default function MobileMenuList() {
                 ))}
               </div>
             )}
-          </button>
+          </div>
         </div>
       ))}
       {/* <Link key={"/contact"} href={"/contact"}>
