@@ -12,23 +12,26 @@ import UserInfo from "./UserInfo";
 import MobileMenuButton from "./MobileMenuButton";
 import MobileMenu from "./MobileMenu";
 
+import styles from "./header.module.css";
+import { CSSTransition } from "react-transition-group";
+
 export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   // get logged in user session
   const { data: session } = useSession();
 
   return (
-    <div className="flex items-center justify-between px-0 md:px-12 lg:px-20 xl:px-32 py-8">
+    <div className="flex items-center justify-between py-8">
       {/* Left portion: Logo, Website Name, Menu */}
       <div className="flex items-center">
         <div>
           <Logo />
         </div>
 
-        <div className="ml-10 mr-4 hidden sm:block">
+        <div className="ml-10 mr-4 hidden md:block">
           <VerticalDivider />
         </div>
 
-        <div className="ml-6 hidden sm:block">
+        <div className="ml-6 hidden md:block">
           <Menu />
         </div>
       </div>
@@ -66,11 +69,21 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
         </div>
       </div>
 
-      {isMobileMenuOpen === true && (
-        <div className="absolute w-full right-0 top-0 bottom-0">
+      <CSSTransition
+        in={isMobileMenuOpen}
+        timeout={500}
+        classNames={{
+          enter: styles.menuContainerEnter,
+          enterActive: styles.menuContainerEnterActive,
+          exit: styles.menuContainerExit,
+          exitActive: styles.menuContainerExitActive,
+        }}
+        unmountOnExit
+      >
+        <div className={styles.menuContainer}>
           <MobileMenu session={session} />
         </div>
-      )}
+      </CSSTransition>
     </div>
   );
 }

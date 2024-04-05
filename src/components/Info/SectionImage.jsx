@@ -17,7 +17,7 @@ export default function SectionImage({
     >
       <Image
         src={`/images/${id}.png`}
-        className="aspect-square object-cover"
+        className="aspect-square object-cover z-0"
         alt={name}
         width={500}
         height={500}

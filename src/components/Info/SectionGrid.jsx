@@ -6,7 +6,7 @@ export default function SectionGrid({ infoType, sectionName, contentList }) {
 
   return (
     <>
-      <div className="hidden md:grid gap-y-16 md:gap-y-24 lg:gap-y-32">
+      <div className="hidden md:grid gap-y-16 md:gap-y-24 lg:gap-y-32 z-0">
         {contentList.map((_, index) => {
           if (index % 3 === 0) {
             return (
@@ -28,7 +28,7 @@ export default function SectionGrid({ infoType, sectionName, contentList }) {
           }
         })}
       </div>
-      <div className="grid md:hidden gap-y-12 sm:gap-y-16 md:gap-y-24 lg:gap-y-32">
+      <div className="grid md:hidden gap-y-12 sm:gap-y-16 md:gap-y-24 lg:gap-y-32 z-0">
         {contentList.map((_, index) => {
           if (index % 2 === 0) {
             return (

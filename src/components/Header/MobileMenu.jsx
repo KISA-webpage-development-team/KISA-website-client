@@ -6,7 +6,7 @@ import MobileMenuList from "./MobileMenuList";
 export default function MobileMenu({ session }) {
   return (
     <div
-      className="z-10 w-full flex flex-col gap-12 items-start px-12 pt-12 pb-12 
+      className="z-20 w-full flex flex-col gap-12 items-start px-12 pt-12 pb-12 
     bg-michigan-blue"
     >
       {/* 1. User + Login Button */}
