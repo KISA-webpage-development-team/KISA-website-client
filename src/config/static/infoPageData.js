@@ -226,7 +226,7 @@ const housingPageOffCampusData = {
       sectionText: "Off-Campus Housing",
       contentList: [
         {
-          name: "Tower Plaza",
+          name: "Tower Plaza\n(TP)",
           id: "tower_plaza",
         },
         {
@@ -234,7 +234,7 @@ const housingPageOffCampusData = {
           id: "landmark",
         },
         {
-          name: "University Tower\n(UT) ",
+          name: "University Tower\n(UT)",
           id: "university_tower",
         },
         {
