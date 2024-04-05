@@ -9,7 +9,7 @@ export default function Template({ children }) {
   return (
     <div className="grow flex flex-col h-full">
       <header className="top-0 z-40">
-        <div className="max-w-[1920px] mx-auto px-[15px] md:px-[60px] lg:px-[75px]">
+        <div className="max-w-screen-2xl mx-auto px-[15px] md:px-[60px] lg:px-[75px]">
           <Header
             isMobileMenuOpen={isMobileMenuOpen}
             setIsMobileMenuOpen={setIsMobileMenuOpen}
@@ -17,7 +17,7 @@ export default function Template({ children }) {
         </div>
       </header>
       <main
-        className="grow max-w-screen-2xl
+        className="grow w-full mx-auto max-w-screen-2xl
        md:px-[60px] lg:px-[75px]"
       >
         {children}
