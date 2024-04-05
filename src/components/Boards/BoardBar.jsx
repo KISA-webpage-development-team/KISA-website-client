@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import PostSearchBar from "./PostSearchBar";
 import CreatePostButton from "./CreatePostButton";
+import BoardTitle from "./BoardTitle";
 
 export default function BoardBar({ boardType }) {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function BoardBar({ boardType }) {
 
   return (
     <div className="flex items-center justify-between">
-      <PostSearchBar />
+      <BoardTitle boardType={boardType} />
       <CreatePostButton onClick={handleCreatePostClick} />
     </div>
   );

@@ -9,7 +9,9 @@ export default function PageSizeSelector({ pageSize, setPageSize }) {
         <button
           key={pageSizeOption}
           className={`w-8 h-8 border border-gray-300 rounded-lg px-2 flex items-center justify-center ${
-            pageSizeOption === pageSize ? "bg-blue-400 text-white" : ""
+            pageSizeOption === pageSize
+              ? "bg-michigan-blue text-michigan-maize"
+              : ""
           }`}
           onClick={() => setPageSize(pageSizeOption)}
         >

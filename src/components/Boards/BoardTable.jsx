@@ -42,7 +42,7 @@ export default function BoardTable({ boardType }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <table className="border border-gray-300 w-full">
         <thead className="">
           <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center">

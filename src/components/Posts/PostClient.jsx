@@ -24,6 +24,7 @@ export default function PostClient({ postid }) {
       // }
       const post = await getSinglePost(postid);
       setPost(post);
+      console.log("fetched post: ", post);
 
       return;
     };

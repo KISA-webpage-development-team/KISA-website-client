@@ -25,6 +25,8 @@ export default function PostView({ boardType, post, postid }) {
   const [commentsStale, setCommentsStale] = useState(true);
   const [openCommentEditor, setOpenCommentEditor] = useState(false);
 
+  console.log("PostView: ", post);
+
   useEffect(() => {
     const getComments = async () => {
       const comments_res = await getCommentsByPostid(postid);
@@ -45,7 +47,10 @@ export default function PostView({ boardType, post, postid }) {
         // console.log("incrementing read count");
         await incrementReadCount(postid);
       }
-      cookieCutter.set(postid, "true", { expires: oneDayLater, sameSite: "strict"});
+      cookieCutter.set(postid, "true", {
+        expires: oneDayLater,
+        sameSite: "strict",
+      });
     };
     incrementRead();
   }, [postid]);

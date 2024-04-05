@@ -1,6 +1,6 @@
 import React from "react";
-import BoardTitle from "../../../components/Boards/BoardTitle";
 import BoardTable from "../../../components/Boards/BoardTable";
+import MobileBoardTable from "../../../components/Boards/MobileBoardTable";
 import BoardBar from "../../../components/Boards/BoardBar";
 // import { getBoardPosts } from "../../../service/board";
 
@@ -15,9 +15,9 @@ export default async function CommunityPage() {
       {/* 게시판 이름: 자유게시판 */}
       {/* for now, boardType is not working as a parameter,
       will be fixed in later factorization */}
-      <div className="pt-3 pb-2 ">
+      {/* <div className="pt-3 pb-2 ">
         <BoardTitle boardType={boardType} />
-      </div>
+      </div> */}
 
       {/* 게시판 search bar */}
       <div className="py-3">
@@ -27,7 +27,13 @@ export default async function CommunityPage() {
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
 
-      <BoardTable boardType={boardType} />
+      <div className="hidden md:flex w-full ">
+        <BoardTable boardType={boardType} />
+      </div>
+
+      <div className="flex md:hidden w-full">
+        <MobileBoardTable boardType={boardType} />
+      </div>
     </section>
   );
 }
