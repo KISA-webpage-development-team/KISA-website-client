@@ -116,7 +116,7 @@ const campusCentralData = [
   },
   {
     id: "mason_angell_hall",
-    title: "Mason Hall (MH)/\nAngell Hall (AH)",
+    title: "Mason Hall (MH) /\nAngell Hall (AH)",
     desc: (
       <p>
         (1) 캠퍼스 내에서 단연코 가장 다양한 전공의 강의들이 진행되는
@@ -188,7 +188,7 @@ const campusCentralData = [
   },
   {
     id: "chemistry_building",
-    title: "Chemistry Building",
+    title: "Chemistry Building\n(CHEM)",
     desc: (
       <p>
         (1) CCTC 바로 옆에 위치한 화학과 빌딩은 건물 3개를 붙여놓은 엄청나게 큰
@@ -215,13 +215,9 @@ const campusCentralData = [
   },
   {
     id: "randall_laboratory",
-    title: "Randall Laboratory",
+    title: "Randall Laboratory\n(RAND)",
     desc: (
       <p>
-        (1) 이름에서 알 수 있듯이 대학원생들을 위한 도서관입니다. 하지만
-        학부생들이 출입해도 무관합니다.
-        <br />
-        <br />
         (1) Physics 교수님들의 오피스와 Physics Help Room이 있습니다.
         <br />
         <br />
@@ -290,7 +286,7 @@ const campusCentralData = [
   },
   {
     id: "bell_tower",
-    title: "Bell Tower",
+    title: "Bell Tower\n(BMT)",
     desc: (
       <p>
         (1) 캠퍼스 중앙에 위치한 상징적인 건축물입니다. 종을 치는 건물임에도
@@ -330,7 +326,7 @@ const campusNorthData = [
   },
   {
     id: "stamps_auditorium",
-    title: "STAMPS auditorium",
+    title: "STAMPS auditorium\n(STAMPS)",
     desc: (
       <p>
         (1) 노스 캠퍼스에 있는 유일한 대규모 강당이며, 종종 U-M School of Music,
@@ -713,7 +709,7 @@ const housingOnCampusData = [
     ),
   },
   {
-    id: "bursely",
+    id: "bursley",
     title: "Bursley",
     desc: (
       <p>
@@ -1150,7 +1146,7 @@ const sportsFacilityData = [
         Field를 이용할 수 있습니다.
         <br />
         <br />
-        (2) 2025년 완공 예정입니다.
+        (2) 2025년 봄에 완공 예정입니다.
       </p>
     ),
   },
@@ -1215,7 +1211,7 @@ const sportsMiscSportsData = [
     title: "테니스",
     desc: (
       <p>
-        실내 테니스를 즐기기 위해서는 학교 시설인 Varsity Tennis Center에
+        (1) 실내 테니스를 즐기기 위해서는 학교 시설인 Varsity Tennis Center에
         멤버십을 가지고 있어야 하는데, 학생은 할인가격에 등록이 가능합니다. 주로
         Varsity Tennis Center 등 실내 테니스 경기장에서 경기를 진행하기 때문에
         한 해 동안 쉬지 않고 꾸준히 운영되고 있습니다. <br />

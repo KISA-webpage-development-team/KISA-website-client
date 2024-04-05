@@ -192,13 +192,13 @@ const checkListData = [
       <p>
         앤아버에서 가장 가까운 국제공항인 Detroit Metro Airport는 자동차로 약
         25분 거리인 Romulus에 있습니다. KAL과 Delta 비행기의 경우 인천에서
-        Detroit까지 매일 직항편이 있으며 아시아나와 UA의 경우 여러 경유편이
-        있습니다. 직항편은 약 12-13시간 정도 걸리며 경유편은 16-17시간 정도
+        Detroit까지 매일 직항 편이 있으며 아시아나와 UA의 경우 여러 경유 편이
+        있습니다. 직항 편은 약 12-13시간 정도 걸리며 경유편은 16-17시간 정도
         걸립니다.
         <br />
-        알고있는 지인이 없는 경우, 보통 공항과 앤아버 사이를 운행하는 택시와
-        공항셔틀버스(Michigan Flyer-AirRide)를 이용합니다. 택시는 편도 $60-70
-        정도의 비용이 부과됩니다. 공항셔틀버스의 경우 편도 $12의 비용이 들고
+        알고 있는 지인이 없는 경우, 보통 공항과 앤아버 사이를 운행하는 택시와
+        공항 셔틀버스 (Michigan Flyer-AirRide)를 이용합니다. 택시는 편도 $60-70
+        정도의 비용이 부과됩니다. 공항 셔틀버스의 경우 편도 $12의 비용이 들고
         앤아버 시내에 정거장이 두 군데 있으며 (BTC, Blake Transit Center - 328
         S. Fifth Ave와 Kensington Court Hotel - 610 Hilton Blvd.) BTC에서 앤아버
         시내버스 (AAATA, Ann Arbor Area Transportation Authority)로 환승해

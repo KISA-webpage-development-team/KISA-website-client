@@ -15,18 +15,18 @@ export default function RulePage() {
         className={`${sejongHospitalLight.className} px-4 sm:px-8 md:px-16 lg:px-24 mt-16 md:mt:20 lg:mt-24 
       text-base md:text-lg lg:text-xl`}
       >
-        <p className={`${sejongHospitalBold.className}`}>제 1조</p>
+        <p className={`${sejongHospitalBold.className}`}>제1조</p>
         (명칭) <br />
         본회의 정식 명칭은 미시간 대학교 한인 학생회 (Korean International
         Student Association)으로, 이하 KISA로 호칭할 수도 있도록 한다.
         <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 2조</p>
+        <p className={`${sejongHospitalBold.className}`}>제2조</p>
         (제휴)
         <br /> 본회는 캠퍼스 안의 어떠한 부서나 기관과도 제휴하고 있지 않는다.
         <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 3조</p>
+        <p className={`${sejongHospitalBold.className}`}>제3조</p>
         제 1항 (목적) KISA는 미시간 대학교의 한국 학생들의 결속력과 복지를
         증진하는 기관이다.
         <br />제 2항 (미션) KISA는 재학생들의 캠퍼스 안의 교류를 통해 원만한
@@ -37,7 +37,7 @@ export default function RulePage() {
         <br />제 3항 KISA는 미시간 대학의 정책과 절차를 준수하고 이에 따른
         책임을 가진다. <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 4조</p>
+        <p className={`${sejongHospitalBold.className}`}>제4조</p>
         (회원 자격)
         <br />제 1항 본회의 회원은 현재 등록된 미시간 대학교 학생으로 제한된다.
         또한 회원으로 인정되기 위해서는 다음의 요건이 필요하다. <br />
@@ -57,7 +57,7 @@ export default function RulePage() {
         임원진들과 상의를 거친 후 결정하여야 한다.
         <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 5조</p>
+        <p className={`${sejongHospitalBold.className}`}>제5조</p>
         (임원)
         <br /> KISA는 회장을 포함한 세 명의 임원으로 구성된 임원회에 의해
         운영된다.
@@ -69,7 +69,7 @@ export default function RulePage() {
         미시간 대학 정책 준수 등을 처리한다.
         <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 6조</p>
+        <p className={`${sejongHospitalBold.className}`}>제6조</p>
         (운영)
         <br />제 1항 (투표 자격) 제 4조 1항에서 규정한 모든 회원 자격을 충족하는
         회원에게는 투표 자격이 부여된다.
@@ -91,18 +91,18 @@ export default function RulePage() {
         &nbsp;&nbsp;&nbsp;&nbsp;마. 해산
         <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 7조</p>
+        <p className={`${sejongHospitalBold.className}`}>제7조</p>
         (재정)
         <br /> KISA는 다음과 같은 방법으로 활동 자금을 조달한다: 가.
         총학생회로부터의 보조금 지원 나. 다른 학생회 및/또는 외부 기업과의 모금
         행사 <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 8조</p>
+        <p className={`${sejongHospitalBold.className}`}>제8조</p>
         (정족수)
         <br /> 투표가 필요한 선거 및 공식 업무를 위한 정족수를 구성하려면 회원의
         3분의 2가 참석해야 한다. <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 9조</p>
+        <p className={`${sejongHospitalBold.className}`}>제9조</p>
         (회원 또는 임원의 해임)
         <br />제 1항 (임원의 해임) KISA의 임원이 KISA의 목적, 정관에 위배되거나
         제 5조에 명시된 임원의 책임을 다하지 않을 경우, 다음 절차에 따라 해임할
@@ -121,7 +121,7 @@ export default function RulePage() {
         &nbsp;&nbsp;&nbsp;&nbsp;다. 임원 만장일치로 해당 회원을 조직에서
         제명하기로 결정. <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 10조</p> (개정)
+        <p className={`${sejongHospitalBold.className}`}>제10조</p> (개정)
         <br /> 제 1항 본 정관은 KISA의 모든 구성원에게 구속력을 가지지만, 그
         자체로는 구속력이 없다. <br />
         정관 개정은 정족수를 충족하는 모든 회의에서 투표권을 가진 KISA 회원이
@@ -130,11 +130,11 @@ export default function RulePage() {
         개정안은 재적 회원의 3분의 2 이상의 찬성을 얻으면 즉시 효력이 발생한다.{" "}
         <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 11조</p>
+        <p className={`${sejongHospitalBold.className}`}>제11조</p>
         (비준) <br />본 정관은 회원 3분의 2의 비준을 받아야 효력이 발생하며,
         2년마다 재검토 되어야 한다. <br />
         <br />
-        <p className={`${sejongHospitalBold.className}`}>제 12조</p>
+        <p className={`${sejongHospitalBold.className}`}>제12조</p>
         (준수 선언문) <br />
         KISA는 본 대학의 규정을 읽었으며 이를 철저히 준수할 것에 동의하며 본회의
         등록은 이러한 규정을 준수하는 것을 조건으로 한다.
