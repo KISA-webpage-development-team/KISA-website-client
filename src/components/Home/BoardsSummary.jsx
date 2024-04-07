@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import HotPosts from "./HotPosts";
-import RecentPosts from "./HomePostView";
+
 // need to change this api call to "getRecentPosts" and "getHotPosts"
 import { getBoardPosts } from "../../service/board";
 import HomePostView from "./HomePostView";

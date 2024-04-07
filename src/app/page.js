@@ -2,6 +2,8 @@
 import HomeCarousel from "../components/Home/HomeCarousel";
 import QuickLinks from "../components/Home/QuickLinks";
 import BoardsSummary from "../components/Home/BoardsSummary";
+import SchoolCalendar from "../components/Home/SchoolCalendar";
+import SponsorBanner from "../components/Home/SponsorBanner";
 
 export default function Home() {
   return (
@@ -17,8 +19,9 @@ export default function Home() {
       {/* Boards Summary */}
       <BoardsSummary />
       {/* SchoolCalendar */}
-
+      <SchoolCalendar />
       {/* SponsorBanner */}
+      <SponsorBanner />
     </section>
   );
 }
