@@ -1,9 +1,8 @@
 import React from "react";
-import AnnouncementIcon from "../ui/AnnouncementIcon";
 
 export default function PostTitleBar({ isAnnouncement, title }) {
   return (
-    <div className="flex justify-start pt-2 text-xl font-semibold">
+    <div className="flex justify-start pt-2 text-base sm:text-lg md:text-xl font-semibold">
       {isAnnouncement ? (
         <p className="text-blue-500 font-bold">[ 공지 ]</p>
       ) : (

@@ -88,15 +88,16 @@ export default function CommentEditor({
 
   return (
     <>
-      <div className="flex items-center w-full mt-4">
+      <div className="flex items-center w-full mt-3">
         {/* Text Editor */}
-        <div className="grow">
+        <div className="grow text-sm md:text-base ">
           {mode === "create" ? (
             <input
               type="text"
               value={text}
               onChange={handleTextChange}
-              className="w-full h-20 border border-gray-300 rounded-md p-2"
+              className="w-full h-16 md:h-20 border border-gray-300 rounded-md p-2
+              focus:outline-michigan-blue"
               placeholder="댓글을 입력해주세요"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.target === document.activeElement) {
@@ -110,7 +111,8 @@ export default function CommentEditor({
               type="text"
               value={text}
               onChange={handleTextChange}
-              className="w-full h-20 border border-gray-300 rounded-md p-2"
+              className="w-full h-16 md:h-20 border border-gray-300 rounded-md p-2
+              focus:outline-michigan-blue"
               placeholder={placeholder}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.target === document.activeElement) {
@@ -125,7 +127,8 @@ export default function CommentEditor({
               type="text"
               value={text}
               onChange={handleTextChange}
-              className="w-full h-20 border border-gray-300 rounded-md p-2"
+              className="w-full h-16 md:h-20 border border-gray-300 rounded-md p-2 
+              focus:outline-michigan-blue"
               placeholder="댓글을 입력해주세요"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.target === document.activeElement) {
@@ -138,8 +141,10 @@ export default function CommentEditor({
         </div>
 
         <button
-          className="ml-5 w-24 h-10 bg-blue-500 hover:bg-blue-400 text-white 
-          rounded-md cursor-pointer"
+          className="ml-5 
+          p-3
+          bg-michigan-blue  text-michigan-maize hover:text-white
+          rounded-md cursor-pointer text-xs after:sm:text-sm md:text-base"
           onClick={handleSumbit}
         >
           댓글등록

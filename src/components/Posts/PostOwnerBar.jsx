@@ -4,7 +4,10 @@ import ClockIcon from "../ui/ClockIcon";
 
 export default function PostOwnerBar({ fullname, created, readCount }) {
   return (
-    <div className="flex justify-between items-center">
+    <div
+      className="flex justify-between items-center 
+    text-sm md:text-base"
+    >
       {/* left: fullname + created */}
       <div className="flex items-center gap-2">
         {/* later, fullname will be linked to user profile */}

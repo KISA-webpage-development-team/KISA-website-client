@@ -15,7 +15,7 @@ export default function CommentsList({
   return (
     <div className="flex flex-col">
       <div className="flex items-center mb-4">
-        <p className="mr-1">댓글 {commentsCount}개</p>
+        <p className="mr-1 text-sm md:text-base">댓글 {commentsCount}개</p>
         <DownArrowIcon />
       </div>
 

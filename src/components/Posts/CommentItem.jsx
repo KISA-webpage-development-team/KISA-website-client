@@ -6,6 +6,8 @@ import TrashcanIcon from "../ui/TrashcanIcon";
 import CommentEditor from "./CommentEditor";
 import { editComment, deleteComment } from "../../service/comment";
 
+import { timeForToday } from "../../utils/dateFormatter";
+
 export default function CommentItem({
   commentid,
   postid,
@@ -43,7 +45,7 @@ export default function CommentItem({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       <div className="flex items-center">
         {isCommentOfComment ? (
           <div className="-translate-y-2">
@@ -52,37 +54,42 @@ export default function CommentItem({
         ) : null}
 
         {/* Comment contents */}
-        <div className="flex items-center justify-between w-full ml-2">
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 md:gap-4">
+        <div className="flex items-center justify-between w-full ml-1 md:ml-2">
+          <div className="flex flex-col w-full gap-1">
+            <div className="flex items-center justify-between">
               {/* need to change fullname to fullname's username */}
-              <p className="text-black font-bold text-sm">{fullname}</p>
-              <p className="text-gray-500 text-xs md:text-sm">{created}</p>
+              <div className="flex items-center gap-1 md:gap-2">
+                <p className="text-black font-bold text-sm">{fullname}</p>
+                <p className="text-gray-500 text-xs md:text-sm">
+                  {timeForToday(created)}
+                </p>
+              </div>
+
+              <div className="flex gap-2">
+                {isAuthor && (
+                  <>
+                    <ImageButton
+                      text={`${openCommentEditor ? "닫기" : ""}`}
+                      icon={<PencilIcon color="gray" />}
+                      onClick={handleOpenCommentEditor}
+                    />
+                    <ImageButton
+                      icon={<TrashcanIcon color="gray" />}
+                      text={""}
+                      onClick={handleCommentDelete}
+                    />
+                  </>
+                )}
+                <ImageButton
+                  icon={<ReplyIcon />}
+                  text={`${openReplyEditor ? "닫기" : "답글"}`}
+                  onClick={handleOpenReplyEditor}
+                />
+              </div>
             </div>
             <div className={`${isAuthor && "text-blue-500"} pb-3`}>{text}</div>
           </div>
           {/* Right Buttons */}
-          <div className="flex gap-2">
-            {isAuthor && (
-              <>
-                <ImageButton
-                  text={`${openCommentEditor ? "닫기" : "수정"}`}
-                  icon={<PencilIcon color="gray" />}
-                  onClick={handleOpenCommentEditor}
-                />
-                <ImageButton
-                  icon={<TrashcanIcon color="gray" />}
-                  text={"삭제"}
-                  onClick={handleCommentDelete}
-                />
-              </>
-            )}
-            <ImageButton
-              icon={<ReplyIcon />}
-              text={`${openReplyEditor ? "닫기" : "답글"}`}
-              onClick={handleOpenReplyEditor}
-            />
-          </div>
         </div>
       </div>
       {openCommentEditor && (

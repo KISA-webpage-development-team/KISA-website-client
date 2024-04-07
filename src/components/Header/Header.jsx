@@ -20,7 +20,7 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   const { data: session } = useSession();
 
   return (
-    <div className="flex items-center justify-between py-8">
+    <div className="flex items-center justify-between py-6 md:py-8">
       {/* Left portion: Logo, Website Name, Menu */}
       <div className="flex items-center">
         <div>
