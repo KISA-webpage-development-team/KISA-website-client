@@ -7,13 +7,13 @@ import FacebookLinkIcon from "../shared/FacebookLinkIcon";
 
 export default function Footer() {
   return (
-    <div className="flex flex-col gap-3 justify-center items-center py-[53px]">
+    <div className="flex flex-col gap-1 md:gap-3 justify-center items-center py-[53px]">
       <div className="flex items-center gap-4">
         <InstagramLinkIcon color="black" />
         <FacebookLinkIcon color="black" />
       </div>
 
-      <h2 className="text-2xl">UMICH KISA</h2>
+      <h2 className="text-lg sm:text-xl md:text-2xl">UMICH KISA</h2>
     </div>
   );
 }

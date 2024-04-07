@@ -3,7 +3,9 @@ import { AiOutlineInstagram } from "react-icons/ai";
 
 export default function InstagramIcon({ color = "none" }) {
   if (color === "black") {
-    return <AiOutlineInstagram className={`w-8 h-8 text-black`} />;
+    return (
+      <AiOutlineInstagram className={`w-6 h-6 md:w-8 md:h-8 text-black`} />
+    );
   }
 
   return (
