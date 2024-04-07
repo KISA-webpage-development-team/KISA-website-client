@@ -40,7 +40,7 @@ export default function HomeCarousel() {
   };
 
   return (
-    <div className="relative w-full h-[450px] sm:h-[600px] md:h-96 flex flex-col md:flex-row gap-2">
+    <div className="relative w-full h-[450px] sm:h-[600px] md:h-96 flex flex-col md:flex-row gap-10">
       <div className="grow md:basis-1/2 h-full transition-all duration-150 delay-300 ease-in-out">
         <div
           className="relative flex flex-col justify-center 
