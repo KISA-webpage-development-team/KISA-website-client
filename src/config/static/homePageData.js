@@ -6,7 +6,7 @@
 // descr
 const homeCarouselData = [
   {
-    id: "new_year_fundraising",
+    id: "new_year",
     title: "설맞이 펀드레이징",
     desc: "벌써 학기가 시작 된지 한 달이 넘어가고 설날이 다가오고 있는데요, 기대되는 설날을 맞이해서 저희 키사에서 펀드레이징을 준비했습니다!",
   },
