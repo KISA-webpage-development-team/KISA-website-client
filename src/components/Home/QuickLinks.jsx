@@ -28,7 +28,7 @@ export default function QuickLinks() {
         items-center gap-5 "
       >
         {items.map(({ id, title, url }, index) => (
-          <div
+          <button
             key={`quick-link-${id}-${index}`}
             onClick={() => {
               navigateToLink(url);
@@ -45,7 +45,7 @@ export default function QuickLinks() {
               height={500}
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
             />
-          </div>
+          </button>
         ))}
       </div>
     </div>

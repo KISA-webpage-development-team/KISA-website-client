@@ -1,6 +1,7 @@
 // sub-ui components
 import HomeCarousel from "../components/Home/HomeCarousel";
 import QuickLinks from "../components/Home/QuickLinks";
+import BoardsSummary from "../components/Home/BoardsSummary";
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
       {/* Quick Links (Hub) */}
       <QuickLinks />
       {/* Boards Summary */}
-
+      <BoardsSummary />
       {/* SchoolCalendar */}
 
       {/* SponsorBanner */}
