@@ -87,7 +87,13 @@ export default function CommentItem({
                 />
               </div>
             </div>
-            <div className={`${isAuthor && "text-blue-500"} pb-3`}>{text}</div>
+            <div
+              className={`${
+                isAuthor && "text-blue-500"
+              } pb-3 text-sm md:text-base`}
+            >
+              {text}
+            </div>
           </div>
           {/* Right Buttons */}
         </div>
