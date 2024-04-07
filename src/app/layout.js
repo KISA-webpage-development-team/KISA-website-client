@@ -21,28 +21,15 @@ export default async function RootLayout({ children }) {
     <html className={globalFont.className} lang="en">
       <SessionProvider session={session}>
         <body className="flex flex-col overflow-x-hidden relative">
-          {/* Header */}
-          {/* <header className="top-0 z-10">
-            <div className="max-w-[1920px] mx-auto">
-              <Header />
-            </div>
-          </header> */}
-
-          {/* Main Content */}
-
-          {/* <div className="max-w-screen-2xl px-0 md:px-[60px] lg:px-[75px] h-full mx-auto"> */}
-          <UIProvider>
-            <div className="grow">{children}</div>{" "}
-          </UIProvider>
-
-          {/* </div> */}
+          {/* template.js : header + main */}
+          <div className="grow">
+            <UIProvider>{children}</UIProvider>
+          </div>
 
           {/* Footer */}
           <footer className="bottom-0 z-0">
             <Footer />
           </footer>
-
-          {/* {children} */}
         </body>
       </SessionProvider>
     </html>

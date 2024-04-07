@@ -3,16 +3,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { homeCarouselData as items } from "../../config/static/homeCarouselData";
 import Image from "next/image";
-import { sejongHospitalBold } from "../../utils/fonts/textFonts";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "../../utils/fonts/textFonts";
 import { motion } from "framer-motion";
 
 export default function HomeCarousel() {
-  const duration = 5000; // 5 seconds
+  const duration = 1000000; // 5 seconds
   const frame = useRef(0);
   const firstFrameTime = useRef(performance.now());
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [animationCompleted, setAnimationCompleted] = useState(false);
 
   useEffect(() => {
     firstFrameTime.current = performance.now();
@@ -33,14 +35,16 @@ export default function HomeCarousel() {
 
       setProgress(0);
       setActive((active + 1) % items.length);
-      setAnimationCompleted(true); // Set animation completed for the new active item
     }
   };
 
   return (
-    <div className="relative w-full h-96 flex flex-col md:flex-row gap-2">
-      <div className="basis-1/2 transition-all duration-150 delay-300 ease-in-out">
-        <div className="relative flex flex-col w-full h-full">
+    <div className="relative w-full h-[450px] sm:h-[600px] md:h-96 flex flex-col md:flex-row gap-2">
+      <div className="grow md:basis-1/2 h-full transition-all duration-150 delay-300 ease-in-out">
+        <div
+          className="relative flex flex-col justify-center 
+        h-72 sm:h-[500px] md:h-96"
+        >
           {items.map(({ id, desc }, index) => (
             <motion.div
               key={`carousel-${id}`}
@@ -53,10 +57,9 @@ export default function HomeCarousel() {
                 opacity: active === index ? 1 : 0,
               }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className={`object-contain absolute w-full h-full ${
+              className={`absolute w-full h-72 sm:h-[500px] md:h-96 ${
                 active === index ? "" : "hidden"
               }`}
-              onAnimationComplete={() => setAnimationCompleted(false)}
             >
               <Image
                 className="object-contain"
@@ -69,7 +72,7 @@ export default function HomeCarousel() {
         </div>
       </div>
 
-      <div className="basis-1/2 flex flex-col justify-center gap-2 pl-10">
+      <div className="h-full md:basis-1/2 flex flex-col justify-center gap-2 pl-10">
         {items.map(({ id, title, desc }, index) => (
           <motion.div
             key={`carousel-${id}`}
@@ -77,13 +80,23 @@ export default function HomeCarousel() {
             animate={{ opacity: active === index ? 1 : 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
             className={`object-contain ${active === index ? "" : "hidden"}`}
-            onAnimationComplete={() => setAnimationCompleted(false)}
           >
-            <div className="h-full flex flex-col justify-center gap-4">
-              <h2 className={`${sejongHospitalBold.className} text-3xl`}>
+            <div
+              className="h-full flex flex-col justify-center 
+            gap-2 md:gap-4 
+            pr-10 md:pr-4
+            pt-2 md:pt-0"
+            >
+              <h2
+                className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-3xl`}
+              >
                 {title}
               </h2>
-              <p>{desc}</p>
+              <p
+                className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-xl`}
+              >
+                {desc}
+              </p>
             </div>
           </motion.div>
         ))}
@@ -91,8 +104,12 @@ export default function HomeCarousel() {
 
       {/* Progress Bar */}
       <div
-        className="absolute w-1/2 bottom-0 right-0
-      flex gap-3 pl-10"
+        className="absolute 
+      w-full md:w-1/2
+      bottom-0 right-0
+      translate-y-6 sm:translate-y-10 md:translate-y-0
+      flex gap-3 pl-10 
+      pr-10 md:pr-0"
       >
         {items.map(({ id, title, desc }, index) => (
           <button
