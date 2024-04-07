@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@boiseitguru/cookie-cutter": "0.2.3",
+    "@headlessui/react": "1.7.18",
+    "@nextui-org/react": "2.2.10",
     "aws-sdk": "^2.1496.0",
     "axios": "^1.6.0",
+    "framer-motion": "11.0.25",
     "jsonwebtoken": "^9.0.2",
     "next": "14.0.4",
     "next-auth": "^4.23.2",

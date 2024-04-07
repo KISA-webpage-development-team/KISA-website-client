@@ -5,6 +5,7 @@ import Footer from "../components/Footer/Footer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../config/auth";
 import { SessionProvider } from "../context/SessionProvider";
+import UIProvider from "../context/UIProvider";
 
 export const metadata = {
   title: "UMich KISA",
@@ -30,7 +31,9 @@ export default async function RootLayout({ children }) {
           {/* Main Content */}
 
           {/* <div className="max-w-screen-2xl px-0 md:px-[60px] lg:px-[75px] h-full mx-auto"> */}
-          <div>{children}</div>
+          <UIProvider>
+            <div className="grow">{children}</div>{" "}
+          </UIProvider>
 
           {/* </div> */}
 
