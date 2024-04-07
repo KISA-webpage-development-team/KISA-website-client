@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { homeCarouselData as items } from "../../config/static/homeCarouselData";
+import { homeCarouselData as items } from "../../config/static/homePageData";
 import Image from "next/image";
 import {
   sejongHospitalBold,
@@ -65,6 +65,8 @@ export default function HomeCarousel() {
                 className="object-contain"
                 src={`/carousel/${id}.png`}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority={index === active}
                 alt={desc}
               />
             </motion.div>
@@ -72,7 +74,7 @@ export default function HomeCarousel() {
         </div>
       </div>
 
-      <div className="h-full md:basis-1/2 flex flex-col justify-center gap-2 pl-10">
+      <div className="h-full md:basis-1/2 flex flex-col justify-center gap-2">
         {items.map(({ id, title, desc }, index) => (
           <motion.div
             key={`carousel-${id}`}
@@ -107,9 +109,9 @@ export default function HomeCarousel() {
         className="absolute 
       w-full md:w-1/2
       bottom-0 right-0
-      translate-y-6 sm:translate-y-10 md:translate-y-0
-      flex gap-3 pl-10 
-      pr-10 md:pr-0"
+      translate-y-6 sm:translate-y-12 md:translate-y-0
+      flex gap-3
+      md:pr-0"
       >
         {items.map(({ id, title, desc }, index) => (
           <button

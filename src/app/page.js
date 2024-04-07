@@ -7,12 +7,12 @@ export default function Home() {
     <section
       className="h-full w-full 
     flex flex-col items-center
-     gap-16 py-6"
+     gap-20 py-6 px-10"
     >
       {/* Carousel */}
       <HomeCarousel />
       {/* Quick Links (Hub) */}
-      {/* <QuickLinks /> */}
+      <QuickLinks />
       {/* Boards Summary */}
 
       {/* SchoolCalendar */}
