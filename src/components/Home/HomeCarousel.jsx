@@ -58,9 +58,10 @@ export default function HomeCarousel() {
                 opacity: active === index ? 1 : 0,
               }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className={`absolute w-full h-72 sm:h-[500px] md:h-96 ${
+              className={`cursor-pointer absolute w-full h-72 sm:h-[500px] md:h-96 ${
                 active === index ? "" : "hidden"
               }`}
+              onClick={() => window.open(items[active].url, "_blank")}
             >
               <Image
                 className="object-contain"
