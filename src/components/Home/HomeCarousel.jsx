@@ -8,6 +8,7 @@ import {
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
 import { motion } from "framer-motion";
+//?
 
 export default function HomeCarousel() {
   const duration = 10000; // 10 seconds
