@@ -40,11 +40,11 @@ const homeQuickLinksData = [
     title: "Atlas",
     url: "https://atlas.ai.umich.edu/",
   },
-  // {
-  //   id: "atlas",
-  //   title: "Atlas",
-  //   url: "https://atlas.ai.umich.edu/",
-  // },
+  {
+    id: "maize_pages",
+    title: "Maize Pages",
+    url: "https://maizepages.umich.edu/",
+  },
 ];
 
 export { homeCarouselData, homeQuickLinksData };

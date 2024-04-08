@@ -26,7 +26,7 @@ const menu = [
     href: "/info",
     dropdowns: [
       {
-        name: "처음와서 할 일",
+        name: "처음 와서 할 일",
         href: "/info/checklist",
       },
       {
