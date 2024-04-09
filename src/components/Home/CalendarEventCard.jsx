@@ -17,6 +17,7 @@ export default function CalendarEventCard({ event }) {
     hour: "2-digit",
     minute: "2-digit",
   });
+  // .
 
   return (
     <div
