@@ -46,7 +46,7 @@ export default function SchoolCalendar() {
       <h2
         className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-3xl`}
       >
-        Quick Links
+        Calendar
       </h2>
       <div className="w-full text-sm lg:text-base hidden md:block">
         <FullCalendar
