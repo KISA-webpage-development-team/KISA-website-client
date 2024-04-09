@@ -67,7 +67,6 @@ export default function HomeCarousel() {
                 className="object-contain"
                 src={`/carousel/${id}.png`}
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
                 priority={index === active}
                 alt={desc}
               />
