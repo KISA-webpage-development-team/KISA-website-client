@@ -29,28 +29,27 @@ export default function HomePostView({ type, posts }) {
                                 border-b border-gray-200  py-2 `}
               >
                 {/* top: 제목 [댓글수]] */}
-                <div className="flex items-center gap-2">
-                  <td className="text-left grow ">
-                    <Link
-                      href={`/posts/${postid}`}
-                      className="hover:underline text-sm sm:text-base"
-                    >
-                      {commentsCount > 0
-                        ? `${title} [${commentsCount}]`
-                        : title}
-                    </Link>
-                  </td>
-                </div>
+                <td className="text-left grow ">
+                  <Link
+                    href={`/posts/${postid}`}
+                    className="hover:underline text-sm sm:text-base"
+                  >
+                    {commentsCount > 0 ? `${title} [${commentsCount}]` : title}
+                  </Link>
+                </td>
 
                 {/* bottom: 날짜 / 글쓴이 / 조회수 */}
-                <div
-                  className="flex items-center gap-3
-                                 text-gray-500 text-[10px] sm:text-xs "
-                >
-                  <td className="text-center ">{created.split(" ")[0]}</td>
-                  <td className="text-center">{fullname}</td>
-                  <td className="text-center ">{readCount}</td>
-                </div>
+                <td>
+                  <span className="text-center text-[10px] sm:text-xs text-gray-500">
+                    {created.split(" ")[0]}
+                  </span>
+                  <span className="text-center ml-3 text-[10px] sm:text-xs text-gray-500">
+                    {fullname}
+                  </span>
+                  <span className="text-center ml-3 text-[10px] sm:text-xs text-gray-500">
+                    {readCount}
+                  </span>
+                </td>
               </tr>
             )
           )}
