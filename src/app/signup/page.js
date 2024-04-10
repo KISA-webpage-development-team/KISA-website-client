@@ -116,7 +116,7 @@ export default function SignUpPage() {
     <div
       className="flex flex-col items-center justify-center gap-10
     max-w-sm h-full mx-auto
-    mt-12 md:mt-20 lg:mt-28"
+    mt-8 md:mt-16"
     >
       <div className="flex flex-col text-center gap-1 items-center">
         <h1 className={`${sejongHospitalBold.className} text-2xl`}>
