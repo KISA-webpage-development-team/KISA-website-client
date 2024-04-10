@@ -4,7 +4,7 @@ import MobileBoardTable from "../../../components/Boards/MobileBoardTable";
 import BoardBar from "../../../components/Boards/BoardBar";
 // import { getBoardPosts } from "../../../service/board";
 
-export default async function CommunityPage() {
+export default function CommunityPage() {
   const boardType = "community";
   // fetch all the page data
   // const data = await getBoardPosts("community");

@@ -10,7 +10,7 @@ export default function AboutMainText() {
   return (
     <div className="flex flex-col items-center">
       <h1
-        className={`${styles.arialCaption} ${arial.className} text-4xl md:text-5xl lg:text-6xl`}
+        className={`${styles.arialCaption} ${sejongHospitalBold.className} text-4xl md:text-5xl lg:text-6xl`}
       >
         About KISA
       </h1>
