@@ -11,9 +11,17 @@ export default function KisaAll() {
         alt="23-24 KISA 단체사진"
         width={1252}
         height={560}
-        priority
+        priority={true}
       />
       <div className="absolute bg-[#00000040] opacity-[81%] w-[1252px] h-full" />
     </div>
   );
+}
+
+export async function getStaticProps() {
+  // Fetch data here if needed
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
 }

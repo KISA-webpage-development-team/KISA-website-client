@@ -76,6 +76,18 @@ const campusPageData = {
           name: "Bell Tower",
           id: "bell_tower",
         },
+        {
+          name: "West Hall\n(WH)",
+          id: "west_hall",
+        },
+        {
+          name: "Weiser Hall\n(WEIS)",
+          id: "weiser_hall",
+        },
+        {
+          name: "North University Building\n(NUB)",
+          id: "north_university_building",
+        },
       ],
     },
 

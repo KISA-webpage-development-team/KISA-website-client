@@ -12,7 +12,6 @@ export default function KisaPage() {
     px-[20px] md:px-[60px] lg:px-[75px]"
     >
       {/* link is for Kepler adobe font */}
-      <link rel="stylesheet" href="https://use.typekit.net/xbq1zkp.css"></link>
       <div className="flex justify-center w-screen bg-[#00274C] self-center">
         <KisaAll />
       </div>
