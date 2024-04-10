@@ -10,6 +10,7 @@ import { getBoardAnnouncements } from "../../service/board";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
 import PageSizeSelector from "./PageSizeSelector";
 import Pagination from "./Pagination";
+import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function MobileBoardTable({ boardType }) {
   const [posts, setPosts] = useState([]);
@@ -43,7 +44,10 @@ export default function MobileBoardTable({ boardType }) {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <table className="border border-gray-300 w-full">
+      <table
+        className="border-t border-b border-michigan-blue w-full 
+      text-base text-black "
+      >
         <tbody className="">
           {announcementPosts.map(
             (
@@ -53,8 +57,8 @@ export default function MobileBoardTable({ boardType }) {
               <tr
                 key={postid}
                 className={`flex flex-col items-start justify-center
-                            bg-gray-50/100
-                            border-b border-gray-200  py-2 px-2`}
+                            bg-gray-100
+                            border-b border-gray-200 py-2 px-3`}
               >
                 {/* top: 제목 [댓글수]] */}
                 <div className="flex items-center gap-2">
@@ -63,21 +67,16 @@ export default function MobileBoardTable({ boardType }) {
                   </td>
                   <td className="text-left grow ">
                     <Link href={`/posts/${postid}`} className="hover:underline">
-                      {commentsCount > 0
-                        ? `${title} [${commentsCount}]`
-                        : title}
+                      {commentsCount > 0 ? (
+                        <span className="">
+                          {title}
+                          <span className="ml-1 text-red-500">{`[${commentsCount}]`}</span>
+                        </span>
+                      ) : (
+                        <span className="">{title}</span>
+                      )}
                     </Link>
                   </td>
-                </div>
-
-                {/* bottom: 날짜 / 글쓴이 / 조회수 */}
-                <div
-                  className="flex items-center gap-3
-                             text-gray-500 text-xs "
-                >
-                  <td className="text-center ">{created.split(" ")[0]}</td>
-                  <td className="text-center">{fullname}</td>
-                  <td className="text-center ">{readCount}</td>
                 </div>
               </tr>
             )
@@ -85,39 +84,36 @@ export default function MobileBoardTable({ boardType }) {
 
           {posts.map(
             (
-              {
-                postid,
-                title,
-                fullname,
-                readCount,
-                created,
-                isAnnouncement,
-                commentsCount,
-              },
+              { postid, title, fullname, readCount, created, commentsCount },
               idx
             ) => (
               <tr
                 key={postid}
                 className={`flex flex-col items-start justify-center
-                border-b border-gray-200 hover:bg-gray-50/100 py-2 px-2`}
+                border-b border-gray-200 hover:bg-gray-100 py-2 px-3`}
               >
                 {/* top: 제목 [댓글수]] */}
                 <div className="flex items-center">
                   <td className="text-left grow ">
                     <Link href={`/posts/${postid}`} className="hover:underline">
-                      {commentsCount > 0
-                        ? `${title} [${commentsCount}]`
-                        : title}
+                      {commentsCount > 0 ? (
+                        <span className="">
+                          {title}
+                          <span className="ml-1 text-red-500">{`[${commentsCount}]`}</span>
+                        </span>
+                      ) : (
+                        <span className="">{title}</span>
+                      )}
                     </Link>
                   </td>
                 </div>
 
                 {/* bottom: 날짜 / 글쓴이 / 조회수 */}
                 <div
-                  className="flex items-center gap-3
+                  className="flex items-center gap-2
                  text-gray-500 text-xs "
                 >
-                  <td className="text-center ">{created.split(" ")[0]}</td>
+                  <td className="text-center ">{dateFormatter(created)}</td>
                   <td className="text-center">{fullname}</td>
                   <td className="text-center ">{readCount}</td>
                 </div>

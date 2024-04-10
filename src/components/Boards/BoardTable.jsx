@@ -10,6 +10,7 @@ import { getBoardAnnouncements } from "../../service/board";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
 import PageSizeSelector from "./PageSizeSelector";
 import Pagination from "./Pagination";
+import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function BoardTable({ boardType }) {
   const [posts, setPosts] = useState([]);
@@ -17,6 +18,7 @@ export default function BoardTable({ boardType }) {
   const [pageNum, setPageNum] = useState(0);
   const [pageSize, setPageSize] = useState(10); // 10, 20, 30
 
+  // fetch announcements
   useEffect(() => {
     const fetchAnnouncements = async () => {
       const data = await getBoardAnnouncements(boardType);
@@ -27,6 +29,7 @@ export default function BoardTable({ boardType }) {
     fetchAnnouncements();
   }, [boardType]);
 
+  // fetch non-announcements
   useEffect(() => {
     const fetchPosts = async () => {
       const data = await getBoardPosts(boardType, pageSize, pageNum);
@@ -43,14 +46,20 @@ export default function BoardTable({ boardType }) {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <table className="border border-gray-300 w-full">
+      <table
+        className="border border-gray-300 w-full 
+      text-base text-black "
+      >
         <thead className="">
-          <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center">
-            <th className="py-2 w-16">번호</th>
+          <tr
+            className="border-b border-gray-500 bg-white
+           flex items-center py-2"
+          >
+            <th className="basis-1/12 min-w-16">번호</th>
             <th className="grow">제목</th>
-            <th className="w-36">글쓴이</th>
+            <th className="basis-1/12 min-w-16">글쓴이</th>
+            <th className="basis-1/12 min-w-16">작성일</th>
             <th className="w-16">조회수</th>
-            <th className="w-28">날짜</th>
           </tr>
         </thead>
         <tbody className="">
@@ -69,26 +78,42 @@ export default function BoardTable({ boardType }) {
                 },
                 idx
               ) => (
+                // 번호 | 제목 | 글쓴이 | 작성일 | 조회수
                 <tr
                   key={postid}
-                  className={`border-b border-gray-200 flex items-center ${
-                    isAnnouncement ? "bg-gray-50/100" : "hover:bg-gray-50/100"
+                  className={`border-b border-gray-200 flex items-center py-2 ${
+                    isAnnouncement
+                      ? "border-l-4 border-l-michigan-blue bg-gray-100"
+                      : "hover:bg-gray-100"
                   }`}
                 >
-                  <td className="text-center w-16 py-2 flex justify-center items-center">
+                  <td
+                    className={` ${
+                      isAnnouncement && "pr-2"
+                    } text-center basis-1/12 flex justify-center min-w-16 `}
+                  >
                     {isAnnouncement ? <AnnouncementIcon /> : postid}
                   </td>
-                  <td className="text-left grow py-2">
+                  <td className="text-left grow">
                     <Link href={`/posts/${postid}`} className="hover:underline">
-                      {commentsCount > 0
-                        ? `${title} [${commentsCount}]`
-                        : title}
+                      {commentsCount > 0 ? (
+                        <span className="">
+                          {title}
+                          <span className="ml-1 text-red-500">{`[${commentsCount}]`}</span>
+                        </span>
+                      ) : (
+                        <span className="">{title}</span>
+                      )}
                     </Link>
                   </td>
 
-                  <td className="text-center w-36">{fullname}</td>
+                  <td className="text-center basis-1/12 min-w-16">
+                    {fullname}
+                  </td>
+                  <td className="text-center basis-1/12 min-w-16">
+                    {dateFormatter(created)}
+                  </td>
                   <td className="text-center w-16">{readCount}</td>
-                  <td className="text-center w-28">{created.split(" ")[0]}</td>
                 </tr>
               )
             )}
@@ -102,6 +127,7 @@ export default function BoardTable({ boardType }) {
         </div>
 
         <div className="grow">
+          {/* TODO: improve pagination */}
           <Pagination pageNum={pageNum} setPageNum={setPageNum} />
         </div>
       </div>

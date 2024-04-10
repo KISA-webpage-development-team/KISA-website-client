@@ -1,3 +1,4 @@
+// comments의 생성 시간을 위한 oo시간전, oo일전, oo년전을 반환하는 함수
 export function timeForToday(value) {
   const today = new Date();
   const timeValue = new Date(value);
@@ -21,4 +22,34 @@ export function timeForToday(value) {
   }
 
   return `${Math.floor(betweenTimeDay / 365)}년전`;
+}
+
+// post의 작성 날짜를 오늘이면 시간을, 오늘이 아니면 날짜를 반환하는 함수
+export function dateFormatter(date) {
+  const today = new Date();
+  const target = new Date(date);
+
+  if (
+    today.getFullYear() === target.getFullYear() &&
+    today.getMonth() === target.getMonth() &&
+    today.getDate() === target.getDate()
+  ) {
+    return target.toLocaleTimeString("ko-KR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  } else {
+    let currentYear = new Date().getFullYear();
+    let year = target.getFullYear();
+    let month = ("0" + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
+    let day = ("0" + target.getDate()).slice(-2);
+
+    if (year === currentYear) {
+      return `${month}.${day}`;
+    } else {
+      let lastTwoDigitsOfYear = ("0" + (year % 100)).slice(-2);
+      return `${lastTwoDigitsOfYear}.${month}.${day}`;
+    }
+  }
 }

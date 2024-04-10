@@ -11,7 +11,7 @@ export default async function CommunityPage() {
   // console.log(data);
 
   return (
-    <section className="flex flex-col mb-10 px-0 md:px-[60px] lg:px-[75px]">
+    <section className={`flex flex-col mb-10 px-0 md:px-[60px] lg:px-[75px]`}>
       {/* 게시판 이름: 자유게시판 */}
       {/* for now, boardType is not working as a parameter,
       will be fixed in later factorization */}

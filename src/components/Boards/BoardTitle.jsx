@@ -7,7 +7,7 @@ export default function BoardTitle({ boardType }) {
 
   return (
     <Link href={boardLink}>
-      <p className="text-lg md:text-xl font-bold text-black hover:text-gray-500 cursor-pointer">
+      <p className="text-lg sm:text-xl md:text-2xl font-bold text-black hover:text-gray-500 cursor-pointer">
         자유게시판
       </p>
     </Link>
