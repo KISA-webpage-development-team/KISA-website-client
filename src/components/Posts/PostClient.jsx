@@ -32,6 +32,10 @@ export default function PostClient({ postid }) {
     getData();
   }, [postid]);
 
+  if (!post) {
+    return <div>Loading...</div>;
+  }
+
   return (
     /* post is null when it is not fetched yet */
     post && (
@@ -40,7 +44,7 @@ export default function PostClient({ postid }) {
         <div className="pt-3 pb-2 ">
           <BoardTitle boardType={post.type} />
         </div>
-        <HorizontalDivider />
+        <HorizontalDivider color="dark" />
 
         {/* post content */}
         <PostView boardType={post.type} post={post} postid={postid} />

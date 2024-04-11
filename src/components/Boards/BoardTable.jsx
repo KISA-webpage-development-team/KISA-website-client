@@ -81,25 +81,33 @@ export default function BoardTable({ boardType }) {
                 // 번호 | 제목 | 글쓴이 | 작성일 | 조회수
                 <tr
                   key={postid}
-                  className={`border-b border-gray-200 flex items-center py-2 ${
-                    isAnnouncement
-                      ? "border-l-4 border-l-michigan-blue bg-gray-100"
-                      : "hover:bg-gray-100"
+                  className={`relative border-b border-gray-200 flex items-center py-2 ${
+                    isAnnouncement ? "bg-gray-100" : "hover:bg-gray-100"
                   }`}
                 >
                   <td
                     className={` ${
-                      isAnnouncement && "pr-2"
+                      isAnnouncement && ""
                     } text-center basis-1/12 flex justify-center min-w-16 `}
                   >
-                    {isAnnouncement ? <AnnouncementIcon /> : postid}
+                    {isAnnouncement ? (
+                      <>
+                        <AnnouncementIcon />
+                        <td className="absolute top-0 left-0 h-full w-1 bg-michigan-blue" />
+                      </>
+                    ) : (
+                      postid
+                    )}
+                    {/* {isAnnouncement && (
+                      <div className="absolute left-0 h-full border-4 border-michigan-blue" />
+                    )} */}
                   </td>
                   <td className="text-left grow">
                     <Link href={`/posts/${postid}`} className="hover:underline">
                       {commentsCount > 0 ? (
-                        <span className="">
+                        <span className={``}>
                           {title}
-                          <span className="ml-1 text-red-500">{`[${commentsCount}]`}</span>
+                          <span className="ml-1 text-red-500 font-normal">{`[${commentsCount}]`}</span>
                         </span>
                       ) : (
                         <span className="">{title}</span>

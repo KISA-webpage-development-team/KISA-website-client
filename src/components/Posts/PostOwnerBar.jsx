@@ -6,7 +6,7 @@ export default function PostOwnerBar({ fullname, created, readCount }) {
   return (
     <div
       className="flex justify-between items-center 
-    text-sm md:text-base"
+    text-sm md:text-base bg-green-100"
     >
       {/* left: fullname + created */}
       <div className="flex items-center gap-2">

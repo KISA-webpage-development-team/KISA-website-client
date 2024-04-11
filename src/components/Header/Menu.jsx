@@ -20,9 +20,9 @@ export default function Menu() {
   };
 
   return (
-    <div className="flex gap-8">
+    <div className="flex gap-5 last:lg:gap-8">
       {menu.map(({ name, dropdowns }, idx) => (
-        <div className="relative" key={idx}>
+        <div className="relative text-sm lg:text-base" key={idx}>
           <button
             onMouseEnter={() => handleDropdownClick(idx)}
             onMouseLeave={() => setShowDropdown(false)}

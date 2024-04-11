@@ -2,9 +2,9 @@ import React from "react";
 
 export default function PostTitleBar({ isAnnouncement, title }) {
   return (
-    <div className="flex justify-start pt-2 text-base sm:text-lg md:text-xl font-semibold">
+    <div className="flex justify-start font-semibold text-base sm:text-lg md:text-xl ">
       {isAnnouncement ? (
-        <p className="text-blue-500 font-bold">[ 공지 ]</p>
+        <p className="text-blue-700 font-bold">[ 공지 ]</p>
       ) : (
         <></>
       )}

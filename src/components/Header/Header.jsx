@@ -27,11 +27,11 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
           <Logo />
         </div>
 
-        <div className="ml-10 mr-4 hidden md:block">
+        <div className="ml-7 lg:ml-10 mr-1 lg:mr-4 hidden md:block">
           <VerticalDivider />
         </div>
 
-        <div className="ml-6 hidden md:block">
+        <div className="ml-5 lg:ml-6 hidden md:block">
           <Menu />
         </div>
       </div>

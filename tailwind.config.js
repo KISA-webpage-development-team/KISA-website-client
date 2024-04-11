@@ -22,6 +22,9 @@ module.exports = {
         "michigan-blue": "#00274C",
         "michigan-maize": "#FFCB05",
       },
+      fontSize: {
+        "responsive-xl": "text-base sm:text-lg md:text-xl",
+      },
     },
   },
   darkMode: "class",
