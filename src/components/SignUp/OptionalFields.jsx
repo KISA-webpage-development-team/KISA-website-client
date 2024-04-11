@@ -15,9 +15,9 @@ export default function OptionalFields({
   return (
     <div className="flex flex-col gap-6 w-full">
       <div className="w-full">
-        <CustomLabel htmlFor="year" text="출생년도 (YYYY)" />
+        <CustomLabel htmlFor="year" text="생년월일 (YYYY/MM/DD)" />
         <CustomInput
-          type="number"
+          type="text"
           value={bornYear}
           onChange={(e) => setBornYear(e.target.value)}
           placeholder=""

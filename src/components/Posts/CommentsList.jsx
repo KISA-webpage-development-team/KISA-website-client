@@ -21,7 +21,7 @@ export default function CommentsList({
       </div>
 
       {comments?.map((comment) => (
-        <div key={comment.commentid} className="mb-1">
+        <div key={comment.commentid} className="">
           <CommentItem
             commentid={comment.commentid}
             postid={comment.postid}

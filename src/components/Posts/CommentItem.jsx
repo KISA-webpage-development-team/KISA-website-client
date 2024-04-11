@@ -7,6 +7,7 @@ import CommentEditor from "./CommentEditor";
 import { editComment, deleteComment } from "../../service/comment";
 
 import { timeForToday } from "../../utils/dateFormatter";
+import HorizontalDivider from "../shared/HorizontalDivider";
 
 export default function CommentItem({
   commentid,
@@ -45,35 +46,38 @@ export default function CommentItem({
   };
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col pt-2">
       <div className="flex items-center">
         {isCommentOfComment ? (
-          <div className="-translate-y-2">
+          <div className="-translate-y-2 mr-4">
             <ReplyIcon type="flip" />
           </div>
         ) : null}
 
         {/* Comment contents */}
-        <div className="flex items-center justify-between w-full ml-1 md:ml-2">
-          <div className="flex flex-col w-full gap-1">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex flex-col w-full">
             <div className="flex items-center justify-between">
               {/* need to change fullname to fullname's username */}
-              <div className="flex items-center gap-1 md:gap-2">
-                <p className="text-black font-bold text-sm">{fullname}</p>
-                <p className="text-gray-500 text-xs md:text-sm">
-                  {timeForToday(created)}
-                </p>
+              <div
+                className="flex items-center gap-1 md:gap-2
+              text-base"
+              >
+                <p className="text-black font-semibold">{fullname}</p>
+                <p className="text-gray-500">{timeForToday(created)}</p>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 {isAuthor && (
                   <>
                     <ImageButton
+                      background="none"
                       text={`${openCommentEditor ? "닫기" : ""}`}
                       icon={<PencilIcon color="gray" />}
                       onClick={handleOpenCommentEditor}
                     />
                     <ImageButton
+                      background="none"
                       icon={<TrashcanIcon color="gray" />}
                       text={""}
                       onClick={handleCommentDelete}
@@ -81,21 +85,17 @@ export default function CommentItem({
                   </>
                 )}
                 <ImageButton
+                  background="none"
                   icon={<ReplyIcon />}
                   text={`${openReplyEditor ? "닫기" : "답글"}`}
                   onClick={handleOpenReplyEditor}
                 />
               </div>
             </div>
-            <div
-              className={`${
-                isAuthor && "text-blue-500"
-              } pb-3 text-sm md:text-base`}
-            >
+            <div className={`${isAuthor && "text-blue-500"} pb-3 text-base`}>
               {text}
             </div>
           </div>
-          {/* Right Buttons */}
         </div>
       </div>
       {openCommentEditor && (
@@ -127,7 +127,7 @@ export default function CommentItem({
       {childComments &&
         childComments.length > 0 &&
         childComments.map((subComment, idx) => (
-          <div key={subComment.commentid} className="ml-8">
+          <div key={subComment.commentid} className="ml-4">
             <CommentItem
               commentid={subComment.commentid}
               postid={subComment.postid}

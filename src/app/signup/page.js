@@ -76,7 +76,7 @@ export default function SignUpPage() {
     // const userData = {
     //   name: name,
     //   email: email,
-    //   bornYear: bornYear ? bornYear : null,
+    //   bornDate: bornYear ? bornYear : null,
     //   major: major ? major : null,
     //   gradYear: gradYear ? gradYear : null,
     //   linkedIn: linkedIn ? linkedIn : null,
