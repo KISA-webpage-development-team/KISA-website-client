@@ -4,7 +4,7 @@ export default function HorizontalDivider({ color = "light" }) {
   return (
     <div
       className={`border w-full ${
-        color === "light" ? "border-gray-100" : "border-gray-500"
+        color === "light" ? "border-gray-200/60" : "border-gray-500"
       } rounded-lg`}
     ></div>
   );

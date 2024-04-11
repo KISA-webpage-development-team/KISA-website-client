@@ -75,13 +75,14 @@ export default function PostView({ boardType, post, postid }) {
   return (
     <div className="flex flex-col">
       {/* 1. Post Title Bar: title + created */}
-      <div className="flex flex-col gap-0 bg-yellow-200">
+      <div className="flex flex-col gap-1 py-3">
         <PostTitleBar isAnnouncement={post.isAnnouncement} title={post.title} />
         {/* 2. Post Owner bar: Owner + created + readCount (+ 추천수, 댓글수 등) */}
         <PostOwnerBar
           fullname={post.fullname}
           created={post.created}
           readCount={post.readCount}
+          commentsCount={post.commentsCount}
         />
       </div>
 

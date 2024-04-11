@@ -53,3 +53,17 @@ export function dateFormatter(date) {
     }
   }
 }
+
+// input: Thu, 11 Apr 2024 18:46:43 GMT
+// output: 2024.04.11 18:46
+export function fullDateFormatter(date) {
+  const target = new Date(date);
+
+  let year = target.getFullYear();
+  let month = ("0" + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
+  let day = ("0" + target.getDate()).slice(-2);
+  let hour = ("0" + target.getHours()).slice(-2);
+  let minute = ("0" + target.getMinutes()).slice(-2);
+
+  return `${year}.${month}.${day} ${hour}:${minute}`;
+}
