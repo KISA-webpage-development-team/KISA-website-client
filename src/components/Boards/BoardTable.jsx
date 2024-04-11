@@ -58,7 +58,7 @@ export default function BoardTable({ boardType }) {
             <th className="basis-1/12 min-w-16">번호</th>
             <th className="grow">제목</th>
             <th className="basis-1/12 min-w-16">글쓴이</th>
-            <th className="basis-1/12 min-w-16">작성일</th>
+            <th className="basis-[10%] min-w-16">작성일</th>
             <th className="w-16">조회수</th>
           </tr>
         </thead>
@@ -118,7 +118,7 @@ export default function BoardTable({ boardType }) {
                   <td className="text-center basis-1/12 min-w-16">
                     {fullname}
                   </td>
-                  <td className="text-center basis-1/12 min-w-16">
+                  <td className="text-center basis-[10%] min-w-16">
                     {dateFormatter(created)}
                   </td>
                   <td className="text-center w-16">{readCount}</td>

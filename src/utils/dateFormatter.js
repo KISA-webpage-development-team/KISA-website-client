@@ -45,12 +45,7 @@ export function dateFormatter(date) {
     let month = ("0" + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
     let day = ("0" + target.getDate()).slice(-2);
 
-    if (year === currentYear) {
-      return `${month}.${day}`;
-    } else {
-      let lastTwoDigitsOfYear = ("0" + (year % 100)).slice(-2);
-      return `${lastTwoDigitsOfYear}.${month}.${day}`;
-    }
+    return `${year}.${month}.${day}`;
   }
 }
 

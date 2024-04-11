@@ -4,6 +4,7 @@ import React from "react";
 import CommentItem from "./CommentItem";
 import DownArrowIcon from "../ui/DownArrowIcon";
 import { useSession } from "next-auth/react";
+import HorizontalDivider from "../shared/HorizontalDivider";
 
 export default function CommentsList({
   commentsCount,
@@ -13,8 +14,8 @@ export default function CommentsList({
   const { data: session } = useSession();
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center mb-4">
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center">
         <p className="mr-1 text-sm md:text-base">댓글 {commentsCount}개</p>
         <DownArrowIcon />
       </div>
