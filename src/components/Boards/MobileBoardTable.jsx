@@ -21,7 +21,7 @@ export default function MobileBoardTable({ boardType }) {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       const data = await getBoardAnnouncements(boardType);
-      console.log(data);
+      console.log(data.results);
       setAnnouncementPosts(data?.results);
     };
 
@@ -31,7 +31,7 @@ export default function MobileBoardTable({ boardType }) {
   useEffect(() => {
     const fetchPosts = async () => {
       const data = await getBoardPosts(boardType, pageSize, pageNum);
-      console.log(data);
+      console.log(data.results);
       setPosts(data?.results);
     };
 

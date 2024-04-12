@@ -31,13 +31,13 @@ export default function CommunityPage() {
         <BoardTable boardType={boardType} />
       </div>
 
-      <div
+      {/* <div
         className="
          flex md:hidden 
      "
       >
         <MobileBoardTable boardType={boardType} />
-      </div>
+      </div> */}
     </section>
   );
 }
