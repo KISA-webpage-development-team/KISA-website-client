@@ -13,6 +13,7 @@ export async function createComment(postid, body) {
   }
 }
 
+// need email from the response
 export async function getCommentsByPostid(postid) {
   // const url = `${backendUrl}/comments/${postid}/`;
   const url = `${backendUrl}/comments/${postid}/`;

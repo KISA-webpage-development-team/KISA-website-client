@@ -2,6 +2,7 @@ import axios from "axios";
 import { backendUrl } from "../config/backendUrl";
 
 // page is 0-indexed
+// need email address from response
 export async function getBoardPosts(boardType, size, page) {
   const url = `${backendUrl}/boards/${boardType}/posts/?size=${size}&page=${page}`;
   try {

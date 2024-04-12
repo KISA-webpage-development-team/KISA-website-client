@@ -38,7 +38,7 @@ export default function MobileBoardTable({ boardType }) {
     fetchPosts();
   }, [pageNum, pageSize, boardType]);
 
-  if (!posts) {
+  if (!posts || !announcementPosts) {
     return <div>Loading...</div>;
   }
 
@@ -49,7 +49,7 @@ export default function MobileBoardTable({ boardType }) {
       text-base text-black "
       >
         <tbody className="">
-          {announcementPosts.map(
+          {announcementPosts?.map(
             (
               { postid, title, commentsCount, created, fullname, readCount },
               idx
@@ -82,7 +82,7 @@ export default function MobileBoardTable({ boardType }) {
             )
           )}
 
-          {posts.map(
+          {posts?.map(
             (
               { postid, title, fullname, readCount, created, commentsCount },
               idx
