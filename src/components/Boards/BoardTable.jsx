@@ -40,7 +40,7 @@ export default function BoardTable({ boardType }) {
     fetchPosts();
   }, [pageNum, pageSize, boardType]);
 
-  if (!posts) {
+  if (!posts || !announcementPosts) {
     return <div>Loading...</div>;
   }
 
