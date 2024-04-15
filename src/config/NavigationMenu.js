@@ -69,8 +69,8 @@ const menu = [
         href: "/boards/community",
       },
       {
-        name: "취업 정보",
-        href: "/boards/job",
+        name: "학업 정보",
+        href: "/boards/academics",
       },
       {
         name: "사고팔기",

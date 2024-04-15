@@ -65,7 +65,9 @@ export default function PostView({ boardType, post, postid }) {
   };
 
   const onClickPostDelete = () => {
-    route.push(`/posts/delete/${boardType}/${post.title}/${post.postid}`);
+    const formattedTitle = post.title.replace("/", "-");
+
+    route.push(`/posts/delete/${boardType}/${formattedTitle}/${post.postid}`);
   };
 
   const onClickPostComment = () => {
