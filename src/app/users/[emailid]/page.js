@@ -29,7 +29,7 @@ export default async function UserPage({ params }) {
 
   return (
     <div className={`container ${sejongHospitalLight.className}`}>
-      <UserBasicInfo email={userInfo.email} fullname={userInfo.fullname} />
+      <UserBasicInfo user={userInfo} />
 
       {/* <>
         <UserBoard email={email} />

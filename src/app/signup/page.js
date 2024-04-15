@@ -69,18 +69,15 @@ export default function SignUpPage() {
     event.preventDefault();
 
     const userData = {
-      name: name,
+      fullname: name,
       email: email,
+      bornYear: bornYear ? bornYear : null,
+      bornDate: null,
+      bornMonth: null,
+      major: major ? major : null,
+      gradYear: gradYear ? gradYear : null,
+      linkedin: linkedIn ? linkedIn : null,
     };
-
-    // const userData = {
-    //   name: name,
-    //   email: email,
-    //   bornDate: bornYear ? bornYear : null,
-    //   major: major ? major : null,
-    //   gradYear: gradYear ? gradYear : null,
-    //   linkedIn: linkedIn ? linkedIn : null,
-    // };
 
     const userConfirmed = window.confirm(
       "한 번 생성된 로그인 정보 수정은 어렵습니다. 진행하시겠습니까?"
