@@ -48,7 +48,11 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       setCanSubmit(false);
       return;
     }
-    if (announcementTag === "" && customTag === "") {
+    if (
+      boardType === "announcement" &&
+      announcementTag === "" &&
+      customTag === ""
+    ) {
       setCanSubmit(false);
       return;
     }
