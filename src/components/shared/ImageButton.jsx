@@ -17,7 +17,9 @@ export default function ImageButton({
     >
       {icon}
       {text !== "" && (
-        <p className="text-xs md:text-sm hover:underline">{text}</p>
+        <p className="hidden md:block text-xs md:text-sm hover:underline">
+          {text}
+        </p>
       )}
     </button>
   );

@@ -61,7 +61,7 @@ export default function CommentItem({
               {/* need to change fullname to fullname's username */}
               <div
                 className="flex items-center gap-1 md:gap-2
-              text-base"
+              text-sm md:text-lg"
               >
                 <p className="text-black font-semibold">{fullname}</p>
                 <p className="text-gray-500">{timeForToday(created)}</p>
@@ -72,14 +72,14 @@ export default function CommentItem({
                   <>
                     <ImageButton
                       background="none"
-                      text={`${openCommentEditor ? "닫기" : ""}`}
+                      text={`${openCommentEditor ? "닫기" : "수정"}`}
                       icon={<PencilIcon color="gray" />}
                       onClick={handleOpenCommentEditor}
                     />
                     <ImageButton
                       background="none"
                       icon={<TrashcanIcon color="gray" />}
-                      text={""}
+                      text={"삭제"}
                       onClick={handleCommentDelete}
                     />
                   </>
