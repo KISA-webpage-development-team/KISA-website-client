@@ -40,11 +40,18 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
 
   // form validation
   useEffect(() => {
+    console.log("checking...");
+    console.log("title: ", title);
+    console.log("content: ", content);
     if (title === null || title?.length === 0) {
       setCanSubmit(false);
       return;
     }
-    if (content === null || content?.length === 0) {
+    if (
+      content === null ||
+      content?.length === 0 ||
+      content === "<p><br></p>"
+    ) {
       setCanSubmit(false);
       return;
     }
@@ -55,13 +62,15 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
     ) {
       setCanSubmit(false);
       return;
+    } else {
+      setCanSubmit(true);
+      return;
     }
-    setCanSubmit(true);
   }, [title, content, announcementTag, customTag]);
 
-  // useEffect(() => {
-  //   if (content === "") setCanSubmit(false);
-  // }, [content]);
+  useEffect(() => {
+    if (content === "") setCanSubmit(false);
+  }, [content]);
 
   // check if user is admin
   useEffect(() => {
