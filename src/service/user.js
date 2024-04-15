@@ -59,7 +59,7 @@ export async function getUserInfo(email) {
       created: "Thu, 11 Apr 2024 00:50:14 GMT",
       email: "jiohin@umich.edu",
       fullname: "인지오",
-      gradYear: "Winter 2026",
+      gradYear: 2026,
       linkedin: "https://www.linkedin.com/in/jioh-in-4228b2222/",
       major: "Computer Science",
     };

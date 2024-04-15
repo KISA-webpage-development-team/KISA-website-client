@@ -14,9 +14,6 @@ export default async function UserPage({ params }) {
 
   const userInfo = await getUserInfo(umichEmail);
 
-  // const userInfo = await getUserInfo(decodedEmail);
-  // // currently, userInfo is just same as session's email and name
-
   // if (decodedEmail !== userInfo.email) {
   //   return (
   //     <div className="flex flex-col items-center py-10 px-[20px] md:px-[60px] lg:px-[75px]">
@@ -31,9 +28,9 @@ export default async function UserPage({ params }) {
     <div className={`container ${sejongHospitalLight.className}`}>
       <UserBasicInfo user={userInfo} />
 
-      {/* <>
-        <UserBoard email={email} />
-      </> */}
+      <>
+        <UserBoard email={umichEmail} />
+      </>
     </div>
   );
 }

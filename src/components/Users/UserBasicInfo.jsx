@@ -40,7 +40,7 @@ export default function UserBasicInfo({ user }) {
   }
 
   return (
-    <div className="flex gap-16 justify-center bg-yellow-300">
+    <div className="flex gap-24 justify-center">
       {/* Left: profile image + name + major */}
       {/* TODO: profile 이미지가 구글 로그인 이미지이기 때문에 로그인한 유저만 된다... */}
       <UserBasicInfoLeft
@@ -48,18 +48,6 @@ export default function UserBasicInfo({ user }) {
         fullname={fullname}
         major={major}
       />
-
-      {/* {session?.user.email == email && (
-        <div className="w-36 h-36">
-          <Image
-            className="rounded-full"
-            src={session?.user.image}
-            alt="user profile image"
-            width={500}
-            height={500}
-          />
-        </div>
-      )} */}
 
       {/* Right: email, gradYear, borndate, linkedin*/}
       <UserBaiscInfoRight

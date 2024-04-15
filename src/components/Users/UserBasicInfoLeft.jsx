@@ -1,24 +1,28 @@
 import Image from "next/image";
 import React from "react";
+import { sejongHospitalBold } from "../../utils/fonts/textFonts";
 
 export default function UserBasicInfoLeft({ profile, fullname, major }) {
   return (
-    <div className="flex flex-col justify-center gap-4">
+    <div className="flex flex-col items-center gap-4">
       {/* Image */}
-      <div>
+      <div
+        className="relative flex justify-center 
+      aspect-square w-24"
+      >
         <Image
           className="rounded-full object-contain"
           src={profile}
           alt="profile image"
-          width={200}
-          height={200}
+          fill
         />
       </div>
 
       {/* fullname + major */}
-
-      <div className="bg-pink-200">
-        <h1 className="text-3xl font-bold">{fullname}</h1>
+      <div className="flex flex-col items-center gap-1">
+        <h1 className={`${sejongHospitalBold.className} text-3xl`}>
+          {fullname}
+        </h1>
         <h2 className="text-xl">{major}</h2>
       </div>
     </div>

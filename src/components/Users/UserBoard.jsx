@@ -38,6 +38,8 @@ export default function UserBoard({ email }) {
     else fetchComments();
   }, [email, openPosts]);
 
+  if (!postsData && !commentsData) return <div>loading...</div>;
+
   return (
     <div className="flex flex-col w-full mt-10">
       {/* Nav Bar: 내 글 / 내 댓글 (default 내 글) */}

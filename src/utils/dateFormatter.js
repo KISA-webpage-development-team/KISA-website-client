@@ -62,3 +62,9 @@ export function fullDateFormatter(date) {
 
   return `${year}.${month}.${day} ${hour}:${minute}`;
 }
+
+// input year, month, day
+// output: 2024.04.11
+export function birthDateFormatter(year, month, day) {
+  return `${year}.${month}.${day}`;
+}

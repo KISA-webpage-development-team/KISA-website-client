@@ -10,7 +10,9 @@ export default function UserBoardNavBar({ openPosts, setOpenPosts }) {
   return (
     <div className="flex py-2">
       <div
-        className={`flex items-center gap-2 ${openPosts && "bg-gray-300"}`}
+        className={`flex items-center gap-2 ${
+          openPosts && "bg-gray-300"
+        } p-2 rounded-lg`}
         onClick={handleUserBoardToggle}
       >
         <ListIcon size="medium" />
