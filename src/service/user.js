@@ -51,7 +51,7 @@ export async function getUserInfo(email) {
   const url = `${backendUrl}/users/${email}/`;
   try {
     const response = await axios.get(url);
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (err) {
     console.error(err);

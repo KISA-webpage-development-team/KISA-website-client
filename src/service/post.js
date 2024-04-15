@@ -14,8 +14,8 @@ export async function createReadCountCookie(postid) {
     //     "Content-Type": "application/json",
     //   },
     // });
-    console.log(response.headers["Set-Cookie"]);
-    console.log(response);
+    // console.log(response.headers["Set-Cookie"]);
+    // console.log(response);
     return response;
   } catch (error) {
     console.error(error);
@@ -23,7 +23,7 @@ export async function createReadCountCookie(postid) {
 }
 
 export async function createPost(data) {
-  console.log(data);
+  // console.log(data);
   // const url = `${backendUrl}/posts/`;
   const url = `${backendUrl}/posts/`; // currently env doesn't work
   try {
