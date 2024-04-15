@@ -121,7 +121,7 @@ export default function BoardTable({ boardType }) {
               </tr>
             )
           )}
-          {posts.map(
+          {posts?.map(
             (
               {
                 postid,
