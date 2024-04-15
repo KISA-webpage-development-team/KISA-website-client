@@ -41,7 +41,7 @@ export default function BoardTable({ boardType }) {
   }, [pageNum, pageSize, boardType]);
 
   if (!posts && !announcementPosts) {
-    return <div>Loading...</div>;
+    return null;
   }
 
   return (

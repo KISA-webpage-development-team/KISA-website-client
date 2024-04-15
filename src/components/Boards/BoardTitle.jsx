@@ -1,6 +1,7 @@
 // boardId = url에서 /boards/{boardId}
 import Link from "next/link";
 import React from "react";
+import { getBoardName } from "../../config/boardName";
 
 export default function BoardTitle({ boardType }) {
   const boardLink = `/boards/${boardType}`;
@@ -10,7 +11,7 @@ export default function BoardTitle({ boardType }) {
       <p
         className={`text-xl md:text-2xl font-bold text-black hover:text-gray-500 cursor-pointer`}
       >
-        자유게시판
+        {getBoardName(boardType)}
       </p>
     </Link>
   );

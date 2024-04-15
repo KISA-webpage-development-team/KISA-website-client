@@ -4,8 +4,8 @@ import MobileBoardTable from "../../../components/Boards/MobileBoardTable";
 import BoardBar from "../../../components/Boards/BoardBar";
 // import { getBoardPosts } from "../../../service/board";
 
-export default function AnnouncementPage() {
-  const boardType = "announcement";
+export default function BuyAndSellPage() {
+  const boardType = "buyandsell";
   // fetch all the page data
   // const data = await getBoardPosts("community");
   // console.log(data);

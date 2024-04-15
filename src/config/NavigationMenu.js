@@ -19,6 +19,10 @@ const menu = [
         name: "회칙",
         href: "/about/rule",
       },
+      {
+        name: "스폰서",
+        href: "/about/sponsor",
+      },
     ],
   },
   {
@@ -65,16 +69,16 @@ const menu = [
         href: "/boards/community",
       },
       {
-        name: "채용공고",
+        name: "취업 정보",
         href: "/boards/job",
       },
       {
-        name: "Alumni",
-        href: "/boards/alumni",
+        name: "사고팔기",
+        href: "/boards/buyandsell",
       },
       {
-        name: "KISA 스폰서",
-        href: "/boards/sponsor",
+        name: "하우징/룸메이트",
+        href: "/boards/housing",
       },
     ],
   },
