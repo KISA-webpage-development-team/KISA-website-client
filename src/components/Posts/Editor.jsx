@@ -9,6 +9,10 @@ import { getIsAdmin } from "../../service/user";
 import { createPost, updatePost } from "../../service/post";
 import { useRouter } from "next/navigation";
 import { reactQuillModule } from "../../config/reactQuillModule";
+import {
+  getBoardName,
+  getTagListForAnnouncement,
+} from "../../config/boardName";
 
 // need to import react quill dynamically to load style properly
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -26,6 +30,9 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
   const [isAnnouncement, setIsAnnouncement] = useState(
     curPost?.isAnnouncement || false
   ); // 공지사항인지
+
+  const [canSubmit, setCanSubmit] = useState(false); // 등록 버튼의 disabled상태
+  const [annoucnementTag, setAnnouncementTag] = useState(""); // 공지사항 게시판용 태그
 
   const [isAdmin, setIsAdmin] = useState(false); // admin인지
 
@@ -48,7 +55,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
   };
 
   const handleCheckboxChange = (e) => {
-    setIsAnnouncement(e.currentTarget.checked);
+    setAnnouncementTag(e.currentTarget.value);
   };
 
   const handleSumbit = async () => {
@@ -64,9 +71,13 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       // send update api call instead of create call
       try {
         const newData = {
-          title,
+          title:
+            boardType === "announcement"
+              ? `[${getBoardName(annoucnementTag)}] ${title}`
+              : `${title}`,
           text: content,
           isAnnouncement,
+          tag: annoucnementTag,
         };
 
         console.log("New Partial Data submit!: ", newData);
@@ -87,11 +98,15 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       try {
         const data = {
           type: boardType,
-          title,
+          title:
+            boardType === "announcement"
+              ? `[${getBoardName(annoucnementTag)}] ${title}`
+              : `${title}`,
           fullname: session?.user.name,
           email: session?.user.email,
           text: content,
           isAnnouncement,
+          tag: annoucnementTag,
         };
 
         console.log("Data submit!: ", data);
@@ -116,9 +131,13 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
     return <NotLoginModal />;
   }
 
+  if (status !== "loading" && boardType === "announcement" && !isAdmin) {
+    return <div>권한이 없습니다.</div>;
+  }
+
   return (
-    <>
-      <div className="flex flex-col grow">
+    <div className="flex flex-col h-full">
+      <div className="grow flex flex-col">
         {/* Title Input */}
         <div className="flex items-center pb-1">
           <label htmlFor="title">제목</label>
@@ -151,19 +170,41 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       </div>
 
       {/* 공지사항 checkbox: user가 admin일때만 */}
-      {isAdmin && (
+      {isAdmin && boardType !== "announcement" && (
         <div className="flex items-center mt-12">
-          <input
-            type="checkbox"
-            checked={isAnnouncement}
-            onChange={handleCheckboxChange}
-          />
-          <label className="ml-2" htmlFor="announcement">
-            공지사항
-          </label>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              checked={isAnnouncement}
+              onChange={handleCheckboxChange}
+            />
+            <label className="ml-2" htmlFor="announcement">
+              공지사항
+            </label>
+          </div>
         </div>
       )}
 
+      {
+        // 공지사항 게시판글 작성할 경우, 태그를 추가
+        boardType === "announcement" && (
+          <div className="flex items-center mt-12 gap-4">
+            {getTagListForAnnouncement().map((tag) => (
+              <div key={tag.type} className="flex items-center gap-1 ">
+                <input
+                  value={tag.type}
+                  type="checkbox"
+                  checked={annoucnementTag === tag.type}
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="announcement" value={tag.type}>
+                  {tag.name}
+                </label>
+              </div>
+            ))}
+          </div>
+        )
+      }
       {/* Submit Button */}
       <div className={`flex justify-end ${!isAdmin && "mt-12"}`}>
         <button
@@ -174,6 +215,6 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
           등록
         </button>
       </div>
-    </>
+    </div>
   );
 }

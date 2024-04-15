@@ -5,7 +5,6 @@ import Footer from "../components/Footer/Footer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../config/auth";
 import { SessionProvider } from "../context/SessionProvider";
-import UIProvider from "../context/UIProvider";
 
 export const metadata = {
   title: "UMich KISA",
@@ -22,9 +21,7 @@ export default async function RootLayout({ children }) {
       <SessionProvider session={session}>
         <body className="flex flex-col overflow-x-hidden relative">
           {/* template.js : header + main */}
-          <div className="grow">
-            <UIProvider>{children}</UIProvider>
-          </div>
+          <div className="grow">{children}</div>
 
           {/* Footer */}
           <footer className="bottom-0 z-0">

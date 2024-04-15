@@ -26,7 +26,9 @@ export default function BoardTable({ boardType }) {
       setAnnouncementPosts(data?.results);
     };
 
-    fetchAnnouncements();
+    if (boardType !== "announcement") {
+      fetchAnnouncements();
+    }
   }, [boardType]);
 
   // fetch non-announcements
@@ -40,9 +42,9 @@ export default function BoardTable({ boardType }) {
     fetchPosts();
   }, [pageNum, pageSize, boardType]);
 
-  if (!posts && !announcementPosts) {
-    return null;
-  }
+  // if (!posts && !announcementPosts) {
+  //   return null;
+  // }
 
   return (
     <div className="flex flex-col gap-4 w-full">

@@ -9,7 +9,19 @@ export function getBoardName(boardType) {
     return "사고팔기";
   } else if (boardType === "housing") {
     return "하우징/룸메이트";
+  } else if (boardType === "") {
+    return "일반";
   } else {
-    return "게시판";
+    return "존재하지 않는 게시판";
   }
+}
+
+export function getTagListForAnnouncement() {
+  return [
+    { name: "태그 없음", type: "" },
+    { name: "자유게시판", type: "community" },
+    { name: "취업 정보", type: "job" },
+    { name: "사고팔기", type: "buyandsell" },
+    { name: "하우징/룸메이트", type: "housing" },
+  ];
 }

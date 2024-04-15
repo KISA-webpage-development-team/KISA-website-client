@@ -13,7 +13,9 @@ export default function CreatePostPage({ params }) {
       </div>
 
       {/* Text Editor */}
-      <Editor boardType={boardType} />
+      <div className="grow h-full">
+        <Editor boardType={boardType} />
+      </div>
     </div>
   );
 }

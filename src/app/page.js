@@ -4,6 +4,7 @@ import QuickLinks from "../components/Home/QuickLinks";
 import BoardsSummary from "../components/Home/BoardsSummary";
 import SchoolCalendar from "../components/Home/SchoolCalendar";
 import SponsorBanner from "../components/Home/SponsorBanner";
+import UIProvider from "../context/UIProvider";
 
 export default function Home() {
   return (
@@ -13,7 +14,9 @@ export default function Home() {
      gap-20 py-6 px-10"
     >
       {/* Carousel */}
-      <HomeCarousel />
+      <UIProvider>
+        <HomeCarousel />
+      </UIProvider>
       {/* Quick Links (Hub) */}
       <QuickLinks />
       {/* Boards Summary */}
