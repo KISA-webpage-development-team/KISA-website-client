@@ -13,6 +13,7 @@ import {
   getBoardName,
   getTagListForAnnouncement,
 } from "../../config/boardName";
+import { set } from "@boiseitguru/cookie-cutter";
 
 // need to import react quill dynamically to load style properly
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -28,13 +29,35 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
   const [title, setTitle] = useState(curPost?.title || ""); // post title
   const [content, setContent] = useState(curPost?.text || ""); // post content
   const [isAnnouncement, setIsAnnouncement] = useState(
-    curPost?.isAnnouncement || false
+    curPost?.isAnnouncement || ""
   ); // 공지사항인지
 
   const [canSubmit, setCanSubmit] = useState(false); // 등록 버튼의 disabled상태
-  const [annoucnementTag, setAnnouncementTag] = useState(""); // 공지사항 게시판용 태그
+  const [announcementTag, setAnnouncementTag] = useState(""); // 공지사항 게시판용 태그
+  const [customTag, setCustomTag] = useState(""); // 커스텀 태그
 
   const [isAdmin, setIsAdmin] = useState(false); // admin인지
+
+  // form validation
+  useEffect(() => {
+    if (title === null || title?.length === 0) {
+      setCanSubmit(false);
+      return;
+    }
+    if (content === null || content?.length === 0) {
+      setCanSubmit(false);
+      return;
+    }
+    if (announcementTag === "" && customTag === "") {
+      setCanSubmit(false);
+      return;
+    }
+    setCanSubmit(true);
+  }, [title, content, announcementTag, customTag]);
+
+  // useEffect(() => {
+  //   if (content === "") setCanSubmit(false);
+  // }, [content]);
 
   // check if user is admin
   useEffect(() => {
@@ -72,12 +95,14 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       try {
         const newData = {
           title:
-            boardType === "announcement"
-              ? `[${getBoardName(annoucnementTag)}] ${title}`
-              : `${title}`,
+            boardType !== "announcement"
+              ? `${title}`
+              : customTag === ""
+              ? `[${getBoardName(announcementTag)}] ${title}`
+              : `[${customTag}] ${title}`,
           text: content,
           isAnnouncement,
-          tag: annoucnementTag,
+          tag: customTag === "" ? announcementTag : "",
         };
 
         console.log("New Partial Data submit!: ", newData);
@@ -99,14 +124,16 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         const data = {
           type: boardType,
           title:
-            boardType === "announcement"
-              ? `[${getBoardName(annoucnementTag)}] ${title}`
-              : `${title}`,
+            boardType !== "announcement"
+              ? `${title}`
+              : customTag === ""
+              ? `[${getBoardName(announcementTag)}] ${title}`
+              : `[${customTag}] ${title}`,
           fullname: session?.user.name,
           email: session?.user.email,
           text: content,
           isAnnouncement,
-          tag: annoucnementTag,
+          tag: customTag === "" ? announcementTag : "",
         };
 
         console.log("Data submit!: ", data);
@@ -194,11 +221,21 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
                 <input
                   value={tag.type}
                   type="checkbox"
-                  checked={annoucnementTag === tag.type}
+                  checked={announcementTag === tag.type}
                   onChange={handleCheckboxChange}
                 />
                 <label htmlFor="announcement" value={tag.type}>
-                  {tag.name}
+                  {tag.type === "" ? (
+                    <input
+                      type="text"
+                      placeholder="커스텀"
+                      value={customTag}
+                      onChange={(e) => setCustomTag(e.currentTarget.value)}
+                      className="w-20 border h-5 border-black rounded-md p-1"
+                    />
+                  ) : (
+                    tag.name
+                  )}
                 </label>
               </div>
             ))}
@@ -207,13 +244,23 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       }
       {/* Submit Button */}
       <div className={`flex justify-end ${!isAdmin && "mt-12"}`}>
-        <button
-          className="w-1/4 h-10 bg-blue-500 hover:bg-blue-400 text-white 
-      rounded-md cursor-pointer"
-          onClick={handleSumbit}
-        >
-          등록
-        </button>
+        {canSubmit ? (
+          <button
+            className="w-1/4 h-10 bg-blue-500 hover:bg-blue-400 text-white 
+        rounded-md cursor-pointer "
+            onClick={handleSumbit}
+          >
+            등록
+          </button>
+        ) : (
+          <button
+            className="w-1/4 h-10 bg-gray-300  text-white 
+        rounded-md cursor-pointer "
+            disabled
+          >
+            등록
+          </button>
+        )}
       </div>
     </div>
   );
