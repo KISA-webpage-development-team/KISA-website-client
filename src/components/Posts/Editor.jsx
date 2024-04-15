@@ -216,7 +216,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
             <input
               type="checkbox"
               checked={isAnnouncement}
-              onChange={handleCheckboxChange}
+              onChange={(e) => setIsAnnouncement(e.currentTarget.checked)}
             />
             <label className="ml-2" htmlFor="announcement">
               공지사항
