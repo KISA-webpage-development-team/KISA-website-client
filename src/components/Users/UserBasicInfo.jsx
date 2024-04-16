@@ -20,16 +20,7 @@ import UserBaiscInfoRight from "./UserBasicInfoRight";
 // }
 
 export default function UserBasicInfo({ user }) {
-  const {
-    email,
-    fullname,
-    bornDate,
-    bornMonth,
-    bornYear,
-    gradYear,
-    major,
-    linkedin,
-  } = user;
+  const { email, fullname, gradYear, major, linkedin } = user;
 
   // this will decide whether to show edit buttons
   const { data: session, status } = useSession();
@@ -40,7 +31,7 @@ export default function UserBasicInfo({ user }) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-16 lg:gap-24 justify-center">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-12 lg:gap-16 justify-center">
       {/* Left: profile image + name + major */}
       {/* TODO: profile 이미지가 구글 로그인 이미지이기 때문에 로그인한 유저만 된다... */}
       <UserBasicInfoLeft
@@ -54,10 +45,8 @@ export default function UserBasicInfo({ user }) {
       <UserBaiscInfoRight
         email={email}
         gradYear={gradYear}
-        bornDate={bornDate}
-        bornMonth={bornMonth}
-        bornYear={bornYear}
         linkedin={linkedin}
+        canEdit={session?.user.email === email}
       />
     </div>
   );

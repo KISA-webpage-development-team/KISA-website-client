@@ -19,7 +19,6 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
-import { useSession } from "next-auth/react";
 
 export default function SignUpPage() {
   // const { data: session, status } = useSession();

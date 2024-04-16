@@ -5,17 +5,14 @@ import { birthDateFormatter } from "../../utils/dateFormatter";
 import EmailIcon from "../ui/EmailIcon";
 import GradIcon from "../ui/GradIcon";
 import LinkedInIcon from "../ui/LinkedInIcon";
+import Link from "next/link";
 
 export default function UserBasicInfoRight({
   email,
   gradYear,
-  bornDate,
-  bornMonth,
-  bornYear,
   linkedin,
+  canEdit,
 }) {
-  const born = birthDateFormatter(bornYear, bornMonth, bornDate);
-
   const userData = [
     {
       icon: <EmailIcon size="large" />,
@@ -32,7 +29,7 @@ export default function UserBasicInfoRight({
   };
 
   return (
-    <ul className="flex flex-col justify-center gap-2">
+    <ul className="flex flex-col justify-center gap-2 md:min-w-72">
       {userData.map(({ icon, text }, index) => (
         <li key={index} className="flex items-center gap-4">
           {icon}
@@ -48,6 +45,18 @@ export default function UserBasicInfoRight({
           </button>
         </div>
       )}
+
+      {
+        // edit button
+        canEdit && (
+          <Link
+            href={`/users/edit/${email.split("@")[0]}`}
+            className="mt-1 backdrop:self-center md:self-start md:w-[40%] blue_button"
+          >
+            정보 수정
+          </Link>
+        )
+      }
     </ul>
   );
 }
