@@ -11,20 +11,21 @@ export default function UserBasicInfoLeft({
   return (
     <div className="flex flex-col items-center gap-4">
       {/* Image */}
-      <div
-        className="relative flex justify-center 
+      {hasProfile && (
+        <div
+          className="relative flex justify-center 
       aspect-square w-24"
-      >
-        {/* if hasProfile is false, use default profile image */}
-        {hasProfile && (
+        >
+          {/* if hasProfile is false, use default profile image */}
+
           <Image
             className="rounded-full object-contain"
             src={profile}
             alt="profile image"
             fill
           />
-        )}
-      </div>
+        </div>
+      )}
 
       {/* fullname + major */}
       <div className="flex flex-col items-center gap-1">
