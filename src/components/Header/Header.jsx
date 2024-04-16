@@ -29,7 +29,7 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
       <div className={`${sejongHospitalLight.className} flex items-center`}>
         <Logo />
 
-        <div className="ml-7 lg:ml-10 mr-1 lg:mr-4 hidden md:block">
+        <div className="ml-4 lg:ml-7 mr-0 lg:mr-1 hidden md:block">
           <VerticalDivider />
         </div>
 
