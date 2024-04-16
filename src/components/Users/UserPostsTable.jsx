@@ -15,7 +15,7 @@ export default function UserPostsTable({ posts }) {
   return (
     <table className="border border-gray-300 w-full">
       <thead className="">
-        <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center">
+        <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center py-2">
           <th className="basis-1/12 min-w-16">번호</th>
           <th className="grow">제목</th>
           <th className="basis-1/12 min-w-16">글쓴이</th>
