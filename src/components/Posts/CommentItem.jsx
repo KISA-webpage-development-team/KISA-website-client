@@ -8,9 +8,11 @@ import { editComment, deleteComment } from "../../service/comment";
 
 import { timeForToday } from "../../utils/dateFormatter";
 import HorizontalDivider from "../shared/HorizontalDivider";
+import Link from "next/link";
 
 export default function CommentItem({
   commentid,
+  emailid,
   postid,
   isAuthor,
   fullname,
@@ -63,7 +65,11 @@ export default function CommentItem({
                 className="flex items-center gap-1 md:gap-2
               text-xs md:text-base"
               >
-                <p className="text-black font-semibold">{fullname}</p>
+                <Link href={`/users/${emailid}`}>
+                  <p className="text-black font-semibold hover:underline">
+                    {fullname}
+                  </p>
+                </Link>
                 <p className="text-gray-500">{timeForToday(created)}</p>
               </div>
 

@@ -2,8 +2,10 @@ import React from "react";
 import VerticalDivider from "../shared/VerticalDivider";
 import ClockIcon from "../ui/ClockIcon";
 import { fullDateFormatter } from "../../utils/dateFormatter";
+import Link from "next/link";
 
 export default function PostOwnerBar({
+  emailid,
   fullname,
   created,
   readCount,
@@ -17,7 +19,10 @@ export default function PostOwnerBar({
       {/* left: fullname + created */}
       <div className="flex items-center gap-2">
         {/* later, fullname will be linked to user profile */}
-        <p className="font-semibold">{fullname}</p>
+        <Link href={`/users/${emailid}`}>
+          <p className="font-semibold hover:underline">{fullname}</p>
+        </Link>
+
         <VerticalDivider size="small" />
         <ClockIcon />
         <p className="text-gray-600">{fullDateFormatter(created)}</p>

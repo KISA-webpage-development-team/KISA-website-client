@@ -34,6 +34,7 @@ export default function BoardTable({ posts, announcementPosts }) {
           (
             {
               postid,
+              // email,
               title,
               fullname,
               readCount,
@@ -80,7 +81,12 @@ export default function BoardTable({ posts, announcementPosts }) {
                 </Link>
               </td>
 
-              <td className="text-center basis-1/12 min-w-16">{fullname}</td>
+              <td className="text-center basis-1/12 min-w-16">
+                {/* <Link href={`/users/${email.split("@")[0]}`}>
+                  <span>{fullname}</span>{" "}
+                </Link> */}
+                {fullname}
+              </td>
               <td className="text-center basis-[10%] min-w-16">
                 {dateFormatter(created)}
               </td>
@@ -92,6 +98,7 @@ export default function BoardTable({ posts, announcementPosts }) {
           (
             {
               postid,
+              // email,
               title,
               fullname,
               readCount,
@@ -138,7 +145,12 @@ export default function BoardTable({ posts, announcementPosts }) {
                 </Link>
               </td>
 
-              <td className="text-center basis-1/12 min-w-16">{fullname}</td>
+              <td className="text-center basis-1/12 min-w-16">
+                {/* <Link href={`/users/${email.split("@")[0]}`}>
+                  <span>{fullname}</span>
+                </Link> */}
+                {fullname}
+              </td>
               <td className="text-center basis-[10%] min-w-16">
                 {dateFormatter(created)}
               </td>

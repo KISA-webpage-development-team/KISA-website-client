@@ -81,6 +81,7 @@ export default function PostView({ boardType, post, postid }) {
         <PostTitleBar isAnnouncement={post.isAnnouncement} title={post.title} />
         {/* 2. Post Owner bar: Owner + created + readCount (+ 추천수, 댓글수 등) */}
         <PostOwnerBar
+          emailid={post.email.split("@")[0]}
           fullname={post.fullname}
           created={post.created}
           readCount={post.readCount}
