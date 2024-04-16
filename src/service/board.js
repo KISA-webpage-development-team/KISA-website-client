@@ -5,12 +5,15 @@ import { backendUrl } from "../config/backendUrl";
 // need email address from response
 export async function getBoardPosts(boardType, size, page) {
   const url = `${backendUrl}/boards/${boardType}/posts/?size=${size}&page=${page}`;
+
+  console.log("boardType: ", boardType, "size: ", size, "page: ", page);
   try {
     const response = await axios.get(url, {
       headers: {
         "Content-Type": "application/json",
       },
     });
+    console.log("fetching postss: ", response?.data);
     return response.data;
   } catch (error) {
     console.error(error);
