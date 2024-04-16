@@ -8,6 +8,10 @@ import AnnouncementIcon from "../ui/AnnouncementIcon";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function BoardTable({ posts, announcementPosts }) {
+  if (posts?.length === 0 && announcementPosts?.length === 0) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <table
       className="border border-gray-300 w-full 

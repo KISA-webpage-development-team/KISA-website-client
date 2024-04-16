@@ -15,6 +15,7 @@ export async function getBoardPosts(boardType, size, page) {
     });
     console.log("fetching postss: ", response?.data);
     return response.data;
+    z;
   } catch (error) {
     console.error(error);
     return;

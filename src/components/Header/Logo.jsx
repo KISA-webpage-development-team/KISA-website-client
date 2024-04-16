@@ -14,8 +14,8 @@ export default function Logo() {
       </div>
 
       <div className={`flex ml-2 flex-col ${sejongHospitalBold.className}`}>
-        <h1 className="text-base md:text-lg lg:text-xl">UMich</h1>
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">KISA</h1>
+        <h1 className="text-base md:text-lg lg:text-4xl">UM KISA</h1>
+        {/* <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">KISA</h1> */}
       </div>
     </Link>
   );
