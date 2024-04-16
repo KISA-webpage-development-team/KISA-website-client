@@ -24,7 +24,7 @@ export default function CommentsTable({ comments }) {
             key={commentid}
             className={`border-b border-gray-200 flex items-center `}
           >
-            <td className="text-center w-16 py-2 flex justify-center items-center">
+            <td className="text-center basis-1/12 min-w-16 py-2 flex justify-center items-center">
               {idx + 1}
             </td>
             <td className="text-left grow py-2">

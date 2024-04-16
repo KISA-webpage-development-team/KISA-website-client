@@ -14,7 +14,7 @@ export default function CommentsTable({ comments }) {
       <thead className="">
         <tr className="px-2  py-1 border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center">
           <th className="grow text-left">내용</th>
-          <th className="w-12">날짜</th>
+          <th className="w-12">작성일</th>
         </tr>
       </thead>
       <tbody className="">
