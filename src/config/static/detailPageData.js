@@ -1452,6 +1452,19 @@ const sportsMiscSportsData = [
 // -------------------------------------------------------
 
 // [RESTAURANTS] ----------------------------------------------
+const restaurantsKoreanMarketData = [
+  {
+    id: "orange_market",
+    title: "Orange Market",
+    desc: (
+      <p>
+        센트럴 캠퍼스 바로 위에 위치한 한인마트이며 23/65번 버스를 타고 가면
+        편리합니다. 자취생들을 위한 식재료가 많이 있습니다. 한인 사장님이 손수
+        만드신 맛있는 반찬도 구매 가능합니다.
+      </p>
+    ),
+  },
+];
 const restaurantsKoreanData = [
   {
     id: "tomukun_bbq",
@@ -1741,6 +1754,7 @@ export {
   travelNearbyData,
   sportsFacilityData,
   sportsMiscSportsData,
+  restaurantsKoreanMarketData,
   restaurantsKoreanData,
   restaurantsAsianData,
   restaurantsHamburgerPizzaData,

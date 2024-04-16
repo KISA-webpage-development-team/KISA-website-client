@@ -21,8 +21,10 @@ export default function EditUserForm({
     const data = {
       major,
       gradYear,
-      linkedin: linkedIn === "" ? null : linkedIn,
+      linkedin: linkedIn,
     };
+
+    console.log(data);
 
     const res = await updateUser(emailid + "@umich.edu", data);
     if (res) {
@@ -32,6 +34,7 @@ export default function EditUserForm({
     }
     alert("정보 수정에 실패했습니다");
   };
+
   return (
     <form className="flex flex-col gap-3 md:min-w-72" onSubmit={onSubmit}>
       {/* major */}

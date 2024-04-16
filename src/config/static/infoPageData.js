@@ -413,6 +413,17 @@ const restaurantsPageData = {
   infoTitle: "맛집",
   // 한식 + 아시안 + 햄버거 & 피자 + 디저트 + 파인 다이닝 + 기타
   sections: [
+    // 한인마트
+    {
+      sectionName: "korean-market",
+      sectionText: "한인마트",
+      contentList: [
+        {
+          name: "Orange Market",
+          id: "orange_market",
+        },
+      ],
+    },
     // 한식
     {
       sectionName: "korean",
