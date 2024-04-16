@@ -12,10 +12,10 @@ export default function CommentsTable({ comments }) {
   return (
     <table className="border border-gray-300 w-full">
       <thead className="">
-        <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center">
-          <th className="py-2 w-16">번호</th>
+        <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center py-2">
+          <th className="basis-1/12 min-w-16">번호</th>
           <th className="grow">내용</th>
-          <th className="w-28">날짜</th>
+          <th className="w-28">작성일</th>
         </tr>
       </thead>
       <tbody className="">
