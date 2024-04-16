@@ -1,8 +1,6 @@
 import React from "react";
-import BoardTable from "../../../components/Boards/BoardTable";
-import MobileBoardTable from "../../../components/Boards/MobileBoardTable";
 import BoardBar from "../../../components/Boards/BoardBar";
-// import { getBoardPosts } from "../../../service/board";
+import BoardClient from "../../../components/Boards/BoardClient";
 
 export default function AnnouncementPage() {
   const boardType = "announcement";
@@ -18,11 +16,8 @@ export default function AnnouncementPage() {
       </div>
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
-      <div className="hidden md:flex w-full ">
-        <BoardTable boardType={boardType} />
-      </div>
-      <div className=" flex md:hidden ">
-        <MobileBoardTable boardType={boardType} />
+      <div className="w-full ">
+        <BoardClient boardType={boardType} />
       </div>
     </section>
   );
