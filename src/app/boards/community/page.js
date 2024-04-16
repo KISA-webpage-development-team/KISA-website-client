@@ -25,11 +25,8 @@ export default function CommunityPage() {
       </div>
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
-      <div className="hidden md:flex w-full ">
+      <div className="w-full ">
         <BoardClient boardType={boardType} />
-      </div>
-      <div className=" flex md:hidden ">
-        <MobileBoardTable boardType={boardType} />
       </div>
     </section>
   );

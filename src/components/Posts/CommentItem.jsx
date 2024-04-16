@@ -56,12 +56,12 @@ export default function CommentItem({
 
         {/* Comment contents */}
         <div className="flex items-center justify-between w-full">
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full gap-1 md:gap-0">
             <div className="flex items-center justify-between">
               {/* need to change fullname to fullname's username */}
               <div
                 className="flex items-center gap-1 md:gap-2
-              text-sm md:text-base"
+              text-xs md:text-base"
               >
                 <p className="text-black font-semibold">{fullname}</p>
                 <p className="text-gray-500">{timeForToday(created)}</p>
@@ -92,7 +92,11 @@ export default function CommentItem({
                 />
               </div>
             </div>
-            <div className={`${isAuthor && "text-blue-500"} pb-3 text-base`}>
+            <div
+              className={`${
+                isAuthor && "text-blue-500"
+              } pb-3 text-xs md:text-base`}
+            >
               {text}
             </div>
           </div>
