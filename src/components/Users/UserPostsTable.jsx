@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
+import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function UserPostsTable({ posts }) {
   const [announcementPosts, setAnnouncementPosts] = useState([]);
@@ -46,7 +47,7 @@ export default function UserPostsTable({ posts }) {
                 </td>
                 <td className="text-center w-36">{fullname}</td>
                 <td className="text-center w-16">{readCount}</td>
-                <td className="text-center w-28">{created.split(" ")[0]}</td>
+                <td className="text-center w-28">{dateFormatter(created)}</td>
               </tr>
             )
           )}
