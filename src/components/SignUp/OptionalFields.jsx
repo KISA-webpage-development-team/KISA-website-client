@@ -36,10 +36,10 @@ export default function OptionalFields({
       <div className="w-full">
         <CustomLabel htmlFor="year" text="졸업년도" />
         <CustomInput
-          type="text"
+          type="number"
           value={gradYear}
           onChange={(e) => setGradYear(e.target.value)}
-          placeholder="예) Winter 2026"
+          placeholder=""
         />
       </div>
 

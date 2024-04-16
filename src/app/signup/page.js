@@ -71,9 +71,9 @@ export default function SignUpPage() {
     const userData = {
       fullname: name,
       email: email,
-      bornYear: bornYear ? bornYear : null,
-      bornDate: null,
-      bornMonth: null,
+      bornYear: bornYear.split("/")[0] ? bornYear.split("/")[0] : null,
+      bornDate: bornYear.split("/")[1] ? bornYear.split("/")[0] : null,
+      bornMonth: bornYear.split("/")[2] ? bornYear.split("/")[0] : null,
       major: major ? major : null,
       gradYear: gradYear ? gradYear : null,
       linkedin: linkedIn ? linkedIn : null,

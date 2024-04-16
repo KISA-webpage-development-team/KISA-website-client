@@ -22,6 +22,7 @@ export default function BoardsSummary() {
     fetchRecentPosts();
     fetchHotPosts();
   }, []);
+
   return (
     <div
       className="w-full

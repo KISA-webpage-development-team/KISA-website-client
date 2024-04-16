@@ -14,6 +14,10 @@ import MobileMenu from "./MobileMenu";
 
 import styles from "./header.module.css";
 import { CSSTransition } from "react-transition-group";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "../../utils/fonts/textFonts";
 
 export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   // get logged in user session
@@ -22,10 +26,8 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   return (
     <div className="flex items-center justify-between py-6 md:py-8">
       {/* Left portion: Logo, Website Name, Menu */}
-      <div className="flex items-center">
-        <div>
-          <Logo />
-        </div>
+      <div className={`${sejongHospitalLight.className} flex items-center`}>
+        <Logo />
 
         <div className="ml-7 lg:ml-10 mr-1 lg:mr-4 hidden md:block">
           <VerticalDivider />

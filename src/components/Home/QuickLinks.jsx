@@ -14,7 +14,7 @@ export default function QuickLinks() {
   return (
     <div
       className="w-full mt-0 sm:mt-4 md:mt-0
-    flex flex-col gap-4"
+    flex flex-col gap-2"
     >
       <h2
         className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-3xl`}
@@ -25,7 +25,7 @@ export default function QuickLinks() {
       <div
         className="relative flex flex-row
         flex-wrap w-full justify-evenly
-        items-center gap-5 "
+        items-center gap-10"
       >
         {items.map(({ id, title, url }, index) => (
           <button
@@ -33,17 +33,17 @@ export default function QuickLinks() {
             onClick={() => {
               navigateToLink(url);
             }}
-            className="relative cursor-pointer flex-1 aspect-square
+            className="relative min-h-64
+            cursor-pointer flex-1 aspect-square
             flex flex-col items-center justify-center  rounded-xl
             hover:shadow-lg  p-1"
           >
             <Image
-              className="object-contain "
+              className="object-contain"
               src={`/quick_links/${id}.png`}
               alt={title}
-              width={500}
-              height={500}
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
+              fill
+              // sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
             />
           </button>
         ))}
