@@ -44,9 +44,11 @@ export default function BoardClient({ boardType }) {
     fetchPosts();
   }, [pageNum, pageSize, boardType]);
 
-  // if (!posts || !announcementPosts) {
-  //   return <div>Loading...</div>;
-  // }
+  console.log("fteching posts", posts, announcementPosts);
+
+  if (!posts || !announcementPosts) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={`flex flex-col gap-4 w-full ${heebo.className}`}>

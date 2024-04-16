@@ -12,14 +12,14 @@ import {
 export default function Footer() {
   return (
     <div
-      className={`${sejongHospitalLight.className} flex flex-col gap-1 md:gap-3 justify-center items-center py-[53px]`}
+      className={`${sejongHospitalLight.className} flex flex-col gap-0 md:gap-2 justify-center items-center py-[30px]`}
     >
       <div className="flex items-center gap-4">
         <InstagramLinkIcon color="black" />
         <FacebookLinkIcon color="black" />
       </div>
 
-      <h2 className="text-lg sm:text-xl md:text-2xl">UMICH KISA</h2>
+      <h2 className="text-md sm:text-lg md:text-xl">UMICH KISA</h2>
     </div>
   );
 }

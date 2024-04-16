@@ -8,7 +8,7 @@ import AnnouncementIcon from "../ui/AnnouncementIcon";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function MobileBoardTable({ posts, announcementPosts }) {
-  console.log("MobileBoardTable", posts, announcementPosts);
+  // console.log("MobileBoardTable", posts, announcementPosts);
 
   return (
     <table
