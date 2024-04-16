@@ -21,7 +21,7 @@ export default function CalendarEventCard({ event }) {
 
   return (
     <div
-      className="w-full flex gap-10 border border-michigan-blue rounded-lg 
+      className="h-full w-full flex gap-10 border border-michigan-blue rounded-lg 
     p-4 md:p-5"
     >
       {/* Left: [optional] photo */}
@@ -36,11 +36,10 @@ export default function CalendarEventCard({ event }) {
         >
           {event.title}
         </span>
-        <>
-          <span className="text-xs md:text-sm lg:text-base">
-            {startTime} - {endTime}
-          </span>
-        </>
+
+        <span className="text-xs md:text-sm lg:text-base">
+          {startTime} - {endTime}
+        </span>
 
         <p className="">{event.extendedProps?.location}</p>
         {event?.extendedProps?.description && (

@@ -48,42 +48,48 @@ export default function SchoolCalendar() {
       >
         Calendar
       </h2>
-      <div className="w-full text-sm lg:text-base hidden md:block">
-        <FullCalendar
-          plugins={[dayGridPlugin, googleCalendarPlugin]}
-          initialView="dayGridMonth"
-          googleCalendarApiKey={process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY}
-          events={{
-            googleCalendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,
-          }}
-          eventContent={renderEventContent}
-          eventDisplay={"block"}
-          eventTextColor={"#00274C"}
-          eventColor={"#FFCB05"}
-          eventClick={handleDateClick}
-        />
-      </div>
-      <div className="w-full text-[8px] sm:text-xs md:text-sm block md:hidden">
-        <FullCalendar
-          plugins={[dayGridPlugin, googleCalendarPlugin]}
-          initialView="dayGridWeek"
-          googleCalendarApiKey={process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY}
-          events={{
-            googleCalendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,
-          }}
-          eventContent={renderEventContent}
-          eventDisplay={"block"}
-          eventTextColor={"#00274C"}
-          eventColor={"#FFCB05"}
-          eventClick={handleDateClick}
-        />
-      </div>
-
-      {selectedEvent && (
-        <div className="w-full">
-          <CalendarEventCard event={selectedEvent} />
+      <div className="flex flex-row h-full gap-6">
+        <div className="w-full text-sm lg:text-base hidden md:block">
+          <FullCalendar
+            plugins={[dayGridPlugin, googleCalendarPlugin]}
+            initialView="dayGridMonth"
+            googleCalendarApiKey={
+              process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY
+            }
+            events={{
+              googleCalendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,
+            }}
+            eventContent={renderEventContent}
+            eventDisplay={"block"}
+            eventTextColor={"#00274C"}
+            eventColor={"#FFCB05"}
+            eventClick={handleDateClick}
+          />
         </div>
-      )}
+        <div className="w-full text-[8px] sm:text-xs md:text-sm block md:hidden">
+          <FullCalendar
+            plugins={[dayGridPlugin, googleCalendarPlugin]}
+            initialView="dayGridWeek"
+            googleCalendarApiKey={
+              process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY
+            }
+            events={{
+              googleCalendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,
+            }}
+            eventContent={renderEventContent}
+            eventDisplay={"block"}
+            eventTextColor={"#00274C"}
+            eventColor={"#FFCB05"}
+            eventClick={handleDateClick}
+          />
+        </div>
+
+        {selectedEvent && (
+          <div className="basis-1/3 h-full w-full">
+            <CalendarEventCard event={selectedEvent} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
