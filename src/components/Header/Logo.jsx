@@ -4,7 +4,7 @@ import Image from "next/image";
 import Kisa_Logo from "../../../public/umich_kisa_logo.jpeg";
 import React from "react";
 import Link from "next/link";
-import { sejongHospitalBold } from "../../utils/fonts/textFonts";
+import { heebo, sejongHospitalBold } from "../../utils/fonts/textFonts";
 
 export default function Logo() {
   return (
@@ -13,8 +13,8 @@ export default function Logo() {
         <Image priority src={Kisa_Logo} fill alt="kisa logo" />
       </div>
 
-      <div className={`flex ml-2 flex-col ${sejongHospitalBold.className}`}>
-        <h1 className="text-base md:text-lg lg:text-4xl">UMICH KISA</h1>
+      <div className={`flex ml-2 flex-col font-medium ${heebo.className}`}>
+        <h1 className="text-base md:text-lg lg:text-4xl">UM KISA</h1>
         {/* <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">KISA</h1> */}
       </div>
     </Link>
