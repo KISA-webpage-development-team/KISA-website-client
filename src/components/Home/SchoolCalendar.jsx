@@ -48,7 +48,7 @@ export default function SchoolCalendar() {
       >
         Calendar
       </h2>
-      <div className="flex flex-row h-full gap-6">
+      <div className="flex flex-col md:flex-row h-full gap-6">
         <div className="w-full text-sm lg:text-base hidden md:block">
           <FullCalendar
             plugins={[dayGridPlugin, googleCalendarPlugin]}
