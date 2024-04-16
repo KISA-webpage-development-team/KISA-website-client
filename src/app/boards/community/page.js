@@ -2,6 +2,7 @@ import React from "react";
 import BoardTable from "../../../components/Boards/BoardTable";
 import MobileBoardTable from "../../../components/Boards/MobileBoardTable";
 import BoardBar from "../../../components/Boards/BoardBar";
+import BoardClient from "../../../components/Boards/BoardClient";
 // import { getBoardPosts } from "../../../service/board";
 
 export default function CommunityPage() {
@@ -25,7 +26,7 @@ export default function CommunityPage() {
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
       <div className="hidden md:flex w-full ">
-        <BoardTable boardType={boardType} />
+        <BoardClient boardType={boardType} />
       </div>
       <div className=" flex md:hidden ">
         <MobileBoardTable boardType={boardType} />
