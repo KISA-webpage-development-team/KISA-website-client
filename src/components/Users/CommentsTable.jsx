@@ -6,6 +6,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
+import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function CommentsTable({ comments }) {
   return (
@@ -31,7 +32,7 @@ export default function CommentsTable({ comments }) {
                 {text}
               </Link>
             </td>
-            <td className="text-center w-28">{created.split(" ")[0]}</td>
+            <td className="text-center w-28">{dateFormatter(created)}</td>
           </tr>
         ))}
       </tbody>
