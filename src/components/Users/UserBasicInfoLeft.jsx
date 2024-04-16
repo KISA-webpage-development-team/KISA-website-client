@@ -2,7 +2,12 @@ import Image from "next/image";
 import React from "react";
 import { sejongHospitalBold } from "../../utils/fonts/textFonts";
 
-export default function UserBasicInfoLeft({ profile, fullname, major }) {
+export default function UserBasicInfoLeft({
+  hasProfile,
+  profile,
+  fullname,
+  major,
+}) {
   return (
     <div className="flex flex-col items-center gap-4">
       {/* Image */}
@@ -10,12 +15,15 @@ export default function UserBasicInfoLeft({ profile, fullname, major }) {
         className="relative flex justify-center 
       aspect-square w-24"
       >
-        <Image
-          className="rounded-full object-contain"
-          src={profile}
-          alt="profile image"
-          fill
-        />
+        {/* if hasProfile is false, use default profile image */}
+        {hasProfile && (
+          <Image
+            className="rounded-full object-contain"
+            src={profile}
+            alt="profile image"
+            fill
+          />
+        )}
       </div>
 
       {/* fullname + major */}

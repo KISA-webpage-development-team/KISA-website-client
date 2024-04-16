@@ -44,6 +44,7 @@ export default function UserBasicInfo({ user }) {
       {/* Left: profile image + name + major */}
       {/* TODO: profile 이미지가 구글 로그인 이미지이기 때문에 로그인한 유저만 된다... */}
       <UserBasicInfoLeft
+        hasProfile={session?.user.email === email}
         profile={session?.user.image}
         fullname={fullname}
         major={major}
