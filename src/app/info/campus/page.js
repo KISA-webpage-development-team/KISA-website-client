@@ -13,19 +13,12 @@ export default function CampusInfoPage() {
   const { infoType, infoTitle, sections } = campusPageData;
 
   return (
-    <section
-      className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
-    pb-[100px] md:pb-[125px] lg:pb-[150px]
-    px-[20px] md:px-[60px] lg:px-[75px]"
-    >
+    <section>
       {/* Information title section divider */}
       <InfoTitle title={infoTitle} />
 
       {/* Intro + Description */}
-      <div
-        className="flex flex-col gap-8 md:gap-10 lg:gap-12 items-center 
-      mt-8 md:mt-10 lg:mt-12"
-      >
+      <div className="intro_and_desc">
         <div
           className={`${sejongHospitalBold.className} text-xl md:text-2xl lg:text-3xl`}
         >
@@ -44,7 +37,7 @@ export default function CampusInfoPage() {
       </div>
 
       {/* Sections: Central Campus + North Campus */}
-      <div className="flex flex-col gap-24 sm:gap-36 md:gap-48 lg:gap-64 mt-12 md:mt-20 lg:mt-28">
+      <div className="section_list">
         {sections.map((section, index) => {
           const { sectionName, sectionText, sectionIntro, contentList } =
             section;

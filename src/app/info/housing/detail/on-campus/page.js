@@ -6,12 +6,7 @@ import { housingOnCampusData } from "../../../../../config/static/detailPageData
 
 export default function OnCampusHousingDetail() {
   return (
-    <section
-      className="flex flex-col items-center w-full 
-    gap-24 sm:gap-32 md:gap-40 lg:gap-48 
-    pb-24 sm:pb-28 md:pb-32 lg:pb-36
-    px-[20px] md:px-[60px] lg:px-[75px]"
-    >
+    <section className="detail_section">
       {housingOnCampusData.map(({ id, title, desc }, _) => (
         <div id={id} key={id} className="flex flex-col w-full items-center ">
           {/* 1. Detail Thumbnail Image */}

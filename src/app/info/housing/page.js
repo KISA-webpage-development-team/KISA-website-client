@@ -17,11 +17,7 @@ export default function HousingPage() {
   const { sections: offCampusSections } = housingPageOffCampusData;
 
   return (
-    <section
-      className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
-pb-[100px] md:pb-[125px] lg:pb-[150px]
-px-[20px] md:px-[60px] lg:px-[75px]"
-    >
+    <section>
       {/* Information title section divider */}
       <InfoTitle title="Housing" />
       {/* Sections: On Campus + Off Campus */}
@@ -33,7 +29,7 @@ px-[20px] md:px-[60px] lg:px-[75px]"
         />
       </div>
 
-      <div className="flex flex-col gap-24 sm:gap-36 md:gap-48 lg:gap-64 mt-12 md:mt-20 lg:mt-28">
+      <div className="section_list">
         {/* On-Campus Housing */}
 
         {/* Sub Sections: Central + Hill + North */}
@@ -70,10 +66,9 @@ px-[20px] md:px-[60px] lg:px-[75px]"
         />
       </div>
 
-      <div className="flex flex-col gap-48 md:gap-64 lg:gap-72 mt-8 md:mt-10 lg:mt-12">
-        {/* On-Campus Housing */}
+      <div className="section_list">
+        {/* Off-Campus Housing */}
 
-        {/* Sub Sections: Central + Hill + North */}
         {offCampusSections.map((section, index) => {
           const { sectionName, sectionText, sectionIntro, contentList } =
             section;
