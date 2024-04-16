@@ -28,9 +28,7 @@ export default async function UserPage({ params }) {
     <div className={`container ${sejongHospitalLight.className}`}>
       <UserBasicInfo user={userInfo} />
 
-      <>
-        <UserBoard email={umichEmail} />
-      </>
+      <UserBoard email={umichEmail} />
     </div>
   );
 }
