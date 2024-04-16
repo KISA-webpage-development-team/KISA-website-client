@@ -34,11 +34,13 @@ export function dateFormatter(date) {
     today.getMonth() === target.getMonth() &&
     today.getDate() === target.getDate()
   ) {
-    return target.toLocaleTimeString("ko-KR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
+    return target
+      .toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+      .replace(/^24:/, "00:");
   } else {
     let currentYear = new Date().getFullYear();
     let year = target.getFullYear();
