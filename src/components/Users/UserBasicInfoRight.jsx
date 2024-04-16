@@ -41,9 +41,12 @@ export default function UserBasicInfoRight({
       ))}
 
       {linkedin && (
-        <button onClick={navigateToLinkedIn}>
+        <div className="text-base md:text-xl flex items-center gap-4">
           <LinkedInIcon />
-        </button>
+          <button className="hover:underline" onClick={navigateToLinkedIn}>
+            {linkedin.split(".com/in/")[1].replace("/", "")}
+          </button>
+        </div>
       )}
     </ul>
   );

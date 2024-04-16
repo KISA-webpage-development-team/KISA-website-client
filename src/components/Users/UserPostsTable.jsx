@@ -33,7 +33,7 @@ export default function UserPostsTable({ posts }) {
             ) => (
               <tr
                 key={idx}
-                className={`border-b border-gray-200 flex items-center ${
+                className={`border-b border-gray-200 flex items-center py-2 ${
                   isAnnouncement ? "bg-gray-50/100" : "hover:bg-gray-50/100"
                 }`}
               >
