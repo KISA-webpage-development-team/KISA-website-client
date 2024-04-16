@@ -29,10 +29,10 @@ export default function UserBasicInfoLeft({
 
       {/* fullname + major */}
       <div className="flex flex-col items-center gap-1">
-        <h1 className={`${sejongHospitalBold.className} text-3xl`}>
+        <h1 className={`${sejongHospitalBold.className} text-xl md:text-3xl`}>
           {fullname}
         </h1>
-        <h2 className="text-xl">{major}</h2>
+        <h2 className="text-base md:text-xl">{major}</h2>
       </div>
     </div>
   );

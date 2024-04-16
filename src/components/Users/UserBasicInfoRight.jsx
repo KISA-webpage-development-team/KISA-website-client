@@ -36,7 +36,7 @@ export default function UserBasicInfoRight({
       {userData.map(({ icon, text }, index) => (
         <li key={index} className="flex items-center gap-4">
           {icon}
-          <span className="text-xl">{text}</span>
+          <span className="text-base md:text-xl">{text}</span>
         </li>
       ))}
 

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import CommentsTable from "./CommentsTable";
 import UserPostsTable from "./UserPostsTable";
+import MobileUserPostsTable from "./MobileUserPostsTable";
+import MobileCommentsTable from "./MobileCommentsTable";
 
 export default function UserBoardList({ posts, comments, openPosts }) {
   // TODO: need to prevent 무지성 api call
@@ -9,9 +11,23 @@ export default function UserBoardList({ posts, comments, openPosts }) {
   return (
     <div className="flex flex-col">
       {openPosts ? (
-        <UserPostsTable posts={posts} />
+        <div>
+          <div className="hidden md:flex">
+            <UserPostsTable posts={posts} />
+          </div>
+          <div className="flex md:hidden">
+            <MobileUserPostsTable posts={posts} />
+          </div>
+        </div>
       ) : (
-        <CommentsTable comments={comments} />
+        <div>
+          <div className="hidden md:flex">
+            <CommentsTable comments={comments} />
+          </div>
+          <div className="flex md:hidden">
+            <MobileCommentsTable comments={comments} />
+          </div>
+        </div>
       )}
     </div>
   );

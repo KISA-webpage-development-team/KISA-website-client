@@ -16,17 +16,17 @@ export default function UserBoardNavBar({ openPosts, setOpenPosts }) {
         onClick={handleUserBoardToggle}
       >
         <ListIcon size="medium" />
-        <p className="text-xl">내 글</p>
+        <p className="text-base md:text-xl">내 글</p>
       </div>
 
       <div
         className={`flex items-center gap-2 ml-5 ${
           !openPosts && "bg-gray-300"
-        }`}
+        } p-2 rounded-lg`}
         onClick={handleUserBoardToggle}
       >
         <CommentIcon />
-        <p className="text-xl">내 댓글</p>
+        <p className="text-base md:text-xl">내 댓글</p>
       </div>
     </div>
   );
