@@ -12,7 +12,7 @@ export default function PostOwnerBar({
   return (
     <div
       className="flex justify-between items-center 
-    text-sm md:text-lg"
+    text-sm md:text-base"
     >
       {/* left: fullname + created */}
       <div className="flex items-center gap-2">

@@ -61,7 +61,7 @@ export default function CommentItem({
               {/* need to change fullname to fullname's username */}
               <div
                 className="flex items-center gap-1 md:gap-2
-              text-sm md:text-lg"
+              text-sm md:text-base"
               >
                 <p className="text-black font-semibold">{fullname}</p>
                 <p className="text-gray-500">{timeForToday(created)}</p>

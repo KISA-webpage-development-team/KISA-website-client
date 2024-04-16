@@ -8,10 +8,12 @@ import AnnouncementIcon from "../ui/AnnouncementIcon";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function MobileBoardTable({ posts, announcementPosts }) {
+  console.log("MobileBoardTable", posts, announcementPosts);
+
   return (
     <table
       className="border-t border-b border-michigan-blue w-full
-      text-base text-black "
+      text-base text-black"
     >
       <tbody className="">
         {announcementPosts?.map(({ postid, title, commentsCount }, idx) => (

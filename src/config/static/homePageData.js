@@ -28,7 +28,7 @@ const homeQuickLinksData = [
   {
     id: "wolverine_access",
     title: "Wolverine Access",
-    url: "https://wolverineaccess.umich.edu/",
+    url: "https://csprod.dsc.umich.edu/psc/csprodnonop/EMPLOYEE/SA/c/NUI_FRAMEWORK.PT_AGSTARTPAGE_NUI.GBL?CONTEXTIDPARAMS=TEMPLATE_ID%3aPTPPNAVCOL&scname=ADMN_CAMPUS_FINANCES&PanelCollapsible=Y&PTPPB_GROUPLET_ID=M_SF_CAMPUS_FIN&CRefName=ADMN_CAMPUS_FIN",
   },
   {
     id: "canvas",
