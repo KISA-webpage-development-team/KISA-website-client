@@ -51,18 +51,19 @@ export async function getUserInfo(email) {
   const url = `${backendUrl}/users/${email}/`;
   try {
     const response = await axios.get(url);
+    return response?.data;
     // console.log(response.data);
-    return {
-      bornDate: 26,
-      bornMonth: 9,
-      bornYear: 2004,
-      created: "Thu, 11 Apr 2024 00:50:14 GMT",
-      email: "jiohin@umich.edu",
-      fullname: "인지오",
-      gradYear: 2026,
-      linkedin: "https://www.linkedin.com/in/jioh-in-4228b2222/",
-      major: "Computer Science",
-    };
+    // return {
+    //   bornDate: 26,
+    //   bornMonth: 9,
+    //   bornYear: 2004,
+    //   created: "Thu, 11 Apr 2024 00:50:14 GMT",
+    //   email: "jiohin@umich.edu",
+    //   fullname: "인지오",
+    //   gradYear: 2026,
+    //   linkedin: "https://www.linkedin.com/in/jioh-in-4228b2222/",
+    //   major: "Computer Science",
+    // };
   } catch (err) {
     console.error(err);
   }
