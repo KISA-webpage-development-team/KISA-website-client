@@ -33,7 +33,7 @@ export default function QuickLinks() {
             onClick={() => {
               navigateToLink(url);
             }}
-            className="relative min-h-64
+            className="relative
             cursor-pointer flex-1 aspect-square
             flex flex-col items-center justify-center  rounded-xl
             hover:shadow-lg  p-1"
@@ -43,7 +43,7 @@ export default function QuickLinks() {
               src={`/quick_links/${id}.png`}
               alt={title}
               fill
-              // sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
             />
           </button>
         ))}
