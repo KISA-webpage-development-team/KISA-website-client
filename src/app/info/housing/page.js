@@ -37,10 +37,7 @@ export default function HousingPage() {
           const { sectionName, sectionText, sectionIntro, contentList } =
             section;
           return (
-            <div
-              key={index}
-              className="flex flex-col gap-6 md:gap-10 lg:gap-12"
-            >
+            <div key={index} className="section_list_item">
               <SectionTitle
                 align="left"
                 infoType={infoType.toLowerCase()}
@@ -73,10 +70,7 @@ export default function HousingPage() {
           const { sectionName, sectionText, sectionIntro, contentList } =
             section;
           return (
-            <div
-              key={index}
-              className="flex flex-col gap-6 md:gap-10 lg:gap-12"
-            >
+            <div key={index} className="section_list_item">
               <SectionIntro sectionIntro={sectionIntro} />
               <SectionGrid
                 infoType={infoType.toLowerCase()}

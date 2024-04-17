@@ -1,54 +1,63 @@
 import React from "react";
 import SectionImage from "../Info/SectionImage";
+import Link from "next/link";
 
 export default function SectionGrid({ infoType, sectionName, contentList }) {
   const sectionLink = `/info/${infoType}/detail/${sectionName}`;
+  const third = Math.floor(contentList.length / 3);
+  const second = Math.floor(contentList.length / 2);
 
   return (
     <>
-      <div className="hidden md:grid gap-y-16 md:gap-y-24 lg:gap-y-32 z-0">
-        {contentList.map((_, index) => {
-          if (index % 3 === 0) {
-            return (
-              <div
-                key={index}
-                className="flex w-full md:h-[250px] lg:h-[320px] xl:h-[380px] justify-center gap-x-4 md:gap-x-6 lg:gap-x-8"
-              >
-                {contentList.slice(index, index + 3).map(({ name, id }) => (
-                  <SectionImage
-                    priority={index < 3}
-                    key={id}
-                    sectionLink={sectionLink}
-                    name={name}
-                    id={id}
-                  />
-                ))}
-              </div>
-            );
-          }
-        })}
+      <div className="hidden md:flex grid_wrapper">
+        <div className="grid_container">
+          {contentList.slice(0, third * 3).map(({ name, id }, index) => (
+            <SectionImage
+              key={id}
+              sectionLink={sectionLink}
+              name={name}
+              id={id}
+            />
+          ))}
+        </div>
+        <div
+          className={`${
+            contentList.length % 3 === 1
+              ? "grid_auto_container_one"
+              : "grid_auto_container_two"
+          } `}
+        >
+          {contentList.slice(third * 3).map(({ name, id }, index) => (
+            <SectionImage
+              key={id}
+              sectionLink={sectionLink}
+              name={name}
+              id={id}
+            />
+          ))}
+        </div>
       </div>
-      <div className="grid md:hidden gap-y-12 sm:gap-y-16 md:gap-y-24 lg:gap-y-32 z-0">
-        {contentList.map((_, index) => {
-          if (index % 2 === 0) {
-            return (
-              <div
-                key={index}
-                className="flex w-full h-[165px] sm:h-[260px] justify-center gap-x-4 md:gap-x-6 lg:gap-x-8"
-              >
-                {contentList.slice(index, index + 2).map(({ name, id }) => (
-                  <SectionImage
-                    priority={index < 2}
-                    key={id}
-                    sectionLink={sectionLink}
-                    name={name}
-                    id={id}
-                  />
-                ))}
-              </div>
-            );
-          }
-        })}
+      <div className="flex md:hidden grid_wrapper">
+        <div className="grid_container_mobile">
+          {contentList.slice(0, second * 2).map(({ name, id }, index) => (
+            <SectionImage
+              key={id}
+              sectionLink={sectionLink}
+              name={name}
+              id={id}
+            />
+          ))}
+        </div>
+        <div className={`grid_auto_container_mobile`}>
+          {contentList.slice(second * 2).map(({ name, id }, index) => (
+            <SectionImage
+              key={id}
+              sectionLink={sectionLink}
+              name={name}
+              id={id}
+            />
+          ))}
+        </div>
       </div>
     </>
   );

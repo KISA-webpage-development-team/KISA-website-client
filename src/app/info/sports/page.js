@@ -34,10 +34,7 @@ export default function SportsPage() {
           const { sectionName, sectionText, sectionIntro, contentList } =
             section;
           return (
-            <div
-              key={index}
-              className="flex flex-col gap-6 md:gap-10 lg:gap-12"
-            >
+            <div key={index} className="section_list_item">
               <SectionTitle
                 infoType={infoType.toLowerCase()}
                 sectionName={sectionName}
