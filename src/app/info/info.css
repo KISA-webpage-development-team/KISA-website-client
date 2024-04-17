@@ -67,6 +67,7 @@ section {
 }
 
 .cover_text {
-  font-size: clamp(1rem, 2vw, 2rem);
-  @apply text-[#FFFDFD] text-center break-words leading-none;
+  /* font-size: clamp(1.1rem, 1.3vw, 2rem); */
+  @apply text-[#FFFDFD] text-center break-words leading-none
+   text-base sm:text-xl md:text-base lg:text-lg xl:text-2xl;
 }
