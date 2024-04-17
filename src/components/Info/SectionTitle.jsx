@@ -16,7 +16,7 @@ export default function SectionTitle({
       className={`${align === "center" ? "text-center" : "text-left"}`}
     >
       <span
-        className={`${sejongHospitalBold.className} text-xl md:text-2xl lg:text-3xl text-black hover:text-gray-600`}
+        className={`${sejongHospitalBold.className} text-xl md:text-3xl text-black hover:text-gray-600`}
       >
         {sectionText}
       </span>
