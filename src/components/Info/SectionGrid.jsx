@@ -10,16 +10,19 @@ export default function SectionGrid({ infoType, sectionName, contentList }) {
   return (
     <>
       <div className="hidden md:flex grid_wrapper">
-        <div className="grid_container">
-          {contentList.slice(0, third * 3).map(({ name, id }, index) => (
-            <SectionImage
-              key={id}
-              sectionLink={sectionLink}
-              name={name}
-              id={id}
-            />
-          ))}
-        </div>
+        {third > 0 && (
+          <div className="grid_container">
+            {contentList.slice(0, third * 3).map(({ name, id }, index) => (
+              <SectionImage
+                key={id}
+                sectionLink={sectionLink}
+                name={name}
+                id={id}
+              />
+            ))}
+          </div>
+        )}
+
         <div
           className={`${
             contentList.length % 3 === 1
@@ -38,16 +41,19 @@ export default function SectionGrid({ infoType, sectionName, contentList }) {
         </div>
       </div>
       <div className="flex md:hidden grid_wrapper">
-        <div className="grid_container_mobile">
-          {contentList.slice(0, second * 2).map(({ name, id }, index) => (
-            <SectionImage
-              key={id}
-              sectionLink={sectionLink}
-              name={name}
-              id={id}
-            />
-          ))}
-        </div>
+        {second > 0 && (
+          <div className="grid_container_mobile">
+            {contentList.slice(0, second * 2).map(({ name, id }, index) => (
+              <SectionImage
+                key={id}
+                sectionLink={sectionLink}
+                name={name}
+                id={id}
+              />
+            ))}
+          </div>
+        )}
+
         <div className={`grid_auto_container_mobile`}>
           {contentList.slice(second * 2).map(({ name, id }, index) => (
             <SectionImage
