@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import NotLoginModal from "../shared/NotLoginModal";
 import { useRouter } from "next/navigation";
 import { createComment, updateComment } from "../../service/comment";
+import { set } from "react-hook-form";
 
 export default function CommentEditor({
   postid,
@@ -24,6 +25,9 @@ export default function CommentEditor({
   // router
   const router = useRouter();
 
+  // states to prevent multiple key inputs at the same time
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [text, setText] = useState(
     curComment?.text || placeholder === "" ? "" : placeholder
   ); // comment content
@@ -33,7 +37,10 @@ export default function CommentEditor({
   };
 
   const handleSumbit = async () => {
-    console.log("submit called...");
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     if (mode === "update") {
       // send update api call instead of create call
       const data = {
@@ -47,6 +54,8 @@ export default function CommentEditor({
         // modify states after new comment has been submitted
         setCommentsStale(true);
         setOpenCommentEditor(false);
+
+        setIsSubmitting(false);
 
         console.log("comment update success");
       } else {
@@ -72,6 +81,8 @@ export default function CommentEditor({
         // modify states after new comment has been submitted
         setCommentsStale(true);
         setOpenCommentEditor(false);
+
+        setIsSubmitting(false);
 
         console.log("comment creation success");
       } else {
@@ -146,6 +157,7 @@ export default function CommentEditor({
           bg-michigan-blue  text-michigan-maize hover:text-white
           rounded-md cursor-pointer text-xs after:sm:text-sm md:text-base"
           onClick={handleSumbit}
+          disabled={isSubmitting}
         >
           댓글등록
         </button>
