@@ -10,7 +10,7 @@ export default function InstagramIcon({ color = "none" }) {
 
   return (
     <AiOutlineInstagram
-      className="w-9 h-9 rounded-lg
+      className="text-3xl rounded-lg
 text-white bg-gradient-to-bl from-fuchsia-600 via-rose-500 to-amber-300
     p-[0.15rem]"
     />

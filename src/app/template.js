@@ -8,13 +8,11 @@ export default function Template({ children }) {
 
   return (
     <div className="h-full flex flex-col">
-      <header className="top-0 z-40">
-        <div className="max-w-screen-2xl mx-auto px-[15px] md:px-[60px] lg:px-[75px]">
-          <Header
-            isMobileMenuOpen={isMobileMenuOpen}
-            setIsMobileMenuOpen={setIsMobileMenuOpen}
-          />
-        </div>
+      <header className="top-0 z-40  bg-michigan-blue">
+        <Header
+          isMobileMenuOpen={isMobileMenuOpen}
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
+        />
       </header>
       <main
         className="h-full w-full mx-auto max-w-screen-2xl

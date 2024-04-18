@@ -6,5 +6,5 @@ export default function FacebookIcon({ color = "none" }) {
     return <FaFacebook className={`w-5 h-5 md:w-6 md:h-6 text-black`} />;
   }
 
-  return <FaFacebook className="w-10 h-10 text-blue-500" />;
+  return <FaFacebook className="text-3xl text-blue-500" />;
 }

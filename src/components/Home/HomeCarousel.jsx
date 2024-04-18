@@ -40,11 +40,11 @@ export default function HomeCarousel() {
   };
 
   return (
-    <div className="relative w-full h-[450px] sm:h-[600px] md:h-96 flex flex-col md:flex-row gap-10">
-      <div className="grow md:basis-1/2 h-full transition-all duration-150 delay-300 ease-in-out">
+    <div className="mt-4 relative w-full h-full flex flex-col items-center md:flex-row gap-10">
+      <div className="h-full transition-all duration-150 delay-300 ease-in-out">
         <div
-          className="relative flex flex-col justify-center 
-        h-72 sm:h-[500px] md:h-96"
+          className="relative w-full flex flex-col justify-center 
+        h-72 sm:h-[500px] md:h-[55vh] aspect-[6/4]"
         >
           {items.map(({ id, desc }, index) => (
             <motion.div
@@ -58,13 +58,13 @@ export default function HomeCarousel() {
                 opacity: active === index ? 1 : 0,
               }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className={`cursor-pointer absolute w-full h-72 sm:h-[500px] md:h-96 ${
+              className={`cursor-pointer absolute w-full h-72 sm:h-[500px] md:h-[55vh] ${
                 active === index ? "" : "hidden"
               }`}
               onClick={() => window.open(items[active].url, "_blank")}
             >
               <Image
-                className="object-contain"
+                className="object-fit"
                 src={`/carousel/${id}.png`}
                 fill
                 priority={index === active}
@@ -75,7 +75,7 @@ export default function HomeCarousel() {
         </div>
       </div>
 
-      <div className="h-full md:basis-1/2 flex flex-col justify-center gap-2">
+      <div className="relative h-full flex flex-col justify-center gap-2">
         {items.map(({ id, title, desc }, index) => (
           <motion.div
             key={`carousel-${id}`}
@@ -103,39 +103,38 @@ export default function HomeCarousel() {
             </div>
           </motion.div>
         ))}
-      </div>
-
-      {/* Progress Bar */}
-      <div
-        className="absolute 
-      w-full md:w-1/2
+        {/* Progress Bar */}
+        <div
+          className=" absolute
+        w-full 
       bottom-0 right-0
       translate-y-6 sm:translate-y-12 md:translate-y-0
       flex gap-3
       md:pr-0"
-      >
-        {items.map(({ id, title, desc }, index) => (
-          <button
-            key={`carousel-${id}`}
-            // className="flex flex-col gap-4 text-left bg-pink-200"
-            className="w-full"
-            onClick={() => {
-              setActive(index);
-              setProgress(0);
-            }}
-          >
-            <span
-              className="block relative w-full bg-slate-200 h-2 rounded-full"
-              role="progressbar"
-              aria-valuenow={active === index ? progress : 0}
+        >
+          {items.map(({ id, title, desc }, index) => (
+            <button
+              key={`carousel-${id}`}
+              // className="flex flex-col gap-4 text-left bg-pink-200"
+              className="w-full"
+              onClick={() => {
+                setActive(index);
+                setProgress(0);
+              }}
             >
               <span
-                className="absolute inset-0 bg-michigan-blue rounded-[inherit]"
-                style={{ width: active === index ? `${progress}%` : "0%" }}
-              ></span>
-            </span>
-          </button>
-        ))}
+                className="block relative w-full hover:bg-opacity-50 bg-slate-200 h-[10px] rounded-full"
+                role="progressbar"
+                aria-valuenow={active === index ? progress : 0}
+              >
+                <span
+                  className="absolute inset-0 bg-michigan-blue rounded-[inherit]"
+                  style={{ width: active === index ? `${progress}%` : "0%" }}
+                ></span>
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
