@@ -13,11 +13,11 @@ export default function CommunityPage() {
 
   return (
     <section
-      className={`
-    flex flex-col mb-10 px-0 md:px-[60px] lg:px-[75px]`}
+      className={`w-full
+    flex flex-col mb-10 px-0 md:px-[60px] lg:px-[75px] gap-4`}
     >
       {/* 게시판 search bar */}
-      <div className="px-4 md:px-0">
+      <div className="w-full px-4 md:px-0">
         <BoardBar boardType={boardType} />
       </div>
       {/* 게시판 table */}

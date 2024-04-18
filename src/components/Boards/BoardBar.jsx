@@ -14,7 +14,7 @@ export default function BoardBar({ boardType }) {
   }
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="w-full flex items-center justify-between">
       <BoardTitle boardType={boardType} />
       <CreatePostButton onClick={handleCreatePostClick} />
     </div>
