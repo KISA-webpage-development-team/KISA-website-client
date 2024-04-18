@@ -12,9 +12,12 @@ export default function CommunityPage() {
   // console.log(data);
 
   return (
-    <section className={`flex flex-col mb-10 px-0 md:px-[60px] lg:px-[75px]`}>
+    <section
+      className={`bg-green-300 
+    flex flex-col mb-10 px-0 md:px-[60px] lg:px-[75px]`}
+    >
       {/* 게시판 search bar */}
-      <div className="px-4 md:px-0 py-3">
+      <div className="px-4 md:px-0">
         <BoardBar boardType={boardType} />
       </div>
       {/* 게시판 table */}

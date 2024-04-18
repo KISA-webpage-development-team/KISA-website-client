@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React from "react";
 import InstagramIcon from "../ui/InstagramIcon";
+import { Button } from "@nextui-org/react";
 
 const instagramURL = "https://www.instagram.com/kisa_umich/";
 
@@ -12,8 +13,16 @@ export default function InstagramLinkIcon({ color = "none" }) {
   };
 
   return (
-    <button onClick={navigateToInstagram}>
+    // <button onClick={navigateToInstagram}>
+    //   <InstagramIcon color={color} />
+    // </button>
+    <Button
+      isIconOnly
+      color="white"
+      aria-label="Instagram"
+      onClick={navigateToInstagram}
+    >
       <InstagramIcon color={color} />
-    </button>
+    </Button>
   );
 }

@@ -14,7 +14,11 @@ export default function Logo() {
       </div>
 
       <div className={`flex ml-2 flex-col font-medium ${heebo.className}`}>
-        <h1 className="text-base md:text-lg lg:text-4xl">UM KISA</h1>
+        <h1 className="text-base md:text-lg lg:text-xl">
+          University of Michigan
+        </h1>
+
+        <h1 className="text-base md:text-lg lg:text-4xl">KISA</h1>
       </div>
     </Link>
   );

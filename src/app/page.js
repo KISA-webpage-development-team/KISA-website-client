@@ -11,16 +11,17 @@ export default function Home() {
     <section
       className="h-full w-full 
     flex flex-col items-center
-     gap-20 py-6 px-10"
+     gap-20 px-10"
     >
       {/* Carousel */}
-      <UIProvider>
-        <HomeCarousel />
-      </UIProvider>
-      {/* Quick Links (Hub) */}
-      <QuickLinks />
+      {/* <UIProvider> */}
+      <HomeCarousel />
+      {/* </UIProvider> */}
       {/* Boards Summary */}
       <BoardsSummary />
+      {/* Quick Links (Hub) */}
+      <QuickLinks />
+
       {/* SchoolCalendar */}
       <SchoolCalendar />
       {/* SponsorBanner */}

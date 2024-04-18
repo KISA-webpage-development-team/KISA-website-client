@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 //?
 
 export default function HomeCarousel() {
-  const duration = 10000; // 10 seconds
+  const duration = 100000; // 10 seconds
   const frame = useRef(0);
   const firstFrameTime = useRef(performance.now());
   const [active, setActive] = useState(0);
@@ -40,42 +40,47 @@ export default function HomeCarousel() {
   };
 
   return (
-    <div className="mt-4 relative w-full h-full flex flex-col items-center md:flex-row gap-10">
-      <div className="h-full transition-all duration-150 delay-300 ease-in-out">
-        <div
-          className="relative w-full flex flex-col justify-center 
-        h-72 sm:h-[500px] md:h-[55vh] aspect-[6/4]"
-        >
-          {items.map(({ id, desc }, index) => (
-            <motion.div
-              key={`carousel-${id}`}
-              initial={{
-                x: active === index ? 0 : 50,
-                opacity: active === index ? 1 : 0,
-              }}
-              animate={{
-                x: active === index ? 0 : -50,
-                opacity: active === index ? 1 : 0,
-              }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className={`cursor-pointer absolute w-full h-72 sm:h-[500px] md:h-[55vh] ${
-                active === index ? "" : "hidden"
-              }`}
-              onClick={() => window.open(items[active].url, "_blank")}
-            >
-              <Image
-                className="object-fit"
-                src={`/carousel/${id}.png`}
-                fill
-                priority={index === active}
-                alt={desc}
-              />
-            </motion.div>
-          ))}
-        </div>
+    <div
+      className=" w-full relative h-full flex flex-col items-center md:flex-row
+     gap-8 md:gap-16"
+    >
+      <div
+        className="w-full basis-[65%] flex justify-center 
+      transition-all duration-150 delay-300 ease-in-out
+      "
+      >
+        {items.map(({ id, desc }, index) => (
+          <motion.div
+            key={`carousel-${id}`}
+            initial={{
+              x: active === index ? 0 : 50,
+              opacity: active === index ? 1 : 0,
+            }}
+            animate={{
+              x: active === index ? 0 : -50,
+              opacity: active === index ? 1 : 0,
+            }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className={`relative w-full cursor-pointer  
+             aspect-[12/8] h-full
+               ${active === index ? "" : "hidden"}`}
+            onClick={() => window.open(items[active].url, "_blank")}
+          >
+            <Image
+              className="object-fit"
+              src={`/carousel/${id}.png`}
+              fill
+              priority={index === active}
+              alt={desc}
+            />
+          </motion.div>
+        ))}
       </div>
 
-      <div className="relative h-full flex flex-col justify-center gap-2">
+      <div
+        className="basis-1/2
+       relative h-full flex flex-col justify-center gap-2"
+      >
         {items.map(({ id, title, desc }, index) => (
           <motion.div
             key={`carousel-${id}`}
@@ -91,12 +96,12 @@ export default function HomeCarousel() {
             pt-2 md:pt-0"
             >
               <h2
-                className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-3xl`}
+                className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl`}
               >
                 {title}
               </h2>
               <p
-                className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-xl`}
+                className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-sm lg:text-lg xl:text-xl;`}
               >
                 {desc}
               </p>
@@ -123,7 +128,7 @@ export default function HomeCarousel() {
               }}
             >
               <span
-                className="block relative w-full hover:bg-opacity-50 bg-slate-200 h-[10px] rounded-full"
+                className="block relative w-full hover:bg-opacity-50 bg-slate-200 h-[5px] rounded-full"
                 role="progressbar"
                 aria-valuenow={active === index ? progress : 0}
               >

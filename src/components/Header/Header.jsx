@@ -5,17 +5,17 @@ import React, { useEffect, useState } from "react";
 // import Menu from "./Menu";
 import LoginButton from "./LoginButton";
 import { useSession } from "next-auth/react";
-// import VerticalDivider from "../shared/VerticalDivider";
+import VerticalDivider from "../shared/VerticalDivider";
 import InstagramLinkIcon from "../shared/InstagramLinkIcon";
 import FacebookLinkIcon from "../shared/FacebookLinkIcon";
 import UserInfo from "./UserInfo";
-// import MobileMenuButton from "./MobileMenuButton";
+import MobileMenuButton from "./MobileMenuButton";
 // import MobileMenu from "./MobileMenu";
 
-// import styles from "./header.module.css";
-// import { CSSTransition } from "react-transition-group";
+import styles from "./header.module.css";
+import { CSSTransition } from "react-transition-group";
 // import {
-//   sejongHospitalBold,
+//   heebo,
 //   sejongHospitalLight,
 // } from "../../utils/fonts/textFonts";
 import Kisa_Logo from "../../../public/kisa_logo.png";
@@ -24,11 +24,23 @@ import {
   HoveredLink,
   Menu,
   MenuItem,
+  MobileMenu,
+  MobileMenuItem,
   ProductItem,
 } from "../../components/ui/aceternity/navbar-menu";
 import { cn } from "../../utils/cn";
+import menu from "../../config/NavigationMenu";
+import {
+  he,
+  heebo,
+  heeboebo,
+  sejongHospitalBold,
+} from "../../utils/fonts/textFonts";
+import { Divider, NavbarContent, NavbarMenuToggle } from "@nextui-org/react";
+import HorizontalDivider from "../shared/HorizontalDivider";
+import Link from "next/link";
 
-export default function Header({}) {
+export default function Header() {
   return (
     <div className="w-full flex items-center justify-center">
       <Navbar />
@@ -37,55 +49,65 @@ export default function Header({}) {
 }
 
 function Navbar({ className }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const { data: session } = useSession();
   const [active, setActive] = useState(null);
+
   return (
     <div
       className={cn(
-        "inset-x-0 w-full max-w-screen-xl mx-auto z-50 flex flex-row justify-between items-center",
+        "relative inset-x-0 w-full max-w-screen-xl mx-auto z-50 flex flex-row justify-between items-center px-6",
         className
       )}
     >
-      <div className="flex items-center">
-        <h1 className="text-white text-2xl font-bold">UM KISA</h1>
+      <div
+        className={`flex flex-col md:flex-row
+       items-center py-4 lg:py-6
+       `}
+      >
+        <Link href="/" className="flex flex-col items-start gap-0">
+          <h1
+            className={`text-xs lg:text-sm 
+            font-bold ${sejongHospitalBold.className}`}
+          >
+            University of Michigan
+          </h1>
+          <h1
+            className={`flex items-center 
+            text-xl lg:text-2xl font-bold ${sejongHospitalBold.className}`}
+          >
+            한인 학생회
+          </h1>
+        </Link>
 
-        <Menu setActive={setActive}>
-          <MenuItem setActive={setActive} active={active} item="KISA">
-            <div className="flex flex-col space-y-4 text-sm">
-              <HoveredLink href="/web-dev">About KISA</HoveredLink>
-              <HoveredLink href="/interface-design">학생회 조직도</HoveredLink>
-              <HoveredLink href="/seo">활동 소개</HoveredLink>
-              <HoveredLink href="/branding">회칙</HoveredLink>
-              <HoveredLink href="/branding">스폰서</HoveredLink>
-            </div>
-          </MenuItem>
-          <MenuItem setActive={setActive} active={active} item="정보">
-            <div className="flex flex-col space-y-4 text-sm">
-              <HoveredLink href="/hobby">처음 와서 할 일</HoveredLink>
-              <HoveredLink href="/individual">캠퍼스 정보</HoveredLink>
-              <HoveredLink href="/team">하우징</HoveredLink>
-              <HoveredLink href="/enterprise">여행</HoveredLink>
-              <HoveredLink href="/enterprise">스포츠</HoveredLink>
-              <HoveredLink href="/enterprise">맛집</HoveredLink>
-            </div>
-          </MenuItem>
-          <MenuItem setActive={setActive} active={active} item="게시판">
-            <div className="flex flex-col space-y-4 text-sm">
-              <HoveredLink href="/hobby">공지사항</HoveredLink>
-              <HoveredLink href="/individual">자유게시판</HoveredLink>
-              <HoveredLink href="/team">학업 정보</HoveredLink>
-              <HoveredLink href="/enterprise">사고팔기</HoveredLink>
-              <HoveredLink href="/enterprise">하우징/룸메이트</HoveredLink>
-            </div>
-          </MenuItem>
-        </Menu>
+        <MobileMenu setActive={setActive} isMobileMenuOpen={isMobileMenuOpen}>
+          {menu?.map((item, index) => (
+            <MobileMenuItem
+              key={item.href}
+              setActive={setActive}
+              active={active}
+              item={item.name}
+              isFirstChild={index === 0}
+              isLastChild={index === menu?.length - 1}
+            >
+              <div className="flex flex-col space-y-4 text-sm">
+                {item.dropdowns.map((dropdown) => (
+                  <HoveredLink key={dropdown.href} href={dropdown.href}>
+                    {dropdown.name}
+                  </HoveredLink>
+                ))}
+              </div>
+            </MobileMenuItem>
+          ))}
+        </MobileMenu>
       </div>
-      <div className="hidden md:flex justify-center gap-4">
+      <div className="hidden lg:flex justify-center items-center gap-4">
         <InstagramLinkIcon />
-        <FacebookLinkIcon />
+        <VerticalDivider />
 
         {session && (
-          <div className="ml-3 hidden md:flex items-center">
+          <div className="ml-3 flex items-center">
             <UserInfo
               email={session.user.email}
               image={session.user.image}
@@ -93,10 +115,41 @@ function Navbar({ className }) {
             />
           </div>
         )}
-        <div className="hidden md:block ml-3">
+        <div className="block ml-3">
           <LoginButton session={session} />
         </div>
       </div>
+
+      <div
+        className="absolute right-0 top-0 mr-6 mt-6
+       flex items-center lg:hidden"
+      >
+        <MobileMenuButton
+          isMobileMenuOpen={isMobileMenuOpen}
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
+        />
+        {/* <CSSTransition
+          in={isMobileMenuOpen}
+          timeout={500}
+          classNames={{
+            enter: styles.menuContainerEnter,
+            enterActive: styles.menuContainerEnterActive,
+            exit: styles.menuContainerExit,
+            exitActive: styles.menuContainerExitActive,
+          }}
+          unmountOnExit
+        >
+          <div className={styles.menuContainer}>
+            <MobileMenu
+              session={session}
+              isMobileMenuOpen={isMobileMenuOpen}
+              setIsMobileMenuOpen={setIsMobileMenuOpen}
+            />
+          </div>
+        </CSSTransition> */}
+      </div>
+
+      {/* mobile menu button */}
     </div>
   );
 }

@@ -69,7 +69,7 @@ const menu = [
         href: "/boards/community",
       },
       {
-        name: "학업 정보",
+        name: "학업/취업",
         href: "/boards/academics",
       },
       {

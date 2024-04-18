@@ -11,7 +11,7 @@ export default function HomePostView({ type, posts }) {
   return (
     <div
       className="w-full flex flex-col
-  rounded-lg shadow-lg border-gray-300 border-1 p-6"
+  rounded-lg  border-gray-300 border-1 p-6"
     >
       <h2
         className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-2`}

@@ -1,16 +1,35 @@
 "use client";
 
+import { Button } from "@nextui-org/react";
 import { signIn, signOut } from "next-auth/react";
 import React from "react";
+import { heebo, sejongHospitalBold } from "../../utils/fonts/textFonts";
 
 export default function LoginButton({ session = false }) {
+  // return session ? (
+  //   <button className="simple_button" onClick={() => signOut()}>
+  //     로그아웃
+  //   </button>
+  // ) : (
+  //   <button className="simple_button" onClick={() => signIn("google")}>
+  //     로그인
+  //   </button>
+  // );
+  const buttonStyle = "bg-white text-black shadow-lg font-bold";
+
   return session ? (
-    <button className="simple_button" onClick={() => signOut()}>
+    <Button
+      className={`${buttonStyle} ${heebo.className}`}
+      onClick={() => signOut()}
+    >
       로그아웃
-    </button>
+    </Button>
   ) : (
-    <button className="simple_button" onClick={() => signIn("google")}>
+    <Button
+      className={`${buttonStyle} ${heebo.className}`}
+      onClick={() => signIn("google")}
+    >
       로그인
-    </button>
+    </Button>
   );
 }

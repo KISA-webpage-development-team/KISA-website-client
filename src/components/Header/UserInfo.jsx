@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { sejongHospitalBold } from "../../utils/fonts/textFonts";
 
 export default function UserInfo({ email, image, name }) {
   // user page is navigated by using email's first part
@@ -17,7 +18,13 @@ export default function UserInfo({ email, image, name }) {
           alt="user profile"
         />
       </div>
-      <p className="hidden md:block text-lg ml-3 mr-3 text-white">{name}</p>
+      <p
+        className={`${sejongHospitalBold.className}
+      hidden md:block text-lg ml-3 mr-3 
+      text-white hover:text-michigan-maize`}
+      >
+        {name}
+      </p>
     </Link>
   );
 }

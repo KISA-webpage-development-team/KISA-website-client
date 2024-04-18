@@ -9,7 +9,7 @@ import { SessionProvider } from "../context/SessionProvider";
 export const metadata = {
   title: "UMich KISA",
   description:
-    "University of Michigan Korean International Student Association (KISA) official website",
+    "University of Michigan Korean International Student Association (KISA) official website | 미시간 대학교 한인 학생회 공식 웹사이트",
 };
 
 export default async function RootLayout({ children }) {

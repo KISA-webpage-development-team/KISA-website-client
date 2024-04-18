@@ -11,7 +11,7 @@ export default function MobileMenu({
 }) {
   return (
     <div
-      className="z-20 w-full flex flex-col gap-12 items-start px-10 pt-12 pb-12 
+      className="z-20 w-full flex flex-col gap-12 items-start pb-12 pt-6 px-12
     bg-michigan-blue"
     >
       {/* 1. User + Login Button */}

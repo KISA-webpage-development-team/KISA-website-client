@@ -18,6 +18,12 @@ const homeCarouselData = [
     desc: "새 학기를 맞이하여 신규 소그룹 모집을 진행하였는데요! 이번에 새로 개설된 두 개의 소그룹과 이번 학기에도 활동할 세 개의 기존 소그룹을 소개합니다",
     url: "https://www.instagram.com/p/C3YUambphdn/?img_index=1",
   },
+  {
+    id: "pocha",
+    title: "Winter 24 연말 포차",
+    desc: "새 학기를 맞이하여 신규 소그룹 모집을 진행하였는데요! 이번에 새로 개설된 두 개의 소그룹과 이번 학기에도 활동할 세 개의 기존 소그룹을 소개합니다",
+    url: "https://www.instagram.com/p/C3YUambphdn/?img_index=1",
+  },
 ];
 
 // <homeQuickLinksData>

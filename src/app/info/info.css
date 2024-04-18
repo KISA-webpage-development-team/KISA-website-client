@@ -4,6 +4,7 @@
 /* outside section styling */
 section {
   @apply flex flex-col items-center
+    pt-10
     pb-[100px] md:pb-[125px] lg:pb-[150px]
     px-[20px] md:px-[60px] lg:px-[75px];
 }
