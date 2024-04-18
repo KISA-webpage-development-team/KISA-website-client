@@ -30,14 +30,7 @@ import {
 } from "../../components/ui/aceternity/navbar-menu";
 import { cn } from "../../utils/cn";
 import menu from "../../config/NavigationMenu";
-import {
-  he,
-  heebo,
-  heeboebo,
-  sejongHospitalBold,
-} from "../../utils/fonts/textFonts";
-import { Divider, NavbarContent, NavbarMenuToggle } from "@nextui-org/react";
-import HorizontalDivider from "../shared/HorizontalDivider";
+import { sejongHospitalBold } from "../../utils/fonts/textFonts";
 import Link from "next/link";
 
 export default function Header() {
@@ -62,7 +55,7 @@ function Navbar({ className }) {
       )}
     >
       <div
-        className={`flex flex-col md:flex-row
+        className={`flex flex-col lg:flex-row
        items-center py-4 lg:py-6
        `}
       >

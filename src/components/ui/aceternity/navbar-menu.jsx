@@ -5,6 +5,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { heebo } from "../../../utils/fonts/textFonts";
 
+const transition = {
+  type: "spring",
+  mass: 0.5,
+  damping: 11.5,
+  stiffness: 100,
+  restDelta: 0.001,
+  restSpeed: 0.001,
+};
+
 export const MobileMenuItem = ({
   isMobileMenuOpen,
   setActive,
@@ -71,7 +80,6 @@ export const MobileMenuItem = ({
 };
 
 export const MenuItem = ({
-  isMobileMenuOpen,
   setActive,
   active,
   item,
@@ -97,8 +105,8 @@ export const MenuItem = ({
       </motion.p>
       {active !== null && (
         <motion.div
-          initial={{ opacity: 1, scale: 1, y: 0 }}
-          animate={{ opacity: 0, scale: 0.85, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.85, y: 10 }}
           transition={transition}
         >
           {active === item && (
@@ -176,13 +184,12 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
   };
 
   return (
-    <motion.nav
+    <nav
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)} // resets the state
       className={`
-
-
-        flex flex-col md:flex-row
+      ${isMobileMenuOpen ? "hidden" : ""}
+        flex flex-col lg:flex-row
         gap-6 md:gap-0
         w-full md:w-max
         relative border border-transparent
@@ -192,7 +199,7 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
       variants={menuVariants}
     >
       {children}
-    </motion.nav>
+    </nav>
   );
 };
 

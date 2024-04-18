@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 //?
 
 export default function HomeCarousel() {
-  const duration = 100000; // 10 seconds
+  const duration = 50000; // 10 seconds
   const frame = useRef(0);
   const firstFrameTime = useRef(performance.now());
   const [active, setActive] = useState(0);
