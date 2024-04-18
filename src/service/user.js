@@ -60,7 +60,7 @@ export async function getUserInfo(email) {
 export async function updateUser(email, data) {
   const url = `${backendUrl}/users/${email}/`;
   try {
-    const response = await axios.put(url, data);
+    const response = await axios.patch(url, data);
     return response.data;
   } catch (err) {
     console.error(err);
