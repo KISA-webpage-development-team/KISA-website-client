@@ -80,8 +80,7 @@ function Navbar({ className }) {
             한인 학생회
           </h1>
         </Link>
-
-        <MobileMenu setActive={setActive} isMobileMenuOpen={isMobileMenuOpen}>
+        {/* <MobileMenu setActive={setActive} isMobileMenuOpen={isMobileMenuOpen}>
           {menu?.map((item, index) => (
             <MobileMenuItem
               key={item.href}
@@ -100,7 +99,27 @@ function Navbar({ className }) {
               </div>
             </MobileMenuItem>
           ))}
-        </MobileMenu>
+        </MobileMenu> */}
+        <Menu setActive={setActive} isMobileMenuOpen={isMobileMenuOpen}>
+          {menu?.map((item, index) => (
+            <MenuItem
+              key={item.href}
+              setActive={setActive}
+              active={active}
+              item={item.name}
+              isFirstChild={index === 0}
+              isLastChild={index === menu?.length - 1}
+            >
+              <div className="flex flex-col space-y-4 text-sm">
+                {item.dropdowns.map((dropdown) => (
+                  <HoveredLink key={dropdown.href} href={dropdown.href}>
+                    {dropdown.name}
+                  </HoveredLink>
+                ))}
+              </div>
+            </MenuItem>
+          ))}
+        </Menu>
       </div>
       <div className="hidden lg:flex justify-center items-center gap-4">
         <InstagramLinkIcon />

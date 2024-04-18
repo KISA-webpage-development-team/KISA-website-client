@@ -13,7 +13,7 @@ export default function CommunityPage() {
 
   return (
     <section
-      className={`bg-green-300 
+      className={`
     flex flex-col mb-10 px-0 md:px-[60px] lg:px-[75px]`}
     >
       {/* 게시판 search bar */}
