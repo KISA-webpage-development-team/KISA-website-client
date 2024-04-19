@@ -14,11 +14,11 @@ export default function MobileMenuButton({
   const iconVariants = {
     open: {
       opacity: 1,
-      rotate: 0,
+      rotate: -90,
       scale: 1,
     },
     closed: {
-      rotate: -90, // Adjust angle for burger icon orientation
+      rotate: 0, // Adjust angle for burger icon orientation
       scale: 1, // Adjust scale for smaller burger icon size (optional)
     },
   };
@@ -35,7 +35,7 @@ export default function MobileMenuButton({
         variants={iconVariants}
         transition={{ duration: 0.35 }} // Set transition duration for smoothness
       >
-        {!isMobileMenuOpen ? <CancelIcon /> : <BurgerMenuIcon />}
+        {isMobileMenuOpen ? <CancelIcon /> : <BurgerMenuIcon />}
       </motion.div>
     </motion.button>
   );

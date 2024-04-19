@@ -12,10 +12,7 @@ export default function AsianRestaurantsPage() {
         <div id={id} key={id} className="flex flex-col w-full items-center ">
           {/* 1. Detail Thumbnail Image */}
           <DetailThumbnail id={id} />
-          <div
-            className="flex flex-col items-center mt-8 md:mt-12 lg:mt-16
-           gap-8 md:gap-12 lg:gap-16 w-full sm:px-16 md:px-28 lg:px-36"
-          >
+          <div className="detail_text">
             {/* 2. Detail Section Title */}
             <DetailTitle title={title} />
             {/* 3. Detail Section Description  */}

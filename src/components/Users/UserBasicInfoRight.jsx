@@ -50,7 +50,7 @@ export default function UserBasicInfoRight({
         // edit button
         canEdit && (
           <Link
-            href={`/users/edit/${email.split("@")[0]}`}
+            href={`/users/edit/${email}`}
             className="mt-1 backdrop:self-center md:self-start md:w-[40%] blue_button"
           >
             정보 수정

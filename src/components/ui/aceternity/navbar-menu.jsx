@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { heebo } from "../../../utils/fonts/textFonts";
@@ -14,14 +14,70 @@ const transition = {
   restSpeed: 0.001,
 };
 
-export const MobileMenuItem = ({
-  isMobileMenuOpen,
-  setActive,
+export const MobileMenuItem = ({ setActive, active, item, children }) => {
+  const mobileMenuItemVariants = {
+    open: {
+      opacity: 1,
+      height: "auto",
+      transition: { duration: 2, ease: "easeOut" }, // Adjust ease for smooth opening
+    },
+    closed: {
+      opacity: 0,
+      height: 0, // Adjust height for upward shift
+      transition: { duration: 0.3, ease: "easeIn" }, // Adjust ease for faster closing
+    },
+  };
+
+  return (
+    <div
+      onClick={() => setActive(active === item ? null : item)}
+      className={`relative
+      mt-4 md:mt-0
+    `}
+    >
+      {/* motion.p: base menu item text */}
+      <motion.p
+        className="cursor-pointer hover:opacity-[0.9] 
+        hover:text-michigan-maize
+        text-sm md:text-base"
+      >
+        {item}
+      </motion.p>
+
+      {/* motion.div: dropdown menu items list */}
+      {/* `active` handles whether user hovers in the base menu to open the dropdown */}
+      {active !== null &&
+        //  this is where dropdown menu items are rendered
+        //    if current base menu is selected,
+        // show dropdown with transition
+        active === item && (
+          <motion.div
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
+            variants={{
+              open: { opacity: 1, height: "auto", duration: 0.5 },
+              collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
+          >
+            <motion.div
+              // layout // layout ensures smooth animation
+              className="w-max h-full py-4 pl-5"
+            >
+              {children}
+            </motion.div>
+          </motion.div>
+        )}
+    </div>
+  );
+};
+
+export const MobileMenu = ({
   active,
-  item,
+  setActive,
+  isMobileMenuOpen,
   children,
-  isFirstChild,
-  isLastChild,
 }) => {
   const menuVariants = {
     open: {
@@ -37,78 +93,20 @@ export const MobileMenuItem = ({
   };
 
   return (
-    <div
-      onClick={() => setActive(active === item ? null : item)}
-      className={`relative
-      px-0 md:px-4 
-      ${isFirstChild ? "mt-5 md:mt-0" : ""}
-      ${isLastChild ? "mb-5 md:mb-0" : ""}
-  `}
-    >
-      <motion.p
-        transition={{ duration: 0.3 }}
-        className="cursor-pointer hover:opacity-[0.9] 
-        hover:text-michigan-maize "
-      >
-        {item}
-      </motion.p>
-      {active !== null && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-        >
-          {active === item && (
-            <div className="">
-              <motion.div
-                layoutId="active" // layoutId ensures smooth animation
-                className="
-                "
-              >
-                <motion.div
-                  layout // layout ensures smooth animation
-                  className="w-max h-full p-4"
-                >
-                  {children}
-                </motion.div>
-              </motion.div>
-            </div>
-          )}
-        </motion.div>
-      )}
-    </div>
-  );
-};
-
-export const MobileMenu = ({ setActive, isMobileMenuOpen, children }) => {
-  const menuVariants = {
-    open: {
-      opacity: 1,
-      height: "auto",
-      transition: { duration: 0.3, ease: "easeOut" }, // Adjust ease for smooth opening
-    },
-    closed: {
-      opacity: 0,
-      height: 0, // Adjust height for upward shift
-      transition: { duration: 0.3, ease: "easeIn" }, // Adjust ease for faster closing
-    },
-  };
-
-  return (
     <motion.nav
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)} // resets the state
-      // onClick={() => setActive(true)}
       className={`
-
-
-        flex flex-col md:flex-row
-        gap-6 md:gap-0
-        w-full md:w-max
+        md:mt-0
+        flex 
+        items-start 
+        flex-col md:flex-row
         relative border border-transparent
-        shadow-input justify-start md:px-8
+        shadow-input 
+        space-x-0 md:space-x-10
+        space-y-4 md:space-y-0
+        ${isMobileMenuOpen ? "" : "h-0 overflow-y-hidden"}
       `}
-      animate={isMobileMenuOpen ? "closed" : "open"}
       variants={menuVariants}
+      animate={isMobileMenuOpen ? "open" : "closed"}
     >
       {children}
     </motion.nav>
@@ -132,27 +130,41 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
   };
 
   return (
-    <nav
+    <motion.nav
       onMouseLeave={() => setActive(null)}
       className={`
-        flex flex-row
+        md:mt-0
+        flex 
+        items-start 
+        flex-col md:flex-row
         relative border border-transparent
-        shadow-input justify-start space-x-10
+        shadow-input 
+        space-x-0 md:space-x-10
+        space-y-4 md:space-y-0
+        
       `}
+      // variants={menuVariants}
+      // animate={isMobileMenuOpen ? "closed" : "open"}
     >
       {children}
-    </nav>
+    </motion.nav>
   );
 };
 
 export const MenuItem = ({ setActive, active, item, children }) => {
   return (
-    <div onMouseEnter={() => setActive(item)} className={`relative`}>
+    <div
+      onMouseEnter={() => setActive(item)}
+      className={`relative
+      mt-2 md:mt-0
+    `}
+    >
       {/* motion.p: base menu item text */}
       <motion.p
         transition={{ duration: 0.3 }}
         className="cursor-pointer hover:opacity-[0.9] 
-        hover:text-michigan-maize "
+        hover:text-michigan-maize
+        text-sm md:text-base"
       >
         {item}
       </motion.p>
@@ -161,6 +173,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
       {/* `active` handles whether user hovers in the base menu to open the dropdown */}
       {active !== null && (
         <motion.div
+          className={`hidden md:flex`}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           initial={{ opacity: 0, scale: 0.85, y: 10 }}
           transition={transition}
@@ -168,7 +181,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
           {/* if current base menu is selected,
           show dropdown with transition */}
           {active === item && (
-            <div className="absolute pt-[calc(2.8rem)] left-1/2 transform -translate-x-1/2">
+            <div className="absolute pt-[calc(2.2rem)] left-1/2 transform -translate-x-1/2">
               <motion.div
                 transition={transition}
                 layoutId="active" // layoutId ensures smooth animation

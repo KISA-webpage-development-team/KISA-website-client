@@ -12,6 +12,11 @@ section {
   @apply gap-24 sm:gap-32 md:gap-40 lg:gap-48;
 }
 
+.detail_text {
+  @apply flex flex-col items-center mt-8 md:mt-12 lg:mt-16
+  gap-8 md:gap-12 lg:gap-16 w-full px-4 md:px-10 lg:px-12;
+}
+
 /* intro, description */
 .intro_and_desc {
   @apply flex flex-col items-center 

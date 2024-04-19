@@ -19,7 +19,7 @@ export default function UserInfo({ email, image, name }) {
       </div>
       <p
         className={`${sejongHospitalBold.className}
-      hidden md:block text-lg ml-3 mr-3 
+      hidden lg:block text-lg ml-3 mr-3 
       text-white hover:text-michigan-maize`}
       >
         {name}
