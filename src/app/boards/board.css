@@ -6,7 +6,8 @@ section {
 }
 
 .board_table_wrapper {
-  @apply mt-14 md:mt-0 
-  left-0 absolute md:relative 
-  w-screen md:w-full;
+  @apply md:mt-0 
+  left-0 md:relative 
+  w-screen md:w-full 
+  -translate-x-1 md:translate-x-0;
 }

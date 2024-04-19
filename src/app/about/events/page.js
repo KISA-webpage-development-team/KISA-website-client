@@ -10,8 +10,7 @@ export default function EventsPages() {
   return (
     <section
       className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
-    pb-[100px] md:pb-[125px] lg:pb-[150px]
-    px-[20px] md:px-[60px] lg:px-[75px]"
+"
     >
       <InfoTitle title="활동 소개" />
 

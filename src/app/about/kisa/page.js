@@ -9,7 +9,7 @@ export default function KisaPage() {
   return (
     <section
       className="flex flex-col mb-16 md:mb-24 lg:mb-32
-    px-[20px] md:px-[60px] lg:px-[75px]"
+"
     >
       {/* link is for Kepler adobe font */}
       <div className="flex justify-center w-screen bg-[#00274C] self-center">
