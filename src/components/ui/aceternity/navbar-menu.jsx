@@ -135,6 +135,7 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
     <nav
       onMouseLeave={() => setActive(null)}
       className={`
+        mt-2 md:mt-0
         flex flex-row
         relative border border-transparent
         shadow-input justify-start space-x-10

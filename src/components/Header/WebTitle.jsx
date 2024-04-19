@@ -6,7 +6,7 @@ export default function WebTitle() {
   return (
     <Link href="/" className="flex flex-col items-start gap-0">
       <h1
-        className={`text-xs lg:text-sm 
+        className={`text-xs md:text-sm 
     font-bold ${sejongHospitalBold.className}`}
       >
         University of Michigan

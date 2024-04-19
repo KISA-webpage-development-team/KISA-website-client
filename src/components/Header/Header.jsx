@@ -1,7 +1,7 @@
 "use client";
 
 // ** IMPORTANT NOTE **
-// lg:1024px is a breakpoint
+// md:768px is a breakpoint
 // for the header to switch from desktop to mobile view
 
 import React, { useEffect, useState } from "react";
@@ -39,7 +39,7 @@ import Link from "next/link";
 import WebTitle from "./WebTitle";
 
 export default function Header() {
-  const headerContentWidth = "max-w-screen-2xl px-5 sm:px-16 md:px-24 lg:px-32";
+  const headerContentWidth = "max-w-screen-2xl px-5 md:px-24 lg:px-32";
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -49,15 +49,18 @@ export default function Header() {
   return (
     <div
       className={`mx-auto ${headerContentWidth}
-        relative inset-x-0 w-full z-50 
+        relative inset-x-0 w-full h-full z-50 
         flex justify-between items-center 
-        py-4 lg:py-5
+        py-4 md:py-5
       `}
     >
       {/* LEFT SIDE */}
       <div
-        className={`flex flex-row items-center
-          gap-10
+        className={` 
+        flex flex-col md:flex-row 
+        items-start md:items-center
+        md:gap-10 overflow-y-hidden
+        ${isMobileMenuOpen ? "h-[100vh]" : "h-full"}
        `}
       >
         {/* Web Name home link */}
@@ -88,7 +91,10 @@ export default function Header() {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="hidden lg:flex justify-center items-center gap-4">
+      <div
+        className="hidden md:flex
+       justify-center items-center gap-4 h-48"
+      >
         <InstagramLinkIcon />
         <VerticalDivider />
 
@@ -107,32 +113,13 @@ export default function Header() {
       </div>
 
       <div
-        className="absolute right-0 top-0 mr-6 mt-6
-       flex items-center lg:hidden"
+        className="absolute right-0 top-0
+      flex items-center lg:hidden h-full"
       >
         <MobileMenuButton
           isMobileMenuOpen={isMobileMenuOpen}
           setIsMobileMenuOpen={setIsMobileMenuOpen}
         />
-        {/* <CSSTransition
-          in={isMobileMenuOpen}
-          timeout={500}
-          classNames={{
-            enter: styles.menuContainerEnter,
-            enterActive: styles.menuContainerEnterActive,
-            exit: styles.menuContainerExit,
-            exitActive: styles.menuContainerExitActive,
-          }}
-          unmountOnExit
-        >
-          <div className={styles.menuContainer}>
-            <MobileMenu
-              session={session}
-              isMobileMenuOpen={isMobileMenuOpen}
-              setIsMobileMenuOpen={setIsMobileMenuOpen}
-            />
-          </div>
-        </CSSTransition> */}
       </div>
 
       {/* mobile menu button */}
