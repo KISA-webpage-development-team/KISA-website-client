@@ -5,11 +5,15 @@ import UserBoardList from "./UserBoardList";
 import UserBoardNavBar from "./UserBoardNavBar";
 import { getPostsByUser, getCommentsByUser } from "../../service/user";
 import { heebo, sejongHospitalLight } from "../../utils/fonts/textFonts";
+import { useSession } from "next-auth/react";
+import { adminEmail } from "../../config/admin";
 
 export default function UserBoard({ email }) {
   const [openPosts, setOpenPosts] = useState(true); // if openPosts = false, open comments
   const [postsData, setPostsData] = useState();
   const [commentsData, setCommentsData] = useState();
+
+  const { data: session, status } = useSession();
 
   // if (!data) return <div>loading...</div>;
 
@@ -40,6 +44,13 @@ export default function UserBoard({ email }) {
   }, [email, openPosts]);
 
   if (!postsData && !commentsData) return null;
+
+  if (status === "loading") return null;
+
+  // umich kisa validity check
+  if (session?.user.email !== adminEmail && email === adminEmail) {
+    return null;
+  }
 
   return (
     <div className={`${heebo.className} flex flex-col w-full mt-10`}>

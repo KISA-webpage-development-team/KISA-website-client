@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 // sub-ui components
 import UserBasicInfoLeft from "./UserBasicInfoLeft";
 import UserBaiscInfoRight from "./UserBasicInfoRight";
+import { adminEmail } from "../../config/admin";
 
 // SAMPLE
 // {
@@ -28,6 +29,11 @@ export default function UserBasicInfo({ user }) {
   if (status === "loading") {
     // TODO: need to change this to a proper loading ui
     return <div>Loading...</div>;
+  }
+
+  // umich kisa validity check
+  if (session?.user.email !== adminEmail && email === adminEmail) {
+    return <div>권한이 없습니다</div>;
   }
 
   return (

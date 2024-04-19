@@ -11,7 +11,7 @@ export default function Home() {
     <section
       className="h-full w-full 
     flex flex-col items-center
-     gap-20 px-10"
+     gap-20"
     >
       {/* Carousel */}
       {/* <UIProvider> */}

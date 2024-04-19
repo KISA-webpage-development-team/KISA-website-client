@@ -189,7 +189,7 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
       onMouseLeave={() => setActive(false)} // resets the state
       className={`
       ${isMobileMenuOpen ? "hidden" : ""}
-        flex flex-col lg:flex-row
+        flex flex-row
         gap-6 md:gap-0
         w-full md:w-max
         relative border border-transparent

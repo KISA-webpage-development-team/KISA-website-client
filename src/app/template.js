@@ -1,10 +1,11 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Header from "../components/Header/Header";
 import { sejongHospitalLight } from "../utils/fonts/textFonts";
 
 export default function Template({ children }) {
+  // mainConentsWidth: this will control all of the horizontal padding and margin of the page contents
+  const mainContentsWidth = "max-w-screen-2xl px-5 sm:px-16 md:px-24 lg:px-32";
+
   return (
     <div className="h-full flex flex-col">
       <header
@@ -15,8 +16,9 @@ export default function Template({ children }) {
         <Header />
       </header>
       <main
-        className="h-full w-full mx-auto max-w-screen-2xl
-       md:px-[60px] lg:px-[75px] pt-5 md:pt-10"
+        className={`w-full h-fullbg-yellow-200
+        mx-auto ${mainContentsWidth}
+        pt-5 md:pt-10`}
       >
         {children}
       </main>

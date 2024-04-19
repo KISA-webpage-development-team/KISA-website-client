@@ -1,8 +1,10 @@
 "use client";
 
+// ** IMPORTANT NOTE **
+// lg:1024px is a breakpoint
+// for the header to switch from desktop to mobile view
+
 import React, { useEffect, useState } from "react";
-// import Logo from "./Logo";
-// import Menu from "./Menu";
 import LoginButton from "./LoginButton";
 import { useSession } from "next-auth/react";
 import VerticalDivider from "../shared/VerticalDivider";
@@ -33,15 +35,12 @@ import menu from "../../config/NavigationMenu";
 import { sejongHospitalBold } from "../../utils/fonts/textFonts";
 import Link from "next/link";
 
-export default function Header() {
-  return (
-    <div className="w-full flex items-center justify-center">
-      <Navbar />
-    </div>
-  );
-}
+// sub-ui components
+import WebTitle from "./WebTitle";
 
-function Navbar({ className }) {
+export default function Header() {
+  const headerContentWidth = "max-w-screen-2xl px-5 sm:px-16 md:px-24 lg:px-32";
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { data: session } = useSession();
@@ -49,50 +48,20 @@ function Navbar({ className }) {
 
   return (
     <div
-      className={cn(
-        "relative inset-x-0 w-full max-w-screen-xl mx-auto z-50 flex flex-row justify-between items-center px-6",
-        className
-      )}
+      className={`mx-auto ${headerContentWidth}
+        relative inset-x-0 w-full z-50 
+        flex justify-between items-center 
+        py-4 lg:py-5
+      `}
     >
+      {/* LEFT SIDE */}
       <div
         className={`flex flex-col lg:flex-row
-       items-center py-4 lg:py-6
+       items-center
        `}
       >
-        <Link href="/" className="flex flex-col items-start gap-0">
-          <h1
-            className={`text-xs lg:text-sm 
-            font-bold ${sejongHospitalBold.className}`}
-          >
-            University of Michigan
-          </h1>
-          <h1
-            className={`flex items-center 
-            text-xl lg:text-2xl font-bold ${sejongHospitalBold.className}`}
-          >
-            한인 학생회
-          </h1>
-        </Link>
-        {/* <MobileMenu setActive={setActive} isMobileMenuOpen={isMobileMenuOpen}>
-          {menu?.map((item, index) => (
-            <MobileMenuItem
-              key={item.href}
-              setActive={setActive}
-              active={active}
-              item={item.name}
-              isFirstChild={index === 0}
-              isLastChild={index === menu?.length - 1}
-            >
-              <div className="flex flex-col space-y-4 text-sm">
-                {item.dropdowns.map((dropdown) => (
-                  <HoveredLink key={dropdown.href} href={dropdown.href}>
-                    {dropdown.name}
-                  </HoveredLink>
-                ))}
-              </div>
-            </MobileMenuItem>
-          ))}
-        </MobileMenu> */}
+        <WebTitle />
+
         <Menu setActive={setActive} isMobileMenuOpen={isMobileMenuOpen}>
           {menu?.map((item, index) => (
             <MenuItem
@@ -114,6 +83,7 @@ function Navbar({ className }) {
           ))}
         </Menu>
       </div>
+      {/* RIGHT SIDE */}
       <div className="hidden lg:flex justify-center items-center gap-4">
         <InstagramLinkIcon />
         <VerticalDivider />
