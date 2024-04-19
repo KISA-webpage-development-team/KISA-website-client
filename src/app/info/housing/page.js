@@ -17,7 +17,7 @@ export default function HousingPage() {
   const { sections: offCampusSections } = housingPageOffCampusData;
 
   return (
-    <section>
+    <section className="pt-3 md:pt-4 lg:pt-5">
       {/* Information title section divider */}
       <InfoTitle title="Housing" />
       {/* Sections: On Campus + Off Campus */}

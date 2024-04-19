@@ -12,7 +12,7 @@ import {
 
 export default function InfoCheckListPage() {
   return (
-    <section>
+    <section className="pt-3 md:pt-4 lg:pt-5">
       <InfoTitle title="Things to Do" />
 
       {/* Intro + Description */}

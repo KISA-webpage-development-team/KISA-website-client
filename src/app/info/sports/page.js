@@ -14,7 +14,7 @@ export default function SportsPage() {
   const { infoType, infoTitle, sections } = sportsPageData;
 
   return (
-    <section>
+    <section className="pt-3 md:pt-4 lg:pt-5">
       {/* Information title section divider */}
       <InfoTitle title={infoTitle} />
 

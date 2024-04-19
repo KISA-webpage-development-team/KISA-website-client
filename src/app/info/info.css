@@ -3,10 +3,10 @@
 
 /* outside section styling */
 section {
-  @apply flex flex-col items-center
-    pt-10
+  @apply flex flex-col items-center;
+  /* pt-5
     pb-[100px] md:pb-[125px] lg:pb-[150px]
-    px-[20px] md:px-[60px] lg:px-[75px];
+    px-[20px] md:px-[60px] lg:px-[75px]; */
 }
 .detail_section {
   @apply gap-24 sm:gap-32 md:gap-40 lg:gap-48;

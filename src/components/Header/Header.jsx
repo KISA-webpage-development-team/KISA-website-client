@@ -66,6 +66,7 @@ export default function Header() {
               // isLastChild={index === menu?.length - 1} */}
 
         {/* Navigation Menu */}
+        {/* !!! in mobile menu, this menu should go down and become hidden */}
         <Menu setActive={setActive}>
           {menu?.map((item, index) => (
             <MenuItem

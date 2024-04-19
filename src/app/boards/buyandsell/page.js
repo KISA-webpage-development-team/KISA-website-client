@@ -6,12 +6,15 @@ export default function BuyAndSellPage() {
   const boardType = "buyandsell";
 
   return (
-    <section>
+    <section className="">
       {/* 게시판 search bar */}
       <BoardBar boardType={boardType} />
+
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
-      <BoardClient boardType={boardType} />
+      <div className="board_table_wrapper">
+        <BoardClient boardType={boardType} />
+      </div>
     </section>
   );
 }

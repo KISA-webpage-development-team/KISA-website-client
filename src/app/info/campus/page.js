@@ -13,7 +13,7 @@ export default function CampusInfoPage() {
   const { infoType, infoTitle, sections } = campusPageData;
 
   return (
-    <section>
+    <section className="pt-3 md:pt-4 lg:pt-5">
       {/* Information title section divider */}
       <InfoTitle title={infoTitle} />
 

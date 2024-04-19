@@ -4,3 +4,9 @@
 section {
   @apply w-full flex flex-col gap-4;
 }
+
+.board_table_wrapper {
+  @apply mt-14 md:mt-0 
+  left-0 absolute md:relative 
+  w-screen md:w-full;
+}

@@ -49,7 +49,11 @@ export default function BoardClient({ boardType }) {
   // }
 
   return (
-    <div className={`flex flex-col gap-4 w-full ${heebo.className}`}>
+    <div
+      className={`
+    w-full
+    flex flex-col gap-4  ${heebo.className}`}
+    >
       <div className="flex md:hidden">
         <MobileBoardTable posts={posts} announcementPosts={announcementPosts} />
       </div>
