@@ -1,8 +1,6 @@
 import React from "react";
 import UserBasicInfo from "../../../components/Users/UserBasicInfo";
 import UserBoard from "../../../components/Users/UserBoard";
-import { getUserInfo } from "../../../service/user";
-import { decode } from "punycode";
 import { sejongHospitalLight } from "../../../utils/fonts/textFonts";
 
 // currently, this page is only for logged in users.
@@ -11,8 +9,7 @@ import { sejongHospitalLight } from "../../../utils/fonts/textFonts";
 export default async function UserPage({ params }) {
   const { email } = params;
 
-  const userInfo = await getUserInfo(email);
-
+  const decodedEmail = decodeURIComponent(email);
   // if (decodedEmail !== userInfo.email) {
   //   return (
   //     <div className="flex flex-col items-center py-10 px-[20px] md:px-[60px] lg:px-[75px]">
@@ -25,9 +22,9 @@ export default async function UserPage({ params }) {
 
   return (
     <div className={`container ${sejongHospitalLight.className}`}>
-      <UserBasicInfo user={userInfo} />
+      <UserBasicInfo email={decodedEmail} />
 
-      <UserBoard email={email} />
+      <UserBoard email={decodedEmail} />
     </div>
   );
 }

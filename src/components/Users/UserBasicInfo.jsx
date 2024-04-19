@@ -1,38 +1,41 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 // sub-ui components
 import UserBasicInfoLeft from "./UserBasicInfoLeft";
 import UserBaiscInfoRight from "./UserBasicInfoRight";
 import { adminEmail } from "../../config/admin";
+import { getUserInfo } from "../../service/user";
 
-// SAMPLE
-// {
-//   bornDate: 26,
-//   bornMonth: 9,
-//   bornYear: 2004,
-//   created: 'Thu, 11 Apr 2024 00:50:14 GMT',
-//   email: 'jiohin@umich.edu',
-//   fullname: '인지오',
-//   gradYear: "Winter 2026",
-//   linkedin: "https://www.linkedin.com/in/jioh-in-4228b2222/"
-//   major: "Computer Science",
-// }
-
-export default function UserBasicInfo({ user }) {
-  const { email, fullname, gradYear, major, linkedin } = user;
-
-  // this will decide whether to show edit buttons
+export default function UserBasicInfo({ email }) {
+  const [user, setUser] = useState(null);
   const { data: session, status } = useSession();
 
-  if (status === "loading") {
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await getUserInfo(email);
+      if (res) {
+        setUser(res);
+        return;
+      } else {
+        // error handling
+        console.log("user fetch failed");
+      }
+    };
+
+    fetchUser();
+  }, [email]);
+
+  // this will decide whether to show edit buttons
+
+  if (status === "loading" || !user) {
     // TODO: need to change this to a proper loading ui
     return <div>Loading...</div>;
   }
 
   // umich kisa validity check
-  if (session?.user.email !== adminEmail && email === adminEmail) {
+  if (email === adminEmail && session?.user.email !== adminEmail) {
     return <div>권한이 없습니다</div>;
   }
 
@@ -43,15 +46,15 @@ export default function UserBasicInfo({ user }) {
       <UserBasicInfoLeft
         hasProfile={session?.user.email === email}
         profile={session?.user.image}
-        fullname={fullname}
-        major={major}
+        fullname={user?.fullname}
+        major={user?.major}
       />
 
       {/* Right: email, gradYear, borndate, linkedin*/}
       <UserBaiscInfoRight
         email={email}
-        gradYear={gradYear}
-        linkedin={linkedin}
+        gradYear={user?.gradYear}
+        linkedin={user?.linkedin}
         canEdit={session?.user.email === email}
       />
     </div>
