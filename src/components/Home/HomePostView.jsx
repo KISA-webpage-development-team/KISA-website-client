@@ -22,7 +22,7 @@ export default function HomePostView({ type, posts }) {
       {/* table */}
       <table className="w-full">
         <tbody>
-          {posts.map(
+          {posts?.map(
             (
               { postid, title, commentsCount, created, fullname, readCount },
               idx
