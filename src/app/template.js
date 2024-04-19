@@ -16,9 +16,9 @@ export default function Template({ children }) {
         <Header />
       </header>
       <main
-        className={`w-full h-fullbg-yellow-200
+        className={`w-full h-full
         mx-auto ${mainContentsWidth}
-        pt-5 md:pt-10`}
+        pt-6`}
       >
         {children}
       </main>

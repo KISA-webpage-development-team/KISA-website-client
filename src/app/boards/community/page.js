@@ -7,24 +7,14 @@ import BoardClient from "../../../components/Boards/BoardClient";
 
 export default function CommunityPage() {
   const boardType = "community";
-  // fetch all the page data
-  // const data = await getBoardPosts("community");
-  // console.log(data);
 
   return (
-    <section
-      className={`w-full
-    flex flex-col mb-10 px-0 md:px-[60px] lg:px-[75px] gap-4`}
-    >
+    <section>
       {/* 게시판 search bar */}
-      <div className="w-full px-4 md:px-0">
-        <BoardBar boardType={boardType} />
-      </div>
+      <BoardBar boardType={boardType} />
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
-      <div className="w-full ">
-        <BoardClient boardType={boardType} />
-      </div>
+      <BoardClient boardType={boardType} />
     </section>
   );
 }

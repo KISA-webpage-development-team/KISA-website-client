@@ -56,21 +56,23 @@ export default function Header() {
     >
       {/* LEFT SIDE */}
       <div
-        className={`flex flex-col lg:flex-row
-       items-center
+        className={`flex flex-row items-center
+          gap-10
        `}
       >
+        {/* Web Name home link */}
         <WebTitle />
+        {/* // isFirstChild={index === 0}
+              // isLastChild={index === menu?.length - 1} */}
 
-        <Menu setActive={setActive} isMobileMenuOpen={isMobileMenuOpen}>
+        {/* Navigation Menu */}
+        <Menu setActive={setActive}>
           {menu?.map((item, index) => (
             <MenuItem
               key={item.href}
               setActive={setActive}
               active={active}
               item={item.name}
-              isFirstChild={index === 0}
-              isLastChild={index === menu?.length - 1}
             >
               <div className="flex flex-col space-y-4 text-sm">
                 {item.dropdowns.map((dropdown) => (
@@ -83,6 +85,7 @@ export default function Header() {
           ))}
         </Menu>
       </div>
+
       {/* RIGHT SIDE */}
       <div className="hidden lg:flex justify-center items-center gap-4">
         <InstagramLinkIcon />

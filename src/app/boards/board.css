@@ -1,0 +1,6 @@
+/* board.css */
+/* this applies to all the board pages */
+
+section {
+  @apply w-full flex flex-col gap-4;
+}
