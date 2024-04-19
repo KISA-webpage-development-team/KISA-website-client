@@ -5,7 +5,7 @@ import BoardsSummary from "../components/Home/BoardsSummary";
 import SchoolCalendar from "../components/Home/SchoolCalendar";
 import SponsorBanner from "../components/Home/SponsorBanner";
 import UIProvider from "../context/UIProvider";
-
+// .
 export default function Home() {
   return (
     <section
