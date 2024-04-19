@@ -1,4 +1,10 @@
-# KISA Website
+# KISA Website Frontend
+
+## Tech Stacks
+- Framework: NextJS
+- Styling: TailwindCSS
+- UI Library: NextUI + Aceternity
+- State Management: React Context API
 
 ## USER-PAGE BRANCH
 
