@@ -9,10 +9,9 @@ import { sejongHospitalLight } from "../../../utils/fonts/textFonts";
 // Can't view other users' profile pages
 
 export default async function UserPage({ params }) {
-  const { emailid } = params;
-  const umichEmail = emailid + "@umich.edu";
+  const { email } = params;
 
-  const userInfo = await getUserInfo(umichEmail);
+  const userInfo = await getUserInfo(email);
 
   // if (decodedEmail !== userInfo.email) {
   //   return (
@@ -28,7 +27,7 @@ export default async function UserPage({ params }) {
     <div className={`container ${sejongHospitalLight.className}`}>
       <UserBasicInfo user={userInfo} />
 
-      <UserBoard email={umichEmail} />
+      <UserBoard email={email} />
     </div>
   );
 }

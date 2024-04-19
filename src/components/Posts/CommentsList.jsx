@@ -24,7 +24,7 @@ export default function CommentsList({
         <div key={comment.commentid} className="">
           <CommentItem
             commentid={comment.commentid}
-            emailid={comment.email.split("@")[0]}
+            email={comment.email}
             postid={comment.postid}
             isAuthor={session?.user.email === comment.email}
             fullname={comment.fullname}

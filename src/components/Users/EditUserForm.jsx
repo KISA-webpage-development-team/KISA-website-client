@@ -13,7 +13,7 @@ export default function EditUserForm({
   setGradYear,
   linkedIn,
   setLinkedIn,
-  emailid,
+  email,
 }) {
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -26,10 +26,10 @@ export default function EditUserForm({
 
     console.log(data);
 
-    const res = await updateUser(emailid + "@umich.edu", data);
+    const res = await updateUser(email);
     if (res) {
       alert("정보가 수정되었습니다");
-      window.location.replace(`/users/${emailid}`);
+      window.location.replace(`/users/${email}`);
       return;
     }
     alert("정보 수정에 실패했습니다");

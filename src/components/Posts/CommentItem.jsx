@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export default function CommentItem({
   commentid,
-  emailid,
+  email,
   postid,
   isAuthor,
   fullname,
@@ -65,7 +65,7 @@ export default function CommentItem({
                 className="flex items-center gap-1 md:gap-2
               text-xs md:text-base"
               >
-                <Link href={`/users/${emailid}`}>
+                <Link href={`/users/${email}`}>
                   <p className="text-black font-semibold hover:underline">
                     {fullname}
                   </p>

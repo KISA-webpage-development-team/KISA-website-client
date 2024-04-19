@@ -5,7 +5,7 @@ import { fullDateFormatter } from "../../utils/dateFormatter";
 import Link from "next/link";
 
 export default function PostOwnerBar({
-  emailid,
+  email,
   fullname,
   created,
   readCount,
@@ -19,7 +19,7 @@ export default function PostOwnerBar({
       {/* left: fullname + created */}
       <div className="flex items-center gap-2">
         {/* later, fullname will be linked to user profile */}
-        <Link href={`/users/${emailid}`}>
+        <Link href={`/users/${email}`}>
           <p className="font-semibold hover:underline">{fullname}</p>
         </Link>
 

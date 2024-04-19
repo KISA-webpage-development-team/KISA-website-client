@@ -7,7 +7,7 @@ import UserEditClient from "../../../../components/Users/UserEditClient";
 
 export default function UserEditPage({ params }) {
   const { data: session, status } = useSession();
-  const { emailid } = params;
+  const { email } = params;
 
   // loading for session
   if (status === "loading") {
@@ -15,13 +15,13 @@ export default function UserEditPage({ params }) {
   }
 
   // page view validity check
-  if (session?.user.email.split("@")[0] !== emailid) {
+  if (session?.user.email !== email) {
     return <div>권한이 없습니다</div>;
   }
 
   return (
     <div className={`container ${sejongHospitalLight.className}`}>
-      <UserEditClient emailid={emailid} profile={session?.user.image} />
+      <UserEditClient email={email} profile={session?.user.image} />
     </div>
   );
 }

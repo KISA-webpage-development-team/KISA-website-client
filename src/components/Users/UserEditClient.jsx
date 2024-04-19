@@ -5,7 +5,7 @@ import { getUserInfo } from "../../service/user";
 import EditUserFixed from "./EditUserFixed";
 import EditUserForm from "./EditUserForm";
 
-export default function UserEditClient({ emailid, profile }) {
+export default function UserEditClient({ email, profile }) {
   const [user, setUser] = useState(null);
 
   // editable fields
@@ -16,9 +16,7 @@ export default function UserEditClient({ emailid, profile }) {
   // get user info
   useEffect(() => {
     const fetchUser = async () => {
-      const umichEmail = emailid + "@umich.edu";
-
-      const res = await getUserInfo(umichEmail);
+      const res = await getUserInfo(email);
       setUser(res);
 
       // set editable fields
@@ -28,7 +26,7 @@ export default function UserEditClient({ emailid, profile }) {
     };
 
     fetchUser();
-  }, [emailid]);
+  }, [email]);
 
   if (!user) {
     return <div>Loading...</div>;
@@ -48,7 +46,7 @@ export default function UserEditClient({ emailid, profile }) {
         setGradYear={setGradYear}
         linkedIn={linkedIn}
         setLinkedIn={setLinkedIn}
-        emailid={emailid}
+        email={email}
       />
     </div>
   );
