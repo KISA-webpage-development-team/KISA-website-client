@@ -15,9 +15,9 @@ export default function HomePostView({ type, posts }) {
     >
       <h2
         className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-2`}
-      >{`${type} 게시판`}</h2>
+      >{`${type} 게시판 [준비중입니다...]`}</h2>
 
-      <HorizontalDivider color="gray" />
+      {/* <HorizontalDivider color="gray" /> */}
 
       {/* table */}
       <table className="w-full">

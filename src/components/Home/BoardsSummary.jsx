@@ -19,8 +19,8 @@ export default function BoardsSummary() {
       const data = await getBoardPosts("community", 10, 0);
       setHotPosts(data?.results.slice(0, 5));
     };
-    fetchRecentPosts();
-    fetchHotPosts();
+    // fetchRecentPosts();
+    // fetchHotPosts();
   }, []);
 
   return (
