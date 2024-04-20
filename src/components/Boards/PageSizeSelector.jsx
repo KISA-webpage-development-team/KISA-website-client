@@ -9,7 +9,10 @@ export default function PageSizeSelector({
   setPageSize,
 }) {
   return (
-    <div className="flex items-center w-20 gap-1">
+    <div
+      className="flex items-center w-20 gap-1
+    ml-2 md:ml-0"
+    >
       {pageSizeOptions
         .filter((pageSizeOption) => pageNum * pageSizeOption <= totalPostNum)
         .map((pageSizeOption) => (
