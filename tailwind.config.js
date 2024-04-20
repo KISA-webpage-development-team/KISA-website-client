@@ -31,7 +31,21 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [nextui(), addVariablesForColors],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            primary: {
+              DEFAULT: "#00274C",
+              foreground: "#FFCB05",
+            },
+          },
+        },
+      },
+    }),
+    addVariablesForColors,
+  ],
 };
 
 // This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).

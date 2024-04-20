@@ -1,5 +1,3 @@
-"use client";
-
 // BoardClient.jsx
 // : rendering the board
 // + pagination bar
@@ -17,12 +15,14 @@ import BoardTable from "./BoardTable";
 import MobileBoardTable from "./MobileBoardTable";
 
 import { Pagination as PaginationBar } from "@nextui-org/react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function BoardClient({ boardType, page, size }) {
+  const router = useRouter();
   const [posts, setPosts] = useState([]); // 일반 게시물
   const [announcementPosts, setAnnouncementPosts] = useState([]); // 공지사항
-  const [pageNum, setPageNum] = useState(page);
-  const [pageSize, setPageSize] = useState(size); // 10, 20, 30
+  const [pageNum, setPageNum] = useState(page || 1);
+  const [pageSize, setPageSize] = useState(size || 10); // 10, 20, 30
 
   const [totalPostNum, setTotalPostNum] = useState(null); // 게시판 내의 게시물 총 개수
 
@@ -35,7 +35,6 @@ export default function BoardClient({ boardType, page, size }) {
 
     if (boardType !== "announcement") {
       fetchAnnouncements();
-      console.log("we are fetching announcement!");
     }
   }, [boardType]);
 
@@ -44,20 +43,18 @@ export default function BoardClient({ boardType, page, size }) {
     const fetchPosts = async () => {
       // pageNum - 1 is neccessary because page is 0-indexing in backend
       const data = await getBoardPosts(boardType, pageSize, pageNum - 1);
-      console.log("we are fetching!");
       setPosts(data?.results);
     };
 
-    if (pageNum && pageSize) {
-      fetchPosts();
-    }
+    // if (pageNum && pageSize) {
+    fetchPosts();
+    // }
   }, [pageNum, pageSize, boardType]);
 
   // fetch number of posts in the board
   useEffect(() => {
     const fetchPostNum = async () => {
       const data = await getBoardPostNum(boardType);
-      console.log(data);
       if (!data) {
         return; // error handling
       }
@@ -68,13 +65,18 @@ export default function BoardClient({ boardType, page, size }) {
   }, [boardType, announcementPosts]);
 
   // page reloading hook
+  // useEffect(() => {
+  //   window.history.pushState(
+  //     {},
+  //     `/boards/${boardType}?size=${pageSize}&page=${pageNum}`
+  //   );
+  // }, [pageNum, pageSize, boardType]);
+
+  // Function to update URL params
+
   useEffect(() => {
-    window.history.pushState(
-      {},
-      "",
-      `/boards/${boardType}?size=${pageSize}&page=${pageNum}`
-    );
-  }, [pageNum, pageSize, boardType]);
+    router.replace(`/boards/${boardType}?size=${pageSize}&page=${pageNum}`);
+  }, [pageNum, pageSize]);
 
   if (totalPostNum === null) {
     return <div>Loading...</div>;
@@ -104,21 +106,20 @@ export default function BoardClient({ boardType, page, size }) {
       {/* Pagination Bar */}
       <div className="flex w-full">
         <div className="flex-1">
-          <PageSizeSelector pageSize={pageSize} setPageSize={setPageSize} />
+          <PageSizeSelector
+            pageNum={pageNum}
+            totalPostNum={totalPostNum}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+          />
         </div>
 
         <div className="grow">
           {/* TODO: improve pagination */}
-          {/* <Pagination
+          <Pagination
             totalPageNum={Math.ceil(totalPostNum / pageSize)}
             pageNum={pageNum}
             setPageNum={setPageNum}
-          /> */}
-          <PaginationBar
-            showControls
-            total={Math.ceil(totalPostNum / pageSize)}
-            page={pageNum}
-            onChange={setPageNum}
           />
         </div>
       </div>

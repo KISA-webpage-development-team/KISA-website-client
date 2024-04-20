@@ -4,21 +4,18 @@ import React from "react";
 import BoardBar from "../../../components/Boards/BoardBar";
 import BoardClient from "../../../components/Boards/BoardClient";
 import { useSearchParams } from "next/navigation";
-// import { getBoardPosts } from "../../../service/board";
 
 export default function CommunityPage() {
+  const searchParams = useSearchParams();
+
+  const size = Number(searchParams.get("size")) || 10;
+  const page = Number(searchParams.get("page")) || 1;
+
   const boardType = "community";
 
-  // query on url [size, p]
-  const searchParams = useSearchParams();
-  const size = searchParams.get("size") || 10;
-  const page = searchParams.get("page") || 1;
-
-  console.log("");
-
-  if (!size || !page) {
-    return <div>Loading...</div>;
-  }
+  // if (!size || !page) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <section>
