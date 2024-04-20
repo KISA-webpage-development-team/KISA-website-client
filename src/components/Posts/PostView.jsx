@@ -110,14 +110,25 @@ export default function PostView({ boardType, post, postid }) {
       )}
 
       {/* 5. 게시판 목록으로 가는 버튼 */}
-      <div className="flex justify-between mt-5">
-        {status === "authenticated" && (
-          <ImageButton
-            icon={<PencilIcon color="gray" />}
-            text={`${openCommentEditor ? "댓글 취소" : "댓글 쓰기"}`}
-            onClick={onClickPostComment}
-          />
-        )}
+      <div
+        className={`flex
+        ${
+          status === "authenticated" &&
+          !post.isAnnouncement &&
+          boardType !== "announcement"
+            ? "justify-between"
+            : "justify-end"
+        }
+      mt-5`}
+      >
+        {(status === "authenticated" && !post.isAnnouncement) ||
+          (boardType === "announcement" && (
+            <ImageButton
+              icon={<PencilIcon color="gray" />}
+              text={`${openCommentEditor ? "댓글 취소" : "댓글 쓰기"}`}
+              onClick={onClickPostComment}
+            />
+          ))}
 
         <ImageButton
           icon={<ListIcon />}
@@ -140,11 +151,13 @@ export default function PostView({ boardType, post, postid }) {
           <div className="pt-6 pb-3">
             <HorizontalDivider />
           </div>
-          <CommentsList
-            commentsCount={post.commentsCount}
-            comments={comments}
-            setCommentsStale={setCommentsStale}
-          />
+          {!post?.isAnnouncement && boardType !== "announcement" && (
+            <CommentsList
+              commentsCount={post.commentsCount}
+              comments={comments}
+              setCommentsStale={setCommentsStale}
+            />
+          )}
         </>
       )}
 

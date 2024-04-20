@@ -16,15 +16,8 @@ export default function PostClient({ postid }) {
 
   useEffect(() => {
     const getData = async () => {
-      // const res = await createReadCountCookie(postid);
-
-      // if (!res) {
-      //   console.log("read count cookie creation failed");
-      //   return;
-      // }
       const post = await getSinglePost(postid);
       setPost(post);
-      console.log("fetched post: ", post);
 
       return;
     };
