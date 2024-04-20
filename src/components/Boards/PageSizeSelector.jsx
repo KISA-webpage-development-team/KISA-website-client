@@ -2,7 +2,7 @@ import React from "react";
 
 const pageSizeOptions = [10, 20, 30];
 
-export default function PageSizeSelector({ pageSize, setPageSize }) {
+export default function PageSizeSelector({ pageNum, pageSize, setPageSize }) {
   return (
     <div className="flex items-center w-20 gap-1">
       {pageSizeOptions.map((pageSizeOption) => (

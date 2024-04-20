@@ -30,3 +30,16 @@ export async function getBoardAnnouncements(boardType) {
     return;
   }
 }
+
+// get the number of posts in a board for pagination
+// res: { postCount: integer}
+export async function getBoardPostNum(boardType) {
+  const url = `${backendUrl}/boards/${boardType}/count/`;
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+}

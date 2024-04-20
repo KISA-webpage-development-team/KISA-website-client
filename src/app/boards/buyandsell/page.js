@@ -1,9 +1,16 @@
+"use client";
+
 import React from "react";
 import BoardBar from "../../../components/Boards/BoardBar";
 import BoardClient from "../../../components/Boards/BoardClient";
+import { useSearchParams } from "next/navigation";
 
 export default function BuyAndSellPage() {
   const boardType = "buyandsell";
+
+  const searchParams = useSearchParams();
+  const size = searchParams.get("size") || 10;
+  const page = searchParams.get("page") || 1;
 
   return (
     <section className="">
@@ -13,7 +20,7 @@ export default function BuyAndSellPage() {
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
       <div className="board_table_wrapper">
-        <BoardClient boardType={boardType} />
+        <BoardClient boardType={boardType} size={size} page={page} />
       </div>
     </section>
   );

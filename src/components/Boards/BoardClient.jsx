@@ -6,7 +6,7 @@
 // + fetch board data
 
 import { useState, useEffect } from "react";
-import { getBoardPosts } from "../../service/board";
+import { getBoardPostNum, getBoardPosts } from "../../service/board";
 import { getBoardAnnouncements } from "../../service/board";
 import { heebo } from "../../utils/fonts/textFonts";
 
@@ -16,11 +16,15 @@ import Pagination from "./Pagination";
 import BoardTable from "./BoardTable";
 import MobileBoardTable from "./MobileBoardTable";
 
-export default function BoardClient({ boardType }) {
+import { Pagination as PaginationBar } from "@nextui-org/react";
+
+export default function BoardClient({ boardType, page, size }) {
   const [posts, setPosts] = useState([]); // 일반 게시물
   const [announcementPosts, setAnnouncementPosts] = useState([]); // 공지사항
-  const [pageNum, setPageNum] = useState(0);
-  const [pageSize, setPageSize] = useState(10); // 10, 20, 30
+  const [pageNum, setPageNum] = useState(page);
+  const [pageSize, setPageSize] = useState(size); // 10, 20, 30
+
+  const [totalPostNum, setTotalPostNum] = useState(null); // 게시판 내의 게시물 총 개수
 
   // fetch announcements
   useEffect(() => {
@@ -31,22 +35,50 @@ export default function BoardClient({ boardType }) {
 
     if (boardType !== "announcement") {
       fetchAnnouncements();
+      console.log("we are fetching announcement!");
     }
   }, [boardType]);
 
   // fetch non-announcements
   useEffect(() => {
     const fetchPosts = async () => {
-      const data = await getBoardPosts(boardType, pageSize, pageNum);
+      // pageNum - 1 is neccessary because page is 0-indexing in backend
+      const data = await getBoardPosts(boardType, pageSize, pageNum - 1);
+      console.log("we are fetching!");
       setPosts(data?.results);
     };
 
-    fetchPosts();
+    if (pageNum && pageSize) {
+      fetchPosts();
+    }
   }, [pageNum, pageSize, boardType]);
 
-  // if (!posts || !announcementPosts) {
-  //   return <div>Loading...</div>;
-  // }
+  // fetch number of posts in the board
+  useEffect(() => {
+    const fetchPostNum = async () => {
+      const data = await getBoardPostNum(boardType);
+      console.log(data);
+      if (!data) {
+        return; // error handling
+      }
+
+      setTotalPostNum(data?.postCount);
+    };
+    fetchPostNum();
+  }, [boardType, announcementPosts]);
+
+  // page reloading hook
+  useEffect(() => {
+    window.history.pushState(
+      {},
+      "",
+      `/boards/${boardType}?size=${pageSize}&page=${pageNum}`
+    );
+  }, [pageNum, pageSize, boardType]);
+
+  if (totalPostNum === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div
@@ -55,10 +87,18 @@ export default function BoardClient({ boardType }) {
     flex flex-col gap-4  ${heebo.className}`}
     >
       <div className="flex md:hidden">
-        <MobileBoardTable posts={posts} announcementPosts={announcementPosts} />
+        <MobileBoardTable
+          postStartIdx={totalPostNum - pageSize * (pageNum - 1)}
+          posts={posts}
+          announcementPosts={announcementPosts}
+        />
       </div>
       <div className="hidden md:flex">
-        <BoardTable posts={posts} announcementPosts={announcementPosts} />
+        <BoardTable
+          postStartIdx={totalPostNum - pageSize * (pageNum - 1)}
+          posts={posts}
+          announcementPosts={announcementPosts}
+        />
       </div>
 
       {/* Pagination Bar */}
@@ -69,7 +109,17 @@ export default function BoardClient({ boardType }) {
 
         <div className="grow">
           {/* TODO: improve pagination */}
-          <Pagination pageNum={pageNum} setPageNum={setPageNum} />
+          {/* <Pagination
+            totalPageNum={Math.ceil(totalPostNum / pageSize)}
+            pageNum={pageNum}
+            setPageNum={setPageNum}
+          /> */}
+          <PaginationBar
+            showControls
+            total={Math.ceil(totalPostNum / pageSize)}
+            page={pageNum}
+            onChange={setPageNum}
+          />
         </div>
       </div>
     </div>

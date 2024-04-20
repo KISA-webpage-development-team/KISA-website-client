@@ -70,7 +70,7 @@ const menu = [
       },
       {
         name: "학업/취업",
-        href: "/boards/academics",
+        href: "/boards/academic-job",
       },
       {
         name: "사고팔기",

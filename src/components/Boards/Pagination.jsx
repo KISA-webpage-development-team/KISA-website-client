@@ -1,8 +1,9 @@
 import React from "react";
 import PrevIcon from "../ui/PrevIcon";
 import NextIcon from "../ui/NextIcon";
+import { Pagination as PaginationBar } from "@nextui-org/react";
 
-export default function Pagination({ pageNum, setPageNum }) {
+export default function Pagination({ totalPageNum, pageNum, setPageNum }) {
   const backToPrev = () => {
     if (pageNum === 0) return;
     setPageNum((prev) => prev - 1);
@@ -14,15 +15,12 @@ export default function Pagination({ pageNum, setPageNum }) {
 
   return (
     <div className="flex items-center gap-3">
-      <button onClick={backToPrev}>
-        <PrevIcon />
-      </button>
-
-      <span className="text-xl">{pageNum + 1}</span>
-
-      <button onClick={moveToNext}>
-        <NextIcon />
-      </button>
+      <PaginationBar
+        showControls
+        total={totalPageNum}
+        page={pageNum}
+        onChange={setPageNum}
+      />
     </div>
   );
 }

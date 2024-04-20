@@ -3,7 +3,7 @@ export function getBoardName(boardType) {
     return "공지사항";
   } else if (boardType === "community") {
     return "자유게시판";
-  } else if (boardType === "academics") {
+  } else if (boardType === "academic-job") {
     return "학업 정보";
   } else if (boardType === "buyandsell") {
     return "사고팔기";
@@ -20,7 +20,7 @@ export function getTagListForAnnouncement() {
   return [
     { name: "태그 없음", type: "" },
     { name: "자유게시판", type: "community" },
-    { name: "학업 정보", type: "academics" },
+    { name: "학업 정보", type: "academic-job" },
     { name: "사고팔기", type: "buyandsell" },
     { name: "하우징/룸메이트", type: "housing" },
   ];

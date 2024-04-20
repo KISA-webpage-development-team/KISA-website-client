@@ -7,7 +7,11 @@ import Link from "next/link";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
 import { dateFormatter } from "../../utils/dateFormatter";
 
-export default function MobileBoardTable({ posts, announcementPosts }) {
+export default function MobileBoardTable({
+  postStartIdx,
+  posts,
+  announcementPosts,
+}) {
   // console.log("MobileBoardTable", posts, announcementPosts);
 
   return (

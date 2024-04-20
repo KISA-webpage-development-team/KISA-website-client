@@ -7,7 +7,7 @@ import Link from "next/link";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
 import { dateFormatter } from "../../utils/dateFormatter";
 
-export default function BoardTable({ posts, announcementPosts }) {
+export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
   if (posts?.length === 0 && announcementPosts?.length === 0) {
     return <div>Loading...</div>;
   }
@@ -56,17 +56,10 @@ export default function BoardTable({ posts, announcementPosts }) {
                   isAnnouncement && ""
                 } text-center basis-1/12 flex justify-center min-w-16 `}
               >
-                {isAnnouncement ? (
-                  <>
-                    <AnnouncementIcon />
-                    <span className="absolute top-0 left-0 h-full w-1 bg-michigan-blue" />
-                  </>
-                ) : (
-                  postid
-                )}
-                {/* {isAnnouncement && (
-                      <div className="absolute left-0 h-full border-4 border-michigan-blue" />
-                    )} */}
+                <>
+                  <AnnouncementIcon />
+                  <span className="absolute top-0 left-0 h-full w-1 bg-michigan-blue" />
+                </>
               </td>
               <td className="text-left grow">
                 <Link href={`/posts/${postid}`} className="hover:underline">
@@ -126,11 +119,8 @@ export default function BoardTable({ posts, announcementPosts }) {
                     <td className="absolute top-0 left-0 h-full w-1 bg-michigan-blue" />
                   </>
                 ) : (
-                  postid
+                  postStartIdx - idx
                 )}
-                {/* {isAnnouncement && (
-                      <div className="absolute left-0 h-full border-4 border-michigan-blue" />
-                    )} */}
               </td>
               <td className="text-left grow">
                 <Link href={`/posts/${postid}`} className="hover:underline">
