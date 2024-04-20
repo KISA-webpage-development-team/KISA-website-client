@@ -120,7 +120,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
 
         console.log("New Partial Data submit!: ", newData);
 
-        const res = await updatePost(curPost.postid, newData);
+        const res = await updatePost(curPost.postid, newData, session?.token);
         if (res) {
           console.log("Post updated!");
         }

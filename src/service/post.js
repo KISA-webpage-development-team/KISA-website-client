@@ -46,11 +46,19 @@ export async function getSinglePost(postid) {
   }
 }
 
-export async function updatePost(postid, data) {
+export async function updatePost(postid, data, token) {
   // const url = `${backendUrl}/posts/${postid}/`;
   const url = `${backendUrl}/posts/${postid}/`; // currently env doesn't work
   try {
-    const response = await axios.patch(url, data);
+    const response = await axios.patch(
+      url,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+      data
+    );
     return response;
   } catch (error) {
     console.error(error);
