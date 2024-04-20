@@ -121,14 +121,15 @@ export default function PostView({ boardType, post, postid }) {
         }
       mt-5`}
       >
-        {(status === "authenticated" && !post.isAnnouncement) ||
-          (boardType === "announcement" && (
+        {status === "authenticated" &&
+          !post.isAnnouncement &&
+          boardType !== "announcement" && (
             <ImageButton
               icon={<PencilIcon color="gray" />}
               text={`${openCommentEditor ? "댓글 취소" : "댓글 쓰기"}`}
               onClick={onClickPostComment}
             />
-          ))}
+          )}
 
         <ImageButton
           icon={<ListIcon />}
