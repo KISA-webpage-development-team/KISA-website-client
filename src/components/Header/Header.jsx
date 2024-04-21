@@ -25,6 +25,8 @@ import menu from "../../config/NavigationMenu";
 import WebTitle from "./WebTitle";
 import { usePathname } from "next/navigation";
 
+import { motion } from "framer-motion";
+
 export default function Header() {
   const headerContentWidth = "max-w-screen-2xl px-5 md:px-24 lg:px-32";
 
@@ -143,9 +145,14 @@ export default function Header() {
         />
       </div>
       {isMobileMenuOpen && (
-        <div
-          className="absolute right-0 mr-4
+        <motion.div
+          className="absolute top-0 mt-20
+        right-0 mr-4
         flex items-center gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }} // Add exit animation
+          transition={{ duration: 0.3 }}
         >
           {session && (
             <UserInfo
@@ -156,7 +163,7 @@ export default function Header() {
           )}
 
           <LoginButton session={session} size="sm" />
-        </div>
+        </motion.div>
       )}
     </div>
   );

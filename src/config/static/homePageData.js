@@ -7,21 +7,39 @@
 // url
 const homeCarouselData = [
   {
-    id: "new_year",
-    title: "설맞이 펀드레이징",
-    desc: "벌써 학기가 시작 된지 한 달이 넘어가고 설날이 다가오고 있는데요, 기대되는 설날을 맞이해서 저희 키사에서 펀드레이징을 준비했습니다!",
-    url: "https://www.instagram.com/p/C3Di73tO5CB/?img_index=1",
+    id: "pdo",
+    title: "Pre-Departure Orientation (PDO)",
+    desc: (
+      <p>
+        장소: 소피텔 앰버서더 서울
+        <br />
+        일시: 2024년 5월 24일 금요일 13:00 - 17:00
+        <br />
+        UMich International Center에서 공식적으로 주최하는 Pre-Departure
+        Orientation 참석하셔서 학교생활과 학업 등 미국으로 출국 전 필요한 다양한
+        정보들을 얻어 가세요!
+      </p>
+    ),
   },
   {
     id: "small_group",
-    title: "Winter 24 소그룹 소개",
-    desc: "새 학기를 맞이하여 신규 소그룹 모집을 진행하였는데요! 이번에 새로 개설된 두 개의 소그룹과 이번 학기에도 활동할 세 개의 기존 소그룹을 소개합니다",
-    url: "https://www.instagram.com/p/C3YUambphdn/?img_index=1",
+    title: "[24-25] 신/편입생 톡방",
+    desc: (
+      <p>
+        미시간 대학교 입학을 축하드립니다!! KISA에서 준비한 신/편입생 톡방에
+        들어오셔서 다양한 정보를 얻고 새로운 사람들도 만나보세요!
+      </p>
+    ),
   },
   {
     id: "pocha",
-    title: "Winter 24 연말 포차",
-    desc: "새 학기를 맞이하여 신규 소그룹 모집을 진행하였는데요! 이번에 새로 개설된 두 개의 소그룹과 이번 학기에도 활동할 세 개의 기존 소그룹을 소개합니다",
+    title: "웹사이트 런칭 이벤트",
+    desc: (
+      <p>
+        새 학기를 맞이하여 신규 소그룹 모집을 진행하였는데요! 이번에 새로 개설된
+        두 개의 소그룹과 이번 학기에도 활동할 세 개의 기존 소그룹을 소개합니다
+      </p>
+    ),
     url: "https://www.instagram.com/p/C3YUambphdn/?img_index=1",
   },
 ];
@@ -47,10 +65,25 @@ const homeQuickLinksData = [
     url: "https://atlas.ai.umich.edu/",
   },
   {
-    id: "maize_pages",
-    title: "Maize Pages",
-    url: "https://maizepages.umich.edu/",
+    id: "mprint",
+    title: "MPrint",
+    url: "https://mprint.umich.edu/",
   },
+  // {
+  //   id: "mprint",
+  //   title: "MPrint",
+  //   url: "https://mprint.umich.edu/",
+  // },
+  // {
+  //   id: "mprint",
+  //   title: "MPrint",
+  //   url: "https://mprint.umich.edu/",
+  // },
+  // {
+  //   id: "mprint",
+  //   title: "MPrint",
+  //   url: "https://mprint.umich.edu/",
+  // },
 ];
 
 export { homeCarouselData, homeQuickLinksData };

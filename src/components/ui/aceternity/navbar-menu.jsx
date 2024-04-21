@@ -181,7 +181,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
           {/* if current base menu is selected,
           show dropdown with transition */}
           {active === item && (
-            <div className="absolute pt-[calc(2.2rem)] left-1/2 transform -translate-x-1/2">
+            <div className="absolute pt-[calc(2.4rem)] left-1/2 transform -translate-x-1/2">
               <motion.div
                 transition={transition}
                 layoutId="active" // layoutId ensures smooth animation
