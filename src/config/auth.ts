@@ -30,8 +30,6 @@ export const authOptions = {
       return token;
     },
     async signIn({ user, account, profile, credentials }) {
-      // console.log(backendUrl);
-      // 1. check whether user already exists in DB
       try {
         const res = await axios.get(
           `${backendUrl}/auth/userExists${profile.email}`
