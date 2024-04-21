@@ -120,7 +120,7 @@ export default function PostView({ boardType, post, postid }) {
             ? "justify-between"
             : "justify-end"
         }
-      mt-5`}
+      mt-2 md:mt-5`}
       >
         {status === "authenticated" &&
           !post.isAnnouncement &&
@@ -150,7 +150,10 @@ export default function PostView({ boardType, post, postid }) {
       {/* 6. comments list */}
       {!commentsStale && (
         <>
-          <div className="pt-6 pb-3">
+          <div
+            className="pt-3 md:pt-6
+          pb-0 md:pb-3"
+          >
             <HorizontalDivider />
           </div>
           {!post?.isAnnouncement && boardType !== "announcement" && (

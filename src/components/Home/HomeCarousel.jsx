@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 //?
 
 export default function HomeCarousel() {
-  const duration = 50000; // 10 seconds
+  const duration = 5000; // 10 seconds
   const frame = useRef(0);
   const firstFrameTime = useRef(performance.now());
   const [active, setActive] = useState(0);
@@ -64,7 +64,11 @@ export default function HomeCarousel() {
             className={`relative w-full cursor-pointer  
              aspect-[12/8] h-full
                ${active === index ? "" : "hidden"}`}
-            onClick={() => window.open(items[active].url, "_blank")}
+            onClick={() => {
+              if (items[active].url) {
+                window.open(items[active].url, "_blank");
+              }
+            }}
           >
             <Image
               className="object-fit"
@@ -90,21 +94,23 @@ export default function HomeCarousel() {
             className={`object-contain ${active === index ? "" : "hidden"}`}
           >
             <div
-              className="h-full flex flex-col justify-center 
+              className="h-full flex flex-col 
+             justify-start md:justify-center 
             gap-2 md:gap-4 
             pr-10 md:pr-4
-            pt-2 md:pt-0"
+            pt-2 md:pt-0 
+            min-h-36"
             >
               <h2
                 className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl`}
               >
                 {title}
               </h2>
-              <p
+              <div
                 className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-sm lg:text-lg xl:text-xl;`}
               >
                 {desc}
-              </p>
+              </div>
             </div>
           </motion.div>
         ))}
@@ -113,7 +119,7 @@ export default function HomeCarousel() {
           className=" absolute
         w-full 
       bottom-0 right-0
-      translate-y-6 sm:translate-y-12 md:translate-y-0
+      translate-y-6 sm:translate-y-12 md:-translate-y-2
       flex gap-3
       md:pr-0"
         >

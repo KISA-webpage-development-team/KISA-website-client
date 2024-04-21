@@ -11,8 +11,8 @@ export default function RulePage() {
   pb-[100px] md:pb-[125px] lg:pb-[150px]"
     >
       <InfoTitle title="회칙" />
-      <p
-        className={`${sejongHospitalLight.className} px-4 sm:px-8 md:px-12 lg:px-16 mt-16 md:mt:20 lg:mt-24 
+      <div
+        className={`${sejongHospitalLight.className} px-4 sm:px-8 md:px-12 lg:px-16 mt-12 
       text-base md:text-lg lg:text-xl`}
       >
         <p className={`${sejongHospitalBold.className}`}>제1조</p>
@@ -138,7 +138,7 @@ export default function RulePage() {
         (준수 선언문) <br />
         KISA는 본 대학의 규정을 읽었으며 이를 철저히 준수할 것에 동의하며 본회의
         등록은 이러한 규정을 준수하는 것을 조건으로 한다.
-      </p>
+      </div>
     </section>
   );
 }

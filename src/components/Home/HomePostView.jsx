@@ -11,10 +11,11 @@ export default function HomePostView({ type, posts }) {
   return (
     <div
       className="w-full flex flex-col
-  rounded-lg  border-gray-300 border-1 p-6"
+  rounded-lg  border-gray-300 border-1 
+  p-3 md:p-6"
     >
       <h2
-        className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-2`}
+        className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-0`}
       >{`${type} 게시판 [준비중입니다...]`}</h2>
 
       {/* <HorizontalDivider color="gray" /> */}

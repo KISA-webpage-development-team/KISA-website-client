@@ -20,11 +20,11 @@ export default function InfoCheckListPage() {
         className="flex flex-col gap-8 md:gap-10 lg:gap-12 items-center 
 mt-8 md:mt-10 lg:mt-12 w-11/12 md:w-10/12 lg:w-9/12 px-2 md:px-4 lg:px-6"
       >
-        <h
+        <h1
           className={`${sejongHospitalBold.className} text-xl md:text-2xl lg:text-3xl`}
         >
           신입생이 입학 전에 해야 할 일
-        </h>
+        </h1>
         <p
           className={`${sejongHospitalLight.className} text-center text-base md:text-lg lg:text-xl`}
         >
