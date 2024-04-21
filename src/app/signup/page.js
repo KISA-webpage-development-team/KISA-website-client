@@ -162,9 +162,7 @@ export default function SignUpPage() {
 
     // user exists check
     try {
-      const res = await axios.get(`${backendUrl}/auth/userExists`, {
-        params: { email: email },
-      });
+      const res = await axios.get(`${backendUrl}/auth/userExists/${email}`);
 
       if (res.status === 200) {
         window.alert("이미 가입된 이메일입니다.");

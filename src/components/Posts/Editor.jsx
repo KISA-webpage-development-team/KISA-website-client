@@ -76,7 +76,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
   useEffect(() => {
     const fetchIsAdmin = async () => {
       try {
-        const res = await getIsAdmin(session?.user.email);
+        const res = await getIsAdmin(session?.user.email, session?.token);
         setIsAdmin(res);
       } catch (error) {
         console.log(error);
@@ -152,7 +152,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         console.log("Data submit!: ", data);
 
         // do some api call
-        const res = await createPost(data);
+        const res = await createPost(data, session?.token);
         if (res) {
           console.log("Post created!");
         }

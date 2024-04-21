@@ -23,6 +23,7 @@ export default function CommentItem({
   parentCommentid = 0,
   useremail,
   setCommentsStale,
+  token,
 }) {
   const [openReplyEditor, setOpenReplyEditor] = useState(false);
   const [openCommentEditor, setOpenCommentEditor] = useState(false);
@@ -37,7 +38,7 @@ export default function CommentItem({
 
   const handleCommentDelete = async () => {
     console.log("Comment delete has been clicked");
-    const res = await deleteComment(commentid);
+    const res = await deleteComment(commentid, token);
     if (res) {
       // modify states after comment has been deleted
       setCommentsStale(true);
@@ -150,6 +151,7 @@ export default function CommentItem({
               isCommentOfComment={subComment.isCommentOfComment}
               parentCommentid={commentid}
               setCommentsStale={setCommentsStale}
+              token={token}
             />
           </div>
         ))}

@@ -33,9 +33,9 @@ export const authOptions = {
       // console.log(backendUrl);
       // 1. check whether user already exists in DB
       try {
-        const res = await axios.get(`${backendUrl}/auth/userExists`, {
-          params: { email: profile.email },
-        });
+        const res = await axios.get(
+          `${backendUrl}/auth/userExists${profile.email}`
+        );
 
         if (res.status === 200) {
           const fullname = res.data?.fullname;

@@ -35,6 +35,7 @@ export default function CommentsList({
             isCommentOfComment={comment.isCommentOfComment}
             parentCommentid={comment.commentid}
             setCommentsStale={setCommentsStale}
+            token={session?.token}
           />
         </div>
       ))}

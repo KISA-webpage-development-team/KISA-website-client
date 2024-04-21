@@ -2,11 +2,14 @@ import axios from "axios";
 import { backendUrl } from "../config/backendUrl";
 
 // pass user email to check whether user is admin
-export async function getIsAdmin(email) {
+export async function getIsAdmin(email, token) {
   try {
-    const url = `${backendUrl}/auth/isAdmin/`;
-    // const data = { email: email };
-    const response = await axios.get(url, { params: { email: email } });
+    const url = `${backendUrl}/auth/isAdmin/${email}`;
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return true;
   } catch (error) {
     console.error(error);
