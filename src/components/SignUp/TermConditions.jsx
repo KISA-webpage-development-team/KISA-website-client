@@ -37,7 +37,7 @@ export default function TermConditions({
   }, [divRef, setIsScrolledToBottom, lastScrollTop]);
 
   return (
-    <div className="flex flex-col gap-2 w-full mt-8">
+    <div className="flex flex-col gap-2 w-full">
       <span className={`${sejongHospitalBold.className} text-base md:text-lg`}>
         {label}
         <span className="text-red-500 ml-2">*</span>
@@ -57,7 +57,11 @@ export default function TermConditions({
           value={termChecked}
           onChange={(e) => setTermChecked(e.target.checked)}
         />
-        <span className={` ${sejongHospitalLight.className} text-sm`}>
+        <span
+          className={` ${sejongHospitalLight.className} text-sm ${
+            isScrolledToBottom ? "text-black" : "text-gray-400"
+          }`}
+        >
           {checkboxLabel}
         </span>
       </div>

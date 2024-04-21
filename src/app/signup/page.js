@@ -218,26 +218,29 @@ export default function SignUpPage() {
         {/* optional inputs: linkedIn */}
         <OptionalFields fields={optionalFields} />
 
-        {/* 개인정보수집약관 */}
-        <TermConditions
-          isScrolledToBottom={personTermScroll}
-          setIsScrolledToBottom={setPersonTermScroll}
-          label={personalInfoTerm.label}
-          text={personalInfoTerm.text}
-          checkboxLabel={personalInfoTerm.checkboxLabel}
-          termChecked={personTermChecked}
-          setTermChecked={setPersonTermChecked}
-        />
-        {/* 웹사이트 이용약관 */}
-        <TermConditions
-          isScrolledToBottom={websiteTermScroll}
-          setIsScrolledToBottom={setWebsiteTermScroll}
-          label={websiteTerm.label}
-          text={websiteTerm.text}
-          checkboxLabel={websiteTerm.checkboxLabel}
-          termChecked={websiteTermChecked}
-          setTermChecked={setWebsiteTermChecked}
-        />
+        <HorizontalDivider color="gray" />
+        <>
+          {/* 개인정보수집약관 */}
+          <TermConditions
+            isScrolledToBottom={personTermScroll}
+            setIsScrolledToBottom={setPersonTermScroll}
+            label={personalInfoTerm.label}
+            text={personalInfoTerm.text}
+            checkboxLabel={personalInfoTerm.checkboxLabel}
+            termChecked={personTermChecked}
+            setTermChecked={setPersonTermChecked}
+          />
+          {/* 웹사이트 이용약관 */}
+          <TermConditions
+            isScrolledToBottom={websiteTermScroll}
+            setIsScrolledToBottom={setWebsiteTermScroll}
+            label={websiteTerm.label}
+            text={websiteTerm.text}
+            checkboxLabel={websiteTerm.checkboxLabel}
+            termChecked={websiteTermChecked}
+            setTermChecked={setWebsiteTermChecked}
+          />
+        </>
 
         {disabled ? (
           <button
