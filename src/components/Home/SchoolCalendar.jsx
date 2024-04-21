@@ -10,6 +10,8 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
+import { motion } from "framer-motion";
+import { set } from "@boiseitguru/cookie-cutter";
 
 // event summary display
 function renderEventContent(eventInfo) {
@@ -19,11 +21,8 @@ function renderEventContent(eventInfo) {
         sejongHospitalLight.className
       } py-1 px-1 md:px-2 ${
         eventInfo.event.allDay && "bg-michigan-blue text-white "
-      } text-[6px] sm:text-xs md:text-sm lg:text-base`}
+      } text-[10px] sm:text-xs md:text-sm`}
     >
-      {eventInfo.timeText && (
-        <span className="hidden md:block">{eventInfo.timeText + "m"}</span>
-      )}
       <div
         className={` ${sejongHospitalBold.className} overflow-hidden break-words`}
       >
@@ -35,10 +34,41 @@ function renderEventContent(eventInfo) {
 
 export default function SchoolCalendar() {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [didEventSetup, setDidEventSetup] = useState(false);
+  const [events, setEvents] = useState([]);
 
   const handleDateClick = (arg) => {
     arg.jsEvent.preventDefault();
     setSelectedEvent(arg.event);
+    console.log("selected: ", arg.event);
+  };
+
+  const handleEventsSet = (eventsInfo) => {
+    if (eventsInfo.length === 0) return;
+    if (didEventSetup) return;
+    console.log(eventsInfo);
+
+    // check whether last event is upcoming in 7 days
+    const lastEvent = new Date(eventsInfo[eventsInfo.length - 1].start);
+    const today = new Date();
+    const diffTime = lastEvent - today;
+    console.log("today: ", today);
+    console.log("lastEvent: ", lastEvent);
+    console.log("diffTime: ", diffTime);
+
+    if (diffTime > 7 * 24 * 60 * 60 * 1000 || diffTime < 0) {
+      console.log("no upcoming event");
+      setDidEventSetup(true);
+      setSelectedEvent(null);
+      return;
+    }
+
+    console.log(eventsInfo[eventsInfo.length - 1]);
+    setDidEventSetup(true);
+
+    setSelectedEvent(eventsInfo[eventsInfo.length - 1]);
+    // setSelectedEvent(eventsInfo[eventsInfo.length - 1]);
+    return;
   };
 
   return (
@@ -46,8 +76,8 @@ export default function SchoolCalendar() {
       className={`${sejongHospitalBold.className} w-full flex flex-col gap-6`}
     >
       <h2 className="section_title">Calendar</h2>
-      <div className="flex flex-col md:flex-row h-full gap-6">
-        <div className="w-full text-sm lg:text-base hidden md:block">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="w-full text-xs lg:text-sm hidden md:block">
           <FullCalendar
             plugins={[dayGridPlugin, googleCalendarPlugin]}
             initialView="dayGridMonth"
@@ -62,9 +92,10 @@ export default function SchoolCalendar() {
             eventTextColor={"#00274C"}
             eventColor={"#FFCB05"}
             eventClick={handleDateClick}
+            eventsSet={handleEventsSet}
           />
         </div>
-        <div className="w-full text-[8px] sm:text-xs md:text-sm block md:hidden">
+        <div className="w-full text-[9px] block md:hidden">
           <FullCalendar
             plugins={[dayGridPlugin, googleCalendarPlugin]}
             initialView="dayGridWeek"
@@ -74,6 +105,7 @@ export default function SchoolCalendar() {
             events={{
               googleCalendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,
             }}
+            contentHeight={100}
             eventContent={renderEventContent}
             eventDisplay={"block"}
             eventTextColor={"#00274C"}
@@ -82,11 +114,14 @@ export default function SchoolCalendar() {
           />
         </div>
 
-        {selectedEvent && (
-          <div className="basis-1/3 h-full w-full">
-            <CalendarEventCard event={selectedEvent} />
-          </div>
-        )}
+        <motion.div
+          className="basis-1/2 md:basis-1/3 h-full w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <CalendarEventCard event={selectedEvent} />
+        </motion.div>
       </div>
     </div>
   );
