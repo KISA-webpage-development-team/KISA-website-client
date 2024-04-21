@@ -31,6 +31,10 @@ export default function QuickLinks() {
     },
   };
 
+  const navigateToLink = (link) => {
+    window.open(link, "_blank");
+  };
+
   return (
     <div
       className={`w-full mt-0 sm:mt-4 md:mt-0
@@ -55,7 +59,7 @@ export default function QuickLinks() {
             className="w-[90%]
             aspect-square relative border-none flex flex-col"
             isPressable
-            onPress={() => console.log("wow")}
+            onPress={() => navigateToLink(item.url)}
             draggable={false} // Set draggable to false to prevent individual cards from being draggable
           >
             <Image
