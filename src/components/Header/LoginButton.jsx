@@ -5,7 +5,7 @@ import { signIn, signOut } from "next-auth/react";
 import React from "react";
 import { heebo, sejongHospitalBold } from "../../utils/fonts/textFonts";
 
-export default function LoginButton({ session = false }) {
+export default function LoginButton({ session = false, size = "md" }) {
   // return session ? (
   //   <button className="simple_button" onClick={() => signOut()}>
   //     로그아웃
@@ -21,6 +21,7 @@ export default function LoginButton({ session = false }) {
     <Button
       className={`${buttonStyle} ${heebo.className}`}
       onClick={() => signOut()}
+      size={size}
     >
       로그아웃
     </Button>
@@ -28,6 +29,7 @@ export default function LoginButton({ session = false }) {
     <Button
       className={`${buttonStyle} ${heebo.className}`}
       onClick={() => signIn("google")}
+      size={size}
     >
       로그인
     </Button>

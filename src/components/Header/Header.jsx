@@ -142,6 +142,22 @@ export default function Header() {
           setIsMobileMenuOpen={setIsMobileMenuOpen}
         />
       </div>
+      {isMobileMenuOpen && (
+        <div
+          className="absolute right-0 mr-4
+        flex items-center gap-2"
+        >
+          {session && (
+            <UserInfo
+              email={session?.user.email}
+              image={session?.user.image}
+              name={session?.user.name}
+            />
+          )}
+
+          <LoginButton session={session} size="sm" />
+        </div>
+      )}
     </div>
   );
 }
