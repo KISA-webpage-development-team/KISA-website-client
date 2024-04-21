@@ -160,21 +160,34 @@ export default function SignUpPage() {
       return;
     }
 
-    //   // send /auth/signup api call to create a new user
-
-    const url = `${backendUrl}/auth/signup/`;
+    // user exists check
     try {
-      const res = await axios.post(url, userData);
-      if (res.status === 201) {
-        // redirect to home
-        return router.push(`/signup/${name}`);
+      const res = await axios.get(`${backendUrl}/auth/userExists`, {
+        params: { email: email },
+      });
+
+      if (res.status === 200) {
+        window.alert("이미 가입된 이메일입니다.");
+        window.location.href = "/";
+        return;
       }
-      // add error notification
-      return;
-    } catch (err) {
-      console.log(err);
-      // add error notification
-      return;
+    } catch {
+      //   // send /auth/signup api call to create a new user
+
+      const url = `${backendUrl}/auth/signup/`;
+      try {
+        const res = await axios.post(url, userData);
+        if (res.status === 201) {
+          // redirect to home
+          return router.push(`/signup/${name}`);
+        }
+        // add error notification
+        return;
+      } catch (err) {
+        console.log(err);
+        // add error notification
+        return;
+      }
     }
   };
 

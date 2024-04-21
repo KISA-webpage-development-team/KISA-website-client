@@ -4,7 +4,6 @@
 // + fetch board data
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { getBoardPostNum, getBoardPosts } from "../../service/board";
 import { getBoardAnnouncements } from "../../service/board";
 import { heebo } from "../../utils/fonts/textFonts";
@@ -17,6 +16,7 @@ import MobileBoardTable from "./MobileBoardTable";
 
 import { Pagination as PaginationBar } from "@nextui-org/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function BoardClient({ boardType, page, size }) {
   const router = useRouter();
@@ -24,8 +24,9 @@ export default function BoardClient({ boardType, page, size }) {
   const [announcementPosts, setAnnouncementPosts] = useState([]); // 공지사항
   const [pageNum, setPageNum] = useState(page || 1);
   const [pageSize, setPageSize] = useState(size || 10); // 10, 20, 30
-  const [totalPostNum, setTotalPostNum] = useState(null); // 게시판 내의 게시물 총 개수
+
   const { data: session } = useSession();
+  const [totalPostNum, setTotalPostNum] = useState(null); // 게시판 내의 게시물 총 개수
 
   // fetch announcements
   useEffect(() => {
@@ -116,6 +117,7 @@ export default function BoardClient({ boardType, page, size }) {
         </div>
 
         <div className="grow">
+          <p></p>
           {/* TODO: improve pagination */}
           <Pagination
             totalPageNum={Math.ceil(totalPostNum / pageSize)}
