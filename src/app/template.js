@@ -19,7 +19,7 @@ export default function Template({ children }) {
       <main
         className={`w-full h-full
         mx-auto ${mainContentsWidth}
-        pt-6 mb-20`}
+        pt-6 mb-24`}
       >
         {children}
       </main>

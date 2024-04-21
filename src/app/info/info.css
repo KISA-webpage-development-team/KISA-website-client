@@ -30,7 +30,7 @@ section {
   @apply w-full flex flex-col gap-16 sm:gap-20 md:gap-32 mt-6 md:mt-12;
 }
 .section_list_item {
-  @apply flex flex-col;
+  @apply flex flex-col gap-4;
 }
 
 /* grid styling */

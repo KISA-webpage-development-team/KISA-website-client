@@ -14,7 +14,7 @@ export default function Footer() {
     <div
       className={`${sejongHospitalLight.className} flex flex-col gap-0 md:gap-2 justify-center items-center py-[30px]`}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <InstagramLinkIcon color="black" />
         <FacebookLinkIcon color="black" />
       </div>

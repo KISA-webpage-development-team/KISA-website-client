@@ -69,21 +69,11 @@ const homeQuickLinksData = [
     title: "MPrint",
     url: "https://mprint.umich.edu/",
   },
-  // {
-  //   id: "mprint",
-  //   title: "MPrint",
-  //   url: "https://mprint.umich.edu/",
-  // },
-  // {
-  //   id: "mprint",
-  //   title: "MPrint",
-  //   url: "https://mprint.umich.edu/",
-  // },
-  // {
-  //   id: "mprint",
-  //   title: "MPrint",
-  //   url: "https://mprint.umich.edu/",
-  // },
+  {
+    id: "mdining",
+    title: "MDining",
+    url: "https://dining.umich.edu/menus-locations/dining-halls/",
+  },
 ];
 
 export { homeCarouselData, homeQuickLinksData };
