@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 //?
 
 export default function HomeCarousel() {
-  const duration = 5000; // 10 seconds
+  const duration = 50000; // 10 seconds
   const frame = useRef(0);
   const firstFrameTime = useRef(performance.now());
   const [active, setActive] = useState(0);
@@ -42,10 +42,10 @@ export default function HomeCarousel() {
   return (
     <div
       className=" w-full relative h-full flex flex-col items-center md:flex-row
-     gap-8 md:gap-16"
+     gap-8 md:gap-16 min-h-40"
     >
       <div
-        className="w-full basis-[65%] flex justify-center 
+        className="w-full basis-[55%] aspect-[12/8] flex justify-center 
       transition-all duration-150 delay-300 ease-in-out
       "
       >
@@ -62,7 +62,7 @@ export default function HomeCarousel() {
             }}
             transition={{ duration: 1, ease: "easeOut" }}
             className={`relative w-full cursor-pointer  
-             aspect-[12/8] h-full
+             aspect-[12/8] 
                ${active === index ? "" : "hidden"}`}
             onClick={() => {
               if (items[active].url) {
@@ -80,10 +80,10 @@ export default function HomeCarousel() {
           </motion.div>
         ))}
       </div>
-
+      {/* Carousel Text */}
       <div
-        className="basis-1/2
-       relative h-full flex flex-col justify-center gap-2"
+        className="flex-1
+       relative h-full min-h-36 flex flex-col justify-start md:justify-center gap-2"
       >
         {items.map(({ id, title, desc }, index) => (
           <motion.div
@@ -94,12 +94,12 @@ export default function HomeCarousel() {
             className={`object-contain ${active === index ? "" : "hidden"}`}
           >
             <div
-              className="h-full flex flex-col 
+              className="w-full flex flex-col 
              justify-start md:justify-center 
-            gap-2 md:gap-4 
+            gap-2 lg:gap-4 
             pr-10 md:pr-4
             pt-2 md:pt-0 
-            min-h-36"
+            overflow-hidden"
             >
               <h2
                 className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl`}
@@ -107,7 +107,8 @@ export default function HomeCarousel() {
                 {title}
               </h2>
               <div
-                className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-sm lg:text-lg xl:text-xl;`}
+                className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-sm lg:text-md xl:text-lg
+                `}
               >
                 {desc}
               </div>
@@ -119,7 +120,7 @@ export default function HomeCarousel() {
           className=" absolute
         w-full 
       bottom-0 right-0
-      translate-y-6 sm:translate-y-12 md:-translate-y-2
+      translate-y-6 sm:translate-y-12 md:-translate-y-3
       flex gap-3
       md:pr-0"
         >

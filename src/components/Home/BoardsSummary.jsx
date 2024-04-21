@@ -27,7 +27,7 @@ export default function BoardsSummary() {
     <div
       className="w-full
   flex flex-col justify-center 
-  md:flex-row gap-4"
+  md:flex-row gap-4 mt-10 lg:mt-0"
     >
       <HomePostView type="최신" posts={recentPosts} />
       <HomePostView type="추천" posts={hotPosts} />

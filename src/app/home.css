@@ -1,0 +1,7 @@
+.section_title {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.react-multi-carousel-list {
+  padding: 0rem 0 2rem 0;
+}
