@@ -13,17 +13,20 @@ export async function getBoardPosts(boardType, size, page) {
       },
     });
     return response.data;
-    z;
   } catch (error) {
     console.error(error);
     return;
   }
 }
 
-export async function getBoardAnnouncements(boardType) {
+export async function getBoardAnnouncements(boardType, token) {
   const url = `${backendUrl}/boards/${boardType}/announcements/`;
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error(error);

@@ -7,15 +7,6 @@ export async function createReadCountCookie(postid) {
     const response = await axios.post(url, null, {
       withCredentials: true,
     });
-    // const response = await fetch(url, {
-    //   method: "POST",
-    //   credentials: "include",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    // console.log(response.headers["Set-Cookie"]);
-    // console.log(response);
     return response;
   } catch (error) {
     console.error(error);

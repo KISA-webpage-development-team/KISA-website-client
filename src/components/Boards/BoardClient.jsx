@@ -4,6 +4,7 @@
 // + fetch board data
 
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { getBoardPostNum, getBoardPosts } from "../../service/board";
 import { getBoardAnnouncements } from "../../service/board";
 import { heebo } from "../../utils/fonts/textFonts";
@@ -23,13 +24,13 @@ export default function BoardClient({ boardType, page, size }) {
   const [announcementPosts, setAnnouncementPosts] = useState([]); // 공지사항
   const [pageNum, setPageNum] = useState(page || 1);
   const [pageSize, setPageSize] = useState(size || 10); // 10, 20, 30
-
   const [totalPostNum, setTotalPostNum] = useState(null); // 게시판 내의 게시물 총 개수
+  const { data: session } = useSession();
 
   // fetch announcements
   useEffect(() => {
     const fetchAnnouncements = async () => {
-      const data = await getBoardAnnouncements(boardType);
+      const data = await getBoardAnnouncements(boardType, session?.token);
       setAnnouncementPosts(data?.results);
     };
 
