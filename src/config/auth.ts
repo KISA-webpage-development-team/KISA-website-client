@@ -32,7 +32,7 @@ export const authOptions = {
     async signIn({ user, account, profile, credentials }) {
       try {
         const res = await axios.get(
-          `${backendUrl}/auth/userExists${profile.email}`
+          `${backendUrl}/auth/userExists/${profile.email}`
         );
 
         if (res.status === 200) {
@@ -49,6 +49,7 @@ export const authOptions = {
         }
 
         // 2. if not, redirect to /signup page to create a new user
+        console.log(error);
         console.log("user doens't exist, redirecting to signup page...");
         // console.log("error: ", error);
         return "/signup";
