@@ -47,7 +47,7 @@ export default function CommentEditor({
         text: text,
       };
 
-      const res = await updateComment(curComment, data);
+      const res = await updateComment(curComment, data, session?.token);
       if (res) {
         console.log("Data submitted: ", data);
 
@@ -73,7 +73,7 @@ export default function CommentEditor({
       };
       console.log("data: ", data);
       // send post api call to create comment with postid
-      const res = await createComment(postid, data);
+      const res = await createComment(postid, data, session?.token);
 
       if (res) {
         console.log("Data submitted: ", data);

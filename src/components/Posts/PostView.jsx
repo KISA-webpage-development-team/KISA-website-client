@@ -45,7 +45,7 @@ export default function PostView({ boardType, post, postid }) {
       oneDayLater.setDate(oneDayLater.getDate() + 1);
       if (readCount === undefined && status === "authenticated") {
         // console.log("incrementing read count");
-        const res = await incrementReadCount(postid);
+        const res = await incrementReadCount(postid, session?.token);
         if (!res) return;
       }
       cookieCutter.set(postid, "true", {
