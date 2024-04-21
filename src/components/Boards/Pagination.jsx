@@ -13,6 +13,7 @@ export default function Pagination({ totalPageNum, pageNum, setPageNum }) {
 
   return (
     <div className="flex items-center gap-3">
+      <p>{totalPageNum}</p>
       <PaginationBar
         variant="light"
         showControls
