@@ -19,8 +19,6 @@ export default function CalendarEventCard({ event }) {
   });
   // .
 
-  console.log("event: ", event);
-
   return (
     <div
       className="h-full w-full flex gap-10 border border-michigan-blue rounded-lg 

@@ -11,7 +11,6 @@ import {
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
 import { motion } from "framer-motion";
-import { set } from "@boiseitguru/cookie-cutter";
 
 // event summary display
 function renderEventContent(eventInfo) {
@@ -35,12 +34,10 @@ function renderEventContent(eventInfo) {
 export default function SchoolCalendar() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [didEventSetup, setDidEventSetup] = useState(false);
-  const [events, setEvents] = useState([]);
 
   const handleDateClick = (arg) => {
     arg.jsEvent.preventDefault();
     setSelectedEvent(arg.event);
-    console.log("selected: ", arg.event);
   };
 
   const handleEventsSet = (eventsInfo) => {
@@ -52,12 +49,8 @@ export default function SchoolCalendar() {
     const lastEvent = new Date(eventsInfo[eventsInfo.length - 1].start);
     const today = new Date();
     const diffTime = lastEvent - today;
-    console.log("today: ", today);
-    console.log("lastEvent: ", lastEvent);
-    console.log("diffTime: ", diffTime);
 
     if (diffTime > 7 * 24 * 60 * 60 * 1000 || diffTime < 0) {
-      console.log("no upcoming event");
       setDidEventSetup(true);
       setSelectedEvent(null);
       return;
@@ -67,7 +60,6 @@ export default function SchoolCalendar() {
     setDidEventSetup(true);
 
     setSelectedEvent(eventsInfo[eventsInfo.length - 1]);
-    // setSelectedEvent(eventsInfo[eventsInfo.length - 1]);
     return;
   };
 
