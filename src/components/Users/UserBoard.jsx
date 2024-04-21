@@ -45,7 +45,7 @@ export default function UserBoard({ email }) {
 
   if (!postsData && !commentsData) return null;
 
-  if (status === "loading") return null;
+  if (status === "loading" || status === "unauthenticated") return null;
 
   // umich kisa validity check
   if (session?.user.email !== adminEmail && email === adminEmail) {

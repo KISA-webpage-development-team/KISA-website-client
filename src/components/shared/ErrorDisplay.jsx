@@ -3,7 +3,7 @@ import InfoIcon from "../ui/InfoIcon";
 
 export default function ErrorDisplay({ state = "error", text }) {
   return (
-    <div className="flex items-start gap-2 mt-2">
+    <div className="flex items-center gap-2 mt-2">
       <InfoIcon color={state} />
       <span
         className={`text-xs md:text-sm ${

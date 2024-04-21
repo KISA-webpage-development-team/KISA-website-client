@@ -1,57 +1,27 @@
-import React from "react";
-import CustomLabel from "../shared/CustomLabel";
-import CustomInput from "../shared/CustomInput";
+import CustomField from "../shared/CustomField";
 
-export default function OptionalFields({
-  bornYear,
-  setBornYear,
-  major,
-  setMajor,
-  gradYear,
-  setGradYear,
-  linkedIn,
-  setLinkedIn,
-}) {
+export default function OptionalFields({ fields }) {
   return (
     <div className="flex flex-col gap-6 w-full">
-      <div className="w-full">
-        <CustomLabel htmlFor="year" text="생년월일 (YYYY/MM/DD)" />
-        <CustomInput
-          type="text"
-          value={bornYear}
-          onChange={(e) => setBornYear(e.target.value)}
-          placeholder=""
-        />
-      </div>
-      <div className="w-full">
-        <CustomLabel htmlFor="major" text="전공 (major)" />
-        <CustomInput
-          type="text"
-          value={major}
-          onChange={(e) => setMajor(e.target.value)}
-          placeholder=""
-        />
-      </div>
-
-      <div className="w-full">
-        <CustomLabel htmlFor="year" text="졸업년도" />
-        <CustomInput
-          type="number"
-          value={gradYear}
-          onChange={(e) => setGradYear(e.target.value)}
-          placeholder=""
-        />
-      </div>
-
-      <div className="w-full">
-        <CustomLabel htmlFor="url" text="LinkedIn URL" />
-        <CustomInput
-          type="url"
-          value={linkedIn}
-          onChange={(e) => setLinkedIn(e.target.value)}
-          placeholder=""
-        />
-      </div>
+      {fields.map(
+        (
+          { value, setValue, label, type, isError, errorMsg, errorState },
+          index
+        ) => (
+          <div key={index} className="w-full">
+            <CustomField
+              value={value}
+              setValue={setValue}
+              label={label}
+              required={false}
+              type={type}
+              isError={isError}
+              errorMsg={errorMsg}
+              errorState={errorState}
+            />
+          </div>
+        )
+      )}
     </div>
   );
 }
