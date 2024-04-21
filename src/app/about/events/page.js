@@ -16,7 +16,7 @@ export default function EventsPages() {
 
       <div
         className="flex flex-col w-full 
-      gap-12 md:gap-16 lg:gap-20
+      gap-12 md:gap-28 lg:gap-32
       mt-8 md:mt-12 lg:mt-16"
       >
         {eventsPageData.map((data, _) => (

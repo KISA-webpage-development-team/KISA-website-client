@@ -5,7 +5,7 @@
 
 // (optional) 전공 + 출생년도 +  졸업년도 + LinkedIn URL
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { backendUrl } from "../../config/backendUrl";
@@ -20,52 +20,121 @@ import {
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
 
+import { personalInfoTerm } from "../../config/termCondition";
+import { websiteTerm } from "../../config/termCondition";
+
 export default function SignUpPage() {
-  // const { data: session, status } = useSession();
-  // console.log("session: ", session, status);
   const router = useRouter();
 
   // form states
-  const [name, setName] = useState(""); // user input 한글 이름
-  const [email, setEmail] = useState(""); // user input 이메일
-  const [termChecked, setTermChecked] = useState(false); // user input 개인정보 수집 약관 동의 [checkbox
+  const [name, setName] = useState(null); // user input 한글 이름
+  const [email, setEmail] = useState(null); // user input 이메일
+  const [major, setMajor] = useState(null); // user input 전공
+  const [bornDate, setBornDate] = useState(null); // user input 출생년도
+  const [gradYear, setGradYear] = useState(null); // user input 졸업년도
+
+  // term conditions
+  const [personTermScroll, setPersonTermScroll] = useState(false); // 개인정보 수집 약관 스크롤 [boolean]
+  const [personTermChecked, setPersonTermChecked] = useState(false); // 개인정보 수집 약관 동의 [checkbox]
+  const [websiteTermScroll, setWebsiteTermScroll] = useState(false); // 웹사이트 이용 약관 스크롤 [boolean]
+  const [websiteTermChecked, setWebsiteTermChecked] = useState(false); // 웹사이트 이용 약관 동의 [checkbox]
 
   // optional fields
-  const [major, setMajor] = useState(""); // user input 전공
-  const [bornYear, setBornYear] = useState(""); // user input 출생년도 [optional
-  const [gradYear, setGradYear] = useState(""); // user input 졸업년도
-  const [linkedIn, setLinkedIn] = useState(""); // user input linkedIn URL
+  const [linkedIn, setLinkedIn] = useState(null); // user input linkedIn URL
 
   // form validity
   const [disabled, setDisabled] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
+
+  // required fields
+  const requiredFields = useMemo(
+    () => [
+      {
+        value: name,
+        setValue: setName,
+        label: "이름 (본명)",
+        type: "text",
+        isError: true,
+        errorMsg: "게시판에 사용될 이름입니다. 반드시 실명으로 작성해주세요.",
+        errorState: "alert",
+      },
+      {
+        value: email,
+        setValue: setEmail,
+        label: "umich 이메일",
+        type: "email",
+        isError:
+          (!email?.endsWith("@umich.edu") && email?.length > 0) ||
+          email?.length === 0,
+        errorMsg: "유효한 미시간 이메일을 입력해주세요.",
+        errorState: "error",
+      },
+      {
+        value: major,
+        setValue: setMajor,
+        label: "전공 (major)",
+        type: "text",
+        isError: major?.length === 0,
+        errorMsg: "전공을 입력해주세요.",
+        errorState: "error",
+      },
+      {
+        value: bornDate,
+        setValue: setBornDate,
+        label: "생년월일 (YYYY/MM/DD)",
+        type: "date",
+        isError: bornDate !== null && bornDate?.length !== 10,
+        errorMsg: "출생년도를 입력해주세요.",
+        errorState: "error",
+      },
+      {
+        value: gradYear,
+        setValue: setGradYear,
+        label: "졸업년도 (YYYY)",
+        type: "number",
+        isError: gradYear !== null && gradYear?.length !== 4,
+        errorMsg: "정확한 졸업년도를 입력해주세요.",
+        errorState: "error",
+      },
+    ],
+    [name, email, major, bornDate, gradYear]
+  );
+
+  const optionalFields = [
+    {
+      value: linkedIn,
+      setValue: setLinkedIn,
+      label: "LinkedIn URL",
+      type: "url",
+      errorState: "none",
+    },
+  ];
 
   // form validity check
   useEffect(() => {
-    if (!termChecked) {
+    // term condition check
+    if (!personTermChecked || !websiteTermChecked) {
       setDisabled(true);
       return;
     }
 
-    const isEmailValid = email.endsWith("@umich.edu");
-
-    if (!isEmailValid) {
-      setErrorMsg("유효한 미시간 이메일을 입력해주세요.");
+    // additional error check on name
+    const isNameValid = name?.length > 0;
+    if (!isNameValid) {
       setDisabled(true);
       return;
     }
 
-    if (name === "") {
-      setDisabled(true);
-      return;
+    for (const field of requiredFields) {
+      if (
+        (field.errorState === "error" && field.isError) ||
+        field.value === null
+      ) {
+        setDisabled(true);
+        return;
+      }
     }
-
-    if (isEmailValid && name.length > 0 && termChecked) {
-      setErrorMsg("");
-      setDisabled(false);
-      return;
-    }
-  }, [name, email, termChecked]);
+    setDisabled(false);
+  }, [requiredFields, name, personTermChecked, websiteTermChecked]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -73,9 +142,9 @@ export default function SignUpPage() {
     const userData = {
       fullname: name,
       email: email,
-      bornYear: bornYear.split("/")[0] ? bornYear.split("/")[0] : null,
-      bornDate: bornYear.split("/")[2] ? bornYear.split("/")[2] : null,
-      bornMonth: bornYear.split("/")[1] ? bornYear.split("/")[1] : null,
+      bornYear: bornDate.split(".")[0] ? bornDate.split(".")[0] : null,
+      bornDate: bornDate.split(".")[2] ? bornDate.split(".")[2] : null,
+      bornMonth: bornDate.split(".")[1] ? bornDate.split(".")[1] : null,
       major: major ? major : null,
       gradYear: gradYear ? gradYear : null,
       linkedin: linkedIn ? linkedIn : null,
@@ -89,17 +158,13 @@ export default function SignUpPage() {
       return;
     }
 
-    console.log("data submitted", userData);
-
     //   // send /auth/signup api call to create a new user
 
     const url = `${backendUrl}/auth/signup/`;
     try {
       const res = await axios.post(url, userData);
       if (res.status === 201) {
-        console.log("Successfully created a new user!");
         // redirect to home
-        console.log(name);
         return router.push(`/signup/${name}`);
       }
       // add error notification
@@ -114,8 +179,7 @@ export default function SignUpPage() {
   return (
     <div
       className="flex flex-col items-center justify-center gap-10
-    max-w-sm h-full mx-auto
-    mt-8 md:mt-16 mb-20"
+    max-w-sm h-full mx-auto mb-20"
     >
       <div className="flex flex-col text-center gap-1 items-center">
         <h1 className={`${sejongHospitalBold.className} text-2xl`}>
@@ -128,34 +192,38 @@ export default function SignUpPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 items-center w-full px-4"
+        className="flex flex-col 
+        gap-6 md:gap-8
+         items-center w-full px-4"
       >
-        {/* required inputs: 이름 + 미시간 이메일 */}
-        <RequiredFields
-          name={name}
-          setName={setName}
-          email={email}
-          setEmail={setEmail}
-        />
+        {/* required inputs */}
+        <RequiredFields fields={requiredFields} />
 
         {/*  divider  */}
         <HorizontalDivider color="gray" />
 
-        {/* optional inputs: 전공 + 졸업년도 + linkedIn */}
-        <OptionalFields
-          bornYear={bornYear}
-          setBornYear={setBornYear}
-          major={major}
-          setMajor={setMajor}
-          gradYear={gradYear}
-          setGradYear={setGradYear}
-          linkedIn={linkedIn}
-          setLinkedIn={setLinkedIn}
-        />
+        {/* optional inputs: linkedIn */}
+        <OptionalFields fields={optionalFields} />
 
+        {/* 개인정보수집약관 */}
         <TermConditions
-          termChecked={termChecked}
-          setTermChecked={setTermChecked}
+          isScrolledToBottom={personTermScroll}
+          setIsScrolledToBottom={setPersonTermScroll}
+          label={personalInfoTerm.label}
+          text={personalInfoTerm.text}
+          checkboxLabel={personalInfoTerm.checkboxLabel}
+          termChecked={personTermChecked}
+          setTermChecked={setPersonTermChecked}
+        />
+        {/* 웹사이트 이용약관 */}
+        <TermConditions
+          isScrolledToBottom={websiteTermScroll}
+          setIsScrolledToBottom={setWebsiteTermScroll}
+          label={websiteTerm.label}
+          text={websiteTerm.text}
+          checkboxLabel={websiteTerm.checkboxLabel}
+          termChecked={websiteTermChecked}
+          setTermChecked={setWebsiteTermChecked}
         />
 
         {disabled ? (

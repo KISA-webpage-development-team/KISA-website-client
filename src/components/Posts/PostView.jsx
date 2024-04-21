@@ -43,9 +43,10 @@ export default function PostView({ boardType, post, postid }) {
       const readCount = cookieCutter.get(postid);
       const oneDayLater = new Date();
       oneDayLater.setDate(oneDayLater.getDate() + 1);
-      if (readCount === undefined) {
+      if (readCount === undefined && status === "authenticated") {
         // console.log("incrementing read count");
-        await incrementReadCount(postid);
+        const res = await incrementReadCount(postid);
+        if (!res) return;
       }
       cookieCutter.set(postid, "true", {
         expires: oneDayLater,

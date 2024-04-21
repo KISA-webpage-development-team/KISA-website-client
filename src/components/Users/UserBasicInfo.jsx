@@ -7,6 +7,7 @@ import UserBasicInfoLeft from "./UserBasicInfoLeft";
 import UserBaiscInfoRight from "./UserBasicInfoRight";
 import { adminEmail } from "../../config/admin";
 import { getUserInfo } from "../../service/user";
+import NotLoginModal from "../shared/NotLoginModal";
 
 export default function UserBasicInfo({ email }) {
   const [user, setUser] = useState(null);
@@ -28,6 +29,10 @@ export default function UserBasicInfo({ email }) {
   }, [email]);
 
   // this will decide whether to show edit buttons
+
+  if (status === "unauthenticated") {
+    return <NotLoginModal />;
+  }
 
   if (status === "loading" || !user) {
     // TODO: need to change this to a proper loading ui

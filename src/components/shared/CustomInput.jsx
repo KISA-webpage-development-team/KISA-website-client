@@ -17,7 +17,7 @@ export default function CustomInput({
       className=" w-full
       border border-gray-300 p-3 rounded-lg
       mt-2 
-      focus:outline-michigan-blue text-sm md:text-base
+      focus:outline-michigan-blue text-base
       "
     />
   );
