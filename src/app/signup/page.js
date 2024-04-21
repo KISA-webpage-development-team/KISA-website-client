@@ -142,13 +142,15 @@ export default function SignUpPage() {
     const userData = {
       fullname: name,
       email: email,
-      bornYear: bornDate.split(".")[0] ? bornDate.split(".")[0] : null,
-      bornDate: bornDate.split(".")[2] ? bornDate.split(".")[2] : null,
-      bornMonth: bornDate.split(".")[1] ? bornDate.split(".")[1] : null,
+      bornYear: bornDate.split("-")[0] ? Number(bornDate.split("-")[0]) : null,
+      bornDate: bornDate.split("-")[2] ? Number(bornDate.split("-")[2]) : null,
+      bornMonth: bornDate.split("-")[1] ? Number(bornDate.split("-")[1]) : null,
       major: major ? major : null,
-      gradYear: gradYear ? gradYear : null,
+      gradYear: gradYear ? Number(gradYear) : null,
       linkedin: linkedIn ? linkedIn : null,
     };
+    console.log(bornDate);
+    console.log(userData);
 
     const userConfirmed = window.confirm(
       "한 번 생성된 로그인 정보 수정은 어렵습니다. 진행하시겠습니까?"
