@@ -16,18 +16,13 @@ export async function createReadCountCookie(postid) {
 export async function createPost(data, token) {
   const url = `${backendUrl}/posts/`;
   try {
-    const response = await axios.post(
-      url,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-      data
-    );
+    const response = await axios.post(url, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return response;
   } catch (error) {
     console.error(error);
+    return;
   }
 }
 

@@ -41,11 +41,11 @@ export default function HomeCarousel() {
 
   return (
     <div
-      className=" w-full relative h-full flex flex-col items-center md:flex-row
+      className="w-full relative h-full flex flex-col items-center md:flex-row
      gap-8 md:gap-16 min-h-40"
     >
       <div
-        className="w-full basis-[55%] aspect-[12/8] flex justify-center 
+        className="h-full w-full basis-[50%] aspect-[12/8] flex justify-center 
       transition-all duration-150 delay-300 ease-in-out
       "
       >
@@ -83,45 +83,49 @@ export default function HomeCarousel() {
       {/* Carousel Text */}
       <div
         className="flex-1
-       relative h-full min-h-36 flex flex-col justify-start md:justify-center gap-2"
+       relative h-full min-h-36 flex flex-col justify-start md:justify-center"
       >
-        {items.map(({ id, title, desc }, index) => (
-          <motion.div
-            key={`carousel-${id}`}
-            initial={{ opacity: active === index ? 1 : 0 }}
-            animate={{ opacity: active === index ? 1 : 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className={`object-contain ${active === index ? "" : "hidden"}`}
-          >
-            <div
-              className="w-full flex flex-col 
+        <div className="h-full flex flex-col items-center">
+          {items.map(({ id, title, desc }, index) => (
+            <motion.div
+              key={`carousel-${id}`}
+              initial={{ opacity: active === index ? 1 : 0 }}
+              animate={{ opacity: active === index ? 1 : 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className={`object-contain ${
+                active === index ? "" : "hidden"
+              } flex h-full items-center`}
+            >
+              <div
+                className="w-full flex flex-col 
              justify-start md:justify-center 
             gap-2 lg:gap-4 
             pr-10 md:pr-4
             pt-2 md:pt-0 
             overflow-hidden"
-            >
-              <h2
-                className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl`}
               >
-                {title}
-              </h2>
-              <div
-                className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-sm lg:text-md xl:text-lg
+                <h2
+                  className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl`}
+                >
+                  {title}
+                </h2>
+                <div
+                  className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-sm lg:text-md xl:text-lg
                 `}
-              >
-                {desc}
+                >
+                  {desc}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
+
         {/* Progress Bar */}
         <div
-          className=" absolute
-        w-full 
+          className="
+        w-full
       bottom-0 right-0
-      translate-y-6 sm:translate-y-12 md:-translate-y-3
-      flex gap-3
+      flex items-end gap-3
       md:pr-0"
         >
           {items.map(({ id, title, desc }, index) => (

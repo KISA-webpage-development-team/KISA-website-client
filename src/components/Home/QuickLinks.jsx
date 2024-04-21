@@ -48,7 +48,7 @@ export default function QuickLinks() {
         draggable={true}
         partialVisbile={false}
         infinite={true}
-        className="relative py-1"
+        className="relative py-1 h-full"
         itemClass="py-1 px-1"
       >
         {items.map((item, index) => (
@@ -56,7 +56,7 @@ export default function QuickLinks() {
             key={item.id}
             isFooterBlurred
             radius="lg"
-            className="w-[90%]
+            className="max-w-32 md:max-w-full w-[80%] md:w-[90%]
             aspect-square relative border-none flex flex-col"
             isPressable
             onPress={() => navigateToLink(item.url)}

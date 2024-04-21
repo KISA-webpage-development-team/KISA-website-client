@@ -40,9 +40,6 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
 
   // form validation
   useEffect(() => {
-    console.log("checking...");
-    console.log("title: ", title);
-    console.log("content: ", content);
     if (title === null || title?.length === 0) {
       setCanSubmit(false);
       return;
@@ -66,7 +63,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       setCanSubmit(true);
       return;
     }
-  }, [title, content, announcementTag, customTag]);
+  }, [title, content, announcementTag, customTag, boardType]);
 
   useEffect(() => {
     if (content === "") setCanSubmit(false);
@@ -118,7 +115,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
           tag: customTag === "" ? announcementTag : "",
         };
 
-        console.log("New Partial Data submit!: ", newData);
+        // console.log("New Partial Data submit!: ", newData);
 
         const res = await updatePost(curPost.postid, newData, session?.token);
         if (res) {
@@ -149,7 +146,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
           tag: customTag === "" ? announcementTag : "",
         };
 
-        console.log("Data submit!: ", data);
+        // console.log("Data submit!: ", data);
 
         // do some api call
         const res = await createPost(data, session?.token);
