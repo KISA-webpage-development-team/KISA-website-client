@@ -17,40 +17,57 @@ export async function getIsAdmin(email, token) {
   }
 }
 
-export async function getUserInfo(email) {
+export async function getUserInfo(email, token) {
   const url = `${backendUrl}/users/${email}/`;
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (err) {
     console.error(err);
   }
 }
 
-export async function updateUser(email, data) {
+export async function updateUser(email, data, token) {
   const url = `${backendUrl}/users/${email}/`;
   try {
-    const response = await axios.patch(url, data);
+    const response = await axios.patch(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (err) {
     console.error(err);
   }
 }
 
-export async function getPostsByUser(email) {
+export async function getPostsByUser(email, token) {
   const url = `${backendUrl}/users/${email}/posts`;
+  console.log("post tokne: ", token);
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (err) {
     console.error(err);
   }
 }
 
-export async function getCommentsByUser(email) {
+export async function getCommentsByUser(email, token) {
   const url = `${backendUrl}/users/${email}/comments`;
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }}
+    );
     return response.data;
   } catch (err) {
     console.error(err);

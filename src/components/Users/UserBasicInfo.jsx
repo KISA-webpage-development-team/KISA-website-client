@@ -15,7 +15,7 @@ export default function UserBasicInfo({ email }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await getUserInfo(email);
+      const res = await getUserInfo(email, session?.token);
       if (res) {
         setUser(res);
         return;
@@ -24,9 +24,9 @@ export default function UserBasicInfo({ email }) {
         console.log("user fetch failed");
       }
     };
-
+    
     fetchUser();
-  }, [email]);
+  }, [email, session]);
 
   // this will decide whether to show edit buttons
 

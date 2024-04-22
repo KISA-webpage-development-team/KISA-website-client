@@ -19,7 +19,7 @@ export default function UserBoard({ email }) {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await getPostsByUser(email);
+      const res = await getPostsByUser(email, session?.token);
       if (res) {
         setPostsData(res.posts);
         return;
@@ -29,7 +29,7 @@ export default function UserBoard({ email }) {
       }
     };
     const fetchComments = async () => {
-      const res = await getCommentsByUser(email);
+      const res = await getCommentsByUser(email, session?.token);
       if (res) {
         setCommentsData(res.comments);
         return;
@@ -41,7 +41,7 @@ export default function UserBoard({ email }) {
 
     if (openPosts) fetchPosts();
     else fetchComments();
-  }, [email, openPosts]);
+  }, [email, openPosts, session]);
 
   if (!postsData && !commentsData) return null;
 
