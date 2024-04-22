@@ -7,6 +7,17 @@
 // url
 const homeCarouselData = [
   {
+    id: "website",
+    title: "웹사이트 런칭 이벤트",
+    desc: (
+      <p>
+        새 학기를 맞이하여 신규 소그룹 모집을 진행하였는데요! 이번에 새로 개설된
+        두 개의 소그룹과 이번 학기에도 활동할 세 개의 기존 소그룹을 소개합니다
+      </p>
+    ),
+    url: "https://www.instagram.com/p/C3YUambphdn/?img_index=1",
+  },
+  {
     id: "pdo",
     title: "Pre-Departure Orientation (PDO)",
     desc: (
@@ -21,27 +32,7 @@ const homeCarouselData = [
       </p>
     ),
   },
-  {
-    id: "small_group",
-    title: "[24-25] 신/편입생 톡방",
-    desc: (
-      <p>
-        미시간 대학교 입학을 축하드립니다!! KISA에서 준비한 신/편입생 톡방에
-        들어오셔서 다양한 정보를 얻고 새로운 사람들도 만나보세요!
-      </p>
-    ),
-  },
-  {
-    id: "pocha",
-    title: "웹사이트 런칭 이벤트",
-    desc: (
-      <p>
-        새 학기를 맞이하여 신규 소그룹 모집을 진행하였는데요! 이번에 새로 개설된
-        두 개의 소그룹과 이번 학기에도 활동할 세 개의 기존 소그룹을 소개합니다
-      </p>
-    ),
-    url: "https://www.instagram.com/p/C3YUambphdn/?img_index=1",
-  },
+
 ];
 
 // <homeQuickLinksData>

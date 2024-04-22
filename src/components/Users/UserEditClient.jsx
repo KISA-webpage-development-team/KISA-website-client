@@ -4,9 +4,11 @@ import { getUserInfo } from "../../service/user";
 // sub-ui components
 import EditUserFixed from "./EditUserFixed";
 import EditUserForm from "./EditUserForm";
+import { useSession } from "next-auth/react";
 
 export default function UserEditClient({ email, profile }) {
   const [user, setUser] = useState(null);
+  const { data: session } = useSession();
 
   // editable fields
   const [major, setMajor] = useState("");
@@ -16,7 +18,7 @@ export default function UserEditClient({ email, profile }) {
   // get user info
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await getUserInfo(email);
+      const res = await getUserInfo(email, session?.token);
       setUser(res);
 
       // set editable fields
@@ -24,9 +26,10 @@ export default function UserEditClient({ email, profile }) {
       setGradYear(res.gradYear);
       setLinkedIn(res.linkedin ? res.linkedin : "");
     };
-
-    fetchUser();
-  }, [email]);
+    if (session ) {
+      fetchUser();
+    }
+  }, [email, session]);
 
   if (!user) {
     return <div>Loading...</div>;
@@ -47,6 +50,7 @@ export default function UserEditClient({ email, profile }) {
         linkedIn={linkedIn}
         setLinkedIn={setLinkedIn}
         email={email}
+        session = {session}
       />
     </div>
   );

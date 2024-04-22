@@ -42,12 +42,12 @@ export async function updatePost(postid, data, token) {
   try {
     const response = await axios.patch(
       url,
+      data,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       },
-      data
     );
     return response;
   } catch (error) {

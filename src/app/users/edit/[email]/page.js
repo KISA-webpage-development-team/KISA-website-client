@@ -8,6 +8,7 @@ import UserEditClient from "../../../../components/Users/UserEditClient";
 export default function UserEditPage({ params }) {
   const { data: session, status } = useSession();
   const { email } = params;
+  const decodedEmail = decodeURIComponent(email);
 
   // loading for session
   if (status === "loading") {
@@ -15,7 +16,8 @@ export default function UserEditPage({ params }) {
   }
 
   // page view validity check
-  if (session?.user.email !== email) {
+  if (session?.user.email !== decodedEmail) {
+    console.log(session?.user.email);
     return <div>권한이 없습니다</div>;
   }
 

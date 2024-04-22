@@ -14,6 +14,7 @@ export default function EditUserForm({
   linkedIn,
   setLinkedIn,
   email,
+  session,
 }) {
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -25,8 +26,10 @@ export default function EditUserForm({
     };
 
     console.log(data);
-
-    const res = await updateUser(email);
+    if (session === null) {
+      return;
+    }
+    const res = await updateUser(email, session?.token );
     if (res) {
       alert("정보가 수정되었습니다");
       window.location.replace(`/users/${email}`);
