@@ -7,7 +7,7 @@ export default function SecondPlacePage() {
         2등에 당첨되셨습니다! 🎉🎉
       </h2>
       <p className="text-base md:text-xl">
-        {`해당 페이지의 URL(주소)을 복사하여 "umichkisa@gmail.com"으로 보내주시면 최초 발견자에게 상품을 드립니다.`}
+        {`해당 페이지의 URL(주소)을 복사하여 "umichkisa@gmail.com"으로 보내주시면 추첨을 통해 상품을 드립니다.`}
       </p>
     </section>
   );
