@@ -5,7 +5,16 @@ export default function RequiredFields({ fields }) {
     <div className="flex flex-col gap-6 w-full">
       {fields.map(
         (
-          { value, setValue, label, type, isError, errorMsg, errorState },
+          {
+            value,
+            setValue,
+            label,
+            type,
+            placeholder,
+            isError,
+            errorMsg,
+            errorState,
+          },
           index
         ) => (
           <div key={index} className="w-full">
@@ -15,6 +24,7 @@ export default function RequiredFields({ fields }) {
               label={label}
               required={true}
               type={type}
+              placeholder={placeholder}
               isError={isError}
               errorMsg={errorMsg}
               errorState={errorState}

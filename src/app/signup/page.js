@@ -53,6 +53,7 @@ export default function SignUpPage() {
         setValue: setName,
         label: "이름 (본명)",
         type: "text",
+        placeholder: "예) 홍길동",
         isError: true,
         errorMsg: "게시판에 사용될 이름입니다. 반드시 실명으로 작성해주세요.",
         errorState: "alert",
@@ -62,6 +63,7 @@ export default function SignUpPage() {
         setValue: setEmail,
         label: "umich 이메일",
         type: "email",
+        placeholder: "예) example@umich.edu",
         isError:
           (!email?.endsWith("@umich.edu") && email?.length > 0) ||
           email?.length === 0,
@@ -73,6 +75,7 @@ export default function SignUpPage() {
         setValue: setMajor,
         label: "전공 (major)",
         type: "text",
+        placeholder: "예) Computer Science",
         isError: major?.length === 0,
         errorMsg: "전공을 입력해주세요.",
         errorState: "error",
