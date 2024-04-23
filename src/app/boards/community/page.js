@@ -27,7 +27,7 @@ export default function CommunityPage() {
         className=" md:mt-0 
         left-0 md:relative 
         w-screen md:w-full
-      translate-x-0"
+      -translate-x-5 md:translate-x-0"
       >
         <BoardClient boardType={boardType} size={size} page={page} />
       </div>
