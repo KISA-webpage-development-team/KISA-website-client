@@ -141,6 +141,7 @@ export default function CommentItem({
             <CommentItem
               commentid={subComment.commentid}
               postid={subComment.postid}
+              email={subComment.email}
               isAuthor={useremail === subComment.email}
               fullname={subComment.fullname}
               created={subComment.created}
