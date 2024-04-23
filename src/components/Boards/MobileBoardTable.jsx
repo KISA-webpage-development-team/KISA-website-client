@@ -25,7 +25,7 @@ export default function MobileBoardTable({
             key={postid}
             className={`flex flex-col items-start justify-center
                             bg-gray-100
-                            border-b border-gray-200 py-2 px-3`}
+                            border-b border-gray-200 py-2 px-2`}
           >
             {/* top: 제목 [댓글수]] */}
             <td className="flex items-center gap-2 text-left grow">
@@ -52,7 +52,7 @@ export default function MobileBoardTable({
             <tr
               key={postid}
               className={`flex flex-col items-start justify-center
-                border-b border-gray-200 hover:bg-gray-100 py-2 px-3`}
+                border-b border-gray-200 hover:bg-gray-100 py-2 px-2`}
             >
               {/* top: 제목 [댓글수]] */}
               <td className="text-left grow flex items-center">
