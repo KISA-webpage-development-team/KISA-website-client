@@ -9,7 +9,7 @@ export async function createReadCountCookie(postid) {
     });
     return response;
   } catch (error) {
-    console.error(error);
+    // //console.error(error);
   }
 }
 
@@ -21,7 +21,7 @@ export async function createPost(data, token) {
     });
     return response;
   } catch (error) {
-    console.error(error);
+    // //console.error(error);
     return;
   }
 }
@@ -33,7 +33,7 @@ export async function getSinglePost(postid) {
     const response = await axios.get(url);
     return response?.data;
   } catch (error) {
-    console.error(error);
+    // //console.error(error);
   }
 }
 
@@ -47,7 +47,7 @@ export async function updatePost(postid, data, token) {
     });
     return response;
   } catch (error) {
-    console.error(error);
+    // //console.error(error);
   }
 }
 
@@ -62,7 +62,7 @@ export async function deletePost(postid, token) {
     });
     return response;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 
@@ -81,6 +81,6 @@ export async function incrementReadCount(postid, token) {
     );
     return response;
   } catch (error) {
-    console.error(error);
+    // //console.error(error);
   }
 }

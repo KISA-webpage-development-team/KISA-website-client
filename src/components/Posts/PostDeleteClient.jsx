@@ -23,7 +23,8 @@ export default function PostDeleteClient({ boardType, postid }) {
       // need to fix: should go remember its board name
       router.push(`/boards/${boardType}`);
     } else {
-      console.error(res);
+      window.alert("게시글 삭제에 실패했습니다.");
+      // console.error(res);
     }
   };
 

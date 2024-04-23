@@ -180,7 +180,7 @@ export default function SignUpPage() {
         // add error notification
         return;
       } catch (err) {
-        console.log(err);
+        window.alert("회원가입에 실패했습니다.");
         // add error notification
         return;
       }

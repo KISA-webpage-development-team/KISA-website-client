@@ -78,7 +78,8 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         const res = await getIsAdmin(session?.user.email, session?.token);
         setIsAdmin(res);
       } catch (error) {
-        console.log(error);
+        // error handling
+        return;
       }
     };
 
@@ -125,7 +126,8 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
 
         router.push(`/posts/${curPost.postid}`);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        window.alert("게시글 수정에 실패했습니다.");
         return;
         f;
         // change it to error notification modal later
@@ -155,7 +157,8 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         // redirect to a new post page
         router.push(`/boards/${boardType}`);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
+        window.alert("게시글 작성에 실패했습니다.");
         // change it to error notification modal late
       }
     }

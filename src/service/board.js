@@ -10,7 +10,7 @@ export async function getBoardPosts(boardType, size, page) {
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
-    console.error(error);
+    // //console.error(error);
     return;
   }
 }
@@ -21,7 +21,7 @@ export async function getBoardAnnouncements(boardType) {
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
-    console.error(error);
+    // //console.error(error);
     return;
   }
 }
@@ -34,7 +34,7 @@ export async function getBoardPostNum(boardType) {
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
-    console.error(error);
+    // //console.error(error);
     return;
   }
 }

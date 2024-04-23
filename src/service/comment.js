@@ -11,7 +11,7 @@ export async function createComment(postid, body, token) {
     });
     return response.data;
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     return;
   }
 }
@@ -24,7 +24,7 @@ export async function getCommentsByPostid(postid) {
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     return;
   }
 }
@@ -40,7 +40,7 @@ export async function updateComment(commentid, body, token) {
     });
     return response.data;
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     return;
   }
 }
@@ -56,7 +56,7 @@ export async function deleteComment(commentid, token) {
     });
     return response;
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     return;
   }
 }
