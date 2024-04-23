@@ -40,15 +40,11 @@ export async function getSinglePost(postid) {
 export async function updatePost(postid, data, token) {
   const url = `${backendUrl}/posts/${postid}/`;
   try {
-    const response = await axios.patch(
-      url,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.patch(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
     return response;
   } catch (error) {
     console.error(error);
@@ -64,7 +60,6 @@ export async function deletePost(postid, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);

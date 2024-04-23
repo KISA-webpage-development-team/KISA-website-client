@@ -149,8 +149,6 @@ export default function SignUpPage() {
       gradYear: gradYear ? Number(gradYear) : null,
       linkedin: linkedIn ? linkedIn : null,
     };
-    console.log(bornDate);
-    console.log(userData);
 
     const userConfirmed = window.confirm(
       "한 번 생성된 로그인 정보 수정은 어렵습니다. 진행하시겠습니까?"

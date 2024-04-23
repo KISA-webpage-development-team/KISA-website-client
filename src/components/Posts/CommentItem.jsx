@@ -37,7 +37,6 @@ export default function CommentItem({
   };
 
   const handleCommentDelete = async () => {
-    console.log("Comment delete has been clicked");
     const res = await deleteComment(commentid, token);
     if (res) {
       // modify states after comment has been deleted

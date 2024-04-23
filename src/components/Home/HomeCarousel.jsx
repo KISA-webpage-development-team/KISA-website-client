@@ -8,7 +8,6 @@ import {
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
 import { motion } from "framer-motion";
-//?
 
 export default function HomeCarousel() {
   const duration = 50000; // 10 seconds
@@ -17,6 +16,7 @@ export default function HomeCarousel() {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
 
+  // animation + progress
   useEffect(() => {
     firstFrameTime.current = performance.now();
     frame.current = requestAnimationFrame(animate);
@@ -41,11 +41,12 @@ export default function HomeCarousel() {
 
   return (
     <div
-      className="w-full relative h-full flex flex-col items-center md:flex-row
-     gap-8 md:gap-16 min-h-40"
+      className="
+      w-full flex flex-col
+      lg:flex-row"
     >
       <div
-        className="h-full w-full basis-[50%] aspect-[12/8] flex justify-center 
+        className="lg:basis-[55%] aspect-[3/2] flex justify-center 
       transition-all duration-150 delay-300 ease-in-out
       "
       >
@@ -80,12 +81,17 @@ export default function HomeCarousel() {
           </motion.div>
         ))}
       </div>
-      {/* Carousel Text */}
+      {/* Carousel Text + Prgoress Bar */}
       <div
         className="flex-1
-       relative h-full min-h-36 flex flex-col justify-start md:justify-center"
+      mt-4 lg:mt-0
+      lg:ml-10
+      flex flex-col justify-center"
       >
-        <div className="h-full flex flex-col items-center">
+        <div
+          className="flex-1 flex flex-col justify-center
+        mb-6 lg:mb-0"
+        >
           {items.map(({ id, title, desc }, index) => (
             <motion.div
               key={`carousel-${id}`}
@@ -94,24 +100,24 @@ export default function HomeCarousel() {
               transition={{ duration: 1, ease: "easeOut" }}
               className={`object-contain ${
                 active === index ? "" : "hidden"
-              } flex h-full items-center`}
+              } flex items-center`}
             >
               <div
                 className="w-full flex flex-col 
              justify-start md:justify-center 
             gap-2 lg:gap-4 
-            pr-10 md:pr-4
             pt-2 md:pt-0 
             overflow-hidden"
               >
                 <h2
-                  className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl`}
+                  className={`${sejongHospitalBold.className} text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl`}
                 >
                   {title}
                 </h2>
                 <div
-                  className={`${sejongHospitalLight.className} text-sm sm:text-base md:text-sm lg:text-md xl:text-lg
-                `}
+                  className={`${sejongHospitalLight.className} text-xs sm:text-sm md:text-sm xl:text-base
+                  h-16 sm:h-28 md:h-32 lg:h-fit
+                  overflow-hidden`}
                 >
                   {desc}
                 </div>
@@ -121,13 +127,7 @@ export default function HomeCarousel() {
         </div>
 
         {/* Progress Bar */}
-        <div
-          className="
-        w-full
-      bottom-0 right-0
-      flex items-end gap-3
-      md:pr-0"
-        >
+        <div className="flex flex-row gap-3">
           {items.map(({ id, title, desc }, index) => (
             <button
               key={`carousel-${id}`}

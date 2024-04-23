@@ -17,7 +17,6 @@ export default function UserEditPage({ params }) {
 
   // page view validity check
   if (session?.user.email !== decodedEmail) {
-    console.log(session?.user.email);
     return <div>권한이 없습니다</div>;
   }
 

@@ -11,8 +11,10 @@ const homeCarouselData = [
     title: "웹사이트 런칭 이벤트",
     desc: (
       <p>
-        새 학기를 맞이하여 신규 소그룹 모집을 진행하였는데요! 이번에 새로 개설된
-        두 개의 소그룹과 이번 학기에도 활동할 세 개의 기존 소그룹을 소개합니다
+        키사의 공식 웹사이트가 런칭되었습니다 🎉🎉
+        <br />
+        웹사이트 곳곳에 숨겨진 버튼을 찾아보세요! 먼저 찾으신 세 분께 깜짝
+        선물이 준비되어 있습니다!
       </p>
     ),
     url: "https://www.instagram.com/p/C3YUambphdn/?img_index=1",
@@ -32,7 +34,6 @@ const homeCarouselData = [
       </p>
     ),
   },
-
 ];
 
 // <homeQuickLinksData>

@@ -2,7 +2,6 @@
 export async function sendEmail(data) {
   try {
     const emailData = JSON.stringify(data);
-    console.log(emailData);
     const apiEndpoint = "/api/email";
 
     const res = await fetch(apiEndpoint, {

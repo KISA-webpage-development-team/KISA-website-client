@@ -37,7 +37,7 @@ export default function QuickLinks() {
 
   return (
     <div
-      className={`w-full mt-0 sm:mt-4 md:mt-0
+      className={`w-full
     flex flex-col gap-4 ${sejongHospitalBold.className}`}
     >
       <h2 className="section_title">Quick Links</h2>
@@ -48,7 +48,7 @@ export default function QuickLinks() {
         draggable={true}
         partialVisbile={false}
         infinite={true}
-        className="relative py-1 h-full"
+        className="relative"
         itemClass="py-1 px-1"
       >
         {items.map((item, index) => (

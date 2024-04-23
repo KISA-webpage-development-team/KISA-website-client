@@ -43,7 +43,6 @@ export default function SchoolCalendar() {
   const handleEventsSet = (eventsInfo) => {
     if (eventsInfo.length === 0) return;
     if (didEventSetup) return;
-    console.log(eventsInfo);
 
     // check whether last event is upcoming in 7 days
     const lastEvent = new Date(eventsInfo[eventsInfo.length - 1].start);
@@ -56,7 +55,6 @@ export default function SchoolCalendar() {
       return;
     }
 
-    console.log(eventsInfo[eventsInfo.length - 1]);
     setDidEventSetup(true);
 
     setSelectedEvent(eventsInfo[eventsInfo.length - 1]);
@@ -65,7 +63,8 @@ export default function SchoolCalendar() {
 
   return (
     <div
-      className={`${sejongHospitalBold.className} w-full flex flex-col gap-6`}
+      className={`${sejongHospitalBold.className} w-full flex flex-col 
+      gap-2 md:gap-6 -translate-y-8`}
     >
       <h2 className="section_title">Calendar</h2>
       <div className="flex flex-col lg:flex-row gap-6">

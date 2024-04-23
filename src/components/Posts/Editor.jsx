@@ -118,9 +118,6 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         // console.log("New Partial Data submit!: ", newData);
 
         const res = await updatePost(curPost.postid, newData, session?.token);
-        if (res) {
-          console.log("Post updated!");
-        }
 
         router.push(`/posts/${curPost.postid}`);
       } catch (err) {
@@ -150,9 +147,6 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
 
         // do some api call
         const res = await createPost(data, session?.token);
-        if (res) {
-          console.log("Post created!");
-        }
 
         // redirect to a new post page
         router.push(`/boards/${boardType}`);

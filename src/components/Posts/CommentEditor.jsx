@@ -49,7 +49,7 @@ export default function CommentEditor({
 
       const res = await updateComment(curComment, data, session?.token);
       if (res) {
-        console.log("Data submitted: ", data);
+        // console.log("Data submitted: ", data);
 
         // modify states after new comment has been submitted
         setCommentsStale(true);
@@ -57,7 +57,7 @@ export default function CommentEditor({
 
         setIsSubmitting(false);
 
-        console.log("comment update success");
+        // console.log("comment update success");
       } else {
         // error handling
         console.log("comment update failed");
@@ -71,20 +71,15 @@ export default function CommentEditor({
         isCommentOfComment: commentid === 0 ? false : true,
         parentCommentid: commentid,
       };
-      console.log("data: ", data);
       // send post api call to create comment with postid
       const res = await createComment(postid, data, session?.token);
 
       if (res) {
-        console.log("Data submitted: ", data);
-
         // modify states after new comment has been submitted
         setCommentsStale(true);
         setOpenCommentEditor(false);
 
         setIsSubmitting(false);
-
-        console.log("comment creation success");
       } else {
         // error handling
         console.log("comment creation failed");

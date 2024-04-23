@@ -47,7 +47,6 @@ export async function updateUser(email, data, token) {
 
 export async function getPostsByUser(email, token) {
   const url = `${backendUrl}/users/${email}/posts`;
-  console.log("post tokne: ", token);
   try {
     const response = await axios.get(url, {
       headers: {
@@ -66,8 +65,8 @@ export async function getCommentsByUser(email, token) {
     const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
-      }}
-    );
+      },
+    });
     return response.data;
   } catch (err) {
     console.error(err);
