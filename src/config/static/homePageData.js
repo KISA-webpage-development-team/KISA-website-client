@@ -34,6 +34,7 @@ const homeCarouselData = [
         정보들을 얻어 가세요!
       </p>
     ),
+    url: "https://internationalcenter.umich.edu/pdo-in-country",
   },
 ];
 
