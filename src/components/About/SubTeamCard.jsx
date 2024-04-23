@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   sejongHospitalBold,
@@ -25,9 +27,17 @@ export default function SubTeamCard({ role, members }) {
                   {`(${major}, ${year})`}
                 </span>
               </div>
+            ) : name === "Jioh In" ? (
+              <span
+                onClick={() => {
+                  window.location.href =
+                    "../../launching-event/w2dPaLM5Qk3bUw4p9Cn8sJgMytvUPBAB";
+                }}
+                className={`${sejongHospitalLight.className} text-base cursor-pointer`}
+              >{`${name} (${major}, ${year})`}</span>
             ) : (
               <span
-                className={`${sejongHospitalLight.className} :text-base`}
+                className={`${sejongHospitalLight.className} text-base`}
               >{`${name} (${major}, ${year})`}</span>
             )}
           </li>

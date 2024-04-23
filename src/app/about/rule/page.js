@@ -4,6 +4,12 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "../../../utils/fonts/textFonts";
+
+export const metadata = {
+  title: "회칙",
+  description: "미시간 대학교 한인 학부 학생회의 회칙입니다.",
+};
+
 export default function RulePage() {
   return (
     <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4">

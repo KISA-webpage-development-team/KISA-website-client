@@ -23,7 +23,15 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
            flex items-center py-2"
         >
           <th className="basis-1/12 min-w-16">번호</th>
-          <th className="grow">제목</th>
+          <th
+            className="grow"
+            onClick={() => {
+              window.location.href =
+                "../../launching-event/fueTV5v4BjBXxwd3FGgrYvCPt3FnkKKy";
+            }}
+          >
+            제목
+          </th>
           <th className="basis-1/12 min-w-16">글쓴이</th>
           <th className="basis-[10%] min-w-16">작성일</th>
           <th className="w-16">조회수</th>

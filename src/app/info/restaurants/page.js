@@ -5,6 +5,12 @@ import InfoTitle from "../../../components/shared/InfoTitle";
 import { restaurantsPageData } from "../../../config/static/infoPageData";
 import SectionIntro from "../../../components/Info/SectionIntro";
 
+export const metadata = {
+  title: "식생활",
+  description:
+    "미시간 대학교 캠퍼스의 다양한 음식점들을 소개합니다. 한식부터 파인 다이닝까지 다양한 후기와 정보들이 담겨있습니다.",
+};
+
 export default function RestaurantsPage() {
   const { infoType, infoTitle, sections } = restaurantsPageData;
 

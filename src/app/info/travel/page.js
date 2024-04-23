@@ -5,6 +5,12 @@ import InfoTitle from "../../../components/shared/InfoTitle";
 import { travelPageData } from "../../../config/static/infoPageData";
 import SectionIntro from "../../../components/Info/SectionIntro";
 
+export const metadata = {
+  title: "여행",
+  description:
+    "미시간 대학교를 다니면서 여행할 수 있는 장소들에 대한 정보입니다. 미시간 주 뿐만 아니라 캐나다, 시카고와 같은 다양한 도시들과 명소들을 소개합니다.",
+};
+
 export default function TravelPage() {
   const { infoType, infoTitle, sections } = travelPageData;
 

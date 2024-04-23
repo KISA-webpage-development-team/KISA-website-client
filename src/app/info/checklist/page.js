@@ -10,6 +10,12 @@ import {
   sejongHospitalLight,
 } from "../../../utils/fonts/textFonts";
 
+export const metadata = {
+  title: "처음 와서 할 일",
+  description:
+    "미시간 대학교에 처음 와서 할 체크 리스트입니다. 신입생을 위한 정보 뿐만 아니라, 운전면허, 신분증 등 다양한 유용한 정보들이 있습니다.",
+};
+
 export default function InfoCheckListPage() {
   return (
     <section className="pt-3 md:pt-4 lg:pt-5">

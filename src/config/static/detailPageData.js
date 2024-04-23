@@ -1080,9 +1080,12 @@ const travelDetroitData = [
         Casino at Greektown)도 있습니다.
         <br />
         <br />
-        (3) 유명한 레스토랑으로는 The New Parthenon, The Golden Fleece, Cyprus
-        Taverna, Pegasus Taverna, Pizza Papalis, Fishbone’s Rhythm Kitchen Cafe
-        등이 있습니다.
+        (3) 유명한 레스토랑으로는 The New Parthenon, The Golden Fleece
+        <a href="../../../launching-event/Ex6QYPWY9GxydPTpswkxrxvUNwVjfRrb">
+          ,
+        </a>{" "}
+        Cyprus Taverna, Pegasus Taverna, Pizza Papalis, Fishbone’s Rhythm
+        Kitchen Cafe 등이 있습니다.
       </p>
     ),
   },

@@ -10,6 +10,12 @@ import SectionTitle from "../../../components/Info/SectionTitle";
 import SectionGrid from "../../../components/Info/SectionGrid";
 import SectionIntro from "../../../components/Info/SectionIntro";
 
+export const metadata = {
+  title: "스포츠",
+  description:
+    "미시간 대학교 내의 다양한 운동 시설들과 스포츠들에 대한 정보들입니다. 헬스장 뿐만 아니라, 축구, 테니스, 스키 등 다양한 취미 운동을 미시간에서 하는 방법들을 확인할 수 있습니다.",
+};
+
 export default function SportsPage() {
   const { infoType, infoTitle, sections } = sportsPageData;
 

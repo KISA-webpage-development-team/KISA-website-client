@@ -5,6 +5,12 @@ import React from "react";
 import AboutMainText from "../../../components/About/AboutMainText";
 import KisaAll from "../../../components/About/KisaAll";
 
+export const metadata = {
+  title: "소개",
+  description:
+    "키사 (KISA) 소개 페이지입니다. 인사말과 키사가 하는 일들이 간단히 정리 되어있습니다.",
+};
+
 export default function KisaPage() {
   return (
     <section

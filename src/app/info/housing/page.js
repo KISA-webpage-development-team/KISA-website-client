@@ -10,6 +10,12 @@ import {
   housingPageOffCampusData,
 } from "../../../config/static/infoPageData";
 
+export const metadata = {
+  title: "하우징",
+  description:
+    "미시간 대학교의 하우징 정보들입니다. On-Campus와 Off-Campus로 나뉩니다. 기숙사별 다양한 정보들과, 랜드마크, 타워플라자를 비롯한 오프 캠퍼스 하우징에 대한 자세한 설명을 확인할 수 있습니다.",
+};
+
 export default function HousingPage() {
   const infoType = "housing";
   const { sections: onCampusSections } = housingPageOnCampusData;

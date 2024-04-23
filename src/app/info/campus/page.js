@@ -9,6 +9,11 @@ import SectionGrid from "../../../components/Info/SectionGrid";
 import { campusPageData } from "../../../config/static/infoPageData";
 import SectionIntro from "../../../components/Info/SectionIntro";
 
+export const metadata = {
+  title: "캠퍼스 정보",
+  description: "미시간 대학교의 다양한 캠퍼스들",
+};
+
 export default function CampusInfoPage() {
   const { infoType, infoTitle, sections } = campusPageData;
 
