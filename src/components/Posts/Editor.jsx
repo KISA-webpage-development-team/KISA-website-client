@@ -178,7 +178,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       <div className="grow h-full flex flex-col">
         {/* Title Input */}
         <div className="flex items-center pb-2">
-          <label htmlFor="title" className="text-base md:text-xl">
+          <label htmlFor="title" className="text-base md:text-lg">
             제목
           </label>
           <input
