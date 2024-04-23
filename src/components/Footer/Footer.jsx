@@ -5,6 +5,7 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
+import Link from "next/link";
 
 // instagram + facebook icons
 // umich kisa text
@@ -19,7 +20,9 @@ export default function Footer() {
         <FacebookLinkIcon color="black" />
       </div>
 
-      <h2 className="text-md sm:text-lg md:text-xl">UMICH KISA</h2>
+      <Link href="/" className="text-md sm:text-lg md:text-xl">
+        UMICH KISA
+      </Link>
     </div>
   );
 }
