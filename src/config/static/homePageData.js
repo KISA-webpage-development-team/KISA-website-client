@@ -19,7 +19,6 @@ const homeCarouselData = [
         (당첨 페이지의 안내사항을 따라 상품을 수령해주세요)
       </p>
     ),
-    url: "https://www.instagram.com/p/C3YUambphdn/?img_index=1",
   },
   {
     id: "pdo",
