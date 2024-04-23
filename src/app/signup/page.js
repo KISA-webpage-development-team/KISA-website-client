@@ -83,7 +83,7 @@ export default function SignUpPage() {
       {
         value: bornDate,
         setValue: setBornDate,
-        label: "생년월일 (DD/MM/YYYY)",
+        label: "생년월일",
         type: "date",
         isError: bornDate !== null && bornDate?.length !== 10,
         errorMsg: "출생년도를 입력해주세요.",
