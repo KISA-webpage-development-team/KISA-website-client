@@ -84,7 +84,7 @@ export default function HomeCarousel() {
       {/* Carousel Text + Prgoress Bar */}
       <div
         className="flex-1
-      mt-4 lg:mt-0
+      mt-6 lg:mt-0
       lg:ml-10
       flex flex-col justify-center"
       >
@@ -106,7 +106,7 @@ export default function HomeCarousel() {
                 className="w-full flex flex-col 
              justify-start md:justify-center 
             gap-2 lg:gap-4 
-            pt-2 md:pt-0 
+            lg:pt-0
             overflow-hidden"
               >
                 <h2
@@ -114,13 +114,13 @@ export default function HomeCarousel() {
                 >
                   {title}
                 </h2>
-                <div
-                  className={`${sejongHospitalLight.className} text-xs sm:text-sm md:text-sm xl:text-base
-                  h-16 sm:h-28 md:h-32 lg:h-fit
-                  overflow-hidden`}
+                <span
+                  className={`${sejongHospitalLight.className} text-xs sm:text-sm md:text-base xl:text-base
+                  h-16 sm:h-24 md:h-28 lg:h-fit
+                  overflow-hidden text-ellipsis`}
                 >
                   {desc}
-                </div>
+                </span>
               </div>
             </motion.div>
           ))}
@@ -131,7 +131,6 @@ export default function HomeCarousel() {
           {items.map(({ id, title, desc }, index) => (
             <button
               key={`carousel-${id}`}
-              // className="flex flex-col gap-4 text-left bg-pink-200"
               className="w-full"
               onClick={() => {
                 setActive(index);
