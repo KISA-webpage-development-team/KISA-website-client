@@ -3,6 +3,7 @@ import DetailThumbnail from "../../../../../components/Info/DetailThumbnail";
 import DetailTitle from "../../../../../components/Info/DetailTitle";
 import DetailDescription from "../../../../../components/Info/DetailDescription";
 import { travelNearbyData } from "../../../../../config/static/detailPageData";
+import "../../../info.css";
 
 export default function NearbyDetail() {
   return (

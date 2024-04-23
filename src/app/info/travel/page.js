@@ -4,6 +4,7 @@ import SectionGrid from "../../../components/Info/SectionGrid";
 import InfoTitle from "../../../components/shared/InfoTitle";
 import { travelPageData } from "../../../config/static/infoPageData";
 import SectionIntro from "../../../components/Info/SectionIntro";
+import "../info.css";
 
 export const metadata = {
   title: "여행",

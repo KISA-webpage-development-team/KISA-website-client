@@ -23,12 +23,7 @@ export default function CommunityPage() {
       <BoardBar boardType={boardType} />
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
-      <div
-        className=" md:mt-0 
-        left-0 md:relative 
-        w-screen md:w-full
-      -translate-x-5 md:translate-x-0"
-      >
+      <div className="board_table_wrapper">
         <BoardClient boardType={boardType} size={size} page={page} />
       </div>
     </section>

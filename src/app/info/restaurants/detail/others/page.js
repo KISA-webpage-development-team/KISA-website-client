@@ -4,6 +4,7 @@ import DetailTitle from "../../../../../components/Info/DetailTitle";
 import DetailDescription from "../../../../../components/Info/DetailDescription";
 
 import { restaurantsOthersData } from "../../../../../config/static/detailPageData";
+import "../../../info.css";
 
 export default function OtherRestaurantsPage() {
   return (

@@ -8,6 +8,7 @@ import SectionTitle from "../../../components/Info/SectionTitle";
 import SectionGrid from "../../../components/Info/SectionGrid";
 import { campusPageData } from "../../../config/static/infoPageData";
 import SectionIntro from "../../../components/Info/SectionIntro";
+import "../info.css";
 
 export const metadata = {
   title: "캠퍼스 정보",

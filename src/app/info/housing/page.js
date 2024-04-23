@@ -9,6 +9,7 @@ import {
   housingPageOnCampusData,
   housingPageOffCampusData,
 } from "../../../config/static/infoPageData";
+import "../info.css";
 
 export const metadata = {
   title: "하우징",

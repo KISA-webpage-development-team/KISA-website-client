@@ -8,6 +8,7 @@ import DetailDescription from "../../../../../components/Info/DetailDescription"
 
 import { campusCentralData } from "../../../../../config/static/detailPageData";
 import DetailPageTitle from "../../../../../components/Info/DetailPageTitle";
+import "../../../info.css";
 
 export default function CentralCampusDetail() {
   return (

@@ -10,6 +10,8 @@ import {
   sejongHospitalLight,
 } from "../../../utils/fonts/textFonts";
 
+import "../info.css";
+
 export const metadata = {
   title: "처음 와서 할 일",
   description:

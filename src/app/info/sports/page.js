@@ -9,6 +9,7 @@ import InfoTitle from "../../../components/shared/InfoTitle";
 import SectionTitle from "../../../components/Info/SectionTitle";
 import SectionGrid from "../../../components/Info/SectionGrid";
 import SectionIntro from "../../../components/Info/SectionIntro";
+import "../info.css";
 
 export const metadata = {
   title: "스포츠",
