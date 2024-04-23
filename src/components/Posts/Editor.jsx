@@ -215,7 +215,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
             //   onChange={setContent}
             // />
             <CustomTextEditor
-              placeholder={htmlToText(boardTerms[boardType])}
+              // placeholder={htmlToText(boardTerms[boardType])}
               value={content}
               setValue={setContent}
             />
