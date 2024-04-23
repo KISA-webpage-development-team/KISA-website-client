@@ -154,7 +154,7 @@ export default function PostView({ boardType, post, postid }) {
         <>
           <div
             className="pt-3 md:pt-6
-          pb-0 md:pb-3"
+          pb-3"
           >
             <HorizontalDivider />
           </div>

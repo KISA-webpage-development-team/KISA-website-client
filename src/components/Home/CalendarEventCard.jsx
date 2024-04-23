@@ -21,7 +21,7 @@ export default function CalendarEventCard({ event }) {
 
   return (
     <div
-      className="h-full w-full flex gap-10 border border-michigan-blue rounded-lg 
+      className="h-full w-full flex gap-10 border border-michigan-blue/60 rounded-lg 
     p-4 md:p-5"
     >
       {/* Right: title + date + description */}

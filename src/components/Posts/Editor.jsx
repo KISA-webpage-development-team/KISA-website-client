@@ -13,7 +13,9 @@ import {
   getBoardName,
   getTagListForAnnouncement,
 } from "../../config/boardName";
-import { set } from "@boiseitguru/cookie-cutter";
+import CustomTextEditor from "./CustomTextEditor";
+import { boardTerms } from "../../config/termCondition";
+import { htmlToText } from "../../utils/htmlFormatter";
 
 // need to import react quill dynamically to load style properly
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -80,7 +82,9 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
       }
     };
 
-    fetchIsAdmin();
+    if (session) {
+      fetchIsAdmin();
+    }
   }, [session]);
 
   const handleTitleChange = (e) => {
@@ -168,12 +172,15 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="grow flex flex-col">
+      <div className="grow h-full flex flex-col">
         {/* Title Input */}
-        <div className="flex items-center pb-1">
-          <label htmlFor="title">제목</label>
+        <div className="flex items-center pb-2">
+          <label htmlFor="title" className="text-base md:text-xl">
+            제목
+          </label>
           <input
-            className="ml-2 border-2 border-gray-300 w-1/2 md:w-1/4 px-1"
+            className="ml-2 border-2 text-base md:text-xl border-gray-300 w-2/3 md:w-1/4
+             py-[2px] px-1"
             id="title"
             type="text"
             value={mode === "update" ? title : null}
@@ -182,22 +189,42 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         </div>
 
         {/* Text Editor */}
-        {mode === "create" ? (
-          <ReactQuill
-            theme="snow"
-            style={{ height: "100%" }}
-            modules={reactQuillModule}
-            onChange={setContent}
-          />
-        ) : (
-          <ReactQuill
-            theme="snow"
-            style={{ height: "100%" }}
-            modules={reactQuillModule}
-            value={content}
-            onChange={setContent}
-          />
-        )}
+        <div className="grow">
+          {mode === "create" ? (
+            <CustomTextEditor
+              placeholder={htmlToText(boardTerms[boardType])}
+              value={content}
+              setValue={setContent}
+            />
+          ) : (
+            // <ReactQuill
+            //   placeholder={htmlToText(boardTerms[boardType])}
+            //   theme="snow"
+            //   style={{ height: "100%", overflowY: "auto" }}
+            //   modules={reactQuillModule}
+            //   onChange={setContent}
+            // />
+            // <ReactQuill
+            //   placeholder={htmlToText(boardTerms[boardType])}
+            //   theme="snow"
+            //   style={{ height: "100%", overflowY: "hidden" }}
+            //   modules={reactQuillModule}
+            //   onChange={setContent}
+            // />
+            <CustomTextEditor
+              placeholder={htmlToText(boardTerms[boardType])}
+              value={content}
+              setValue={setContent}
+            />
+            // <ReactQuill
+            //   theme="snow"
+            //   style={{ height: "100%" }}
+            //   modules={reactQuillModule}
+            //   value={content}
+            //   onChange={setContent}
+            // />
+          )}
+        </div>
       </div>
 
       {/* 공지사항 checkbox: user가 admin일때만 */}
@@ -247,7 +274,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         )
       }
       {/* Submit Button */}
-      <div className={`flex justify-end ${!isAdmin && "mt-12"}`}>
+      <div className={`flex justify-end ${!isAdmin && "mt-0"}`}>
         {canSubmit ? (
           <button
             className="w-1/4 h-10 bg-blue-500 hover:bg-blue-400 text-white 

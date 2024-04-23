@@ -16,7 +16,7 @@ const checkListData = [
         <br />
         <br />
         (2) 항공권은 일찍 구매하면 구매할수록 좋습니다. 비행기 가격이 상시로
-        올라가며 한 번 올라간 비행기표 값은 떨어지지 않습니다 3개월~6개월 미리
+        올라가며 한 번 올라간 비행기표 값은 떨어지지 않습니다. 3개월~6개월 미리
         구매를 해 두신다면 왕복 190만 원 정도에서 구매를 하실 수 있으며 한 달 전
         혹은 3주 전에 구매를 한다면 왕복 400만원 이상으로 가격이 치솟게 됩니다.
       </p>
@@ -307,11 +307,11 @@ const checkListData = [
         <br />
         M-Card를 발급 받기 위해서는 Central Campus에 위치한 Student Activity
         Building(SAB, 515 E. Jefferson St.) 이나 North Campus의 Pierpont
-        Commons(2101 Bonisteel Blvd.)에 있는 Entree Plus Office로 찾아가야 한다.
-        초기 신청 시 입학허가서에 표시되어 있는 UM ID number가 앞면에, unique
-        name이 뒷면에 찍혀 나옵니다. 신청 당시 디지털카메라로 사진을 찍게 되니,
-        차림새에 약간 신경을 써 두는 것이 좋습니다. 사진이 마음에 들지 않으면
-        얼마든지 부담없이 재촬영을 요구할 수 있습니다.
+        Commons(2101 Bonisteel Blvd.)에 있는 Entree Plus Office로 찾아가야
+        합니다. 초기 신청 시 입학허가서에 표시되어 있는 UM ID number가 앞면에,
+        unique name이 뒷면에 찍혀 나옵니다. 신청 당시 디지털카메라로 사진을 찍게
+        되니, 차림새에 약간 신경을 써 두는 것이 좋습니다. 사진이 마음에 들지
+        않으면 얼마든지 부담없이 재촬영을 요구할 수 있습니다.
       </p>
     ),
   },

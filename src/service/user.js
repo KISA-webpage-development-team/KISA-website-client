@@ -3,8 +3,8 @@ import { backendUrl } from "../config/backendUrl";
 
 // pass user email to check whether user is admin
 export async function getIsAdmin(email, token) {
+  const url = `${backendUrl}/auth/isAdmin/${email}`;
   try {
-    const url = `${backendUrl}/auth/isAdmin/${email}/`;
     const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -33,6 +33,7 @@ export async function getUserInfo(email, token) {
 
 export async function updateUser(email, data, token) {
   const url = `${backendUrl}/users/${email}/`;
+
   try {
     const response = await axios.patch(url, data, {
       headers: {
@@ -50,7 +51,6 @@ export async function getPostsByUser(email, token) {
   try {
     const response = await axios.get(url, {
       headers: {
-        "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
       },
     });

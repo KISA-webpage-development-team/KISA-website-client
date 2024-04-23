@@ -14,7 +14,7 @@ export default function CommentsList({
   const { data: session } = useSession();
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-1">
       <div className="flex items-center">
         <p className="mr-1 text-sm md:text-base">댓글 {commentsCount}개</p>
         <DownArrowIcon />

@@ -19,10 +19,10 @@ const menu = [
         name: "회칙",
         href: "/about/rule",
       },
-      {
-        name: "스폰서",
-        href: "/about/sponsor",
-      },
+      // {
+      //   name: "스폰서",
+      //   href: "/about/sponsor",
+      // },
     ],
   },
   {
@@ -50,7 +50,7 @@ const menu = [
         href: "/info/sports",
       },
       {
-        name: "맛집",
+        name: "식생활",
         href: "/info/restaurants",
       },
     ],

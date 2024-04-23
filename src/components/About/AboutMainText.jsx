@@ -8,7 +8,7 @@ import styles from "./aboutMainText.module.css";
 
 export default function AboutMainText() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center text-center">
       <h1
         className={`${styles.arialCaption} ${sejongHospitalBold.className} text-4xl md:text-5xl lg:text-6xl`}
       >

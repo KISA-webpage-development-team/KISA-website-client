@@ -11,7 +11,7 @@ export default function KisaAll() {
         src="/kisa_all.png"
         alt="23-24 KISA 단체사진"
         width={1252}
-        height={560}
+        height={450}
       />
       <div className="absolute bg-[#00000040] opacity-[81%] w-[1252px] h-full" />
     </div>

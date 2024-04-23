@@ -220,10 +220,6 @@ const housingPageOnCampusData = {
           name: "Baits",
           id: "baits",
         },
-        {
-          name: "Michigan Learning Community\n(MLC)",
-          id: "michigan_learning_community",
-        },
       ],
     },
   ],
@@ -410,7 +406,7 @@ const sportsPageData = {
 // /info/restaurants/page.js
 const restaurantsPageData = {
   infoType: "restaurants",
-  infoTitle: "맛집",
+  infoTitle: "식생활",
   // 한식 + 아시안 + 햄버거 & 피자 + 디저트 + 파인 다이닝 + 기타
   sections: [
     // 한인마트

@@ -62,7 +62,8 @@ const members = {
       role: "Web Development",
       members: [
         {
-          name: "Lead: Dongsub Kim",
+          isLead: true,
+          name: "Dongsub Kim",
           major: "Computer Science",
           year: "2023",
         },

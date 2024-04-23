@@ -28,7 +28,7 @@ export default function EditUserForm({
     if (session === null) {
       return;
     }
-    const res = await updateUser(email, session?.token);
+    const res = await updateUser(email, data, session?.token);
     if (res) {
       alert("정보가 수정되었습니다");
       window.location.replace(`/users/${email}`);

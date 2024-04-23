@@ -832,33 +832,6 @@ const housingOnCampusData = [
       </p>
     ),
   },
-  {
-    id: "michigan_learning_community",
-    title: "Michigan Learning Community(MLC)",
-    desc: (
-      <p>
-        (1) 주로 1학년 학생들 위주로 구성되어 있는 Residential Community
-        Program입니다. 미술, 공대, 리서치 등 관심사별로 나누어져 있으며 3-4월쯤
-        에세이나 포트폴리오를 제출하고 합격하게 되면 각 MLC가 있는 기숙사에서
-        같은 커뮤니티에 있는 친구들과 함께 살게 됩니다.
-        <br />
-        <br />
-        (2) 경쟁률이 높지 않고 지원 자격도 MLC 수업 한 학기에 한 개(LSA
-        First-year Writing/Engineering 필수과목 요건 충족), 매월 미팅 한 번,
-        클럽 등 기여해야 하는 것이 크지 않기 때문에 기숙사를 미리 보장 받고
-        싶다면 좋은 선택입니다.
-        <br />
-        <br />
-        (3) 특히 1학년의 경우 새 학기에 오리엔테이션이나 소셜 이벤트를 많이 하기
-        때문에 같은 관심사를 가진 친구들을 사귀기에 좋습니다. 그리고 MLC
-        학생들에게 기숙사 우선권이 주어지기 때문에 만약 2, 3학년에도 기숙사에
-        살고 싶다면 지원해 보는 것을 적극 추천합니다.
-        <br />
-        <br />
-        MLC LIST: https://lsa.umich.edu/mlc
-      </p>
-    ),
-  },
 ];
 const housingOffCampusData = [
   {

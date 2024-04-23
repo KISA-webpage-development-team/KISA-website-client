@@ -5,9 +5,7 @@ import SubTeamCard from "./SubTeamCard";
 export default function TeamMembersList({ team, name }) {
   return (
     <div className="flex flex-col items-center gap-8">
-      <p
-        className={`${sejongHospitalBold.className} text-lg sm:text-xl md:text-2xl`}
-      >
+      <p className={`${sejongHospitalBold.className} text-xl md:text-2xl`}>
         {name}
       </p>
       <ul className="flex flex-col gap-8">

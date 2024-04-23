@@ -48,7 +48,7 @@ export default function CommentItem({
   };
 
   return (
-    <div className="flex flex-col pt-2">
+    <div className="flex flex-col pt-1">
       <div className="flex items-center">
         {isCommentOfComment ? (
           <div className="-translate-y-2 mr-4">
@@ -63,7 +63,7 @@ export default function CommentItem({
               {/* need to change fullname to fullname's username */}
               <div
                 className="flex items-center gap-1 md:gap-2
-              text-xs md:text-base"
+              text-sm md:text-base"
               >
                 <Link href={`/users/${email}`}>
                   <p className="text-black font-semibold hover:underline">
@@ -101,7 +101,7 @@ export default function CommentItem({
             <div
               className={`${
                 isAuthor && "text-blue-500"
-              } pb-3 text-xs md:text-base`}
+              } pb-3 text-sm md:text-base`}
             >
               {text}
             </div>

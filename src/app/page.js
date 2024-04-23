@@ -26,7 +26,7 @@ export default function Home() {
       {/* SchoolCalendar */}
       <SchoolCalendar />
       {/* SponsorBanner */}
-      <SponsorBanner />
+      {/* <SponsorBanner /> */}
     </section>
   );
 }
