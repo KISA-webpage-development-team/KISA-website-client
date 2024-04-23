@@ -8,6 +8,5 @@ section {
 .board_table_wrapper {
   @apply md:mt-0 
   left-0 md:relative 
-  w-screen md:w-full 
-  -translate-x-5 md:translate-x-0;
+  w-screen md:w-full;
 }

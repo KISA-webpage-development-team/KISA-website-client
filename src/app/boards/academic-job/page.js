@@ -18,7 +18,12 @@ export default function AcademicsPage() {
       <BoardBar boardType={boardType} />
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
-      <div className="board_table_wrapper">
+      <div
+        className=" md:mt-0 
+        left-0 md:relative 
+        w-screen md:w-full
+      translate-x-0"
+      >
         <BoardClient boardType={boardType} page={page} size={size} />
       </div>
     </section>

@@ -13,12 +13,17 @@ export default function HousingPage() {
   const page = searchParams.get("page") || 1;
 
   return (
-    <section>
+    <section className="">
       {/* 게시판 search bar */}
       <BoardBar boardType={boardType} />
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
-      <div className="board_table_wrapper">
+      <div
+        className=" md:mt-0 
+        left-0 md:relative 
+        w-screen md:w-full
+      translate-x-0"
+      >
         <BoardClient boardType={boardType} size={size} page={page} />
       </div>
     </section>
