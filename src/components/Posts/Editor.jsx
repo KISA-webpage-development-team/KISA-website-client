@@ -195,7 +195,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         <div className="grow">
           {mode === "create" ? (
             <CustomTextEditor
-              placeholder={htmlToText(boardTerms[boardType])}
+              // placeholder={htmlToText(boardTerms[boardType])}
               value={content}
               setValue={setContent}
             />

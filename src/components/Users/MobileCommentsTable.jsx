@@ -9,6 +9,8 @@ import AnnouncementIcon from "../ui/AnnouncementIcon";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function CommentsTable({ comments }) {
+  if (!comments) return null;
+
   return (
     <table className="border border-gray-300 w-full">
       <thead className="">
