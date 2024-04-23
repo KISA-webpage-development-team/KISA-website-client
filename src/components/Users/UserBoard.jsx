@@ -39,8 +39,8 @@ export default function UserBoard({ email }) {
       }
     };
 
-    if (openPosts) fetchPosts();
-    else fetchComments();
+    if (openPosts && session) fetchPosts();
+    else if (!openPosts && session) fetchComments();
   }, [email, openPosts, session]);
 
   if (!postsData && !commentsData) return null;

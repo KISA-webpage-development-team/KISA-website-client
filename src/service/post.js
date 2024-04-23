@@ -67,14 +67,18 @@ export async function deletePost(postid, token) {
 }
 
 export async function incrementReadCount(postid, token) {
-  // const url = `${backendUrl}/posts/${postid}/readcount`;
   const url = `${backendUrl}/posts/readCount/${postid}/`; // currently env doesn't work
+  // in patch method, the second parameter is the data to be sent (in this case, it's empty)
   try {
-    const response = await axios.patch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.patch(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
     console.error(error);

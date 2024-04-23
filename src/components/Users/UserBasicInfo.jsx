@@ -24,8 +24,10 @@ export default function UserBasicInfo({ email }) {
         console.log("user fetch failed");
       }
     };
-    
-    fetchUser();
+
+    if (session) {
+      fetchUser();
+    }
   }, [email, session]);
 
   // this will decide whether to show edit buttons

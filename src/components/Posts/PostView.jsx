@@ -44,7 +44,6 @@ export default function PostView({ boardType, post, postid }) {
       const oneDayLater = new Date();
       oneDayLater.setDate(oneDayLater.getDate() + 1);
       if (readCount === undefined && status === "authenticated") {
-        // console.log("incrementing read count");
         const res = await incrementReadCount(postid, session?.token);
         if (!res) return;
       }
@@ -53,7 +52,10 @@ export default function PostView({ boardType, post, postid }) {
         sameSite: "strict",
       });
     };
-    incrementRead();
+
+    if (session) {
+      incrementRead();
+    }
   }, [postid]);
 
   const OnClickBackToList = () => {
