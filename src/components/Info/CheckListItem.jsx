@@ -54,7 +54,7 @@ export default function CheckListItem({ title, desc, index }) {
 
       <div
         className={`${sejongHospitalLight.className} 
-        text-base md:text-lg lg:text-xl pr-12 md:pr-14 lg:pr-16 
+        text-base md:text-lg lg:text-xl pr-12 md:pr-14 lg:pr-16 overflow-y-auto
           ${accordionContentStyles}`}
       >
         {desc}
