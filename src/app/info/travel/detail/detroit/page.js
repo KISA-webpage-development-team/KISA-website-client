@@ -16,7 +16,7 @@ export default function DetroitDetail() {
             {/* 2. Detail Section Title */}
             <DetailTitle title={title} />
             {/* 3. Detail Section Description  */}
-            <DetailDescription desc={desc} />
+            <DetailDescription id={id} desc={desc} />
           </div>
         </div>
       ))}
