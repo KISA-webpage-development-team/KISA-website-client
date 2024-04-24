@@ -11,6 +11,7 @@ import Image from "next/image";
 import "react-multi-carousel/lib/styles.css";
 
 import Carousel from "react-multi-carousel";
+import "./test.css";
 
 export default function QuickLinks() {
   const responsive = {
@@ -56,8 +57,9 @@ export default function QuickLinks() {
             key={item.id}
             isFooterBlurred
             radius="lg"
-            className="max-w-32 md:max-w-full w-[80%] md:w-[90%]
-            aspect-square relative border-none flex flex-col"
+            className="max-w-32 md:max-w-full w-[80%] md:w-[90%] 
+            border border-black/10 hover:border-michigan-blue/50
+            aspect-square relative flex flex-col bg-transparent shadow-md"
             isPressable
             onPress={() => navigateToLink(item.url)}
             draggable={false} // Set draggable to false to prevent individual cards from being draggable
