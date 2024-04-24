@@ -23,7 +23,7 @@ export default function AboutMainText() {
       <div className="flex flex-col mt-[50px] gap-[50px] text-center px-6 md:px-16 lg:px-20 text-lg md:text-xl lg:text-2xl">
         <p className={`${sejongHospitalLight.className}`}>
           안녕하십니까, 미시간 대학교 학부 한인 학생회 KISA입니다. 1998년에
-          설립된 이래, 현재까지 5000명 가량의 한익 학부생들을 대표하고 있는
+          설립된 이래, 현재까지 5000명 가량의 한인 학부생들을 대표하고 있는
           KISA는 미시간 대학교에 재학중인 한인 학생들간의 긴밀한 공동체를
           조성하고, 귀중한 기회와 자원을 제공함으로써 한국인 유학생들에게 힘을
           실어주기 위해 노력합니다.
