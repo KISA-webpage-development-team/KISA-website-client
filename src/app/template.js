@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "../components/Header/Header";
 import { sejongHospitalLight } from "../utils/fonts/textFonts";
-import Footer from "../components/Footer/Footer";
 
 export default function Template({ children }) {
   // mainConentsWidth: this will control all of the horizontal padding and margin of the page contents

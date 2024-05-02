@@ -1,14 +1,11 @@
 # KISA Website Frontend
 
 ## Tech Stacks
+
 - Framework: NextJS
 - Styling: TailwindCSS
-- UI Library: NextUI + Aceternity
+- UI Library: NextUI + Aceternity UI | React-icons
 - State Management: React Context API
-
-## USER-PAGE BRANCH
-
-: /users api를 사용하는 모든 페이지들을 추가
 
 ## Getting Started
 
