@@ -152,8 +152,6 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
           tag: customTag === "" ? announcementTag : "",
         };
 
-        // console.log("Data submit!: ", data);
-
         // do some api call
         const res = await createPost(data, session?.token);
 
