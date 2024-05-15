@@ -8,7 +8,10 @@ import NotLoginModal from "../shared/NotLoginModal";
 import { getIsAdmin } from "../../service/user";
 import { createPost, updatePost } from "../../service/post";
 import { useRouter } from "next/navigation";
-import { reactQuillModule } from "../../config/reactQuillModule";
+import {
+  reactQuillModule,
+  reactQuillModuleAdmin,
+} from "../../config/reactQuillModule";
 import {
   getBoardName,
   getTagListForAnnouncement,
@@ -194,38 +197,63 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
         {/* Text Editor */}
         <div className="grow">
           {mode === "create" ? (
-            <CustomTextEditor
-              // placeholder={htmlToText(boardTerms[boardType])}
+            // <CustomTextEditor
+            //   // placeholder={htmlToText(boardTerms[boardType])}
+            //   value={content}
+            //   setValue={setContent}
+            // />
+            isAdmin ? (
+              <ReactQuill
+                theme="snow"
+                style={{ height: "100%" }}
+                modules={reactQuillModuleAdmin}
+                value={content}
+                onChange={setContent}
+              />
+            ) : (
+              <ReactQuill
+                theme="snow"
+                style={{ height: "100%" }}
+                modules={reactQuillModule}
+                value={content}
+                onChange={setContent}
+              />
+            )
+          ) : // <ReactQuill
+          //   placeholder={htmlToText(boardTerms[boardType])}
+          //   theme="snow"
+          //   style={{ height: "100%", overflowY: "auto" }}
+          //   modules={reactQuillModule}
+          //   onChange={setContent}
+          // />
+          // <ReactQuill
+          //   placeholder={htmlToText(boardTerms[boardType])}
+          //   theme="snow"
+          //   style={{ height: "100%", overflowY: "hidden" }}
+          //   modules={reactQuillModule}
+          //   onChange={setContent}
+          // />
+          // <CustomTextEditor
+          //   // placeholder={htmlToText(boardTerms[boardType])}
+          //   value={content}
+          //   setValue={setContent}
+          // />
+          isAdmin ? (
+            <ReactQuill
+              theme="snow"
+              style={{ height: "100%" }}
+              modules={reactQuillModuleAdmin}
               value={content}
-              setValue={setContent}
+              onChange={setContent}
             />
           ) : (
-            // <ReactQuill
-            //   placeholder={htmlToText(boardTerms[boardType])}
-            //   theme="snow"
-            //   style={{ height: "100%", overflowY: "auto" }}
-            //   modules={reactQuillModule}
-            //   onChange={setContent}
-            // />
-            // <ReactQuill
-            //   placeholder={htmlToText(boardTerms[boardType])}
-            //   theme="snow"
-            //   style={{ height: "100%", overflowY: "hidden" }}
-            //   modules={reactQuillModule}
-            //   onChange={setContent}
-            // />
-            <CustomTextEditor
-              // placeholder={htmlToText(boardTerms[boardType])}
+            <ReactQuill
+              theme="snow"
+              style={{ height: "100%" }}
+              modules={reactQuillModule}
               value={content}
-              setValue={setContent}
+              onChange={setContent}
             />
-            // <ReactQuill
-            //   theme="snow"
-            //   style={{ height: "100%" }}
-            //   modules={reactQuillModule}
-            //   value={content}
-            //   onChange={setContent}
-            // />
           )}
         </div>
       </div>
