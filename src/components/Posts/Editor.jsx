@@ -203,7 +203,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
             isAdmin ? (
               <ReactQuill
                 theme="snow"
-                style={{ height: "100%" }}
+                style={{ height: "70%" }}
                 modules={reactQuillModuleAdmin}
                 value={content}
                 onChange={setContent}
@@ -211,7 +211,7 @@ export default function Editor({ boardType, curPost = null, mode = "create" }) {
             ) : (
               <ReactQuill
                 theme="snow"
-                style={{ height: "100%" }}
+                style={{ height: "70%" }}
                 modules={reactQuillModule}
                 value={content}
                 onChange={setContent}
