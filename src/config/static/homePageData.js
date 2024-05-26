@@ -19,22 +19,6 @@ const homeCarouselData = [
     ),
     url: "https://open.kakao.com/o/gFbE6Hng",
   },
-  {
-    id: "pdo",
-    title: "Pre-Departure Orientation (PDO)",
-    desc: (
-      <p>
-        장소: 소피텔 앰버서더 서울
-        <br />
-        일시: 2024년 5월 24일 금요일 13:00 - 17:00
-        <br />
-        UMich International Center에서 공식적으로 주최하는 Pre-Departure
-        Orientation 참석하셔서 학교생활과 학업 등 미국으로 출국 전 필요한 다양한
-        정보들을 얻어 가세요!
-      </p>
-    ),
-    url: "https://internationalcenter.umich.edu/pdo-in-country",
-  },
 ];
 
 // <homeQuickLinksData>
