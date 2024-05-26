@@ -1,0 +1,7 @@
+/* posts.css
+global styles especially for "/posts" pages */
+
+section {
+  @apply w-full min-h-full
+    flex flex-col gap-4;
+}

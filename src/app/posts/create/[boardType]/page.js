@@ -6,16 +6,18 @@ export default function CreatePostPage({ params }) {
   const { boardType } = params;
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <section>
       {/* Board Title (지금 어떤 보드에 대한 게시물을 쓰는지 확인위해) */}
-      <div className="pt-1 pb-2">
-        <BoardTitle boardType={boardType} />
-      </div>
+      <BoardTitle boardType={boardType} />
 
       {/* Text Editor */}
       <div className="grow h-full">
         <Editor boardType={boardType} />
       </div>
-    </div>
+    </section>
   );
 }
+
+// [NOTE on rendering method]
+// This page is rendered as SSR (Server Side Rendering) dynamically.
+// Client-Side Components like BoardTitle and Editor are rendered and become interactive in the browser after the initial HTML is loaded

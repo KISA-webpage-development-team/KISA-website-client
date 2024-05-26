@@ -9,7 +9,8 @@ export default function BoardTitle({ boardType }) {
   return (
     <Link href={boardLink}>
       <p
-        className={`text-xl md:text-2xl font-bold text-black hover:text-gray-500 cursor-pointer`}
+        className={`cursor-pointer hover:underline
+        text-xl md:text-2xl font-bold text-michigan-blue`}
       >
         {getBoardName(boardType)}
       </p>
