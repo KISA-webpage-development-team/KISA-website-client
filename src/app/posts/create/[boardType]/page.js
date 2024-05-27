@@ -1,6 +1,17 @@
 import React from "react";
 import BoardTitle from "../../../../components/Boards/BoardTitle";
-import EditorClient from "../../../../components/Posts/post-edit/EditorClient";
+
+import dynamic from "next/dynamic";
+
+// need to force EditorClient to be rendered on client-side
+// I don't know why NextJS doesn't automatically render it on client-side
+// this will remove the error "document is not defined"
+const EditorClient = dynamic(
+  () => import("../../../../components/Posts/post-edit/EditorClient"),
+  {
+    ssr: false,
+  }
+);
 
 export default function CreatePostPage({ params }) {
   const { boardType } = params;
@@ -11,7 +22,7 @@ export default function CreatePostPage({ params }) {
       <BoardTitle boardType={boardType} />
 
       {/* Text Editor */}
-      <div className="grow">
+      <div className="grow w-full">
         <EditorClient boardType={boardType} mode="create" />
       </div>
     </section>
