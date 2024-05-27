@@ -16,6 +16,7 @@ import { incrementReadCount } from "../../../service/post";
 
 // for view count
 import cookieCutter from "@boiseitguru/cookie-cutter";
+import TrashcanIcon from "../../ui/TrashcanIcon";
 
 // currently, comments are not implemented
 export default function PostView({ boardType, post, postid }) {
@@ -105,7 +106,7 @@ export default function PostView({ boardType, post, postid }) {
             onClick={onClickPostUpdate}
           />
           <ImageButton
-            icon={<PencilIcon color="gray" />}
+            icon={<TrashcanIcon color="gray" />}
             text="삭제"
             onClick={onClickPostDelete}
           />
