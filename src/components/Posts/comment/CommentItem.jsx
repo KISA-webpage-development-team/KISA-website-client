@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import ImageButton from "../shared/ImageButton";
-import ReplyIcon from "../ui/ReplyIcon";
-import PencilIcon from "../ui/PencilIcon";
-import TrashcanIcon from "../ui/TrashcanIcon";
+import ImageButton from "../../shared/ImageButton";
+import ReplyIcon from "../../ui/ReplyIcon";
+import PencilIcon from "../../ui/PencilIcon";
+import TrashcanIcon from "../../ui/TrashcanIcon";
 import CommentEditor from "./CommentEditor";
-import { editComment, deleteComment } from "../../service/comment";
+import { editComment, deleteComment } from "../../../service/comment";
 
-import { timeForToday } from "../../utils/dateFormatter";
-import HorizontalDivider from "../shared/HorizontalDivider";
+import { timeForToday } from "../../../utils/dateFormatter";
+import HorizontalDivider from "../../shared/HorizontalDivider";
 import Link from "next/link";
 
 export default function CommentItem({

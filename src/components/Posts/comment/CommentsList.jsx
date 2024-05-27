@@ -2,9 +2,9 @@
 
 import React from "react";
 import CommentItem from "./CommentItem";
-import DownArrowIcon from "../ui/DownArrowIcon";
+import DownArrowIcon from "../../ui/DownArrowIcon";
 import { useSession } from "next-auth/react";
-import HorizontalDivider from "../shared/HorizontalDivider";
+import HorizontalDivider from "../../shared/HorizontalDivider";
 
 export default function CommentsList({
   commentsCount,

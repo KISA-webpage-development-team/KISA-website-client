@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { deletePost } from "../../service/post";
-import ImageButton from "../shared/ImageButton";
-import TrashcanIcon from "../ui/TrashcanIcon";
-import PencilIcon from "../ui/PencilIcon";
+import { deletePost } from "../../../service/post";
+import ImageButton from "../../shared/ImageButton";
+import TrashcanIcon from "../../ui/TrashcanIcon";
+import PencilIcon from "../../ui/PencilIcon";
 import { useSession } from "next-auth/react";
 
 export default function PostDeleteClient({ boardType, postid }) {

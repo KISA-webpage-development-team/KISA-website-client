@@ -119,7 +119,11 @@ export default function BoardClient({ boardType, page, size }) {
           <p></p>
           {/* TODO: improve pagination */}
           <Pagination
-            totalPageNum={Math.ceil(totalPostNum / pageSize)}
+            totalPageNum={
+              Math.ceil(totalPostNum / pageSize) === 0
+                ? 1
+                : Math.ceil(totalPostNum / pageSize)
+            }
             pageNum={pageNum}
             setPageNum={setPageNum}
           />

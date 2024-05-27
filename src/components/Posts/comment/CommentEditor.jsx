@@ -4,10 +4,8 @@
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import NotLoginModal from "../shared/NotLoginModal";
-import { useRouter } from "next/navigation";
-import { createComment, updateComment } from "../../service/comment";
-import { set } from "react-hook-form";
+import NotLoginModal from "../../shared/NotLoginModal";
+import { createComment, updateComment } from "../../../service/comment";
 
 export default function CommentEditor({
   postid,
@@ -22,8 +20,6 @@ export default function CommentEditor({
 
   // get user session
   const { data: session, status } = useSession();
-  // router
-  const router = useRouter();
 
   // states to prevent multiple key inputs at the same time
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,8 +52,6 @@ export default function CommentEditor({
         setOpenCommentEditor(false);
 
         setIsSubmitting(false);
-
-        // console.log("comment update success");
       } else {
         // error handling
         console.log("comment update failed");

@@ -9,20 +9,24 @@
 // - checkboxes (admin) | submit button
 
 import React, { useEffect, useState } from "react";
-import { EditorClientProps } from "./model/props/posts";
+import { EditorClientProps } from "../../../model/props/posts";
 import { useSession } from "next-auth/react";
 
 // sub-ui components
-import NotLoginModal from "../shared/NotLoginModal";
+import NotLoginModal from "../../shared/NotLoginModal";
 import TitleInput from "./TitleInput";
 import TextEditor from "./TextEditor";
 import CheckBoxes from "./CheckBoxes";
 import PostSubmitButton from "./PostSubmitButton";
-import { getIsAdmin } from "../../service/user";
-import { CustomSession } from "./model/common/types";
-import { getBoardName } from "../../config/boardName";
+import { getIsAdmin } from "../../../service/user";
+import { CustomSession } from "../../../model/common/types";
+import { getBoardName } from "../../../config/boardName";
 
-export default function EditorClient({ boardType, mode }: EditorClientProps) {
+export default function EditorClient({
+  boardType,
+  curPost,
+  mode,
+}: EditorClientProps) {
   const { data: session, status } = useSession() as {
     data: CustomSession | null;
     status: string;
@@ -32,9 +36,11 @@ export default function EditorClient({ boardType, mode }: EditorClientProps) {
   const [isAdmin, setIsAdmin] = useState<boolean>();
 
   // form states
-  const [title, setTitle] = useState<string>("");
-  const [text, setText] = useState<string>("");
-  const [isAnnouncement, setIsAnnouncement] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(curPost?.title || "");
+  const [text, setText] = useState<string>(curPost?.text || "");
+  const [isAnnouncement, setIsAnnouncement] = useState<boolean>(
+    curPost?.isAnnouncement || false
+  );
   // form states for announcement board
   const [announcementTag, setAnnouncementTag] = useState<string>("");
   const [customTag, setCustomTag] = useState<string>("");
@@ -135,7 +141,7 @@ export default function EditorClient({ boardType, mode }: EditorClientProps) {
           disabled={isSubmitBtnDisabled}
           token={session?.token}
           mode={mode}
-          postid={mode === "create" ? "" : ""} // [TODO]: change post id for update mode
+          postid={mode === "create" ? null : curPost?.postid} // [TODO]: change post id for update mode
           formData={
             // when creating a post
             mode === "create"

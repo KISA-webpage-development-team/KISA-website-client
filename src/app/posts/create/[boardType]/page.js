@@ -1,9 +1,6 @@
-// ~24.05.27: Testing new Editor by Jioh
-
 import React from "react";
 import BoardTitle from "../../../../components/Boards/BoardTitle";
-import Editor from "../../../../components/Posts/Editor";
-import EditorClient from "../../../../components/Test/EditorClient";
+import EditorClient from "../../../../components/Posts/post-edit/EditorClient";
 
 export default function CreatePostPage({ params }) {
   const { boardType } = params;
@@ -14,7 +11,6 @@ export default function CreatePostPage({ params }) {
       <BoardTitle boardType={boardType} />
 
       {/* Text Editor */}
-      {/* <Editor boardType={boardType} /> */}
       <div className="grow">
         <EditorClient boardType={boardType} mode="create" />
       </div>

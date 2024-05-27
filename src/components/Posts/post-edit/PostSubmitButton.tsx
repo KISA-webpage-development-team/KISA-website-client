@@ -2,26 +2,19 @@ import React, { useState } from "react";
 import {
   EditorMode,
   PostFormData,
+  PostSubmitButtonProps,
   SimplePostFormData,
-} from "./model/props/posts";
-import { createPost, updatePost } from "../../service/post";
+} from "../../../model/props/posts";
+import { createPost, updatePost } from "../../../service/post";
 import { useRouter } from "next/navigation";
-
-type Props = {
-  disabled: boolean;
-  token: string;
-  mode: EditorMode;
-  postid?: string; // only needed for update mode
-  formData: SimplePostFormData | PostFormData;
-};
 
 export default function PostSubmitButton({
   disabled,
   token,
   mode,
-  postid = "",
+  postid,
   formData,
-}: Props) {
+}: PostSubmitButtonProps) {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,6 +33,11 @@ export default function PostSubmitButton({
   };
 
   const handleUpdatePost = async () => {
+    if (postid === null) {
+      window.alert("게시글 수정에 실패했습니다.");
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await updatePost(postid, formData, token);

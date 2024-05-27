@@ -1,26 +1,41 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import BoardTitle from "../../../../components/Boards/BoardTitle";
 import { getSinglePost } from "../../../../service/post";
-import Editor from "../../../../components/Posts/Editor";
+import EditorClient from "../../../../components/Posts/post-edit/EditorClient";
 
-export default async function PostUpdatePage({ params }) {
+export default function PostUpdatePage({ params }) {
   const { postid } = params;
+  const [post, setPost] = useState();
 
-  const post = await getSinglePost(postid);
+  useEffect(() => {
+    const fetchPost = async () => {
+      const post = await getSinglePost(postid);
+      setPost(post);
+    };
+    fetchPost();
+  }, [postid]);
+
+  if (!post) {
+    return <></>;
+  }
 
   return (
-    <div
-      className="flex flex-col h-full w-full 
-    px-[20px] md:px-[60px] lg:px-[75px] "
-    >
-      {/* Board Title (지금 어떤 보드에 대한 게시물을 쓰는지 확인위해) */}
-      <div className="pt-3 pb-2 ">
-        <BoardTitle boardType={post.type} />
-      </div>
+    <section>
+      {/* Board Title */}
+      <BoardTitle boardType={post.type} />
 
       {/* Text Editor */}
 
-      <Editor boardType={post.type} curPost={post} mode="update" />
-    </div>
+      <div className="grow">
+        <EditorClient boardType={post.type} curPost={post} mode="update" />
+      </div>
+    </section>
   );
 }
+// [NOTE on rendering method]
+// This page is rendered as CSR (Client Side Rendering) dynamically.
+// * current post data is fetched with useEffect to keep it updated
+// Client-Side Components like BoardTitle and Editor are rendered and
+// become interactive in the browser after the initial HTML is loaded

@@ -1,15 +1,6 @@
 import React from "react";
-import { getTagListForAnnouncement } from "../../config/boardName";
-
-type Props = {
-  isBoardAnnouncement: boolean;
-  isAnnouncement: boolean;
-  setIsAnnouncement: (value: boolean) => void;
-  announcementTag: string;
-  setAnnouncementTag: (value: string) => void;
-  customTag: string;
-  setCustomTag: (value: string) => void;
-};
+import { getTagListForAnnouncement } from "../../../config/boardName";
+import { CheckBoxesProps } from "../../../model/props/posts";
 
 export default function CheckBoxes({
   isBoardAnnouncement,
@@ -19,7 +10,7 @@ export default function CheckBoxes({
   setAnnouncementTag,
   customTag,
   setCustomTag,
-}: Props) {
+}: CheckBoxesProps) {
   // if board is not announcement board
   if (!isBoardAnnouncement) {
     return (

@@ -1,7 +1,7 @@
 import React from "react";
-import VerticalDivider from "../shared/VerticalDivider";
-import ClockIcon from "../ui/ClockIcon";
-import { fullDateFormatter } from "../../utils/dateFormatter";
+import VerticalDivider from "../../shared/VerticalDivider";
+import ClockIcon from "../../ui/ClockIcon";
+import { fullDateFormatter } from "../../../utils/dateFormatter";
 import Link from "next/link";
 
 export default function PostOwnerBar({

@@ -1,12 +1,7 @@
 import React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
-type Props = {
-  isAdmin?: boolean;
-  text: string;
-  setText: (text: string) => void;
-};
+import { TextEditorProps } from "../../../model/props/posts";
 
 // this React Quill Module will be moved to separate config file later
 const testReactQuillModules = {
@@ -34,7 +29,11 @@ const testReactQuillModulesAdmin = {
   },
 };
 
-export default function TextEditor({ isAdmin, text, setText }: Props) {
+export default function TextEditor({
+  isAdmin,
+  text,
+  setText,
+}: TextEditorProps) {
   return (
     <ReactQuill
       theme="snow"
