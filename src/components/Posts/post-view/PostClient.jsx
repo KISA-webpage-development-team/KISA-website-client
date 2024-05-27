@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import BoardTitle from "../Boards/BoardTitle";
-import { createReadCountCookie, getSinglePost } from "../../service/post";
-import HorizontalDivider from "../shared/HorizontalDivider";
+import BoardTitle from "../../Boards/BoardTitle";
+import { createReadCountCookie, getSinglePost } from "../../../service/post";
+import HorizontalDivider from "../../shared/HorizontalDivider";
 import PostView from "./PostView";
 // import { getCommentsByPostid } from "../../service/comment";
 

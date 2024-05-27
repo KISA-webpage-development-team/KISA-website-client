@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import PostTitleBar from "./PostTitleBar";
 import PostOwnerBar from "./PostOwnerBar";
 import PostContent from "./PostContent";
-import HorizontalDivider from "../shared/HorizontalDivider";
+import HorizontalDivider from "../../shared/HorizontalDivider";
 
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import ImageButton from "../shared/ImageButton";
-import PencilIcon from "../ui/PencilIcon";
-import ListIcon from "../ui/ListIcon";
-import CommentEditor from "./CommentEditor";
-import CommentsList from "./CommentsList";
-import { getCommentsByPostid } from "../../service/comment";
-import { incrementReadCount } from "../../service/post";
+import ImageButton from "../../shared/ImageButton";
+import PencilIcon from "../../ui/PencilIcon";
+import ListIcon from "../../ui/ListIcon";
+import CommentEditor from "../comment/CommentEditor";
+import CommentsList from "../comment/CommentsList";
+import { getCommentsByPostid } from "../../../service/comment";
+import { incrementReadCount } from "../../../service/post";
 
 // for view count
 import cookieCutter from "@boiseitguru/cookie-cutter";
