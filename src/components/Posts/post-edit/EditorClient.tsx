@@ -120,7 +120,7 @@ export default function EditorClient({
       <div
         className={`flex
       ${isAdmin ? "w-full justify-between" : "justify-end"}
-      mt-12`}
+      mt-20 md:mt-12`}
       >
         {isAdmin && (
           <CheckBoxes
