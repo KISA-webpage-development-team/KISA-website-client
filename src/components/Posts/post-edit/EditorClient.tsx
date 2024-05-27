@@ -48,8 +48,25 @@ export default function EditorClient({
   // submit button state
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(true);
 
-  // submit button validation
-  // form validation
+  // check if user is admin ---------------------------------------------------
+  useEffect(() => {
+    const fetchIsAdmin = async () => {
+      try {
+        const res = await getIsAdmin(session?.user.email, session?.token);
+        setIsAdmin(res);
+      } catch (error) {
+        // error handling
+        return;
+      }
+    };
+
+    if (session) {
+      fetchIsAdmin();
+    }
+  }, [session]);
+  // ---------------------------------------------------------------------------
+
+  // submit button validation -------------------------------------------------
   useEffect(() => {
     if (title?.length === 0) {
       setIsSubmitBtnDisabled(true);
@@ -75,23 +92,7 @@ export default function EditorClient({
   useEffect(() => {
     if (text === "") setIsSubmitBtnDisabled(true);
   }, [text]);
-
-  // check if user is admin
-  useEffect(() => {
-    const fetchIsAdmin = async () => {
-      try {
-        const res = await getIsAdmin(session?.user.email, session?.token);
-        setIsAdmin(res);
-      } catch (error) {
-        // error handling
-        return;
-      }
-    };
-
-    if (session) {
-      fetchIsAdmin();
-    }
-  }, [session]);
+  // ---------------------------------------------------------------------------
 
   // Exception Handling -------------------------------------------------------
   // 1) if user is not logged in
@@ -113,14 +114,9 @@ export default function EditorClient({
   // ---------------------------------------------------------------------------
 
   return (
-    <div
-      className="flex flex-col h-full gap-4
-   "
-    >
+    <div className="flex flex-col h-full gap-4">
       <TitleInput title={title} setTitle={setTitle} />
-
       <TextEditor isAdmin={isAdmin} text={text} setText={setText} />
-
       <div
         className={`flex
       ${isAdmin ? "w-full justify-between" : "justify-end"}
