@@ -34,7 +34,9 @@ export default function PostUpdatePage({ params }) {
   return (
     <section>
       {/* Board Title */}
-      <BoardTitle boardType={post.type} />
+      <div className="w-full">
+        <BoardTitle boardType={post.type} />
+      </div>
 
       {/* Text Editor */}
 
