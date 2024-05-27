@@ -1,6 +1,9 @@
+// ~24.05.27: Testing new Editor by Jioh
+
 import React from "react";
 import BoardTitle from "../../../../components/Boards/BoardTitle";
 import Editor from "../../../../components/Posts/Editor";
+import EditorClient from "../../../../components/Test/EditorClient";
 
 export default function CreatePostPage({ params }) {
   const { boardType } = params;
@@ -11,8 +14,9 @@ export default function CreatePostPage({ params }) {
       <BoardTitle boardType={boardType} />
 
       {/* Text Editor */}
-      <div className="grow h-full">
-        <Editor boardType={boardType} />
+      {/* <Editor boardType={boardType} /> */}
+      <div className="grow">
+        <EditorClient boardType={boardType} mode="create" />
       </div>
     </section>
   );
@@ -20,4 +24,5 @@ export default function CreatePostPage({ params }) {
 
 // [NOTE on rendering method]
 // This page is rendered as SSR (Server Side Rendering) dynamically.
-// Client-Side Components like BoardTitle and Editor are rendered and become interactive in the browser after the initial HTML is loaded
+// Client-Side Components like BoardTitle and Editor are rendered and
+// become interactive in the browser after the initial HTML is loaded
