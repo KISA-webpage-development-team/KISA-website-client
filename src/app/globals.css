@@ -28,6 +28,9 @@ body {
 .blue_button:hover {
   @apply flex items-center justify-center px-4 py-2 font-bold bg-[#00274c] border border-[#ffcb05] text-[#ffcb05] rounded-md cursor-pointer;
 }
+.blue_button:disabled {
+  @apply flex items-center justify-center px-4 py-2 bg-gray-300 border border-gray-300 text-white rounded-md cursor-not-allowed;
+}
 
 .disabled_blue_button {
   @apply flex items-center justify-center px-4 py-2 bg-gray-300 border text-white rounded-md cursor-not-allowed;

@@ -4,8 +4,8 @@ import "react-quill/dist/quill.snow.css";
 
 type Props = {
   isAdmin?: boolean;
-  content: string;
-  setContent: (content: string) => void;
+  text: string;
+  setText: (text: string) => void;
 };
 
 // this React Quill Module will be moved to separate config file later
@@ -34,14 +34,14 @@ const testReactQuillModulesAdmin = {
   },
 };
 
-export default function TextEditor({ isAdmin, content, setContent }: Props) {
+export default function TextEditor({ isAdmin, text, setText }: Props) {
   return (
     <ReactQuill
       theme="snow"
       style={{ minHeight: 400 }}
       modules={isAdmin ? testReactQuillModulesAdmin : testReactQuillModules}
-      value={content}
-      onChange={(e: any) => setContent(e)}
+      value={text}
+      onChange={(e: any) => setText(e)}
     />
   );
 }
