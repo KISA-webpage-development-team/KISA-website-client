@@ -7,7 +7,6 @@ import { TextEditorProps } from "../../../model/props/posts";
 const testReactQuillModules = {
   toolbar: {
     container: [
-      ["link"],
       [{ size: ["small", false, "large", "huge"] }],
       [{ list: "ordered" }, { list: "bullet" }],
       ["bold", "underline", "italic"],
@@ -20,7 +19,6 @@ const testReactQuillModulesAdmin = {
   toolbar: {
     container: [
       ["image"],
-      ["link"],
       [{ size: ["small", false, "large", "huge"] }],
       [{ list: "ordered" }, { list: "bullet" }],
       ["bold", "underline", "italic"],
