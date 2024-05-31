@@ -1,9 +1,15 @@
 // [24.06.01 ~ ]: Refactoring + TS conversion by Jioh
 
+// [UI]
+// BoardTitle
+// PostView
+// CommentsView
+
 import React from "react";
 import PostClient from "../../../components/Posts/post-view/PostClient";
 import { getSinglePost } from "../../../service/post";
 import { PostParamsPageProps } from "../../../model/props/posts";
+import BoardTitle from "../../../components/Boards/BoardTitle";
 
 export default async function PostPage({ params }: PostParamsPageProps) {
   const { postid } = params;
@@ -18,9 +24,14 @@ export default async function PostPage({ params }: PostParamsPageProps) {
   }
 
   return (
-    <div className="flex flex-col">
+    <section>
+      <div className="w-full">
+        <BoardTitle boardType={post?.type} />
+      </div>
+      {/* [TODO] change to PostView */}
       <PostClient postid={postid} />
-    </div>
+      {/* [TODO] add CommentsView */}
+    </section>
   );
 }
 

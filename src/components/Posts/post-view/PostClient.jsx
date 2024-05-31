@@ -34,12 +34,7 @@ export default function PostClient({ postid }) {
     post && (
       <div className="flex flex-col">
         {/* board title */}
-        <div
-          className="pt-1
-        pb-1 md:pb-2 flex"
-        >
-          <BoardTitle boardType={post.type} />
-        </div>
+
         <HorizontalDivider color="dark" />
 
         {/* post content */}
