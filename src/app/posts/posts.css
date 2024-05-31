@@ -5,3 +5,7 @@ section {
   @apply w-full h-full min-h-full
     flex flex-col gap-4;
 }
+
+.ql-editor {
+  padding: 0px 0px !important;
+}

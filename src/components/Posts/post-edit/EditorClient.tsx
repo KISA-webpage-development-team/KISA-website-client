@@ -20,7 +20,10 @@ import CheckBoxes from "./CheckBoxes";
 import PostSubmitButton from "./PostSubmitButton";
 import { getIsAdmin } from "../../../service/user";
 import { CustomSession } from "../../../model/common/types";
-import { getBoardName } from "../../../config/boardName";
+import {
+  getBoardName,
+  getBoardNameFromKorean,
+} from "../../../config/boardName";
 
 export default function EditorClient({
   boardType,
@@ -41,9 +44,26 @@ export default function EditorClient({
   const [isAnnouncement, setIsAnnouncement] = useState<boolean>(
     curPost?.isAnnouncement || false
   );
+
   // form states for announcement board
   const [announcementTag, setAnnouncementTag] = useState<string>("");
   const [customTag, setCustomTag] = useState<string>("");
+  // set initial tags
+  useEffect(() => {
+    const setInitialTag = () => {
+      if (mode === "create") return "";
+      const tag = curPost?.title.startsWith("[")
+        ? curPost?.title.split("]")[0].slice(1)
+        : "";
+
+      if (getBoardNameFromKorean(tag) === "none") {
+        setCustomTag(tag);
+      } else {
+        setAnnouncementTag(getBoardNameFromKorean(tag));
+      }
+    };
+    setInitialTag();
+  }, []);
 
   // submit button state
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(true);

@@ -78,6 +78,8 @@ export default function PostView({ boardType, post, postid }) {
     setOpenCommentEditor(!openCommentEditor);
   };
 
+  console.log("post: ", post);
+
   return (
     <div className="flex flex-col">
       {/* 1. Post Title Bar: title + created */}

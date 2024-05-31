@@ -2,7 +2,14 @@ import { BoardType } from "../common/types";
 
 export type EditorMode = "create" | "update";
 
-// Props
+// Page Props -------------------------------------------
+export interface PostParamsPageProps {
+  params: {
+    postid: string;
+  };
+}
+
+// Component Props -------------------------------------
 export interface EditorClientProps {
   boardType: BoardType;
   curPost: Post | null;
@@ -29,8 +36,9 @@ export interface PostSubmitButtonProps {
   postid?: Number | null; // only needed for update mode
   formData: SimplePostFormData | PostFormData;
 }
+// ------------------------------------------------------
 
-// Post formdata
+// Post formdata ----------------------------------------
 export interface SimplePostFormData {
   title: string;
   text: string;
@@ -42,9 +50,10 @@ export interface PostFormData extends SimplePostFormData {
   fullname: string;
   email: string;
 }
-export interface Post extends PostFormData {
+export interface Post extends Omit<PostFormData, "tag"> {
   postid: Number;
   readCount: Number;
   commentsCount: Number;
   created: string;
 }
+// ------------------------------------------------------

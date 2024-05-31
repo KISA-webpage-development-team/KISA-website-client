@@ -16,6 +16,24 @@ export function getBoardName(boardType) {
   }
 }
 
+export function getBoardNameFromKorean(boardType) {
+  if (boardType === "공지사항") {
+    return "announcement";
+  } else if (boardType === "자유게시판") {
+    return "community";
+  } else if (boardType === "학업/취업") {
+    return "academic-job";
+  } else if (boardType === "사고팔기") {
+    return "buyandsell";
+  } else if (boardType === "하우징/룸메이트") {
+    return "housing";
+  } else if (boardType === "일반") {
+    return "";
+  } else {
+    return "none";
+  }
+}
+
 export function getTagListForAnnouncement() {
   return [
     { name: "태그 없음", type: "" },

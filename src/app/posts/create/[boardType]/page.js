@@ -33,5 +33,5 @@ export default function CreatePostPage({ params }) {
 
 // [NOTE on rendering method]
 // This page is rendered as SSR (Server Side Rendering) dynamically.
-// Client-Side Components like BoardTitle and Editor are rendered and
+// Client-Side Components like BoardTitle and EditorClient are rendered and
 // become interactive in the browser after the initial HTML is loaded

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { TextEditorProps } from "../../../model/props/posts";
+import "react-quill/dist/quill.snow.css";
 
 // this React Quill Module will be moved to separate config file later
 const testReactQuillModules = {
