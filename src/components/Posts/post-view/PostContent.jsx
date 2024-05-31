@@ -8,7 +8,7 @@ export default function PostContent({ text }) {
   console.log("text: ", text);
   return (
     <div
-      className="my-2 ql-editor text-sm md:text-base"
+      className="!px-0 ql-editor my-2 text-sm md:text-base"
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(String(text)),
       }}
