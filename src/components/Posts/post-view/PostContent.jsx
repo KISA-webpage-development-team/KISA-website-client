@@ -5,10 +5,9 @@ import "react-quill/dist/quill.snow.css";
 // DOMPurify sanitizes HTML and prevents XSS attacks
 
 export default function PostContent({ text }) {
-  console.log("text: ", text);
   return (
     <div
-      className="!px-0 ql-editor my-2 text-sm md:text-base"
+      className="!px-0 !py-3 ql-editor text-base min-h-16"
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(String(text)),
       }}

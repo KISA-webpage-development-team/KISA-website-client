@@ -1,5 +1,6 @@
 import axios from "axios";
 import { backendUrl } from "../config/backendUrl";
+import { Post } from "../model/props/posts";
 
 export async function createReadCountCookie(postid) {
   const url = `${backendUrl}/cookies/post/${postid}/`;
@@ -26,7 +27,8 @@ export async function createPost(data, token) {
   }
 }
 
-export async function getSinglePost(postid) {
+// [24.06.01] TS Conversion DONE
+export async function getSinglePost(postid: string): Promise<Post | null> {
   const url = `${backendUrl}/posts/${postid}/`;
 
   try {

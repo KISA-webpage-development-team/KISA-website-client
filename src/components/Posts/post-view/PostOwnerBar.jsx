@@ -1,7 +1,7 @@
 import React from "react";
 import VerticalDivider from "../../shared/VerticalDivider";
 import ClockIcon from "../../ui/ClockIcon";
-import { fullDateFormatter } from "../../../utils/dateFormatter";
+import { fullDateFormatter, timeForToday } from "../../../utils/dateFormatter";
 import Link from "next/link";
 
 export default function PostOwnerBar({
@@ -14,18 +14,25 @@ export default function PostOwnerBar({
   return (
     <div
       className="flex justify-between items-center 
-    text-sm md:text-base"
+    text-xs sm:text-sm md:text-base"
     >
       {/* left: fullname + created */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 md:gap-3">
         {/* later, fullname will be linked to user profile */}
         <Link href={`/users/${email}`}>
           <p className="font-semibold hover:underline">{fullname}</p>
         </Link>
 
         <VerticalDivider size="small" />
-        <ClockIcon />
-        <p className="text-gray-600">{fullDateFormatter(created)}</p>
+        <div className="flex items-center gap-1">
+          <ClockIcon />
+          <p className="text-gray-600 hidden sm:block">
+            {fullDateFormatter(created)}
+          </p>
+          <p className="text-gray-600 block sm:hidden">
+            {timeForToday(created)}
+          </p>
+        </div>
       </div>
 
       {/* right: readCount, (추천수, 댓글수) */}

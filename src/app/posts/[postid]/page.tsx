@@ -10,6 +10,9 @@ import PostClient from "../../../components/Posts/post-view/PostClient";
 import { getSinglePost } from "../../../service/post";
 import { PostParamsPageProps } from "../../../model/props/posts";
 import BoardTitle from "../../../components/Boards/BoardTitle";
+import TestPostView from "../../../components/Posts/post-view-test/TestPostView";
+import TestCommentsView from "../../../components/Posts/post-view-test/TestCommentsView";
+import HorizontalDivider from "../../../components/shared/HorizontalDivider";
 
 export default async function PostPage({ params }: PostParamsPageProps) {
   const { postid } = params;
@@ -24,13 +27,18 @@ export default async function PostPage({ params }: PostParamsPageProps) {
   }
 
   return (
-    <section>
+    <section className="!gap-0">
       <div className="w-full">
-        <BoardTitle boardType={post?.type} />
+        <BoardTitle boardType={post?.type} size="small" />
       </div>
       {/* [TODO] change to PostView */}
-      <PostClient postid={postid} />
+      <div className="w-full">
+        <TestPostView post={post} />
+      </div>
       {/* [TODO] add CommentsView */}
+      <div className="w-full">
+        <TestCommentsView />
+      </div>
     </section>
   );
 }

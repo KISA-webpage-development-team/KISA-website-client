@@ -10,6 +10,18 @@ export interface PostParamsPageProps {
 }
 
 // Component Props -------------------------------------
+// * post-view
+export interface PostViewProps {
+  post: Post;
+}
+export interface PostButtonBarProps {
+  isAuthor: boolean;
+  type: BoardType;
+  postid?: Number;
+  title?: string;
+}
+
+// * post-edit
 export interface EditorClientProps {
   boardType: BoardType;
   curPost: Post | null;
