@@ -45,9 +45,6 @@ export default function CommentsView({
     // [TODO]: add loading spinner or skeleton ui
     return <></>;
   }
-  if (status === "unauthenticated") {
-    return <></>;
-  }
 
   return (
     <div className="w-full flex flex-col py-4 gap-2">
@@ -55,12 +52,15 @@ export default function CommentsView({
       {/* [TODO] post의 commentsCount를 상시 업데이트하지 못하고 있음. */}
       <p className="text-sm md:text-base">{`댓글 ${commentsCount}개`}</p>
       {/* 2. default comment editor to add direct comment on the post */}
-      <TestCommentEditor
-        mode="create"
-        session={session}
-        postid={postid}
-        setCommentsStale={setCommentsStale}
-      />
+      {status === "authenticated" && (
+        <TestCommentEditor
+          mode="create"
+          session={session}
+          postid={postid}
+          setCommentsStale={setCommentsStale}
+        />
+      )}
+
       {/* 3. comment list */}
       <TestCommentsList
         comments={comments}

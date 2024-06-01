@@ -105,12 +105,14 @@ export default function CommentItem({
                     />
                   </>
                 )}
-                <ImageButton
-                  background="none"
-                  icon={<CommentIcon color="gray" noResize />}
-                  text={`${openReplyEditor ? "닫기" : "답글"}`}
-                  onClick={handleOpenReplyEditor}
-                />
+                {session && (
+                  <ImageButton
+                    background="none"
+                    icon={<CommentIcon color="gray" noResize />}
+                    text={`${openReplyEditor ? "닫기" : "답글"}`}
+                    onClick={handleOpenReplyEditor}
+                  />
+                )}
               </div>
             </div>
             {/* 3. Text */}
@@ -126,7 +128,7 @@ export default function CommentItem({
       </div>
       {/* Comment Editor from buttons */}
       {/* - Edit Reply */}
-      {openCommentEditor && (
+      {openCommentEditor && session && (
         <div className="mb-4">
           <CommentEditor
             mode="update"
@@ -140,7 +142,7 @@ export default function CommentItem({
           />
         </div>
       )}
-      {openReplyEditor && (
+      {openReplyEditor && session && (
         <div className="ml-8 mb-4 flex items-center gap-4">
           <ReplyIcon type="flip" />
           <CommentEditor
