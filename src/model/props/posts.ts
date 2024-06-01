@@ -1,6 +1,8 @@
-import { BoardType } from "../common/types";
+import { BoardType, CustomSession } from "../common/types";
 
 export type EditorMode = "create" | "update";
+
+export type CommentEditorMode = "create" | "update" | "reply";
 
 // Page Props -------------------------------------------
 export interface PostParamsPageProps {
@@ -19,6 +21,20 @@ export interface PostButtonBarProps {
   type: BoardType;
   postid?: Number;
   title?: string;
+}
+export interface PostTitleBarProps {
+  isAnnouncement: boolean;
+  title: string;
+}
+export interface PostOwnerBarProps {
+  email: string;
+  fullname: string;
+  created: string;
+  readCount: Number;
+  commentsCount: Number;
+}
+export interface PostContentProps {
+  text: string;
 }
 
 // * post-edit
@@ -48,6 +64,7 @@ export interface PostSubmitButtonProps {
   postid?: Number | null; // only needed for update mode
   formData: SimplePostFormData | PostFormData;
 }
+
 // ------------------------------------------------------
 
 // Post formdata ----------------------------------------
@@ -69,3 +86,46 @@ export interface Post extends Omit<PostFormData, "tag"> {
   created: string;
 }
 // ------------------------------------------------------
+
+// * comments
+export interface CommentsViewProps {
+  commentsCount: Number;
+  postid: Number;
+}
+
+export interface CommentEditorProps {
+  mode: CommentEditorMode;
+  session: CustomSession | null;
+  postid: Number;
+  commentid?: Number;
+  curCommentId?: Number | null;
+  placeholder?: string;
+  setCommentsStale: (value: boolean) => void;
+  setOpenCommentEditor?: (value: boolean) => void;
+}
+
+export interface CommentsListProps {
+  comments: Comment[];
+  session: CustomSession | null;
+  setCommentsStale: (value: boolean) => void;
+}
+
+export interface CommentItemProps {
+  session: CustomSession | null;
+  comment: Comment;
+  parentCommentid?: Number;
+  setCommentsStale: (value: boolean) => void;
+}
+
+// Comment formdata -------------------------------------
+export interface Comment {
+  commentid: Number;
+  created: string;
+  email: string;
+  fullname: string;
+  isCommentOfComment: boolean;
+  parentCommentid: Number;
+  postid: Number;
+  text: string;
+  childComments: Comment[];
+}

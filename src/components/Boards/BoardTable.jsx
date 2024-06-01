@@ -12,6 +12,10 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
     return <div>Loading...</div>;
   }
 
+  const navigateToPost = (postid) => () => {
+    window.location.href = `/posts/${postid}`;
+  };
+
   return (
     <table
       className="border border-gray-300 w-full 
@@ -70,7 +74,7 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
                 </>
               </td>
               <td className="text-left grow">
-                <Link href={`/posts/${postid}`} className="hover:underline">
+                <Link className="hover:underline" href={`/posts/${postid}`}>
                   {commentsCount > 0 ? (
                     <span className={``}>
                       {title}
@@ -131,7 +135,10 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
                 )}
               </td>
               <td className="text-left grow">
-                <Link href={`/posts/${postid}`} className="hover:underline">
+                <button
+                  onClick={navigateToPost(postid)}
+                  className="hover:underline"
+                >
                   {commentsCount > 0 ? (
                     <span className={``}>
                       {title}
@@ -140,7 +147,7 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
                   ) : (
                     <span className="">{title}</span>
                   )}
-                </Link>
+                </button>
               </td>
 
               <td className="text-center basis-1/12 min-w-16">

@@ -1,6 +1,10 @@
 import React from "react";
+import { PostTitleBarProps } from "../../../model/props/posts";
 
-export default function PostTitleBar({ isAnnouncement, title }) {
+export default function PostTitleBar({
+  isAnnouncement,
+  title,
+}: PostTitleBarProps) {
   return (
     <div
       className="flex justify-start font-medium text-black 

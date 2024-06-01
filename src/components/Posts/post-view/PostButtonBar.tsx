@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import PencilIcon from "../../ui/PencilIcon";
 import TrashcanIcon from "../../ui/TrashcanIcon";
 
-export default function TestPostButtonBar({
+export default function PostButtonBar({
   isAuthor,
   type,
   postid,
@@ -37,7 +37,7 @@ export default function TestPostButtonBar({
   };
 
   return (
-    <div className="w-full flex items-center justify-between py-2 sm:py-3">
+    <div className="w-full flex items-center justify-between py-2 sm:py-4">
       {/* List Button */}
       <ImageButton
         icon={<ListIcon />}

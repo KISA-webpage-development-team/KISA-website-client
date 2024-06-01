@@ -7,16 +7,20 @@
 // 4. Edit + Delete + List Buttons
 
 import React from "react";
-import { PostViewProps } from "../../../model/props/posts";
-import PostTitleBar from "../post-view/PostTitleBar";
-import HorizontalDivider from "../../shared/HorizontalDivider";
-import PostOwnerBar from "../post-view/PostOwnerBar";
-import PostContent from "../post-view/PostContent";
-import TestPostButtonBar from "./TestPostButtonBar";
-import { CustomSession } from "../../../model/common/types";
 import { useSession } from "next-auth/react";
 
-export default function TestPostView({ post }: PostViewProps) {
+// types
+import { PostViewProps } from "../../../model/props/posts";
+import { CustomSession } from "../../../model/common/types";
+
+// sub-ui components
+import PostTitleBar from "./PostTitleBar";
+import PostOwnerBar from "./PostOwnerBar";
+import PostContent from "./PostContent";
+import PostButtonBar from "./PostButtonBar";
+import HorizontalDivider from "../../shared/HorizontalDivider";
+
+export default function PostView({ post }: PostViewProps) {
   const { data: session, status } = useSession() as {
     data: CustomSession | null;
     status: string;
@@ -37,7 +41,7 @@ export default function TestPostView({ post }: PostViewProps) {
 
   if (status === "loading") {
     // [TODO]: add loading spinner or skeleton ui
-    return <div>Loading...</div>;
+    return <></>;
   }
 
   return (
@@ -47,7 +51,7 @@ export default function TestPostView({ post }: PostViewProps) {
       <div
         className="w-full flex flex-col
       pt-1 
-      pb-2 sm:pb-3 gap-1"
+      pb-2 gap-1"
       >
         {/* 1. Post Title Bar */}
         <PostTitleBar isAnnouncement={isAnnouncement} title={title} />
@@ -67,7 +71,7 @@ export default function TestPostView({ post }: PostViewProps) {
       <PostContent text={text} />
 
       {/* 4. Post Buttons: Edit + Delete + List Buttons */}
-      <TestPostButtonBar
+      <PostButtonBar
         isAuthor={session?.user.email === email}
         type={type}
         postid={postid}

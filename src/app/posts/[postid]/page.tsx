@@ -6,20 +6,17 @@
 // CommentsView
 
 import React from "react";
-import PostClient from "../../../components/Posts/post-view/PostClient";
 import { getSinglePost } from "../../../service/post";
 import { PostParamsPageProps } from "../../../model/props/posts";
 import BoardTitle from "../../../components/Boards/BoardTitle";
-import TestPostView from "../../../components/Posts/post-view-test/TestPostView";
-import TestCommentsView from "../../../components/Posts/post-view-test/TestCommentsView";
-import HorizontalDivider from "../../../components/shared/HorizontalDivider";
+import CommentsView from "../../../components/Posts/comment/CommentsView";
+import PostView from "../../../components/Posts/post-view/PostView";
 
 export default async function PostPage({ params }: PostParamsPageProps) {
   const { postid } = params;
 
+  // parallel fetching from server side: post & comment
   const post = await getSinglePost(postid);
-  // console.log("post: ", post);
-  // console.log(typeof postid);
 
   // [TODO]: when there's no post "error.tsx" should be rendered
   if (!post) {
@@ -31,14 +28,19 @@ export default async function PostPage({ params }: PostParamsPageProps) {
       <div className="w-full">
         <BoardTitle boardType={post?.type} size="small" />
       </div>
-      {/* [TODO] change to PostView */}
+
       <div className="w-full">
-        <TestPostView post={post} />
+        <PostView post={post} />
       </div>
-      {/* [TODO] add CommentsView */}
-      <div className="w-full">
-        <TestCommentsView />
-      </div>
+
+      {!post?.isAnnouncement && post?.type !== "announcement" && (
+        <div className="w-full">
+          <CommentsView
+            commentsCount={post?.commentsCount}
+            postid={post?.postid}
+          />
+        </div>
+      )}
     </section>
   );
 }

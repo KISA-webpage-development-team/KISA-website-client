@@ -1,32 +1,44 @@
 import React, { useState } from "react";
+import Link from "next/link";
+import { timeForToday } from "../../../utils/dateFormatter";
+import { deleteComment } from "../../../service/comment";
+import { CommentItemProps } from "../../../model/props/posts";
+
+// sub-ui components
+import CommentEditor from "./CommentEditor";
+
 import ImageButton from "../../shared/ImageButton";
-import ReplyIcon from "../../ui/ReplyIcon";
 import PencilIcon from "../../ui/PencilIcon";
 import TrashcanIcon from "../../ui/TrashcanIcon";
-import CommentEditor from "./CommentEditor";
-import { editComment, deleteComment } from "../../../service/comment";
-
-import { timeForToday } from "../../../utils/dateFormatter";
-import HorizontalDivider from "../../shared/HorizontalDivider";
-import Link from "next/link";
+import CommentIcon from "../../ui/CommentIcon";
+import ReplyIcon from "../../ui/ReplyIcon";
 
 export default function CommentItem({
-  commentid,
-  email,
-  postid,
-  isAuthor,
-  fullname,
-  created,
-  text,
-  childComments,
-  isCommentOfComment,
+  session,
+  comment,
   parentCommentid = 0,
-  useremail,
   setCommentsStale,
-  token,
-}) {
+}: CommentItemProps) {
+  const {
+    commentid,
+    email,
+    postid,
+    fullname,
+    created,
+    text,
+    childComments,
+    isCommentOfComment,
+  } = comment;
+  // constants for comment item
+  const isAuthor = session?.user?.email === email;
+  const useremail = session?.user?.email;
+  const token = session?.token;
+
+  // states for reply editor
   const [openReplyEditor, setOpenReplyEditor] = useState(false);
   const [openCommentEditor, setOpenCommentEditor] = useState(false);
+  // states for delete comment
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   const handleOpenReplyEditor = () => {
     setOpenReplyEditor(!openReplyEditor);
@@ -37,10 +49,12 @@ export default function CommentItem({
   };
 
   const handleCommentDelete = async () => {
+    setIsDeleteLoading(true);
     const res = await deleteComment(commentid, token);
     if (res) {
       // modify states after comment has been deleted
       setCommentsStale(true);
+      setIsDeleteLoading(false);
     } else {
       // error handling
       console.log("comment deletion failed");
@@ -48,7 +62,7 @@ export default function CommentItem({
   };
 
   return (
-    <div className="flex flex-col pt-1">
+    <div className="flex flex-col">
       <div className="flex items-center">
         {isCommentOfComment ? (
           <div className="-translate-y-2 mr-4">
@@ -60,10 +74,10 @@ export default function CommentItem({
         <div className="flex items-center justify-between w-full">
           <div className="flex flex-col w-full gap-1 md:gap-0">
             <div className="flex items-center justify-between">
-              {/* need to change fullname to fullname's username */}
+              {/* 1. Name + Time */}
               <div
                 className="flex items-center gap-1 md:gap-2
-              text-sm md:text-base"
+            text-sm md:text-base"
               >
                 <Link href={`/users/${email}`}>
                   <p className="text-black font-semibold hover:underline">
@@ -73,18 +87,19 @@ export default function CommentItem({
                 <p className="text-gray-500">{timeForToday(created)}</p>
               </div>
 
+              {/* 2. Buttons */}
               <div className="flex gap-3">
                 {isAuthor && (
                   <>
                     <ImageButton
                       background="none"
-                      text={`${openCommentEditor ? "닫기" : "수정"}`}
-                      icon={<PencilIcon color="gray" />}
+                      text={`${openCommentEditor ? "취소" : "수정"}`}
+                      icon={<PencilIcon color="gray" noResize />}
                       onClick={handleOpenCommentEditor}
                     />
                     <ImageButton
                       background="none"
-                      icon={<TrashcanIcon color="gray" />}
+                      icon={<TrashcanIcon color="gray" noResize />}
                       text={"삭제"}
                       onClick={handleCommentDelete}
                     />
@@ -92,12 +107,13 @@ export default function CommentItem({
                 )}
                 <ImageButton
                   background="none"
-                  icon={<ReplyIcon />}
+                  icon={<CommentIcon color="gray" noResize />}
                   text={`${openReplyEditor ? "닫기" : "답글"}`}
                   onClick={handleOpenReplyEditor}
                 />
               </div>
             </div>
+            {/* 3. Text */}
             <div
               className={`${
                 isAuthor && "text-blue-500"
@@ -108,16 +124,19 @@ export default function CommentItem({
           </div>
         </div>
       </div>
+      {/* Comment Editor from buttons */}
+      {/* - Edit Reply */}
       {openCommentEditor && (
         <div className="mb-4">
           <CommentEditor
-            positd={postid}
-            curComment={commentid}
             mode="update"
+            session={session}
+            commentid={commentid}
+            postid={postid}
+            curCommentId={commentid}
+            placeholder={text}
             setCommentsStale={setCommentsStale}
             setOpenCommentEditor={setOpenCommentEditor}
-            commentid={commentid}
-            placeholder={text}
           />
         </div>
       )}
@@ -125,33 +144,26 @@ export default function CommentItem({
         <div className="ml-8 mb-4 flex items-center gap-4">
           <ReplyIcon type="flip" />
           <CommentEditor
-            postid={postid}
-            curComment={commentid}
             mode="reply"
-            setCommentsStale={setCommentsStale}
+            session={session}
             commentid={commentid}
+            postid={postid}
+            curCommentId={commentid}
+            setCommentsStale={setCommentsStale}
             setOpenCommentEditor={setOpenReplyEditor}
           />
         </div>
       )}
+      {/* 대댓글 */}
       {childComments &&
         childComments.length > 0 &&
         childComments.map((subComment, idx) => (
-          <div key={subComment.commentid} className="ml-4">
+          <div key={`subComment-${subComment.commentid}`} className="ml-4">
             <CommentItem
-              commentid={subComment.commentid}
-              postid={subComment.postid}
-              email={subComment.email}
-              isAuthor={useremail === subComment.email}
-              fullname={subComment.fullname}
-              created={subComment.created}
-              text={subComment.text}
-              childComments={subComment.childComments}
-              useremail={useremail}
-              isCommentOfComment={subComment.isCommentOfComment}
+              comment={subComment}
+              session={session}
               parentCommentid={commentid}
               setCommentsStale={setCommentsStale}
-              token={token}
             />
           </div>
         ))}
