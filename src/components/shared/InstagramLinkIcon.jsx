@@ -5,7 +5,7 @@ import React from "react";
 import InstagramIcon from "../ui/InstagramIcon";
 import { Button } from "@nextui-org/react";
 
-const instagramURL = "https://www.instagram.com/kisa_umich/";
+const instagramURL = "https://www.instagram.com/kisa_michigan/";
 
 export default function InstagramLinkIcon({ color = "none" }) {
   const navigateToInstagram = () => {
