@@ -15,12 +15,11 @@ import PostView from "../../../components/Posts/post-view/PostView";
 export default async function PostPage({ params }: PostParamsPageProps) {
   const { postid } = params;
 
-  // parallel fetching from server side: post & comment
   const post = await getSinglePost(postid);
 
   // [TODO]: when there's no post "error.tsx" should be rendered
   if (!post) {
-    return <div>404 NOT FOUND</div>;
+    return <div>존재하지 않는 게시물입니다</div>;
   }
 
   return (
