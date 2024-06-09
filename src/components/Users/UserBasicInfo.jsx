@@ -9,42 +9,11 @@ import { adminEmail } from "../../config/admin";
 import { getUserInfo } from "../../service/user";
 import NotLoginModal from "../shared/NotLoginModal";
 
-export default function UserBasicInfo({ email }) {
-  const [user, setUser] = useState(null);
-  const { data: session, status } = useSession();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await getUserInfo(email, session?.token);
-      if (res) {
-        setUser(res);
-        return;
-      } else {
-        // error handling
-        console.log("user fetch failed");
-      }
-    };
-
-    if (session) {
-      fetchUser();
-    }
-  }, [email, session]);
-
-  // this will decide whether to show edit buttons
-
-  if (status === "unauthenticated") {
-    return <NotLoginModal />;
-  }
-
-  if (status === "loading" || !user) {
-    // TODO: need to change this to a proper loading ui
-    return <div>Loading...</div>;
-  }
-
-  // umich kisa validity check
-  if (email === adminEmail && session?.user.email !== adminEmail) {
-    return <div>권한이 없습니다</div>;
-  }
+export default function UserBasicInfo({ email, session, user }) {
+  // // umich kisa validity check
+  // if (email === adminEmail && session?.user.email !== adminEmail) {
+  //   return <div>권한이 없습니다</div>;
+  // }
 
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-12 lg:gap-16 justify-center">

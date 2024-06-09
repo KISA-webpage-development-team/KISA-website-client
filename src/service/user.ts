@@ -1,5 +1,6 @@
 import axios from "axios";
 import { backendUrl } from "../config/backendUrl";
+import { User } from "../model/props/users";
 
 // pass user email to check whether user is admin
 export async function getIsAdmin(email, token) {
@@ -17,7 +18,10 @@ export async function getIsAdmin(email, token) {
   }
 }
 
-export async function getUserInfo(email, token) {
+export async function getUserInfo(
+  email: string,
+  token: string | null
+): Promise<User | null> {
   const url = `${backendUrl}/users/${email}/`;
   try {
     const response = await axios.get(url, {

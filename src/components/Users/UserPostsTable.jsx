@@ -38,7 +38,7 @@ export default function UserPostsTable({ posts }) {
                 }`}
               >
                 <td className=" text-center basis-1/12 flex justify-center min-w-16 ">
-                  {isAnnouncement ? <AnnouncementIcon /> : idx}
+                  {isAnnouncement ? <AnnouncementIcon /> : idx + 1}
                 </td>
                 <td className="text-left grow">
                   <Link href={`/posts/${postid}`} className="hover:underline">
