@@ -4,15 +4,27 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import { sejongHospitalLight } from "../../../../utils/fonts/textFonts";
 import UserEditClient from "../../../../components/Users/UserEditClient";
+import { useUser } from "../../../../service/user";
+import { CustomSession } from "../../../../model/common/types";
 
 export default function UserEditPage({ params }) {
-  const { data: session, status } = useSession();
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);
 
+  const { data: session, status } = useSession() as {
+    data: CustomSession | null;
+    status: string;
+  };
+
+  const { user, isLoading, isError } = useUser(decodedEmail, session?.token);
+
   // loading for session
-  if (status === "loading") {
+  if (status === "loading" || isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (status === "unauthenticated") {
+    return <div>권한이 없습니다</div>;
   }
 
   // page view validity check
@@ -22,7 +34,11 @@ export default function UserEditPage({ params }) {
 
   return (
     <div className={`container ${sejongHospitalLight.className}`}>
-      <UserEditClient email={email} profile={session?.user.image} />
+      <UserEditClient
+        user={user}
+        email={decodedEmail}
+        profile={session?.user.image}
+      />
     </div>
   );
 }

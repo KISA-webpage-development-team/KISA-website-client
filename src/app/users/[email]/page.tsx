@@ -3,19 +3,13 @@
 // This page is only for logged in users.
 // Can't view other users' profile pages without logging in.
 
-import React, { useEffect, useState } from "react";
 import UserBasicInfo from "../../../components/Users/UserBasicInfo";
 import UserBoard from "../../../components/Users/UserBoard";
 import { sejongHospitalLight } from "../../../utils/fonts/textFonts";
-import { User, UserParamsPageProps } from "../../../model/props/users";
+import { UserParamsPageProps } from "../../../model/props/users";
 import { useSession } from "next-auth/react";
 import { CustomSession } from "../../../model/common/types";
-import {
-  getCommentsByUser,
-  getPostsByUser,
-  getUserInfo,
-} from "../../../service/user";
-import { useUser } from "../../../service/test/testapi";
+import { useUser, useUserComments, useUserPosts } from "../../../service/user";
 import NotLoginModal from "../../../components/shared/NotLoginModal";
 import { adminEmail } from "../../../config/admin";
 
@@ -28,75 +22,31 @@ export default function UserPage({ params }: UserParamsPageProps) {
     status: string;
   };
 
-  const { user, isLoading, isError } = useUser(decodedEmail, session?.token);
+  // user의 기본 정보는 자주 바뀌지 않으니 revalidate를 주기적으로 해줄 필요는 없을 것 같음.
+  const {
+    user,
+    isLoading: isUserFetching,
+    isError: userError,
+  } = useUser(decodedEmail, session?.token);
 
-  // session
-  // const { data: session, status } = useSession() as {
-  //   data: CustomSession | null;
-  //   status: string;
-  // };
+  // posts와 comments의 revalidate을 주기적으로 해줘야할것 같음.
+  const {
+    posts,
+    isLoading: isPostsFetching,
+    isError: postsError,
+  } = useUserPosts(decodedEmail, session?.token);
+  const {
+    comments,
+    isLoading: isCommentsFetching,
+    isError: commentsError,
+  } = useUserComments(decodedEmail, session?.token);
 
-  // user data states
-  // const [user, setUser] = useState<User | null>(null);
-  // const [postsData, setPostsData] = useState();
-  // const [commentsData, setCommentsData] = useState();
-
-  // api calls to get user data
-  // useEffect(() => {
-  //   // 1. fetch user's basic info with `getUserInfo`
-  //   const fetchUser = async () => {
-  //     const res = await getUserInfo(decodedEmail, session?.token);
-  //     console.log("res: ", res);
-  //     if (res) {
-  //       setUser(res);
-  //       return;
-  //     } else {
-  //       // error handling
-  //       console.log("user fetch failed");
-  //     }
-  //   };
-
-  //   // 2. fetch user's posts with `getPostsByUser`
-  //   const fetchPosts = async () => {
-  //     const res = await getPostsByUser(decodedEmail, session?.token);
-  //     if (res) {
-  //       setPostsData(res.posts);
-  //       return;
-  //     } else {
-  //       // error handling
-
-  //       console.log("posts fetch failed");
-  //       throw new Error("Failed to fetch user's posts");
-  //     }
-  //   };
-
-  //   // 3. fetch user's comments with `getCommentsByUser`
-  //   const fetchComments = async () => {
-  //     const res = await getCommentsByUser(decodedEmail, session?.token);
-  //     if (res) {
-  //       setCommentsData(res.comments);
-  //       return;
-  //     } else {
-  //       // error handling
-  //       console.log("comments fetch failed");
-  //     }
-  //   };
-
-  //   // when session is available
-  //   if (session) {
-  //     // 1. fetch user data
-  //     fetchUser();
-  //     // fetchPosts();
-  //     // fetchComments();
-  //   }
-  // }, [session]);
-
-  // // loading and auth check
-  // if (status === "loading") {
-  //   return <div>Loading...</div>;
-  // }
-
-  if (status === "loading") {
+  if (
+    status === "loading" ||
+    isUserFetching ||
+    isPostsFetching ||
+    isCommentsFetching
+  ) {
     return <div>Loading...</div>;
   }
 
@@ -104,12 +54,8 @@ export default function UserPage({ params }: UserParamsPageProps) {
     return <NotLoginModal />;
   }
 
-  if (isError) {
+  if (userError || postsError || commentsError) {
     return <div>Error!</div>;
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
   }
 
   if (decodedEmail === adminEmail && session?.user.email !== adminEmail) {
@@ -123,7 +69,7 @@ export default function UserPage({ params }: UserParamsPageProps) {
     >
       <UserBasicInfo email={decodedEmail} session={session} user={user} />
 
-      {/* <UserBoard email={decodedEmail} /> */}
+      <UserBoard postsData={posts} commentsData={comments} />
     </section>
   );
 }

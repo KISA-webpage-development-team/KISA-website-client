@@ -16,7 +16,7 @@ export default function UserBoardNavBar({ openPosts, setOpenPosts }) {
         onClick={handleUserBoardToggle}
       >
         <ListIcon size="medium" />
-        <p className="text-base md:text-xl">내 글</p>
+        <p className="text-sm sm:text-base md:text-lg">내 글</p>
       </div>
 
       <div
@@ -26,7 +26,7 @@ export default function UserBoardNavBar({ openPosts, setOpenPosts }) {
         onClick={handleUserBoardToggle}
       >
         <CommentIcon />
-        <p className="text-base md:text-xl">내 댓글</p>
+        <p className="text-sm sm:text-base md:text-lg">내 댓글</p>
       </div>
     </div>
   );

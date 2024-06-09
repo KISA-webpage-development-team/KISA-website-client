@@ -1,19 +1,9 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 // sub-ui components
 import UserBasicInfoLeft from "./UserBasicInfoLeft";
 import UserBaiscInfoRight from "./UserBasicInfoRight";
-import { adminEmail } from "../../config/admin";
-import { getUserInfo } from "../../service/user";
-import NotLoginModal from "../shared/NotLoginModal";
 
 export default function UserBasicInfo({ email, session, user }) {
-  // // umich kisa validity check
-  // if (email === adminEmail && session?.user.email !== adminEmail) {
-  //   return <div>권한이 없습니다</div>;
-  // }
+  console.log("user: ", user);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-12 lg:gap-16 justify-center">

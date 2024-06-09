@@ -6,7 +6,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
-import { dateFormatter } from "../../utils/dateFormatter";
+import { dateFormatter, timeForToday } from "../../utils/dateFormatter";
 
 export default function CommentsTable({ comments }) {
   if (!comments || comments?.length === 0) return null;
@@ -19,18 +19,24 @@ export default function CommentsTable({ comments }) {
           <th className="w-12">작성일</th>
         </tr>
       </thead>
-      <tbody className="">
+      <tbody className="text-sm">
         {comments.map(({ commentid, text, created, postid }, idx) => (
           <tr
             key={commentid}
             className={`px-2 border-b border-gray-200 flex items-center `}
           >
-            <td className="text-left grow py-2">
+            <td
+              className="grow max-h-12 text-left py-2
+              overflow-hidden
+            "
+            >
               <Link href={`/posts/${postid}`} className="hover:underline">
                 {text}
               </Link>
             </td>
-            <td className="text-center w-12">{dateFormatter(created)}</td>
+            <td className="w-12 min-w-12 text-center ">
+              {timeForToday(created)}
+            </td>
           </tr>
         ))}
       </tbody>

@@ -14,8 +14,7 @@ import Pagination from "./Pagination";
 import BoardTable from "./BoardTable";
 import MobileBoardTable from "./MobileBoardTable";
 
-import { Pagination as PaginationBar } from "@nextui-org/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 export default function BoardClient({ boardType, page, size }) {

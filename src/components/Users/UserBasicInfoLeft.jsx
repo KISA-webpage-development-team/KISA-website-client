@@ -19,6 +19,7 @@ export default function UserBasicInfoLeft({
           {/* if hasProfile is false, use default profile image */}
 
           <Image
+            priority
             className="rounded-full object-contain"
             src={profile}
             alt="profile image"

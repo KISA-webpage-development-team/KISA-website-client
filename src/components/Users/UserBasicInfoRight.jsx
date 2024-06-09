@@ -41,7 +41,7 @@ export default function UserBasicInfoRight({
         <div className="text-base md:text-xl flex items-center gap-4">
           <LinkedInIcon />
           <button className="hover:underline" onClick={navigateToLinkedIn}>
-            {linkedin.split(".com/in/")[1].replace("/", "")}
+            {linkedin.split(".com/in/")[1]?.replace("/", "")}
           </button>
         </div>
       )}
@@ -51,7 +51,9 @@ export default function UserBasicInfoRight({
         canEdit && (
           <Link
             href={`/users/edit/${email}`}
-            className="mt-1 backdrop:self-center md:self-start md:w-[40%] blue_button"
+            className="
+            !text-sm md:!text-base
+            mt-1 backdrop:self-center md:self-start md:w-[40%] blue_button"
           >
             정보 수정
           </Link>

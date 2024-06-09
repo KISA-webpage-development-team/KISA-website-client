@@ -6,34 +6,15 @@ import EditUserFixed from "./EditUserFixed";
 import EditUserForm from "./EditUserForm";
 import { useSession } from "next-auth/react";
 
-export default function UserEditClient({ email, profile }) {
-  const [user, setUser] = useState(null);
+export default function UserEditClient({ user, email, profile }) {
   const { data: session } = useSession();
 
+  console.log(user);
+
   // editable fields
-  const [major, setMajor] = useState("");
-  const [gradYear, setGradYear] = useState("");
-  const [linkedIn, setLinkedIn] = useState(""); // optional
-
-  // get user info
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await getUserInfo(email, session?.token);
-      setUser(res);
-
-      // set editable fields
-      setMajor(res.major);
-      setGradYear(res.gradYear);
-      setLinkedIn(res.linkedin ? res.linkedin : "");
-    };
-    if (session ) {
-      fetchUser();
-    }
-  }, [email, session]);
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  const [major, setMajor] = useState(user.major);
+  const [gradYear, setGradYear] = useState(user.gradYear);
+  const [linkedIn, setLinkedIn] = useState(user.linkedin ? user.linkedin : ""); // optional
 
   return (
     <div className="flex flex-col md:flex-row gap-8 md:gap-16 lg:gap-20">
@@ -50,7 +31,7 @@ export default function UserEditClient({ email, profile }) {
         linkedIn={linkedIn}
         setLinkedIn={setLinkedIn}
         email={email}
-        session = {session}
+        session={session}
       />
     </div>
   );
