@@ -15,22 +15,27 @@ export default function UserEditClient({ user, email, profile }) {
   const [linkedIn, setLinkedIn] = useState(user.linkedin ? user.linkedin : ""); // optional
 
   return (
-    <div className="flex flex-col justify-center md:flex-row gap-8 md:gap-16 lg:gap-20">
+    <div
+      className="w-full
+    flex flex-col justify-center md:flex-row gap-8 md:gap-16 lg:gap-20"
+    >
       <EditUserFixed
         profile={profile}
         fullname={user?.fullname}
         email={user?.email}
       />
-      <EditUserForm
-        major={major}
-        setMajor={setMajor}
-        gradYear={gradYear}
-        setGradYear={setGradYear}
-        linkedIn={linkedIn}
-        setLinkedIn={setLinkedIn}
-        email={email}
-        session={session}
-      />
+      <div className="w-full">
+        <EditUserForm
+          major={major}
+          setMajor={setMajor}
+          gradYear={gradYear}
+          setGradYear={setGradYear}
+          linkedIn={linkedIn}
+          setLinkedIn={setLinkedIn}
+          email={email}
+          session={session}
+        />
+      </div>
     </div>
   );
 }

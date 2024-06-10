@@ -38,7 +38,10 @@ export default function EditUserForm({
   };
 
   return (
-    <form className="flex flex-col gap-3 md:min-w-72" onSubmit={onSubmit}>
+    <form
+      className="w-full flex flex-col gap-3 md:min-w-72"
+      onSubmit={onSubmit}
+    >
       {/* major */}
       <div className="w-full">
         <CustomLabel htmlFor="major" text="전공 (major)" required />
