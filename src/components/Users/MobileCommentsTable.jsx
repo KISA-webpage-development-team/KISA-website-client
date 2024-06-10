@@ -15,7 +15,7 @@ export default function CommentsTable({ comments }) {
         flex items-center"
         >
           <th className="grow text-center text-sm font-medium">내용</th>
-          <th className="w-12 text-sm font-medium">작성일</th>
+          <th className="min-w-16 text-sm font-medium">작성일</th>
         </tr>
       </thead>
       <tbody className="text-sm">
@@ -33,9 +33,7 @@ export default function CommentsTable({ comments }) {
                 <span className="text-overflow">{text}</span>
               </Link>
             </td>
-            <td className="w-12 min-w-12 text-center ">
-              {timeForToday(created)}
-            </td>
+            <td className="min-w-16 text-center ">{timeForToday(created)}</td>
           </tr>
         ))}
       </tbody>

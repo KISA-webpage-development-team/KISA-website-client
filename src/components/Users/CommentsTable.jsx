@@ -12,7 +12,7 @@ export default function CommentsTable({ comments }) {
       <thead className="">
         <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center py-2">
           <th className="basis-1/12 min-w-16">번호</th>
-          <th className="grow">내용</th>
+          <th className="flex-1">내용</th>
           <th className="w-28">작성일</th>
         </tr>
       </thead>
@@ -25,7 +25,7 @@ export default function CommentsTable({ comments }) {
             <td className="text-center basis-1/12 min-w-16 py-2 flex justify-center items-center">
               {comments.length - idx}
             </td>
-            <td className="text-left grow py-2">
+            <td className="text-left flex-1 py-2">
               <Link href={`/posts/${postid}`} className="hover:underline">
                 <span className="text-overflow">{text}</span>
               </Link>

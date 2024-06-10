@@ -18,7 +18,7 @@ export default function UserPostsTable({ posts }) {
       <thead className="">
         <tr className="border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center py-2">
           <th className="basis-1/12 min-w-16">번호</th>
-          <th className="grow">제목</th>
+          <th className="flex-1">제목</th>
           <th className="basis-[10%] min-w-24 text-center">게시판</th>
           <th className="basis-[10%] min-w-24">작성일</th>
           <th className="w-16">조회수</th>
@@ -45,7 +45,7 @@ export default function UserPostsTable({ posts }) {
                     announcementPosts.length + normalPosts.length - idx
                   )}
                 </td>
-                <td className="text-left grow">
+                <td className="text-left flex-1">
                   <Link href={`/posts/${postid}`} className="hover:underline">
                     <span className="text-overflow">{title}</span>
                   </Link>

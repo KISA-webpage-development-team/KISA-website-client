@@ -28,7 +28,7 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
         >
           <th className="basis-1/12 min-w-16">번호</th>
           <th
-            className="grow"
+            className="flex-1"
             onClick={() => {
               window.location.href =
                 "../../launching-event/fueTV5v4BjBXxwd3FGgrYvCPt3FnkKKy";
@@ -73,15 +73,15 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
                   <span className="absolute top-0 left-0 h-full w-1 bg-michigan-blue" />
                 </>
               </td>
-              <td className="text-left grow">
+              <td className="text-left flex-1">
                 <Link className="hover:underline" href={`/posts/${postid}`}>
                   {commentsCount > 0 ? (
-                    <span className={``}>
+                    <span className={`text-overflow`}>
                       {title}
                       <span className="ml-1 text-red-500 font-normal">{`[${commentsCount}]`}</span>
                     </span>
                   ) : (
-                    <span className="">{title}</span>
+                    <span className="text-overflow">{title}</span>
                   )}
                 </Link>
               </td>
@@ -134,18 +134,18 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
                   postStartIdx - idx
                 )}
               </td>
-              <td className="text-left grow">
+              <td className="text-left flex-1">
                 <button
                   onClick={navigateToPost(postid)}
                   className="hover:underline"
                 >
                   {commentsCount > 0 ? (
-                    <span className={``}>
+                    <span className={`text-overflow`}>
                       {title}
                       <span className="ml-1 text-red-500 font-normal">{`[${commentsCount}]`}</span>
                     </span>
                   ) : (
-                    <span className="">{title}</span>
+                    <span className="text-overflow">{title}</span>
                   )}
                 </button>
               </td>

@@ -20,8 +20,8 @@ export default function MobileUserPostsTable({ posts }) {
           className="px-2 py-1 border-b border-gray-400 bg-gray-50/100 
         flex items-center"
         >
-          <th className="grow text-center text-sm font-medium">내용</th>
-          <th className="w-12 text-sm font-medium">작성일</th>
+          <th className="flex-1 text-center text-sm font-medium">내용</th>
+          <th className="min-w-16 text-sm font-medium">작성일</th>
         </tr>
       </thead>
       <tbody className="">
@@ -47,7 +47,7 @@ export default function MobileUserPostsTable({ posts }) {
                   border-b border-gray-200 hover:bg-gray-100 py-2 px-2`}
               >
                 <td
-                  className="text-base text-left grow flex flex-col items-start justify-center 
+                  className="text-base text-left flex-1 flex flex-col items-start justify-center 
                 pr-1"
                 >
                   <Link href={`/posts/${postid}`} className="hover:underline">
@@ -72,7 +72,7 @@ export default function MobileUserPostsTable({ posts }) {
                   </div>
                 </td>
 
-                <td className="w-12 min-w-12 text-center text-sm">
+                <td className="min-w-16 text-center text-sm">
                   {timeForToday(created)}
                 </td>
               </tr>
