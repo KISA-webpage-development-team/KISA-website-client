@@ -35,7 +35,7 @@ export default function UserEditPage({ params }) {
   return (
     <section
       className="pt-2 md:pt-3 lg:pt-4 
-  pb-[100px] md:pb-[125px] lg:pb-[150px]"
+  "
     >
       <UserEditClient
         user={user}
