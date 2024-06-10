@@ -32,7 +32,7 @@ export default function PostButtonBar({
 
   const onClickPostDelete = () => {
     const formattedTitle = title.replace("/", "-");
-
+    // window.location.href = `/posts/delete/${type}/${formattedTitle}/${postid}`;
     route.push(`/posts/delete/${type}/${formattedTitle}/${postid}`);
   };
 

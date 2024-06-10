@@ -25,7 +25,8 @@ export default function PostSubmitButton({
       const res = await createPost(formData, token);
       setLoading(false);
 
-      router.push(`/boards/${(formData as PostFormData).type}`);
+      // router.push(`/boards/${(formData as PostFormData).type}`);
+      router.back();
     } catch (error) {
       window.alert("게시글 작성에 실패했습니다.");
       return;
@@ -43,7 +44,7 @@ export default function PostSubmitButton({
       const res = await updatePost(postid, formData, token);
       setLoading(false);
 
-      window.location.href = `/test/${postid}`;
+      window.location.href = `/posts/${postid}`;
       // [NOTE] window.location.href is used instead of router.push because the page is not re-rendered
       // This keeps the page from re-rendering and updating content live
     } catch (error) {
