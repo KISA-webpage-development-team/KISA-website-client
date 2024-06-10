@@ -9,7 +9,7 @@ export default function UserBoard({ postsData, commentsData }) {
   if (!postsData && !commentsData) return null;
 
   return (
-    <div className={`${heebo.className} flex flex-col w-full mt-10`}>
+    <div className={`${heebo.className} flex flex-col w-full`}>
       {/* Nav Bar: 내 글 / 내 댓글 (default 내 글) */}
       <>
         <UserBoardNavBar openPosts={openPosts} setOpenPosts={setOpenPosts} />

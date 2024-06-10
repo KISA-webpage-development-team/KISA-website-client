@@ -9,8 +9,6 @@ import { useSession } from "next-auth/react";
 export default function UserEditClient({ user, email, profile }) {
   const { data: session } = useSession();
 
-  console.log(user);
-
   // editable fields
   const [major, setMajor] = useState(user.major);
   const [gradYear, setGradYear] = useState(user.gradYear);

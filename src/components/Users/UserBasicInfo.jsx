@@ -4,7 +4,10 @@ import UserBaiscInfoRight from "./UserBasicInfoRight";
 
 export default function UserBasicInfo({ email, session, user }) {
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-12 lg:gap-16 justify-center">
+    <div
+      className="flex flex-col md:flex-row
+     gap-4 md:gap-10 lg:gap-12 justify-center md:items-center"
+    >
       {/* Left: profile image + name + major */}
       {/* TODO: profile 이미지가 구글 로그인 이미지이기 때문에 로그인한 유저만 된다... */}
       <UserBasicInfoLeft

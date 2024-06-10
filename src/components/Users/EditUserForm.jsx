@@ -21,7 +21,7 @@ export default function EditUserForm({
 
     const data = {
       major,
-      gradYear,
+      gradYear: Number(gradYear),
       linkedin: linkedIn,
     };
 

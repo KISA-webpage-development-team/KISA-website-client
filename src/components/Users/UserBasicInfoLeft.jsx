@@ -9,15 +9,17 @@ export default function UserBasicInfoLeft({
   major,
 }) {
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div
+      className="flex flex-row md:flex-col 
+      justify-center items-center 
+    gap-4"
+    >
       {/* Image */}
       {hasProfile && (
         <div
           className="relative flex justify-center 
-      aspect-square w-24"
+      aspect-square w-16 md:w-20"
         >
-          {/* if hasProfile is false, use default profile image */}
-
           <Image
             priority
             className="rounded-full object-contain"
@@ -29,11 +31,14 @@ export default function UserBasicInfoLeft({
       )}
 
       {/* fullname + major */}
-      <div className="flex flex-col items-center gap-1">
-        <h1 className={`${sejongHospitalBold.className} text-xl md:text-3xl`}>
+      <div
+        className="flex flex-col items-center
+       gap-0"
+      >
+        <h1 className={`${sejongHospitalBold.className} text-xl md:text-2xl`}>
           {fullname}
         </h1>
-        <h2 className="text-base md:text-xl">{major}</h2>
+        <h2 className="text-sm md:text-lg">{major}</h2>
       </div>
     </div>
   );

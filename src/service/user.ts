@@ -1,5 +1,5 @@
 import useSWR, { SWRConfiguration } from "swr";
-import { User } from "../model/props/users";
+import { SimpleUser, User } from "../model/props/users";
 import { Comment, Post } from "../model/props/posts";
 import { fetcherWithToken } from "./swrConfig";
 import client from "../config/axios";
@@ -70,7 +70,11 @@ export function useUserComments(
 }
 
 // PATCH
-export async function updateUser(email, data, token) {
+export async function updateUser(
+  email: string,
+  data: SimpleUser,
+  token: string | null
+): Promise<boolean> {
   const url = `/users/${email}/`;
 
   try {
@@ -79,7 +83,8 @@ export async function updateUser(email, data, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+
+    return !!response.data;
   } catch (err) {
     console.error(err);
   }

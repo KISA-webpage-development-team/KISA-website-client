@@ -6,14 +6,17 @@ export interface UserParamsPageProps {
 }
 
 // User data
-export interface User {
+export interface SimpleUser {
+  major: string;
+  gradYear: Number;
+  linkedin: string;
+}
+
+export interface User extends SimpleUser {
   email: string;
   fullname: string;
   created: string;
-  linkedin: string;
-  major: string;
   bornDate: Number;
   bornMonth: Number;
   bornYear: Number;
-  gradYear: Number;
 }
