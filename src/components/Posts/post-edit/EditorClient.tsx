@@ -113,16 +113,16 @@ export default function EditorClient({
     return <div>Loading...</div>;
   }
 
-  // 3) if boardType is announcement and user is not admin
-  if (status !== "loading" && boardType === "announcement" && !isAdmin) {
-    return <div>권한이 없습니다.</div>;
-  }
-
-  // 4) if there is an error
+  // 3) if there is an error
   if (isError) {
     // error handling
     return <div>Error!</div>;
   }
+  // 4) if boardType is announcement and user is not admin
+  if (status !== "loading" && boardType === "announcement" && !isAdmin) {
+    return <div>권한이 없습니다.</div>;
+  }
+
   // ---------------------------------------------------------------------------
   return (
     <div className="flex flex-col h-full gap-4">

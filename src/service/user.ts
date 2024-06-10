@@ -22,8 +22,6 @@ export function useUser(
     options
   );
 
-  console.log(data, error, isLoading);
-
   return {
     user: data as UserData,
     isLoading,

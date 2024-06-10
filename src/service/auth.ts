@@ -16,6 +16,6 @@ export function useAdmin(
   return {
     isAdmin: !!data as boolean,
     isLoading,
-    isError: error || data === null,
+    isError: error,
   };
 }
