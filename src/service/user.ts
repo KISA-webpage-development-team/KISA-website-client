@@ -1,55 +1,24 @@
-import axios from "axios";
-import { backendUrl } from "../config/backendUrl";
 import useSWR, { SWRConfiguration } from "swr";
 import { User } from "../model/props/users";
 import { Comment, Post } from "../model/props/posts";
 import { fetcherWithToken } from "./swrConfig";
+import client from "../config/axios";
 
-// pass user email to check whether user is admin
-export async function getIsAdmin(email, token) {
-  const url = `${backendUrl}/auth/isAdmin/${email}`;
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return true;
-  } catch (error) {
-    //console.error(error);
-    return false;
-  }
-}
-
-export async function updateUser(email, data, token) {
-  const url = `${backendUrl}/users/${email}/`;
-
-  try {
-    const response = await axios.patch(url, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-// SWR
+// GET
+// data type -------------------------------------
 type UserData = User | null;
 type UserPostsData = Post[] | null;
 type UserCommentsData = Comment[] | null;
-
+// -----------------------------------------------
+// @route GET /users/{email}/
+// @params email, token, options
 export function useUser(
   email: string,
   token: string | null,
   options?: SWRConfiguration
 ) {
-  // token이 주어지지 않았다면 fetch를 하지 않는다
   const { data, error, isLoading } = useSWR(
     token ? [`/users/${email}/`, token] : null,
-    fetcherWithToken,
     options
   );
 
@@ -60,6 +29,8 @@ export function useUser(
   };
 }
 
+// @route GET /users/{email}/posts/
+// @params email, token, options
 export function useUserPosts(
   email: string,
   token: string | null,
@@ -74,10 +45,12 @@ export function useUserPosts(
   return {
     posts: data?.posts as UserPostsData,
     isLoading,
-    isError: error,
+    isError: error || data === null,
   };
 }
 
+// @route GET /users/{email}/comments/
+// @params email, token, options
 export function useUserComments(
   email: string,
   token: string | null,
@@ -88,9 +61,26 @@ export function useUserComments(
     fetcherWithToken,
     options
   );
+
   return {
     comments: data?.comments as UserCommentsData,
     isLoading,
-    isError: error,
+    isError: error || data === null,
   };
+}
+
+// PATCH
+export async function updateUser(email, data, token) {
+  const url = `/users/${email}/`;
+
+  try {
+    const response = await client.patch(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
 }

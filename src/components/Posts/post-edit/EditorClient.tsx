@@ -18,12 +18,12 @@ import TitleInput from "./TitleInput";
 import TextEditor from "./TextEditor";
 import CheckBoxes from "./CheckBoxes";
 import PostSubmitButton from "./PostSubmitButton";
-import { getIsAdmin } from "../../../service/user";
 import { CustomSession } from "../../../model/common/types";
 import {
   getBoardName,
   getBoardNameFromKorean,
 } from "../../../config/boardName";
+import { useAdmin } from "../../../service/auth";
 
 export default function EditorClient({
   boardType,
@@ -36,7 +36,11 @@ export default function EditorClient({
   };
 
   // admin state
-  const [isAdmin, setIsAdmin] = useState<boolean>();
+  // const [isAdmin, setIsAdmin] = useState<boolean>();
+  const { isAdmin, isLoading, isError } = useAdmin(
+    session?.user.email,
+    session?.token
+  );
 
   // form states
   const [title, setTitle] = useState<string>(curPost?.title || "");
@@ -67,24 +71,6 @@ export default function EditorClient({
 
   // submit button state
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(true);
-
-  // check if user is admin ---------------------------------------------------
-  useEffect(() => {
-    const fetchIsAdmin = async () => {
-      try {
-        const res = await getIsAdmin(session?.user.email, session?.token);
-        setIsAdmin(res);
-      } catch (error) {
-        // error handling
-        return;
-      }
-    };
-
-    if (session) {
-      fetchIsAdmin();
-    }
-  }, [session]);
-  // ---------------------------------------------------------------------------
 
   // submit button validation -------------------------------------------------
   useEffect(() => {
@@ -122,7 +108,7 @@ export default function EditorClient({
   }
 
   // 2) if admin state is not yet fetched
-  if (isAdmin === undefined) {
+  if (isLoading) {
     // [TODO] loading spinner
     return <div>Loading...</div>;
   }
@@ -131,8 +117,13 @@ export default function EditorClient({
   if (status !== "loading" && boardType === "announcement" && !isAdmin) {
     return <div>권한이 없습니다.</div>;
   }
-  // ---------------------------------------------------------------------------
 
+  // 4) if there is an error
+  if (isError) {
+    // error handling
+    return <div>Error!</div>;
+  }
+  // ---------------------------------------------------------------------------
   return (
     <div className="flex flex-col h-full gap-4">
       <TitleInput title={title} setTitle={setTitle} />

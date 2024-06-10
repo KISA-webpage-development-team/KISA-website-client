@@ -1,17 +1,25 @@
 "use client";
 
+// User Page (/users/[email])
+
 // This page is only for logged in users.
 // Can't view other users' profile pages without logging in.
 
+import { sejongHospitalLight } from "../../../utils/fonts/textFonts";
+import { adminEmail } from "../../../config/admin";
+
+// hooks
+import { useSession } from "next-auth/react";
+import { useUser, useUserComments, useUserPosts } from "../../../service/user";
+
+// sub-ui components
 import UserBasicInfo from "../../../components/Users/UserBasicInfo";
 import UserBoard from "../../../components/Users/UserBoard";
-import { sejongHospitalLight } from "../../../utils/fonts/textFonts";
-import { UserParamsPageProps } from "../../../model/props/users";
-import { useSession } from "next-auth/react";
-import { CustomSession } from "../../../model/common/types";
-import { useUser, useUserComments, useUserPosts } from "../../../service/user";
 import NotLoginModal from "../../../components/shared/NotLoginModal";
-import { adminEmail } from "../../../config/admin";
+
+// types
+import { UserParamsPageProps } from "../../../model/props/users";
+import { CustomSession } from "../../../model/common/types";
 
 export default function UserPage({ params }: UserParamsPageProps) {
   const { email } = params;
@@ -22,6 +30,8 @@ export default function UserPage({ params }: UserParamsPageProps) {
     status: string;
   };
 
+  // Data Fetching from client side using custom useSWR hooks ----------------
+  // (참고: session?.token이 null인 경우에는 애초에 api call을 하지 않도록 hook을 만들어놓음)
   // user의 기본 정보는 자주 바뀌지 않으니 revalidate를 주기적으로 해줄 필요는 없을 것 같음.
   const {
     user,
@@ -40,6 +50,7 @@ export default function UserPage({ params }: UserParamsPageProps) {
     isLoading: isCommentsFetching,
     isError: commentsError,
   } = useUserComments(decodedEmail, session?.token);
+  // --------------------------------------------------------------------------
 
   if (
     status === "loading" ||
