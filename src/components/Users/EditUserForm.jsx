@@ -75,7 +75,12 @@ export default function EditUserForm({
       </div>
 
       {/* submit button */}
-      <button type="submit" className="w-full blue_button">
+      <button
+        type="submit"
+        className="
+      !text-sm md:!text-base
+      w-full blue_button"
+      >
         제출
       </button>
     </form>

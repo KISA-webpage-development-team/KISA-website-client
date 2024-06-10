@@ -7,12 +7,12 @@ import EmailIcon from "../ui/EmailIcon";
 
 export default function EditUserFixed({ profile, fullname, email }) {
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-2 md:gap-4">
       {/* Image */}
       {profile && (
         <div
           className="relative flex justify-center 
-    aspect-square w-24"
+    aspect-square w-16 md:w-20"
         >
           <Image
             className="rounded-full object-contain"
@@ -24,11 +24,11 @@ export default function EditUserFixed({ profile, fullname, email }) {
       )}
 
       {/* fullname + major */}
-      <div className="flex flex-col items-center gap-1">
-        <h1 className={`${sejongHospitalBold.className} text-xl md:text-3xl`}>
+      <div className="flex flex-col items-center">
+        <h1 className={`${sejongHospitalBold.className} text-lg md:text-2xl`}>
           {fullname}
         </h1>
-        <h2 className="text-base md:text-xl flex items-center gap-2">
+        <h2 className="text-base md:text-lg flex items-center gap-2">
           <EmailIcon />
           {email}
         </h2>

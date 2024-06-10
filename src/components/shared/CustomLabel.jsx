@@ -9,7 +9,7 @@ export default function CustomLabel({ htmlFor, text, required = false }) {
     <label
       htmlFor={htmlFor}
       className={`flex items-start gap-1
-      ${sejongHospitalBold.className} text-base`}
+      ${sejongHospitalBold.className} text-sm md:text-base`}
     >
       <span>{text}</span>
       {required && <span className="text-red-500">*</span>}

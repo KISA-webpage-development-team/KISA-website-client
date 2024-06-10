@@ -15,7 +15,7 @@ export default function UserEditClient({ user, email, profile }) {
   const [linkedIn, setLinkedIn] = useState(user.linkedin ? user.linkedin : ""); // optional
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 md:gap-16 lg:gap-20">
+    <div className="flex flex-col justify-center md:flex-row gap-8 md:gap-16 lg:gap-20">
       <EditUserFixed
         profile={profile}
         fullname={user?.fullname}

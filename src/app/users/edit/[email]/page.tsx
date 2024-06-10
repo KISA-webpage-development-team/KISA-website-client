@@ -33,12 +33,15 @@ export default function UserEditPage({ params }) {
   }
 
   return (
-    <div className={`container ${sejongHospitalLight.className}`}>
+    <section
+      className="pt-2 md:pt-3 lg:pt-4 
+  pb-[100px] md:pb-[125px] lg:pb-[150px]"
+    >
       <UserEditClient
         user={user}
         email={decodedEmail}
         profile={session?.user.image}
       />
-    </div>
+    </section>
   );
 }
