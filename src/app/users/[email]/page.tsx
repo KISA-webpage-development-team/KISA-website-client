@@ -65,8 +65,9 @@ export default function UserPage({ params }: UserParamsPageProps) {
     return <NotLoginModal />;
   }
 
+  // console.log(userError, postsError, commentsError);
   if (userError || postsError || commentsError) {
-    return <div>Error!</div>;
+    return <div>존재하지 않는 유저입니다</div>;
   }
 
   if (decodedEmail === adminEmail && session?.user.email !== adminEmail) {

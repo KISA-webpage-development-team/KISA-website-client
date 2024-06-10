@@ -22,10 +22,12 @@ export function useUser(
     options
   );
 
+  console.log(data, error, isLoading);
+
   return {
     user: data as UserData,
     isLoading,
-    isError: error || data === null,
+    isError: data === null || error,
   };
 }
 
@@ -45,7 +47,7 @@ export function useUserPosts(
   return {
     posts: data?.posts as UserPostsData,
     isLoading,
-    isError: error || data === null,
+    isError: data === null || error,
   };
 }
 
@@ -65,7 +67,7 @@ export function useUserComments(
   return {
     comments: data?.comments as UserCommentsData,
     isLoading,
-    isError: error || data === null,
+    isError: data === null || error,
   };
 }
 
