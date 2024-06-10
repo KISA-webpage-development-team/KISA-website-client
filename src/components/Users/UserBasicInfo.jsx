@@ -3,8 +3,6 @@ import UserBasicInfoLeft from "./UserBasicInfoLeft";
 import UserBaiscInfoRight from "./UserBasicInfoRight";
 
 export default function UserBasicInfo({ email, session, user }) {
-  console.log("user: ", user);
-
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-12 lg:gap-16 justify-center">
       {/* Left: profile image + name + major */}
