@@ -8,3 +8,13 @@ export default function CommentIcon({ color = "black", noResize = false }) {
     />
   );
 }
+
+export function UserPageCommentIcon({ size = "small" }) {
+  return (
+    <FaRegComments
+      className={`${
+        size === "medium" ? "text-lg md:text-2xl" : "w-4 h-4"
+      } text-gray-800`}
+    />
+  );
+}

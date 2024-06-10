@@ -1,7 +1,8 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
-import { dateFormatter } from "../../utils/dateFormatter";
+import { dateFormatter, timeForToday } from "../../utils/dateFormatter";
+import { getBoardName } from "../../config/boardName";
 
 export default function MobileUserPostsTable({ posts }) {
   const [announcementPosts, setAnnouncementPosts] = useState([]);
@@ -14,6 +15,15 @@ export default function MobileUserPostsTable({ posts }) {
 
   return (
     <table className="border border-gray-300 w-full">
+      <thead className="">
+        <tr
+          className="px-2 py-1 border-b border-gray-400 bg-gray-50/100 
+        flex items-center"
+        >
+          <th className="grow text-center text-sm font-medium">내용</th>
+          <th className="w-12 text-sm font-medium">작성일</th>
+        </tr>
+      </thead>
       <tbody className="">
         {announcementPosts
           ?.concat(normalPosts)
@@ -26,36 +36,44 @@ export default function MobileUserPostsTable({ posts }) {
                 readCount,
                 created,
                 isAnnouncement,
+                type,
                 commentsCount,
               },
               idx
             ) => (
               <tr
                 key={postid}
-                className={`flex flex-col items-start justify-center
-                  border-b border-gray-200 hover:bg-gray-100 py-2 px-3`}
+                className={`flex flex-row items-center
+                  border-b border-gray-200 hover:bg-gray-100 py-2 px-2`}
               >
-                <td className="text-left grow flex items-center">
+                <td
+                  className="text-base text-left grow flex flex-col items-start justify-center 
+                pr-1"
+                >
                   <Link href={`/posts/${postid}`} className="hover:underline">
                     {commentsCount > 0 ? (
-                      <span className="">
+                      <span className="text-overflow">
                         {title}
                         <span className="ml-1 text-red-500">{`[${commentsCount}]`}</span>
                       </span>
                     ) : (
-                      <span className="">{title}</span>
+                      <p className="text-overflow">{title}</p>
                     )}
                   </Link>
+
+                  {/* bottom: 날짜 / 글쓴이 / 조회수 */}
+                  <div
+                    className="flex items-center gap-2
+                 text-gray-500 text-xs "
+                  >
+                    <span className="text-center">{getBoardName(type)}</span>
+                    <span className="text-center">{fullname}</span>
+                    <span className="text-center ">{`조회: ${readCount}`}</span>
+                  </div>
                 </td>
 
-                {/* bottom: 날짜 / 글쓴이 / 조회수 */}
-                <td
-                  className="flex items-center gap-2
-                 text-gray-500 text-xs "
-                >
-                  <span className="text-center ">{dateFormatter(created)}</span>
-                  <span className="text-center">{fullname}</span>
-                  <span className="text-center ">{readCount}</span>
+                <td className="w-12 min-w-12 text-center text-sm">
+                  {timeForToday(created)}
                 </td>
               </tr>
             )

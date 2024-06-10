@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-
 import CommentsTable from "./CommentsTable";
 import UserPostsTable from "./UserPostsTable";
 import MobileUserPostsTable from "./MobileUserPostsTable";

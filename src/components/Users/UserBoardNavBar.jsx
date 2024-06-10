@@ -1,32 +1,32 @@
 import React from "react";
 import ListIcon from "../ui/ListIcon";
-import CommentIcon from "../ui/CommentIcon";
+import CommentIcon, { UserPageCommentIcon } from "../ui/CommentIcon";
 
 export default function UserBoardNavBar({ openPosts, setOpenPosts }) {
   const handleUserBoardToggle = () => {
     setOpenPosts(!openPosts);
   };
 
+  const seletcedStyle = "font-bold text-michigan-blue !border-michigan-maize";
+  const defaultContainerStyle =
+    "flex items-center gap-2 p-2 border-t-2 border-transparent hover:underline cursor-pointer";
+
   return (
-    <div className="flex py-2">
+    <div className="flex text-sm md:text-lg mt-1">
       <div
-        className={`flex items-center gap-2 ${
-          openPosts && "bg-gray-300"
-        } p-2 rounded-lg`}
+        className={`${defaultContainerStyle} ${openPosts && seletcedStyle}`}
         onClick={handleUserBoardToggle}
       >
         <ListIcon size="medium" />
-        <p className="text-sm sm:text-base md:text-lg">내 글</p>
+        <p className="">내 글</p>
       </div>
 
       <div
-        className={`flex items-center gap-2 ml-5 ${
-          !openPosts && "bg-gray-300"
-        } p-2 rounded-lg`}
+        className={`${defaultContainerStyle} ${!openPosts && seletcedStyle}`}
         onClick={handleUserBoardToggle}
       >
-        <CommentIcon />
-        <p className="text-sm sm:text-base md:text-lg">내 댓글</p>
+        <UserPageCommentIcon size="medium" />
+        <p className="">내 댓글</p>
       </div>
     </div>
   );

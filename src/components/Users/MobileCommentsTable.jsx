@@ -4,19 +4,18 @@
 //  columns: id, title, author, view, created
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import AnnouncementIcon from "../ui/AnnouncementIcon";
-import { dateFormatter, timeForToday } from "../../utils/dateFormatter";
+import { timeForToday } from "../../utils/dateFormatter";
 
 export default function CommentsTable({ comments }) {
-  if (!comments || comments?.length === 0) return null;
-
   return (
     <table className="border border-gray-300 w-full">
       <thead className="">
-        <tr className="px-2  py-1 border-b border-gray-400 bg-gray-50/100 text-sm font-normal flex items-center">
-          <th className="grow text-left">내용</th>
-          <th className="w-12">작성일</th>
+        <tr
+          className="px-2 py-1 border-b border-gray-400 bg-gray-50/100 
+        flex items-center"
+        >
+          <th className="grow text-center text-sm font-medium">내용</th>
+          <th className="w-12 text-sm font-medium">작성일</th>
         </tr>
       </thead>
       <tbody className="text-sm">
@@ -30,8 +29,8 @@ export default function CommentsTable({ comments }) {
               overflow-hidden
             "
             >
-              <Link href={`/posts/${postid}`} className="hover:underline">
-                {text}
+              <Link href={`/posts/${postid}`} className="hover:underline ">
+                <span className="text-overflow">{text}</span>
               </Link>
             </td>
             <td className="w-12 min-w-12 text-center ">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import UserBoardList from "./UserBoardList";
 import UserBoardNavBar from "./UserBoardNavBar";
 import { heebo, sejongHospitalLight } from "../../utils/fonts/textFonts";

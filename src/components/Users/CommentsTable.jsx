@@ -4,8 +4,6 @@
 //  columns: id, title, author, view, created
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import AnnouncementIcon from "../ui/AnnouncementIcon";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 export default function CommentsTable({ comments }) {
@@ -25,11 +23,11 @@ export default function CommentsTable({ comments }) {
             className={`border-b border-gray-200 flex items-center `}
           >
             <td className="text-center basis-1/12 min-w-16 py-2 flex justify-center items-center">
-              {idx + 1}
+              {comments.length - idx}
             </td>
             <td className="text-left grow py-2">
               <Link href={`/posts/${postid}`} className="hover:underline">
-                {text}
+                <span className="text-overflow">{text}</span>
               </Link>
             </td>
             <td className="text-center w-28">{dateFormatter(created)}</td>
