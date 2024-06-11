@@ -12,7 +12,7 @@ export default function UserBasicInfoLeft({
     <div
       className="flex flex-row md:flex-col 
       justify-center items-center 
-    gap-4"
+    gap-2 md:gap-4"
     >
       {/* Image */}
       {hasProfile && (

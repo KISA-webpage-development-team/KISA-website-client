@@ -76,7 +76,7 @@ export default function UserPage({ params }: UserParamsPageProps) {
 
   return (
     <section
-      className={`${sejongHospitalLight.className} pt-2 md:pt-3 lg:pt-4`}
+      className={`${sejongHospitalLight.className} pt-2 md:pt-3 lg:pt-4 gap-6`}
     >
       <UserBasicInfo email={decodedEmail} session={session} user={user} />
 
