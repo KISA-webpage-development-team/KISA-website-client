@@ -134,7 +134,7 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
                   postStartIdx - idx
                 )}
               </td>
-              <td className="text-left flex-1 bg-pink-300">
+              <td className="text-left flex-1">
                 <button
                   onClick={navigateToPost(postid)}
                   className="hover:underline "
