@@ -44,12 +44,12 @@ export default function SchoolCalendar() {
     if (eventsInfo.length === 0) return;
     if (didEventSetup) return;
 
-    // check whether last event is upcoming in 7 days
+    // check whether last event is upcoming in 14 days
     const lastEvent = new Date(eventsInfo[eventsInfo.length - 1].start);
     const today = new Date();
     const diffTime = lastEvent - today;
 
-    if (diffTime > 7 * 24 * 60 * 60 * 1000 || diffTime < 0) {
+    if (diffTime > 14 * 24 * 60 * 60 * 1000 || diffTime < 0) {
       setDidEventSetup(true);
       setSelectedEvent(null);
       return;
