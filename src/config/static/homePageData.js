@@ -19,6 +19,20 @@ const homeCarouselData = [
     ),
     url: "https://open.kakao.com/o/gFbE6Hng",
   },
+  {
+    id: "24_summer_illak",
+    title: "일락 업고 튀어",
+    desc: (
+      <p>
+        UIUC, NEU, 그리고 NWU와 함께하는 2024 일락 업고 튀어☁️
+        <br />
+        6월 26일 오후 7시 - 오전 1시, 강남 맛깔시장에서 만나요!!
+        <br />
+        자세한 정보는 @illak_tt 인스타를 확인해 주세요!
+      </p>
+    ),
+    url: "https://www.instagram.com/p/C8Ko9mzyBhr/",
+  },
 ];
 
 // <homeQuickLinksData>

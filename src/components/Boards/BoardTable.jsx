@@ -137,7 +137,7 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
               <td className="text-left flex-1">
                 <button
                   onClick={navigateToPost(postid)}
-                  className="hover:underline "
+                  className="hover:underline"
                 >
                   {commentsCount > 0 ? (
                     <span className={``}>
