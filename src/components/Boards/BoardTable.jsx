@@ -76,12 +76,12 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
               <td className="text-left flex-1">
                 <Link className="hover:underline" href={`/posts/${postid}`}>
                   {commentsCount > 0 ? (
-                    <span className={`text-overflow`}>
+                    <span className={``}>
                       {title}
                       <span className="ml-1 text-red-500 font-normal">{`[${commentsCount}]`}</span>
                     </span>
                   ) : (
-                    <span className="text-overflow">{title}</span>
+                    <span className="">{title}</span>
                   )}
                 </Link>
               </td>
@@ -134,18 +134,18 @@ export default function BoardTable({ postStartIdx, posts, announcementPosts }) {
                   postStartIdx - idx
                 )}
               </td>
-              <td className="text-left flex-1">
+              <td className="text-left flex-1 bg-pink-300">
                 <button
                   onClick={navigateToPost(postid)}
-                  className="hover:underline"
+                  className="hover:underline "
                 >
                   {commentsCount > 0 ? (
-                    <span className={`text-overflow`}>
+                    <span className={``}>
                       {title}
-                      <span className="ml-1 text-red-500 font-normal">{`[${commentsCount}]`}</span>
+                      <span className="ml-1 text-red-500 font-normal ">{`[${commentsCount}]`}</span>
                     </span>
                   ) : (
-                    <span className="text-overflow">{title}</span>
+                    <span className="">{title}</span>
                   )}
                 </button>
               </td>
