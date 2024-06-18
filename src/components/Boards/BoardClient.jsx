@@ -16,6 +16,7 @@ import MobileBoardTable from "./MobileBoardTable";
 
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import TestBoardTable from "./Test/TestBoardTable";
 
 export default function BoardClient({ boardType, page, size }) {
   const router = useRouter();
@@ -96,7 +97,12 @@ export default function BoardClient({ boardType, page, size }) {
         />
       </div>
       <div className="hidden md:flex">
-        <BoardTable
+        {/* <BoardTable
+          postStartIdx={totalPostNum - pageSize * (pageNum - 1)}
+          posts={posts}
+          announcementPosts={announcementPosts}
+        /> */}
+        <TestBoardTable
           postStartIdx={totalPostNum - pageSize * (pageNum - 1)}
           posts={posts}
           announcementPosts={announcementPosts}
