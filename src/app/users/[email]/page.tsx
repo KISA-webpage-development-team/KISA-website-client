@@ -61,7 +61,7 @@ export default function UserPage({ params }: UserParamsPageProps) {
     return <div>Loading...</div>;
   }
 
-  if (status === "unauthenticated") {
+  if (status === "unauthenticated" || session?.token === null) {
     return <NotLoginModal />;
   }
 
