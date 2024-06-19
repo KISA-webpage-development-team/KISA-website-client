@@ -1,3 +1,5 @@
+"use client";
+
 // BoardClient.jsx
 // : rendering the board
 // + pagination bar
@@ -25,13 +27,12 @@ export default function BoardClient({ boardType, page, size }) {
   const [pageNum, setPageNum] = useState(page || 1);
   const [pageSize, setPageSize] = useState(size || 10); // 10, 20, 30
 
-  const { data: session } = useSession();
   const [totalPostNum, setTotalPostNum] = useState(null); // 게시판 내의 게시물 총 개수
 
   // fetch announcements
   useEffect(() => {
     const fetchAnnouncements = async () => {
-      const data = await getBoardAnnouncements(boardType, session?.token);
+      const data = await getBoardAnnouncements(boardType);
       setAnnouncementPosts(data?.results);
     };
 
@@ -121,8 +122,6 @@ export default function BoardClient({ boardType, page, size }) {
         </div>
 
         <div className="grow">
-          <p></p>
-          {/* TODO: improve pagination */}
           <Pagination
             totalPageNum={
               Math.ceil(totalPostNum / pageSize) === 0

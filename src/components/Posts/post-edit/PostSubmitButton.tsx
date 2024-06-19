@@ -26,7 +26,8 @@ export default function PostSubmitButton({
       setLoading(false);
 
       // router.push(`/boards/${(formData as PostFormData).type}`);
-      router.back();
+      // router.back();
+      window.location.href = `/boards/${(formData as PostFormData).type}`;
     } catch (error) {
       window.alert("게시글 작성에 실패했습니다.");
       return;

@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/config/auth.ts",
-    "src/service/board.js"
+    "src/service/board.ts"
   ],
   "exclude": ["node_modules"]
 }

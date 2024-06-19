@@ -25,7 +25,7 @@ export function useUser(
   return {
     user: data as UserData,
     isLoading,
-    isError: data === null || error,
+    isError: error,
   };
 }
 
@@ -45,7 +45,7 @@ export function useUserPosts(
   return {
     posts: data?.posts as UserPostsData,
     isLoading,
-    isError: data === null || error,
+    isError: error,
   };
 }
 
@@ -65,7 +65,7 @@ export function useUserComments(
   return {
     comments: data?.comments as UserCommentsData,
     isLoading,
-    isError: data === null || error,
+    isError: error,
   };
 }
 

@@ -1,6 +1,7 @@
 /* board.css */
-/* this applies to all the board pages */
+/* this applies to all the /boards pages */
 
+/* PAGE LAYOUT ---------------------- */
 section {
   @apply w-full flex flex-col gap-4;
 }
@@ -10,8 +11,9 @@ section {
   left-0 md:relative 
   w-full;
 }
+/* ---------------------- PAGE LAYOUT */
 
-/* table css */
+/* TABLE */
 /* Normal Table --------------------- */
 .normal_table {
   @apply border border-gray-300 w-full
