@@ -21,6 +21,16 @@ section {
     @apply w-full;
   }
 
+  th,
+  td {
+    &:first-child {
+      @apply pl-2;
+    }
+    &:last-child {
+      @apply pr-2;
+    }
+  }
+
   /* thead::tr */
   .normal_table_header {
     @apply border-b border-gray-500;
@@ -28,22 +38,21 @@ section {
     /* thead::tr::th */
     th {
       @apply py-2 font-semibold text-gray-800;
-
-      &:first-child {
-        @apply pl-2;
-      }
-      &:last-child {
-        @apply pr-2;
-      }
     }
   }
 
+  /* tbody */
   tbody {
+    @apply w-full;
+
+    /* tbody::tr */
     tr {
-      @apply border-b border-gray-200;
-    }
-    td {
-      @apply text-center py-2;
+      @apply border-b border-gray-200 hover:bg-gray-100;
+
+      /* tbody::tr::td */
+      td {
+        @apply text-center py-2;
+      }
     }
   }
 }
