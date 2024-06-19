@@ -12,6 +12,7 @@ export default function UserPostsTable({ posts }) {
     setAnnouncementPosts(posts.filter((post) => post.isAnnouncement));
     setNormalPosts(posts.filter((post) => !post.isAnnouncement));
   }, [posts]);
+  
 
   return (
     <table className="border border-gray-300 w-full">
