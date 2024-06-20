@@ -12,13 +12,13 @@ import TestBoardTableRow from "./TestBoardTableRow";
 type Props = {
   postStartIdx: number;
   posts: any[];
-  announcementPosts: any[];
+  annoucements: any[];
 };
 
 export default function TestBoardTable({
   postStartIdx,
   posts,
-  announcementPosts,
+  annoucements,
 }: Props) {
   return (
     <table className="normal_table">
@@ -51,7 +51,7 @@ export default function TestBoardTable({
       </thead>
 
       <tbody>
-        {announcementPosts?.map((announcement, _) => (
+        {annoucements?.map((announcement, _) => (
           <TestBoardTableRow
             key={announcement.postid}
             post={announcement}

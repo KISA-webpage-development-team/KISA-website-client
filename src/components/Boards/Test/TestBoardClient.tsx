@@ -9,7 +9,10 @@ import {
 } from "../../../service/swrHooks/boardHooks";
 import { heebo } from "../../../utils/fonts/textFonts";
 import TestBoardTable from "./TestBoardTable";
+import TestMobileBoardTable from "./TestMobileBoardTable";
+import PaginationSizeSelector from "./PaginationSizeSelector";
 
+// [NOTE] page is still 1-indexing here
 type Props = {
   boardType: BoardType;
   announcements: SimplePost[];
@@ -28,7 +31,7 @@ export default function TestBoardClient({
     posts,
     isLoading: isPostsFetching,
     isError: postsError,
-  } = useBoardPosts(boardType, size, page);
+  } = useBoardPosts(boardType, size, page - 1);
   const {
     postNum: totalPostNum,
     isLoading: isPostNumFetching,
@@ -45,14 +48,33 @@ export default function TestBoardClient({
   }
 
   return (
-    <div
-      className={`
-  flex flex-col gap-4  ${heebo.className}`}
-    >
-      <TestBoardTable
-        postStartIdx={totalPostNum - size * page}
-        posts={posts}
-        announcementPosts={page === 1 ? announcements : null}
+    <div className={`flex flex-col gap-4 ${heebo.className}`}>
+      {/* TABLE */}
+      <div className="hidden md:block">
+        <TestBoardTable
+          postStartIdx={totalPostNum - size * (page - 1)}
+          posts={posts}
+          annoucements={page === 1 ? announcements : null}
+        />
+      </div>
+      <div className="block md:hidden">
+        <TestMobileBoardTable
+          posts={posts}
+          annoucements={page === 1 ? announcements : null}
+        />
+      </div>
+
+      {/* PAGINATION BAR */}
+
+      <PaginationSizeSelector
+        totalPageNum={
+          Math.ceil(totalPostNum / size) === 0
+            ? 1
+            : Math.ceil(totalPostNum / size)
+        }
+        pageNum={page}
+        totalPostNum={totalPostNum}
+        pageSize={size}
       />
     </div>
   );

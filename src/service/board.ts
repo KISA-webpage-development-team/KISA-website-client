@@ -13,7 +13,6 @@ export async function getBoardPosts(
   const url = `/boards/${boardType}/posts/?size=${size}&page=${page}/`;
   try {
     const response = await client.get(url);
-    console.log("post fetched");
     return response.data;
   } catch (error) {
     // console.error(error);

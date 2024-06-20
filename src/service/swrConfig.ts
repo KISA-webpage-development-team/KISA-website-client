@@ -14,7 +14,7 @@ export const fetcherWithToken = ([url, token]) =>
 
 export const fetcher = (url) => {
   // TEST revlaidation here
-
+  // console.log("url: ", url);
   try {
     return client.get(url).then((res) => res.data);
   } catch (error) {

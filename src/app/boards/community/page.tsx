@@ -39,8 +39,8 @@ export default async function CommunityPage({
         <TestBoardClient
           boardType={boardType}
           announcements={annoucements}
-          size={size ? size : 10}
-          page={page ? page - 1 : 0}
+          size={size ? Number(size) : 10}
+          page={page ? Number(page) : 1}
         />
       </article>
     </section>

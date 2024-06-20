@@ -17,9 +17,10 @@ export function useBoardPosts(
   options?: SWRConfiguration
 ) {
   const { data, error, isLoading } = useSWR(
-    boardType ? `/boards/${boardType}/posts/?size=${size}&page=${page}/` : null,
+    boardType ? `/boards/${boardType}/posts/?size=${size}&page=${page}` : null,
     options
   );
+
   return {
     posts: data?.results as BoardPostsData,
     isLoading,

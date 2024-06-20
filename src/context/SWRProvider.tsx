@@ -36,7 +36,7 @@ export default function SWRProvider({ children }) {
     <SWRConfig
       value={{
         fetcher: fetcher,
-        onErrorRetry: GlobalonErrorRetry,
+        // onErrorRetry: GlobalonErrorRetry,
       }}
     >
       {children}
