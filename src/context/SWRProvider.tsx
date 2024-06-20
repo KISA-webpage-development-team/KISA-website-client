@@ -4,7 +4,13 @@ import React from "react";
 import { SWRConfig } from "swr";
 import { fetcher, fetcherWithToken } from "../service/swrConfig";
 
-const GlobalonErrorRetry = (error, key, config, revalidate, { retryCount }) => {
+export const GlobalonErrorRetry = (
+  error,
+  key,
+  config,
+  revalidate,
+  { retryCount }
+) => {
   // 404에서 재시도 안함
   if (error.response.status === 404) return;
 
