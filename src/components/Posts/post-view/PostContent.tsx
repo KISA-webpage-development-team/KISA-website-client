@@ -8,7 +8,9 @@ import "react-quill/dist/quill.snow.css";
 export default function PostContent({ text }: PostContentProps) {
   return (
     <div
-      className="!px-0 !py-3 ql-editor text-base min-h-16"
+      className="!px-0 !py-3 ql-editor 
+       text-sm md:text-base
+       min-h-16"
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(String(text)),
       }}

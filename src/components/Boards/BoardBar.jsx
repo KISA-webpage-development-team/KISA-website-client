@@ -2,9 +2,9 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import PostSearchBar from "./PostSearchBar";
-import CreatePostButton from "./CreatePostButton";
 import BoardTitle from "./BoardTitle";
+import CutomButton from "../shared/CutomButton";
+import PencilIcon from "../ui/PencilIcon";
 
 export default function BoardBar({ boardType }) {
   const router = useRouter();
@@ -14,12 +14,13 @@ export default function BoardBar({ boardType }) {
   }
 
   return (
-    <div
-      className="
-    w-full flex items-center justify-between"
-    >
+    <div className="w-full flex items-center justify-between">
       <BoardTitle boardType={boardType} />
-      <CreatePostButton onClick={handleCreatePostClick} />
+      <CutomButton
+        onClick={handleCreatePostClick}
+        beforeIcon={<PencilIcon />}
+        btnText="글쓰기"
+      />
     </div>
   );
 }

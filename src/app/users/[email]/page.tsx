@@ -20,6 +20,8 @@ import NotLoginModal from "../../../components/shared/NotLoginModal";
 // types
 import { UserParamsPageProps } from "../../../model/props/users";
 import { CustomSession } from "../../../model/common/types";
+import { useSWRConfig } from "swr";
+import { useEffect } from "react";
 
 export default function UserPage({ params }: UserParamsPageProps) {
   const { email } = params;
@@ -29,6 +31,11 @@ export default function UserPage({ params }: UserParamsPageProps) {
     data: CustomSession | null;
     status: string;
   };
+
+  // const { cache, mutate } = useSWRConfig();
+  // useEffect(() => {
+  //   console.log("cache:", cache);
+  // }, [cache]);
 
   // Data Fetching from client side using custom useSWR hooks ----------------
   // (참고: session?.token이 null인 경우에는 애초에 api call을 하지 않도록 hook을 만들어놓음)

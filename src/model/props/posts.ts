@@ -79,10 +79,12 @@ export interface PostFormData extends SimplePostFormData {
   fullname: string;
   email: string;
 }
+export interface SimplePost extends Omit<Post, "email" | "text"> {}
+
 export interface Post extends Omit<PostFormData, "tag"> {
-  postid: Number;
-  readCount: Number;
-  commentsCount: Number;
+  postid: number;
+  readCount: number;
+  commentsCount: number;
   created: string;
 }
 // ------------------------------------------------------

@@ -43,7 +43,7 @@ export function dateFormatter(date) {
       .replace(/^24:/, "00:");
   } else {
     let currentYear = new Date().getFullYear();
-    let year = target.getFullYear();
+    let year = target.getFullYear().toString().slice(-2);
     let month = ("0" + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
     let day = ("0" + target.getDate()).slice(-2);
 

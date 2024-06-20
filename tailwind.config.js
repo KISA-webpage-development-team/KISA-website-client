@@ -23,7 +23,9 @@ module.exports = {
       },
       colors: {
         "michigan-blue": "#00274C",
+        "michigan-light-blue": "#003594",
         "michigan-maize": "#FFCB05",
+        "michigan-dark-maize": "#e5b604",
       },
       fontSize: {
         "responsive-xl": "text-base sm:text-lg md:text-xl",
