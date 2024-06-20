@@ -13,9 +13,11 @@ export function useAdmin(
     options
   );
 
+  console.log("error: ", error);
+
   return {
     isAdmin: !!data as boolean,
     isLoading,
-    isError: error,
+    isError: error?.response.status === 201 ? null : error,
   };
 }
