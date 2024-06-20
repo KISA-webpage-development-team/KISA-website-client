@@ -40,13 +40,8 @@ section {
   px-[20px] md:px-[60px] lg:px-[75px];
 }
 
-.simple_button {
-  @apply bg-slate-100 flex items-center justify-center text-black py-2 px-4 rounded;
-}
-.simple_button:hover {
-  @apply bg-slate-200 flex items-center justify-center text-black py-2 px-4 rounded;
-}
-
+/* Custom Button ------------------------------------------------------ */
+/* [SAMPLE BLUE BUTTON] */
 .blue_button {
   @apply flex items-center justify-center px-4 py-2 bg-[#00274c] border border-[#00274c] text-[#ffcb05] rounded-md cursor-pointer;
 }
@@ -56,7 +51,34 @@ section {
 .blue_button:disabled {
   @apply flex items-center justify-center px-4 py-2 bg-gray-300 border border-gray-300 text-white rounded-md cursor-not-allowed;
 }
-
 .disabled_blue_button {
   @apply flex items-center justify-center px-4 py-2 bg-gray-300 border text-white rounded-md cursor-not-allowed;
 }
+
+/* [1. PRIMARY] */
+/* blue background + maize text */
+.primary_btn {
+  @apply flex items-center justify-center gap-2
+  bg-[#00274c] border border-[#00274c] text-[#ffcb05] 
+  rounded-md cursor-pointer
+  px-3 md:px-4 py-1;
+
+  &:hover {
+    @apply flex items-center justify-center font-bold bg-[#00274c] border border-[#ffcb05] text-[#ffcb05] rounded-md cursor-pointer;
+  }
+
+  &:disabled {
+    @apply flex items-center justify-center bg-gray-300 border border-gray-300 text-white rounded-md cursor-not-allowed;
+  }
+}
+.primary_btn_text {
+  @apply text-sm md:text-base;
+}
+
+/* [2. SECONDARY] */
+
+/* [3. TERTIARY] */
+
+/* ------------------------------------------------------------------ */
+
+/* WTF */

@@ -1,15 +1,20 @@
 "use client";
 
 import React from "react";
-import { SimplePost } from "../../../model/props/posts";
-import { BoardType } from "../../../model/common/types";
+import { heebo } from "../../utils/fonts/textFonts";
+
 import {
   useBoardPostNum,
   useBoardPosts,
-} from "../../../service/swrHooks/boardHooks";
-import { heebo } from "../../../utils/fonts/textFonts";
-import TestBoardTable from "./TestBoardTable";
-import TestMobileBoardTable from "./TestMobileBoardTable";
+} from "../../service/swrHooks/boardHooks";
+
+// types
+import { SimplePost } from "../../model/props/posts";
+import { BoardType } from "../../model/common/types";
+
+// sub-ui components
+import BoardTable from "./BoardTable";
+import MobileBoardList from "./MobileBoardList";
 import PaginationSizeSelector from "./PaginationSizeSelector";
 
 // [NOTE] page is still 1-indexing here
@@ -20,7 +25,7 @@ type Props = {
   page: number;
 };
 
-export default function TestBoardClient({
+export default function BoardClient({
   boardType,
   announcements,
   size,
@@ -40,7 +45,7 @@ export default function TestBoardClient({
   // -----------------------------------------------
 
   if (isPostsFetching || isPostNumFetching) {
-    return <div>Loading...</div>;
+    return <></>;
   }
   //   postsError.response.status === 404
   if (postsError || postNumError) {
@@ -48,17 +53,20 @@ export default function TestBoardClient({
   }
 
   return (
-    <div className={`flex flex-col gap-4 ${heebo.className}`}>
+    <div
+      className={`
+    flex flex-col gap-4 ${heebo.className}`}
+    >
       {/* TABLE */}
       <div className="hidden md:block">
-        <TestBoardTable
+        <BoardTable
           postStartIdx={totalPostNum - size * (page - 1)}
           posts={posts}
           annoucements={page === 1 ? announcements : null}
         />
       </div>
       <div className="block md:hidden">
-        <TestMobileBoardTable
+        <MobileBoardList
           posts={posts}
           annoucements={page === 1 ? announcements : null}
         />

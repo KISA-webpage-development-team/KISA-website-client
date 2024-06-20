@@ -13,7 +13,9 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <div
-      className={`${sejongHospitalLight.className} flex flex-col gap-0 md:gap-2 justify-center items-center py-[30px]`}
+      className={`${sejongHospitalLight.className} 
+      flex flex-col gap-0 md:gap-2 justify-center items-center
+      mt-6 py-[30px]`}
     >
       <div className="flex items-center gap-2">
         <InstagramLinkIcon color="black" />

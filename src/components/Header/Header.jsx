@@ -28,7 +28,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 export default function Header() {
-  const headerContentWidth = "max-w-screen-2xl px-5 md:px-24 lg:px-32";
+  const headerContentWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -45,7 +45,7 @@ export default function Header() {
       className={`mx-auto ${headerContentWidth}
         relative inset-x-0 w-full z-50 
         flex justify-between items-center 
-        py-4 md:py-5
+        py-3 md:py-5
       `}
     >
       {/* LEFT SIDE */}

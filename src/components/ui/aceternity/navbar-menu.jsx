@@ -95,7 +95,6 @@ export const MobileMenu = ({
   return (
     <motion.nav
       className={`
-        md:mt-0
         flex 
         items-start 
         flex-col md:flex-row

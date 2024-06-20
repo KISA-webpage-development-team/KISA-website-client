@@ -1,11 +1,9 @@
 import React from "react";
-import { getBoardAnnouncements } from "../../../service/board";
-
-// sub-ui components
 import BoardBar from "../../../components/Boards/BoardBar";
 import BoardClient from "../../../components/Boards/BoardClient";
+import { getBoardAnnouncements } from "../../../service/board";
 
-export default async function CommunityPage({
+export default async function BuyAndSellPage({
   searchParams,
 }: {
   searchParams?: {
@@ -15,7 +13,7 @@ export default async function CommunityPage({
 }) {
   const { size, page } = searchParams;
 
-  const boardType = "community";
+  const boardType = "buyandsell";
   // 공지사항은 Server Side이기 때문에 완전한 실시간 데이터가 아니다.
   // 공지사항 게시글의 특성상 실시간으로 완전한 싱크 (지속적인 api call)이 필요하지 않다.
   const annoucements = await getBoardAnnouncements(boardType);
@@ -44,11 +42,3 @@ export default async function CommunityPage({
     </section>
   );
 }
-
-// [NOTE on rendering method]
-// This page is rendered as SSR (Server Side Rendering) dynamically.
-// "announcementPosts" are fetched from the server
-// (공지사항은 자주 바뀌지 않는다 + 일반 유저의 인터렉션이 존재하지 않는다)
-// "posts" are fetched from the client side using useSWR hooks
-// and then the page is rendered with the fetched data.
-// BoardBar is a client component that interacts with user
