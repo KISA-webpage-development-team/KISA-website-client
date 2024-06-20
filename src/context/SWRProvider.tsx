@@ -8,6 +8,8 @@ const GlobalonErrorRetry = (error, key, config, revalidate, { retryCount }) => {
   // 404에서 재시도 안함
   if (error.response.status === 404) return;
 
+  if (error.response.status === 401) return;
+
   // 특정 키에 대해 재시도 안함
   // if (key === '/api/user') return
 
