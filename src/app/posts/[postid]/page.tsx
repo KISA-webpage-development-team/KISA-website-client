@@ -1,3 +1,5 @@
+"use client";
+
 // [24.06.01 ~ ]: Refactoring + TS conversion by Jioh
 
 // [UI]
@@ -11,16 +13,28 @@ import { PostParamsPageProps } from "../../../model/props/posts";
 import BoardTitle from "../../../components/Boards/BoardTitle";
 import CommentsView from "../../../components/Posts/comment/CommentsView";
 import PostView from "../../../components/Posts/post-view/PostView";
+import SWRProvider from "../../../context/SWRProvider";
+import { usePost } from "../../../service/swrHooks/postHooks";
+import { fetcher } from "../../../service/swrConfig";
 
-export default async function PostPage({ params }: PostParamsPageProps) {
+export default function PostPage({ params }: PostParamsPageProps) {
   const { postid } = params;
 
-  const post = await getSinglePost(postid);
+  // const post = await getSinglePost(postid);
+
+  const { post, isLoading, isError } = usePost(postid, { fetcher: fetcher });
 
   // [TODO]: when there's no post "error.tsx" should be rendered
-  if (!post) {
+  if (isLoading) {
+    return <></>;
+  }
+  if (isError) {
+    console.log(isError);
+
     return <div>존재하지 않는 게시물입니다</div>;
   }
+
+  console.log(post);
 
   return (
     <section className="!gap-0">
