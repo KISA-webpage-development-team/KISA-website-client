@@ -18,6 +18,6 @@ export function useAdmin(
   return {
     isAdmin: !!data as boolean,
     isLoading,
-    isError: error?.response.status === 201 ? null : error,
+    isError: error?.response.status === 401 ? null : error,
   };
 }
