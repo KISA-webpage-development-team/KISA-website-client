@@ -102,7 +102,7 @@ export default function EditorClient({
 
   // Exception Handling -------------------------------------------------------
   // 1) if user is not logged in
-  if (status === "unauthenticated") {
+  if (status === "unauthenticated" || session?.token === null) {
     // force user to login
     return <NotLoginModal />;
   }
