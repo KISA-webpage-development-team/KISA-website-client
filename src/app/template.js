@@ -7,7 +7,7 @@ export default function Template({ children }) {
   const mainContentsWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-y-hidden">
       <header
         className={`${sejongHospitalLight.className} top-0 z-40 
         bg-gradient-to-r from-michigan-blue/90 via-michigan-blue to-michigan-blue/85
