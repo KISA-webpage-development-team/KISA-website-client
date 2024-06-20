@@ -36,7 +36,7 @@ export default function TestBoardTable({
         <col width="*" />
         <col width="10%" />
         <col width="10%" />
-        <col width="8%" />
+        <col width="60px" />
       </colgroup>
 
       <thead>
