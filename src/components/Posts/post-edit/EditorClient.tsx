@@ -23,7 +23,7 @@ import {
   getBoardName,
   getBoardNameFromKorean,
 } from "../../../config/boardName";
-import { useAdmin } from "../../../service/auth";
+import { getIsAdmin } from "../../../service/auth";
 
 export default function EditorClient({
   boardType,
@@ -36,11 +36,19 @@ export default function EditorClient({
   };
 
   // admin state
-  // const [isAdmin, setIsAdmin] = useState<boolean>();
-  const { isAdmin, isLoading, isError } = useAdmin(
-    session?.user.email,
-    session?.token
-  );
+  const [isAdmin, setIsAdmin] = useState<boolean>();
+  useEffect(() => {
+    const fetchIsAdmin = async () => {
+      const res = await getIsAdmin(session?.user.email, session?.token);
+      if (res) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    };
+
+    fetchIsAdmin();
+  }, [session]);
 
   // form states
   const [title, setTitle] = useState<string>(curPost?.title || "");
@@ -106,19 +114,7 @@ export default function EditorClient({
     // force user to login
     return <NotLoginModal />;
   }
-
-  // 2) if admin state is not yet fetched
-  if (isLoading) {
-    // [TODO] loading spinner
-    return <div>Loading...</div>;
-  }
-
-  // 3) if there is an error
-  if (isError) {
-    // error handling
-    return <div>Error!</div>;
-  }
-  // 4) if boardType is announcement and user is not admin
+  // 2) if boardType is announcement and user is not admin
   if (status !== "loading" && boardType === "announcement" && !isAdmin) {
     return <div>권한이 없습니다.</div>;
   }

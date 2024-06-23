@@ -11,9 +11,11 @@ export default function PostTitleBar({
     text-lg sm:text-xl md:text-2xl"
     >
       <span>
-        {isAnnouncement && (
-          <span className="text-blue-700 font-bold">[공지]</span>
-        )}{" "}
+        {isAnnouncement ? (
+          <span className="text-blue-700 font-bold">{`[공지] `}</span>
+        ) : (
+          <></>
+        )}
         {title}
       </span>
     </div>
