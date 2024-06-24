@@ -42,6 +42,7 @@ const homeCarouselData = [
         제작한 Course Evaluation Booklet을 통해 많은 수업들의 과제 정도, 교수님
         평가, 수업 난이도 등 솔직한 리뷰들을 살펴보세요! 여러분의 성공적인
         수강신청을 키사가 응원합니다!
+        <br />
         <a href="https://www.umichkisa.com/posts/124">
           <b className="font-extrabold">[자료 보러 가기]</b>
         </a>
