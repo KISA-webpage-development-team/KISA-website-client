@@ -4,7 +4,7 @@ import { sejongHospitalBold } from "../../utils/fonts/textFonts";
 
 export default function EventSectionImage({ id, imageTitle }) {
   return (
-    <div className="relative aspect-square h-full bg-blue-200">
+    <div className="relative aspect-square h-full">
       <Image
         className="object-cover"
         src={`/events/${id}.png`}

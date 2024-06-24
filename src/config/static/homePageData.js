@@ -33,6 +33,22 @@ const homeCarouselData = [
     ),
     url: "https://open.kakao.com/o/gFbE6Hng",
   },
+  {
+    id: "w24_course_evaluation",
+    title: "여러분의 수강신청을 도와드립니다",
+    desc: (
+      <p>
+        다음 학기에는 무슨 수업을 들으면 좋을지 고민하고 계시나요? 저희 키사가
+        제작한 Course Evaluation Booklet을 통해 많은 수업들의 과제 정도, 교수님
+        평가, 수업 난이도 등 솔직한 리뷰들을 살펴보세요! 여러분의 성공적인
+        수강신청을 키사가 응원합니다!
+        <a href="https://www.umichkisa.com/posts/124">
+          <b className="font-extrabold">[자료 보러 가기]</b>
+        </a>
+      </p>
+    ),
+    url: "https://www.umichkisa.com/posts/124",
+  },
 ];
 
 // <homeQuickLinksData>
