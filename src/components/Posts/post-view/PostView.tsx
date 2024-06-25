@@ -48,18 +48,24 @@ export default function PostView({ post }: PostViewProps) {
   // read count
   // : when cookie doesn't exist, create one and increase read count (`incrementReadCount`)
   // if cookie exists, don't increase read count, but update the cookie expiration time
-  useEffect(() => {
-    const cookieHandler = () => {
-      const cookieName = `read-${postid}`;
 
-      const postReadCount = async () => {
+  useEffect(() => {
+    const postReadCount = async () => {
+      try {
         const res = await incrementReadCount(postid, session?.token);
         if (res === null) {
           console.log("Failed to increment read count");
         }
-      };
+      } catch (error) {
+        console.error("Error incrementing read count: ", error);
+      }
+    };
 
+    const cookieHandler = async () => {
+      const cookieName = `read-${postid}`;
       if (getCookie(cookieName) === undefined) {
+        // 만약 쿠키가 없다
+        // -> 쿠키를 생성 + 조회수 증가
         setCookie(cookieName, true, {
           path: "/",
           secure: true,
@@ -67,7 +73,7 @@ export default function PostView({ post }: PostViewProps) {
         });
         setDidRead(true);
 
-        postReadCount();
+        await postReadCount();
         return;
       } else {
         setCookie(cookieName, true, {
