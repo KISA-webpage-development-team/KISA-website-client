@@ -1,14 +1,14 @@
 import React, { useMemo } from "react";
-import ReactQuill from "react-quill";
 import { TextEditorProps } from "../../../model/props/posts";
 import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
 
 export default function TextEditor({
   isAdmin,
   text,
   setText,
 }: TextEditorProps) {
-  const testReactQuillModules = useMemo(
+  const ReactQuillModules = useMemo(
     () => ({
       toolbar: {
         container: [
@@ -21,7 +21,7 @@ export default function TextEditor({
     }),
     []
   );
-  const testReactQuillModulesAdmin = useMemo(
+  const ReactQuillModulesAdmin = useMemo(
     () => ({
       toolbar: {
         container: [
@@ -40,7 +40,7 @@ export default function TextEditor({
     <ReactQuill
       theme="snow"
       style={{ minHeight: 400 }}
-      modules={isAdmin ? testReactQuillModulesAdmin : testReactQuillModules}
+      modules={isAdmin ? ReactQuillModulesAdmin : ReactQuillModules}
       value={text}
       onChange={(e: any) => setText(e)}
     />

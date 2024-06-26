@@ -34,8 +34,6 @@ export default function PostPage({ params }: PostParamsPageProps) {
     return <div>존재하지 않는 게시물입니다</div>;
   }
 
-  console.log(post);
-
   return (
     <section className="!gap-0">
       <div className="w-full">

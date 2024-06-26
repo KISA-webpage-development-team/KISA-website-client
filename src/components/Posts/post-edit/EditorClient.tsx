@@ -36,7 +36,8 @@ export default function EditorClient({
   };
 
   // admin state
-  const [isAdmin, setIsAdmin] = useState<boolean>();
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+
   useEffect(() => {
     const fetchIsAdmin = async () => {
       const res = await getIsAdmin(session?.user.email, session?.token);
@@ -47,7 +48,9 @@ export default function EditorClient({
       }
     };
 
-    fetchIsAdmin();
+    if (session) {
+      fetchIsAdmin();
+    }
   }, [session]);
 
   // form states
@@ -123,7 +126,10 @@ export default function EditorClient({
   return (
     <div className="flex flex-col h-full gap-4">
       <TitleInput title={title} setTitle={setTitle} />
-      <TextEditor isAdmin={isAdmin} text={text} setText={setText} />
+      {isAdmin !== null && (
+        <TextEditor isAdmin={isAdmin} text={text} setText={setText} />
+      )}
+
       <div
         className={`flex
       ${isAdmin ? "w-full justify-between" : "justify-end"}

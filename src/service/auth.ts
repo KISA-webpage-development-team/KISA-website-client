@@ -31,7 +31,8 @@ export async function getIsAdmin(email: string, token: string) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+
+    return response?.data;
   } catch (error) {
     // console.log(error);
   }
