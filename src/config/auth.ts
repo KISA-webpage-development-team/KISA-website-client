@@ -44,15 +44,13 @@ export const authOptions = {
         }
         return false; // if not 200, something went wrong
       } catch (error) {
-        // Check if email ends with "umich.edu"
-        if (!profile.email.endsWith("umich.edu")) {
-          return false;
+        if (profile.email.endsWith("umich.edu")) {
+          return "/signup";
         }
 
-        // 2. if not, redirect to /signup page to create a new user
-        console.log(error);
-        // console.log("error: ", error);
-        return "/signup";
+        // if not, redirect to /signup page to create a new user
+
+        return "/signin";
       }
     },
     async redirect({ url, baseUrl }) {
@@ -60,6 +58,10 @@ export const authOptions = {
       if (url.includes("/signin")) {
         // /signin페이지로 로그인할시에, callbackUrl을 붙여서 리다이렉트
         let callbackUrl = url.split("callbackUrl=")[1];
+
+        if (callbackUrl === undefined) {
+          return `${baseUrl}/signin`;
+        }
 
         return `${decodeURIComponent(callbackUrl)}`;
       }
