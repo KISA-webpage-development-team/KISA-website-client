@@ -3,6 +3,7 @@ import Header from "../components/Header/Header";
 import { sejongHospitalLight } from "../utils/fonts/textFonts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../config/auth";
+import SessionProvider from "../context/SessionProvider";
 
 export default async function Template({ children }) {
   // pass over this session to Header to remove unnecessary re-renders
@@ -13,13 +14,16 @@ export default async function Template({ children }) {
 
   return (
     <div className="h-full flex flex-col overflow-y-hidden">
-      <header
-        className={`${sejongHospitalLight.className} top-0 z-40 
+      <SessionProvider>
+        <header
+          className={`${sejongHospitalLight.className} top-0 z-40 
         bg-gradient-to-r from-michigan-blue/90 via-michigan-blue to-michigan-blue/85
       text-white`}
-      >
-        <Header session={session} />
-      </header>
+        >
+          <Header session={session} />
+        </header>
+      </SessionProvider>
+
       <main
         className={`w-full h-full
         mx-auto ${mainContentsWidth}
