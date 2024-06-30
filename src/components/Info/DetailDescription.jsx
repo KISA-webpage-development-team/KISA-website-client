@@ -4,12 +4,6 @@ import React from "react";
 import { sejongHospitalLight } from "../../utils/fonts/textFonts";
 
 export default function DetailDescription({ id = null, desc }) {
-  // for event
-  const handleOnClick = () => {
-    window.location.href =
-      "../../../launching-event/Ex6QYPWY9GxydPTpswkxrxvUNwVjfRrb";
-  };
-
   if (id === "greek_town") {
     return (
       <div
@@ -31,9 +25,7 @@ export default function DetailDescription({ id = null, desc }) {
             </span>
             <span className="flex text-center w-full justify-center">
               (3) 유명한 레스토랑으로는 The New Parthenon, The Golden Fleece
-              <span className="cursor-text" onClick={handleOnClick}>
-                ,
-              </span>
+              <span className="cursor-text">,</span>
             </span>
           </div>
 
