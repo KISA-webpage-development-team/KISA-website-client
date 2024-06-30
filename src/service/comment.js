@@ -1,10 +1,9 @@
-import axios from "axios";
-import { backendUrl } from "../config/backendUrl";
+import client from "../config/axios";
 
 export async function createComment(postid, body, token) {
-  const url = `${backendUrl}/comments/${postid}/`;
+  const url = `/comments/${postid}/`;
   try {
-    const response = await axios.post(url, body, {
+    const response = await client.post(url, body, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -18,10 +17,10 @@ export async function createComment(postid, body, token) {
 
 // need email from the response
 export async function getCommentsByPostid(postid) {
-  // const url = `${backendUrl}/comments/${postid}/`;
-  const url = `${backendUrl}/comments/${postid}/`;
+  // const url = `/comments/${postid}/`;
+  const url = `/comments/${postid}/`;
   try {
-    const response = await axios.get(url);
+    const response = await client.get(url);
     return response.data;
   } catch (error) {
     //console.error(error);
@@ -30,10 +29,10 @@ export async function getCommentsByPostid(postid) {
 }
 
 export async function updateComment(commentid, body, token) {
-  // const url = `${backendUrl}/comments/${postid}/`;
-  const url = `${backendUrl}/comments/${commentid}/`;
+  // const url = `/comments/${postid}/`;
+  const url = `/comments/${commentid}/`;
   try {
-    const response = await axios.put(url, body, {
+    const response = await client.put(url, body, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -46,10 +45,10 @@ export async function updateComment(commentid, body, token) {
 }
 
 export async function deleteComment(commentid, token) {
-  // const url = `${backendUrl}/comments/${postid}/`;
-  const url = `${backendUrl}/comments/${commentid}/`;
+  // const url = `/comments/${postid}/`;
+  const url = `/comments/${commentid}/`;
   try {
-    const response = await axios.delete(url, {
+    const response = await client.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

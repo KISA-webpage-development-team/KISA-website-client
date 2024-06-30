@@ -90,11 +90,9 @@ export default function SchoolCalendar() {
           <FullCalendar
             plugins={[dayGridPlugin, googleCalendarPlugin]}
             initialView="dayGridWeek"
-            googleCalendarApiKey={
-              process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY
-            }
+            googleCalendarApiKey={process.env.GOOGLE_CALENDAR_API_KEY}
             events={{
-              googleCalendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,
+              googleCalendarId: process.env.GOOGLE_CALENDAR_ID,
             }}
             contentHeight={100}
             eventContent={renderEventContent}
