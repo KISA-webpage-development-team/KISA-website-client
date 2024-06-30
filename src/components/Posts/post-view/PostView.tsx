@@ -1,5 +1,3 @@
-"use client";
-
 // [UI]
 // 1. Post Title Bar: title + isAnnouncement
 // 2. Post Owner Bar: fullname + created + readCount + commentsCount
@@ -22,7 +20,6 @@ import HorizontalDivider from "../../shared/HorizontalDivider";
 import { CookiesProvider } from "react-cookie";
 import { getCookie, setCookie } from "../../../utils/cookie";
 import { incrementReadCount } from "../../../service/post";
-import { set } from "react-hook-form";
 
 export default function PostView({ post }: PostViewProps) {
   const { data: session, status } = useSession() as {
@@ -97,8 +94,6 @@ export default function PostView({ post }: PostViewProps) {
   return (
     <CookiesProvider>
       <div className="w-full flex flex-col">
-        {/* <HorizontalDivider color="grey" /> */}
-
         <div
           className="w-full flex flex-col
       pt-1 

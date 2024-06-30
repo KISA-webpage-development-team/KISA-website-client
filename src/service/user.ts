@@ -21,7 +21,6 @@ export function useUser(
     token ? [`/users/${email}/`, token] : null,
     options
   );
-
   return {
     user: data as UserData,
     isLoading,

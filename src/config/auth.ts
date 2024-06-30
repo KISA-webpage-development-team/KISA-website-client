@@ -3,6 +3,7 @@ import axios from "axios";
 import GoogleProvider from "next-auth/providers/google";
 import SignToken from "../utils/signToken";
 import { backendUrl } from "./backendUrl";
+import { co } from "@fullcalendar/core/internal-common";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -55,13 +56,26 @@ export const authOptions = {
       }
     },
     async redirect({ url, baseUrl }) {
+      // [TEST: middleware]
+      if (url.includes("/signin")) {
+        // /signin페이지로 로그인할시에, callbackUrl을 붙여서 리다이렉트
+        let callbackUrl = url.split("callbackUrl=")[1];
+        return `${baseUrl}${decodeURIComponent(callbackUrl)}`;
+      }
+
       // Allows relative callback URLs
-      if (url.split("/")[3] === "signup") return baseUrl;
+      else if (url.split("/")[3] === "signup") return baseUrl;
       else if (url.startsWith("/")) return `${baseUrl}${url}`;
       // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
+  },
+  pages: {
+    signIn: "/signin",
+  },
+  session: {
+    maxAge: 60 * 60 * 24 * 7, // 7 days
   },
   secret: process.env.JWT_SECRET_KEY,
 };

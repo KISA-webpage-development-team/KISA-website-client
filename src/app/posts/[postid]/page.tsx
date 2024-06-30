@@ -7,20 +7,21 @@
 // PostView
 // CommentsView
 
-import React from "react";
-import { getSinglePost } from "../../../service/post";
-import { PostParamsPageProps } from "../../../model/props/posts";
 import BoardTitle from "../../../components/Boards/BoardTitle";
 import CommentsView from "../../../components/Posts/comment/CommentsView";
 import PostView from "../../../components/Posts/post-view/PostView";
-import SWRProvider from "../../../context/SWRProvider";
 import { usePost } from "../../../service/swrHooks/postHooks";
 import { fetcher } from "../../../service/swrConfig";
+import { SessionProvider } from "next-auth/react";
 
-export default function PostPage({ params }: PostParamsPageProps) {
+type PageProps = {
+  params: {
+    postid: string;
+  };
+};
+
+export default function PostPage({ params }: PageProps) {
   const { postid } = params;
-
-  // const post = await getSinglePost(postid);
 
   const { post, isLoading, isError } = usePost(postid, { fetcher: fetcher });
 
@@ -29,29 +30,29 @@ export default function PostPage({ params }: PostParamsPageProps) {
     return <></>;
   }
   if (isError) {
-    console.log(isError);
-
     return <div>존재하지 않는 게시물입니다</div>;
   }
 
   return (
     <section className="!gap-0">
       <div className="w-full">
-        <BoardTitle boardType={post?.type} size="small" />
+        <BoardTitle boardType={post.type} size="small" />
       </div>
 
-      <div className="w-full">
-        <PostView post={post} />
-      </div>
-
-      {!post?.isAnnouncement && post?.type !== "announcement" && (
+      <SessionProvider>
         <div className="w-full">
-          <CommentsView
-            commentsCount={post?.commentsCount}
-            postid={post?.postid}
-          />
+          <PostView post={post} />
         </div>
-      )}
+
+        {!post?.isAnnouncement && post?.type !== "announcement" && (
+          <div className="w-full">
+            <CommentsView
+              commentsCount={post?.commentsCount}
+              postid={post?.postid}
+            />
+          </div>
+        )}
+      </SessionProvider>
     </section>
   );
 }

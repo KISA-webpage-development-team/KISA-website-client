@@ -27,13 +27,6 @@ export default function BoardTable({
     >
       <caption className="hidden">게시판 목록</caption>
 
-      {/* 아. colgroup이 안되던 이유가 있었다. */}
-      {/* board_table_header에 flex가 있어서 그랬음 ㅋㅋ */}
-      {/* board_table_header안에서 py-2로 스타일링은 또 웃기게 안됨 뭐노... */}
-      {/* colgroup에 다이렉트한 스탕일 */}
-      {/* py-2는 th안으로 넣어버림 엄 */}
-      {/* span은 col 개수를 명시하는것. */}
-
       <colgroup span={5}>
         <col width="60px" />
         <col width="*" />

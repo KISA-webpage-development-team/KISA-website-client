@@ -1,8 +1,13 @@
 import React from "react";
 import Header from "../components/Header/Header";
 import { sejongHospitalLight } from "../utils/fonts/textFonts";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../config/auth";
 
-export default function Template({ children }) {
+export default async function Template({ children }) {
+  // pass over this session to Header to remove unnecessary re-renders
+  const session = await getServerSession(authOptions);
+
   // mainConentsWidth: this will control all of the horizontal padding and margin of the page contents
   const mainContentsWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
 
@@ -13,7 +18,7 @@ export default function Template({ children }) {
         bg-gradient-to-r from-michigan-blue/90 via-michigan-blue to-michigan-blue/85
       text-white`}
       >
-        <Header />
+        <Header session={session} />
       </header>
       <main
         className={`w-full h-full

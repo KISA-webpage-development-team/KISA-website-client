@@ -1,9 +1,17 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
 import BoardTitle from "../../../../components/Boards/BoardTitle";
-import { getSinglePost } from "../../../../service/post";
 import dynamic from "next/dynamic";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../../config/auth";
+import { BoardType } from "../../../../model/common/types";
+
+type PageProps = {
+  params: {
+    postid: string;
+  };
+  searchParams: {
+    board_type: BoardType;
+  };
+};
 
 // need to force EditorClient to be rendered on client-side
 // I don't know why NextJS doesn't automatically render it on client-side
@@ -15,39 +23,40 @@ const EditorClient = dynamic(
   }
 );
 
-export default function PostUpdatePage({ params }) {
+export default async function PostUpdatePage({
+  params,
+  searchParams,
+}: PageProps) {
+  const session = await getServerSession(authOptions);
+  const { board_type } = searchParams;
   const { postid } = params;
-  const [post, setPost] = useState();
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      const post = await getSinglePost(postid);
-      setPost(post);
-    };
-    fetchPost();
-  }, [postid]);
-
-  if (!post) {
-    return <></>;
+  if (!board_type) {
+    return <>존재하지 않는 페이지입니다</>;
   }
 
   return (
     <section>
       {/* Board Title */}
       <div className="w-full">
-        <BoardTitle boardType={post.type} />
+        <BoardTitle boardType={board_type} />
       </div>
 
       {/* Text Editor */}
 
       <div className="grow w-full">
-        <EditorClient boardType={post.type} curPost={post} mode="update" />
+        <EditorClient
+          session={session}
+          boardType={board_type}
+          curPostId={postid}
+          mode="update"
+        />
       </div>
     </section>
   );
 }
 // [NOTE on rendering method]
-// This page is rendered as CSR (Client Side Rendering) dynamically.
+// This page is rendered as SSR (Server Side Rendering) dynamically.
 // * current post data is fetched with useEffect to keep it updated
 // Client-Side Components like BoardTitle and Editor are rendered and
 // become interactive in the browser after the initial HTML is loaded

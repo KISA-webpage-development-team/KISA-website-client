@@ -6,7 +6,6 @@
 
 import React, { useState } from "react";
 import LoginButton from "./LoginButton";
-import { useSession } from "next-auth/react";
 import VerticalDivider from "../shared/VerticalDivider";
 import InstagramLinkIcon from "../shared/InstagramLinkIcon";
 import UserInfo from "./UserInfo";
@@ -17,28 +16,26 @@ import {
   MenuItem,
   MobileMenu,
   MobileMenuItem,
-  ProductItem,
 } from "../../components/ui/aceternity/navbar-menu";
 import menu from "../../config/NavigationMenu";
 
 // sub-ui components
 import WebTitle from "./WebTitle";
-import { usePathname } from "next/navigation";
-
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
-export default function Header() {
+export default function Header({ session }) {
   const headerContentWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { data: session } = useSession();
   const [active, setActive] = useState(null);
-  const pathname = usePathname();
 
-  // useEffect(() => {
-  //   setIsMobileMenuOpen(false);
-  // }, [pathname]);
+  const pathname = usePathname();
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   return (
     <div
@@ -58,9 +55,6 @@ export default function Header() {
       >
         {/* Web Name home link */}
         <WebTitle />
-        {/* // isFirstChild={index === 0}
-              // isLastChild={index === menu?.length - 1} */}
-
         {/* Navigation Menu */}
         {/* !!! in mobile menu, this menu should go down and become hidden */}
         <div className="hidden md:flex">

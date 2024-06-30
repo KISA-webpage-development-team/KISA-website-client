@@ -27,7 +27,7 @@ export default function PostButtonBar({
   };
 
   const onClickPostUpdate = () => {
-    route.push(`/posts/update/${postid}`);
+    route.push(`/posts/update/${postid}?board_type=${type}`);
   };
 
   const onClickPostDelete = () => {

@@ -15,7 +15,8 @@ export default function BoardTableRow({
   postNum = 0,
   isAnnouncement = false,
 }: Props) {
-  const { postid, title, fullname, created, readCount, commentsCount } = post;
+  const { postid, type, title, fullname, created, readCount, commentsCount } =
+    post;
 
   return (
     <tr

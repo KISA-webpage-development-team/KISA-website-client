@@ -1,12 +1,29 @@
+"use client";
+
 import React, { useState } from "react";
 import UserBoardList from "./UserBoardList";
 import UserBoardNavBar from "./UserBoardNavBar";
-import { heebo, sejongHospitalLight } from "../../utils/fonts/textFonts";
+import { heebo } from "../../utils/fonts/textFonts";
+import { useUserComments, useUserPosts } from "../../service/user";
 
-export default function UserBoard({ postsData, commentsData }) {
+export default function UserBoard({ email, session }) {
   const [openPosts, setOpenPosts] = useState(true); // if openPosts = false, open comments
 
-  if (!postsData && !commentsData) return null;
+  // posts와 comments의 revalidate을 주기적으로 해줘야할것 같음.
+  const {
+    posts,
+    isLoading: isPostsFetching,
+    isError: postsError,
+  } = useUserPosts(email, session?.token);
+  const {
+    comments,
+    isLoading: isCommentsFetching,
+    isError: commentsError,
+  } = useUserComments(email, session?.token);
+
+  if (isPostsFetching || isCommentsFetching) return null;
+
+  if (postsError || commentsError) return <div>에러가 발생했습니다!</div>;
 
   return (
     <div className={`${heebo.className} flex flex-col w-full`}>
@@ -16,11 +33,11 @@ export default function UserBoard({ postsData, commentsData }) {
       </>
 
       {/* 내 글 / 내 댓글 */}
-      {(openPosts ? postsData : commentsData) && (
+      {(openPosts ? posts : comments) && (
         <>
           <UserBoardList
-            posts={postsData}
-            comments={commentsData}
+            posts={posts}
+            comments={comments}
             openPosts={openPosts}
           />
         </>

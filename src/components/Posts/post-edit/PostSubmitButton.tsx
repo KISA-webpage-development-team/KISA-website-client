@@ -43,6 +43,7 @@ export default function PostSubmitButton({
     try {
       setLoading(true);
       const res = await updatePost(postid, formData, token);
+
       setLoading(false);
 
       window.location.href = `/posts/${postid}`;
@@ -50,6 +51,7 @@ export default function PostSubmitButton({
       // This keeps the page from re-rendering and updating content live
     } catch (error) {
       window.alert("게시글 수정에 실패했습니다.");
+      setLoading(false);
       return;
     }
   };

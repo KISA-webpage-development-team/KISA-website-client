@@ -37,7 +37,9 @@ export default function CheckBoxes({
             value={tag.type}
             type="checkbox"
             checked={announcementTag === tag.type}
-            onChange={(e) => setAnnouncementTag(e.currentTarget.value)}
+            onChange={(e) => {
+              setAnnouncementTag(e.currentTarget.value);
+            }}
           />
           <label htmlFor="announcement">
             {tag.type === "" ? (

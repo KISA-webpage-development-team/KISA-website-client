@@ -17,7 +17,7 @@ export default function CommentsTable({ comments }) {
         </tr>
       </thead>
       <tbody className="">
-        {comments.map(({ commentid, text, created, postid }, idx) => (
+        {comments.map(({ commentid, text, created, postid, type }, idx) => (
           <tr
             key={commentid}
             className={`border-b border-gray-200 flex items-center `}

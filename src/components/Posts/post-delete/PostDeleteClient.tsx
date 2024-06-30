@@ -3,14 +3,14 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { deletePost } from "../../../service/post";
+
+// sub-ui components
 import ImageButton from "../../shared/ImageButton";
 import TrashcanIcon from "../../ui/TrashcanIcon";
 import PencilIcon from "../../ui/PencilIcon";
-import { useSession } from "next-auth/react";
 
-export default function PostDeleteClient({ boardType, postid }) {
+export default function PostDeleteClient({ session, boardType, postid }) {
   const router = useRouter();
-  const { data: session } = useSession();
 
   const onClickPostDeleteCancel = () => {
     router.push(`/posts/${postid}`);

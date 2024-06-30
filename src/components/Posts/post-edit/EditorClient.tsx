@@ -9,35 +9,29 @@
 // - checkboxes (admin) | submit button
 
 import React, { useEffect, useState } from "react";
-import { EditorClientProps } from "../../../model/props/posts";
-import { useSession } from "next-auth/react";
 
 // sub-ui components
-import NotLoginModal from "../../shared/NotLoginModal";
 import TitleInput from "./TitleInput";
 import TextEditor from "./TextEditor";
 import CheckBoxes from "./CheckBoxes";
 import PostSubmitButton from "./PostSubmitButton";
-import { CustomSession } from "../../../model/common/types";
 import {
   getBoardName,
   getBoardNameFromKorean,
 } from "../../../config/boardName";
 import { getIsAdmin } from "../../../service/auth";
+import { getSinglePost } from "../../../service/post";
 
 export default function EditorClient({
+  session,
   boardType,
-  curPost,
+  curPostId = null,
   mode,
-}: EditorClientProps) {
-  const { data: session, status } = useSession() as {
-    data: CustomSession | null;
-    status: string;
-  };
-
+}) {
   // admin state
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
+  // check admin status
   useEffect(() => {
     const fetchIsAdmin = async () => {
       const res = await getIsAdmin(session?.user.email, session?.token);
@@ -54,11 +48,28 @@ export default function EditorClient({
   }, [session]);
 
   // form states
-  const [title, setTitle] = useState<string>(curPost?.title || "");
-  const [text, setText] = useState<string>(curPost?.text || "");
-  const [isAnnouncement, setIsAnnouncement] = useState<boolean>(
-    curPost?.isAnnouncement || false
-  );
+  const [title, setTitle] = useState<string>("");
+  const [text, setText] = useState<string>("");
+  const [isAnnouncement, setIsAnnouncement] = useState<boolean>(false);
+
+  // fetch initial post if necessary
+  useEffect(() => {
+    const fetchInitialPost = async (postid) => {
+      try {
+        const res = await getSinglePost(postid);
+        // initialize post states
+        setTitle(res.title);
+        setText(res.text);
+        setIsAnnouncement(res.isAnnouncement);
+      } catch (error) {
+        console.log("Error occured while fetching post: ", error);
+      }
+    };
+
+    if (curPostId) {
+      fetchInitialPost(curPostId);
+    }
+  }, [curPostId]);
 
   // form states for announcement board
   const [announcementTag, setAnnouncementTag] = useState<string>("");
@@ -67,9 +78,7 @@ export default function EditorClient({
   useEffect(() => {
     const setInitialTag = () => {
       if (mode === "create") return "";
-      const tag = curPost?.title.startsWith("[")
-        ? curPost?.title.split("]")[0].slice(1)
-        : "";
+      const tag = title.startsWith("[") ? title.split("]")[0].slice(1) : "";
 
       if (getBoardNameFromKorean(tag) === "none") {
         setCustomTag(tag);
@@ -78,7 +87,7 @@ export default function EditorClient({
       }
     };
     setInitialTag();
-  }, []);
+  }, [title, mode]);
 
   // submit button state
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(true);
@@ -109,16 +118,17 @@ export default function EditorClient({
   useEffect(() => {
     if (text === "") setIsSubmitBtnDisabled(true);
   }, [text]);
+
   // ---------------------------------------------------------------------------
 
   // Exception Handling -------------------------------------------------------
-  // 1) if user is not logged in
-  if (status === "unauthenticated" || session?.token === null) {
-    // force user to login
-    return <NotLoginModal />;
+  // no need to handle not logged in because middleware will handle it
+  // 1) admin status is not fetched yet
+  if (isAdmin === null) {
+    return <div>Loading...</div>;
   }
   // 2) if boardType is announcement and user is not admin
-  if (status !== "loading" && boardType === "announcement" && !isAdmin) {
+  if (boardType === "announcement" && isAdmin === false) {
     return <div>권한이 없습니다.</div>;
   }
 
@@ -150,7 +160,7 @@ export default function EditorClient({
           disabled={isSubmitBtnDisabled}
           token={session?.token}
           mode={mode}
-          postid={mode === "create" ? null : curPost?.postid} // [TODO]: change post id for update mode
+          postid={mode === "create" ? null : curPostId}
           formData={
             // when creating a post
             mode === "create"
@@ -159,26 +169,26 @@ export default function EditorClient({
                   title:
                     boardType !== "announcement"
                       ? `${title}`
-                      : customTag === ""
-                      ? `[${getBoardName(announcementTag)}] ${title}`
-                      : `[${customTag}] ${title}`,
+                      : announcementTag === ""
+                      ? `[${customTag}] ${title}`
+                      : `[${getBoardName(announcementTag)}] ${title}`,
                   fullname: session?.user.name,
                   email: session?.user.email,
                   text: text,
                   isAnnouncement,
-                  tag: customTag === "" ? announcementTag : "",
+                  tag: announcementTag === "" ? customTag : announcementTag,
                 }
               : // when updating a post
                 {
                   title:
                     boardType !== "announcement"
                       ? `${title}`
-                      : customTag === ""
-                      ? `[${getBoardName(announcementTag)}] ${title}`
-                      : `[${customTag}] ${title}`,
+                      : announcementTag === ""
+                      ? `[${customTag}] ${title}`
+                      : `[${getBoardName(announcementTag)}] ${title}`,
                   text: text,
                   isAnnouncement,
-                  tag: customTag === "" ? announcementTag : "",
+                  tag: announcementTag === "" ? customTag : announcementTag,
                 }
           }
         />

@@ -15,8 +15,7 @@ export default function RulePage() {
     <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4">
       <InfoTitle title="회칙" />
       <div
-        className={`${sejongHospitalLight.className} px-4 sm:px-8 md:px-12 lg:px-16 
-        mt-6 md:mt-10
+        className={`${sejongHospitalLight.className} 
       text-base md:text-lg lg:text-xl`}
       >
         <p className={`${sejongHospitalBold.className}`}>제1조</p>

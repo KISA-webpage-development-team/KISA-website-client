@@ -1,18 +1,31 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
-import { getUserInfo } from "../../service/user";
+import { useUser } from "../../service/user";
 
 // sub-ui components
 import EditUserFixed from "./EditUserFixed";
 import EditUserForm from "./EditUserForm";
-import { useSession } from "next-auth/react";
 
-export default function UserEditClient({ user, email, profile }) {
-  const { data: session } = useSession();
+export default function UserEditClient({ email, session }) {
+  const { user, isLoading, isError } = useUser(email, session?.token);
 
   // editable fields
-  const [major, setMajor] = useState(user.major);
-  const [gradYear, setGradYear] = useState(user.gradYear);
-  const [linkedIn, setLinkedIn] = useState(user.linkedin ? user.linkedin : ""); // optional
+  const [major, setMajor] = useState("");
+  const [gradYear, setGradYear] = useState(0);
+  const [linkedIn, setLinkedIn] = useState(""); // optional
+
+  useEffect(() => {
+    if (isLoading || !user) return;
+
+    setMajor(user.major);
+    setGradYear(user.gradYear);
+    setLinkedIn(user.linkedin ? user.linkedin : "");
+  }, [isLoading, user]);
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (isError) return <div>에러가 발생했습니다!</div>;
 
   return (
     <div
@@ -20,7 +33,7 @@ export default function UserEditClient({ user, email, profile }) {
     flex flex-col justify-center md:flex-row gap-8 md:gap-16 lg:gap-20"
     >
       <EditUserFixed
-        profile={profile}
+        profile={session?.user.image}
         fullname={user?.fullname}
         email={user?.email}
       />

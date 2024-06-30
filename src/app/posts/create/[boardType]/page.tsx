@@ -2,6 +2,9 @@ import React from "react";
 import BoardTitle from "../../../../components/Boards/BoardTitle";
 
 import dynamic from "next/dynamic";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../../config/auth";
+import { BoardType } from "../../../../model/common/types";
 
 // need to force EditorClient to be rendered on client-side
 // I don't know why NextJS doesn't automatically render it on client-side
@@ -13,7 +16,15 @@ const EditorClient = dynamic(
   }
 );
 
-export default function CreatePostPage({ params }) {
+type PageProps = {
+  params: {
+    boardType: BoardType;
+  };
+};
+
+export default async function CreatePostPage({ params }: PageProps) {
+  const session = await getServerSession(authOptions);
+
   const { boardType } = params;
 
   return (
@@ -25,7 +36,7 @@ export default function CreatePostPage({ params }) {
 
       {/* Text Editor */}
       <div className="grow w-full">
-        <EditorClient boardType={boardType} mode="create" />
+        <EditorClient session={session} boardType={boardType} mode="create" />
       </div>
     </section>
   );
