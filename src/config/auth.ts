@@ -60,7 +60,8 @@ export const authOptions = {
       if (url.includes("/signin")) {
         // /signin페이지로 로그인할시에, callbackUrl을 붙여서 리다이렉트
         let callbackUrl = url.split("callbackUrl=")[1];
-        return `${baseUrl}${decodeURIComponent(callbackUrl)}`;
+
+        return `${decodeURIComponent(callbackUrl)}`;
       }
 
       // Allows relative callback URLs
@@ -77,5 +78,5 @@ export const authOptions = {
   session: {
     maxAge: 60 * 60 * 24 * 7, // 7 days
   },
-  secret: process.env.JWT_SECRET_KEY,
+  secret: process.env.NEXTAUTH_SECRET,
 };
