@@ -93,7 +93,7 @@ export default function PostView({ post }: PostViewProps) {
 
   return (
     <CookiesProvider>
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col self-stretch">
         <div
           className="w-full flex flex-col
       pt-1 

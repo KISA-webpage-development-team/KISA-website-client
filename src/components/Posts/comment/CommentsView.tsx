@@ -10,8 +10,8 @@ import { useSession } from "next-auth/react";
 import { getCommentsByPostid } from "../../../service/comment";
 
 // sub-ui components
-import TestCommentEditor from "./CommentEditor";
-import TestCommentsList from "./CommentsList";
+import CommentEditor from "./CommentEditor";
+import CommentsList from "./CommentsList";
 
 // types
 import { CustomSession } from "../../../model/common/types";
@@ -47,13 +47,13 @@ export default function CommentsView({
   }
 
   return (
-    <div className="w-full flex flex-col py-4 gap-2">
+    <div className="flex flex-col py-4 gap-2 self-stretch">
       {/* 1. comment count */}
       {/* [TODO] post의 commentsCount를 상시 업데이트하지 못하고 있음. */}
       <p className="text-sm md:text-base">{`댓글 ${commentsCount}개`}</p>
       {/* 2. default comment editor to add direct comment on the post */}
       {status === "authenticated" && (
-        <TestCommentEditor
+        <CommentEditor
           mode="create"
           session={session}
           postid={postid}
@@ -62,7 +62,7 @@ export default function CommentsView({
       )}
 
       {/* 3. comment list */}
-      <TestCommentsList
+      <CommentsList
         comments={comments}
         session={session}
         setCommentsStale={setCommentsStale}

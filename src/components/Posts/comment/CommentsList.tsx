@@ -8,7 +8,7 @@ export default function CommentsList({
   setCommentsStale,
 }: CommentsListProps) {
   return (
-    <div className="flex flex-col gap-1 mt-2">
+    <ul className="flex flex-col gap-1 mt-2">
       {comments?.map((comment) => (
         <CommentItem
           key={`comment-${comment.commentid}`}
@@ -18,6 +18,6 @@ export default function CommentsList({
           setCommentsStale={setCommentsStale}
         />
       ))}
-    </div>
+    </ul>
   );
 }

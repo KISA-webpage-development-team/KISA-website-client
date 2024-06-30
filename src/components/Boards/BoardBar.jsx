@@ -14,7 +14,7 @@ export default function BoardBar({ boardType }) {
   }
 
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className="self-stretch flex items-center justify-between">
       <BoardTitle boardType={boardType} />
       <CutomButton
         onClick={handleCreatePostClick}

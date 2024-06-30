@@ -35,22 +35,16 @@ export default function PostPage({ params }: PageProps) {
 
   return (
     <section className="!gap-0">
-      <div className="w-full">
-        <BoardTitle boardType={post.type} size="small" />
-      </div>
+      <BoardTitle boardType={post.type} size="small" />
 
       <SessionProvider>
-        <div className="w-full">
-          <PostView post={post} />
-        </div>
+        <PostView post={post} />
 
         {!post?.isAnnouncement && post?.type !== "announcement" && (
-          <div className="w-full">
-            <CommentsView
-              commentsCount={post?.commentsCount}
-              postid={post?.postid}
-            />
-          </div>
+          <CommentsView
+            commentsCount={post?.commentsCount}
+            postid={post?.postid}
+          />
         )}
       </SessionProvider>
     </section>

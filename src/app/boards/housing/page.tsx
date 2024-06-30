@@ -26,9 +26,7 @@ export default async function HousingPage({
   return (
     <section>
       {/* 게시판 search bar */}
-      <header className="w-full">
-        <BoardBar boardType={boardType} />
-      </header>
+      <BoardBar boardType={boardType} />
       {/* 게시판 table */}
       {/* API happens in BoardTable client component */}
       <article className="board_table_wrapper">

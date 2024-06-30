@@ -30,9 +30,7 @@ export default async function CreatePostPage({ params }: PageProps) {
   return (
     <section>
       {/* Board Title (지금 어떤 보드에 대한 게시물을 쓰는지 확인위해) */}
-      <div className="w-full">
-        <BoardTitle boardType={boardType} />
-      </div>
+      <BoardTitle boardType={boardType} />
 
       {/* Text Editor */}
       <div className="grow w-full">

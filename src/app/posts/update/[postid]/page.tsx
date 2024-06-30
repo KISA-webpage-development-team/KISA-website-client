@@ -38,9 +38,7 @@ export default async function PostUpdatePage({
   return (
     <section>
       {/* Board Title */}
-      <div className="w-full">
-        <BoardTitle boardType={board_type} />
-      </div>
+      <BoardTitle boardType={board_type} />
 
       {/* Text Editor */}
 

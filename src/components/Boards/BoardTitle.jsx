@@ -8,7 +8,7 @@ export default function BoardTitle({ boardType, size = "normal" }) {
 
   if (size === "normal") {
     return (
-      <Link href={boardLink} className="w-max">
+      <Link href={boardLink} className="w-max self-stretch">
         <p
           className={`cursor-pointer hover:underline
         text-lg sm:text-xl md:text-2xl font-bold text-michigan-blue`}
@@ -20,7 +20,7 @@ export default function BoardTitle({ boardType, size = "normal" }) {
   }
 
   return (
-    <Link href={boardLink} className="w-max">
+    <Link href={boardLink} className="w-max self-stretch">
       <p
         className={`cursor-pointer hover:underline
         text-xs sm:text-sm font-semibold text-michigan-blue`}

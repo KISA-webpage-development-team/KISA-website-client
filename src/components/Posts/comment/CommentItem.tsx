@@ -62,67 +62,63 @@ export default function CommentItem({
   };
 
   return (
-    <div className="flex flex-col">
+    <li className="flex flex-col">
       <div className="flex items-center">
         {isCommentOfComment ? (
-          <div className="-translate-y-2 mr-4">
-            <ReplyIcon type="flip" />
-          </div>
+          <ReplyIcon type="flip" customClassName="-translate-y-2 mr-4" />
         ) : null}
 
         {/* Comment contents */}
-        <div className="flex items-center justify-between w-full">
-          <div className="flex flex-col w-full gap-1 md:gap-0">
-            <div className="flex items-center justify-between">
-              {/* 1. Name + Time */}
-              <div
-                className="flex items-center gap-1 md:gap-2
+        <div className="flex flex-col w-full gap-1 md:gap-0">
+          <div className="flex items-center justify-between">
+            {/* 1. Name + Time */}
+            <div
+              className="flex items-center gap-1 md:gap-2
             text-sm md:text-base"
-              >
-                <Link href={`/users/${email}`}>
-                  <p className="text-black font-semibold hover:underline">
-                    {fullname}
-                  </p>
-                </Link>
-                <p className="text-gray-500">{timeForToday(created)}</p>
-              </div>
+            >
+              <Link href={`/users/${email}`}>
+                <p className="text-black font-semibold hover:underline">
+                  {fullname}
+                </p>
+              </Link>
+              <p className="text-gray-500">{timeForToday(created)}</p>
+            </div>
 
-              {/* 2. Buttons */}
-              <div className="flex gap-3">
-                {isAuthor && (
-                  <>
-                    <ImageButton
-                      background="none"
-                      text={`${openCommentEditor ? "취소" : "수정"}`}
-                      icon={<PencilIcon color="gray" noResize />}
-                      onClick={handleOpenCommentEditor}
-                    />
-                    <ImageButton
-                      background="none"
-                      icon={<TrashcanIcon color="gray" noResize />}
-                      text={"삭제"}
-                      onClick={handleCommentDelete}
-                    />
-                  </>
-                )}
-                {session && (
+            {/* 2. Buttons */}
+            <div className="flex gap-3">
+              {isAuthor && (
+                <>
                   <ImageButton
                     background="none"
-                    icon={<CommentIcon color="gray" noResize />}
-                    text={`${openReplyEditor ? "닫기" : "답글"}`}
-                    onClick={handleOpenReplyEditor}
+                    text={`${openCommentEditor ? "취소" : "수정"}`}
+                    icon={<PencilIcon color="gray" noResize />}
+                    onClick={handleOpenCommentEditor}
                   />
-                )}
-              </div>
+                  <ImageButton
+                    background="none"
+                    icon={<TrashcanIcon color="gray" noResize />}
+                    text={"삭제"}
+                    onClick={handleCommentDelete}
+                  />
+                </>
+              )}
+              {session && (
+                <ImageButton
+                  background="none"
+                  icon={<CommentIcon color="gray" noResize />}
+                  text={`${openReplyEditor ? "닫기" : "답글"}`}
+                  onClick={handleOpenReplyEditor}
+                />
+              )}
             </div>
-            {/* 3. Text */}
-            <div
-              className={`${
-                isAuthor && "text-blue-500"
-              } pb-3 text-sm md:text-base`}
-            >
-              {text}
-            </div>
+          </div>
+          {/* 3. Text */}
+          <div
+            className={`${
+              isAuthor && "text-blue-500"
+            } pb-3 text-sm md:text-base`}
+          >
+            {text}
           </div>
         </div>
       </div>
@@ -169,6 +165,6 @@ export default function CommentItem({
             />
           </div>
         ))}
-    </div>
+    </li>
   );
 }
