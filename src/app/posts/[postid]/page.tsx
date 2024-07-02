@@ -11,7 +11,7 @@ import BoardTitle from "../../../components/Boards/BoardTitle";
 import CommentsView from "../../../components/Posts/comment/CommentsView";
 import PostView from "../../../components/Posts/post-view/PostView";
 import { usePost } from "../../../service/swrHooks/postHooks";
-import { fetcher } from "../../../service/swrConfig";
+import { fetcher } from "../../../config/swrConfig";
 import { SessionProvider } from "next-auth/react";
 
 type PageProps = {
