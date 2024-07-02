@@ -4,7 +4,10 @@ import React, { useState } from "react";
 import UserBoardList from "./UserBoardList";
 import UserBoardNavBar from "./UserBoardNavBar";
 import { heebo } from "../../utils/fonts/textFonts";
-import { useUserComments, useUserPosts } from "../../service/user";
+import {
+  useUserComments,
+  useUserPosts,
+} from "../../service/swrHooks/userHooks";
 
 export default function UserBoard({ email, session }) {
   const [openPosts, setOpenPosts] = useState(true); // if openPosts = false, open comments

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { SWRConfig } from "swr";
-import { fetcher, fetcherWithToken } from "../service/swrConfig";
+import { fetcher, fetcherWithToken } from "../config/swrConfig";
 
 export const GlobalonErrorRetry = (
   error,

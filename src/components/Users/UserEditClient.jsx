@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useUser } from "../../service/user";
+import { useUser } from "../../service/swrHooks/userHooks";
 
 // sub-ui components
 import EditUserFixed from "./EditUserFixed";

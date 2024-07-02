@@ -3,7 +3,7 @@
 // sub-ui components
 import UserBasicInfoLeft from "./UserBasicInfoLeft";
 import UserBaiscInfoRight from "./UserBasicInfoRight";
-import { useUser } from "../../service/user";
+import { useUser } from "../../service/swrHooks/userHooks";
 
 export default function UserBasicInfo({ email, session }) {
   // Data Fetching from client side using custom useSWR hooks ----------------
