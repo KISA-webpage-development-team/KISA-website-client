@@ -5,14 +5,19 @@ import MobileBoardListItem from "./MobileBoardListItem";
 type Props = {
   posts: SimplePost[];
   annoucements: SimplePost[];
+  hasBorder?: boolean;
 };
 
-export default function MobileBoardList({ posts, annoucements }: Props) {
+export default function MobileBoardList({
+  posts,
+  annoucements,
+  hasBorder = true,
+}: Props) {
   return (
     <ol
-      className="sm:w-full sm:translate-x-0
+      className={`sm:w-full sm:translate-x-0
   w-screen -translate-x-4
-  border-t border-b border-gray-400"
+  ${hasBorder && "border-t border-b border-gray-400"}`}
     >
       {annoucements?.map((announcement, _) => (
         <MobileBoardListItem

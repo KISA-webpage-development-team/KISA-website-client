@@ -14,18 +14,10 @@ export default function Home() {
      gap-10 md:gap-16 lg:gap-20 
      mt-0 md:mt-6"
     >
-      {/* Carousel */}
-      {/* <UIProvider> */}
       <HomeCarousel />
-      {/* </UIProvider> */}
-      {/* Boards Summary */}
       <BoardsSummary />
-      {/* Quick Links (Hub) */}
       <QuickLinks />
-
-      {/* SchoolCalendar */}
       <SchoolCalendar />
-      {/* SponsorBanner */}
       {/* <SponsorBanner /> */}
     </section>
   );
