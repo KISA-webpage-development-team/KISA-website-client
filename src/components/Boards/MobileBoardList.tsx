@@ -16,7 +16,7 @@ export default function MobileBoardList({
   return (
     <ol
       className={`sm:w-full sm:translate-x-0
-  w-screen -translate-x-4
+  ${hasBorder && "w-screen -translate-x-4"}
   ${hasBorder && "border-t border-b border-gray-400"}`}
     >
       {annoucements?.map((announcement, _) => (
