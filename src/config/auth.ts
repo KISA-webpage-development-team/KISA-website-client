@@ -3,7 +3,6 @@ import axios from "axios";
 import GoogleProvider from "next-auth/providers/google";
 import SignToken from "../utils/signToken";
 import { backendUrl } from "./backendUrl";
-import { co } from "@fullcalendar/core/internal-common";
 
 export const authOptions = {
   // Configure one or more authentication providers

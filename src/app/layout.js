@@ -2,6 +2,7 @@ import "./globals.css";
 import { globalFont } from "../utils/fonts/globalFont";
 import Footer from "../components/Footer/Footer";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: {
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
           <Footer />
         </footer>
         <Analytics />
+        <SpeedInsights />
       </body>
       {/* </SessionProvider> */}
     </html>
