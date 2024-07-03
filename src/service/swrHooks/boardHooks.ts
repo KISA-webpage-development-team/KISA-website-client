@@ -29,7 +29,7 @@ export function useBoardPosts(
 }
 
 // @route GET /boards/{boardType}/count/
-// @params boardType
+// @params boardType.
 export function useBoardPostNum(
   boardType: BoardType,
   options?: SWRConfiguration
