@@ -29,6 +29,7 @@ const homeCarouselData = [
         신청하여 2달 무료 수강 쿠폰 받아 가세요!
       </p>
     ),
+    url: "https://www.instagram.com/p/C9BIwGgO7bf/",
   },
 
   {
