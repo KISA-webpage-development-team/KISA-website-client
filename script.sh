@@ -8,7 +8,7 @@ if [[ "$VERCEL_GIT_COMMIT_REF" == "main" || "$VERCEL_GIT_COMMIT_REF" == "main"  
   exit 1;
 
 else
-  # Don't builddf
+  # Don't build
   echo "🛑 - Build cancelled"
   exit 0;
 fi
