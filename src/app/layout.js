@@ -1,8 +1,8 @@
 import "./globals.css";
 import { globalFont } from "../utils/fonts/globalFont";
 import Footer from "../components/Footer/Footer";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+// import { Analytics } from "@vercel/analytics/react";
+// import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: {
@@ -28,8 +28,8 @@ export default function RootLayout({ children }) {
         <footer className="bottom-0 z-0">
           <Footer />
         </footer>
-        <Analytics />
-        <SpeedInsights />
+        {/* <Analytics /> */}
+        {/* <SpeedInsights /> */}
       </body>
       {/* </SessionProvider> */}
     </html>
