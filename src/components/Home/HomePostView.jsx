@@ -9,8 +9,6 @@ import HorizontalDivider from "../shared/HorizontalDivider";
 import MobileBoardList from "../Boards/MobileBoardList";
 
 export default function HomePostView({ type, posts }) {
-  console.log(posts);
-
   return (
     <div
       className="w-full flex flex-col
