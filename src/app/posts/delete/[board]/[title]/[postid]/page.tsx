@@ -20,7 +20,7 @@ export default async function DeleteConfirmPage({ params }: PageProps) {
 
   return (
     <section className="items-center justify-center gap-4">
-      <h1>{<strong>{`"${krTitle}"`}</strong>}을 삭제하시겠습니까?</h1>
+      <h1>게시물을 삭제하시겠습니까?</h1>
       {/* Actual delete api call happens here */}
       <PostDeleteClient session={session} boardType={board} postid={postid} />
     </section>
