@@ -1,12 +1,7 @@
-// User Page의 모든 api call은 token이 필요하므로, fetcherWithToken을 사용하도록 설정
-// [NOTE] this is still server component
-
-// import { SWRTokenProvider } from "../../context/SWRProvider";
-
-// export default function UserLayout({ children }) {
-//   return <SWRTokenProvider>{children}</SWRTokenProvider>;
-// }
+import { SWRTokenProvider } from "@/refactor_src/shared/swr/Providers";
 
 export default function UserLayout({ children }) {
-  return children;
+  // "/users" 페이지들은 모두 token을 사용해 GET API call을 하므로,
+  // SWRTokenProvider를 사용하도록 설정
+  return <SWRTokenProvider>{children}</SWRTokenProvider>;
 }

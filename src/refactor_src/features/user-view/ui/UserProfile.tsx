@@ -1,25 +1,28 @@
 "use client";
 
+// [UI]
+// user으 ㅣ얼
+
 import { useUser } from "@/refactor_src/entities/user";
-// import useSWR from "swr";
+import LoadingSpinner from "@/refactor_src/shared/ui/LoadingSpinner";
 
-// const fetcher = (url) => fetch(url).then((res) => res.json());
+type UserProfileProps = {
+  email: string;
+  token: string | null;
+};
 
-export function UserProfile({ email, token }) {
-  // 1. useEffect + axios 을 이용한 커스텁 훅
-  // 특징: revalidation을 하지 않는다. 페이지 새로고침을 해야만 데이터를 다시 가져온다.
-
+export function UserProfile({ email, token }: UserProfileProps) {
+  // [NOTE] api GET call은 공통적으로 SWR + axios를 이용해 이후 확장 옵션을 가져갈것
   const { user, isLoading, error } = useUser(email, token);
 
   if (error) {
-    return <p>Failed to fetch</p>;
+    // Error handling
+    throw error;
   }
 
   if (isLoading) {
-    return <p>Loading User...</p>;
+    return <LoadingSpinner />;
   }
-
-  console.log("user: ", user);
 
   return (
     <div

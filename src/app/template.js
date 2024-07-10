@@ -22,7 +22,7 @@ export default async function Template({ children }) {
       </header>
 
       <main
-        className={`w-full h-full
+        className={`relative w-full h-full
         mx-auto ${mainContentsWidth}
         pt-3 md:pt-6`}
       >

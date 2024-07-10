@@ -4,9 +4,12 @@
 // - page.tsx에서 함수이름은 [Main Feature]Page로 통일
 
 // [Rendering method] SSR (container) + CSR (components)
+// [Auth Middleware applied]
 import { authOptions } from "@/config/auth";
 import { UserBoard, UserProfile } from "@/refactor_src/features/user-view";
+import { KISA_EMAIL } from "@/refactor_src/shared/constants/emails";
 import { getServerSession } from "next-auth";
+import NotAuthorized from "@/refactor_src/shared/ui/NotAuthorized";
 import React from "react";
 
 type PageProps = {
@@ -25,12 +28,16 @@ export default async function UserViewPage({ params }: PageProps) {
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);
 
-  // const data = await getUser(decodedEmail, session?.token);
-
-  // console.log("data: ", data);
+  // [Business Logic]: KISA 이메일로만 KISA의 프로필을 확인
+  if (
+    decodedEmail.includes(KISA_EMAIL) &&
+    !session?.user?.email.includes(KISA_EMAIL)
+  ) {
+    return <NotAuthorized />;
+  }
 
   return (
-    <section className="bg-yellow-200">
+    <section>
       <UserProfile email={decodedEmail} token={session?.token} />
       <UserBoard />
     </section>
