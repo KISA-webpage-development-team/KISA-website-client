@@ -28,7 +28,8 @@ export default function RootLayout({ children }) {
         <footer className="bottom-0 z-0">
           <Footer />
         </footer>
-        <Analytics />
+        {/* <Analytics /> */}
+        {/* Analytics 쓸려면 Vercel Plan 결제해야됨; */}
         <SpeedInsights />
       </body>
       {/* </SessionProvider> */}
