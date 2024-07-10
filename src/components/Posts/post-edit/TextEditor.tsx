@@ -12,19 +12,6 @@ export default function TextEditor({
     () => ({
       toolbar: {
         container: [
-          [{ size: ["small", false, "large", "huge"] }],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["bold", "underline", "italic"],
-          [{ align: [] }],
-        ],
-      },
-    }),
-    []
-  );
-  const ReactQuillModulesAdmin = useMemo(
-    () => ({
-      toolbar: {
-        container: [
           ["image"],
           [{ size: ["small", false, "large", "huge"] }],
           [{ list: "ordered" }, { list: "bullet" }],
@@ -40,7 +27,7 @@ export default function TextEditor({
     <ReactQuill
       theme="snow"
       style={{ minHeight: 400 }}
-      modules={isAdmin ? ReactQuillModulesAdmin : ReactQuillModules}
+      modules={ReactQuillModules}
       value={text}
       onChange={(e: any) => setText(e)}
     />

@@ -15,9 +15,11 @@ export default function HomePostView({ type, posts }) {
   rounded-lg  border-gray-300 border-1 
   p-3 md:p-6 gap-2"
     >
-      <h2
-        className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-0`}
-      >{`${type} 게시판`}</h2>
+      <Link href={`/boards/${type === "공지" ? "announcement" : "community"}`}>
+        <h2
+          className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-0 hover:underline cursor-pointer`}
+        >{`${type} 게시판`}</h2>
+      </Link>
 
       <HorizontalDivider color="gray" />
 
