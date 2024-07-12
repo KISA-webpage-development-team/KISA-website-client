@@ -1,9 +1,11 @@
 "use client";
 
 import useSWR from "swr";
-import { immutableOption } from "@/refactor_src/shared/swr/config";
-import { User } from "@/refactor_src/entities/user/types";
+import { immutableOption } from "@/refactor_src/shared/swr";
+
+// types
 import { CustomAxiosError } from "@/refactor_src/shared/axios/types";
+import { User } from "@/refactor_src/entities/user/types";
 
 // @desc   Fetch user data
 // @route  GET /users/:email/
@@ -12,8 +14,7 @@ export function useUser(email: string, token: string | null) {
   // [NOTE] immutableOption을 추가하므로써 자주 바뀌지 않는 user 데이터의 특성상
   // revalidation을 페이지 새로고침을 제외하고 하지 않도록 설정
   const { data, error, isLoading } = useSWR<User, CustomAxiosError>(
-    // token ? [`/users/${email}/`, token] : null,
-    [`/users/${email}/`, token],
+    token ? [`/users/${email}/`, token] : null,
     immutableOption
   );
 

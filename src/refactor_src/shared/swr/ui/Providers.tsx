@@ -6,7 +6,7 @@
 // [NOTE] Provider는 CSR이지만, Provider를 감싼 children은 여전히 SSR로 렌더링 될 수 있다
 
 import { SWRConfig } from "swr";
-import { fetcher, fetcherWithToken } from "./config";
+import { fetcher, fetcherWithToken } from "../config";
 import { ReactNode } from "react";
 
 type ProviderProps = {

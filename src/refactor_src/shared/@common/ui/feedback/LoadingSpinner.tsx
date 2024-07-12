@@ -2,7 +2,7 @@ import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { Spinner } from "@nextui-org/react";
 import React from "react";
 
-export default function LoadingSpinner() {
+export function LoadingSpinner() {
   return (
     <div className="absolute top-0 left-0 w-full h-full bg-white z-50 flex justify-center items-center">
       <Spinner

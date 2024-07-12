@@ -1,5 +1,5 @@
 // SWR Configuration
-import { client } from "@/refactor_src/shared/axios/config";
+import { client } from "@/refactor_src/shared/axios";
 
 // @desc SWR fetcher object with axios
 const fetcher = (url) =>

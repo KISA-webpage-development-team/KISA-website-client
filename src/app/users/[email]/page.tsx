@@ -5,12 +5,12 @@
 
 // [Rendering method] SSR (container) + CSR (components)
 // [Auth Middleware applied]
-import { authOptions } from "@/config/auth";
-import { UserBoard, UserProfile } from "@/refactor_src/features/user-view";
-import { KISA_EMAIL } from "@/refactor_src/shared/constants/emails";
-import { getServerSession } from "next-auth";
-import NotAuthorized from "@/refactor_src/shared/ui/NotAuthorized";
 import React from "react";
+import { authOptions } from "@/config/auth";
+import { getServerSession } from "next-auth";
+import { UserBoard, UserProfile } from "@/refactor_src/features/user-view";
+import { NotAuthorized } from "@/refactor_src/shared/@common";
+import { KISA_EMAIL } from "@/refactor_src/shared/@common";
 
 type PageProps = {
   params: {
@@ -36,10 +36,14 @@ export default async function UserViewPage({ params }: PageProps) {
     return <NotAuthorized />;
   }
 
+  if (!session) {
+    return <></>;
+  }
+
   return (
     <section>
-      <UserProfile email={decodedEmail} token={session?.token} />
-      <UserBoard />
+      <UserProfile email={decodedEmail} session={session} />
+      <UserBoard email={decodedEmail} session={session} />
     </section>
   );
 }

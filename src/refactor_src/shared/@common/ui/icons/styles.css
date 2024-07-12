@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.icon {
+  @apply text-xl md:text-3xl;
+}
