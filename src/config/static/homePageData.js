@@ -31,7 +31,9 @@ const homeCarouselData = [
         미시간 대학교 입학을 축하드립니다!! KISA에서 준비한 신/편입생 톡방에
         들어오셔서 다양한 정보를 얻고 새로운 사람들도 만나보세요!
         <br />
-        오픈채팅방 비밀번호는 @kisa_michigan 인스타 디엠으로 물어봐주세요!
+        <span className="text-overflow-two-lines">
+          오픈채팅방 비밀번호는 @kisa_michigan 인스타 디엠으로 물어봐주세요!
+        </span>
       </p>
     ),
     url: "https://open.kakao.com/o/gFbE6Hng",
