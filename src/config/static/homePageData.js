@@ -7,6 +7,23 @@
 // url
 const homeCarouselData = [
   {
+    id: "24_new_student_welcome",
+    title: "신편입생 환영회",
+    desc: (
+      <p>
+        장소: 강남비치
+        <br />
+        일시: 2024년 7월 27일 토요일 18:30 - 23:00
+        <br />
+        <span className="text-overflow-two-lines">
+          KISA가 올 가을 미시간 대학교에 입학하는 신/편입생을 환영합니다! 새로운
+          친구들을 만나고 다가오는 새 학기에 도움이 될 꿀팁도 알아가세요.
+          신환회에서 여러분의 첫 걸음을 응원합니다🫶
+        </span>
+      </p>
+    ),
+  },
+  {
     id: "24-25_new_student_chatroom",
     title: "[24-25] 신/편입생 톡방",
     desc: (

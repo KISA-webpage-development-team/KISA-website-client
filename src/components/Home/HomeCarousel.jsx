@@ -117,7 +117,7 @@ export default function HomeCarousel() {
                 <span
                   className={`${sejongHospitalLight.className} text-xs sm:text-sm md:text-base xl:text-base
                   h-16 sm:h-24 md:h-28 lg:h-fit
-                  overflow-hidden text-ellipsis`}
+                  `}
                 >
                   {desc}
                 </span>
