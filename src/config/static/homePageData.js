@@ -15,11 +15,9 @@ const homeCarouselData = [
         <br />
         일시: 2024년 7월 27일 토요일 18:30 - 23:00
         <br />
-        <span className="text-overflow-two-lines">
-          KISA가 올 가을 미시간 대학교에 입학하는 신/편입생을 환영합니다! 새로운
-          친구들을 만나고 다가오는 새 학기에 도움이 될 꿀팁도 알아가세요.
-          신환회에서 여러분의 첫 걸음을 응원합니다🫶
-        </span>
+        KISA가 올 가을 미시간 대학교에 입학하는 신/편입생을 환영합니다! 새로운
+        친구들을 만나고 다가오는 새 학기에 도움이 될 꿀팁도 알아가세요.
+        신환회에서 여러분의 첫 걸음을 응원합니다🫶
       </p>
     ),
   },
@@ -31,9 +29,7 @@ const homeCarouselData = [
         미시간 대학교 입학을 축하드립니다!! KISA에서 준비한 신/편입생 톡방에
         들어오셔서 다양한 정보를 얻고 새로운 사람들도 만나보세요!
         <br />
-        <span className="text-overflow-two-lines">
-          오픈채팅방 비밀번호는 @kisa_michigan 인스타 디엠으로 물어봐주세요!
-        </span>
+        오픈채팅방 비밀번호는 @kisa_michigan 인스타 디엠으로 물어봐주세요!
       </p>
     ),
     url: "https://open.kakao.com/o/gFbE6Hng",
