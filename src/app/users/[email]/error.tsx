@@ -1,5 +1,7 @@
 "use client"; // Error components must be Client Components
 
+// [NOTE] currently this is for testing. not done yet.
+
 import { CustomAxiosError } from "@/refactor_src/shared/axios/types";
 import { useEffect } from "react";
 
