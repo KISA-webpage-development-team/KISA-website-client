@@ -19,7 +19,7 @@ export function useUserPosts(email: string, token: string | null) {
   );
 
   return {
-    posts: data.posts as Post[],
+    posts: data?.posts as Post[],
     isLoading,
     error,
   };

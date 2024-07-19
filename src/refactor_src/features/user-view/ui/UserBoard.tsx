@@ -20,7 +20,7 @@ type UserBoardProps = {
 
 export function UserBoard({ email, session }: UserBoardProps) {
   const { activeView, setActiveView, posts, comments, isLoading, error } =
-    useUserBoard(email, session.token);
+    useUserBoard(email, session?.token);
 
   const userBoardViewList = [
     {
