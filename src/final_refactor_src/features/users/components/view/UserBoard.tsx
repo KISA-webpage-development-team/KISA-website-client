@@ -3,7 +3,7 @@
 import React from "react";
 
 // hook
-import useUserBoard from "../hooks/useUserBoard";
+import useUserBoard from "../../hooks/useUserBoard";
 
 // sub-ui components
 import UserPostsTable from "./UserPostsTable";

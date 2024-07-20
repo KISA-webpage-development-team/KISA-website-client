@@ -21,7 +21,7 @@ text-base text-black"
       <colgroup span={5}>
         <col width="60px" />
         <col width="*" />
-        <col width="100px" />
+        <col width="120px" />
         <col width="80px" />
         <col width="55px" />
       </colgroup>

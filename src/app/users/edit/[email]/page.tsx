@@ -1,5 +1,5 @@
 import React from "react";
-import UserEditClient from "../../../../components/Users/UserEditClient";
+import UserEditClient from "@/final_refactor_src/features/users/components/edit/UserEditClient";
 import { getSession } from "@/final_refactor_src/lib/next-auth/getSession";
 import { NotAuthorized } from "@/final_refactor_src/components/feedback";
 

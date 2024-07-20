@@ -12,8 +12,8 @@ import { getSession } from "@/final_refactor_src/lib/next-auth/getSession";
 
 // UI
 import NotAuthorized from "@/final_refactor_src/components/feedback/NotAuthorized";
-import UserProfile from "@/final_refactor_src/features/users/components/UserProfile";
-import UserBoard from "@/final_refactor_src/features/users/components/UserBoard";
+import UserProfile from "@/final_refactor_src/features/users/components/view/UserProfile";
+import UserBoard from "@/final_refactor_src/features/users/components/view/UserBoard";
 
 type PageProps = {
   params: {
