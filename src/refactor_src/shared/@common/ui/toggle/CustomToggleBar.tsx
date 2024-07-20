@@ -8,11 +8,11 @@ type CustomToggleBarProps = {
   viewList: ViewListItem[];
 };
 
-export function CustomToggleBar({
+const CustomToggleBar = ({
   activeView,
   setActiveView,
   viewList = [],
-}: CustomToggleBarProps) {
+}: CustomToggleBarProps) => {
   return (
     <div className="flex text-sm md:text-lg mt-1">
       {viewList.map((viewList, index) => (
@@ -29,4 +29,6 @@ export function CustomToggleBar({
       ))}
     </div>
   );
-}
+};
+
+export default CustomToggleBar;

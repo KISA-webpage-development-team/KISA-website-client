@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .icon {
-  @apply text-xl md:text-3xl;
+  @apply text-xl md:text-2xl;
 }

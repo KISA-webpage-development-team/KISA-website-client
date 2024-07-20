@@ -4,10 +4,9 @@
 // - user profile image
 // - name
 // - major
-
-import { sejongHospitalBold } from "@/final_refactor_src/utils/fonts/fonts";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import { sejongHospitalBold } from "@/final_refactor_src/utils/fonts/fonts";
 
 type UserProfileInfoProps = {
   fullname: string;
@@ -35,7 +34,7 @@ export default function UserProfileInfo({
           className="relative flex justify-center
           aspect-square w-16 md:w-20"
         >
-          {/* [NOTE] 프로필 이미지는 LCP로 걸린다. priority를 붙여주자 */}
+          {/* [NOTE] Profile image is loaded as LCP (Large Content). Let's add priority */}
           <Image
             priority
             className="rounded-full object-contain"
@@ -52,7 +51,7 @@ export default function UserProfileInfo({
         className="flex flex-col items-center
        gap-0"
       >
-        {/* [NOTE] user의 이름이 페이지의 가장 주된 텍스트 (헤딩)이라고 취급 */}
+        {/* [NOTE] User's name is treated as the main text (heading) of the page */}
         <h1 className={`${sejongHospitalBold.className} text-xl md:text-2xl`}>
           {fullname}
         </h1>

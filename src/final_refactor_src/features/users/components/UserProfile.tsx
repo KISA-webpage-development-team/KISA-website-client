@@ -1,63 +1,78 @@
 "use client";
 
-import { sejongHospitalLight } from "@/final_refactor_src/utils/fonts/fonts";
+// [UI]
+// UserProfileInfo: image (only for the self), name, major
+// UserProfileDetails: email, gradYear, linkedIn
+// EditButton: edit button (only for the self)
 
-// user
+// [Logic]
+// isSelf: check if the user is the same as the logged-in user
+// useUser: fetch user data based on the email
+// prepareDetailList: prepare detail list for the user (UserProfileDetails)
+
+import React from "react";
+import { sejongHospitalLight } from "@/final_refactor_src/utils/fonts/fonts";
+// api
 import { useUser } from "@/final_refactor_src/apis/users/hooks";
 
-// shared
+// sub-ui components
+import UserProfileInfo from "./UserProfileInfo";
+import UserProfileDetails from "./UserProfileDetails";
+import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import { CustomLinkButton } from "@/final_refactor_src/components/button";
 import {
   EmailIcon,
   GradIcon,
   LinkedInIcon,
 } from "@/final_refactor_src/components/icon";
-// UI
-import UserProfileInfo from "./UserProfileInfo";
-import UserProfileDetails from "./UserProfileDetails";
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
-import { CustomLinkButton } from "@/final_refactor_src/components/button";
+
 // Types
 import { UserSession } from "@/final_refactor_src/lib/next-auth/types";
+import { User } from "@/final_refactor_src/types/user";
 
 type UserProfileProps = {
   email: string;
   session: UserSession | null;
 };
 
-export function UserProfile({ email, session }: UserProfileProps) {
-  // [NOTE] api GET call은 공통적으로 SWR + axios를 이용해 이후 확장 옵션을 가져갈것
-  const { user, isLoading, error } = useUser(email, session?.token);
+export default function UserProfile({ email, session }: UserProfileProps) {
+  // [Logic]: Fetch user data based on the email
+  const { user, isLoading, error } = useUser(email, session.token);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   if (error) {
-    // Error handling
+    // Error handling while fetching user data
     throw error;
   }
 
-  const isSelf = session?.user.email === email;
+  // [Logic]: Check if the user is the same as the logged-in user
+  // if so, the user can edit their profile
+  const isSelf = session.user.email === email;
 
-  // <Business Logic> List 형태로 유저의 디테일한 정보들을 보여준다.
-  // 이 리스트를 분리해야함 이 컴포넌트에서
-  // 각각 icon, text, 그리고 필요시 onClick을 받아서 처리한다.
-  const { fullname, major, gradYear, linkedin } = user;
-  const detailList = [
-    {
-      icon: <EmailIcon />,
-      text: email,
-    },
-    {
-      icon: <GradIcon />,
-      text: "Class of " + gradYear.toString(),
-    },
-    {
-      icon: <LinkedInIcon />,
-      text: linkedin?.split(".com/in/")[1]?.replace("/", ""),
-      onClick: () => window.open(linkedin, "_blank"),
-    },
-  ];
+  // [Logic]: Prepare detail list for the returned user
+  const prepareDetailList = (user: User) => {
+    const { email, gradYear, linkedin } = user;
+    return [
+      {
+        icon: <EmailIcon />,
+        text: email,
+      },
+      {
+        icon: <GradIcon />,
+        text: "Class of " + gradYear.toString(),
+      },
+      {
+        icon: <LinkedInIcon />,
+        text: linkedin?.split(".com/in/")[1]?.replace("/", ""),
+        onClick: () => window.open(linkedin, "_blank"),
+      },
+    ];
+  };
+
+  const detailList = prepareDetailList(user);
 
   return (
     <div
@@ -67,12 +82,12 @@ export function UserProfile({ email, session }: UserProfileProps) {
     >
       {/* Left: Profile Image (if email is same as logged in user) + Name + Major*/}
       <UserProfileInfo
-        fullname={fullname}
-        major={major}
+        fullname={user.fullname}
+        major={user.major}
         hasProfile={isSelf}
-        profile={session?.user.image}
+        profile={session.user.image}
       />
-      {/* Right: email + gradYear + linkedIn + edit button */}
+      {/* Right: Details (email + gradYear + linkedIn) + Edit Button */}
       <div className="flex flex-col gap-3 w-fit">
         <UserProfileDetails detailList={detailList} />
         {isSelf && (

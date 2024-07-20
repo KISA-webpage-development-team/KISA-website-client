@@ -1,4 +1,4 @@
-import { sejongHospitalBold } from "@/final_refactor_src/utils/fonts";
+import { sejongHospitalBold } from "@/final_refactor_src/utils/fonts/fonts";
 import { Spinner } from "@nextui-org/react";
 import React from "react";
 

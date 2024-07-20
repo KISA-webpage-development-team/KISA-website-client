@@ -1,3 +1,8 @@
+// [UI]
+// - list of user details (icon - text (link if applicable))
+
+import React from "react";
+
 interface UserProfileDetail {
   icon: JSX.Element;
   text: string;

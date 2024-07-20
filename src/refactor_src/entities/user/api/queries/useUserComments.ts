@@ -5,6 +5,7 @@ import { immutableOption } from "@/refactor_src/shared/swr";
 
 // types
 import { CustomAxiosError } from "@/refactor_src/shared/axios/types";
+import { Comment } from "@/final_refactor_src/types/comment";
 
 // @desc   Fetch comments of a user
 // @route  GET /users/:email/comments/
@@ -18,7 +19,7 @@ export function useUserComments(email: string, token: string | null) {
   );
 
   return {
-    comments: data,
+    comments: data?.comments as Comment[],
     isLoading,
     error,
   };

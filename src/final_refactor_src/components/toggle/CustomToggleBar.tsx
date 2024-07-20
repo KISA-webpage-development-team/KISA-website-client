@@ -14,7 +14,7 @@ export default function CustomToggleBar({
   viewList = [],
 }: CustomToggleBarProps) {
   return (
-    <div className="flex text-sm md:text-lg mt-1">
+    <div className="flex text-sm md:text-base mt-1">
       {viewList.map((viewList, index) => (
         <div
           key={index}

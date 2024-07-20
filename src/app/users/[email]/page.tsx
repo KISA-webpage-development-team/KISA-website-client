@@ -7,12 +7,13 @@
 // [Rendering method] SSR (container) + CSR (components)
 // [Auth Middleware applied]
 import React from "react";
-import { UserBoard, UserProfile } from "@/refactor_src/features/user-view";
 import { KISA_EMAIL } from "@/final_refactor_src/constants/email";
 import { getSession } from "@/final_refactor_src/lib/next-auth/getSession";
 
 // UI
 import NotAuthorized from "@/final_refactor_src/components/feedback/NotAuthorized";
+import UserProfile from "@/final_refactor_src/features/users/components/UserProfile";
+import UserBoard from "@/final_refactor_src/features/users/components/UserBoard";
 
 type PageProps = {
   params: {
