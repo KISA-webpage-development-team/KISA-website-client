@@ -61,7 +61,7 @@ export default function MobileUserPostsList({
                 </div>
               </div>
 
-              <div className="text-gray-500 text-sm">
+              <div className="text-black text-sm">
                 {formatRelativeTime(created)}
               </div>
             </li>

@@ -1,1 +1,1 @@
-export const KISA_EMAIL = "umichkisa.com";
+export const KISA_EMAIL = "umichkisa@gmail.com";

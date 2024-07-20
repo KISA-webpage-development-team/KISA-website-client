@@ -22,7 +22,7 @@ export default function UserCommentsTable({
       <colgroup span={3}>
         <col width="60px" />
         <col width="*" />
-        <col width="80px" />
+        <col width="90px" />
       </colgroup>
 
       <thead className="w-full">
