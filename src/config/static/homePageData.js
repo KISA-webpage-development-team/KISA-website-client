@@ -35,19 +35,6 @@ const homeCarouselData = [
     url: "https://open.kakao.com/o/gFbE6Hng",
   },
   {
-    id: "metacode_kisa_event",
-    title: "[메타코드] 2달 무료 수강 이벤트",
-    desc: (
-      <p>
-        KISA가 [메타코드]와 협업하여 미시간 한인 학생들을 위한 2달 무료 수강
-        이벤트를 진행합니다. 코딩에 조금이라도 관심 있는 학우분들께서는 7.21까지
-        신청하여 2달 무료 수강 쿠폰 받아 가세요!
-      </p>
-    ),
-    url: "https://www.instagram.com/p/C9BIwGgO7bf/",
-  },
-
-  {
     id: "w24_course_evaluation",
     title: "여러분의 수강신청을 도와드립니다",
     desc: (
