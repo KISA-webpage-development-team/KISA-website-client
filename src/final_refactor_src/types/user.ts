@@ -5,15 +5,15 @@ interface SimpleUser {
   email: string;
   fullname: string;
   major: string;
-  gradYear: Number;
+  gradYear: number;
   linkedin?: string;
 }
 
 interface User extends SimpleUser {
   created: string;
-  bornDate: Number;
-  bornMonth: Number;
-  bornYear: Number;
+  bornDate: number;
+  bornMonth: number;
+  bornYear: number;
 }
 
 export type { SimpleUser, User };

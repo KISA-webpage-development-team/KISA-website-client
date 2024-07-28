@@ -14,8 +14,10 @@ import { Post } from "@/final_refactor_src/types/post";
 import { CustomAxiosError } from "@/final_refactor_src/lib/axios/types";
 import { Comment } from "@/final_refactor_src/types/comment";
 
-// @desc   Fetch user data
-// @route  GET /users/:email/
+/**
+ * @desc   Fetch user data
+ * @route  GET /users/:email/
+ */
 export function useUser(email: string, token: string | null) {
   // - By adding immutableOption,
   // revalidation is disabled for user data that doesn't change frequently,
@@ -33,9 +35,10 @@ export function useUser(email: string, token: string | null) {
     error,
   };
 }
-
-// @desc   Fetch posts of a user
-// @route  GET /users/:email/posts/
+/**
+ *@desc   Fetch posts of a user
+ *@route  GET /users/:email/posts/
+ */
 export function useUserPosts(email: string, token: string | null) {
   // - By adding immutableOption,
   // revalidation is disabled for user's post data that doesn't change frequently,

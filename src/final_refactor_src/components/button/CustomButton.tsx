@@ -6,7 +6,8 @@ type CustomButtonProps = {
   type?: ButtonType;
   text: string;
   disabled?: boolean;
-  onClick: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  forSubmit?: boolean;
 };
 
 export default function CustomButton({
@@ -14,6 +15,7 @@ export default function CustomButton({
   text,
   disabled = false,
   onClick,
+  forSubmit = false,
 }: CustomButtonProps) {
   const className = `${
     disabled ? `${type}_button_disabled` : `${type}_button`
@@ -21,6 +23,7 @@ export default function CustomButton({
 
   return (
     <button
+      type={forSubmit ? "submit" : "button"}
       className={className}
       disabled={disabled}
       onClick={onClick}
