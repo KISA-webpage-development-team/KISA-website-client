@@ -1,5 +1,6 @@
 import React from "react";
 import { sejongHospitalBold } from "@/final_refactor_src/utils/fonts/fonts";
+import "./styles.css";
 
 type CustomLabelProps = {
   htmlFor: string;
@@ -15,8 +16,8 @@ export default function CustomLabel({
   return (
     <label
       htmlFor={htmlFor}
-      className={`flex items-start gap-1
-      ${sejongHospitalBold.className} text-sm md:text-base`}
+      className={`label
+      ${sejongHospitalBold.className}`}
     >
       {text && <span>{text}</span>}
       {required && <span className="text-red-500">*</span>}

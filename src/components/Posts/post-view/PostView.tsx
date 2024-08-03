@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 // types
-import { PostViewProps } from "../../../model/props/posts";
 import { CustomSession } from "../../../model/common/types";
 
 // sub-ui components
@@ -20,6 +19,11 @@ import HorizontalDivider from "../../shared/HorizontalDivider";
 import { CookiesProvider } from "react-cookie";
 import { getCookie, setCookie } from "../../../utils/cookie";
 import { incrementReadCount } from "../../../service/post";
+import { Post } from "@/final_refactor_src/types/post";
+
+type PostViewProps = {
+  post: Post;
+};
 
 export default function PostView({ post }: PostViewProps) {
   const { data: session, status } = useSession() as {

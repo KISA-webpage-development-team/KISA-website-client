@@ -1,11 +1,11 @@
 import React from "react";
-import { Post } from "@/final_refactor_src/types/post";
+import { UserBoardPost } from "@/final_refactor_src/types/post";
 import { formatDateOrTime } from "@/final_refactor_src/utils/formats/date";
 import { getKoreanBoardType } from "@/final_refactor_src/utils/formats/boardType";
 import Link from "next/link";
 
 type UserPostsTableProps = {
-  posts: Post[];
+  posts: UserBoardPost[];
 };
 
 export default function UserPostsTable({ posts }: UserPostsTableProps) {

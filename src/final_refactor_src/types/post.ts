@@ -12,6 +12,9 @@ interface Post {
   type: BoardType;
   readCount: number;
   isAnnouncement: boolean;
+  commentsCount: number;
 }
 
-export type { Post };
+interface UserBoardPost extends Omit<Post, "commentsCount"> {}
+
+export type { Post, UserBoardPost };

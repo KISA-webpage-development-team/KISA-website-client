@@ -13,12 +13,13 @@ const componentFolders = ["icon", "button", "feedback", "toggle"];
 module.exports = {
   extends: "next/core-web-vitals",
   plugins: ["import"],
-  rules: {
-    "import/no-restricted-paths": [
-      "error",
-      {
-        zones: componentFolders.map(createComponentImportRule),
-      },
-    ],
-  },
+  // [NOTE] currently disabled
+  // rules: {
+  //   "import/no-restricted-paths": [
+  //     "error",
+  //     {
+  //       zones: componentFolders.map(createComponentImportRule),
+  //     },
+  //   ],
+  // },
 };

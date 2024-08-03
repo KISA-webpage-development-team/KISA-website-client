@@ -5,12 +5,12 @@
 
 // [NOTE] GET API Calls are done with SWR library for future extension options
 // ---------------------------------------------------------------------------
-import useSWR from "swr";
+import useSWR, { SWRConfiguration } from "swr";
 import { immutableOption } from "@/final_refactor_src/lib/swr/options";
 
 // Types
 import { User } from "@/final_refactor_src/types/user";
-import { Post } from "@/final_refactor_src/types/post";
+import { UserBoardPost } from "@/final_refactor_src/types/post";
 import { CustomAxiosError } from "@/final_refactor_src/lib/axios/types";
 import { Comment } from "@/final_refactor_src/types/comment";
 
@@ -18,7 +18,11 @@ import { Comment } from "@/final_refactor_src/types/comment";
  * @desc   Fetch user data
  * @route  GET /users/:email/
  */
-export function useUser(email: string, token: string | null) {
+export function useUser(
+  email: string,
+  token: string | null,
+  options: SWRConfiguration = immutableOption
+) {
   // - By adding immutableOption,
   // revalidation is disabled for user data that doesn't change frequently,
   // except when the page is refreshed.
@@ -26,7 +30,7 @@ export function useUser(email: string, token: string | null) {
 
   const { data, error, isLoading } = useSWR<User, CustomAxiosError>(
     token ? [`/users/${email}/`, token] : null,
-    immutableOption
+    options
   );
 
   return {
@@ -39,20 +43,24 @@ export function useUser(email: string, token: string | null) {
  *@desc   Fetch posts of a user
  *@route  GET /users/:email/posts/
  */
-export function useUserPosts(email: string, token: string | null) {
+export function useUserPosts(
+  email: string,
+  token: string | null,
+  options: SWRConfiguration = immutableOption
+) {
   // - By adding immutableOption,
   // revalidation is disabled for user's post data that doesn't change frequently,
   // except when the page is refreshed.
   // - token is required for the request
   const { data, error, isLoading } = useSWR<any, CustomAxiosError>(
     token ? [`/users/${email}/posts/`, token] : null,
-    immutableOption
+    options
   );
 
   // there is some issue with backend response type
   // so we need to cast the response to Post[]
   return {
-    posts: data ? (data.posts as Post[]) : [],
+    posts: data ? (data.posts as UserBoardPost[]) : [],
     isLoading,
     error,
   };
@@ -60,14 +68,18 @@ export function useUserPosts(email: string, token: string | null) {
 
 // @desc   Fetch comments of a user
 // @route  GET /users/:email/comments/
-export function useUserComments(email: string, token: string | null) {
+export function useUserComments(
+  email: string,
+  token: string | null,
+  options: SWRConfiguration = immutableOption
+) {
   // - By adding immutableOption,
   // revalidation is disabled for user's comment data that doesn't change frequently,
   // except when the page is refreshed.
   // - token is required for the request
   const { data, error, isLoading } = useSWR<any, CustomAxiosError>(
     token ? [`/users/${email}/comments/`, token] : null,
-    immutableOption
+    options
   );
 
   return {

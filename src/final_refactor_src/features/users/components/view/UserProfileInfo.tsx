@@ -25,14 +25,14 @@ export default function UserProfileInfo({
     <div
       className="flex flex-row md:flex-col 
       justify-center items-center 
-    gap-2 md:gap-4"
-      aria-label="User Profile Information"
+    gap-2 md:gap-4 "
+      // aria-label="User Profile Information"
     >
       {/* Profile Image */}
       {hasProfile && (
         <figure
-          className="relative flex justify-center
-          aspect-square w-16 md:w-20"
+          className="relative flex
+         w-16 md:w-20 aspect-square "
         >
           {/* [NOTE] Profile image is loaded as LCP (Large Content). Let's add priority */}
           <Image

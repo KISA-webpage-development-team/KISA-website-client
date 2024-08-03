@@ -1,6 +1,12 @@
 // Declare Types for User
 // [NOTE] never includes props type here
 
+interface UserEditableFields {
+  major: string;
+  gradYear: number;
+  linkedin?: string;
+}
+
 interface SimpleUser {
   email: string;
   fullname: string;
@@ -16,4 +22,4 @@ interface User extends SimpleUser {
   bornYear: number;
 }
 
-export type { SimpleUser, User };
+export type { UserEditableFields, SimpleUser, User };

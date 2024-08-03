@@ -1,13 +1,28 @@
 "use client";
 
-import { UserSession } from "@/final_refactor_src/lib/next-auth/types";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+// UserEditClient: client wrapper component for user edit page
+// includes fixed fields (e.g., email) and editable fields (e.g., major, gradYear, linkedIn)
+
+// [NOTE on Abstraction]
+// 원래는 Editable Field와 Fixed Field를 Abstraction으로 나누어서 쉽게 수정할 수 있도록 노력했지만,
+// 실패했다.
+// 이유는 Editable Field와 Fixed Field가 서로 다른 부분이 많아서, Abstraction으로 나누는 것이
+// 오히려 코드를 복잡하게 만들었기 때문.
+
+import React from "react";
+import { sejongHospitalLight } from "@/final_refactor_src/utils/fonts/fonts";
+
+// hooks
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useUser } from "@/final_refactor_src/apis/users/hooks";
+
+// sub-ui components
 import UserEditForm from "./UserEditForm";
 import UserEditFixed from "./UserEditFixed";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
-import { sejongHospitalLight } from "@/final_refactor_src/utils/fonts/fonts";
-import { useUser } from "@/final_refactor_src/apis/users/hooks";
-import { EmailIcon } from "@/final_refactor_src/components/icon";
+
+// types
+import { UserSession } from "@/final_refactor_src/lib/next-auth/types";
 
 type UserEditClientProps = {
   email: string;
@@ -18,17 +33,22 @@ export default function UserEditClient({
   email,
   session,
 }: UserEditClientProps) {
+  // fetch user data
   const { user, isLoading, error } = useUser(email, session.token);
+
+  // Form States ---------------------------------------------------------------
   // loading state for filling initial fields
   const [initialFieldsFilled, setInitialFieldsFilled] = useState(false);
 
   // form editable fields
-  const [major, setMajor] = useState("");
-  const [gradYear, setGradYear] = useState(0);
-  const [linkedIn, setLinkedIn] = useState(""); // optional
-
+  const [major, setMajor] = useState<string>("");
+  const [gradYear, setGradYear] = useState<number>(0);
+  const [linkedIn, setLinkedIn] = useState<string>(""); // optional
+  // Form functionality --------------------------------------------------------
+  // set initial fields when user data is fetched
   useEffect(() => {
     if (isLoading || !user) return;
+    setInitialFieldsFilled(true);
 
     setMajor(user.major);
     setGradYear(user.gradYear);
@@ -37,6 +57,7 @@ export default function UserEditClient({
     setInitialFieldsFilled(true);
   }, [isLoading, user]);
 
+  // memoized callbacks to reduce re-renders
   const setMajorCallback = useCallback((value: string) => setMajor(value), []);
   const setGradYearCallback = useCallback(
     (value: number) => setGradYear(value),
@@ -45,56 +66,6 @@ export default function UserEditClient({
   const setLinkedInCallback = useCallback(
     (value: string) => setLinkedIn(value),
     []
-  );
-
-  const editableFields = useMemo(
-    () => [
-      {
-        key: "major",
-        type: "text",
-        label: "전공 (Major)",
-        value: major,
-        onChange: setMajorCallback,
-        required: true,
-      },
-      {
-        key: "gradYear",
-        type: "number",
-        label: "졸업년도 (Grad Year)",
-        value: gradYear.toString(),
-        onChange: setGradYearCallback,
-        required: true,
-      },
-      {
-        key: "linkedin",
-        type: "url",
-        label: "LinkedIn",
-        value: linkedIn,
-        onChange: setLinkedInCallback,
-        required: false,
-      },
-    ],
-    [
-      major,
-      gradYear,
-      linkedIn,
-      setMajorCallback,
-      setGradYearCallback,
-      setLinkedInCallback,
-    ]
-  );
-
-  // fixed fields (feel free to add any field you want to be fixed)
-  // - email
-  // [NOTE] useMemo() is applied to prevent re-rendering of the fixed fields
-  const fixedFields = useMemo(
-    () => [
-      {
-        icon: <EmailIcon />,
-        text: user?.email,
-      },
-    ],
-    [user?.email]
   );
 
   // if loading or initial fields are not filled, show loading spinner
@@ -111,13 +82,22 @@ export default function UserEditClient({
       self-stretch w-full mx-auto
       flex flex-col justify-center md:flex-row gap-8 md:gap-16 lg:gap-20`}
     >
+      {/* FIXED: email */}
       <UserEditFixed
-        fullname={user.fullname}
         profile={session.user.image}
-        fixedFields={fixedFields}
+        fullname={user.fullname}
+        email={user.email}
       />
+      {/* EDITABLE: major, gradYear, linkedIn */}
       <UserEditForm
-        editableFields={editableFields} // major, gradYear, linkedIn
+        major={major}
+        setMajor={setMajorCallback}
+        gradYear={gradYear}
+        setGradYear={setGradYearCallback}
+        linkedIn={linkedIn}
+        setLinkedIn={setLinkedInCallback}
+        email={email}
+        token={session.token}
       />
     </div>
   );

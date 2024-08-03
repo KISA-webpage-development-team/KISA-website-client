@@ -6,7 +6,7 @@
   @apply w-full h-full flex items-center justify-center 
   px-4 py-2 
   bg-[#00274c] border border-[#00274c] 
-  text-[#ffcb05] text-xs md:text-base
+  text-[#ffcb05] text-sm md:text-base
   rounded-md cursor-pointer;
 }
 .primary_button:hover {

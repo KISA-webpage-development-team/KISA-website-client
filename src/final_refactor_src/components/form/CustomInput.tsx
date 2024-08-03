@@ -1,10 +1,13 @@
 import React, { memo } from "react";
+import "./styles.css";
 
 type CustomInputProps = {
   type: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  invalid?: boolean;
   required?: boolean;
 };
 
@@ -12,7 +15,9 @@ const CustomInput = ({
   type,
   value,
   onChange,
+  onBlur,
   placeholder = "",
+  invalid = false,
   required = false,
 }: CustomInputProps) => {
   return (
@@ -20,12 +25,12 @@ const CustomInput = ({
       type={type}
       value={value}
       onChange={onChange}
+      onBlur={onBlur}
       placeholder={placeholder}
       required={required}
-      className="self-stretch
-      border border-gray-300 p-3 rounded-lg 
-      focus:outline-michigan-blue text-sm md:text-base
-      "
+      className={`input
+      ${invalid ? "invalid_input" : ""}
+      `}
     />
   );
 };

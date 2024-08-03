@@ -4,11 +4,11 @@ import {
   formatDateOrTime,
   formatRelativeTime,
 } from "@/final_refactor_src/utils/formats/date";
-import { Post } from "@/final_refactor_src/types/post";
+import { UserBoardPost } from "@/final_refactor_src/types/post";
 import { getKoreanBoardType } from "@/final_refactor_src/utils/formats/boardType";
 
 type MobileUserPostsListProps = {
-  posts: Post[];
+  posts: UserBoardPost[];
 };
 
 export default function MobileUserPostsList({

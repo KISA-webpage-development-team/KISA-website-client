@@ -1,5 +1,6 @@
 "use client";
 
+import { usePost } from "@/final_refactor_src/apis/post/hooks";
 // [24.06.01 ~ ]: Refactoring + TS conversion by Jioh
 
 // [UI]
@@ -7,12 +8,12 @@
 // PostView
 // CommentsView
 
+// [Rendering Method]: CSR (Client Side Rendering) with SWR
 import BoardTitle from "../../../components/Boards/BoardTitle";
 import CommentsView from "../../../components/Posts/comment/CommentsView";
 import PostView from "../../../components/Posts/post-view/PostView";
-import { usePost } from "../../../service/swrHooks/postHooks";
-import { fetcher } from "../../../config/swrConfig";
 import { SessionProvider } from "next-auth/react";
+import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 
 type PageProps = {
   params: {
@@ -20,17 +21,17 @@ type PageProps = {
   };
 };
 
-export default function PostPage({ params }: PageProps) {
+export default function PostViewPage({ params }: PageProps) {
   const { postid } = params;
 
-  const { post, isLoading, isError } = usePost(postid, { fetcher: fetcher });
+  const { post, isLoading, error } = usePost(postid);
 
   // [TODO]: when there's no post "error.tsx" should be rendered
   if (isLoading) {
-    return <></>;
+    return <LoadingSpinner />;
   }
-  if (isError) {
-    return <div>존재하지 않는 게시물입니다</div>;
+  if (error) {
+    throw error;
   }
 
   return (
@@ -38,8 +39,10 @@ export default function PostPage({ params }: PageProps) {
       <BoardTitle boardType={post.type} size="small" />
 
       <SessionProvider>
+        {/* 일단 post가 로딩되면 먼저 보여준다. */}
         <PostView post={post} />
 
+        {/* Comments는 로딩되는대로 */}
         {!post?.isAnnouncement && post?.type !== "announcement" && (
           <CommentsView
             commentsCount={post?.commentsCount}

@@ -19,7 +19,7 @@ import { useUser } from "@/final_refactor_src/apis/users/hooks";
 import UserProfileInfo from "./UserProfileInfo";
 import UserProfileDetails from "./UserProfileDetails";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
-import { CustomLinkButton } from "@/final_refactor_src/components/button";
+import CustomLinkButton from "@/final_refactor_src/components/button/CustomLinkButton";
 import {
   EmailIcon,
   GradIcon,
@@ -48,10 +48,6 @@ export default function UserProfile({ email, session }: UserProfileProps) {
     throw error;
   }
 
-  // [Logic]: Check if the user is the same as the logged-in user
-  // if so, the user can edit their profile
-  const isSelf = session.user.email === email;
-
   // [Logic]: Prepare detail list for the returned user
   const prepareDetailList = (user: User) => {
     const { email, gradYear, linkedin } = user;
@@ -74,6 +70,10 @@ export default function UserProfile({ email, session }: UserProfileProps) {
 
   const detailList = prepareDetailList(user);
 
+  // [Logic]: Check if the user is the same as the logged-in user
+  // if so, the user can edit their profile
+  const isSelf = session.user.email === email;
+
   return (
     <div
       className={`flex flex-col md:flex-row
@@ -88,7 +88,7 @@ export default function UserProfile({ email, session }: UserProfileProps) {
         profile={session.user.image}
       />
       {/* Right: Details (email + gradYear + linkedIn) + Edit Button */}
-      <div className="flex flex-col gap-3 w-fit">
+      <div className="flex flex-col gap-4 w-fit">
         <UserProfileDetails detailList={detailList} />
         {isSelf && (
           <CustomLinkButton
