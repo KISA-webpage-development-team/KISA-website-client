@@ -14,6 +14,7 @@ import { getSession } from "@/final_refactor_src/lib/next-auth/getSession";
 import NotAuthorized from "@/final_refactor_src/components/feedback/NotAuthorized";
 import UserProfile from "@/final_refactor_src/features/users/components/view/UserProfile";
 import UserBoard from "@/final_refactor_src/features/users/components/view/UserBoard";
+import NotLoginModal from "@/components/shared/NotLoginModal";
 
 type PageProps = {
   params: {
@@ -30,6 +31,10 @@ export default async function UserViewPage({ params }: PageProps) {
   // need to decodeURIComponent to get the correct value
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);
+
+  if (!session) {
+    return <NotLoginModal />;
+  }
 
   // [Business Logic]: Only KISA email is allowed to access KISA's user page
   if (

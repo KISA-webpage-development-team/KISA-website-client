@@ -2,6 +2,7 @@ import React from "react";
 import UserEditClient from "@/final_refactor_src/features/users/components/edit/UserEditClient";
 import { getSession } from "@/final_refactor_src/lib/next-auth/getSession";
 import { NotAuthorized } from "@/final_refactor_src/components/feedback";
+import NotLoginModal from "@/components/shared/NotLoginModal";
 
 type PageProps = {
   params: {
@@ -18,6 +19,10 @@ export default async function UserEditPage({ params }: PageProps) {
   // need to decodeURIComponent to get the correct value
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);
+
+  if (!session) {
+    return <NotLoginModal />;
+  }
 
   // [Business Logic]: Only the user can edit their own information
   if (session?.user.email !== decodedEmail) {
