@@ -1,4 +1,4 @@
-import { SWRTokenProvider } from "@/refactor_src/shared/swr";
+import { SWRTokenProvider } from "@/final_refactor_src/lib/swr/providers";
 
 export default function UserLayout({ children }) {
   // "/users" 페이지들은 모두 token을 사용해 GET API call을 하므로,
