@@ -1,3 +1,5 @@
+- This file will be deprecated after refactoring the project structure \*
+
 # KISA Website Frontend
 
 ## Tech Stacks

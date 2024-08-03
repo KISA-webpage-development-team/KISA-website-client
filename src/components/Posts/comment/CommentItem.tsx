@@ -62,7 +62,7 @@ export default function CommentItem({
   };
 
   return (
-    <li className="flex flex-col">
+    <div className="flex flex-col">
       <div className="flex items-center">
         {isCommentOfComment ? (
           <ReplyIcon type="flip" customClassName="-translate-y-2 mr-4" />
@@ -165,6 +165,6 @@ export default function CommentItem({
             />
           </div>
         ))}
-    </li>
+    </div>
   );
 }
