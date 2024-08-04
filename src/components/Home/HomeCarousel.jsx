@@ -16,6 +16,15 @@ export default function HomeCarousel() {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
 
+  // animation + progress
+  useEffect(() => {
+    firstFrameTime.current = performance.now();
+    frame.current = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(frame.current);
+    };
+  }, [active]);
+
   const animate = (now) => {
     let timeFraction = (now - firstFrameTime.current) / duration;
 
@@ -29,15 +38,6 @@ export default function HomeCarousel() {
       setActive((active + 1) % items.length);
     }
   };
-
-  // animation + progress
-  useEffect(() => {
-    firstFrameTime.current = performance.now();
-    frame.current = requestAnimationFrame(animate);
-    return () => {
-      cancelAnimationFrame(frame.current);
-    };
-  }, [active, animate]);
 
   return (
     <div
