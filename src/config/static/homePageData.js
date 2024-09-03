@@ -7,19 +7,6 @@
 // url
 const homeCarouselData = [
   {
-    id: "24_fall_support_program",
-    title: "정착 지원 프로그램",
-    desc: (
-      <p>
-        앤아버는 처음이라서 걱정 되시나요? 그런 여러분을 위해 저희 KISA에서
-        정착지원 프로그램을 진행하게 되었습니다! 8/20(화)부터 8/25(일)까지 공항
-        픽업부터 은행 계좌 개설, 휴대폰 개통 등 미국에 처음 오면 필요한
-        서비스부터 기숙사 체크인, 무브인까지 도와드립니다🙌
-      </p>
-    ),
-    url: "https://www.instagram.com/p/C933VpJyQi_/?img_index=1",
-  },
-  {
     id: "24-25_new_student_chatroom",
     title: "[24-25] 신/편입생 톡방",
     desc: (
