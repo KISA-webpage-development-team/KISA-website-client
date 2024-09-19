@@ -52,12 +52,12 @@ const members = {
           year: "2025",
         },
         {
-          name: "Yoon Seo Shin",
+          name: "Yoonseo Shin",
           major: "Computer Science",
           year: "2026",
         },
         {
-          name: "Seoin Chang",
+          name: "Sophia Chang",
           major: "Robotics",
           year: "2027",
         },
@@ -72,7 +72,7 @@ const members = {
           year: "2028",
         },
         {
-          name: "Jun Hee Han",
+          name: "Junhee Han",
           major: "Undecided",
           year: "2028",
         },
@@ -114,7 +114,7 @@ const members = {
           year: "2028",
         },
         {
-          name: "Dongeun Lee",
+          name: "Dongeun Kim",
           major: "Data Science",
           year: "2028",
         },
@@ -143,7 +143,7 @@ const members = {
           year: "2026",
         },
         {
-          name: "Minju Koo",
+          name: "Kelly Koo",
           major: "BHS & Art and Design",
           year: "2027",
         },
@@ -168,7 +168,7 @@ const members = {
           year: "2027",
         },
         {
-          name: "Jaeyoon Jung",
+          name: "Cloe Jung",
           major: "Psychology",
           year: "2026",
         },
