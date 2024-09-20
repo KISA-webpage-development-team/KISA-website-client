@@ -68,7 +68,7 @@ const members = {
         },
         {
           name: "Haeun Lee",
-          major: "Undecided",
+          major: "BHS",
           year: "2028",
         },
         {
@@ -146,6 +146,16 @@ const members = {
           name: "Kelly Koo",
           major: "BHS & Art and Design",
           year: "2027",
+        },
+        {
+          name: "Soomin Kang",
+          major: "Undeclared",
+          year: "2028",
+        },
+        {
+          name: "Lauren Kim",
+          major: "Computer Science",
+          year: "2026",
         },
       ],
     },
