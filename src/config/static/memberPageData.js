@@ -62,7 +62,7 @@ const members = {
           year: "2027",
         },
         {
-          name: "Dong Ju Moon",
+          name: "Jessica Moon",
           major: "Undecided",
           year: "2027",
         },
