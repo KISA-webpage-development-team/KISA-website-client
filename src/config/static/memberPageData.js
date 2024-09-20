@@ -100,7 +100,7 @@ const members = {
         {
           isLead: true,
           name: "Seungmin Shin",
-          major: "Computer Science",
+          major: "Statistics",
           year: "2025",
         },
         {
