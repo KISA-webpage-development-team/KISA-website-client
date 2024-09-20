@@ -18,7 +18,7 @@ export default function MemberPage() {
       className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
     gap-8 md:gap-16"
     >
-      <InfoTitle title="23-24 Board" />
+      <InfoTitle title="24-25 Board" />
 
       <div className="flex flex-col items-center w-full gap-12">
         {/* President */}
