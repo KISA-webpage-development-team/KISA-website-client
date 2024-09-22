@@ -189,17 +189,6 @@ const members = {
         },
       ],
     },
-    {
-      role: "Social Media",
-      members: [
-        {
-          name: "Seoyeon Han",
-          major: "Computer Science",
-          year: "2025",
-        },
-        
-      ],
-    },
   ],
 };
 
