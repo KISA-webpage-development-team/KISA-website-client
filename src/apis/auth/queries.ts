@@ -1,0 +1,26 @@
+// axios GET API calls
+// starting with "/auth" endpoint
+
+import client from "@/lib/axios/client";
+
+// NOTE: getIsAdmin doesn't use SWR
+
+/**
+ * @desc Get user's admin status
+ * @route GET /auth/isAdmin/:email
+ */
+export async function getIsAdmin(email: string, token: string) {
+  const url = `/auth/isAdmin/${email}`;
+  try {
+    const response = await client.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
