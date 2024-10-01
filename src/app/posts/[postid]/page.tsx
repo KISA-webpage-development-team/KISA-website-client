@@ -34,6 +34,8 @@ export default function PostViewPage({ params }: PageProps) {
     throw error;
   }
 
+  console.log("FETCHED post (/posts/[postid]): ", post);
+
   return (
     <section className="!gap-0">
       <BoardTitle boardType={post.type} size="small" />

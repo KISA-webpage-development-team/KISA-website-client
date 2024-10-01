@@ -21,7 +21,7 @@ export default async function Template({ children }) {
       </header>
 
       <main
-        className={`relative w-full h-full overflow-x-hidden
+        className={`relative w-full h-full overflow-x-hidden overflow-y-hidden
         mx-auto ${mainContentsWidth}
         pt-3 md:pt-6`}
       >
