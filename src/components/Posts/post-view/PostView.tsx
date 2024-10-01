@@ -53,7 +53,7 @@ export default function PostView({ post }: PostViewProps) {
   useEffect(() => {
     const postReadCount = async () => {
       try {
-        const res = await incrementReadCount(postid, session?.token);
+        const res = await incrementReadCount(postid);
         if (res === null) {
           console.log("Failed to increment read count");
         }
@@ -85,10 +85,8 @@ export default function PostView({ post }: PostViewProps) {
       }
     };
 
-    if (session) {
-      cookieHandler();
-    }
-  }, [session, postid]);
+    cookieHandler();
+  }, [postid]);
 
   if (status === "loading") {
     // [TODO]: add loading spinner or skeleton ui

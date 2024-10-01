@@ -67,19 +67,13 @@ export async function deletePost(postid, token) {
   }
 }
 
-export async function incrementReadCount(postid, token) {
+export async function incrementReadCount(postid) {
   const url = `/posts/readCount/${postid}/`; // currently env doesn't work
   // in patch method, the second parameter is the data to be sent (in this case, it's empty)
+
+  console.log("incrementReadCount", postid);
   try {
-    const response = await client.patch(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await client.patch(url);
     return response;
   } catch (error) {
     // //console.error(error);
