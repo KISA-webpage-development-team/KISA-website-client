@@ -1,15 +1,18 @@
 // POST, PUT, PATCH, DELETE API calls for post
 
 import client from "@/lib/axios/client";
+import { NewPostBody, UpdatePostBody } from "@/types/post";
 
-type TokenType = string | null;
+type Token = string | undefined;
+
+// TODO: add return type as { success: boolean, message: string }
 
 // Post --------------------------------------------------------------
 /**
  * @desc  Create a post
  * @route POST /posts/
  */
-export async function createPost(data, token: TokenType) {
+export async function createPost(data: NewPostBody, token: Token) {
   const url = `/posts/`;
 
   try {
@@ -19,7 +22,7 @@ export async function createPost(data, token: TokenType) {
     return response;
   } catch (error) {
     console.error(error);
-    return;
+    return undefined;
   }
 }
 
@@ -27,7 +30,11 @@ export async function createPost(data, token: TokenType) {
  * @desc Update a post
  * @route PATCH /posts/:postid/
  */
-export async function updatePost(postid, data, token: TokenType) {
+export async function updatePost(
+  postid: number,
+  data: UpdatePostBody,
+  token: Token
+) {
   const url = `/posts/${postid}/`;
   try {
     const response = await client.patch(url, data, {
@@ -38,7 +45,7 @@ export async function updatePost(postid, data, token: TokenType) {
     return response;
   } catch (error) {
     console.error(error);
-    return;
+    return undefined;
   }
 }
 
@@ -46,7 +53,7 @@ export async function updatePost(postid, data, token: TokenType) {
  * @desc Delete a post
  * @route DELETE /posts/:postid/
  */
-export async function deletePost(postid, token: TokenType) {
+export async function deletePost(postid: number, token: Token) {
   const url = `/posts/${postid}/`;
   try {
     const response = await client.delete(url, {
@@ -57,7 +64,7 @@ export async function deletePost(postid, token: TokenType) {
     return response;
   } catch (error) {
     console.log(error);
-    return;
+    return undefined;
   }
 }
 
@@ -66,7 +73,7 @@ export async function deletePost(postid, token: TokenType) {
  * @desc Increase the read count of a post
  * @route PATCH /posts/readCount/:postid/
  */
-export async function incrementReadCount(postid) {
+export async function incrementReadCount(postid: number) {
   const url = `/posts/readCount/${postid}/`;
   // in patch method, the second parameter is the data to be sent (in this case, it's empty)
   try {
@@ -74,6 +81,6 @@ export async function incrementReadCount(postid) {
     return response;
   } catch (error) {
     console.error(error);
-    return;
+    return undefined;
   }
 }

@@ -18,7 +18,7 @@ export default function BoardsSummary() {
     const fetchAnnouncementPosts = async () => {
       try {
         const res = await getBoardPosts("announcement", 10, 0);
-        setHotPosts(res.results.slice(0, 5));
+        setHotPosts(res.slice(0, 5));
       } catch (err) {
         console.error(err);
       }
@@ -26,7 +26,7 @@ export default function BoardsSummary() {
     const fetchCommunityPosts = async () => {
       try {
         const res = await getBoardPosts("community", 10, 0);
-        setRecentPosts(res.results.slice(0, 5));
+        setRecentPosts(res.slice(0, 5));
       } catch (err) {
         console.error(err);
       }

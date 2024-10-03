@@ -180,6 +180,7 @@ export default function EditorClient({
                 }
               : // when updating a post
                 {
+                  type: boardType,
                   title:
                     boardType !== "announcement"
                       ? `${title}`

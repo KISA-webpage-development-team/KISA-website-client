@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
 
-import { SimplePost } from "../../model/props/posts";
 import { dateFormatter } from "../../utils/dateFormatter";
+import { SimplePost } from "@/types/post";
 
 type Props = {
   post: SimplePost;

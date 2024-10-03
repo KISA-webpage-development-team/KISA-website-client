@@ -2,19 +2,41 @@
 
 import { BoardType } from "./board";
 
-interface Post {
+interface SimplePost {
   postid: number;
-  email: string;
-  fullname: string;
-  created: string;
   title: string;
-  text: string;
+  created: string;
   type: BoardType;
+  fullname: string;
+  email: string; // FK - User.email
   readCount: number;
-  isAnnouncement: boolean;
   commentsCount: number;
 }
 
+interface Post extends SimplePost {
+  text: string;
+  isAnnouncement: boolean;
+}
+
+interface NewPostBody {
+  type: BoardType;
+  title: string;
+  fullname: string;
+  email: string;
+  text: string;
+  isAnnouncement: boolean;
+  tag: string;
+}
+
+interface UpdatePostBody {
+  type: BoardType;
+  title: string;
+  text: string;
+  isAnnouncement: boolean;
+  tag: string;
+}
+
+// TODO: UserBoardPost -> SimplePost로 통일 (getBoardPosts와 동일한 리턴 타입을 가져야함)
 interface UserBoardPost extends Omit<Post, "commentsCount"> {}
 
-export type { Post, UserBoardPost };
+export type { Post, SimplePost, UserBoardPost, NewPostBody, UpdatePostBody };

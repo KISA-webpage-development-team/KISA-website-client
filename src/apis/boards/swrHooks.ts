@@ -2,10 +2,11 @@
 // SWR hooks for GET API calls
 // starting with "/boards" endpoint
 
-// TODO: add some types
 import useSWR, { SWRConfiguration } from "swr";
 import { immutableOption } from "@/lib/swr/options";
 import { BoardType } from "@/types/board";
+import { SimplePost } from "@/types/post";
+import { CustomAxiosError } from "@/lib/axios/types";
 
 /**
  * @desc  Fetch board data
@@ -16,7 +17,11 @@ export function useBoardPosts(
   size: number,
   page: number,
   options: SWRConfiguration = immutableOption
-) {
+): {
+  posts: SimplePost[] | undefined;
+  isLoading: boolean;
+  error: CustomAxiosError | undefined;
+} {
   // - By adding immutableOption,
   // revalidation is disabled for board data that doesn't change frequently,
   // except when the page is refreshed.
@@ -40,7 +45,11 @@ export function useBoardPosts(
 export function useBoardPostNum(
   boardType: BoardType,
   options: SWRConfiguration = immutableOption
-) {
+): {
+  postNum: number | undefined;
+  isLoading: boolean;
+  error: CustomAxiosError | undefined;
+} {
   // - By adding immutableOption,
   // revalidation is disabled for board data that doesn't change frequently,
   // except when the page is refreshed.
@@ -51,7 +60,7 @@ export function useBoardPostNum(
   const { data, error, isLoading } = useSWR(url, options);
 
   return {
-    postNum: data?.postCount as number | null,
+    postNum: data?.postCount,
     isLoading,
     error: error,
   };

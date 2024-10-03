@@ -1,6 +1,6 @@
 import React from "react";
-import { SimplePost } from "../../model/props/posts";
 import MobileBoardListItem from "./MobileBoardListItem";
+import { SimplePost } from "@/types/post";
 
 type Props = {
   posts: SimplePost[];

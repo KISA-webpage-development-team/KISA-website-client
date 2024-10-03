@@ -18,7 +18,10 @@ import { useUser } from "@/apis/users/swrHooks";
 // sub-ui components
 import UserProfileInfo from "./UserProfileInfo";
 import UserProfileDetails from "./UserProfileDetails";
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import {
+  LoadingSpinner,
+  NotFound,
+} from "@/final_refactor_src/components/feedback";
 import CustomLinkButton from "@/final_refactor_src/components/button/CustomLinkButton";
 import {
   EmailIcon,
@@ -45,7 +48,7 @@ export default function UserProfile({ email, session }: UserProfileProps) {
 
   if (error) {
     // Error handling while fetching user data
-    throw error;
+    return <NotFound />;
   }
 
   // [Logic]: Prepare detail list for the returned user

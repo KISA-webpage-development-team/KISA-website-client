@@ -10,7 +10,10 @@ import BoardTitle from "../../../components/Boards/BoardTitle";
 import CommentsView from "../../../components/Posts/comment/CommentsView";
 import PostView from "../../../components/Posts/post-view/PostView";
 import { SessionProvider } from "next-auth/react";
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import {
+  LoadingSpinner,
+  NotFound,
+} from "@/final_refactor_src/components/feedback";
 import { usePost } from "@/apis/posts/swrHooks";
 
 type PageProps = {
@@ -29,7 +32,7 @@ export default function PostViewPage({ params }: PageProps) {
     return <LoadingSpinner />;
   }
   if (error) {
-    throw error;
+    return <NotFound />;
   }
 
   return (

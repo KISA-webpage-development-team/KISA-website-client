@@ -6,8 +6,8 @@ import { heebo } from "../../utils/fonts/textFonts";
 import { useBoardPostNum, useBoardPosts } from "@/apis/boards/swrHooks";
 
 // types
-import { SimplePost } from "../../model/props/posts";
 import { BoardType } from "@/types/board";
+import { SimplePost } from "@/types/post";
 
 // sub-ui components
 import BoardTable from "./BoardTable";
