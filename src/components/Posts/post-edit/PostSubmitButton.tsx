@@ -12,7 +12,7 @@ type PostSubmitButtonProps = {
   disabled: boolean;
   token: string | undefined;
   mode: EditorMode;
-  postid: string;
+  postid: number;
   formData: NewPostBody | UpdatePostBody;
 };
 
@@ -22,7 +22,7 @@ export default function PostSubmitButton({
   mode,
   postid,
   formData,
-}) {
+}: PostSubmitButtonProps) {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,7 +30,7 @@ export default function PostSubmitButton({
   const handleCreatePost = async () => {
     try {
       setLoading(true);
-      const res = await createPost(formData, token);
+      const res = await createPost(formData as NewPostBody, token);
       setLoading(false);
 
       // router.push(`/boards/${(formData as PostFormData).type}`);

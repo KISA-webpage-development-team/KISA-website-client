@@ -20,7 +20,11 @@ export function useUser(
   email: string,
   token: string | null,
   options: SWRConfiguration = immutableOption
-) {
+): {
+  user: User | undefined;
+  isLoading: boolean;
+  error: CustomAxiosError | undefined;
+} {
   // - By adding immutableOption,
   // revalidation is disabled for user data that doesn't change frequently,
   // except when the page is refreshed.
@@ -28,7 +32,7 @@ export function useUser(
 
   const url = `/users/${email}/`;
 
-  const { data, error, isLoading } = useSWR<User, CustomAxiosError>(
+  const { data, error, isLoading } = useSWR(
     token ? [url, token] : null,
     options
   );
@@ -47,7 +51,11 @@ export function useUserPosts(
   email: string,
   token: string | null,
   options: SWRConfiguration = immutableOption
-) {
+): {
+  posts: UserBoardPost[];
+  isLoading: boolean;
+  error: CustomAxiosError | undefined;
+} {
   // - By adding immutableOption,
   // revalidation is disabled for user's post data that doesn't change frequently,
   // except when the page is refreshed.
@@ -55,7 +63,7 @@ export function useUserPosts(
 
   // NOTE: `any` is used for the response type
   // it should be UserBoardPost[] but there is some issue with backend response type
-  const { data, error, isLoading } = useSWR<any, CustomAxiosError>(
+  const { data, error, isLoading } = useSWR(
     token ? [`/users/${email}/posts/`, token] : null,
     options
   );
@@ -77,7 +85,11 @@ export function useUserComments(
   email: string,
   token: string | null,
   options: SWRConfiguration = immutableOption
-) {
+): {
+  comments: Comment[];
+  isLoading: boolean;
+  error: CustomAxiosError | undefined;
+} {
   // - By adding immutableOption,
   // revalidation is disabled for user's comment data that doesn't change frequently,
   // except when the page is refreshed.
@@ -87,7 +99,7 @@ export function useUserComments(
 
   // NOTE: `any` is used for the response type
   // it should be Comment[] but there is some issue with backend
-  const { data, error, isLoading } = useSWR<any, CustomAxiosError>(
+  const { data, error, isLoading } = useSWR(
     token ? [url, token] : null,
     options
   );

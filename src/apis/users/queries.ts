@@ -28,7 +28,7 @@ export async function getUser(
     return response?.data;
   } catch (error) {
     console.log(error);
-    return;
+    return undefined;
   }
 }
 
@@ -52,7 +52,7 @@ export async function getUserPosts(
     return response?.data?.posts;
   } catch (error) {
     console.log(error);
-    return;
+    return undefined;
   }
 }
 

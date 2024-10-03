@@ -6,6 +6,7 @@ import useSWR, { SWRConfiguration } from "swr";
 import { immutableOption } from "@/lib/swr/options";
 import { BoardType } from "@/types/board";
 import { SimplePost } from "@/types/post";
+import { CustomAxiosError } from "@/lib/axios/types";
 
 /**
  * @desc  Fetch board data
@@ -19,7 +20,7 @@ export function useBoardPosts(
 ): {
   posts: SimplePost[] | undefined;
   isLoading: boolean;
-  error: any | undefined;
+  error: CustomAxiosError | undefined;
 } {
   // - By adding immutableOption,
   // revalidation is disabled for board data that doesn't change frequently,
@@ -47,7 +48,7 @@ export function useBoardPostNum(
 ): {
   postNum: number | undefined;
   isLoading: boolean;
-  error: any | undefined;
+  error: CustomAxiosError | undefined;
 } {
   // - By adding immutableOption,
   // revalidation is disabled for board data that doesn't change frequently,

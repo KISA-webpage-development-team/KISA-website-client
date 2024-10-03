@@ -51,7 +51,7 @@ export default function CommentItem({
   const handleCommentDelete = async () => {
     setIsDeleteLoading(true);
     const res = await deleteComment(commentid, token);
-    if (res) {
+    if (res?.success) {
       // modify states after comment has been deleted
       setCommentsStale(true);
       setIsDeleteLoading(false);

@@ -73,7 +73,7 @@ export async function deleteComment(commentid: number, token: Token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response?.data;
+    return { success: true, message: "Comment deleted successfully" };
   } catch (error) {
     //console.error(error);
     return undefined;

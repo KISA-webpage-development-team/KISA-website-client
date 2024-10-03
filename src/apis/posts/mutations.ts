@@ -5,6 +5,8 @@ import { NewPostBody, UpdatePostBody } from "@/types/post";
 
 type Token = string | undefined;
 
+// TODO: add return type as { success: boolean, message: string }
+
 // Post --------------------------------------------------------------
 /**
  * @desc  Create a post
@@ -20,7 +22,7 @@ export async function createPost(data: NewPostBody, token: Token) {
     return response;
   } catch (error) {
     console.error(error);
-    return;
+    return undefined;
   }
 }
 
@@ -28,7 +30,11 @@ export async function createPost(data: NewPostBody, token: Token) {
  * @desc Update a post
  * @route PATCH /posts/:postid/
  */
-export async function updatePost(postid, data: UpdatePostBody, token: Token) {
+export async function updatePost(
+  postid: number,
+  data: UpdatePostBody,
+  token: Token
+) {
   const url = `/posts/${postid}/`;
   try {
     const response = await client.patch(url, data, {
@@ -39,7 +45,7 @@ export async function updatePost(postid, data: UpdatePostBody, token: Token) {
     return response;
   } catch (error) {
     console.error(error);
-    return;
+    return undefined;
   }
 }
 
@@ -47,7 +53,7 @@ export async function updatePost(postid, data: UpdatePostBody, token: Token) {
  * @desc Delete a post
  * @route DELETE /posts/:postid/
  */
-export async function deletePost(postid, token: Token) {
+export async function deletePost(postid: number, token: Token) {
   const url = `/posts/${postid}/`;
   try {
     const response = await client.delete(url, {
@@ -58,7 +64,7 @@ export async function deletePost(postid, token: Token) {
     return response;
   } catch (error) {
     console.log(error);
-    return;
+    return undefined;
   }
 }
 
@@ -67,7 +73,7 @@ export async function deletePost(postid, token: Token) {
  * @desc Increase the read count of a post
  * @route PATCH /posts/readCount/:postid/
  */
-export async function incrementReadCount(postid) {
+export async function incrementReadCount(postid: number) {
   const url = `/posts/readCount/${postid}/`;
   // in patch method, the second parameter is the data to be sent (in this case, it's empty)
   try {
@@ -75,6 +81,6 @@ export async function incrementReadCount(postid) {
     return response;
   } catch (error) {
     console.error(error);
-    return;
+    return undefined;
   }
 }

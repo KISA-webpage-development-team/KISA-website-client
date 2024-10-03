@@ -1,6 +1,7 @@
 import useSWR, { SWRConfiguration } from "swr";
 import { immutableOption } from "@/lib/swr/options";
 import { Post } from "@/types/post";
+import { CustomAxiosError } from "@/lib/axios/types";
 
 /**
  * @desc Fetch a post with the given postid [TOKEN NOT REQUIRED]
@@ -21,7 +22,11 @@ import { Post } from "@/types/post";
 export function usePost(
   postid: string,
   options: SWRConfiguration = immutableOption
-): { post: Post | undefined; isLoading: boolean; error: any | undefined } {
+): {
+  post: Post | undefined;
+  isLoading: boolean;
+  error: CustomAxiosError | undefined;
+} {
   const url = `/posts/${postid}/`;
 
   const { data, error, isLoading } = useSWR(postid ? url : null, options);

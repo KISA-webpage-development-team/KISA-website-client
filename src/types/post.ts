@@ -29,6 +29,7 @@ interface NewPostBody {
 }
 
 interface UpdatePostBody {
+  type: BoardType;
   title: string;
   text: string;
   isAnnouncement: boolean;
