@@ -15,7 +15,12 @@ import CommentsList from "./CommentsList";
 
 // types
 import { CustomSession } from "../../../model/common/types";
-import { Comment, CommentsViewProps } from "../../../model/props/posts";
+import { Comment } from "@/types/comment";
+
+type CommentsViewProps = {
+  commentsCount: number;
+  postid: number;
+};
 
 export default function CommentsView({
   commentsCount,
