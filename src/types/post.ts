@@ -18,7 +18,24 @@ interface Post extends SimplePost {
   isAnnouncement: boolean;
 }
 
+interface NewPostBody {
+  type: BoardType;
+  title: string;
+  fullname: string;
+  email: string;
+  text: string;
+  isAnnouncement: boolean;
+  tag: string;
+}
+
+interface UpdatePostBody {
+  title: string;
+  text: string;
+  isAnnouncement: boolean;
+  tag: string;
+}
+
 // TODO: UserBoardPost -> SimplePost로 통일 (getBoardPosts와 동일한 리턴 타입을 가져야함)
 interface UserBoardPost extends Omit<Post, "commentsCount"> {}
 
-export type { Post, SimplePost, UserBoardPost };
+export type { Post, SimplePost, UserBoardPost, NewPostBody, UpdatePostBody };

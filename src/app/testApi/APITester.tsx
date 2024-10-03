@@ -11,6 +11,7 @@ import {
   deleteComment,
   updateComment,
 } from "@/apis/comments/mutations";
+import { getPost } from "@/apis/posts/queries";
 
 export default function APITester({ token }) {
   const sampleEmail = "jiohin@umich.edu";
@@ -18,10 +19,7 @@ export default function APITester({ token }) {
   const handleApi = async () => {
     // const res = await getBoardPostNum(BoardType.Community);
     // const res = await getCommentsByPostid(192);
-    const data = {
-      text: "test2",
-    };
-    const res = await deleteComment(107, token);
+    const res = await getPost(192);
     // const res = await getUserComments(sampleEmail, token);
 
     // const res = await getUserPosts(sampleEmail, token);

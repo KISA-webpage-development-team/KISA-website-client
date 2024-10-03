@@ -2,11 +2,19 @@ import React, { useState } from "react";
 import {
   EditorMode,
   PostFormData,
-  PostSubmitButtonProps,
   SimplePostFormData,
 } from "../../../model/props/posts";
 import { createPost, updatePost } from "@/apis/posts/mutations";
 import { useRouter } from "next/navigation";
+import { NewPostBody, UpdatePostBody } from "@/types/post";
+
+type PostSubmitButtonProps = {
+  disabled: boolean;
+  token: string | undefined;
+  mode: EditorMode;
+  postid: string;
+  formData: NewPostBody | UpdatePostBody;
+};
 
 export default function PostSubmitButton({
   disabled,
@@ -14,7 +22,7 @@ export default function PostSubmitButton({
   mode,
   postid,
   formData,
-}: PostSubmitButtonProps) {
+}) {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,7 +35,7 @@ export default function PostSubmitButton({
 
       // router.push(`/boards/${(formData as PostFormData).type}`);
       // router.back();
-      window.location.href = `/boards/${(formData as PostFormData).type}`;
+      window.location.href = `/boards/${formData.type}`;
     } catch (error) {
       window.alert("게시글 작성에 실패했습니다.");
       return;

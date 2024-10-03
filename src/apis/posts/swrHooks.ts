@@ -21,13 +21,13 @@ import { Post } from "@/types/post";
 export function usePost(
   postid: string,
   options: SWRConfiguration = immutableOption
-) {
+): { post: Post | undefined; isLoading: boolean; error: any | undefined } {
   const url = `/posts/${postid}/`;
 
   const { data, error, isLoading } = useSWR(postid ? url : null, options);
 
   return {
-    post: data as Post | null,
+    post: data,
     isLoading,
     error,
   };

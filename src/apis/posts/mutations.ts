@@ -1,15 +1,16 @@
 // POST, PUT, PATCH, DELETE API calls for post
 
 import client from "@/lib/axios/client";
+import { NewPostBody, UpdatePostBody } from "@/types/post";
 
-type TokenType = string | null;
+type Token = string | undefined;
 
 // Post --------------------------------------------------------------
 /**
  * @desc  Create a post
  * @route POST /posts/
  */
-export async function createPost(data, token: TokenType) {
+export async function createPost(data: NewPostBody, token: Token) {
   const url = `/posts/`;
 
   try {
@@ -27,7 +28,7 @@ export async function createPost(data, token: TokenType) {
  * @desc Update a post
  * @route PATCH /posts/:postid/
  */
-export async function updatePost(postid, data, token: TokenType) {
+export async function updatePost(postid, data: UpdatePostBody, token: Token) {
   const url = `/posts/${postid}/`;
   try {
     const response = await client.patch(url, data, {
@@ -46,7 +47,7 @@ export async function updatePost(postid, data, token: TokenType) {
  * @desc Delete a post
  * @route DELETE /posts/:postid/
  */
-export async function deletePost(postid, token: TokenType) {
+export async function deletePost(postid, token: Token) {
   const url = `/posts/${postid}/`;
   try {
     const response = await client.delete(url, {

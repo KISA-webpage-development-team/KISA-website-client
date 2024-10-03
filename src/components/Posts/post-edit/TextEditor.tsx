@@ -12,7 +12,7 @@ export default function TextEditor({
     () => ({
       toolbar: {
         container: [
-          ["image"],
+          ["link", "image"],
           [{ size: ["small", false, "large", "huge"] }],
           [{ list: "ordered" }, { list: "bullet" }],
           ["bold", "underline", "italic"],
