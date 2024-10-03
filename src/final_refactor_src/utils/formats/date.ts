@@ -1,8 +1,11 @@
-// @desc: Date를 oo시간전, oo일전, oo년전을 반환하는 함수
-// @param: date: Date
-// @return: string
-// input: Thu, 11 Apr 2024 18:46:43 GMT
-// output: 3일 전
+/**
+ * @desc Date를 oo시간전, oo일전, oo년전을 반환하는 함수
+ * @param date Date
+ * @returns string
+ * @example
+ * Input: Thu, 11 Apr 2024 18:46:43 GMT
+ * Output: 3일 전
+ */
 export function formatRelativeTime(value) {
   const today = new Date();
   const timeValue = new Date(value);
@@ -28,11 +31,14 @@ export function formatRelativeTime(value) {
   return `${Math.floor(betweenTimeDay / 365)}년 전`;
 }
 
-// @desc: Date를 오늘이면 시간을, 오늘이 아니면 YY.MM.DD로 반환하는 함수
-// @param: date: Date
-// @return: string
-// input: Thu, 11 Apr 2024 18:46:43 GMT
-// output: 18:46 or 24.04.11
+/**
+ * @desc Date를 오늘이면 시간을, 오늘이 아니면 YY.MM.DD로 반환하는 함수
+ * @param date: Date
+ * @return string
+ * @example
+ * Input: Thu, 11 Apr 2024 18:46:43 GMT
+ * Output: 18:46 or 24.04.11
+ */
 export function formatDateOrTime(date) {
   const today = new Date();
   const target = new Date(date);
@@ -59,11 +65,14 @@ export function formatDateOrTime(date) {
   }
 }
 
-// @desc Date를 YYYY.MM.DD HH:MM 형식으로 반환하는 함수
-// @param date: Date
-// @return string
-// input: Thu, 11 Apr 2024 18:46:43 GMT
-// output: 2024.04.11 18:46
+/**
+ * @desc Date를 YYYY.MM.DD HH:MM 형식으로 반환하는 함수
+ * @param date: Date
+ * @return string
+ * @example
+ * Input: Thu, 11 Apr 2024 18:46:43 GMT
+ * Output: 2024.04.11 18:46
+ */
 export function formatDateTimeString(date) {
   const target = new Date(date);
 

@@ -2,6 +2,7 @@
 // starting with "/boards" endpoint
 
 // TODO: add some types
+
 import client from "@/lib/axios/client";
 import { BoardType } from "@/types/board";
 
@@ -34,6 +35,21 @@ export async function getBoardPostNum(boardType: BoardType) {
   try {
     const response = await client.get(url);
 
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+/**
+ * @desc Fetch the announcements in a board
+ * @route GET /boards/{boardType}/announcements/
+ */
+export async function getBoardAnnouncements(boardType: BoardType) {
+  const url = `/boards/${boardType}/announcements/`;
+  try {
+    const response = await client.get(url);
     return response?.data;
   } catch (error) {
     console.log(error);

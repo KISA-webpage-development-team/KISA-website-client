@@ -1,8 +1,5 @@
 "use client";
 
-import { usePost } from "@/final_refactor_src/apis/post/hooks";
-// [24.06.01 ~ ]: Refactoring + TS conversion by Jioh
-
 // [UI]
 // BoardTitle
 // PostView
@@ -14,6 +11,7 @@ import CommentsView from "../../../components/Posts/comment/CommentsView";
 import PostView from "../../../components/Posts/post-view/PostView";
 import { SessionProvider } from "next-auth/react";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import { usePost } from "@/apis/posts/swrHooks";
 
 type PageProps = {
   params: {
@@ -33,8 +31,6 @@ export default function PostViewPage({ params }: PageProps) {
   if (error) {
     throw error;
   }
-
-  console.log("FETCHED post (/posts/[postid]): ", post);
 
   return (
     <section className="!gap-0">

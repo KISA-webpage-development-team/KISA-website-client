@@ -7,8 +7,8 @@
 // [Rendering method] SSR (container) + CSR (components)
 // [Auth Middleware applied]
 import React from "react";
-import { KISA_EMAIL } from "@/final_refactor_src/constants/email";
-import { getSession } from "@/final_refactor_src/lib/next-auth/getSession";
+import { KISA_EMAIL } from "@/constants/email";
+import { getSession } from "@/lib/next-auth/getSession";
 
 // UI
 import NotAuthorized from "@/final_refactor_src/components/feedback/NotAuthorized";
