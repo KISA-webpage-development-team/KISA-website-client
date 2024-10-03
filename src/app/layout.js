@@ -1,6 +1,6 @@
 import "./globals.css";
-import { globalFont } from "../utils/fonts/globalFont";
-import Footer from "../components/Footer/Footer";
+import { globalFont } from "@/utils/fonts/global";
+import Footer from "@/components/Footer/Footer";
 // import { Analytics } from "@vercel/analytics/react";
 // import { SpeedInsights } from "@vercel/speed-insights/next";
 

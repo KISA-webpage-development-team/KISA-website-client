@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { getCommentsByPostid } from "../../../service/comment";
+import { getCommentsByPostid } from "@/apis/comments/queries";
 
 // sub-ui components
 import CommentEditor from "./CommentEditor";

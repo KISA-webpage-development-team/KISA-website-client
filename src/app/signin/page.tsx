@@ -1,7 +1,7 @@
 // [TEST] for Next-Auth Middleware functionality
 
-import React, { useEffect } from "react";
-import NotLoginModal from "../../components/shared/NotLoginModal";
+import React from "react";
+import { NotLogin } from "@/final_refactor_src/components/feedback";
 
 export default function page({ searchParams }) {
   const { callbackUrl } = searchParams;
@@ -13,7 +13,7 @@ export default function page({ searchParams }) {
         제한될 수 있습니다.
       </span>
       {(callbackUrl || decodeURIComponent(callbackUrl).endsWith("com/")) && (
-        <NotLoginModal />
+        <NotLogin />
       )}
     </section>
   );

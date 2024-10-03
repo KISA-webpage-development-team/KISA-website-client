@@ -11,18 +11,21 @@ import { KISA_EMAIL } from "@/constants/email";
 import { getSession } from "@/lib/next-auth/getSession";
 
 // UI
-import NotAuthorized from "@/final_refactor_src/components/feedback/NotAuthorized";
-import UserProfile from "@/final_refactor_src/features/users/components/view/UserProfile";
-import UserBoard from "@/final_refactor_src/features/users/components/view/UserBoard";
-import NotLoginModal from "@/components/shared/NotLoginModal";
+import UserProfile from "@/features/users/components/view/UserProfile";
+import UserBoard from "@/features/users/components/view/UserBoard";
 
-type PageProps = {
+import {
+  NotLogin,
+  NotAuthorized,
+} from "@/final_refactor_src/components/feedback";
+
+type UserViewPageProps = {
   params: {
     email: string;
   };
 };
 
-export default async function UserViewPage({ params }: PageProps) {
+export default async function UserViewPage({ params }: UserViewPageProps) {
   // [NOTE] getSession() is a function based on next-auth
   // no need to handle missing session because of the auth middleware
   const session = await getSession();
@@ -33,7 +36,7 @@ export default async function UserViewPage({ params }: PageProps) {
   const decodedEmail = decodeURIComponent(email);
 
   if (!session) {
-    return <NotLoginModal />;
+    return <NotLogin />;
   }
 
   // [Business Logic]: Only KISA email is allowed to access KISA's user page

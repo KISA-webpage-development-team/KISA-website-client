@@ -66,19 +66,11 @@ export async function deletePost(postid, token: TokenType) {
  * @desc Increase the read count of a post
  * @route PATCH /posts/readCount/:postid/
  */
-export async function incrementReadCount(postid, token: TokenType) {
+export async function incrementReadCount(postid) {
   const url = `/posts/readCount/${postid}/`;
   // in patch method, the second parameter is the data to be sent (in this case, it's empty)
   try {
-    const response = await client.patch(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await client.patch(url);
     return response;
   } catch (error) {
     console.error(error);

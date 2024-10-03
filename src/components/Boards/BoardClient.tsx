@@ -3,14 +3,11 @@
 import React from "react";
 import { heebo } from "../../utils/fonts/textFonts";
 
-import {
-  useBoardPostNum,
-  useBoardPosts,
-} from "../../service/swrHooks/boardHooks";
+import { useBoardPostNum, useBoardPosts } from "@/apis/boards/swrHooks";
 
 // types
 import { SimplePost } from "../../model/props/posts";
-import { BoardType } from "../../model/common/types";
+import { BoardType } from "@/types/board";
 
 // sub-ui components
 import BoardTable from "./BoardTable";
@@ -35,12 +32,12 @@ export default function BoardClient({
   const {
     posts,
     isLoading: isPostsFetching,
-    isError: postsError,
+    error: postsError,
   } = useBoardPosts(boardType, size, page - 1);
   const {
     postNum: totalPostNum,
     isLoading: isPostNumFetching,
-    isError: postNumError,
+    error: postNumError,
   } = useBoardPostNum(boardType);
   // -----------------------------------------------
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { sejongHospitalBold } from "@/final_refactor_src/utils/fonts/fonts";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import "./styles.css";
 
 type CustomLabelProps = {

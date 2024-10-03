@@ -50,7 +50,7 @@ export async function getBoardAnnouncements(boardType: BoardType) {
   const url = `/boards/${boardType}/announcements/`;
   try {
     const response = await client.get(url);
-    return response?.data;
+    return response?.data?.results;
   } catch (error) {
     console.log(error);
     return;

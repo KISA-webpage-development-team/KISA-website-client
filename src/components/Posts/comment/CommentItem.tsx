@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { timeForToday } from "../../../utils/dateFormatter";
-import { deleteComment } from "../../../service/comment";
+import { deleteComment } from "@/apis/comments/mutations";
 import { CommentItemProps } from "../../../model/props/posts";
 
 // sub-ui components

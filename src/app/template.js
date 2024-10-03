@@ -1,7 +1,7 @@
-import Header from "../components/Header/Header";
-import { sejongHospitalLight } from "../utils/fonts/textFonts";
+import Header from "@/components/Header/Header";
+import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../config/auth";
+import { authOptions } from "@/config/auth";
 
 export default async function Template({ children }) {
   // pass over this session to Header to remove unnecessary re-renders

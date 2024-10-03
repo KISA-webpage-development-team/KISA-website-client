@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { deletePost } from "../../../service/post";
+import { deletePost } from "@/apis/posts/mutations";
 
 // sub-ui components
 import ImageButton from "../../shared/ImageButton";

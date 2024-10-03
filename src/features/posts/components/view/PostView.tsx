@@ -5,20 +5,27 @@
 // 4. Edit + Delete + List Buttons
 
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-
-// types
-import { CustomSession } from "../../../model/common/types";
 
 // sub-ui components
 import PostTitleBar from "./PostTitleBar";
 import PostOwnerBar from "./PostOwnerBar";
 import PostContent from "./PostContent";
 import PostButtonBar from "./PostButtonBar";
-import HorizontalDivider from "../../shared/HorizontalDivider";
-import { CookiesProvider } from "react-cookie";
+
+// TODO: final_refactor_src -> @components
+import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import { HorizontalDivider } from "@/final_refactor_src/components/divider";
+
+// Libs
+import ReactCookieProvider from "@/lib/react-cookie/provider";
 import { getCookie, setCookie } from "@/lib/react-cookie/cookie";
+import { useSession } from "next-auth/react";
+
+// APIs
 import { incrementReadCount } from "@/apis/posts/mutations";
+
+// types
+import { UserSession } from "@/lib/next-auth/types";
 import { Post } from "@/types/post";
 
 type PostViewProps = {
@@ -27,7 +34,7 @@ type PostViewProps = {
 
 export default function PostView({ post }: PostViewProps) {
   const { data: session, status } = useSession() as {
-    data: CustomSession | null;
+    data: UserSession | null;
     status: string;
   };
 
@@ -49,11 +56,10 @@ export default function PostView({ post }: PostViewProps) {
   // read count
   // : when cookie doesn't exist, create one and increase read count (`incrementReadCount`)
   // if cookie exists, don't increase read count, but update the cookie expiration time
-
   useEffect(() => {
     const postReadCount = async () => {
       try {
-        const res = await incrementReadCount(postid);
+        const res = await incrementReadCount(postid, session?.token);
         if (res === null) {
           console.log("Failed to increment read count");
         }
@@ -85,21 +91,25 @@ export default function PostView({ post }: PostViewProps) {
       }
     };
 
-    cookieHandler();
-  }, [postid]);
+    if (session) {
+      cookieHandler();
+    }
+  }, [session, postid]);
 
   if (status === "loading") {
-    // [TODO]: add loading spinner or skeleton ui
-    return <></>;
+    return <LoadingSpinner />;
   }
 
   return (
-    <CookiesProvider>
+    <ReactCookieProvider>
       <div className="w-full flex flex-col self-stretch">
         <div
-          className="w-full flex flex-col
-      pt-1 
-      pb-2 gap-1"
+          className="w-full flex flex-col 
+        pt-1 pb-2 gap-1 bg-yellow-400"
+
+        // style={{ 
+        //   paddingBottom: 8,
+        // }}
         >
           {/* 1. Post Title Bar */}
           <PostTitleBar isAnnouncement={isAnnouncement} title={title} />
@@ -128,6 +138,6 @@ export default function PostView({ post }: PostViewProps) {
 
         <HorizontalDivider />
       </div>
-    </CookiesProvider>
+    </ReactCookieProvider>
   );
 }

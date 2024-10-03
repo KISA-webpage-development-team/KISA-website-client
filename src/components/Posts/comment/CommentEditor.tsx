@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { CommentEditorProps } from "../../../model/props/posts";
-import { createComment, updateComment } from "../../../service/comment";
+import { createComment, updateComment } from "@/apis/comments/mutations";
 
 export default function CommentEditor({
   mode,

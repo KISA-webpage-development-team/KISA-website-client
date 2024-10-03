@@ -1,16 +1,19 @@
 import React from "react";
-import UserEditClient from "@/final_refactor_src/features/users/components/edit/UserEditClient";
-import { getSession } from "@/final_refactor_src/lib/next-auth/getSession";
-import { NotAuthorized } from "@/final_refactor_src/components/feedback";
-import NotLoginModal from "@/components/shared/NotLoginModal";
+import UserEditClient from "@/features/users/components/edit/UserEditClient";
+import { getSession } from "@/lib/next-auth/getSession";
 
-type PageProps = {
+import {
+  NotAuthorized,
+  NotLogin,
+} from "@/final_refactor_src/components/feedback";
+
+type UserEditPageProps = {
   params: {
     email: string;
   };
 };
 
-export default async function UserEditPage({ params }: PageProps) {
+export default async function UserEditPage({ params }: UserEditPageProps) {
   // [NOTE] getSession() is a function based on next-auth
   // no need to handle missing session because of the auth middleware
   const session = await getSession();
@@ -21,7 +24,7 @@ export default async function UserEditPage({ params }: PageProps) {
   const decodedEmail = decodeURIComponent(email);
 
   if (!session) {
-    return <NotLoginModal />;
+    return <NotLogin />;
   }
 
   // [Business Logic]: Only the user can edit their own information

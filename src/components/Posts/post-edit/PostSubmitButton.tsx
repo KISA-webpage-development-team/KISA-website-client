@@ -5,7 +5,7 @@ import {
   PostSubmitButtonProps,
   SimplePostFormData,
 } from "../../../model/props/posts";
-import { createPost, updatePost } from "../../../service/post";
+import { createPost, updatePost } from "@/apis/posts/mutations";
 import { useRouter } from "next/navigation";
 
 export default function PostSubmitButton({

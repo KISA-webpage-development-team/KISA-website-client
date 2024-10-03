@@ -19,8 +19,8 @@ import {
   getBoardName,
   getBoardNameFromKorean,
 } from "../../../config/boardName";
-import { getIsAdmin } from "../../../service/auth";
-import { getSinglePost } from "../../../service/post";
+import { getIsAdmin } from "@/apis/auth/queries";
+import { getPost } from "@/apis/posts/queries";
 
 export default function EditorClient({
   session,
@@ -56,7 +56,7 @@ export default function EditorClient({
   useEffect(() => {
     const fetchInitialPost = async (postid) => {
       try {
-        const res = await getSinglePost(postid);
+        const res = await getPost(postid);
         // initialize post states
         setTitle(res.title);
         setText(res.text);

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 // need to change this api call to "getRecentPosts" and "getHotPosts"
 import HomePostView from "./HomePostView";
-import { getBoardPosts } from "../../service/board";
+import { getBoardPosts } from "@/apis/boards/queries";
 
 export default function BoardsSummary() {
   const [recentPosts, setRecentPosts] = useState([]);
