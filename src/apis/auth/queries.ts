@@ -8,6 +8,10 @@ import client from "@/lib/axios/client";
 /**
  * @desc Get user's admin status
  * @route GET /auth/isAdmin/:email
+ * @example
+ * valid: { message: "user is admin" }
+ * invalid: 401, { message: "user is not admin" }
+ * missing token: 401, { error: "Decode failed" }
  */
 export async function getIsAdmin(email: string, token: string) {
   const url = `/auth/isAdmin/${email}`;

@@ -1,13 +1,22 @@
 // Declare Types for Post Entity (not props!)
 
-interface Comment {
-  commentid: number;
-  postid: number;
+interface NewCommentBody {
   email: string;
-  created: string;
+  fullname: string;
+  text: string;
   isCommentOfComment: boolean;
   parentCommentid: number | null;
+}
+
+interface UpdateCommentBody {
   text: string;
 }
 
-export type { Comment };
+interface Comment extends NewCommentBody {
+  commentid: number;
+  postid: number;
+  created: string;
+  childComments: Comment[];
+}
+
+export type { Comment, NewCommentBody, UpdateCommentBody };

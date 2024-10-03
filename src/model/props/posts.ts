@@ -19,7 +19,7 @@ export interface PostViewProps {
 export interface PostButtonBarProps {
   isAuthor: boolean;
   type: BoardType;
-  postid?: Number;
+  postid?: number;
   title?: string;
 }
 export interface PostTitleBarProps {
@@ -98,9 +98,9 @@ export interface CommentsViewProps {
 export interface CommentEditorProps {
   mode: CommentEditorMode;
   session: CustomSession | null;
-  postid: Number;
-  commentid?: Number;
-  curCommentId?: Number | null;
+  postid: number;
+  commentid?: number;
+  curCommentId?: number | null;
   placeholder?: string;
   setCommentsStale: (value: boolean) => void;
   setOpenCommentEditor?: (value: boolean) => void;
@@ -115,19 +115,19 @@ export interface CommentsListProps {
 export interface CommentItemProps {
   session: CustomSession | null;
   comment: Comment;
-  parentCommentid?: Number;
+  parentCommentid?: number;
   setCommentsStale: (value: boolean) => void;
 }
 
 // Comment formdata -------------------------------------
 export interface Comment {
-  commentid: Number;
+  commentid: number;
   created: string;
   email: string;
   fullname: string;
   isCommentOfComment: boolean;
-  parentCommentid: Number;
-  postid: Number;
+  parentCommentid: number;
+  postid: number;
   text: string;
   childComments: Comment[];
 }

@@ -40,6 +40,7 @@ export async function getUserPosts(
   email: string,
   token: string
 ): Promise<UserBoardPost[] | undefined> {
+  // TODO: UserBoardPost -> SimplePost로 통일 (getBoardPosts와 동일한 리턴 타입을 가져야함)
   const url = `/users/${email}/posts/`;
   try {
     const response = await client.get(url, {
@@ -48,7 +49,7 @@ export async function getUserPosts(
       },
     });
 
-    return response?.data;
+    return response?.data?.posts;
   } catch (error) {
     console.log(error);
     return;
