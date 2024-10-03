@@ -59,7 +59,7 @@ export default function PostView({ post }: PostViewProps) {
   useEffect(() => {
     const postReadCount = async () => {
       try {
-        const res = await incrementReadCount(postid, session?.token);
+        const res = await incrementReadCount(postid);
         if (res === null) {
           console.log("Failed to increment read count");
         }
@@ -91,10 +91,8 @@ export default function PostView({ post }: PostViewProps) {
       }
     };
 
-    if (session) {
-      cookieHandler();
-    }
-  }, [session, postid]);
+    cookieHandler();
+  }, [postid]);
 
   if (status === "loading") {
     return <LoadingSpinner />;
@@ -107,9 +105,9 @@ export default function PostView({ post }: PostViewProps) {
           className="w-full flex flex-col 
         pt-1 pb-2 gap-1 bg-yellow-400"
 
-        // style={{ 
-        //   paddingBottom: 8,
-        // }}
+          // style={{
+          //   paddingBottom: 8,
+          // }}
         >
           {/* 1. Post Title Bar */}
           <PostTitleBar isAnnouncement={isAnnouncement} title={title} />
