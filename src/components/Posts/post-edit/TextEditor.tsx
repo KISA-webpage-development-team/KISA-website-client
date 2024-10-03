@@ -10,15 +10,13 @@ export default function TextEditor({
 }: TextEditorProps) {
   const ReactQuillModules = useMemo(
     () => ({
-      toolbar: {
-        container: [
-          ["image"],
-          [{ size: ["small", false, "large", "huge"] }],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["bold", "underline", "italic"],
-          [{ align: [] }],
-        ],
-      },
+      toolbar: [
+        ["image", "link"],
+        [{ size: ["small", false, "large", "huge"] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["bold", "underline", "italic"],
+        [{ align: [] }],
+      ],
     }),
     []
   );
