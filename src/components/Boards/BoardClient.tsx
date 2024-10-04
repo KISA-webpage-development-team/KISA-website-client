@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { heebo } from "../../utils/fonts/textFonts";
 
 import { useBoardPostNum, useBoardPosts } from "@/apis/boards/swrHooks";
@@ -39,6 +39,7 @@ export default function BoardClient({
     isLoading: isPostNumFetching,
     error: postNumError,
   } = useBoardPostNum(boardType);
+
   // -----------------------------------------------
 
   if (isPostsFetching || isPostNumFetching) {

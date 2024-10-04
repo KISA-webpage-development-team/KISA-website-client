@@ -1,30 +1,27 @@
 import React from "react";
+import { getBoardAnnouncements } from "@/apis/boards/queries";
+
+// sub-ui components
 import BoardBar from "../../../components/Boards/BoardBar";
 import BoardClient from "../../../components/Boards/BoardClient";
-import { getBoardAnnouncements } from "@/apis/boards/queries";
 import { BoardType } from "@/types/board";
 
-type AcademicJobPageProps = {
+type AcademicPageProps = {
   searchParams?: {
     size?: number;
     page?: number;
   };
 };
 
-export default async function AcademicJobPage({
+export default async function AcademicPage({
   searchParams,
-}: AcademicJobPageProps) {
+}: AcademicPageProps) {
   const { size, page } = searchParams;
 
-  const boardType = BoardType.AcademicJob;
+  const boardType = BoardType.Academic;
   // 공지사항은 Server Side이기 때문에 완전한 실시간 데이터가 아니다.
   // 공지사항 게시글의 특성상 실시간으로 완전한 싱크 (지속적인 api call)이 필요하지 않다.
   const announcements = await getBoardAnnouncements(boardType);
-
-  // 공지사항이 없을 경우 빈 배열 반환
-  if (!announcements) {
-    return <></>;
-  }
 
   return (
     <section>
@@ -45,3 +42,11 @@ export default async function AcademicJobPage({
     </section>
   );
 }
+
+// [NOTE on rendering method]
+// This page is rendered as SSR (Server Side Rendering) dynamically.
+// "announcementPosts" are fetched from the server
+// (공지사항은 자주 바뀌지 않는다 + 일반 유저의 인터렉션이 존재하지 않는다)
+// "posts" are fetched from the client side using useSWR hooks
+// and then the page is rendered with the fetched data.
+// BoardBar is a client component that interacts with user

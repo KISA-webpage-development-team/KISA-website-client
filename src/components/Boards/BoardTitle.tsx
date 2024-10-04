@@ -1,10 +1,23 @@
 // boardId = url에서 /boards/{boardId}
 import Link from "next/link";
 import React from "react";
-import { getBoardName } from "../../config/boardName";
+import {
+  getKoreanBoardType,
+  isEveryKisaBoard,
+} from "@/utils/formats/boardType";
 
-export default function BoardTitle({ boardType, size = "normal" }) {
-  const boardLink = `/boards/${boardType}`;
+type BoardTitleProps = {
+  boardType: string;
+  size?: "normal" | "small";
+};
+
+export default function BoardTitle({
+  boardType,
+  size = "normal",
+}: BoardTitleProps) {
+  const boardLink = isEveryKisaBoard(boardType)
+    ? `/everykisa/${boardType}`
+    : `/boards/${boardType}`;
 
   if (size === "normal") {
     return (
@@ -13,7 +26,7 @@ export default function BoardTitle({ boardType, size = "normal" }) {
           className={`cursor-pointer hover:underline
         text-lg sm:text-xl md:text-2xl font-bold text-michigan-blue`}
         >
-          {getBoardName(boardType)}
+          {getKoreanBoardType(boardType)}
         </p>
       </Link>
     );
@@ -25,7 +38,7 @@ export default function BoardTitle({ boardType, size = "normal" }) {
         className={`cursor-pointer hover:underline
         text-xs sm:text-sm font-semibold text-michigan-blue`}
       >
-        {`${getBoardName(boardType)} >`}
+        {`${getKoreanBoardType(boardType)} >`}
       </p>
     </Link>
   );
