@@ -3,12 +3,14 @@ import MobileBoardListItem from "./MobileBoardListItem";
 import { SimplePost } from "@/types/post";
 
 type Props = {
+  isEveryKisa?: boolean;
   posts: SimplePost[];
   annoucements: SimplePost[];
   hasBorder?: boolean;
 };
 
 export default function MobileBoardList({
+  isEveryKisa = false,
   posts,
   annoucements,
   hasBorder = true,

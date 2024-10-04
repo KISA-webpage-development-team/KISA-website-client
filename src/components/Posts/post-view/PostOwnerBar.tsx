@@ -3,7 +3,15 @@ import VerticalDivider from "../../shared/VerticalDivider";
 import ClockIcon from "../../ui/ClockIcon";
 import { fullDateFormatter, timeForToday } from "../../../utils/dateFormatter";
 import Link from "next/link";
-import { PostOwnerBarProps } from "../../../model/props/posts";
+
+type PostOwnerBarProps = {
+  email: string;
+  fullname: string;
+  created: string;
+  readCount: number;
+  commentsCount: number;
+  anonymous: boolean;
+};
 
 export default function PostOwnerBar({
   email,
@@ -11,6 +19,7 @@ export default function PostOwnerBar({
   created,
   readCount,
   commentsCount,
+  anonymous,
 }: PostOwnerBarProps) {
   return (
     <div
@@ -20,9 +29,13 @@ export default function PostOwnerBar({
       {/* left: fullname + created */}
       <div className="flex items-center gap-2">
         {/* later, fullname will be linked to user profile */}
-        <Link href={`/users/${email}`}>
-          <p className="font-semibold hover:underline">{fullname}</p>
-        </Link>
+        {anonymous ? (
+          <p className="font-semibold">익명</p>
+        ) : (
+          <Link href={`/users/${email}`}>
+            <p className="font-semibold hover:underline">{fullname}</p>
+          </Link>
+        )}
 
         <VerticalDivider size="small" />
         <div className="flex items-center gap-1">

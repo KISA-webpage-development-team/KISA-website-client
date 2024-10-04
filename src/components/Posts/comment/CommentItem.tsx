@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { timeForToday } from "../../../utils/dateFormatter";
 import { deleteComment } from "@/apis/comments/mutations";
-import { CommentItemProps } from "../../../model/props/posts";
 
 // sub-ui components
 import CommentEditor from "./CommentEditor";
@@ -12,12 +11,25 @@ import PencilIcon from "../../ui/PencilIcon";
 import TrashcanIcon from "../../ui/TrashcanIcon";
 import CommentIcon from "../../ui/CommentIcon";
 import ReplyIcon from "../../ui/ReplyIcon";
+import { UserSession } from "@/lib/next-auth/types";
+import { Comment } from "@/types/comment";
+
+type CommentItemProps = {
+  session: UserSession;
+  comment: Comment;
+  parentCommentid?: number;
+  setCommentsStale: (stale: boolean) => void;
+  postAuthorEmail: string;
+  commentAuthorMap: Map<string, number>;
+};
 
 export default function CommentItem({
   session,
   comment,
   parentCommentid = 0,
   setCommentsStale,
+  postAuthorEmail,
+  commentAuthorMap,
 }: CommentItemProps) {
   const {
     commentid,
@@ -28,10 +40,11 @@ export default function CommentItem({
     text,
     childComments,
     isCommentOfComment,
+    anonymous,
   } = comment;
   // constants for comment item
   const isAuthor = session?.user?.email === email;
-  const useremail = session?.user?.email;
+  const isPostAuthor = postAuthorEmail === email;
   const token = session?.token;
 
   // states for reply editor
@@ -61,6 +74,30 @@ export default function CommentItem({
     }
   };
 
+  /**
+   * @desc Renders the author of the comment following anonymous logic
+   *
+   */
+  const renderCommentAuthor = () => {
+    if (isAuthor || !anonymous) {
+      return (
+        <Link href={`/users/${email}`}>
+          <span className="font-semibold hover:underline">{fullname}</span>
+        </Link>
+      );
+    }
+
+    if (isPostAuthor) {
+      return <span className="font-semibold">익명(글쓴이)</span>;
+    }
+
+    return (
+      <span className="font-semibold">{`익명${commentAuthorMap.get(
+        email
+      )}`}</span>
+    );
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center">
@@ -76,11 +113,13 @@ export default function CommentItem({
               className="flex items-center gap-1 md:gap-2
             text-sm md:text-base"
             >
-              <Link href={`/users/${email}`}>
+              {/* TODO: 익명이 적용되어야하는 부분 */}
+              {/* <Link href={`/users/${email}`}>
                 <p className="text-black font-semibold hover:underline">
-                  {fullname}
+                  {fullname} <span>{anonymous && "익명"}</span>
                 </p>
-              </Link>
+              </Link> */}
+              {renderCommentAuthor()}
               <p className="text-gray-500">{timeForToday(created)}</p>
             </div>
 
@@ -162,6 +201,8 @@ export default function CommentItem({
               session={session}
               parentCommentid={commentid}
               setCommentsStale={setCommentsStale}
+              postAuthorEmail={postAuthorEmail}
+              commentAuthorMap={commentAuthorMap}
             />
           </div>
         ))}

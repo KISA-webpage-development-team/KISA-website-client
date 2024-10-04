@@ -7,7 +7,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { getCommentsByPostid } from "@/apis/comments/queries";
+import {
+  getCommentsByPostid,
+  getCommentsByPostidMock,
+} from "@/apis/comments/queries";
 
 // sub-ui components
 import CommentEditor from "./CommentEditor";
@@ -20,11 +23,13 @@ import { Comment } from "@/types/comment";
 type CommentsViewProps = {
   commentsCount: number;
   postid: number;
+  email: string;
 };
 
 export default function CommentsView({
   commentsCount,
   postid,
+  email,
 }: CommentsViewProps) {
   const { data: session, status } = useSession() as {
     data: CustomSession | null;
@@ -37,7 +42,8 @@ export default function CommentsView({
   // fetch comments to keep comments up-to-date
   useEffect(() => {
     const getComments = async () => {
-      const comments_res = await getCommentsByPostid(postid);
+      // const comments_res = await getCommentsByPostid(postid);
+      const comments_res = await getCommentsByPostidMock(postid);
       setComments(comments_res);
       setCommentsStale(false);
       return;
@@ -71,6 +77,7 @@ export default function CommentsView({
         comments={comments}
         session={session}
         setCommentsStale={setCommentsStale}
+        email={email}
       />
       {/* <CommentsList commentsCount={commentsCount} comments={comments} /> */}
     </div>

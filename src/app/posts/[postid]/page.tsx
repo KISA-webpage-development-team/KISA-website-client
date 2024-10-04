@@ -25,7 +25,7 @@ type PageProps = {
 export default function PostViewPage({ params }: PageProps) {
   const { postid } = params;
 
-  const { post, isLoading, error } = usePost(postid);
+  const { post, isLoading, error } = usePost(Number(postid));
 
   // [TODO]: when there's no post "error.tsx" should be rendered
   if (isLoading) {
@@ -48,6 +48,7 @@ export default function PostViewPage({ params }: PageProps) {
           <CommentsView
             commentsCount={post?.commentsCount}
             postid={post?.postid}
+            email={post?.email}
           />
         )}
       </SessionProvider>

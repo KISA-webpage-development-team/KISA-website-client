@@ -3,7 +3,11 @@
 import React, { useEffect } from "react";
 import { heebo } from "../../utils/fonts/textFonts";
 
-import { useBoardPostNum, useBoardPosts } from "@/apis/boards/swrHooks";
+import {
+  useBoardPostNum,
+  useBoardPosts,
+  useBoardPostsMock,
+} from "@/apis/boards/swrHooks";
 
 // types
 import { BoardType } from "@/types/board";
@@ -13,6 +17,7 @@ import { SimplePost } from "@/types/post";
 import BoardTable from "./BoardTable";
 import MobileBoardList from "./MobileBoardList";
 import PaginationSizeSelector from "./PaginationSizeSelector";
+import { isEveryKisaBoard } from "@/utils/formats/boardType";
 
 // [NOTE] page is still 1-indexing here
 type Props = {
@@ -28,12 +33,19 @@ export default function BoardClient({
   size,
   page,
 }: Props) {
+  const isEveryKisa = isEveryKisaBoard(boardType);
+
   // Data Fetching from client side using custom useSWR hooks ----------------
+  // const {
+  //   posts,
+  //   isLoading: isPostsFetching,
+  //   error: postsError,
+  // } = useBoardPosts(boardType, size, page - 1);
   const {
     posts,
     isLoading: isPostsFetching,
     error: postsError,
-  } = useBoardPosts(boardType, size, page - 1);
+  } = useBoardPostsMock(boardType, size, page - 1);
   const {
     postNum: totalPostNum,
     isLoading: isPostNumFetching,
@@ -58,13 +70,15 @@ export default function BoardClient({
       {/* TABLE */}
       <div className="hidden md:block">
         <BoardTable
+          isEveryKisa={isEveryKisa}
           postStartIdx={totalPostNum - size * (page - 1)}
           posts={posts}
-          annoucements={page === 1 ? announcements : null}
+          announcements={page === 1 ? announcements : null}
         />
       </div>
       <div className="block md:hidden">
         <MobileBoardList
+          isEveryKisa={isEveryKisa}
           posts={posts}
           annoucements={page === 1 ? announcements : null}
         />

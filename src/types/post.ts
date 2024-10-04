@@ -11,6 +11,8 @@ interface SimplePost {
   email: string; // FK - User.email
   readCount: number;
   commentsCount: number;
+  // for anonymous posts
+  anonymous: boolean;
 }
 
 interface Post extends SimplePost {

@@ -31,6 +31,7 @@ export default function CommentEditor({
       text: text,
       isCommentOfComment: commentid === 0 ? false : true,
       parentCommentid: commentid,
+      anonymous: false,
     };
     // send post api call to create comment with postid
     const res = await createComment(postid, data, session?.token);

@@ -1,5 +1,8 @@
 import React from "react";
-import { getBoardAnnouncements } from "@/apis/boards/queries";
+import {
+  getBoardAnnouncements,
+  getBoardAnnouncementsMock,
+} from "@/apis/boards/queries";
 
 // sub-ui components
 import BoardBar from "../../../components/Boards/BoardBar";
@@ -21,7 +24,8 @@ export default async function CommunityPage({
   const boardType = BoardType.Community;
   // 공지사항은 Server Side이기 때문에 완전한 실시간 데이터가 아니다.
   // 공지사항 게시글의 특성상 실시간으로 완전한 싱크 (지속적인 api call)이 필요하지 않다.
-  const announcements = await getBoardAnnouncements(boardType);
+  // const announcements = await getBoardAnnouncements(boardType);
+  const announcements = await getBoardAnnouncementsMock(boardType);
 
   if (!announcements) {
     return <></>;
