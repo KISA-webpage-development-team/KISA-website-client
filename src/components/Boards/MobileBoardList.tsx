@@ -23,13 +23,18 @@ export default function MobileBoardList({
     >
       {annoucements?.map((announcement, _) => (
         <MobileBoardListItem
+          isEveryKisa={isEveryKisa}
           key={announcement.postid}
           post={announcement}
           isAnnouncement
         />
       ))}
       {posts?.map((post, _) => (
-        <MobileBoardListItem key={post.postid} post={post} />
+        <MobileBoardListItem
+          isEveryKisa={isEveryKisa}
+          key={post.postid}
+          post={post}
+        />
       ))}
     </ol>
   );
