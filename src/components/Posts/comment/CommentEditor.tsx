@@ -110,7 +110,7 @@ export default function CommentEditor({
       <textarea
         value={text}
         onChange={handleTextChange}
-        className="w-full h-20 md:h-32
+        className="w-full h-20 sm:h-32
              border border-gray-300 rounded-md p-3
               text-sm md:text-base
               focus:outline-michigan-blue"
@@ -137,26 +137,52 @@ export default function CommentEditor({
       >
         {isSubmitting ? "등록 중..." : "댓글 등록"}
       </button> */}
-      <div className="w-1/6 flex flex-col justify-between h-full">
+      <div
+        className="w-full sm:w-1/6 sm:h-full
+        pt-2
+        flex sm:flex-col sm:justify-between
+      flex-row"
+      >
         {/* If isEveryKisa, show anonymous checkbox options */}
         {isEveryKisa && (
-          <RadioGroup
-            className="flex flex-row gap-1 pl-3"
-            defaultValue="none"
-            value={anonymousValue}
-            onValueChange={setAnonymousValue}
-          >
-            <Radio value="anonymous">익명</Radio>
-            <Radio value="non-anonymous">실명</Radio>
-            <Radio
-              value="none"
-              classNames={{
-                base: cn("hidden"),
-              }}
+          <>
+            <RadioGroup
+              className="hidden
+              sm:flex gap-1 pl-3"
+              defaultValue="none"
+              value={anonymousValue}
+              onValueChange={setAnonymousValue}
             >
-              선택 안함
-            </Radio>
-          </RadioGroup>
+              <Radio value="anonymous">익명</Radio>
+              <Radio value="non-anonymous">실명</Radio>
+              <Radio
+                value="none"
+                classNames={{
+                  base: cn("hidden"),
+                }}
+              >
+                선택 안함
+              </Radio>
+            </RadioGroup>
+            <RadioGroup
+              className="flex sm:hidden w-1/4"
+              size="sm"
+              defaultValue="none"
+              value={anonymousValue}
+              onValueChange={setAnonymousValue}
+            >
+              <Radio value="anonymous">익명</Radio>
+              <Radio value="non-anonymous">실명</Radio>
+              <Radio
+                value="none"
+                classNames={{
+                  base: cn("hidden"),
+                }}
+              >
+                선택 안함
+              </Radio>
+            </RadioGroup>
+          </>
         )}
         {/* If isEveryKisa, anonymousValue should be selected */}
         <CustomButton
@@ -167,7 +193,7 @@ export default function CommentEditor({
           }
           onClick={mode === "update" ? handleSubmitUpdate : handleSubmitComment}
           text={isSubmitting ? "등록 중..." : "댓글 등록"}
-          className="w-full"
+          className="w-full h-full sm:h-fit"
         />
       </div>
     </div>
