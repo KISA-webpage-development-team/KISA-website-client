@@ -15,6 +15,7 @@ import {
   NotFound,
 } from "@/final_refactor_src/components/feedback";
 import { usePost } from "@/apis/posts/swrHooks";
+import { isEveryKisaBoard } from "@/utils/formats/boardType";
 
 type PageProps = {
   params: {
@@ -45,7 +46,9 @@ export default function PostViewPage({ params }: PageProps) {
 
         {/* Comments는 로딩되는대로 */}
         {!post?.isAnnouncement && post?.type !== "announcement" && (
+          // bit worry about props drilling on post.type to handle every kisa
           <CommentsView
+            isEveryKisa={isEveryKisaBoard(post?.type)}
             commentsCount={post?.commentsCount}
             postid={post?.postid}
             email={post?.email}

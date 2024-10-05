@@ -80,7 +80,7 @@ export default function BoardClient({
         <MobileBoardList
           isEveryKisa={isEveryKisa}
           posts={posts}
-          annoucements={page === 1 ? announcements : null}
+          announcements={page === 1 ? announcements : null}
         />
       </div>
 

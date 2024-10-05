@@ -10,6 +10,7 @@ type CommentsListProps = {
   email: string;
 };
 
+// TODO: should I add "isEveryKisa"?
 export default function CommentsList({
   comments,
   session,
@@ -38,7 +39,7 @@ export default function CommentsList({
 /**
  * Get comment author map using DFS
  */
-function getCommentAuthorMap(comments: Comment[]) {
+function getCommentAuthorMap(comments: Comment[]): Map<string, number> {
   const commentAuthorMap = new Map<string, number>();
   let idx = 1;
 
