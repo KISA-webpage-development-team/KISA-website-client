@@ -21,7 +21,10 @@ import {
 } from "../../../config/boardName";
 import { getIsAdmin } from "@/apis/auth/queries";
 import { getPost } from "@/apis/posts/queries";
-import { isEveryKisaBoard } from "@/utils/formats/boardType";
+import {
+  isAnnouncementBoard,
+  isEveryKisaBoard,
+} from "@/utils/formats/boardType";
 import { Radio, RadioGroup } from "@nextui-org/react";
 import { cn } from "@/utils/cn";
 
@@ -115,26 +118,20 @@ export default function EditorClient({
       setIsSubmitBtnDisabled(true);
       return;
     }
-    if (
-      boardType === "announcement" &&
-      announcementTag === "" &&
-      customTag === ""
-    ) {
-      setIsSubmitBtnDisabled(true);
-      return;
-    } else {
-      setIsSubmitBtnDisabled(false);
-      return;
-    }
-  }, [
-    title,
-    text,
-    announcementTag,
-    customTag,
-    boardType,
-    anonymousValue,
-    isEveryKisa,
-  ]);
+
+    setIsSubmitBtnDisabled(false);
+    // if (
+    //   boardType === "announcement" &&
+    //   announcementTag === "" &&
+    //   customTag === ""
+    // ) {
+    //   setIsSubmitBtnDisabled(true);
+    //   return;
+    // } else {
+    //   setIsSubmitBtnDisabled(false);
+    //   return;
+    // }
+  }, [title, text, boardType, anonymousValue, isEveryKisa]);
 
   useEffect(() => {
     if (text === "") setIsSubmitBtnDisabled(true);
@@ -149,7 +146,7 @@ export default function EditorClient({
     return <div>Loading...</div>;
   }
   // 2) if boardType is announcement and user is not admin
-  if (boardType === "announcement" && isAdmin === false) {
+  if (isAnnouncementBoard(boardType) && isAdmin === false) {
     return <div>권한이 없습니다.</div>;
   }
 
@@ -175,7 +172,7 @@ export default function EditorClient({
         >
           {isAdmin && (
             <CheckBoxes
-              isBoardAnnouncement={boardType === "announcement"}
+              isBoardAnnouncement={isAnnouncementBoard(boardType)}
               isAnnouncement={isAnnouncement}
               setIsAnnouncement={setIsAnnouncement}
               announcementTag={announcementTag}

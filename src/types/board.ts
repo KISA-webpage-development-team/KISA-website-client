@@ -1,4 +1,4 @@
-// Board type definitions & type utilities
+// Board type definitions
 
 // Type Definitions -----------------------------------------------------------
 export enum BoardType {

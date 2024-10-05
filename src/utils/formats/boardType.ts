@@ -21,6 +21,8 @@ const everyKisaBoards = new Set([
   "livingqa",
 ]);
 
+const announcementBoards = ["announcement", "job-announcement"];
+
 // Create a reverse mapping of Korean names to board types
 const koreanBoardTypeMap = Object.fromEntries(
   Object.entries(boardTypeMap).map(([key, value]) => [value, key])
@@ -64,4 +66,11 @@ export function getTagListForAnnouncement(): { name: string; type: string }[] {
  */
 export function isEveryKisaBoard(boardType: string): boolean {
   return everyKisaBoards.has(boardType);
+}
+
+/**
+ * Check whether a board type is for announcements (can't leave comments or write posts except KISA)
+ */
+export function isAnnouncementBoard(boardType: string): boolean {
+  return announcementBoards.includes(boardType);
 }

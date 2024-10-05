@@ -15,7 +15,10 @@ import {
   NotFound,
 } from "@/final_refactor_src/components/feedback";
 import { usePost } from "@/apis/posts/swrHooks";
-import { isEveryKisaBoard } from "@/utils/formats/boardType";
+import {
+  isAnnouncementBoard,
+  isEveryKisaBoard,
+} from "@/utils/formats/boardType";
 
 type PageProps = {
   params: {
@@ -45,7 +48,7 @@ export default function PostViewPage({ params }: PageProps) {
         <PostView post={post} />
 
         {/* Comments는 로딩되는대로 */}
-        {!post?.isAnnouncement && post?.type !== "announcement" && (
+        {!post?.isAnnouncement && isAnnouncementBoard(post.type) && (
           // bit worry about props drilling on post.type to handle every kisa
           <CommentsView
             isEveryKisa={isEveryKisaBoard(post?.type)}
