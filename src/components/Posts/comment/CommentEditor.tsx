@@ -39,10 +39,6 @@ export default function CommentEditor({
   // state to prevent multiple comment submissions at the same time
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log("anonymousValue: ", anonymousValue);
-  }, [anonymousValue]);
-
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setText(e.target.value);
 

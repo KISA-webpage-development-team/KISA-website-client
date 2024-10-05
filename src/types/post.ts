@@ -28,6 +28,7 @@ interface NewPostBody {
   text: string;
   isAnnouncement: boolean;
   tag: string;
+  anonymous: boolean;
 }
 
 interface UpdatePostBody {
