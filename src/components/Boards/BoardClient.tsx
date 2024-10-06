@@ -36,16 +36,16 @@ export default function BoardClient({
   const isEveryKisa = isEveryKisaBoard(boardType);
 
   // Data Fetching from client side using custom useSWR hooks ----------------
-  const {
-    posts,
-    isLoading: isPostsFetching,
-    error: postsError,
-  } = useBoardPosts(boardType, size, page - 1);
   // const {
   //   posts,
   //   isLoading: isPostsFetching,
   //   error: postsError,
-  // } = useBoardPostsMock(boardType, size, page - 1);
+  // } = useBoardPosts(boardType, size, page - 1);
+  const {
+    posts,
+    isLoading: isPostsFetching,
+    error: postsError,
+  } = useBoardPostsMock(boardType, size, page - 1);
   const {
     postNum: totalPostNum,
     isLoading: isPostNumFetching,

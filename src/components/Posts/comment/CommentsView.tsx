@@ -44,8 +44,8 @@ export default function CommentsView({
   // fetch comments to keep comments up-to-date
   useEffect(() => {
     const getComments = async () => {
-      const comments_res = await getCommentsByPostid(postid);
-      // const comments_res = await getCommentsByPostidMock(postid);
+      // const comments_res = await getCommentsByPostid(postid);
+      const comments_res = await getCommentsByPostidMock(postid);
       setComments(comments_res);
       setCommentsStale(false);
       return;
