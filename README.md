@@ -37,15 +37,6 @@ Contains all public assets like images and logos. Image name follows the format 
 
 ### `src`
 
-- `app`
-
-  - `layout.js`: Global layout including header & footer
-  - `page.js`: Home page
-  - `[Page Name]` folders: Different pages with their own `page.js` and `layout.js` (/[Page Name])
-  - `api`: NextJS API routes (/api)
-
-- `components` (WIP)
-
 - `apis`
 
   - `[API Name]` folders: API call services (backend connection) and data fetching functions (/apis/[API Name])
@@ -53,12 +44,30 @@ Contains all public assets like images and logos. Image name follows the format 
     - `queries.ts`: Queries for fetching data (GET)
     - `swrHooks.ts`: Custom SWR hooks for data fetching (GET)
 
+- `app`
+
+  - `layout.js`: Global layout including header & footer
+  - `page.js`: Home page
+  - `[Page Name]` folders: Different pages with their own `page.js` and `layout.js` (/[Page Name])
+  - `api`: NextJS API routes (/api)
+
+- `assets`
+
+  - `fonts` folder: Fonts used in the website
+
+- `constants`
+
+  - `[Constant Name]`: Related constants for [Constant Name] (/constants/[Constant Name])
+  - `env.ts`: load environment variables (MUST import env variables ONLY from this file)
+
+- `components` (WIP)
+
 - `lib`
 
-  - `[Library Name]` folders: Reusable libraries for the project (/lib/[Library Name])
+  - `[Library Name]` folders: Third Party Library-related codes (/lib/[Library Name])
 
 - `types`
-  - `[Type Name]` folders: Reusable types for the project (/types/[Type Name]) (type name is mostly same as the "entity" name)
+  - `[Type Name]` folders: Types for the project (/types/[Type Name]) (type name is mostly same as the "entity" name)
 
 ## Current Progress
 
