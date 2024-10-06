@@ -23,11 +23,17 @@
 
 `npm run build && npm run start`
 
-## Folder Structure (/src) (WIP)
+## Folder Structure (WIP)
 
 ### `public`
 
-- Contains all public assets like images and logos
+Contains all public assets like images and logos. Image name follows the format {id}.png
+
+- `carousel` folder: Contains images for carousel in home page
+- `events` folder: Contains images for events in events page (/about/events)
+- `images` folder: Contains images for info pages (/info)
+- `quick_links` folder: Contains images for quick links in home page
+- `kisa_all.png`: KISA all photo (/about/kisa)
 
 ### `src`
 
