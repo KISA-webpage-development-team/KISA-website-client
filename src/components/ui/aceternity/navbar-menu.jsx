@@ -138,7 +138,7 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
         flex-col md:flex-row
         relative border border-transparent
         shadow-input 
-        space-x-0 md:space-x-10
+        space-x-0 md:space-x-8
         space-y-4 md:space-y-0
         
       `}

@@ -6,7 +6,11 @@ import BoardTitle from "./BoardTitle";
 import CutomButton from "../shared/CutomButton";
 import PencilIcon from "../ui/PencilIcon";
 
-export default function BoardBar({ boardType }) {
+type BoardBarProps = {
+  boardType: string;
+};
+
+export default function BoardBar({ boardType }: BoardBarProps) {
   const router = useRouter();
 
   function handleCreatePostClick() {

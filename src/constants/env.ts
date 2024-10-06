@@ -18,4 +18,7 @@ export const GOOGLE_CALENDAR_API_KEY = process.env
   : "";
 
 // Backend
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const useLocalBackend = process.env.NEXT_PUBLIC_USE_LOCAL_BACKEND === "true";
+export const BACKEND_URL = useLocalBackend
+  ? process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL
+  : process.env.NEXT_PUBLIC_BACKEND_URL;

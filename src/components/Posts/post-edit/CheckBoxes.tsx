@@ -26,36 +26,39 @@ export default function CheckBoxes({
       </div>
     );
   }
+  return <></>;
 
   // if board is announcement board
   // return different tag list with an extra custom tag input
-  return (
-    <div className="flex items-center gap-4">
-      {getTagListForAnnouncement().map((tag) => (
-        <div key={tag.type} className="flex items-center gap-1 ">
-          <input
-            value={tag.type}
-            type="checkbox"
-            checked={announcementTag === tag.type}
-            onChange={(e) => {
-              setAnnouncementTag(e.currentTarget.value);
-            }}
-          />
-          <label htmlFor="announcement">
-            {tag.type === "" ? (
-              <input
-                type="text"
-                placeholder="커스텀"
-                value={customTag}
-                onChange={(e) => setCustomTag(e.currentTarget.value)}
-                className="w-20 border h-5 border-black rounded-md p-1"
-              />
-            ) : (
-              tag.name
-            )}
-          </label>
-        </div>
-      ))}
-    </div>
-  );
+
+  // NOTE: Disable tag
+  // return (
+  //   <div className="flex items-center gap-4">
+  //     {getTagListForAnnouncement().map((tag) => (
+  //       <div key={tag.type} className="flex items-center gap-1 ">
+  //         <input
+  //           value={tag.type}
+  //           type="checkbox"
+  //           checked={announcementTag === tag.type}
+  //           onChange={(e) => {
+  //             setAnnouncementTag(e.currentTarget.value);
+  //           }}
+  //         />
+  //         <label htmlFor="announcement">
+  //           {tag.type === "" ? (
+  //             <input
+  //               type="text"
+  //               placeholder="커스텀"
+  //               value={customTag}
+  //               onChange={(e) => setCustomTag(e.currentTarget.value)}
+  //               className="w-20 border h-5 border-black rounded-md p-1"
+  //             />
+  //           ) : (
+  //             tag.name
+  //           )}
+  //         </label>
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
 }

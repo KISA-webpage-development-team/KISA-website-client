@@ -21,6 +21,12 @@ import {
 } from "../../../config/boardName";
 import { getIsAdmin } from "@/apis/auth/queries";
 import { getPost } from "@/apis/posts/queries";
+import {
+  isAnnouncementBoard,
+  isEveryKisaBoard,
+} from "@/utils/formats/boardType";
+import { Radio, RadioGroup } from "@nextui-org/react";
+import { cn } from "@/utils/styles/cn";
 
 export default function EditorClient({
   session,
@@ -28,6 +34,8 @@ export default function EditorClient({
   curPostId = null,
   mode,
 }) {
+  const isEveryKisa = isEveryKisaBoard(boardType);
+
   // admin state
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
@@ -51,6 +59,9 @@ export default function EditorClient({
   const [title, setTitle] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [isAnnouncement, setIsAnnouncement] = useState<boolean>(false);
+
+  // anonymous checkbox state for every kisa board ("anonymous" | "non-anonymous" | "none")
+  const [anonymousValue, setAnonymousValue] = useState<string>("none");
 
   // fetch initial post if necessary
   useEffect(() => {
@@ -94,6 +105,11 @@ export default function EditorClient({
 
   // submit button validation -------------------------------------------------
   useEffect(() => {
+    if (isEveryKisa && mode === "create" && anonymousValue === "none") {
+      setIsSubmitBtnDisabled(true);
+      return;
+    }
+
     if (title?.length === 0) {
       setIsSubmitBtnDisabled(true);
       return;
@@ -102,18 +118,20 @@ export default function EditorClient({
       setIsSubmitBtnDisabled(true);
       return;
     }
-    if (
-      boardType === "announcement" &&
-      announcementTag === "" &&
-      customTag === ""
-    ) {
-      setIsSubmitBtnDisabled(true);
-      return;
-    } else {
-      setIsSubmitBtnDisabled(false);
-      return;
-    }
-  }, [title, text, announcementTag, customTag, boardType]);
+
+    setIsSubmitBtnDisabled(false);
+    // if (
+    //   boardType === "announcement" &&
+    //   announcementTag === "" &&
+    //   customTag === ""
+    // ) {
+    //   setIsSubmitBtnDisabled(true);
+    //   return;
+    // } else {
+    //   setIsSubmitBtnDisabled(false);
+    //   return;
+    // }
+  }, [title, text, boardType, anonymousValue, isEveryKisa, mode]);
 
   useEffect(() => {
     if (text === "") setIsSubmitBtnDisabled(true);
@@ -128,7 +146,7 @@ export default function EditorClient({
     return <div>Loading...</div>;
   }
   // 2) if boardType is announcement and user is not admin
-  if (boardType === "announcement" && isAdmin === false) {
+  if (isAnnouncementBoard(boardType) && isAdmin === false) {
     return <div>권한이 없습니다.</div>;
   }
 
@@ -145,17 +163,47 @@ export default function EditorClient({
       ${isAdmin ? "w-full justify-between" : "justify-end"}
       mt-20 md:mt-12`}
       >
-        {isAdmin && (
-          <CheckBoxes
-            isBoardAnnouncement={boardType === "announcement"}
-            isAnnouncement={isAnnouncement}
-            setIsAnnouncement={setIsAnnouncement}
-            announcementTag={announcementTag}
-            setAnnouncementTag={setAnnouncementTag}
-            customTag={customTag}
-            setCustomTag={setCustomTag}
-          />
-        )}
+        {/* 공지사항 게시판 전용 태그
+          TODO: DELETE THIS
+        */}
+        <div
+          className="flex flex-row items-center 
+        gap-4 sm:gap-8"
+        >
+          {isAdmin && (
+            <CheckBoxes
+              isBoardAnnouncement={isAnnouncementBoard(boardType)}
+              isAnnouncement={isAnnouncement}
+              setIsAnnouncement={setIsAnnouncement}
+              announcementTag={announcementTag}
+              setAnnouncementTag={setAnnouncementTag}
+              customTag={customTag}
+              setCustomTag={setCustomTag}
+            />
+          )}
+          {/* If isEveryKisa, show anonymous checkbox options */}
+          {isEveryKisa && mode === "create" && (
+            <RadioGroup
+              className="flex gap-1"
+              orientation="horizontal"
+              defaultValue="none"
+              value={anonymousValue}
+              onValueChange={setAnonymousValue}
+            >
+              <Radio value="anonymous">익명</Radio>
+              <Radio value="non-anonymous">실명</Radio>
+              <Radio
+                value="none"
+                classNames={{
+                  base: cn("hidden"),
+                }}
+              >
+                선택 안함
+              </Radio>
+            </RadioGroup>
+          )}
+        </div>
+
         <PostSubmitButton
           disabled={isSubmitBtnDisabled}
           token={session?.token}
@@ -177,6 +225,9 @@ export default function EditorClient({
                   text: text,
                   isAnnouncement,
                   tag: announcementTag === "" ? customTag : announcementTag,
+                  anonymous: isEveryKisa
+                    ? anonymousValue === "anonymous"
+                    : false,
                 }
               : // when updating a post
                 {
@@ -190,6 +241,7 @@ export default function EditorClient({
                   text: text,
                   isAnnouncement,
                   tag: announcementTag === "" ? customTag : announcementTag,
+                  // when updating a post, anonymous status should be the same as the original post
                 }
           }
         />

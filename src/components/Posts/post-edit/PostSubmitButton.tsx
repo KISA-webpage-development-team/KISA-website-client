@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  EditorMode,
-  PostFormData,
-  SimplePostFormData,
-} from "../../../model/props/posts";
+import { EditorMode } from "../../../model/props/posts";
 import { createPost, updatePost } from "@/apis/posts/mutations";
 import { useRouter } from "next/navigation";
 import { NewPostBody, UpdatePostBody } from "@/types/post";

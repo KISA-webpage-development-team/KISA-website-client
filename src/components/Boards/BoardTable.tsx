@@ -3,12 +3,14 @@
 import React from "react";
 import BoardTableRow from "./BoardTableRow";
 import "../../app/boards/board.css";
+import { SimplePost } from "@/types/post";
 
 // for now, just use any type
-type Props = {
+type BoardTableProps = {
+  isEveryKisa?: boolean;
   postStartIdx: number;
-  posts: any[];
-  annoucements: any[];
+  posts: SimplePost[];
+  announcements: SimplePost[];
 };
 
 // [NOTE]
@@ -16,10 +18,11 @@ type Props = {
 // 시발!
 
 export default function BoardTable({
+  isEveryKisa = false,
   postStartIdx,
   posts,
-  annoucements,
-}: Props) {
+  announcements,
+}: BoardTableProps) {
   return (
     <table
       className="border border-gray-300 w-full
@@ -30,7 +33,8 @@ export default function BoardTable({
       <colgroup span={5}>
         <col width="60px" />
         <col width="*" />
-        <col width="80px" />
+        {/* EveryKisa에는 글쓴이를 표시하지 않는다 */}
+        {!isEveryKisa && <col width="80px" />}
         <col width="80px" />
         <col width="55px" />
       </colgroup>
@@ -42,9 +46,13 @@ export default function BoardTable({
           <th className="py-2 font-semibold text-gray-800" scope="col">
             제목
           </th>
-          <th className="py-2 font-semibold text-gray-800" scope="col">
-            글쓴이
-          </th>
+          {/* EveryKisa에는 글쓴이를 표시하지 않는다 */}
+          {!isEveryKisa && (
+            <th className="py-2 font-semibold text-gray-800" scope="col">
+              글쓴이
+            </th>
+          )}
+
           <th className="py-2 font-semibold text-gray-800" scope="col">
             작성일
           </th>
@@ -55,8 +63,9 @@ export default function BoardTable({
       </thead>
 
       <tbody className="w-full">
-        {annoucements?.map((announcement, _) => (
+        {announcements?.map((announcement, _) => (
           <BoardTableRow
+            isEveryKisa={isEveryKisa}
             key={announcement.postid}
             post={announcement}
             isAnnouncement
@@ -64,6 +73,7 @@ export default function BoardTable({
         ))}
         {posts?.map((post, idx) => (
           <BoardTableRow
+            isEveryKisa={isEveryKisa}
             key={post.postid}
             post={post}
             postNum={postStartIdx - idx}

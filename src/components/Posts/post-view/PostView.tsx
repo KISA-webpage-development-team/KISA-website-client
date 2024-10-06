@@ -42,6 +42,7 @@ export default function PostView({ post }: PostViewProps) {
     created,
     readCount,
     commentsCount,
+    anonymous,
   } = post;
 
   const [didRead, setDidRead] = useState(false);
@@ -110,6 +111,7 @@ export default function PostView({ post }: PostViewProps) {
             created={created}
             readCount={didRead ? Number(readCount) + 1 : readCount}
             commentsCount={commentsCount}
+            anonymous={anonymous}
           />
         </div>
 

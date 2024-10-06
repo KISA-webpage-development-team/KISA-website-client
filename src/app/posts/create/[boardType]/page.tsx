@@ -3,7 +3,7 @@ import BoardTitle from "../../../../components/Boards/BoardTitle";
 
 import dynamic from "next/dynamic";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../config/auth";
+import authOptions from "@/lib/next-auth/authOptions";
 import { BoardType } from "../../../../model/common/types";
 
 // need to force EditorClient to be rendered on client-side

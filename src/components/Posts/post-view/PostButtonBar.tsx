@@ -3,12 +3,19 @@
 // 3. Delete Button [Only when the user is the author]
 
 import React from "react";
-import { PostButtonBarProps } from "../../../model/props/posts";
 import ListIcon from "../../ui/ListIcon";
 import ImageButton from "../../shared/ImageButton";
 import { useRouter } from "next/navigation";
 import PencilIcon from "../../ui/PencilIcon";
 import TrashcanIcon from "../../ui/TrashcanIcon";
+import { BoardType } from "@/types/board";
+
+type PostButtonBarProps = {
+  isAuthor: boolean;
+  type: BoardType;
+  postid: number;
+  title: string;
+};
 
 export default function PostButtonBar({
   isAuthor,

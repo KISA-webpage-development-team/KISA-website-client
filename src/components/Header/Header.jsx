@@ -50,7 +50,7 @@ export default function Header({ session }) {
         className={` 
         flex flex-col md:flex-row 
         items-start md:items-center
-        md:gap-10 
+        md:gap-8 
        `}
       >
         {/* Web Name home link */}
