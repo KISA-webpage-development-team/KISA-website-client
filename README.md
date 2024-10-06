@@ -27,7 +27,7 @@
 
 ### `public`
 
-Contains all public assets like images and logos. Image name follows the format {id}.png
+Contains all public assets like images and logos. Image name follows the format `{id}.png`
 
 - `carousel` folder: Contains images for carousel in home page
 - `events` folder: Contains images for events in events page (/about/events)
@@ -36,8 +36,6 @@ Contains all public assets like images and logos. Image name follows the format 
 - `kisa_all.png`: KISA all photo (/about/kisa)
 
 ### `src`
-
-Main project folder:
 
 - `app`
 
@@ -61,3 +59,9 @@ Main project folder:
 
 - `types`
   - `[Type Name]` folders: Reusable types for the project (/types/[Type Name]) (type name is mostly same as the "entity" name)
+
+## Current Progress
+
+- [ ] TypeScript Conversion (JS -> TS)
+- [ ] Refactoring code into feature-based folder structure
+- [ ] Adding new features such as anonymous, secret comments, like/dislike, etc.
