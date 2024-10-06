@@ -26,7 +26,7 @@ import {
   isEveryKisaBoard,
 } from "@/utils/formats/boardType";
 import { Radio, RadioGroup } from "@nextui-org/react";
-import { cn } from "@/utils/cn";
+import { cn } from "@/utils/styles/cn";
 
 export default function EditorClient({
   session,

@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { createComment, updateComment } from "@/apis/comments/mutations";
 import { NewCommentBody } from "@/types/comment";
 import { CustomButton } from "@/final_refactor_src/components/button";
-import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@nextui-org/react";
-import { cn } from "@/utils/cn";
+import { Radio, RadioGroup } from "@nextui-org/react";
+import { cn } from "@/utils/styles/cn";
 
 type CommentEditorProps = {
   isEveryKisa?: boolean;
