@@ -26,7 +26,7 @@ import {
   isEveryKisaBoard,
 } from "@/utils/formats/boardType";
 import { Radio, RadioGroup } from "@nextui-org/react";
-import { cn } from "@/utils/cn";
+import { cn } from "@/utils/styles/cn";
 
 export default function EditorClient({
   session,
@@ -105,7 +105,7 @@ export default function EditorClient({
 
   // submit button validation -------------------------------------------------
   useEffect(() => {
-    if (isEveryKisa && anonymousValue === "none") {
+    if (isEveryKisa && mode === "create" && anonymousValue === "none") {
       setIsSubmitBtnDisabled(true);
       return;
     }
@@ -131,7 +131,7 @@ export default function EditorClient({
     //   setIsSubmitBtnDisabled(false);
     //   return;
     // }
-  }, [title, text, boardType, anonymousValue, isEveryKisa]);
+  }, [title, text, boardType, anonymousValue, isEveryKisa, mode]);
 
   useEffect(() => {
     if (text === "") setIsSubmitBtnDisabled(true);
@@ -182,7 +182,7 @@ export default function EditorClient({
             />
           )}
           {/* If isEveryKisa, show anonymous checkbox options */}
-          {isEveryKisa && (
+          {isEveryKisa && mode === "create" && (
             <RadioGroup
               className="flex gap-1"
               orientation="horizontal"

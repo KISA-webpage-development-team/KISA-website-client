@@ -48,7 +48,7 @@ export default function PostViewPage({ params }: PageProps) {
         <PostView post={post} />
 
         {/* Comments는 로딩되는대로 */}
-        {!post?.isAnnouncement && isAnnouncementBoard(post.type) && (
+        {!post?.isAnnouncement && !isAnnouncementBoard(post.type) && (
           // bit worry about props drilling on post.type to handle every kisa
           <CommentsView
             isEveryKisa={isEveryKisaBoard(post?.type)}
