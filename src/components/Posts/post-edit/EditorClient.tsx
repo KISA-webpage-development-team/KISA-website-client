@@ -120,17 +120,7 @@ export default function EditorClient({
     }
 
     setIsSubmitBtnDisabled(false);
-    // if (
-    //   boardType === "announcement" &&
-    //   announcementTag === "" &&
-    //   customTag === ""
-    // ) {
-    //   setIsSubmitBtnDisabled(true);
-    //   return;
-    // } else {
-    //   setIsSubmitBtnDisabled(false);
-    //   return;
-    // }
+
   }, [title, text, boardType, anonymousValue, isEveryKisa, mode]);
 
   useEffect(() => {
