@@ -1,6 +1,6 @@
 import DongsubButton from "@/components/DongsubButton";
 import DongsubImage from "@/components/DongsubImage";
-
+import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 export default function OnboardingPage() {
   return (
     <div>
