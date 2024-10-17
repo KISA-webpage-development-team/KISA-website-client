@@ -20,7 +20,7 @@
 
 ### 1. `queries.ts`
 
-해당 Entity에 대한 GET API 호출 함수들을 정의한다. 이때 axios를 이용한다.ㅉ
+해당 Entity에 대한 GET API 호출 함수들을 정의한다. 이때 axios를 이용한다.
 
 ### 2. `swrHooks.ts`
 
