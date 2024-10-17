@@ -18,6 +18,14 @@
 
 각 Entity 폴더마다 다음과 같은 최대 세 가지 파일들이 존재한다.
 
-1. `queries.ts`: 해당 Entity에 대한 GET API 호출 함수들을 정의한다. 이때 axios를 이용한다.
-2. `swrHooks.ts`: 해당 Entity에 대한 GET API 호출 함수들을 정의한다. 이때 SWR을 이용한다. 일반적인 async function이 아닌 use어쩌고라는 React Custom Hook으로 정의되어있다. 사용 방법은 self-explanatory하다.
-3. `mutations.ts`: 해당 Entity에 대한 POST, PUT, DELETE API 호출 함수들을 정의한다. 이때 axios를 이용한다.
+### 1. `queries.ts`
+
+해당 Entity에 대한 GET API 호출 함수들을 정의한다. 이때 axios를 이용한다.ㅉ
+
+### 2. `swrHooks.ts`
+
+해당 Entity에 대한 GET API 호출 함수들을 정의한다. 이때 SWR을 이용한다. 일반적인 async function이 아닌 use어쩌고라는 React Custom Hook으로 정의되어있다. 사용 방법은 self-explanatory하다.
+
+### 3. `mutations.ts`
+
+해당 Entity에 대한 POST, PUT, DELETE API 호출 함수들을 정의한다. 이때 axios를 이용한다.
