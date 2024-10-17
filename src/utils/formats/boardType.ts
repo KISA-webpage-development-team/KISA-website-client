@@ -1,12 +1,27 @@
 // Map of board types to their Korean names
 const boardTypeMap = {
   announcement: "공지사항",
-  community: "자유게시판",
-  "academic-job": "학업/취업",
+  "job-announcement": "취업공고",
   buyandsell: "사고팔기",
   housing: "하우징/룸메이트",
+  // Every Kisa
+  community: "자유게시판",
+  concern: "고민게시판",
+  academic: "공부게시판",
+  career: "취업·진로",
+  livingqa: "생활 Q&A",
   "": "일반",
 };
+
+const everyKisaBoards = new Set([
+  "community",
+  "concern",
+  "academic",
+  "career",
+  "livingqa",
+]);
+
+const announcementBoards = ["announcement", "job-announcement"];
 
 // Create a reverse mapping of Korean names to board types
 const koreanBoardTypeMap = Object.fromEntries(
@@ -18,8 +33,8 @@ const koreanBoardTypeMap = Object.fromEntries(
  * @param boardType - The English board type
  * @returns The Korean name of the board type, or a default message if not found
  */
-export function getKoreanBoardType(boardType: string): string {
-  return boardTypeMap[boardType] || "존재하지 않는 게시판";
+export function getKoreanBoardType(boardName: string): string {
+  return boardTypeMap[boardName] || "존재하지 않는 게시판";
 }
 
 /**
@@ -27,8 +42,8 @@ export function getKoreanBoardType(boardType: string): string {
  * @param boardType - The Korean name of the board type
  * @returns The English board type, or "none" if not found
  */
-export function getEnglishBoardType(boardType: string): string {
-  return koreanBoardTypeMap[boardType] || "none";
+export function getEnglishBoardType(boardName: string): string {
+  return koreanBoardTypeMap[boardName] || "none";
 }
 
 /**
@@ -44,4 +59,18 @@ export function getTagListForAnnouncement(): { name: string; type: string }[] {
       // Map the remaining entries to the required format
       .map(([type, name]) => ({ name, type })),
   ];
+}
+
+/**
+ * Check whether a board type is for EveryKISA
+ */
+export function isEveryKisaBoard(boardType: string): boolean {
+  return everyKisaBoards.has(boardType);
+}
+
+/**
+ * Check whether a board type is for announcements (can't leave comments or write posts except KISA)
+ */
+export function isAnnouncementBoard(boardType: string): boolean {
+  return announcementBoards.includes(boardType);
 }

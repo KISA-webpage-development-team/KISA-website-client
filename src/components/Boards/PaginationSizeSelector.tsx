@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Pagination as PaginationBar } from "@nextui-org/react";
+import { Pagination as PaginationBar } from "@nextui-org/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const pageSizeOptions = [10, 20, 30];

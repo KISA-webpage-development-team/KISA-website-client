@@ -1,7 +1,12 @@
 import React, { useMemo } from "react";
-import { TextEditorProps } from "../../../model/props/posts";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
+
+type TextEditorProps = {
+  isAdmin: boolean;
+  text: string;
+  setText: (e: string) => void;
+};
 
 export default function TextEditor({
   isAdmin,

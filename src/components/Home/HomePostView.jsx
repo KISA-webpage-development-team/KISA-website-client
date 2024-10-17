@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "../../utils/fonts/textFonts";
+import { sejongHospitalBold } from "../../utils/fonts/textFonts";
 import Link from "next/link";
-import { dateFormatter } from "../../utils/dateFormatter";
 import HorizontalDivider from "../shared/HorizontalDivider";
 import MobileBoardList from "../Boards/MobileBoardList";
 

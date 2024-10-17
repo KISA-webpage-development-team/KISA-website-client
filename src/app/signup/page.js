@@ -8,7 +8,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { backendUrl } from "../../config/backendUrl";
+import { BACKEND_URL } from "../../constants/env";
 
 // sub-ui components
 import RequiredFields from "../../components/SignUp/RequiredFields";
@@ -163,7 +163,7 @@ export default function SignUpPage() {
 
     // user exists check
     try {
-      const res = await axios.get(`${backendUrl}/auth/userExists/${email}`);
+      const res = await axios.get(`${BACKEND_URL}/auth/userExists/${email}`);
 
       if (res.status === 200) {
         window.alert("이미 가입된 이메일입니다.");
@@ -173,7 +173,7 @@ export default function SignUpPage() {
     } catch {
       //   // send /auth/signup api call to create a new user
 
-      const url = `${backendUrl}/auth/signup/`;
+      const url = `${BACKEND_URL}/auth/signup/`;
       try {
         const res = await axios.post(url, userData);
         if (res.status === 201) {

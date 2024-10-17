@@ -1,20 +1,15 @@
 import React, { useState } from "react";
-import {
-  EditorMode,
-  PostFormData,
-  SimplePostFormData,
-} from "../../../model/props/posts";
 import { createPost, updatePost } from "@/apis/posts/mutations";
 import { useRouter } from "next/navigation";
 import { NewPostBody, UpdatePostBody } from "@/types/post";
 
-type PostSubmitButtonProps = {
-  disabled: boolean;
-  token: string | undefined;
-  mode: EditorMode;
-  postid: number;
-  formData: NewPostBody | UpdatePostBody;
-};
+// type PostSubmitButtonProps = {
+//   disabled: boolean;
+//   token: string | undefined;
+//   mode: EditorMode;
+//   postid: number;
+//   formData: NewPostBody | UpdatePostBody;
+// };
 
 export default function PostSubmitButton({
   disabled,
@@ -22,7 +17,7 @@ export default function PostSubmitButton({
   mode,
   postid,
   formData,
-}: PostSubmitButtonProps) {
+}) {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);

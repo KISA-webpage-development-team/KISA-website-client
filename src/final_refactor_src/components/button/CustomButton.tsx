@@ -8,6 +8,7 @@ type CustomButtonProps = {
   disabled?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   forSubmit?: boolean;
+  className?: string;
 };
 
 export default function CustomButton({
@@ -16,15 +17,16 @@ export default function CustomButton({
   disabled = false,
   onClick,
   forSubmit = false,
+  className = "",
 }: CustomButtonProps) {
-  const className = `${
-    disabled ? `${type}_button_disabled` : `${type}_button`
-  }`;
+  const btnClassName = `${type}_button ${
+    disabled ? `${type}_button_disabled` : ""
+  } ${className}`.trim();
 
   return (
     <button
       type={forSubmit ? "submit" : "button"}
-      className={className}
+      className={btnClassName}
       disabled={disabled}
       onClick={onClick}
       aria-disabled={disabled}

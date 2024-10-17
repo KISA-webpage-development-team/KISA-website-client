@@ -65,12 +65,8 @@ const menu = [
         href: "/boards/announcement",
       },
       {
-        name: "자유게시판",
-        href: "/boards/community",
-      },
-      {
-        name: "학업/취업",
-        href: "/boards/academic-job",
+        name: "취업 공고",
+        href: "/boards/job-announcement",
       },
       {
         name: "사고팔기",
@@ -79,6 +75,33 @@ const menu = [
       {
         name: "하우징/룸메이트",
         href: "/boards/housing",
+      },
+    ],
+  },
+
+  {
+    name: "에브리키사",
+    href: "/everykisa",
+    dropdowns: [
+      {
+        name: "자유게시판",
+        href: "/everykisa/community",
+      },
+      {
+        name: "고민게시판",
+        href: "/everykisa/concern",
+      },
+      {
+        name: "공부게시판",
+        href: "/everykisa/academic",
+      },
+      {
+        name: "취업·진로",
+        href: "/everykisa/career",
+      },
+      {
+        name: "생활 Q&A",
+        href: "/everykisa/livingqa",
       },
     ],
   },

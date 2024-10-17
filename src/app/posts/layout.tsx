@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { SWRTokenProvider } from "../../context/SWRProvider";
+import { SWRTokenProvider } from "@/lib/swr/providers";
 import "./posts.css";
 
 interface LayoutProps {

@@ -21,3 +21,5 @@
 ## Caution
 
 `components.ts`라는 파일이 있는데, 이는 무시해도 좋다.
+
+이 폴더에는 **3rd party library의 타입 정의**를 하지 않는다. (예: axios의 타입 정의는 `src/lib/axios/types.ts`에 정의한다.)
