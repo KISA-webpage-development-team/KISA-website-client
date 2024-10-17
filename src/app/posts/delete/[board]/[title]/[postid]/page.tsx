@@ -3,7 +3,7 @@ import React from "react";
 import PostDeleteClient from "../../../../../../components/Posts/post-delete/PostDeleteClient";
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/next-auth/authOptions";
-import { BoardType } from "../../../../../../model/common/types";
+import { BoardType } from "@/types/board";
 
 type PageProps = {
   params: {

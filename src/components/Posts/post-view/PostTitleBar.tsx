@@ -1,5 +1,9 @@
 import React from "react";
-import { PostTitleBarProps } from "../../../model/props/posts";
+
+type PostTitleBarProps = {
+  isAnnouncement: boolean;
+  title: string;
+};
 
 export default function PostTitleBar({
   isAnnouncement,

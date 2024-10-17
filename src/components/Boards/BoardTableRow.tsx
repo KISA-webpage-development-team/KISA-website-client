@@ -1,8 +1,8 @@
 import React from "react";
-import { dateFormatter } from "../../utils/dateFormatter";
 import Link from "next/link";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
 import { SimplePost } from "@/types/post";
+import { formatDateOrTime } from "@/utils/formats/date";
 
 type Props = {
   isEveryKisa?: boolean;
@@ -62,7 +62,7 @@ export default function BoardTableRow({
       {!isEveryKisa && (
         <td className="text-center py-2">{anonymous ? "" : fullname}</td>
       )}
-      <td className="text-center py-2">{dateFormatter(created)}</td>
+      <td className="text-center py-2">{formatDateOrTime(created)}</td>
       <td className="text-center py-2 pr-2">{readCount}</td>
     </tr>
   );
