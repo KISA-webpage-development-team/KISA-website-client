@@ -22,4 +22,4 @@ ex) `email.ts`: KISA Email 주소를 상수로 정의한다.
 
 이 폴더에는 **3rd Party Library (/src/lib 폴더)** 에 종속되는 변수를 **절대** 관리해선 안된다.
 
-예를 들어서 `.env` 파일에 `NEXTAUTH_SECRET`은 3rd Party Library인 NextAuth.js에 종속되는 변수이므로, `constants/env.ts` 파일에 정의해서는 안된다. 대신, `/src/lib/next-auth/env.ts` 파일에 정의해야 한다.
+예를 들어서 `.env` 파일에 `NEXTAUTH_SECRET`은 3rd Party Library인 NextAuth.js에 종속되는 상수이므로, `constants/env.ts` 파일에 정의해서는 안된다. 대신, `/src/lib/next-auth/env.ts` 파일에 정의해야 한다.
