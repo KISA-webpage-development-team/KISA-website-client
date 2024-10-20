@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
 
-import { dateFormatter } from "../../utils/dateFormatter";
 import { SimplePost } from "@/types/post";
+import { formatDateOrTime } from "@/utils/formats/date";
 
 type Props = {
   isEveryKisa?: boolean;
@@ -47,7 +47,7 @@ export default function MobileBoardListItem({
         className=" flex items-center gap-2 
       text-gray-500 text-xs"
       >
-        <span>{dateFormatter(created)}</span>
+        <span>{formatDateOrTime(created)}</span>
         {
           // EveryKisa에는 anonymous가 true인 글쓴이를 "익명"으로 표시한다.
           isEveryKisa ? (

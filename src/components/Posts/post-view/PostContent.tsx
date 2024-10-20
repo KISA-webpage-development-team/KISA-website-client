@@ -1,9 +1,12 @@
 import React from "react";
 import DOMPurify from "isomorphic-dompurify";
-import { PostContentProps } from "../../../model/props/posts";
 import "react-quill/dist/quill.snow.css";
 
 // DOMPurify sanitizes HTML and prevents XSS attacks
+
+type PostContentProps = {
+  text: string;
+};
 
 export default function PostContent({ text }: PostContentProps) {
   return (
