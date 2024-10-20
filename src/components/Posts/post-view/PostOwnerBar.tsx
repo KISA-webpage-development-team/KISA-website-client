@@ -1,8 +1,8 @@
 import React from "react";
 import VerticalDivider from "../../shared/VerticalDivider";
 import ClockIcon from "../../ui/ClockIcon";
-import { fullDateFormatter, timeForToday } from "../../../utils/dateFormatter";
 import Link from "next/link";
+import { formatDateTimeString, formatRelativeTime } from "@/utils/formats/date";
 
 type PostOwnerBarProps = {
   email: string;
@@ -41,10 +41,10 @@ export default function PostOwnerBar({
         <div className="flex items-center gap-1">
           <ClockIcon />
           <p className="text-gray-600 hidden sm:block">
-            {fullDateFormatter(created)}
+            {formatDateTimeString(created)}
           </p>
           <p className="text-gray-600 block sm:hidden">
-            {timeForToday(created)}
+            {formatRelativeTime(created)}
           </p>
         </div>
       </div>

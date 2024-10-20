@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { timeForToday } from "../../../utils/dateFormatter";
 import { deleteComment } from "@/apis/comments/mutations";
 
 // sub-ui components
@@ -13,6 +12,7 @@ import CommentIcon from "../../ui/CommentIcon";
 import ReplyIcon from "../../ui/ReplyIcon";
 import { UserSession } from "@/lib/next-auth/types";
 import { Comment } from "@/types/comment";
+import { formatRelativeTime } from "@/utils/formats/date";
 
 type CommentItemProps = {
   session: UserSession;
@@ -120,7 +120,7 @@ export default function CommentItem({
                 </p>
               </Link> */}
               {renderCommentAuthor()}
-              <p className="text-gray-500">{timeForToday(created)}</p>
+              <p className="text-gray-500">{formatRelativeTime(created)}</p>
             </div>
 
             {/* 2. Buttons */}

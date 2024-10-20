@@ -15,10 +15,11 @@ import TitleInput from "./TitleInput";
 import TextEditor from "./TextEditor";
 import CheckBoxes from "./CheckBoxes";
 import PostSubmitButton from "./PostSubmitButton";
+
 import {
-  getBoardName,
-  getBoardNameFromKorean,
-} from "../../../config/boardName";
+  getEnglishBoardType,
+  getKoreanBoardType,
+} from "@/utils/formats/boardType";
 import { getIsAdmin } from "@/apis/auth/queries";
 import { getPost } from "@/apis/posts/queries";
 import {
@@ -91,10 +92,10 @@ export default function EditorClient({
       if (mode === "create") return "";
       const tag = title.startsWith("[") ? title.split("]")[0].slice(1) : "";
 
-      if (getBoardNameFromKorean(tag) === "none") {
+      if (getKoreanBoardType(tag) === "none") {
         setCustomTag(tag);
       } else {
-        setAnnouncementTag(getBoardNameFromKorean(tag));
+        setAnnouncementTag(getKoreanBoardType(tag));
       }
     };
     setInitialTag();
@@ -120,17 +121,7 @@ export default function EditorClient({
     }
 
     setIsSubmitBtnDisabled(false);
-    // if (
-    //   boardType === "announcement" &&
-    //   announcementTag === "" &&
-    //   customTag === ""
-    // ) {
-    //   setIsSubmitBtnDisabled(true);
-    //   return;
-    // } else {
-    //   setIsSubmitBtnDisabled(false);
-    //   return;
-    // }
+
   }, [title, text, boardType, anonymousValue, isEveryKisa, mode]);
 
   useEffect(() => {
@@ -219,7 +210,7 @@ export default function EditorClient({
                       ? `${title}`
                       : announcementTag === ""
                       ? `[${customTag}] ${title}`
-                      : `[${getBoardName(announcementTag)}] ${title}`,
+                      : `[${getEnglishBoardType(announcementTag)}] ${title}`,
                   fullname: session?.user.name,
                   email: session?.user.email,
                   text: text,
@@ -237,7 +228,7 @@ export default function EditorClient({
                       ? `${title}`
                       : announcementTag === ""
                       ? `[${customTag}] ${title}`
-                      : `[${getBoardName(announcementTag)}] ${title}`,
+                      : `[${getEnglishBoardType(announcementTag)}] ${title}`,
                   text: text,
                   isAnnouncement,
                   tag: announcementTag === "" ? customTag : announcementTag,

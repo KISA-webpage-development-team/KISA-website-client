@@ -7,6 +7,19 @@
 // url
 const homeCarouselData = [
   {
+    id: "f24-study-break",
+    title: "맛있는 간식 드시고 힘내세요🤍",
+    desc: (
+      <p>
+        타지에서 한국 음식이 그립지 않으신가요? 키사에서 시험과 과제에 지친
+        여러분을 위해 간식 나눔을 진행하려 합니다! Mason Hall로 오셔서 맛있는
+        간식 드시고 가세요~ 여러분을 위해 키사가 맛있게 준비해 놓고
+        기다리겠습니다! 😊
+      </p>
+    ),
+    url: "https://www.instagram.com/p/DBMQhjWufn-/",
+  },
+  {
     id: "fa24_small_group_recruitment",
     title: "소그룹 신규 모집",
     desc: (
