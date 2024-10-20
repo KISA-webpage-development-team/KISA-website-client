@@ -41,6 +41,7 @@ export default function CommentItem({
     childComments,
     isCommentOfComment,
     anonymous,
+    secret
   } = comment;
   // constants for comment item
   const isAuthor = session?.user?.email === email;
@@ -157,7 +158,9 @@ export default function CommentItem({
               isAuthor && "text-blue-500"
             } pb-3 text-sm md:text-base`}
           >
-            {text}
+            {/* 텍스트 자체가 보이는 경우: 유저가 댓글 작성자일때, 시크릿이 아닐때, 유저가 포스트 작성자일때*/}
+            {isAuthor || !secret || session?.user?.email === postAuthorEmail ? text : "비밀 댓글입니다."}
+           
           </div>
         </div>
       </div>
@@ -196,7 +199,7 @@ export default function CommentItem({
         childComments.length > 0 &&
         childComments.map((subComment, idx) => (
           <div key={`subComment-${subComment.commentid}`} className="ml-4">
-            <CommentItem
+            <CommentItem 
               comment={subComment}
               session={session}
               parentCommentid={commentid}

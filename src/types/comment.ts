@@ -7,6 +7,7 @@ interface NewCommentBody {
   isCommentOfComment: boolean;
   parentCommentid: number | null;
   anonymous: boolean;
+  secret: boolean;
 }
 
 interface UpdateCommentBody {
@@ -19,6 +20,7 @@ interface Comment extends NewCommentBody {
   postid: number;
   created: string;
   childComments: Comment[];
+  
 }
 
 export type { Comment, NewCommentBody, UpdateCommentBody };

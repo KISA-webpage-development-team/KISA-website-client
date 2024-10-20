@@ -57,6 +57,7 @@ export default function CommentEditor({
       isCommentOfComment: commentid === 0 ? false : true,
       parentCommentid: commentid,
       anonymous: isEveryKisa ? anonymousValue === "anonymous" : false,
+      secret: true
     };
     // send post api call to create comment with postid
     const res = await createComment(postid, data, session?.token);
@@ -180,6 +181,10 @@ export default function CommentEditor({
             </RadioGroup>
           </>
         )}
+        
+        <input type="checkbox" id="secret" name="secret"/>
+        <label htmlFor="secret">비밀댓글</label>
+          
         {/* If isEveryKisa, anonymousValue should be selected */}
         <CustomButton
           disabled={
@@ -195,3 +200,8 @@ export default function CommentEditor({
     </div>
   );
 }
+// git switch onboarding
+// git pull origin onboarding // update된 코드를 가져온다
+
+// git switch devteam
+// git merge onboarding
