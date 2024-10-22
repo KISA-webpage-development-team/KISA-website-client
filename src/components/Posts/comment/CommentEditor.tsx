@@ -4,15 +4,17 @@ import { NewCommentBody } from "@/types/comment";
 import { CustomButton } from "@/final_refactor_src/components/button";
 import { Radio, RadioGroup } from "@nextui-org/react";
 import { cn } from "@/utils/styles/cn";
+import { UserSession } from "@/lib/next-auth/types"
 
 type CommentEditorProps = {
   isEveryKisa?: boolean;
   mode: "create" | "update" | "reply";
-  session: any;
+  session: UserSession;
   postid: number;
   commentid?: number;
   curCommentId?: number | null;
   placeholder?: string;
+  secret?: boolean;
   setCommentsStale: (value: boolean) => void;
   setOpenCommentEditor?: (value: boolean) => void;
 };
@@ -25,6 +27,7 @@ export default function CommentEditor({
   commentid = 0,
   curCommentId = null,
   placeholder = "댓글을 입력해주세요",
+  secret,
   setCommentsStale,
   setOpenCommentEditor = () => {},
 }: CommentEditorProps) {
@@ -38,6 +41,8 @@ export default function CommentEditor({
 
   // state to prevent multiple comment submissions at the same time
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const [checked, setChecked] = useState<boolean>(mode === "update" ? secret : false);
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setText(e.target.value);
@@ -57,7 +62,7 @@ export default function CommentEditor({
       isCommentOfComment: commentid === 0 ? false : true,
       parentCommentid: commentid,
       anonymous: isEveryKisa ? anonymousValue === "anonymous" : false,
-      secret: true
+      secret: checked
     };
     // send post api call to create comment with postid
     const res = await createComment(postid, data, session?.token);
@@ -88,7 +93,7 @@ export default function CommentEditor({
       text: text,
     };
 
-    const res = await updateComment(curCommentId, data, session?.token);
+    const res = await updateComment(curCommentId, data,  session?.token);
     if (res) {
       setCommentsStale(true);
       setOpenCommentEditor(false);
@@ -98,6 +103,10 @@ export default function CommentEditor({
       console.log("comment update failed");
     }
   };
+
+  const handleSecretChecked = () => {
+    setChecked(!checked);
+  }
 
   return (
     <div
@@ -181,9 +190,13 @@ export default function CommentEditor({
             </RadioGroup>
           </>
         )}
+
+        <div className="flex mt-1 justify-center gap-3">
+          <input type="checkbox" id="secret" name="secret" checked={checked} 
+          onClick={handleSecretChecked} disabled={mode === "update"}/>
+          <label htmlFor="secret">비밀댓글</label>
+        </div>
         
-        <input type="checkbox" id="secret" name="secret"/>
-        <label htmlFor="secret">비밀댓글</label>
           
         {/* If isEveryKisa, anonymousValue should be selected */}
         <CustomButton

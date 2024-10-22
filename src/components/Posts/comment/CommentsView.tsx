@@ -8,8 +8,7 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
-  getCommentsByPostid,
-  getCommentsByPostidMock,
+  getCommentsByPostid
 } from "@/apis/comments/queries";
 
 // sub-ui components

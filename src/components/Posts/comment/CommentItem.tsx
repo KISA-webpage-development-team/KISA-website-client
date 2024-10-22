@@ -160,7 +160,10 @@ export default function CommentItem({
           >
             {/* 텍스트 자체가 보이는 경우: 유저가 댓글 작성자일때, 시크릿이 아닐때, 유저가 포스트 작성자일때*/}
             {isAuthor || !secret || session?.user?.email === postAuthorEmail ? text : "비밀 댓글입니다."}
-           
+            {/* 로그인한 사람이, 포스트 작성자 + 비밀댓글 = 자물쇠  */}
+            {/* 로그인한 사람이, 댓글 작성자 + 비밀댓글 = 자물쇠 */}
+            {secret && (session?.user?.email === postAuthorEmail || isAuthor) ? "자물쇠" : null}
+
           </div>
         </div>
       </div>
@@ -175,6 +178,7 @@ export default function CommentItem({
             postid={postid}
             curCommentId={commentid}
             placeholder={text}
+            secret={secret}
             setCommentsStale={setCommentsStale}
             setOpenCommentEditor={setOpenCommentEditor}
           />
@@ -189,6 +193,7 @@ export default function CommentItem({
             commentid={commentid}
             postid={postid}
             curCommentId={commentid}
+            secret={secret}
             setCommentsStale={setCommentsStale}
             setOpenCommentEditor={setOpenReplyEditor}
           />
