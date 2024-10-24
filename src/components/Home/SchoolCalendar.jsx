@@ -45,7 +45,11 @@ export default function SchoolCalendar() {
     if (didEventSetup) return;
 
     // check whether last event is upcoming in 14 days
-    const lastEvent = new Date(eventsInfo[eventsInfo.length - 1].start);
+    const sortedEvents = eventsInfo.sort(
+      (a, b) => new Date(a.start) - new Date(b.start)
+    );
+    const lastEvent = new Date(sortedEvents[sortedEvents.length - 1].start);
+
     const today = new Date();
     const diffTime = lastEvent - today;
 
@@ -57,7 +61,7 @@ export default function SchoolCalendar() {
 
     setDidEventSetup(true);
 
-    setSelectedEvent(eventsInfo[eventsInfo.length - 1]);
+    setSelectedEvent(sortedEvents[0]);
     return;
   };
 
