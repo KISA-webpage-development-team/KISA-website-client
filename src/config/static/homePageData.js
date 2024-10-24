@@ -17,6 +17,7 @@ const homeCarouselData = [
         입고 와서 래플 이벤트에도 참여해 보세요~👻
       </p>
     ),
+    url: "https://www.instagram.com/p/DBeTBcguo0M/?img_index=1",
   },
   {
     id: "f24-study-break",
