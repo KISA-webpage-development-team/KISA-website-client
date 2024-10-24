@@ -229,6 +229,7 @@ export default function EditorClient({
                   anonymous: isEveryKisa
                     ? anonymousValue === "anonymous"
                     : false,
+                  readCount: 0,
                 }
               : // when updating a post
                 {

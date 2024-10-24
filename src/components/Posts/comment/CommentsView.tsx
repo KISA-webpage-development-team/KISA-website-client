@@ -77,6 +77,7 @@ export default function CommentsView({
 
       {/* 3. comment list */}
       <CommentsList
+        isEveryKisa={isEveryKisa}
         comments={comments}
         session={session}
         setCommentsStale={setCommentsStale}

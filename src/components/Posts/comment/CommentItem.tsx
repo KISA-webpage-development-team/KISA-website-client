@@ -15,6 +15,7 @@ import { Comment } from "@/types/comment";
 import { formatRelativeTime } from "@/utils/formats/date";
 
 type CommentItemProps = {
+  isEveryKisa?: boolean;
   session: UserSession;
   comment: Comment;
   parentCommentid?: number;
@@ -24,6 +25,7 @@ type CommentItemProps = {
 };
 
 export default function CommentItem({
+  isEveryKisa = false,
   session,
   comment,
   parentCommentid = 0,
@@ -88,7 +90,11 @@ export default function CommentItem({
     }
 
     if (isPostAuthor) {
-      return <span className="font-semibold">익명(글쓴이)</span>;
+      return (
+        <span className="font-semibold">{`익명${commentAuthorMap.get(
+          email
+        )}(글쓴이)`}</span>
+      );
     }
 
     return (
@@ -181,6 +187,7 @@ export default function CommentItem({
         <div className="ml-8 mb-4 flex items-center gap-4">
           <ReplyIcon type="flip" />
           <CommentEditor
+            isEveryKisa={isEveryKisa}
             mode="reply"
             session={session}
             commentid={commentid}
@@ -197,6 +204,7 @@ export default function CommentItem({
         childComments.map((subComment, idx) => (
           <div key={`subComment-${subComment.commentid}`} className="ml-4">
             <CommentItem
+              isEveryKisa={isEveryKisa}
               comment={subComment}
               session={session}
               parentCommentid={commentid}

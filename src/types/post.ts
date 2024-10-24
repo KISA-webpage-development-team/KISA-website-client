@@ -29,6 +29,7 @@ interface NewPostBody {
   isAnnouncement: boolean;
   tag: string;
   anonymous: boolean;
+  readCount: number;
 }
 
 interface UpdatePostBody {

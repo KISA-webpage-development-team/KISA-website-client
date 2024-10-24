@@ -14,6 +14,8 @@ import client from "@/lib/axios/client";
  * missing token: 401, { error: "Decode failed" }
  */
 export async function getIsAdmin(email: string, token: string) {
+  if (!token) return;
+
   const url = `/auth/isAdmin/${email}`;
   try {
     const response = await client.get(url, {
