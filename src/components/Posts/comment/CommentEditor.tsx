@@ -110,16 +110,16 @@ export default function CommentEditor({
 
   return (
     <div
-      className="flex flex-col sm:flex-row 
-    items-end sm:items-center w-full"
+      className="flex flex-col sm:flex-row bg-green-3
+    items-end sm:items-center w-full h-24 sm:h-36"
     >
       <textarea
         value={text}
         onChange={handleTextChange}
-        className="w-full h-20 sm:h-32
+        className="block w-full
              border border-gray-300 rounded-md p-3
               text-sm md:text-base
-              focus:outline-michigan-blue"
+              focus:outline-michigan-blue resize-none"
         placeholder={placeholder}
         onKeyDown={(e) => {
           if (e.key === "Enter" && e.target === document.activeElement) {
@@ -132,29 +132,19 @@ export default function CommentEditor({
           }
         }}
       />
-      {/* <button
-        disabled={text.length === 0}
-        onClick={mode === "update" ? handleSubmitUpdate : handleSubmitComment}
-        className="block h-full sm:h-20 md:h-28 md:aspect-square rounded-md 
-        mt-1 sm:mt-0
-        text-xs sm:text-sm md:text-base 
-        !px-3 !py-1 sm:!px-4 sm:!py-2
-        blue_button"
-      >
-        {isSubmitting ? "등록 중..." : "댓글 등록"}
-      </button> */}
+
       <div
         className="w-full sm:w-1/6 sm:h-full
-        pt-2
+
         flex sm:flex-col sm:justify-between
-      flex-row"
+      flex-row  pl-2 "
       >
         {/* If isEveryKisa, show anonymous checkbox options */}
         {isEveryKisa && (
           <>
             <RadioGroup
               className="hidden
-              sm:flex gap-1 pl-3"
+              sm:flex gap-1"
               defaultValue="none"
               value={anonymousValue}
               onValueChange={setAnonymousValue}
@@ -190,14 +180,14 @@ export default function CommentEditor({
             </RadioGroup>
           </>
         )}
-
-        <div className="flex mt-1 justify-center gap-3">
-          <input type="checkbox" id="secret" name="secret" checked={checked} 
-          onClick={handleSecretChecked} disabled={mode === "update"}/>
-          <label htmlFor="secret">비밀댓글</label>
+      
+        <div className="flex items-center">
+          <input type="checkbox" className="w-4 h-4" 
+            id="secret" name="secret" checked={checked} 
+              onClick={handleSecretChecked} disabled={mode === "update"}/>
+            <label htmlFor="secret" className="ml-3">비밀댓글</label>
         </div>
         
-          
         {/* If isEveryKisa, anonymousValue should be selected */}
         <CustomButton
           disabled={

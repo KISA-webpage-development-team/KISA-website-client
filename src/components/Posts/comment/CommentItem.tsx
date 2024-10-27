@@ -13,6 +13,7 @@ import ReplyIcon from "../../ui/ReplyIcon";
 import { UserSession } from "@/lib/next-auth/types";
 import { Comment } from "@/types/comment";
 import { formatRelativeTime } from "@/utils/formats/date";
+import SecretIcon from "@/final_refactor_src/components/icon/SecretIcon";
 
 type CommentItemProps = {
   session: UserSession;
@@ -122,6 +123,8 @@ export default function CommentItem({
               </Link> */}
               {renderCommentAuthor()}
               <p className="text-gray-500">{formatRelativeTime(created)}</p>
+              {secret && (session?.user?.email === postAuthorEmail || isAuthor) ? <SecretIcon/> : null}
+
             </div>
 
             {/* 2. Buttons */}
@@ -162,7 +165,6 @@ export default function CommentItem({
             {isAuthor || !secret || session?.user?.email === postAuthorEmail ? text : "비밀 댓글입니다."}
             {/* 로그인한 사람이, 포스트 작성자 + 비밀댓글 = 자물쇠  */}
             {/* 로그인한 사람이, 댓글 작성자 + 비밀댓글 = 자물쇠 */}
-            {secret && (session?.user?.email === postAuthorEmail || isAuthor) ? "자물쇠" : null}
 
           </div>
         </div>

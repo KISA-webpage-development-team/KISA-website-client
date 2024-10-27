@@ -5,3 +5,7 @@
 .icon {
   @apply text-xl md:text-2xl;
 }
+
+.small_icon { 
+  @apply text-base md:text-lg;
+}
