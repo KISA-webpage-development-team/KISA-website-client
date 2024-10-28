@@ -36,7 +36,7 @@ export default function MobileBoardListItem({
                 <span>[공지]</span>
               </span>
             )}
-            <span className="">{title}</span>
+            <span className="text-overflow">{title}</span>
           </span>
         </Link>
         {commentsCount > 0 && (

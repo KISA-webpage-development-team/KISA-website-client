@@ -20,7 +20,7 @@ export default function HomePostView({ type, posts }) {
       <HorizontalDivider color="gray" />
 
       {/* table */}
-      <MobileBoardList posts={posts} annoucements={null} hasBorder={false} />
+      <MobileBoardList posts={posts} announcements={null} hasBorder={false} />
     </div>
   );
 }
