@@ -68,7 +68,8 @@ export default function QuickLinks() {
               className="h-full object-contain"
               src={`/quick_links/${item.id}.png`}
               alt={item.title}
-              fill
+              width={500}
+              height={500}
             />
           </Card>
         ))}
