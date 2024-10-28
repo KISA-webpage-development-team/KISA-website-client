@@ -1,9 +1,10 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node devops/args.ts && next dev",
+    "dev:local": "node devops/args.ts -l && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
