@@ -9,13 +9,15 @@ import {
 } from "@/utils/formats/boardType";
 
 export default function HomePostView({ type, posts }) {
+  const boardLink = isEveryKisaBoard(type) ? "everykisa" : "boards";
+
   return (
     <div
       className="w-full flex flex-col
   rounded-lg  border-gray-300 border-1 
   p-3 md:p-6 gap-2"
     >
-      <Link href={`/boards/${type === "공지" ? "announcement" : "community"}`}>
+      <Link href={`/${boardLink}/${type}`}>
         <h2
           className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-0 hover:underline cursor-pointer`}
         >{`${getKoreanBoardType(type)}`}</h2>
