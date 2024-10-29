@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import SWRProvider from "../../context/SWRProvider";
+import { SWRProvider } from "@/lib/swr/providers";
 import "./board.css";
 
 export const metadata: Metadata = {

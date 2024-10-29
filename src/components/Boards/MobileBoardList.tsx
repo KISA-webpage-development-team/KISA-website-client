@@ -3,14 +3,16 @@ import MobileBoardListItem from "./MobileBoardListItem";
 import { SimplePost } from "@/types/post";
 
 type Props = {
+  isEveryKisa?: boolean;
   posts: SimplePost[];
-  annoucements: SimplePost[];
+  announcements: SimplePost[];
   hasBorder?: boolean;
 };
 
 export default function MobileBoardList({
+  isEveryKisa = false,
   posts,
-  annoucements,
+  announcements,
   hasBorder = true,
 }: Props) {
   return (
@@ -19,15 +21,20 @@ export default function MobileBoardList({
   ${hasBorder && "w-screen -translate-x-4"}
   ${hasBorder && "border-t border-b border-gray-400"}`}
     >
-      {annoucements?.map((announcement, _) => (
+      {announcements?.map((announcement, _) => (
         <MobileBoardListItem
+          isEveryKisa={isEveryKisa}
           key={announcement.postid}
           post={announcement}
           isAnnouncement
         />
       ))}
       {posts?.map((post, _) => (
-        <MobileBoardListItem key={post.postid} post={post} />
+        <MobileBoardListItem
+          isEveryKisa={isEveryKisa}
+          key={post.postid}
+          post={post}
+        />
       ))}
     </ol>
   );

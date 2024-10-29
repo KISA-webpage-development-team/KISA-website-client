@@ -1,22 +1,35 @@
 import React from "react";
-import { dateFormatter } from "../../utils/dateFormatter";
 import Link from "next/link";
-import { SimplePost } from "../../model/props/posts";
 import AnnouncementIcon from "../ui/AnnouncementIcon";
+import { SimplePost } from "@/types/post";
+import { formatDateOrTime } from "@/utils/formats/date";
 
 type Props = {
+  isEveryKisa?: boolean;
   post: SimplePost;
   postNum?: number;
   isAnnouncement?: boolean;
 };
 
 export default function BoardTableRow({
+  isEveryKisa = false,
   post,
   postNum = 0,
   isAnnouncement = false,
 }: Props) {
-  const { postid, type, title, fullname, created, readCount, commentsCount } =
-    post;
+  const {
+    postid,
+    type,
+    title,
+    fullname,
+    created,
+    readCount,
+    commentsCount,
+    anonymous,
+  } = post;
+
+  // TODO: change it to real likesCount
+  const likesCount = 1;
 
   return (
     <tr
@@ -48,8 +61,12 @@ export default function BoardTableRow({
           </Link>
         </div>
       </td>
-      <td className="text-center py-2">{fullname}</td>
-      <td className="text-center py-2">{dateFormatter(created)}</td>
+      {/* EveryKisa에는 글쓴이를 표시하지 않는다 */}
+      {!isEveryKisa && (
+        <td className="text-center py-2">{anonymous ? "" : fullname}</td>
+      )}
+      <td className="text-center py-2">{formatDateOrTime(created)}</td>
+      {isEveryKisa && <td className="text-center py-2 pr-2">{likesCount}</td>}
       <td className="text-center py-2 pr-2">{readCount}</td>
     </tr>
   );

@@ -1,12 +1,12 @@
 import React from "react";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "../../utils/fonts/textFonts";
+import { sejongHospitalBold } from "../../utils/fonts/textFonts";
 import Link from "next/link";
-import { dateFormatter } from "../../utils/dateFormatter";
 import HorizontalDivider from "../shared/HorizontalDivider";
 import MobileBoardList from "../Boards/MobileBoardList";
+import {
+  getKoreanBoardType,
+  isEveryKisaBoard,
+} from "@/utils/formats/boardType";
 
 export default function HomePostView({ type, posts }) {
   return (
@@ -18,13 +18,18 @@ export default function HomePostView({ type, posts }) {
       <Link href={`/boards/${type === "공지" ? "announcement" : "community"}`}>
         <h2
           className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-0 hover:underline cursor-pointer`}
-        >{`${type} 게시판`}</h2>
+        >{`${getKoreanBoardType(type)}`}</h2>
       </Link>
 
       <HorizontalDivider color="gray" />
 
       {/* table */}
-      <MobileBoardList posts={posts} annoucements={null} hasBorder={false} />
+      <MobileBoardList
+        isEveryKisa={isEveryKisaBoard(type)}
+        posts={posts}
+        announcements={null}
+        hasBorder={false}
+      />
     </div>
   );
 }

@@ -1,0 +1,82 @@
+// GoBlueButton for post
+
+import { createLike, deleteLike } from "@/apis/likes/mutations";
+import LikeIcon from "@/final_refactor_src/components/icon/LikeIcon";
+import { DeleteLikeParams, NewLikeBody } from "@/types/like";
+import React from "react";
+
+type GoBlueButtonProps = {
+  didLike: boolean;
+  postid: number;
+  email: string;
+  token?: string;
+  likes?: number;
+  className?: string;
+};
+
+export default function GoBlueButton({
+  didLike,
+  postid,
+  email,
+  token = "",
+  likes = 3,
+  className = "",
+}: GoBlueButtonProps) {
+  const handlePostLike = async () => {
+    const likeBody = {
+      email: email,
+      target: "post",
+    };
+
+    // if didLike is true, then unlike (delete like)
+    // if didLike is false, then like (create like)
+    try {
+      const res = didLike
+        ? await deleteLike(postid, likeBody as DeleteLikeParams, token)
+        : await createLike(postid, likeBody as NewLikeBody, token);
+
+      if (res) {
+        console.log("Success!");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-2 h-8 md:h-10">
+      <button
+        className={`${className} 
+    inline-flex items-center justify-center self-center
+  px-4 gap-1 h-full
+  bg-[#00274c] border border-[#00274c] 
+  text-[#ffcb05] text-sm md:text-base
+  hover:bg-[#00274c] hover:border-[#ffcb05]
+  rounded-md
+    `}
+        onClick={handlePostLike}
+      >
+        <LikeIcon size="small" fill={didLike} color="maize" />
+        <span
+          className=" font-bold 
+        text-sm md:text-base"
+        >
+          {didLike ? "취소" : "GO BLUE!"}
+        </span>
+      </button>
+
+      {likes > 0 && (
+        <span
+          className="[#00274c]
+    inline-flex items-center justify-center self-center
+  px-2 md:px-3 h-full
+   border-2 border-[#00274c]
+  text-[#00274c] text-sm md:text-lg
+  rounded-md font-bold"
+        >
+          {likes}
+        </span>
+      )}
+    </div>
+  );
+}

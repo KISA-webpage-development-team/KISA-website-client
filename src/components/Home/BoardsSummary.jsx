@@ -42,8 +42,8 @@ export default function BoardsSummary() {
   flex flex-col justify-center 
   md:flex-row gap-4"
     >
-      <HomePostView type="공지" posts={hotPosts} />
-      <HomePostView type="자유" posts={recentPosts} />
+      <HomePostView type="announcement" posts={hotPosts} />
+      <HomePostView type="community" posts={recentPosts} />
     </div>
   );
 }

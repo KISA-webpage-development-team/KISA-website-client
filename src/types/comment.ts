@@ -6,9 +6,11 @@ interface NewCommentBody {
   text: string;
   isCommentOfComment: boolean;
   parentCommentid: number | null;
+  anonymous: boolean;
 }
 
 interface UpdateCommentBody {
+  // when updating a comment, user can't change anonymous status
   text: string;
 }
 

@@ -1,27 +1,31 @@
 import React from "react";
+import { ButtonType } from "./types";
 
 type CustomImageButtonProps = {
-  background?: "none" | "gray";
+  type?: ButtonType;
   icon: React.ReactNode;
   text?: string;
+  disabled?: boolean;
+  background?: "none" | "gray";
   onClick?: () => void;
+  className?: string;
 };
 
 export default function CustomImageButton({
-  background = "gray",
+  type = "primary",
   icon,
   text = "",
+  disabled = false,
+  background = "gray",
   onClick,
+  className = "",
 }: CustomImageButtonProps) {
+  const btnClassName = `${type}_button ${
+    disabled ? `${type}_button_disabled` : ""
+  } ${className}`.trim();
+
   return (
-    <button
-      className={`${
-        background === "none"
-          ? ""
-          : "bg-slate-100 hover:bg-slate-200text-black  py-[6px] px-2 rounded "
-      } flex items-center justify-center gap-1`}
-      onClick={onClick}
-    >
+    <button className={`${btnClassName} gap-1 h-fit`} onClick={onClick}>
       {icon}
       {text !== "" && (
         <p

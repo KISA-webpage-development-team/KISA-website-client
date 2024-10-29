@@ -15,6 +15,10 @@ import {
   NotFound,
 } from "@/final_refactor_src/components/feedback";
 import { usePost } from "@/apis/posts/swrHooks";
+import {
+  isAnnouncementBoard,
+  isEveryKisaBoard,
+} from "@/utils/formats/boardType";
 
 type PageProps = {
   params: {
@@ -25,7 +29,7 @@ type PageProps = {
 export default function PostViewPage({ params }: PageProps) {
   const { postid } = params;
 
-  const { post, isLoading, error } = usePost(postid);
+  const { post, isLoading, error } = usePost(Number(postid));
 
   // [TODO]: when there's no post "error.tsx" should be rendered
   if (isLoading) {
@@ -44,10 +48,13 @@ export default function PostViewPage({ params }: PageProps) {
         <PostView post={post} />
 
         {/* Comments는 로딩되는대로 */}
-        {!post?.isAnnouncement && post?.type !== "announcement" && (
+        {!post?.isAnnouncement && !isAnnouncementBoard(post.type) && (
+          // bit worry about props drilling on post.type to handle every kisa
           <CommentsView
+            isEveryKisa={isEveryKisaBoard(post?.type)}
             commentsCount={post?.commentsCount}
             postid={post?.postid}
+            email={post?.email}
           />
         )}
       </SessionProvider>

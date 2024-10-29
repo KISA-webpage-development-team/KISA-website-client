@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { timeForToday } from "../../../utils/dateFormatter";
 import { deleteComment } from "@/apis/comments/mutations";
-import { CommentItemProps } from "../../../model/props/posts";
 
 // sub-ui components
 import CommentEditor from "./CommentEditor";
@@ -12,13 +10,32 @@ import PencilIcon from "../../ui/PencilIcon";
 import TrashcanIcon from "../../ui/TrashcanIcon";
 import CommentIcon from "../../ui/CommentIcon";
 import ReplyIcon from "../../ui/ReplyIcon";
+import { UserSession } from "@/lib/next-auth/types";
+import { Comment } from "@/types/comment";
+import { formatRelativeTime } from "@/utils/formats/date";
+import GoBlueButton from "../post-view/GoBlueButton";
+import CommentGoBlueButton from "./CommentGoBlueButton";
+
+type CommentItemProps = {
+  isEveryKisa?: boolean;
+  session: UserSession;
+  comment: Comment;
+  parentCommentid?: number;
+  setCommentsStale: (stale: boolean) => void;
+  postAuthorEmail: string;
+  commentAuthorMap: Map<string, number>;
+};
 
 export default function CommentItem({
+  isEveryKisa = false,
   session,
   comment,
   parentCommentid = 0,
   setCommentsStale,
+  postAuthorEmail,
+  commentAuthorMap,
 }: CommentItemProps) {
+  // TODO: add "didLike" state
   const {
     commentid,
     email,
@@ -28,10 +45,11 @@ export default function CommentItem({
     text,
     childComments,
     isCommentOfComment,
+    anonymous,
   } = comment;
   // constants for comment item
   const isAuthor = session?.user?.email === email;
-  const useremail = session?.user?.email;
+  const isPostAuthor = postAuthorEmail === email;
   const token = session?.token;
 
   // states for reply editor
@@ -61,27 +79,54 @@ export default function CommentItem({
     }
   };
 
+  /**
+   * @desc Renders the author of the comment following anonymous logic
+   *
+   */
+  const renderCommentAuthor = () => {
+    if (isAuthor || !anonymous) {
+      return (
+        <Link href={`/users/${email}`}>
+          <span className="font-semibold hover:underline">{fullname}</span>
+        </Link>
+      );
+    }
+
+    if (isPostAuthor) {
+      return (
+        <span className="font-semibold">{`익명${commentAuthorMap.get(
+          email
+        )}(글쓴이)`}</span>
+      );
+    }
+
+    return (
+      <span className="font-semibold">{`익명${commentAuthorMap.get(
+        email
+      )}`}</span>
+    );
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center">
         {isCommentOfComment ? (
-          <ReplyIcon type="flip" customClassName="-translate-y-2 mr-4" />
+          <ReplyIcon type="flip" customClassName="-translate-y-2" />
         ) : null}
 
         {/* Comment contents */}
-        <div className="flex flex-col w-full gap-1 md:gap-0">
+        <div
+          className={`flex flex-col w-full gap-1 md:gap-0
+          ${isCommentOfComment && "pl-2"}`}
+        >
           <div className="flex items-center justify-between">
             {/* 1. Name + Time */}
             <div
               className="flex items-center gap-1 md:gap-2
             text-sm md:text-base"
             >
-              <Link href={`/users/${email}`}>
-                <p className="text-black font-semibold hover:underline">
-                  {fullname}
-                </p>
-              </Link>
-              <p className="text-gray-500">{timeForToday(created)}</p>
+              {renderCommentAuthor()}
+              <p className="text-gray-500">{formatRelativeTime(created)}</p>
             </div>
 
             {/* 2. Buttons */}
@@ -102,6 +147,14 @@ export default function CommentItem({
                   />
                 </>
               )}
+              {session && !isAuthor && isEveryKisa && (
+                <CommentGoBlueButton
+                  didLike={true}
+                  commentid={commentid}
+                  email={session.user.email}
+                  token={session.token}
+                />
+              )}
               {session && (
                 <ImageButton
                   background="none"
@@ -114,11 +167,10 @@ export default function CommentItem({
           </div>
           {/* 3. Text */}
           <div
-            className={`${
-              isAuthor && "text-blue-500"
-            } pb-3 text-sm md:text-base`}
+            className={`${isAuthor && "text-blue-500"} pb-3 text-sm md:text-base
+            text-wrap `}
           >
-            {text}
+            <span className="">{text}</span>
           </div>
         </div>
       </div>
@@ -142,6 +194,7 @@ export default function CommentItem({
         <div className="ml-8 mb-4 flex items-center gap-4">
           <ReplyIcon type="flip" />
           <CommentEditor
+            isEveryKisa={isEveryKisa}
             mode="reply"
             session={session}
             commentid={commentid}
@@ -156,12 +209,18 @@ export default function CommentItem({
       {childComments &&
         childComments.length > 0 &&
         childComments.map((subComment, idx) => (
-          <div key={`subComment-${subComment.commentid}`} className="ml-4">
+          <div
+            key={`subComment-${subComment.commentid}`}
+            className="ml-3 md:ml-4"
+          >
             <CommentItem
+              isEveryKisa={isEveryKisa}
               comment={subComment}
               session={session}
               parentCommentid={commentid}
               setCommentsStale={setCommentsStale}
+              postAuthorEmail={postAuthorEmail}
+              commentAuthorMap={commentAuthorMap}
             />
           </div>
         ))}

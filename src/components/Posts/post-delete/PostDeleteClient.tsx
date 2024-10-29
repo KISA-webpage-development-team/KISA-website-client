@@ -8,6 +8,7 @@ import { deletePost } from "@/apis/posts/mutations";
 import ImageButton from "../../shared/ImageButton";
 import TrashcanIcon from "../../ui/TrashcanIcon";
 import PencilIcon from "../../ui/PencilIcon";
+import { isEveryKisaBoard } from "@/utils/formats/boardType";
 
 export default function PostDeleteClient({ session, boardType, postid }) {
   const router = useRouter();
@@ -21,7 +22,11 @@ export default function PostDeleteClient({ session, boardType, postid }) {
     if (res) {
       // Updated status code to represent successful deletion
       // need to fix: should go remember its board name
-      router.push(`/boards/${boardType}`);
+      if (isEveryKisaBoard(boardType)) {
+        router.push(`/everykisa/${boardType}`);
+      } else {
+        router.push(`/boards/${boardType}`);
+      }
     } else {
       window.alert("게시글 삭제에 실패했습니다.");
       // console.error(res);

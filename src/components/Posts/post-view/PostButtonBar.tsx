@@ -3,20 +3,37 @@
 // 3. Delete Button [Only when the user is the author]
 
 import React from "react";
-import { PostButtonBarProps } from "../../../model/props/posts";
 import ListIcon from "../../ui/ListIcon";
 import ImageButton from "../../shared/ImageButton";
 import { useRouter } from "next/navigation";
 import PencilIcon from "../../ui/PencilIcon";
 import TrashcanIcon from "../../ui/TrashcanIcon";
+import { BoardType } from "@/types/board";
+import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
+import GoBlueButton from "./GoBlueButton";
+import { isEveryKisaBoard } from "@/utils/formats/boardType";
+import { truncate } from "fs/promises";
+
+type PostButtonBarProps = {
+  email: string;
+  isAuthor: boolean;
+  type: BoardType;
+  postid: number;
+  title: string;
+  token?: string;
+};
 
 export default function PostButtonBar({
+  email,
   isAuthor,
   type,
   postid,
   title,
+  token,
 }: PostButtonBarProps) {
+  // TODO: add "didLike" to GoBlueButton
   const route = useRouter();
+  const isEveryKisa = isEveryKisaBoard(type);
 
   const OnClickBackToList = () => {
     // [TODO]: fix back to list logic
@@ -37,22 +54,41 @@ export default function PostButtonBar({
   };
 
   return (
-    <div className="w-full flex items-center justify-between py-2 sm:py-4">
+    <div
+      className="
+    w-full flex justify-between py-2 sm:py-4"
+    >
       {/* List Button */}
-      <ImageButton
+      <CustomImageButton
+        type="secondary"
         icon={<ListIcon />}
         text="목록"
         onClick={OnClickBackToList}
       />
+
+      {/* Go Blue Button */}
+      {/* NOTE: has separate logic, we made custom button component */}
+      {!isAuthor && isEveryKisa && (
+        <GoBlueButton
+          postid={postid}
+          didLike={false}
+          email={email}
+          token={token}
+        />
+      )}
+      {/* </div> */}
+
       {/* Edit + Delete Button */}
       {isAuthor && (
         <div className="flex items-center gap-2">
-          <ImageButton
+          <CustomImageButton
+            type="secondary"
             icon={<PencilIcon color="gray" />}
             text="수정"
             onClick={onClickPostUpdate}
           />
-          <ImageButton
+          <CustomImageButton
+            type="secondary"
             icon={<TrashcanIcon color="gray" />}
             text="삭제"
             onClick={onClickPostDelete}

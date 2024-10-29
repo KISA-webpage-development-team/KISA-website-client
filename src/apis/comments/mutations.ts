@@ -1,4 +1,3 @@
-// Something will be added here...
 import client from "@/lib/axios/client";
 import { NewCommentBody, UpdateCommentBody } from "@/types/comment";
 
