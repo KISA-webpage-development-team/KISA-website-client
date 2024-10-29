@@ -19,6 +19,7 @@ interface Comment extends NewCommentBody {
   postid: number;
   created: string;
   childComments: Comment[];
+  likesCount: number;
 }
 
 export type { Comment, NewCommentBody, UpdateCommentBody };

@@ -2,7 +2,7 @@
 // 2. Edit Button [Only when the user is the author]
 // 3. Delete Button [Only when the user is the author]
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ListIcon from "../../ui/ListIcon";
 import ImageButton from "../../shared/ImageButton";
 import { useRouter } from "next/navigation";
@@ -12,28 +12,63 @@ import { BoardType } from "@/types/board";
 import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
 import GoBlueButton from "./GoBlueButton";
 import { isEveryKisaBoard } from "@/utils/formats/boardType";
-import { truncate } from "fs/promises";
+import { LikeBody } from "@/types/like";
+import { getLikeByUser } from "@/apis/likes/queries";
+import { UserSession } from "@/lib/next-auth/types";
 
 type PostButtonBarProps = {
-  email: string;
-  isAuthor: boolean;
+  email: string; // post email
+  session?: UserSession | null;
   type: BoardType;
   postid: number;
   title: string;
-  token?: string;
 };
 
 export default function PostButtonBar({
   email,
-  isAuthor,
+  session = null,
   type,
   postid,
   title,
-  token,
 }: PostButtonBarProps) {
   // TODO: add "didLike" to GoBlueButton
   const route = useRouter();
   const isEveryKisa = isEveryKisaBoard(type);
+
+  const isAuthor = session?.user?.email === email;
+  const token = session?.token;
+
+  // session user가 현재 postid의 post를 좋아했는가?
+  const [didLike, setDidLike] = useState<boolean>(false);
+
+  // fetch like status
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      try {
+        const body = {
+          email: session?.user.email,
+          target: "post",
+        };
+
+        const res = await getLikeByUser(
+          postid,
+          body as LikeBody,
+          session?.token
+        );
+        if (res === null) {
+          console.log("Failed to fetch like status");
+        } else {
+          setDidLike(res.liked);
+        }
+      } catch (error) {
+        console.error("Error fetching like status: ", error);
+      }
+    };
+
+    if (session) {
+      fetchLikeStatus();
+    }
+  }, [postid, session]);
 
   const OnClickBackToList = () => {
     // [TODO]: fix back to list logic
@@ -71,7 +106,7 @@ export default function PostButtonBar({
       {!isAuthor && isEveryKisa && (
         <GoBlueButton
           postid={postid}
-          didLike={false}
+          didLike={didLike}
           email={email}
           token={token}
         />

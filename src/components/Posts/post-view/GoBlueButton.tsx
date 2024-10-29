@@ -19,10 +19,15 @@ export default function GoBlueButton({
   postid,
   email,
   token = "",
-  likes = 3,
+  likes,
   className = "",
 }: GoBlueButtonProps) {
   const handlePostLike = async () => {
+    if (!token) {
+      window.alert("로그인이 필요한 기능입니다.");
+      return;
+    }
+
     const likeBody = {
       email: email,
       target: "post",

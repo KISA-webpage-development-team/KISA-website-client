@@ -13,6 +13,8 @@ interface SimplePost {
   commentsCount: number;
   // for anonymous posts
   anonymous: boolean;
+  // like
+  likesCount: number;
 }
 
 interface Post extends SimplePost {

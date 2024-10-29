@@ -20,6 +20,8 @@ import { getCookie, setCookie } from "@/lib/react-cookie/cookie";
 import { incrementReadCount } from "@/apis/posts/mutations";
 import { Post } from "@/types/post";
 import { UserSession } from "@/lib/next-auth/types";
+import { getLikeByUser } from "@/apis/likes/queries";
+import { LikeBody } from "@/types/like";
 
 type PostViewProps = {
   post: Post;
@@ -42,6 +44,7 @@ export default function PostView({ post }: PostViewProps) {
     created,
     readCount,
     commentsCount,
+    likesCount,
     anonymous,
   } = post;
 
@@ -124,11 +127,10 @@ export default function PostView({ post }: PostViewProps) {
         {/* 4. Post Buttons: Edit + Delete + List Buttons */}
         <PostButtonBar
           email={email}
-          isAuthor={session?.user.email === email}
+          session={session}
           type={type}
           postid={postid}
           title={title}
-          token={session?.token}
         />
 
         <HorizontalDivider />
