@@ -1,15 +1,12 @@
 import client from "@/lib/axios/client";
+import { DeleteLikeParams, NewLikeBody } from "@/types/like";
 
 type Token = string | undefined;
 /**
  * @desc create a like on post or comment
  * @route POST /likes/{id}/
  */
-export async function createLike(
-  id: number,
-  body: { email: string; target: "post" | "comment" },
-  token: Token
-) {
+export async function createLike(id: number, body: NewLikeBody, token: Token) {
   // TODO: separate body type to "types" folder
   const url = `/likes/${id}/`;
   try {
@@ -32,10 +29,7 @@ export async function createLike(
  */
 export async function deleteLike(
   id: number,
-  params: {
-    email: string;
-    target: "post" | "comment";
-  },
+  params: DeleteLikeParams,
   token: Token
 ) {
   const url = `/likes/${id}/?email=${params.email}&target=${params.target}/`;

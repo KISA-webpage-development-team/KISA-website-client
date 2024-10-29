@@ -18,6 +18,7 @@ type PostButtonBarProps = {
   type: BoardType;
   postid: number;
   title: string;
+  token?: string;
 };
 
 export default function PostButtonBar({
@@ -26,7 +27,9 @@ export default function PostButtonBar({
   type,
   postid,
   title,
+  token,
 }: PostButtonBarProps) {
+  // TODO: add "didLike" to GoBlueButton
   const route = useRouter();
 
   const OnClickBackToList = () => {
@@ -60,21 +63,17 @@ export default function PostButtonBar({
         onClick={OnClickBackToList}
       />
 
-      <div className="relative">
-        {/* <CustomImageButton
-          type="primary"
-          icon={<ListIcon />}
-          text="GO BLUE!"
-          onClick={() => {}}
-          className="absolute left-0 top-0 w-32"
-        /> */}
+      {/* Go Blue Button */}
+      {/* NOTE: has separate logic, we made custom button component */}
+      {!isAuthor && (
         <GoBlueButton
+          postid={postid}
           didLike={false}
           email={email}
-          target="post"
-          className="absolute left-0 top-0 w-32"
+          token={token}
         />
-      </div>
+      )}
+      {/* </div> */}
 
       {/* Edit + Delete Button */}
       {isAuthor && (

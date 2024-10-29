@@ -13,6 +13,8 @@ import ReplyIcon from "../../ui/ReplyIcon";
 import { UserSession } from "@/lib/next-auth/types";
 import { Comment } from "@/types/comment";
 import { formatRelativeTime } from "@/utils/formats/date";
+import GoBlueButton from "../post-view/GoBlueButton";
+import CommentGoBlueButton from "./CommentGoBlueButton";
 
 type CommentItemProps = {
   isEveryKisa?: boolean;
@@ -33,6 +35,7 @@ export default function CommentItem({
   postAuthorEmail,
   commentAuthorMap,
 }: CommentItemProps) {
+  // TODO: add "didLike" state
   const {
     commentid,
     email,
@@ -119,12 +122,6 @@ export default function CommentItem({
               className="flex items-center gap-1 md:gap-2
             text-sm md:text-base"
             >
-              {/* TODO: 익명이 적용되어야하는 부분 */}
-              {/* <Link href={`/users/${email}`}>
-                <p className="text-black font-semibold hover:underline">
-                  {fullname} <span>{anonymous && "익명"}</span>
-                </p>
-              </Link> */}
               {renderCommentAuthor()}
               <p className="text-gray-500">{formatRelativeTime(created)}</p>
             </div>
@@ -146,6 +143,14 @@ export default function CommentItem({
                     onClick={handleCommentDelete}
                   />
                 </>
+              )}
+              {session && !isAuthor && (
+                <CommentGoBlueButton
+                  didLike={false}
+                  commentid={commentid}
+                  email={session.user.email}
+                  token={session.token}
+                />
               )}
               {session && (
                 <ImageButton

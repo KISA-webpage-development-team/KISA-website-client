@@ -10,7 +10,7 @@ type PostContentProps = {
 
 export default function PostContent({ text }: PostContentProps) {
   return (
-    <div className="relative min-h-16">
+    <div className="relative min-h-36 md:min-h-24">
       <div
         className="!px-0 !py-3
             text-sm md:text-base

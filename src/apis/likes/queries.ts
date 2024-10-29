@@ -1,4 +1,5 @@
 import client from "@/lib/axios/client";
+import { LikeBody } from "@/types/like";
 
 type Token = string | undefined;
 
@@ -7,11 +8,7 @@ type Token = string | undefined;
  * @route POST /likes/{id}/
  * @example
  */
-export async function getLikeByUser(
-  id: number,
-  body: { email: string; target: "post" | "comment" },
-  token: Token
-) {
+export async function getLikeByUser(id: number, body: LikeBody, token: Token) {
   const url = `/likes/${id}/`;
   try {
     const response = await client.post(url, body, {
