@@ -27,11 +27,18 @@ export async function createLike(
 
 /**
  * @desc delete a like on post or comment
- * @route DELETE /likes/{id}/
+ * @route DELETE /likes/{id}?email={email}&target={target}
  * @example
  */
-export async function deleteLike(id: number, token: Token) {
-  const url = `/likes/${id}/`;
+export async function deleteLike(
+  id: number,
+  params: {
+    email: string;
+    target: "posts" | "comments";
+  },
+  token: Token
+) {
+  const url = `/likes/${id}/?email=${params.email}&target=${params.target}/`;
   try {
     const response = await client.delete(url, {
       headers: {
