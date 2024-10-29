@@ -111,11 +111,11 @@ export default function CommentItem({
     <div className="flex flex-col">
       <div className="flex items-center">
         {isCommentOfComment ? (
-          <ReplyIcon type="flip" customClassName="-translate-y-2 mr-4" />
+          <ReplyIcon type="flip" customClassName="-translate-y-2" />
         ) : null}
 
         {/* Comment contents */}
-        <div className="flex flex-col w-full gap-1 md:gap-0">
+        <div className="flex flex-col w-full gap-1 md:gap-0 pl-2">
           <div className="flex items-center justify-between">
             {/* 1. Name + Time */}
             <div
@@ -164,11 +164,10 @@ export default function CommentItem({
           </div>
           {/* 3. Text */}
           <div
-            className={`${
-              isAuthor && "text-blue-500"
-            } pb-3 text-sm md:text-base`}
+            className={`${isAuthor && "text-blue-500"} pb-3 text-sm md:text-base
+            text-wrap `}
           >
-            {text}
+            <span className="">{text}</span>
           </div>
         </div>
       </div>
@@ -207,7 +206,10 @@ export default function CommentItem({
       {childComments &&
         childComments.length > 0 &&
         childComments.map((subComment, idx) => (
-          <div key={`subComment-${subComment.commentid}`} className="ml-4">
+          <div
+            key={`subComment-${subComment.commentid}`}
+            className="ml-3 md:ml-4"
+          >
             <CommentItem
               isEveryKisa={isEveryKisa}
               comment={subComment}
