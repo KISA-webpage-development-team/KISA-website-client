@@ -91,33 +91,33 @@ export default function CommentItem({
   };
 
   // fetch like status
-  // useEffect(() => {
-  //   const fetchLikeStatus = async () => {
-  //     try {
-  //       const body = {
-  //         email: session?.user.email,
-  //         target: "comment",
-  //       };
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      try {
+        const body = {
+          email: session?.user.email,
+          target: "comment",
+        };
 
-  //       const res = await getLikeByUser(
-  //         commentid,
-  //         body as LikeBody,
-  //         session?.token
-  //       );
-  //       if (res === null) {
-  //         console.log("Failed to fetch like status");
-  //       } else {
-  //         setDidLike(res.liked);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching like status: ", error);
-  //     }
-  //   };
+        const res = await getLikeByUser(
+          commentid,
+          body as LikeBody,
+          session?.token
+        );
+        if (res === null) {
+          console.log("Failed to fetch like status");
+        } else {
+          setDidLike(res.liked);
+        }
+      } catch (error) {
+        console.error("Error fetching like status: ", error);
+      }
+    };
 
-  //   if (session) {
-  //     fetchLikeStatus();
-  //   }
-  // }, [postid, session, commentid]);
+    if (session) {
+      fetchLikeStatus();
+    }
+  }, [postid, session, commentid]);
 
   /**
    * @desc Renders the author of the comment following anonymous logic

@@ -42,33 +42,33 @@ export default function PostButtonBar({
   const [didLike, setDidLike] = useState<boolean>(false);
 
   // fetch like status
-  // useEffect(() => {
-  //   const fetchLikeStatus = async () => {
-  //     try {
-  //       const body = {
-  //         email: session?.user.email,
-  //         target: "post",
-  //       };
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      try {
+        const body = {
+          email: session?.user.email,
+          target: "post",
+        };
 
-  //       const res = await getLikeByUser(
-  //         postid,
-  //         body as LikeBody,
-  //         session?.token
-  //       );
-  //       if (res === null) {
-  //         console.log("Failed to fetch like status");
-  //       } else {
-  //         setDidLike(res.liked);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching like status: ", error);
-  //     }
-  //   };
+        const res = await getLikeByUser(
+          postid,
+          body as LikeBody,
+          session?.token
+        );
+        if (res === null) {
+          console.log("Failed to fetch like status");
+        } else {
+          setDidLike(res.liked);
+        }
+      } catch (error) {
+        console.error("Error fetching like status: ", error);
+      }
+    };
 
-  //   if (session) {
-  //     fetchLikeStatus();
-  //   }
-  // }, [postid, session]);
+    if (session) {
+      fetchLikeStatus();
+    }
+  }, [postid, session]);
 
   const OnClickBackToList = () => {
     // [TODO]: fix back to list logic
