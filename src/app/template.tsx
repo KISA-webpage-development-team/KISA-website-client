@@ -9,7 +9,7 @@ import { UnderConstruction } from "@/final_refactor_src/components/feedback";
 
 export default async function Template({ children }: { children: ReactNode }) {
   // flag to show under construction page
-  const underConstruction = true;
+  const underConstruction = false;
 
   // pass over this session to Header to remove unnecessary re-renders
   const session = await getServerSession(authOptions);
