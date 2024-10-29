@@ -7,7 +7,7 @@ type Token = string | undefined;
  */
 export async function createLike(
   id: number,
-  body: { email: string; target: "posts" | "comments" },
+  body: { email: string; target: "post" | "comment" },
   token: Token
 ) {
   // TODO: separate body type to "types" folder
@@ -34,7 +34,7 @@ export async function deleteLike(
   id: number,
   params: {
     email: string;
-    target: "posts" | "comments";
+    target: "post" | "comment";
   },
   token: Token
 ) {

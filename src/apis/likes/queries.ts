@@ -9,7 +9,7 @@ type Token = string | undefined;
  */
 export async function getLikeByUser(
   id: number,
-  body: { email: string; target: "posts" | "comments" },
+  body: { email: string; target: "post" | "comment" },
   token: Token
 ) {
   const url = `/likes/${id}/`;
