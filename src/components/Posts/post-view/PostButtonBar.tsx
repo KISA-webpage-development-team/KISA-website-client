@@ -11,6 +11,7 @@ import TrashcanIcon from "../../ui/TrashcanIcon";
 import { BoardType } from "@/types/board";
 import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
 import GoBlueButton from "./GoBlueButton";
+import { isEveryKisaBoard } from "@/utils/formats/boardType";
 
 type PostButtonBarProps = {
   email: string;
@@ -31,6 +32,7 @@ export default function PostButtonBar({
 }: PostButtonBarProps) {
   // TODO: add "didLike" to GoBlueButton
   const route = useRouter();
+  const isEveryKisa = isEveryKisaBoard(type);
 
   const OnClickBackToList = () => {
     // [TODO]: fix back to list logic
@@ -65,7 +67,7 @@ export default function PostButtonBar({
 
       {/* Go Blue Button */}
       {/* NOTE: has separate logic, we made custom button component */}
-      {!isAuthor && (
+      {!isAuthor && isEveryKisa && (
         <GoBlueButton
           postid={postid}
           didLike={false}

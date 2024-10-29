@@ -28,6 +28,9 @@ export default function BoardTableRow({
     anonymous,
   } = post;
 
+  // TODO: change it to real likesCount
+  const likesCount = 1;
+
   return (
     <tr
       className={`${
@@ -63,6 +66,7 @@ export default function BoardTableRow({
         <td className="text-center py-2">{anonymous ? "" : fullname}</td>
       )}
       <td className="text-center py-2">{formatDateOrTime(created)}</td>
+      {isEveryKisa && <td className="text-center py-2 pr-2">{likesCount}</td>}
       <td className="text-center py-2 pr-2">{readCount}</td>
     </tr>
   );

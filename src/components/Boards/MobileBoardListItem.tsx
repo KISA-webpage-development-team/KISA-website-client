@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { SimplePost } from "@/types/post";
 import { formatDateOrTime } from "@/utils/formats/date";
+import LikeIcon from "@/final_refactor_src/components/icon/LikeIcon";
+import ViewIcon from "@/final_refactor_src/components/icon/ViewIcon";
 
 type Props = {
   isEveryKisa?: boolean;
@@ -17,6 +19,9 @@ export default function MobileBoardListItem({
 }: Props) {
   const { title, fullname, created, readCount, commentsCount, anonymous } =
     post;
+
+  // TODO: likesCount를 서버에서 받아오도록 수정
+  const likesCount = 3;
 
   return (
     <li
@@ -45,7 +50,7 @@ export default function MobileBoardListItem({
       </div>
       <div
         className=" flex items-center gap-2 
-      text-gray-500 text-xs"
+      text-slate-500/90 text-xs"
       >
         <span>{formatDateOrTime(created)}</span>
         {
@@ -56,7 +61,15 @@ export default function MobileBoardListItem({
             <span>{fullname}</span>
           )
         }
-        <span>{`조회 ${readCount}`}</span>
+        <div className="flex items-center gap-1">
+          <ViewIcon size="small" />
+          <span>{likesCount}</span>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <LikeIcon size="small" isGray={true} />
+          <span>{likesCount}</span>
+        </div>
       </div>
 
       {/* <div>{commentsCount}</div> */}

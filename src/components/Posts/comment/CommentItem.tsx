@@ -144,7 +144,7 @@ export default function CommentItem({
                   />
                 </>
               )}
-              {session && !isAuthor && (
+              {session && !isAuthor && isEveryKisa && (
                 <CommentGoBlueButton
                   didLike={false}
                   commentid={commentid}
