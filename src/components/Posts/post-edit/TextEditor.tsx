@@ -29,7 +29,7 @@ export default function TextEditor({
   return (
     <ReactQuill
       theme="snow"
-      style={{ minHeight: 400 }}
+      style={{ minHeight: 400, fontSize: 24 }}
       modules={ReactQuillModules}
       value={text}
       onChange={(e: any) => setText(e)}
