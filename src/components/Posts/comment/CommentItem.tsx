@@ -15,6 +15,8 @@ import { Comment } from "@/types/comment";
 import { formatRelativeTime } from "@/utils/formats/date";
 import GoBlueButton from "../post-view/GoBlueButton";
 import CommentGoBlueButton from "./CommentGoBlueButton";
+import { LikeBody } from "@/types/like";
+import { getLikeByUser } from "@/apis/likes/queries";
 
 type CommentItemProps = {
   isEveryKisa?: boolean;
@@ -46,6 +48,7 @@ export default function CommentItem({
     childComments,
     isCommentOfComment,
     anonymous,
+    likesCount,
   } = comment;
   // constants for comment item
   const isAuthor = session?.user?.email === email;
@@ -57,8 +60,16 @@ export default function CommentItem({
   const [openCommentEditor, setOpenCommentEditor] = useState(false);
   // states for delete comment
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  // states for like
+  const [didLike, setDidLike] = useState<boolean>(false);
 
   const handleOpenReplyEditor = () => {
+    // session이 존재하지 않으면, 로그인 필수 모달을 띄워야 함
+    if (!session) {
+      window.alert("로그인이 필요한 기능입니다.");
+      return;
+    }
+
     setOpenReplyEditor(!openReplyEditor);
   };
 
@@ -78,6 +89,35 @@ export default function CommentItem({
       console.log("comment deletion failed");
     }
   };
+
+  // fetch like status
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      try {
+        const body = {
+          email: session?.user.email,
+          target: "comment",
+        };
+
+        const res = await getLikeByUser(
+          commentid,
+          body as LikeBody,
+          session?.token
+        );
+        if (res === null) {
+          console.log("Failed to fetch like status");
+        } else {
+          setDidLike(res.liked);
+        }
+      } catch (error) {
+        console.error("Error fetching like status: ", error);
+      }
+    };
+
+    if (session) {
+      fetchLikeStatus();
+    }
+  }, [postid, session, commentid]);
 
   /**
    * @desc Renders the author of the comment following anonymous logic
@@ -147,27 +187,29 @@ export default function CommentItem({
                   />
                 </>
               )}
-              {session && !isAuthor && isEveryKisa && (
+              {!isAuthor && isEveryKisa && (
                 <CommentGoBlueButton
-                  didLike={true}
+                  didLike={didLike}
                   commentid={commentid}
-                  email={session.user.email}
-                  token={session.token}
+                  email={session?.user?.email}
+                  likes={likesCount}
+                  token={session?.token}
                 />
               )}
-              {session && (
-                <ImageButton
-                  background="none"
-                  icon={<CommentIcon color="gray" noResize />}
-                  text={`${openReplyEditor ? "닫기" : "답글"}`}
-                  onClick={handleOpenReplyEditor}
-                />
-              )}
+
+              <ImageButton
+                background="none"
+                icon={<CommentIcon color="gray" noResize />}
+                text={`${openReplyEditor ? "닫기" : "답글"}`}
+                onClick={handleOpenReplyEditor}
+              />
             </div>
           </div>
           {/* 3. Text */}
           <div
-            className={`${isAuthor && "text-blue-500"} pb-3 text-sm md:text-base
+            className={`${
+              isAuthor && "text-blue-500"
+            } pt-1 pb-3 text-sm md:text-base
             text-wrap `}
           >
             <span className="">{text}</span>

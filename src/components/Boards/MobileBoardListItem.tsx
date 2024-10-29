@@ -17,11 +17,15 @@ export default function MobileBoardListItem({
   post,
   isAnnouncement = false,
 }: Props) {
-  const { title, fullname, created, readCount, commentsCount, anonymous } =
-    post;
-
-  // TODO: likesCount를 서버에서 받아오도록 수정
-  const likesCount = 3;
+  const {
+    title,
+    fullname,
+    created,
+    readCount,
+    commentsCount,
+    anonymous,
+    likesCount,
+  } = post;
 
   return (
     <li
@@ -65,7 +69,7 @@ export default function MobileBoardListItem({
         {isEveryKisa && (
           <div className="flex items-center gap-1">
             <LikeIcon size="small" isGray={true} className="!text-sm" />
-            <span>{likesCount}</span>
+            <span>{likesCount ? likesCount : 0}</span>
           </div>
         )}
       </div>
