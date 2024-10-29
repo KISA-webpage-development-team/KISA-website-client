@@ -55,11 +55,7 @@ export default function MobileBoardListItem({
         <span>{formatDateOrTime(created)}</span>
         {
           // EveryKisa에는 anonymous가 true인 글쓴이를 "익명"으로 표시한다.
-          isEveryKisa ? (
-            <span>{anonymous ? "익명" : fullname}</span>
-          ) : (
-            <span>{fullname}</span>
-          )
+          !isEveryKisa && <span>{fullname}</span>
         }
         <div className="flex items-center gap-1">
           <ViewIcon size="small" className="!text-sm" />

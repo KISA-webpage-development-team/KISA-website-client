@@ -52,6 +52,8 @@ export default function BoardClient({
     error: postNumError,
   } = useBoardPostNum(boardType);
 
+  console.log("fetched posts: ", posts);
+
   // -----------------------------------------------
 
   if (isPostsFetching || isPostNumFetching) {

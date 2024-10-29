@@ -106,6 +106,7 @@ export default function PostView({ post }: PostViewProps) {
           <PostTitleBar isAnnouncement={isAnnouncement} title={title} />
           {/* 2. Post Owner Bar */}
           <PostOwnerBar
+            isPostAuthor={session?.user.email === email}
             email={email}
             fullname={fullname}
             created={created}

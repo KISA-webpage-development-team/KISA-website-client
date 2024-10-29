@@ -115,7 +115,10 @@ export default function CommentItem({
         ) : null}
 
         {/* Comment contents */}
-        <div className="flex flex-col w-full gap-1 md:gap-0 pl-2">
+        <div
+          className={`flex flex-col w-full gap-1 md:gap-0
+          ${isCommentOfComment && "pl-2"}`}
+        >
           <div className="flex items-center justify-between">
             {/* 1. Name + Time */}
             <div

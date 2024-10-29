@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatDateTimeString, formatRelativeTime } from "@/utils/formats/date";
 
 type PostOwnerBarProps = {
+  isPostAuthor?: boolean;
   email: string;
   fullname: string;
   created: string;
@@ -14,6 +15,7 @@ type PostOwnerBarProps = {
 };
 
 export default function PostOwnerBar({
+  isPostAuthor = false,
   email,
   fullname,
   created,
@@ -27,13 +29,17 @@ export default function PostOwnerBar({
     text-xs sm:text-sm"
     >
       {/* left: fullname + created */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 font-semibold">
         {/* later, fullname will be linked to user profile */}
         {anonymous ? (
-          <p className="font-semibold">익명</p>
+          isPostAuthor ? (
+            <p className="">{`${fullname} (익명)`}</p>
+          ) : (
+            <p className="">익명</p>
+          )
         ) : (
           <Link href={`/users/${email}`}>
-            <p className="font-semibold hover:underline">{fullname}</p>
+            <p className=" hover:underline">{fullname}</p>
           </Link>
         )}
 
