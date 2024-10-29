@@ -9,8 +9,11 @@ import { useRouter } from "next/navigation";
 import PencilIcon from "../../ui/PencilIcon";
 import TrashcanIcon from "../../ui/TrashcanIcon";
 import { BoardType } from "@/types/board";
+import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
+import GoBlueButton from "./GoBlueButton";
 
 type PostButtonBarProps = {
+  email: string;
   isAuthor: boolean;
   type: BoardType;
   postid: number;
@@ -18,6 +21,7 @@ type PostButtonBarProps = {
 };
 
 export default function PostButtonBar({
+  email,
   isAuthor,
   type,
   postid,
@@ -44,22 +48,45 @@ export default function PostButtonBar({
   };
 
   return (
-    <div className="w-full flex items-center justify-between py-2 sm:py-4">
+    <div
+      className="
+    w-full flex justify-between py-2 sm:py-4"
+    >
       {/* List Button */}
-      <ImageButton
+      <CustomImageButton
+        type="secondary"
         icon={<ListIcon />}
         text="목록"
         onClick={OnClickBackToList}
       />
+
+      <div className="relative">
+        {/* <CustomImageButton
+          type="primary"
+          icon={<ListIcon />}
+          text="GO BLUE!"
+          onClick={() => {}}
+          className="absolute left-0 top-0 w-32"
+        /> */}
+        <GoBlueButton
+          didLike={false}
+          email={email}
+          target="post"
+          className="absolute left-0 top-0 w-32"
+        />
+      </div>
+
       {/* Edit + Delete Button */}
       {isAuthor && (
         <div className="flex items-center gap-2">
-          <ImageButton
+          <CustomImageButton
+            type="secondary"
             icon={<PencilIcon color="gray" />}
             text="수정"
             onClick={onClickPostUpdate}
           />
-          <ImageButton
+          <CustomImageButton
+            type="secondary"
             icon={<TrashcanIcon color="gray" />}
             text="삭제"
             onClick={onClickPostDelete}

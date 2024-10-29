@@ -1,3 +1,3 @@
-type ButtonType = "primary" | "secondary";
+type ButtonType = "primary" | "secondary" | "tertiary";
 
 export type { ButtonType };

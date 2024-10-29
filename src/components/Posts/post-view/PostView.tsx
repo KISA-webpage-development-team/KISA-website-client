@@ -122,6 +122,7 @@ export default function PostView({ post }: PostViewProps) {
 
         {/* 4. Post Buttons: Edit + Delete + List Buttons */}
         <PostButtonBar
+          email={email}
           isAuthor={session?.user.email === email}
           type={type}
           postid={postid}
