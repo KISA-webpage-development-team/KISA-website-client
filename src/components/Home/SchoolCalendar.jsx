@@ -52,10 +52,10 @@ export default function SchoolCalendar() {
       (event) => new Date(event.start) > today
     );
 
-    // const sortedEvents = filteredEvents.sort(
-    //   (a, b) => new Date(a.start) - new Date(b.start)
-    // );
-    const lastEvent = new Date(filteredEvents[0].start);
+    const sortedEvents = filteredEvents.sort(
+      (a, b) => new Date(a.start) - new Date(b.start)
+    );
+    const lastEvent = new Date(sortedEvents[0].start);
 
     const diffTime = lastEvent - today;
 
@@ -66,7 +66,7 @@ export default function SchoolCalendar() {
     }
 
     setDidEventSetup(true);
-    setSelectedEvent(filteredEvents[0]);
+    setSelectedEvent(sortedEvents[0]);
     return;
   };
 
