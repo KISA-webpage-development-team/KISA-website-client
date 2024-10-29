@@ -51,7 +51,7 @@ export default function CommentGoBlueButton({
     `}
       onClick={handleCommentLike}
     >
-      <LikeIcon size="small" fill={false} />
+      <LikeIcon size="small" fill={didLike} />
       {likes > 0 && (
         <span className="text-xs md:text-sm text-michigan-light-blue">
           {likes}

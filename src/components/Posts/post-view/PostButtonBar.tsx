@@ -12,6 +12,7 @@ import { BoardType } from "@/types/board";
 import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
 import GoBlueButton from "./GoBlueButton";
 import { isEveryKisaBoard } from "@/utils/formats/boardType";
+import { truncate } from "fs/promises";
 
 type PostButtonBarProps = {
   email: string;

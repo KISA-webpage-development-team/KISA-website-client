@@ -4,12 +4,15 @@ import "./styles.css";
 
 type ViewIconProps = {
   size: "small" | "medium";
+  className?: string;
 };
 
-export default function ViewIcon({ size }: ViewIconProps) {
+export default function ViewIcon({ size, className = "" }: ViewIconProps) {
   return (
     <FiEye
-      className={`${size === "small" ? "small_icon !text-xs" : "icon"} `}
+      className={`${className} ${
+        size === "small" ? "small_icon !text-xs" : "icon"
+      } `}
     />
   );
 }

@@ -146,7 +146,7 @@ export default function CommentItem({
               )}
               {session && !isAuthor && isEveryKisa && (
                 <CommentGoBlueButton
-                  didLike={false}
+                  didLike={true}
                   commentid={commentid}
                   email={session.user.email}
                   token={session.token}

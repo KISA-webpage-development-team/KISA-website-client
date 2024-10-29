@@ -62,14 +62,16 @@ export default function MobileBoardListItem({
           )
         }
         <div className="flex items-center gap-1">
-          <ViewIcon size="small" />
-          <span>{likesCount}</span>
+          <ViewIcon size="small" className="!text-sm" />
+          <span>{readCount}</span>
         </div>
 
-        <div className="flex items-center gap-1">
-          <LikeIcon size="small" isGray={true} />
-          <span>{likesCount}</span>
-        </div>
+        {isEveryKisa && (
+          <div className="flex items-center gap-1">
+            <LikeIcon size="small" isGray={true} className="!text-sm" />
+            <span>{likesCount}</span>
+          </div>
+        )}
       </div>
 
       {/* <div>{commentsCount}</div> */}

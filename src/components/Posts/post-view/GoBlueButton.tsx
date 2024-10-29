@@ -44,30 +44,35 @@ export default function GoBlueButton({
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 h-8 md:h-10">
       <button
         className={`${className} 
-    inline-flex items-center self-center gap-1 
-      border-michigan-dark-maize border-2 px-2 py-1 rounded-md
-      hover:bg-michigan-maize
+    inline-flex items-center justify-center self-center
+  px-4 gap-1 h-full
+  bg-[#00274c] border border-[#00274c] 
+  text-[#ffcb05] text-sm md:text-base
+  hover:bg-[#00274c] hover:border-[#ffcb05]
+  rounded-md
     `}
         onClick={handlePostLike}
       >
-        <LikeIcon size="small" fill={didLike} />
+        <LikeIcon size="small" fill={didLike} color="maize" />
         <span
-          className="text-michigan-light-blue font-bold 
-        text-sm md:text-lg"
+          className=" font-bold 
+        text-sm md:text-base"
         >
-          {didLike ? "NO BLUE!" : "GO BLUE!"}
+          {didLike ? "취소" : "GO BLUE!"}
         </span>
       </button>
 
       {likes > 0 && (
         <span
-          className="inline-flex items-center justify-center self-center
-    px-2 py-1 border-2 rounded-md
-    bg-michigan-maize border-michigan-maize
-    text-michigan-blue text-sm md:text-lg font-bold"
+          className="[#00274c]
+    inline-flex items-center justify-center self-center
+  px-2 md:px-3 h-full
+   border-2 border-[#00274c]
+  text-[#00274c] text-sm md:text-lg
+  rounded-md font-bold"
         >
           {likes}
         </span>
