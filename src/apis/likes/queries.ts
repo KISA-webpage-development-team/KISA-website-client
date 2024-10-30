@@ -5,13 +5,18 @@ type Token = string | undefined;
 
 /**
  * @desc Get whether the user liked the post/comment  or not
- * @route POST /likes/{id}/
+ * @route GET /likes/{id}/
  * @example
  */
-export async function getLikeByUser(id: number, body: LikeBody, token: Token) {
-  const url = `/likes/${id}/`;
+export async function getLikeByUser(
+  id: number,
+  params: LikeBody,
+  token: Token
+) {
+  const url = `/likes/${id}/?email=${params.email}&target=${params.target}/`;
+
   try {
-    const response = await client.post(url, body, {
+    const response = await client.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
