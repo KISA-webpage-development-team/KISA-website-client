@@ -32,7 +32,7 @@ export async function deleteLike(
   params: DeleteLikeParams,
   token: Token
 ) {
-  const url = `/likes/${id}/?email=${params.email}&target=${params.target}/`;
+  const url = `/likes/${id}/?email=${params.email}&target=${params.target}`;
   try {
     const response = await client.delete(url, {
       headers: {
