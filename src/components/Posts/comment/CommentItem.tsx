@@ -62,6 +62,8 @@ export default function CommentItem({
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   // states for like
   const [didLike, setDidLike] = useState<boolean>(false);
+  // stale state for like button to prevent multiple clicks and re-renders
+  const [likeBtnStale, setLikeBtnStale] = useState<boolean>(false);
 
   const handleOpenReplyEditor = () => {
     // session이 존재하지 않으면, 로그인 필수 모달을 띄워야 함
@@ -117,7 +119,7 @@ export default function CommentItem({
     if (session) {
       fetchLikeStatus();
     }
-  }, [postid, session, commentid]);
+  }, [postid, session, commentid, likeBtnStale]);
 
   /**
    * @desc Renders the author of the comment following anonymous logic
@@ -194,6 +196,8 @@ export default function CommentItem({
                   email={session?.user?.email}
                   likes={likesCount}
                   token={session?.token}
+                  likeBtnStale={likeBtnStale}
+                  setLikeBtnStale={setLikeBtnStale}
                 />
               )}
 

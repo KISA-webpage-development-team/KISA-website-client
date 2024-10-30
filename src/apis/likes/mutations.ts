@@ -24,7 +24,7 @@ export async function createLike(id: number, body: NewLikeBody, token: Token) {
 
 /**
  * @desc delete a like on post or comment
- * @route DELETE /likes/{id}?email={email}&target={target}
+ * @route DELETE /likes/{id}/?email={email}&target={target}
  * @example
  */
 export async function deleteLike(
@@ -33,15 +33,16 @@ export async function deleteLike(
   token: Token
 ) {
   const url = `/likes/${id}/?email=${params.email}&target=${params.target}`;
+
   try {
     const response = await client.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response?.data;
+
+    return { success: true, message: "Like deleted successfully" };
   } catch (error) {
-    //console.error(error);
     return undefined;
   }
 }

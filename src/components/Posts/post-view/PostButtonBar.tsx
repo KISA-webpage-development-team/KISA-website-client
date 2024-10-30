@@ -43,6 +43,8 @@ export default function PostButtonBar({
 
   // session user가 현재 postid의 post를 좋아했는가?
   const [didLike, setDidLike] = useState<boolean>(false);
+  // stale state for like button to prevent multiple clicks and re-renders
+  const [likeBtnStale, setLikeBtnStale] = useState<boolean>(false);
 
   // fetch like status
   useEffect(() => {
@@ -71,7 +73,7 @@ export default function PostButtonBar({
     if (session) {
       fetchLikeStatus();
     }
-  }, [postid, session]);
+  }, [postid, session, likeBtnStale]);
 
   const OnClickBackToList = () => {
     // [TODO]: fix back to list logic
@@ -113,6 +115,8 @@ export default function PostButtonBar({
           email={loggedInEmail}
           token={token}
           likes={likes}
+          likeBtnStale={likeBtnStale}
+          setLikeBtnStale={setLikeBtnStale}
         />
       )}
       {/* </div> */}

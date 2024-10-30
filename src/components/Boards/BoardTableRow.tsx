@@ -28,6 +28,8 @@ export default function BoardTableRow({
     anonymous,
     likesCount,
   } = post;
+  // console.log("post: ", post);
+  // console.log("likesCount", likesCount);
 
   return (
     <tr

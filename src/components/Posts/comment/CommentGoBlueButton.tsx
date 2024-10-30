@@ -11,6 +11,8 @@ type GoBlueButtonProps = {
   email: string;
   token?: string;
   likes?: number;
+  likeBtnStale: boolean;
+  setLikeBtnStale: (stale: boolean) => void;
   className?: string;
 };
 
@@ -20,6 +22,8 @@ export default function CommentGoBlueButton({
   email,
   token = "",
   likes,
+  likeBtnStale,
+  setLikeBtnStale,
   className = "",
 }: GoBlueButtonProps) {
   const handleCommentLike = async () => {
@@ -30,7 +34,7 @@ export default function CommentGoBlueButton({
 
     const likeBody = {
       email: email,
-      target: "post",
+      target: "comment",
     };
 
     // if didLike is true, then unlike (delete like)
@@ -42,6 +46,7 @@ export default function CommentGoBlueButton({
 
       if (res) {
         // console.log("Success!");
+        setLikeBtnStale(!likeBtnStale);
       }
     } catch (error) {
       console.error(error);
@@ -49,19 +54,20 @@ export default function CommentGoBlueButton({
   };
 
   return (
-    <button
+    <div
       className={`${className} 
     inline-flex items-center self-center gap-1 
     rounded-md
     `}
-      onClick={handleCommentLike}
     >
-      <LikeIcon size="small" fill={didLike} />
-      {likes > 0 && (
+      <button onClick={handleCommentLike}>
+        <LikeIcon size="small" fill={didLike} />
+      </button>
+      {(likes > 0 || (likes === 0 && likeBtnStale)) && (
         <span className="text-xs md:text-sm text-michigan-light-blue">
-          {likes}
+          {likeBtnStale ? likes + 1 : likes}
         </span>
       )}
-    </button>
+    </div>
   );
 }

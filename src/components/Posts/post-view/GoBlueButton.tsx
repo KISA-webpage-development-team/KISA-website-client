@@ -11,6 +11,8 @@ type GoBlueButtonProps = {
   email: string;
   token?: string;
   likes?: number;
+  likeBtnStale: boolean;
+  setLikeBtnStale: (stale: boolean) => void;
   className?: string;
 };
 
@@ -20,6 +22,9 @@ export default function GoBlueButton({
   email,
   token = "",
   likes,
+  likeBtnStale,
+  setLikeBtnStale,
+
   className = "",
 }: GoBlueButtonProps) {
   const handlePostLike = async () => {
@@ -41,7 +46,8 @@ export default function GoBlueButton({
         : await createLike(postid, likeBody as NewLikeBody, token);
 
       if (res) {
-        // console.log("Success!");
+        setLikeBtnStale(!likeBtnStale);
+        console.log("Success!");
       }
     } catch (error) {
       console.error(error);
@@ -70,7 +76,7 @@ export default function GoBlueButton({
         </span>
       </button>
 
-      {likes > 0 && (
+      {(likes > 0 || (likes === 0 && likeBtnStale)) && (
         <span
           className="[#00274c]
     inline-flex items-center justify-center self-center
@@ -79,7 +85,7 @@ export default function GoBlueButton({
   text-[#00274c] text-sm md:text-lg
   rounded-md font-bold"
         >
-          {likes}
+          {likeBtnStale ? likes + 1 : likes}
         </span>
       )}
     </div>
