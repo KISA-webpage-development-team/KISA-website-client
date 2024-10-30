@@ -13,7 +13,7 @@ export async function getLikeByUser(
   params: LikeBody,
   token: Token
 ) {
-  const url = `/likes/${id}/?email=${params.email}&target=${params.target}/`;
+  const url = `/likes/${id}/?email=${params.email}&target=${params.target}`;
 
   try {
     const response = await client.get(url, {

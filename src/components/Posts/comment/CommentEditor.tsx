@@ -113,7 +113,15 @@ export default function CommentEditor({
               focus:outline-michigan-blue"
         placeholder={placeholder}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && e.target === document.activeElement) {
+          if (
+            e.key === "Enter" &&
+            e.target === document.activeElement &&
+            !(
+              text.length === 0 ||
+              (isEveryKisa && anonymousValue === "none") ||
+              isSubmitting
+            )
+          ) {
             e.preventDefault();
             if (mode === "update") {
               handleSubmitUpdate();
