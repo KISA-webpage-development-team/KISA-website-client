@@ -28,6 +28,10 @@ import {
 } from "@/utils/formats/boardType";
 import { Radio, RadioGroup } from "@nextui-org/react";
 import { cn } from "@/utils/styles/cn";
+import {
+  LoadingSpinner,
+  NotAuthorized,
+} from "@/final_refactor_src/components/feedback";
 
 export default function EditorClient({
   session,
@@ -133,11 +137,11 @@ export default function EditorClient({
   // no need to handle not logged in because middleware will handle it
   // 1) admin status is not fetched yet
   if (isAdmin === null) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   // 2) if boardType is announcement and user is not admin
   if (isAnnouncementBoard(boardType) && isAdmin === false) {
-    return <div>권한이 없습니다.</div>;
+    return <NotAuthorized />;
   }
 
   // ---------------------------------------------------------------------------
