@@ -150,7 +150,7 @@ export default function CommentEditor({
       <div
         className="w-full sm:w-1/6 sm:h-full
         pt-2
-        flex sm:flex-col sm:justify-between
+        flex sm:flex-col justify-between
       flex-row"
       >
         {/* If isEveryKisa, show anonymous checkbox options */}
@@ -203,7 +203,7 @@ export default function CommentEditor({
           }
           onClick={mode === "update" ? handleSubmitUpdate : handleSubmitComment}
           text={isSubmitting ? "등록 중..." : "댓글 등록"}
-          className="w-full h-full sm:h-fit"
+          className="w-fit md:w-full h-fit md:h-fit"
         />
       </div>
     </div>
