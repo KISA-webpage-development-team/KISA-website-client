@@ -106,7 +106,8 @@ export default function CommentEditor({
       <textarea
         value={text}
         onChange={handleTextChange}
-        className="w-full h-20 sm:h-32
+        className="w-full h-20 
+             sm:h-32
              border border-gray-300 rounded-md p-3
               text-sm md:text-base
               focus:outline-michigan-blue"

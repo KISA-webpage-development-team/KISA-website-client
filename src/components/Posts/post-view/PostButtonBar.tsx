@@ -36,6 +36,7 @@ export default function PostButtonBar({
   const isEveryKisa = isEveryKisaBoard(type);
 
   const isAuthor = session?.user?.email === email;
+  const loggedInEmail = session?.user?.email;
   const token = session?.token;
 
   // session user가 현재 postid의 post를 좋아했는가?
@@ -107,7 +108,7 @@ export default function PostButtonBar({
         <GoBlueButton
           postid={postid}
           didLike={didLike}
-          email={email}
+          email={loggedInEmail}
           token={token}
         />
       )}

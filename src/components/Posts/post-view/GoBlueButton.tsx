@@ -41,7 +41,7 @@ export default function GoBlueButton({
         : await createLike(postid, likeBody as NewLikeBody, token);
 
       if (res) {
-        console.log("Success!");
+        // console.log("Success!");
       }
     } catch (error) {
       console.error(error);
