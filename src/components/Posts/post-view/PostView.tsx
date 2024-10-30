@@ -131,6 +131,7 @@ export default function PostView({ post }: PostViewProps) {
           type={type}
           postid={postid}
           title={title}
+          likes={likesCount}
         />
 
         <HorizontalDivider />

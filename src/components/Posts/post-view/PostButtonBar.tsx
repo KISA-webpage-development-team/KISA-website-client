@@ -22,6 +22,7 @@ type PostButtonBarProps = {
   type: BoardType;
   postid: number;
   title: string;
+  likes?: number;
 };
 
 export default function PostButtonBar({
@@ -30,6 +31,7 @@ export default function PostButtonBar({
   type,
   postid,
   title,
+  likes = 0,
 }: PostButtonBarProps) {
   // TODO: add "didLike" to GoBlueButton
   const route = useRouter();
@@ -110,6 +112,7 @@ export default function PostButtonBar({
           didLike={didLike}
           email={loggedInEmail}
           token={token}
+          likes={likes}
         />
       )}
       {/* </div> */}
