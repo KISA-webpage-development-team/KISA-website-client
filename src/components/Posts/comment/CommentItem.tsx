@@ -126,27 +126,31 @@ export default function CommentItem({
    *
    */
   const renderCommentAuthor = () => {
-    if (isAuthor || !anonymous) {
+    if (isAuthor && anonymous) {
+      return (
+        <Link href={`/users/${email}`}>
+          <span className="font-semibold hover:underline">{`${fullname}(익명)`}</span>
+        </Link>
+      );
+    } else if (isAuthor || !anonymous) {
       return (
         <Link href={`/users/${email}`}>
           <span className="font-semibold hover:underline">{fullname}</span>
         </Link>
       );
-    }
-
-    if (isPostAuthor) {
+    } else if (isPostAuthor) {
       return (
         <span className="font-semibold">{`익명${commentAuthorMap.get(
           email
         )}(글쓴이)`}</span>
       );
+    } else {
+      return (
+        <span className="font-semibold">{`익명${commentAuthorMap.get(
+          email
+        )}`}</span>
+      );
     }
-
-    return (
-      <span className="font-semibold">{`익명${commentAuthorMap.get(
-        email
-      )}`}</span>
-    );
   };
 
   return (
