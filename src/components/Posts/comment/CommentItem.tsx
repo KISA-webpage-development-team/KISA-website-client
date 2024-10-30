@@ -173,7 +173,7 @@ export default function CommentItem({
 
             {/* 2. Buttons */}
             <div className="flex gap-3">
-              {didLike !== null && isEveryKisa && (
+              {isEveryKisa && (
                 <CommentGoBlueButton
                   didLike={didLike}
                   commentid={commentid}

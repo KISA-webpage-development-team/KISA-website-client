@@ -113,7 +113,7 @@ export default function PostButtonBar({
       <div className="flex items-center gap-2">
         {/* Go Blue Button */}
         {/* NOTE: has separate logic, we made custom button component */}
-        {didLike !== null && isEveryKisa && (
+        {isEveryKisa && (
           <GoBlueButton
             postid={postid}
             didLike={didLike}
