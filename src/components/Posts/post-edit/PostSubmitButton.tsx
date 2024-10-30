@@ -68,7 +68,7 @@ export default function PostSubmitButton({
   return (
     <button
       disabled={disabled}
-      className="w-1/4 h-10 blue_button"
+      className="w-1/4 h-10 blue_button text-sm md:text-base"
       onClick={mode === "create" ? handleCreatePost : handleUpdatePost}
     >
       {loading ? "로딩 중..." : mode === "create" ? "등록" : "수정"}
