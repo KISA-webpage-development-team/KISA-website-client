@@ -42,7 +42,7 @@ export default function CommentGoBlueButton({
       }
     };
 
-    fetchCommentLikesCount();
+    if (likeBtnStale === false) fetchCommentLikesCount();
   }, [commentid, likeBtnStale]);
 
   const handleCommentLike = async () => {

@@ -27,6 +27,23 @@ export default function GoBlueButton({
 }: GoBlueButtonProps) {
   const [likes, setLikes] = useState<number | null>(null);
 
+  useEffect(() => {
+    const fetchPostLikesCount = async () => {
+      try {
+        const res = await getPostLikesCount(postid);
+        if (!res) {
+          console.log("Failed to fetch post likes count");
+        } else {
+          setLikes(res.likesCount);
+        }
+      } catch (error) {
+        console.error("Error fetching post likes count: ", error);
+      }
+    };
+
+    if (likeBtnStale === false) fetchPostLikesCount();
+  }, [postid, likeBtnStale]);
+
   const handlePostLike = async () => {
     if (!token) {
       window.alert("로그인이 필요한 기능입니다.");
@@ -57,23 +74,6 @@ export default function GoBlueButton({
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    const fetchPostLikesCount = async () => {
-      try {
-        const res = await getPostLikesCount(postid);
-        if (!res) {
-          console.log("Failed to fetch post likes count");
-        } else {
-          setLikes(res.likesCount);
-        }
-      } catch (error) {
-        console.error("Error fetching post likes count: ", error);
-      }
-    };
-
-    fetchPostLikesCount();
-  }, [postid, likeBtnStale]);
 
   return (
     <div className="flex items-center gap-2 h-8 md:h-10">
