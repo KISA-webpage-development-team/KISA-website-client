@@ -22,7 +22,6 @@ type PostButtonBarProps = {
   type: BoardType;
   postid: number;
   title: string;
-  likes?: number;
 };
 
 export default function PostButtonBar({
@@ -31,7 +30,6 @@ export default function PostButtonBar({
   type,
   postid,
   title,
-  likes = 0,
 }: PostButtonBarProps) {
   // TODO: add "didLike" to GoBlueButton
   const route = useRouter();
@@ -42,7 +40,7 @@ export default function PostButtonBar({
   const token = session?.token;
 
   // session user가 현재 postid의 post를 좋아했는가?
-  const [didLike, setDidLike] = useState<boolean>(false);
+  const [didLike, setDidLike] = useState<boolean | null>(null);
   // stale state for like button to prevent multiple clicks and re-renders
   const [likeBtnStale, setLikeBtnStale] = useState<boolean>(false);
 
@@ -80,7 +78,12 @@ export default function PostButtonBar({
     // need to change this to just "go back"
     // This is very interesting, when user navigates to post from non-list page, just "going back" is not enough
     // for now, it is just going back to the board page without remembering pageNum and pageSize
-    route.push(`/boards/${type}`);
+
+    if (isEveryKisaBoard(type)) {
+      window.location.href = `/everykisa/${type}`;
+    } else {
+      window.location.href = `/boards/${type}`;
+    }
   };
 
   const onClickPostUpdate = () => {
@@ -108,13 +111,12 @@ export default function PostButtonBar({
 
       {/* Go Blue Button */}
       {/* NOTE: has separate logic, we made custom button component */}
-      {!isAuthor && isEveryKisa && (
+      {didLike !== null && !isAuthor && isEveryKisa && (
         <GoBlueButton
           postid={postid}
           didLike={didLike}
           email={loggedInEmail}
           token={token}
-          likes={likes}
           likeBtnStale={likeBtnStale}
           setLikeBtnStale={setLikeBtnStale}
         />

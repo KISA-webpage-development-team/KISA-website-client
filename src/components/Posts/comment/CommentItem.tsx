@@ -61,7 +61,7 @@ export default function CommentItem({
   // states for delete comment
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   // states for like
-  const [didLike, setDidLike] = useState<boolean>(false);
+  const [didLike, setDidLike] = useState<boolean | null>(null);
   // stale state for like button to prevent multiple clicks and re-renders
   const [likeBtnStale, setLikeBtnStale] = useState<boolean>(false);
 
@@ -189,7 +189,7 @@ export default function CommentItem({
                   />
                 </>
               )}
-              {!isAuthor && isEveryKisa && (
+              {didLike !== null && !isAuthor && isEveryKisa && (
                 <CommentGoBlueButton
                   didLike={didLike}
                   commentid={commentid}

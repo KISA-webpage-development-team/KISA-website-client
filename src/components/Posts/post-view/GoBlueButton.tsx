@@ -1,16 +1,16 @@
 // GoBlueButton for post
 
 import { createLike, deleteLike } from "@/apis/likes/mutations";
+import { getPostLikesCount } from "@/apis/likes/queries";
 import LikeIcon from "@/final_refactor_src/components/icon/LikeIcon";
 import { DeleteLikeParams, NewLikeBody } from "@/types/like";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 type GoBlueButtonProps = {
   didLike: boolean;
   postid: number;
   email: string;
   token?: string;
-  likes?: number;
   likeBtnStale: boolean;
   setLikeBtnStale: (stale: boolean) => void;
   className?: string;
@@ -21,17 +21,21 @@ export default function GoBlueButton({
   postid,
   email,
   token = "",
-  likes,
   likeBtnStale,
   setLikeBtnStale,
-
   className = "",
 }: GoBlueButtonProps) {
+  const [likes, setLikes] = useState<number | null>(null);
+
   const handlePostLike = async () => {
     if (!token) {
       window.alert("로그인이 필요한 기능입니다.");
       return;
     }
+
+    if (likeBtnStale === true) return;
+
+    setLikeBtnStale(true);
 
     const likeBody = {
       email: email,
@@ -46,13 +50,30 @@ export default function GoBlueButton({
         : await createLike(postid, likeBody as NewLikeBody, token);
 
       if (res) {
-        setLikeBtnStale(!likeBtnStale);
-        console.log("Success!");
+        setLikeBtnStale(false);
+        // console.log("Success!");
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const fetchPostLikesCount = async () => {
+      try {
+        const res = await getPostLikesCount(postid);
+        if (!res) {
+          console.log("Failed to fetch post likes count");
+        } else {
+          setLikes(res.likesCount);
+        }
+      } catch (error) {
+        console.error("Error fetching post likes count: ", error);
+      }
+    };
+
+    fetchPostLikesCount();
+  }, [postid, likeBtnStale]);
 
   return (
     <div className="flex items-center gap-2 h-8 md:h-10">
@@ -76,7 +97,7 @@ export default function GoBlueButton({
         </span>
       </button>
 
-      {(likes > 0 || (likes === 0 && likeBtnStale)) && (
+      {likes > 0 && (
         <span
           className="[#00274c]
     inline-flex items-center justify-center self-center
@@ -85,7 +106,7 @@ export default function GoBlueButton({
   text-[#00274c] text-sm md:text-lg
   rounded-md font-bold"
         >
-          {likeBtnStale ? likes + 1 : likes}
+          {likes}
         </span>
       )}
     </div>

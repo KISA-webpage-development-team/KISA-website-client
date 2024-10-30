@@ -1,9 +1,10 @@
 // GoBlueButton component for comments
 
 import { createLike, deleteLike } from "@/apis/likes/mutations";
+import { getCommentLikesCount } from "@/apis/likes/queries";
 import LikeIcon from "@/final_refactor_src/components/icon/LikeIcon";
 import { DeleteLikeParams, NewLikeBody } from "@/types/like";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 type GoBlueButtonProps = {
   didLike: boolean;
@@ -21,16 +22,38 @@ export default function CommentGoBlueButton({
   commentid,
   email,
   token = "",
-  likes,
   likeBtnStale,
   setLikeBtnStale,
   className = "",
 }: GoBlueButtonProps) {
+  const [likes, setLikes] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCommentLikesCount = async () => {
+      try {
+        const res = await getCommentLikesCount(commentid);
+        if (!res) {
+          console.log("Failed to fetch Comment likes count");
+        } else {
+          setLikes(res.likesCount);
+        }
+      } catch (error) {
+        console.error("Error fetching Comment likes count: ", error);
+      }
+    };
+
+    fetchCommentLikesCount();
+  }, [commentid, likeBtnStale]);
+
   const handleCommentLike = async () => {
     if (!token) {
       window.alert("로그인이 필요한 기능입니다.");
       return;
     }
+
+    if (likeBtnStale === true) return;
+
+    setLikeBtnStale(true);
 
     const likeBody = {
       email: email,
@@ -46,7 +69,7 @@ export default function CommentGoBlueButton({
 
       if (res) {
         // console.log("Success!");
-        setLikeBtnStale(!likeBtnStale);
+        setLikeBtnStale(false);
       }
     } catch (error) {
       console.error(error);
@@ -63,9 +86,9 @@ export default function CommentGoBlueButton({
       <button onClick={handleCommentLike}>
         <LikeIcon size="small" fill={didLike} />
       </button>
-      {(likes > 0 || (likes === 0 && likeBtnStale)) && (
+      {likes > 0 && (
         <span className="text-xs md:text-sm text-michigan-light-blue">
-          {likeBtnStale ? likes + 1 : likes}
+          {likes}
         </span>
       )}
     </div>
