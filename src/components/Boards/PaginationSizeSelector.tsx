@@ -43,32 +43,38 @@ export default function PaginationSizeSelector({
     <div className="relative flex justify-center w-full">
       <div
         className="absolute left-0 flex items-center w-20 gap-1
-    ml-2 md:ml-0"
+    ml-0 -translate-x-1 md:translate-x-0"
       >
         {pageSizeOptions
           .filter((pageSizeOption) => pageNum * pageSizeOption <= totalPostNum)
           .map((pageSizeOption) => (
             <button
               key={pageSizeOption}
-              className={`w-8 h-8 border border-gray-300 rounded-lg px-2 flex items-center justify-center ${
-                pageSizeOption === pageSize
-                  ? "bg-michigan-blue text-michigan-maize"
-                  : ""
-              }`}
+              className={`w-7 md:w-8 h-7 md:h-8
+                text-sm md:text-base
+                 border border-gray-300 rounded-lg flex items-center justify-center ${
+                   pageSizeOption === pageSize
+                     ? "bg-michigan-blue text-michigan-maize"
+                     : ""
+                 }`}
               onClick={() => handlePageSizeChange(pageSizeOption)}
             >
               {pageSizeOption}
             </button>
           ))}
       </div>
-      <PaginationBar
-        variant="light"
-        showControls
-        total={totalPageNum}
-        page={pageNum}
-        onChange={handlePageChange}
-        color="primary"
-      />
+
+      <>
+        <PaginationBar
+          variant="light"
+          showControls
+          total={totalPageNum}
+          page={pageNum}
+          size="md"
+          onChange={handlePageChange}
+          color="primary"
+        />
+      </>
     </div>
   );
 }
