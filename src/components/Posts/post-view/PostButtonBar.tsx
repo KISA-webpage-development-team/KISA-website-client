@@ -55,10 +55,9 @@ export default function PostButtonBar({
           body as LikeBody,
           session?.token
         );
-        if (res === null) {
+        if (!res) {
           console.log("Failed to fetch like status");
         } else {
-          console.log("res", res);
           setDidLike(res.liked);
         }
       } catch (error) {

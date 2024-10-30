@@ -104,7 +104,7 @@ export default function CommentItem({
           body as LikeBody,
           session?.token
         );
-        if (res === null) {
+        if (!res) {
           console.log("Failed to fetch like status");
         } else {
           setDidLike(res.liked);

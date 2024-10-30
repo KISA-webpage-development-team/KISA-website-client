@@ -23,9 +23,9 @@ export default function PostDeleteClient({ session, boardType, postid }) {
       // Updated status code to represent successful deletion
       // need to fix: should go remember its board name
       if (isEveryKisaBoard(boardType)) {
-        router.push(`/everykisa/${boardType}`);
+        router.replace(`/everykisa/${boardType}`);
       } else {
-        router.push(`/boards/${boardType}`);
+        router.replace(`/boards/${boardType}`);
       }
     } else {
       window.alert("게시글 삭제에 실패했습니다.");
