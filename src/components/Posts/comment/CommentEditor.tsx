@@ -202,7 +202,7 @@ export default function CommentEditor({
             isSubmitting
           }
           onClick={mode === "update" ? handleSubmitUpdate : handleSubmitComment}
-          text={isSubmitting ? "등록 중..." : "댓글 등록"}
+          text={isSubmitting ? "..." : "댓글 등록"}
           className="w-fit md:w-full h-fit md:h-fit"
         />
       </div>

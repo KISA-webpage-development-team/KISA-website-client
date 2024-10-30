@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div className="grow">{children}</div>
 
         {/* Footer */}
-        <footer className="bottom-0 z-0">
+        <footer className="bottom-0 z-0 overflow-y-clip">
           <Footer />
         </footer>
         {/* <Analytics />
