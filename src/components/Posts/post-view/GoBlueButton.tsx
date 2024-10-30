@@ -47,7 +47,7 @@ export default function GoBlueButton({
   const handlePostLike = async () => {
     if (!token) {
       window.alert("로그인이 필요한 기능입니다.");
-      window.location.href = "/signin";
+      window.location.href = "/signin" + "?callbackUrl=" + window.location.href;
       return;
     }
 
