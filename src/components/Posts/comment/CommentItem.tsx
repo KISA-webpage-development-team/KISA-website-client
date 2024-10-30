@@ -173,6 +173,17 @@ export default function CommentItem({
 
             {/* 2. Buttons */}
             <div className="flex gap-3">
+              {didLike !== null && isEveryKisa && (
+                <CommentGoBlueButton
+                  didLike={didLike}
+                  commentid={commentid}
+                  email={session?.user?.email}
+                  likes={likesCount}
+                  token={session?.token}
+                  likeBtnStale={likeBtnStale}
+                  setLikeBtnStale={setLikeBtnStale}
+                />
+              )}
               {isAuthor && (
                 <>
                   <ImageButton
@@ -188,17 +199,6 @@ export default function CommentItem({
                     onClick={handleCommentDelete}
                   />
                 </>
-              )}
-              {didLike !== null && !isAuthor && isEveryKisa && (
-                <CommentGoBlueButton
-                  didLike={didLike}
-                  commentid={commentid}
-                  email={session?.user?.email}
-                  likes={likesCount}
-                  token={session?.token}
-                  likeBtnStale={likeBtnStale}
-                  setLikeBtnStale={setLikeBtnStale}
-                />
               )}
 
               <ImageButton

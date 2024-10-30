@@ -3,11 +3,13 @@
 // 3. Delete Button [Only when the user is the author]
 
 import React, { useEffect, useState } from "react";
-import ListIcon from "../../ui/ListIcon";
 import ImageButton from "../../shared/ImageButton";
 import { useRouter } from "next/navigation";
-import PencilIcon from "../../ui/PencilIcon";
-import TrashcanIcon from "../../ui/TrashcanIcon";
+import {
+  PencilIcon,
+  TrashcanIcon,
+  ListIcon,
+} from "@/final_refactor_src/components/icon";
 import { BoardType } from "@/types/board";
 import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
 import GoBlueButton from "./GoBlueButton";
@@ -108,38 +110,39 @@ export default function PostButtonBar({
         text="목록"
         onClick={OnClickBackToList}
       />
+      <div className="flex items-center gap-2">
+        {/* Go Blue Button */}
+        {/* NOTE: has separate logic, we made custom button component */}
+        {didLike !== null && isEveryKisa && (
+          <GoBlueButton
+            postid={postid}
+            didLike={didLike}
+            email={loggedInEmail}
+            token={token}
+            likeBtnStale={likeBtnStale}
+            setLikeBtnStale={setLikeBtnStale}
+          />
+        )}
 
-      {/* Go Blue Button */}
-      {/* NOTE: has separate logic, we made custom button component */}
-      {didLike !== null && !isAuthor && isEveryKisa && (
-        <GoBlueButton
-          postid={postid}
-          didLike={didLike}
-          email={loggedInEmail}
-          token={token}
-          likeBtnStale={likeBtnStale}
-          setLikeBtnStale={setLikeBtnStale}
-        />
-      )}
+        {/* Edit + Delete Button */}
+        {isAuthor && (
+          <div className="flex items-center gap-2">
+            <CustomImageButton
+              type="secondary"
+              icon={<PencilIcon color="gray" />}
+              text="수정"
+              onClick={onClickPostUpdate}
+            />
+            <CustomImageButton
+              type="secondary"
+              icon={<TrashcanIcon color="gray" />}
+              text="삭제"
+              onClick={onClickPostDelete}
+            />
+          </div>
+        )}
+      </div>
       {/* </div> */}
-
-      {/* Edit + Delete Button */}
-      {isAuthor && (
-        <div className="flex items-center gap-2">
-          <CustomImageButton
-            type="secondary"
-            icon={<PencilIcon color="gray" />}
-            text="수정"
-            onClick={onClickPostUpdate}
-          />
-          <CustomImageButton
-            type="secondary"
-            icon={<TrashcanIcon color="gray" />}
-            text="삭제"
-            onClick={onClickPostDelete}
-          />
-        </div>
-      )}
     </div>
   );
 }

@@ -83,7 +83,10 @@ export default function CommentGoBlueButton({
     rounded-md
     `}
     >
-      <button onClick={handleCommentLike}>
+      <button
+        onClick={handleCommentLike}
+        className={`disabled:cursor-not-allowed`}
+      >
         <LikeIcon size="small" fill={didLike} />
       </button>
       {likes > 0 && (

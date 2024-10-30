@@ -30,8 +30,8 @@ export default function CustomImageButton({
       {text !== "" && (
         <p
           className={`
-          ${background === "none" ? "hidden sm:block" : "block"}
-        text-xs md:text-sm 
+          ${"hidden sm:block"}
+        text-sm md:text-base text-gray-600
         hover:underline`}
         >
           {text}

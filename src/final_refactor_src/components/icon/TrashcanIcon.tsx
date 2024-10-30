@@ -12,7 +12,7 @@ export default function TrashcanIcon({
 }: TrashcanIconProps) {
   return (
     <MdDelete
-      className={`${noResize ? "text-base" : "w-3 h-3 md:w-5 md:h-5"}
+      className={`${noResize ? "text-base" : "icon"}
     ${color === "gray" ? "text-gray-400" : "text-michigan-maize"}`}
     />
   );
