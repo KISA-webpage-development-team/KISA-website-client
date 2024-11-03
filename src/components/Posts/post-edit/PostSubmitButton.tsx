@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createPost, updatePost } from "@/apis/posts/mutations";
 import { useRouter } from "next/navigation";
 import { NewPostBody, UpdatePostBody } from "@/types/post";
+import { isEveryKisaBoard } from "@/utils/formats/boardType";
 
 // type PostSubmitButtonProps = {
 //   disabled: boolean;
@@ -30,7 +31,12 @@ export default function PostSubmitButton({
 
       // router.push(`/boards/${(formData as PostFormData).type}`);
       // router.back();
-      window.location.href = `/boards/${formData.type}`;
+
+      if (isEveryKisaBoard(formData.type)) {
+        window.location.href = `/everykisa/${formData.type}`;
+      } else {
+        window.location.href = `/boards/${formData.type}`;
+      }
     } catch (error) {
       window.alert("게시글 작성에 실패했습니다.");
       return;
@@ -62,7 +68,7 @@ export default function PostSubmitButton({
   return (
     <button
       disabled={disabled}
-      className="w-1/4 h-10 blue_button"
+      className="w-1/4 h-10 blue_button text-sm md:text-base"
       onClick={mode === "create" ? handleCreatePost : handleUpdatePost}
     >
       {loading ? "로딩 중..." : mode === "create" ? "등록" : "수정"}

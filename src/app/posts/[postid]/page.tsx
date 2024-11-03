@@ -19,6 +19,8 @@ import {
   isAnnouncementBoard,
   isEveryKisaBoard,
 } from "@/utils/formats/boardType";
+import { useEffect, useState } from "react";
+import { getPost } from "@/apis/posts/queries";
 
 type PageProps = {
   params: {
@@ -28,8 +30,22 @@ type PageProps = {
 
 export default function PostViewPage({ params }: PageProps) {
   const { postid } = params;
+  // const [post, setPost] = useState();
 
   const { post, isLoading, error } = usePost(Number(postid));
+
+  // useEffect(() => {
+  //   const fetchPost = async () => {
+
+  //     try {
+  //     const response = await getPost(Number(postid));
+
+  //     }
+  //       catch(error) {
+  //       console.error("Error fetching post: ", error);
+  //       }
+  //   }
+  // }, [])
 
   // [TODO]: when there's no post "error.tsx" should be rendered
   if (isLoading) {

@@ -7,17 +7,17 @@
 // url
 const homeCarouselData = [
   {
-    id: "f24-study-break",
-    title: "맛있는 간식 드시고 힘내세요🤍",
+    id: "f24-halloween-pocha",
+    title: "나야, 할로윈",
     desc: (
       <p>
-        타지에서 한국 음식이 그립지 않으신가요? 키사에서 시험과 과제에 지친
-        여러분을 위해 간식 나눔을 진행하려 합니다! Mason Hall로 오셔서 맛있는
-        간식 드시고 가세요~ 여러분을 위해 키사가 맛있게 준비해 놓고
-        기다리겠습니다! 😊
+        할로윈 주말에 다들 뭐 하시나유?? 저희 키사는 할로윈 포차를 진행할
+        예정이거덩요~ 맛있는 술뿐만 아니라 오뎅탕, 통닭, 족발 등등 다양한 안주도
+        먹으며 즐거운 할로윈을 함께 보내면 어떨까요? 친구들과 다양한 코스튬도
+        입고 와서 래플 이벤트에도 참여해 보세요~👻
       </p>
     ),
-    url: "https://www.instagram.com/p/DBMQhjWufn-/",
+    url: "https://www.instagram.com/p/DBeTBcguo0M/?img_index=1",
   },
   {
     id: "fa24_small_group_recruitment",

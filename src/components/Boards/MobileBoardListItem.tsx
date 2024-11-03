@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { SimplePost } from "@/types/post";
 import { formatDateOrTime } from "@/utils/formats/date";
+import LikeIcon from "@/final_refactor_src/components/icon/LikeIcon";
+import ViewIcon from "@/final_refactor_src/components/icon/ViewIcon";
 
 type Props = {
   isEveryKisa?: boolean;
@@ -15,8 +17,15 @@ export default function MobileBoardListItem({
   post,
   isAnnouncement = false,
 }: Props) {
-  const { title, fullname, created, readCount, commentsCount, anonymous } =
-    post;
+  const {
+    title,
+    fullname,
+    created,
+    readCount,
+    commentsCount,
+    anonymous,
+    likesCount,
+  } = post;
 
   return (
     <li
@@ -36,7 +45,7 @@ export default function MobileBoardListItem({
                 <span>[공지]</span>
               </span>
             )}
-            <span className="">{title}</span>
+            <span className="text-overflow">{title}</span>
           </span>
         </Link>
         {commentsCount > 0 && (
@@ -45,18 +54,24 @@ export default function MobileBoardListItem({
       </div>
       <div
         className=" flex items-center gap-2 
-      text-gray-500 text-xs"
+      text-slate-500/90 text-xs"
       >
         <span>{formatDateOrTime(created)}</span>
         {
           // EveryKisa에는 anonymous가 true인 글쓴이를 "익명"으로 표시한다.
-          isEveryKisa ? (
-            <span>{anonymous ? "익명" : fullname}</span>
-          ) : (
-            <span>{fullname}</span>
-          )
+          !isEveryKisa && <span>{fullname}</span>
         }
-        <span>{`조회 ${readCount}`}</span>
+        <div className="flex items-center gap-1">
+          <ViewIcon size="small" className="!text-sm" />
+          <span>{readCount}</span>
+        </div>
+
+        {isEveryKisa && (
+          <div className="flex items-center gap-1">
+            <LikeIcon size="small" isGray={true} className="!text-sm" />
+            <span>{likesCount ? likesCount : 0}</span>
+          </div>
+        )}
       </div>
 
       {/* <div>{commentsCount}</div> */}

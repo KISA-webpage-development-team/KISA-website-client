@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  getBoardAnnouncements,
-  getBoardAnnouncementsMock,
-} from "@/apis/boards/queries";
+import { getBoardAnnouncements } from "@/apis/boards/queries";
 
 // sub-ui components
 import BoardBar from "../../../components/Boards/BoardBar";

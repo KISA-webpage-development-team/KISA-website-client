@@ -11,6 +11,7 @@ import {
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
 import { motion } from "framer-motion";
+import { GOOGLE_CALENDAR_API_KEY, GOOGLE_CALENDAR_ID } from "@/constants/env";
 
 // event summary display
 function renderEventContent(eventInfo) {
@@ -44,9 +45,18 @@ export default function SchoolCalendar() {
     if (eventsInfo.length === 0) return;
     if (didEventSetup) return;
 
-    // check whether last event is upcoming in 14 days
-    const lastEvent = new Date(eventsInfo[eventsInfo.length - 1].start);
     const today = new Date();
+
+    // check whether last event is upcoming in 14 days
+    const filteredEvents = eventsInfo.filter(
+      (event) => new Date(event.start) > today
+    );
+
+    const sortedEvents = filteredEvents.sort(
+      (a, b) => new Date(a.start) - new Date(b.start)
+    );
+    const lastEvent = new Date(sortedEvents[0]?.start);
+
     const diffTime = lastEvent - today;
 
     if (diffTime > 14 * 24 * 60 * 60 * 1000 || diffTime < 0) {
@@ -56,8 +66,7 @@ export default function SchoolCalendar() {
     }
 
     setDidEventSetup(true);
-
-    setSelectedEvent(eventsInfo[eventsInfo.length - 1]);
+    setSelectedEvent(sortedEvents[0]);
     return;
   };
 
@@ -72,11 +81,9 @@ export default function SchoolCalendar() {
           <FullCalendar
             plugins={[dayGridPlugin, googleCalendarPlugin]}
             initialView="dayGridMonth"
-            googleCalendarApiKey={
-              process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY
-            }
+            googleCalendarApiKey={GOOGLE_CALENDAR_API_KEY}
             events={{
-              googleCalendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,
+              googleCalendarId: GOOGLE_CALENDAR_ID,
             }}
             eventContent={renderEventContent}
             eventDisplay={"block"}
@@ -90,9 +97,9 @@ export default function SchoolCalendar() {
           <FullCalendar
             plugins={[dayGridPlugin, googleCalendarPlugin]}
             initialView="dayGridWeek"
-            googleCalendarApiKey={process.env.GOOGLE_CALENDAR_API_KEY}
+            googleCalendarApiKey={GOOGLE_CALENDAR_API_KEY}
             events={{
-              googleCalendarId: process.env.GOOGLE_CALENDAR_ID,
+              googleCalendarId: GOOGLE_CALENDAR_ID,
             }}
             contentHeight={100}
             eventContent={renderEventContent}

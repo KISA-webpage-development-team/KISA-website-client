@@ -1,11 +1,20 @@
+import { ReactNode } from "react";
+
 import Header from "@/components/Header/Header";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/next-auth/authOptions";
+import { getIsAdmin } from "@/apis/auth/queries";
+import { UnderConstruction } from "@/final_refactor_src/components/feedback";
 
-export default async function Template({ children }) {
+export default async function Template({ children }: { children: ReactNode }) {
+  // flag to show under construction page
+  const underConstruction = false;
+
   // pass over this session to Header to remove unnecessary re-renders
   const session = await getServerSession(authOptions);
+
+  const isAdmin = await getIsAdmin(session?.user?.email, session?.token);
 
   // mainContentsWidth: this will control all of the horizontal padding and margin of the page contents
   const mainContentsWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
@@ -25,7 +34,16 @@ export default async function Template({ children }) {
         mx-auto ${mainContentsWidth}
         pt-3 md:pt-6`}
       >
-        {children}
+        {underConstruction ? (
+          isAdmin ? (
+            children
+          ) : (
+            <UnderConstruction />
+          )
+        ) : (
+          children
+        )}
+        {/* {children} */}
       </main>
     </div>
   );

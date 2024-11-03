@@ -13,6 +13,8 @@ interface SimplePost {
   commentsCount: number;
   // for anonymous posts
   anonymous: boolean;
+  // like
+  likesCount: number;
 }
 
 interface Post extends SimplePost {
@@ -29,6 +31,7 @@ interface NewPostBody {
   isAnnouncement: boolean;
   tag: string;
   anonymous: boolean;
+  readCount: number;
 }
 
 interface UpdatePostBody {

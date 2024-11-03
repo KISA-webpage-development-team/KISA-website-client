@@ -20,6 +20,8 @@ import { getCookie, setCookie } from "@/lib/react-cookie/cookie";
 import { incrementReadCount } from "@/apis/posts/mutations";
 import { Post } from "@/types/post";
 import { UserSession } from "@/lib/next-auth/types";
+import { getLikeByUser } from "@/apis/likes/queries";
+import { LikeBody } from "@/types/like";
 
 type PostViewProps = {
   post: Post;
@@ -42,6 +44,7 @@ export default function PostView({ post }: PostViewProps) {
     created,
     readCount,
     commentsCount,
+    likesCount,
     anonymous,
   } = post;
 
@@ -106,6 +109,7 @@ export default function PostView({ post }: PostViewProps) {
           <PostTitleBar isAnnouncement={isAnnouncement} title={title} />
           {/* 2. Post Owner Bar */}
           <PostOwnerBar
+            isPostAuthor={session?.user.email === email}
             email={email}
             fullname={fullname}
             created={created}
@@ -122,7 +126,8 @@ export default function PostView({ post }: PostViewProps) {
 
         {/* 4. Post Buttons: Edit + Delete + List Buttons */}
         <PostButtonBar
-          isAuthor={session?.user.email === email}
+          email={email}
+          session={session}
           type={type}
           postid={postid}
           title={title}

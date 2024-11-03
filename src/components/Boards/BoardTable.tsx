@@ -23,6 +23,8 @@ export default function BoardTable({
   posts,
   announcements,
 }: BoardTableProps) {
+  // 추천은 isEveryKisa일 때만 표시한다
+
   return (
     <table
       className="border border-gray-300 w-full
@@ -36,7 +38,8 @@ export default function BoardTable({
         {/* EveryKisa에는 글쓴이를 표시하지 않는다 */}
         {!isEveryKisa && <col width="80px" />}
         <col width="80px" />
-        <col width="55px" />
+        {isEveryKisa && <col width="50px" />}
+        <col width="50px" />
       </colgroup>
 
       <thead className="w-full">
@@ -56,6 +59,11 @@ export default function BoardTable({
           <th className="py-2 font-semibold text-gray-800" scope="col">
             작성일
           </th>
+          {isEveryKisa && (
+            <th className="pr-2 py-2 font-semibold text-gray-800" scope="col">
+              추천
+            </th>
+          )}
           <th className="pr-2 py-2 font-semibold text-gray-800" scope="col">
             조회
           </th>

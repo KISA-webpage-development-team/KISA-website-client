@@ -74,6 +74,9 @@ export default function CommentEditor({
       setText("");
 
       setIsSubmitting(false);
+      setAnonymousValue("none");
+
+      window.alert("댓글이 등록되었습니다.");
     } else {
       window.alert("댓글 등록에 실패했습니다.");
       // error handling
@@ -98,6 +101,8 @@ export default function CommentEditor({
       setCommentsStale(true);
       setOpenCommentEditor(false);
       setIsSubmitting(false);
+
+      window.alert("댓글이 수정되었습니다.");
     } else {
       // error handling
       console.log("comment update failed");
@@ -116,13 +121,22 @@ export default function CommentEditor({
       <textarea
         value={text}
         onChange={handleTextChange}
-        className="block w-full
+        className="w-full h-20 
+             sm:h-32
              border border-gray-300 rounded-md p-3
               text-sm md:text-base
               focus:outline-michigan-blue resize-none"
         placeholder={placeholder}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && e.target === document.activeElement) {
+          if (
+            e.key === "Enter" &&
+            e.target === document.activeElement &&
+            !(
+              text.length === 0 ||
+              (isEveryKisa && anonymousValue === "none") ||
+              isSubmitting
+            )
+          ) {
             e.preventDefault();
             if (mode === "update") {
               handleSubmitUpdate();
@@ -135,9 +149,9 @@ export default function CommentEditor({
 
       <div
         className="w-full sm:w-1/6 sm:h-full
-
-        flex sm:flex-col sm:justify-between
-      flex-row  pl-2 "
+        pt-2
+        flex sm:flex-col justify-between
+      flex-row"
       >
         {/* If isEveryKisa, show anonymous checkbox options */}
         {isEveryKisa && (
@@ -196,8 +210,8 @@ export default function CommentEditor({
             isSubmitting
           }
           onClick={mode === "update" ? handleSubmitUpdate : handleSubmitComment}
-          text={isSubmitting ? "등록 중..." : "댓글 등록"}
-          className="w-full h-full sm:h-fit"
+          text={isSubmitting ? "..." : "댓글 등록"}
+          className="w-fit md:w-full h-fit md:h-fit"
         />
       </div>
     </div>

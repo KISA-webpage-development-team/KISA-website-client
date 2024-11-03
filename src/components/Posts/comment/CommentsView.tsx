@@ -7,9 +7,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import {
-  getCommentsByPostid
-} from "@/apis/comments/queries";
+import { getCommentsByPostid } from "@/apis/comments/queries";
 
 // sub-ui components
 import CommentEditor from "./CommentEditor";
@@ -76,6 +74,7 @@ export default function CommentsView({
 
       {/* 3. comment list */}
       <CommentsList
+        isEveryKisa={isEveryKisa}
         comments={comments}
         session={session}
         setCommentsStale={setCommentsStale}

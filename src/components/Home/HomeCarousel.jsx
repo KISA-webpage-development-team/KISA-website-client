@@ -77,6 +77,7 @@ export default function HomeCarousel() {
               fill
               priority={index === active}
               alt={desc}
+              sizes="100vw" // temporary fix for browser bug
             />
           </motion.div>
         ))}

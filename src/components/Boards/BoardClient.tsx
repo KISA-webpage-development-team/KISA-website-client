@@ -3,11 +3,7 @@
 import React, { useEffect } from "react";
 import { heebo } from "../../utils/fonts/textFonts";
 
-import {
-  useBoardPostNum,
-  useBoardPosts,
-  useBoardPostsMock,
-} from "@/apis/boards/swrHooks";
+import { useBoardPostNum, useBoardPosts } from "@/apis/boards/swrHooks";
 
 // types
 import { BoardType } from "@/types/board";
