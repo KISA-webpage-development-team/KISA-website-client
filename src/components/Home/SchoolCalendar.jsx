@@ -55,7 +55,7 @@ export default function SchoolCalendar() {
     const sortedEvents = filteredEvents.sort(
       (a, b) => new Date(a.start) - new Date(b.start)
     );
-    const lastEvent = new Date(sortedEvents[0].start);
+    const lastEvent = new Date(sortedEvents[0]?.start);
 
     const diffTime = lastEvent - today;
 
