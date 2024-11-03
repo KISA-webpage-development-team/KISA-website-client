@@ -153,7 +153,7 @@ export default function CommentEditor({
         className="w-full sm:w-1/6 sm:h-full
         pt-2
         flex sm:flex-col justify-between
-      flex-row pl-2"
+      flex-row md:pl-2"
       >
         {/* If isEveryKisa, show anonymous checkbox options */}
         {isEveryKisa && (
@@ -197,18 +197,27 @@ export default function CommentEditor({
           </>
         )}
         {!isEveryKisa && (
-          <div className="flex h-full items-end pb-3">
+          <div
+            className="flex h-full
+          items-center md:items-end md:pb-3"
+          >
             <div className="flex items-center">
               <input
                 type="checkbox"
-                className="w-4 h-4 ml-[3px] "
+                className="w-3 md:w-4 h-3 md:h-4
+                 md:ml-[3px] "
                 id="secret"
                 name="secret"
                 checked={checked}
                 onClick={handleSecretChecked}
                 disabled={mode === "update"}
               />
-              <label htmlFor="secret" className="ml-[9px]">
+              <label
+                htmlFor="secret"
+                className="
+              text-sm md:text-base
+              ml-[9px]"
+              >
                 비밀댓글
               </label>
             </div>
