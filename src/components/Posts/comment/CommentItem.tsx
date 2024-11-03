@@ -17,6 +17,7 @@ import GoBlueButton from "../post-view/GoBlueButton";
 import CommentGoBlueButton from "./CommentGoBlueButton";
 import { LikeBody } from "@/types/like";
 import { getLikeByUser } from "@/apis/likes/queries";
+import SecretIcon from "@/final_refactor_src/components/icon/SecretIcon";
 
 type CommentItemProps = {
   isEveryKisa?: boolean;
@@ -49,6 +50,7 @@ export default function CommentItem({
     isCommentOfComment,
     anonymous,
     likesCount,
+    secret,
   } = comment;
   // constants for comment item
   const isAuthor = session?.user?.email === email;
@@ -171,15 +173,30 @@ export default function CommentItem({
               className="flex items-center gap-1 md:gap-2
             text-sm md:text-base"
             >
-              {renderCommentAuthor()}
-              <p className="text-gray-500">{formatRelativeTime(created)}</p>
-              {secret && (session?.user?.email === postAuthorEmail || isAuthor) ? <SecretIcon/> : null}
+              {isAuthor ||
+              !secret ||
+              session?.user?.email === postAuthorEmail ? (
+                <>
+                  {renderCommentAuthor()}
+                  <p className="text-gray-500">{formatRelativeTime(created)}</p>
+                </>
+              ) : (
+                <>
+                  <SecretIcon />
 
+                  <p className="text-gray-500">{formatRelativeTime(created)}</p>
+                </>
+              )}
+
+              {secret &&
+              (session?.user?.email === postAuthorEmail || isAuthor) ? (
+                <SecretIcon />
+              ) : null}
             </div>
 
             {/* 2. Buttons */}
             <div className="flex gap-3">
-              {isEveryKisa && (
+              {isEveryKisa && !secret && (
                 <CommentGoBlueButton
                   didLike={didLike}
                   commentid={commentid}
@@ -206,13 +223,20 @@ export default function CommentItem({
                   />
                 </>
               )}
-
-              <ImageButton
-                background="none"
-                icon={<CommentIcon color="gray" noResize />}
-                text={`${openReplyEditor ? "닫기" : "답글"}`}
-                onClick={handleOpenReplyEditor}
-              />
+              {!(
+                secret &&
+                !(session?.user?.email === postAuthorEmail) &&
+                !isAuthor
+              ) && (
+                <>
+                  <ImageButton
+                    background="none"
+                    icon={<CommentIcon color="gray" noResize />}
+                    text={`${openReplyEditor ? "닫기" : "답글"}`}
+                    onClick={handleOpenReplyEditor}
+                  />
+                </>
+              )}
             </div>
           </div>
           {/* 3. Text */}
@@ -222,7 +246,14 @@ export default function CommentItem({
             } pt-1 pb-3 text-sm md:text-base
             text-wrap `}
           >
-            <span className="">{text}</span>
+            {/* 텍스트 자체가 보이는 경우: 유저가 댓글 작성자일때, 시크릿이 아닐때, 유저가 포스트 작성자일때*/}
+            {isAuthor || !secret || session?.user?.email === postAuthorEmail ? (
+              text
+            ) : (
+              <p className="italic">비밀 댓글입니다.</p>
+            )}
+            {/* 로그인한 사람이, 포스트 작성자 + 비밀댓글 = 자물쇠  */}
+            {/* 로그인한 사람이, 댓글 작성자 + 비밀댓글 = 자물쇠 */}
           </div>
         </div>
       </div>

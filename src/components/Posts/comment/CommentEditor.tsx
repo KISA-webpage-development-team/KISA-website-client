@@ -4,7 +4,7 @@ import { NewCommentBody } from "@/types/comment";
 import { CustomButton } from "@/final_refactor_src/components/button";
 import { Radio, RadioGroup } from "@nextui-org/react";
 import { cn } from "@/utils/styles/cn";
-import { UserSession } from "@/lib/next-auth/types"
+import { UserSession } from "@/lib/next-auth/types";
 
 type CommentEditorProps = {
   isEveryKisa?: boolean;
@@ -42,7 +42,9 @@ export default function CommentEditor({
   // state to prevent multiple comment submissions at the same time
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const [checked, setChecked] = useState<boolean>(mode === "update" ? secret : false);
+  const [checked, setChecked] = useState<boolean>(
+    mode === "update" ? secret : false
+  );
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setText(e.target.value);
@@ -62,7 +64,7 @@ export default function CommentEditor({
       isCommentOfComment: commentid === 0 ? false : true,
       parentCommentid: commentid,
       anonymous: isEveryKisa ? anonymousValue === "anonymous" : false,
-      secret: checked
+      secret: checked,
     };
     // send post api call to create comment with postid
     const res = await createComment(postid, data, session?.token);
@@ -96,7 +98,7 @@ export default function CommentEditor({
       text: text,
     };
 
-    const res = await updateComment(curCommentId, data,  session?.token);
+    const res = await updateComment(curCommentId, data, session?.token);
     if (res) {
       setCommentsStale(true);
       setOpenCommentEditor(false);
@@ -111,7 +113,7 @@ export default function CommentEditor({
 
   const handleSecretChecked = () => {
     setChecked(!checked);
-  }
+  };
 
   return (
     <div
@@ -151,7 +153,7 @@ export default function CommentEditor({
         className="w-full sm:w-1/6 sm:h-full
         pt-2
         flex sm:flex-col justify-between
-      flex-row"
+      flex-row pl-2"
       >
         {/* If isEveryKisa, show anonymous checkbox options */}
         {isEveryKisa && (
@@ -194,14 +196,25 @@ export default function CommentEditor({
             </RadioGroup>
           </>
         )}
-      
-        <div className="flex items-center">
-          <input type="checkbox" className="w-4 h-4" 
-            id="secret" name="secret" checked={checked} 
-              onClick={handleSecretChecked} disabled={mode === "update"}/>
-            <label htmlFor="secret" className="ml-3">비밀댓글</label>
-        </div>
-        
+        {!isEveryKisa && (
+          <div className="flex h-full items-end pb-3">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                className="w-4 h-4 ml-[3px] "
+                id="secret"
+                name="secret"
+                checked={checked}
+                onClick={handleSecretChecked}
+                disabled={mode === "update"}
+              />
+              <label htmlFor="secret" className="ml-[9px]">
+                비밀댓글
+              </label>
+            </div>
+          </div>
+        )}
+
         {/* If isEveryKisa, anonymousValue should be selected */}
         <CustomButton
           disabled={

@@ -53,16 +53,16 @@ export default function CalendarEventCard({ event }) {
           <span
             className={`${sejongHospitalBold.className} text-sm md:text-xl lg:text-2xl`}
           >
-            {event.title}
+            {event?.title}
           </span>
 
           <span className="text-xs md:text-sm lg:text-base">
             {startTime} - {endTime}
           </span>
 
-          <p className="">{event.extendedProps?.location}</p>
+          <p className="">{event?.extendedProps?.location}</p>
           {event?.extendedProps?.description && (
-            <p className="">{event.extendedProps?.description}</p>
+            <p className="">{event?.extendedProps?.description}</p>
           )}
         </div>
       )}
