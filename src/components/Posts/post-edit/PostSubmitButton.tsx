@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import {
-  EditorMode,
-  PostFormData,
-  PostSubmitButtonProps,
-  SimplePostFormData,
-} from "../../../model/props/posts";
-import { createPost, updatePost } from "../../../service/post";
+import { createPost, updatePost } from "@/apis/posts/mutations";
 import { useRouter } from "next/navigation";
+import { NewPostBody, UpdatePostBody } from "@/types/post";
+import { isEveryKisaBoard } from "@/utils/formats/boardType";
+
+// type PostSubmitButtonProps = {
+//   disabled: boolean;
+//   token: string | undefined;
+//   mode: EditorMode;
+//   postid: number;
+//   formData: NewPostBody | UpdatePostBody;
+// };
 
 export default function PostSubmitButton({
   disabled,
@@ -14,7 +18,7 @@ export default function PostSubmitButton({
   mode,
   postid,
   formData,
-}: PostSubmitButtonProps) {
+}) {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,12 +26,17 @@ export default function PostSubmitButton({
   const handleCreatePost = async () => {
     try {
       setLoading(true);
-      const res = await createPost(formData, token);
+      const res = await createPost(formData as NewPostBody, token);
       setLoading(false);
 
       // router.push(`/boards/${(formData as PostFormData).type}`);
       // router.back();
-      window.location.href = `/boards/${(formData as PostFormData).type}`;
+
+      if (isEveryKisaBoard(formData.type)) {
+        window.location.href = `/everykisa/${formData.type}`;
+      } else {
+        window.location.href = `/boards/${formData.type}`;
+      }
     } catch (error) {
       window.alert("게시글 작성에 실패했습니다.");
       return;
@@ -59,7 +68,7 @@ export default function PostSubmitButton({
   return (
     <button
       disabled={disabled}
-      className="w-1/4 h-10 blue_button"
+      className="w-1/4 h-10 blue_button text-sm md:text-base"
       onClick={mode === "create" ? handleCreatePost : handleUpdatePost}
     >
       {loading ? "로딩 중..." : mode === "create" ? "등록" : "수정"}

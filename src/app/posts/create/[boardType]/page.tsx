@@ -3,8 +3,8 @@ import BoardTitle from "../../../../components/Boards/BoardTitle";
 
 import dynamic from "next/dynamic";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../config/auth";
-import { BoardType } from "../../../../model/common/types";
+import authOptions from "@/lib/next-auth/authOptions";
+import { BoardType } from "@/types/board";
 
 // need to force EditorClient to be rendered on client-side
 // I don't know why NextJS doesn't automatically render it on client-side

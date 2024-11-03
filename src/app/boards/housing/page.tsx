@@ -1,25 +1,25 @@
 import React from "react";
 import BoardBar from "../../../components/Boards/BoardBar";
 import BoardClient from "../../../components/Boards/BoardClient";
-import { getBoardAnnouncements } from "../../../service/board";
+import { getBoardAnnouncements } from "@/apis/boards/queries";
+import { BoardType } from "@/types/board";
 
-export default async function HousingPage({
-  searchParams,
-}: {
+type HousingPageProps = {
   searchParams?: {
     size?: number;
     page?: number;
   };
-}) {
+};
+
+export default async function HousingPage({ searchParams }: HousingPageProps) {
   const { size, page } = searchParams;
 
-  const boardType = "housing";
+  const boardType = BoardType.Housing;
   // 공지사항은 Server Side이기 때문에 완전한 실시간 데이터가 아니다.
   // 공지사항 게시글의 특성상 실시간으로 완전한 싱크 (지속적인 api call)이 필요하지 않다.
-  const annoucements = await getBoardAnnouncements(boardType);
+  const announcements = await getBoardAnnouncements(boardType);
 
-  // test
-  if (!annoucements) {
+  if (!announcements) {
     return <></>;
   }
 
@@ -32,7 +32,7 @@ export default async function HousingPage({
       <article className="board_table_wrapper">
         <BoardClient
           boardType={boardType}
-          announcements={annoucements}
+          announcements={announcements}
           size={size ? Number(size) : 10}
           page={page ? Number(page) : 1}
         />

@@ -42,6 +42,10 @@ module.exports = {
               DEFAULT: "#00274C",
               foreground: "#FFCB05",
             },
+            secondary: {
+              DEFAULT: "#FFCB05",
+              foreground: "#00274C",
+            },
           },
         },
       },

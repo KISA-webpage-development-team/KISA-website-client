@@ -5,9 +5,9 @@ const members = {
   president: {
     members: [
       {
-        name: "Wookwan Kwon",
+        name: "Jaemin Jeon",
         major: "Computer Science",
-        year: "2024",
+        year: "2025",
       },
     ],
   },
@@ -17,8 +17,8 @@ const members = {
       role: "Vice President",
       members: [
         {
-          name: "Yuri Hong",
-          major: "Electrical Engineering",
+          name: "Jin Wook Shin",
+          major: "Computer Engineering",
           year: "2026",
         },
       ],
@@ -34,27 +34,47 @@ const members = {
       ],
     },
     {
-      role: "Event Planning",
+      role: "Operational Support",
       members: [
-        {
-          name: "Jaemin Jeon",
-          major: "Computer Science",
-          year: "2025",
-        },
-        {
-          name: "Yoonsung Ji",
-          major: "Computer Science",
-          year: "2024",
-        },
         {
           name: "Jisang Um",
           major: "IOE",
           year: "2026",
         },
+      ],
+    },
+    {
+      role: "Event Planning",
+      members: [
         {
-          name: "Jin Wook Shin",
-          major: "Computer Engineering",
+          name: "Yoonsung Ji",
+          major: "Computer Science",
+          year: "2025",
+        },
+        {
+          name: "Yoonseo Shin",
+          major: "Computer Science",
           year: "2026",
+        },
+        {
+          name: "Sophia Chang",
+          major: "Robotics",
+          year: "2027",
+        },
+        {
+          name: "Jessica Moon",
+          major: "Undecided",
+          year: "2027",
+        },
+        {
+          name: "Haeun Lee",
+          major: "BHS",
+          year: "2028",
+        },
+        {
+          name: "Junhee Han",
+          major: "Undecided",
+          year: "2028",
         },
       ],
     },
@@ -75,12 +95,28 @@ const members = {
       ],
     },
     {
-      role: "Operational Support",
+      role: "Outreach",
       members: [
         {
-          name: "Kyungmin Inn",
-          major: "Computer Engineering",
-          year: "2029",
+          isLead: true,
+          name: "Seungmin Shin",
+          major: "Statistics",
+          year: "2025",
+        },
+        {
+          name: "Wookwan Kwon",
+          major: "Computer Science",
+          year: "2024",
+        },
+        {
+          name: "Junho Lee",
+          major: "Education",
+          year: "2028",
+        },
+        {
+          name: "Dongeun Kim",
+          major: "Data Science",
+          year: "2028",
         },
       ],
     },
@@ -91,40 +127,9 @@ const members = {
       role: "Vice President",
       members: [
         {
-          name: "Siwon Lee",
-          major: "Communication and Media",
-          year: "2024",
-        },
-      ],
-    },
-    {
-      role: "Outreach",
-      members: [
-        {
-          isLead: true,
-          name: "Yoonjoo Lee",
-          major: "Philosophy & History of Art",
-          year: "2025",
-        },
-        {
-          name: "Huymin Lee",
-          major: "Data Science & Statistics",
-          year: "2024",
-        },
-        {
-          name: "Jooyoung Chung",
-          major: "Political Science",
-          year: "2024",
-        },
-        {
-          name: "Seungmin Shin",
+          name: "Seoyeon Han",
           major: "Computer Science",
           year: "2025",
-        },
-        {
-          name: "Seoin Chang",
-          major: "Robotics",
-          year: "2027",
         },
       ],
     },
@@ -133,29 +138,29 @@ const members = {
       members: [
         {
           isLead: true,
-          name: "Chaeyeon Park",
-          major: "Art and Design",
-          year: "2025",
-        },
-        {
           name: "Jungin Hwang",
           major: "Computer Science",
           year: "2026",
         },
         {
-          name: "Joonyoung Byeon",
-          major: "Art and Design",
-          year: "2026",
-        },
-        {
-          name: "Minju Koo",
+          name: "Kelly Koo",
           major: "BHS & Art and Design",
           year: "2027",
+        },
+        {
+          name: "Soomin Kang",
+          major: "Undeclared",
+          year: "2028",
+        },
+        {
+          name: "Lauren Kim",
+          major: "Computer Science",
+          year: "2026",
         },
       ],
     },
     {
-      role: "Newsletter & Yearbook",
+      role: "Social Media/Marketing",
       members: [
         {
           name: "Hyeri Lee",
@@ -163,23 +168,23 @@ const members = {
           year: "2026",
         },
         {
+          name: "Chaeyoung Kim",
+          major: "Biomedical Engineering",
+          year: "2026",
+        },
+        {
           name: "Hyowon Ko",
           major: "Statistics",
           year: "2027",
         },
-      ],
-    },
-    {
-      role: "Social Media",
-      members: [
         {
-          name: "Seoyeon Han",
-          major: "Computer Science",
-          year: "2025",
+          name: "Cloe Jung",
+          major: "Psychology",
+          year: "2026",
         },
         {
-          name: "Chaeyoung Kim",
-          major: "Biomedical Engineering",
+          name: "Younghyun Choi",
+          major: "Psychology",
           year: "2026",
         },
       ],

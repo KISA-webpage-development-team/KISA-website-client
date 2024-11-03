@@ -1,18 +1,26 @@
 "use client";
 
-// [24.06.01 ~ ]: Refactoring + TS conversion by Jioh
-
 // [UI]
 // BoardTitle
 // PostView
 // CommentsView
 
+// [Rendering Method]: CSR (Client Side Rendering) with SWR
 import BoardTitle from "../../../components/Boards/BoardTitle";
 import CommentsView from "../../../components/Posts/comment/CommentsView";
 import PostView from "../../../components/Posts/post-view/PostView";
-import { usePost } from "../../../service/swrHooks/postHooks";
-import { fetcher } from "../../../config/swrConfig";
 import { SessionProvider } from "next-auth/react";
+import {
+  LoadingSpinner,
+  NotFound,
+} from "@/final_refactor_src/components/feedback";
+import { usePost } from "@/apis/posts/swrHooks";
+import {
+  isAnnouncementBoard,
+  isEveryKisaBoard,
+} from "@/utils/formats/boardType";
+import { useEffect, useState } from "react";
+import { getPost } from "@/apis/posts/queries";
 
 type PageProps = {
   params: {
@@ -20,17 +28,31 @@ type PageProps = {
   };
 };
 
-export default function PostPage({ params }: PageProps) {
+export default function PostViewPage({ params }: PageProps) {
   const { postid } = params;
+  // const [post, setPost] = useState();
 
-  const { post, isLoading, isError } = usePost(postid, { fetcher: fetcher });
+  const { post, isLoading, error } = usePost(Number(postid));
+
+  // useEffect(() => {
+  //   const fetchPost = async () => {
+
+  //     try {
+  //     const response = await getPost(Number(postid));
+
+  //     }
+  //       catch(error) {
+  //       console.error("Error fetching post: ", error);
+  //       }
+  //   }
+  // }, [])
 
   // [TODO]: when there's no post "error.tsx" should be rendered
   if (isLoading) {
-    return <></>;
+    return <LoadingSpinner />;
   }
-  if (isError) {
-    return <div>존재하지 않는 게시물입니다</div>;
+  if (error) {
+    return <NotFound />;
   }
 
   return (
@@ -38,12 +60,17 @@ export default function PostPage({ params }: PageProps) {
       <BoardTitle boardType={post.type} size="small" />
 
       <SessionProvider>
+        {/* 일단 post가 로딩되면 먼저 보여준다. */}
         <PostView post={post} />
 
-        {!post?.isAnnouncement && post?.type !== "announcement" && (
+        {/* Comments는 로딩되는대로 */}
+        {!post?.isAnnouncement && !isAnnouncementBoard(post.type) && (
+          // bit worry about props drilling on post.type to handle every kisa
           <CommentsView
+            isEveryKisa={isEveryKisaBoard(post?.type)}
             commentsCount={post?.commentsCount}
             postid={post?.postid}
+            email={post?.email}
           />
         )}
       </SessionProvider>

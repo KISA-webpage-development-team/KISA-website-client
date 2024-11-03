@@ -1,16 +1,27 @@
 import React from "react";
 import VerticalDivider from "../../shared/VerticalDivider";
 import ClockIcon from "../../ui/ClockIcon";
-import { fullDateFormatter, timeForToday } from "../../../utils/dateFormatter";
 import Link from "next/link";
-import { PostOwnerBarProps } from "../../../model/props/posts";
+import { formatDateTimeString, formatRelativeTime } from "@/utils/formats/date";
+
+type PostOwnerBarProps = {
+  isPostAuthor?: boolean;
+  email: string;
+  fullname: string;
+  created: string;
+  readCount: number;
+  commentsCount: number;
+  anonymous: boolean;
+};
 
 export default function PostOwnerBar({
+  isPostAuthor = false,
   email,
   fullname,
   created,
   readCount,
   commentsCount,
+  anonymous,
 }: PostOwnerBarProps) {
   return (
     <div
@@ -18,20 +29,28 @@ export default function PostOwnerBar({
     text-xs sm:text-sm"
     >
       {/* left: fullname + created */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 font-semibold">
         {/* later, fullname will be linked to user profile */}
-        <Link href={`/users/${email}`}>
-          <p className="font-semibold hover:underline">{fullname}</p>
-        </Link>
+        {anonymous ? (
+          isPostAuthor ? (
+            <p className="">{`${fullname} (익명)`}</p>
+          ) : (
+            <p className="">익명</p>
+          )
+        ) : (
+          <Link href={`/users/${email}`}>
+            <p className=" hover:underline">{fullname}</p>
+          </Link>
+        )}
 
         <VerticalDivider size="small" />
         <div className="flex items-center gap-1">
           <ClockIcon />
           <p className="text-gray-600 hidden sm:block">
-            {fullDateFormatter(created)}
+            {formatDateTimeString(created)}
           </p>
           <p className="text-gray-600 block sm:hidden">
-            {timeForToday(created)}
+            {formatRelativeTime(created)}
           </p>
         </div>
       </div>

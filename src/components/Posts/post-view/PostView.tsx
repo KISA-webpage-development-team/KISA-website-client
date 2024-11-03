@@ -8,8 +8,6 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 // types
-import { PostViewProps } from "../../../model/props/posts";
-import { CustomSession } from "../../../model/common/types";
 
 // sub-ui components
 import PostTitleBar from "./PostTitleBar";
@@ -18,12 +16,20 @@ import PostContent from "./PostContent";
 import PostButtonBar from "./PostButtonBar";
 import HorizontalDivider from "../../shared/HorizontalDivider";
 import { CookiesProvider } from "react-cookie";
-import { getCookie, setCookie } from "../../../utils/cookie";
-import { incrementReadCount } from "../../../service/post";
+import { getCookie, setCookie } from "@/lib/react-cookie/cookie";
+import { incrementReadCount } from "@/apis/posts/mutations";
+import { Post } from "@/types/post";
+import { UserSession } from "@/lib/next-auth/types";
+import { getLikeByUser } from "@/apis/likes/queries";
+import { LikeBody } from "@/types/like";
+
+type PostViewProps = {
+  post: Post;
+};
 
 export default function PostView({ post }: PostViewProps) {
   const { data: session, status } = useSession() as {
-    data: CustomSession | null;
+    data: UserSession | null;
     status: string;
   };
 
@@ -38,6 +44,8 @@ export default function PostView({ post }: PostViewProps) {
     created,
     readCount,
     commentsCount,
+    likesCount,
+    anonymous,
   } = post;
 
   const [didRead, setDidRead] = useState(false);
@@ -49,7 +57,7 @@ export default function PostView({ post }: PostViewProps) {
   useEffect(() => {
     const postReadCount = async () => {
       try {
-        const res = await incrementReadCount(postid, session?.token);
+        const res = await incrementReadCount(postid);
         if (res === null) {
           console.log("Failed to increment read count");
         }
@@ -81,10 +89,8 @@ export default function PostView({ post }: PostViewProps) {
       }
     };
 
-    if (session) {
-      cookieHandler();
-    }
-  }, [session, postid]);
+    cookieHandler();
+  }, [postid]);
 
   if (status === "loading") {
     // [TODO]: add loading spinner or skeleton ui
@@ -103,11 +109,13 @@ export default function PostView({ post }: PostViewProps) {
           <PostTitleBar isAnnouncement={isAnnouncement} title={title} />
           {/* 2. Post Owner Bar */}
           <PostOwnerBar
+            isPostAuthor={session?.user.email === email}
             email={email}
             fullname={fullname}
             created={created}
             readCount={didRead ? Number(readCount) + 1 : readCount}
             commentsCount={commentsCount}
+            anonymous={anonymous}
           />
         </div>
 
@@ -118,7 +126,8 @@ export default function PostView({ post }: PostViewProps) {
 
         {/* 4. Post Buttons: Edit + Delete + List Buttons */}
         <PostButtonBar
-          isAuthor={session?.user.email === email}
+          email={email}
+          session={session}
           type={type}
           postid={postid}
           title={title}

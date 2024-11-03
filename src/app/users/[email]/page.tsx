@@ -1,44 +1,56 @@
-// User Page (/users/[email])
+// "/users/[email]"
 
-// This page is only for logged in users.
-// Can't view other users' profile pages without logging in.
+// [UI]
+// UserProfile: User's profile information including image, name, major, etc
+// UserBoard: User's posts and comments with toggle bar to switch between them
 
-import { sejongHospitalLight } from "../../../utils/fonts/textFonts";
-import { adminEmail } from "../../../config/admin";
+// [Rendering method] SSR (container) + CSR (components)
+// [Auth Middleware applied]
+import React from "react";
+import { KISA_EMAIL } from "@/constants/email";
+import { getSession } from "@/lib/next-auth/getSession";
 
-// auth
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../config/auth";
+// UI
+import UserProfile from "@/features/users/components/view/UserProfile";
+import UserBoard from "@/features/users/components/view/UserBoard";
 
-// sub-ui components
-import UserBasicInfo from "../../../components/Users/UserBasicInfo";
-import UserBoard from "../../../components/Users/UserBoard";
+import {
+  NotLogin,
+  NotAuthorized,
+} from "@/final_refactor_src/components/feedback";
 
-// types
-import { UserParamsPageProps } from "../../../model/props/users";
+type UserViewPageProps = {
+  params: {
+    email: string;
+  };
+};
 
-export default async function UserPage({ params }: UserParamsPageProps) {
-  const session = await getServerSession(authOptions);
+export default async function UserViewPage({ params }: UserViewPageProps) {
+  // [NOTE] getSession() is a function based on next-auth
+  // no need to handle missing session because of the auth middleware
+  const session = await getSession();
 
+  // [NOTE] email on the URL is encoded
+  // need to decodeURIComponent to get the correct value
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);
 
-  if (session?.user.email !== adminEmail && decodedEmail === adminEmail) {
-    return <div>권한이 없습니다.</div>;
+  if (!session) {
+    return <NotLogin />;
+  }
+
+  // [Business Logic]: Only KISA email is allowed to access KISA's user page
+  if (
+    decodedEmail.includes(KISA_EMAIL) &&
+    !session?.user?.email.includes(KISA_EMAIL)
+  ) {
+    return <NotAuthorized />;
   }
 
   return (
-    <section
-      className={`${sejongHospitalLight.className} pt-2 md:pt-3 lg:pt-4 gap-6`}
-    >
-      <UserBasicInfo email={decodedEmail} session={session} />
-
+    <section>
+      <UserProfile email={decodedEmail} session={session} />
       <UserBoard email={decodedEmail} session={session} />
     </section>
   );
 }
-
-// [NOTE on rendering method]
-// This page is rendered as CSR (Client Side Rendering) because it is a user-specific page.
-// The page is not indexed by search engines and only the user can access it.
-// If they are not logged in, they will be notified to log in.

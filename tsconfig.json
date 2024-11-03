@@ -16,15 +16,21 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "declaration": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/config/auth.ts",
-    "src/service/board.ts"
+    "src/app/template.tsx",
+    "src/app/page.tsx",
+    "src/app/layout.tsx"
   ],
   "exclude": ["node_modules"]
 }

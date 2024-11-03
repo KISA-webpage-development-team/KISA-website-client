@@ -6,7 +6,7 @@
 // ‘Contact Us (보내기)’ 버튼
 
 import { useForm } from "react-hook-form";
-import { sendEmail } from "../../service/contact";
+// import { sendEmail } from "../../service/contact";
 
 const Contact = () => {
   const { register, handleSubmit } = useForm();
@@ -18,7 +18,7 @@ const Contact = () => {
   const labelStyle = "mb-3 flex gap-1 text-base font-medium text-black";
 
   function onSubmit(data) {
-    sendEmail(data);
+    // sendEmail(data);
   }
 
   return (

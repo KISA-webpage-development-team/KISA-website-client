@@ -1,25 +1,39 @@
 import React from "react";
-import UserEditClient from "../../../../components/Users/UserEditClient";
-import { UserParamsPageProps } from "../../../../model/props/users";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../config/auth";
+import UserEditClient from "@/features/users/components/edit/UserEditClient";
+import { getSession } from "@/lib/next-auth/getSession";
 
-export default async function UserEditPage({ params }: UserParamsPageProps) {
-  const session = await getServerSession(authOptions);
+import {
+  NotAuthorized,
+  NotLogin,
+} from "@/final_refactor_src/components/feedback";
 
+type UserEditPageProps = {
+  params: {
+    email: string;
+  };
+};
+
+export default async function UserEditPage({ params }: UserEditPageProps) {
+  // [NOTE] getSession() is a function based on next-auth
+  // no need to handle missing session because of the auth middleware
+  const session = await getSession();
+
+  // [NOTE] email on the URL is encoded
+  // need to decodeURIComponent to get the correct value
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);
 
-  // page view validity check
+  if (!session) {
+    return <NotLogin />;
+  }
+
+  // [Business Logic]: Only the user can edit their own information
   if (session?.user.email !== decodedEmail) {
-    return <div>권한이 없습니다</div>;
+    return <NotAuthorized />;
   }
 
   return (
-    <section
-      className="pt-2 md:pt-3 lg:pt-4 
-  "
-    >
+    <section>
       <UserEditClient email={decodedEmail} session={session} />
     </section>
   );

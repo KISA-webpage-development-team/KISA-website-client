@@ -253,6 +253,10 @@ const housingPageOffCampusData = {
           name: "HUB",
           id: "hub",
         },
+        {
+          name: "ZWest",
+          id: "zwest",
+        },
       ],
     },
   ],

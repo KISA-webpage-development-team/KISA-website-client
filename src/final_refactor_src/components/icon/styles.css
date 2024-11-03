@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.icon {
+  @apply text-xl md:text-2xl;
+}
+
+.small_icon {
+  @apply text-base md:text-lg;
+}
