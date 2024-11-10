@@ -117,8 +117,8 @@ export default function CommentEditor({
 
   return (
     <div
-      className="flex flex-col sm:flex-row bg-green-3
-    items-end sm:items-center w-full h-24 sm:h-36"
+      className="flex flex-col sm:flex-row
+    items-end sm:items-center w-full"
     >
       <textarea
         value={text}

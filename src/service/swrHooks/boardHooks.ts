@@ -1,8 +1,8 @@
 "use client";
 
 import useSWR, { SWRConfiguration } from "swr";
-import { BoardType } from "../../model/common/types";
-import { SimplePost } from "../../model/props/posts";
+import { BoardType } from "@/types/board";
+import { SimplePost } from "@/types/post";
 
 // GET
 // data type -------------------------------------
