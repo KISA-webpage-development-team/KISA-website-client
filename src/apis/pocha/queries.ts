@@ -27,3 +27,105 @@ export async function getPochaInfoMock(date: Date) {
   };
   return mockPochaInfo;
 }
+
+/**
+ * @desc Fetch pocha menu
+ * @route GET /pocha/menu/${pochaid}
+ */
+export async function getPochaMenu(pochaid: number) {
+  const url = `/pocha/menu/${pochaid}`;
+  try {
+    const response = await client.get(url);
+
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
+export async function getPochaMenuMock(pochaid: number) {
+  // list of menu by category
+  const mockPochaMenu = [
+    {
+      category: "food",
+      menusList: [
+        {
+          menuid: 29,
+          nameKor: "김치전",
+          nameEng: "Kimchi Pancake",
+          price: 20,
+          stock: 50,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        {
+          menuid: 30,
+          nameKor: "떡볶이",
+          nameEng: "Spicy Rice Cake",
+          price: 15,
+          stock: 100,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        {
+          menuid: 31,
+          nameKor: "치킨",
+          nameEng: "Fried Chicken",
+          price: 25,
+          stock: 30,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+      ],
+    },
+    {
+      category: "special-menu",
+      menusList: [
+        {
+          menuid: 32,
+          nameKor: "회",
+          nameEng: "Sashimi",
+          price: 80,
+          stock: 10,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        {
+          menuid: 33,
+          nameKor: "초밥",
+          nameEng: "Sushi",
+          price: 50,
+          stock: 20,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+      ],
+    },
+    {
+      category: "drink",
+      menusList: [
+        {
+          menuid: 27,
+          nameKor: "참이슬",
+          nameEng: "Cham-e-seul",
+          price: 15,
+          stock: 999,
+          isImmediatePrep: true,
+          parentPochaId: 1,
+        },
+        {
+          menuid: 28,
+          nameKor: "카스",
+          nameEng: "Cass",
+          price: 10,
+          stock: 999,
+          isImmediatePrep: true,
+          parentPochaId: 1,
+        },
+      ],
+    },
+  ];
+
+  return mockPochaMenu;
+}
