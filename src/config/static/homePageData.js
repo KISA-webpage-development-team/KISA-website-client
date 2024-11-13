@@ -7,6 +7,22 @@
 // url
 const homeCarouselData = [
   {
+    id: "fa24_networking_session",
+    title: "KISA X MKoBi 네트워킹 세션",
+    desc: (
+      <p>
+        Consulting, Finance, UI/UX, Software Engineering에 관심 있는 사람~?🙋
+        11월 21일 오후 8:30에 열리는 온라인 네트워킹 세션에 참여하고 이 분야에서
+        활발히 활동 중이신 미시간 한인 동문분들과 소통할 수 있는 기회를
+        가져보세요!!{" "}
+        <a href="https://forms.gle/ticPCVa4XBuJ47YC7">
+          <strong>RSVP 작성하기</strong>
+        </a>
+      </p>
+    ),
+    url: "https://www.instagram.com/p/DCUbPJ3xBxy/?img_index=1",
+  },
+  {
     id: "fa24_small_group_recruitment",
     title: "소그룹 신규 모집",
     desc: (
