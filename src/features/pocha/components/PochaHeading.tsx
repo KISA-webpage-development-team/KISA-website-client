@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { getPochaInfo, getPochaInfoMock } from "@/apis/pocha/queries";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
 export default function PochaHeading() {
   // page.tsx는 CSR이기에 PochaHeading도 CSR --> async/await 못함
@@ -31,12 +32,14 @@ export default function PochaHeading() {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col items-center px-4">
       {/* Title - pocha name */}
-      <h1>{pochaInfo?.title}</h1>
+      <h1 className={`${sejongHospitalBold.className} text-xl`}>
+        {pochaInfo?.title}
+      </h1>
 
       {/* Description - pocha description */}
-      <p>{pochaInfo?.description}</p>
+      <p className="text-center">{pochaInfo?.description}</p>
     </div>
   );
 }

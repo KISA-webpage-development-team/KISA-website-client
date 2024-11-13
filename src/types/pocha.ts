@@ -6,4 +6,6 @@ interface PochaInfo {
   description: string;
 }
 
-export type { PochaInfo };
+type PochaTab = "menu" | "orders";
+
+export type { PochaInfo, PochaTab };

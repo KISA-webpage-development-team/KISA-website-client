@@ -48,7 +48,7 @@ export async function getPochaMenuMock(pochaid: number) {
   // list of menu by category
   const mockPochaMenu = [
     {
-      category: "food",
+      category: "Food",
       menusList: [
         {
           menuid: 29,
@@ -80,7 +80,7 @@ export async function getPochaMenuMock(pochaid: number) {
       ],
     },
     {
-      category: "special-menu",
+      category: "Special Menu",
       menusList: [
         {
           menuid: 32,
@@ -103,7 +103,7 @@ export async function getPochaMenuMock(pochaid: number) {
       ],
     },
     {
-      category: "drink",
+      category: "Drink",
       menusList: [
         {
           menuid: 27,

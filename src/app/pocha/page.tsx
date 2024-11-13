@@ -10,11 +10,17 @@ import PochaMenuList from "@/features/pocha/components/PochaMenuList";
 import PochaOrders from "@/features/pocha/components/PochaOrders";
 import PochaTabs from "@/features/pocha/components/PochaTabs";
 
+// types
+import { PochaTab } from "@/types/pocha";
+import { sejongHospitalLight } from "@/utils/fonts/textFonts";
+
 export default function PochaPage() {
-  const [activeTab, setActiveTab] = useState<"menu" | "orders">("menu");
+  const [activeTab, setActiveTab] = useState<PochaTab>("menu");
 
   return (
-    <div>
+    <section
+      className={`${sejongHospitalLight.className} w-screen -translate-x-4`}
+    >
       {/* pocha title & description */}
       <PochaHeading />
       {/* menu and order history tabs */}
@@ -27,6 +33,6 @@ export default function PochaPage() {
       <PochaMenuDetails />
       {/* Button for viewing cart */}
       <PochaCartButton />
-    </div>
+    </section>
   );
 }

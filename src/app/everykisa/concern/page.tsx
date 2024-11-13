@@ -37,6 +37,8 @@ export default async function ConcernPage({ searchParams }: ConcernPageProps) {
           page={page ? Number(page) : 1}
         />
       </article>
+
+      <p className="flex">hello world</p>
     </section>
   );
 }
