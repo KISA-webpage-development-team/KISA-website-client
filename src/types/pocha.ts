@@ -4,6 +4,7 @@ interface PochaInfo {
   endTime: Date;
   title: string;
   description: string;
+  ongoing: boolean;
 }
 
 type PochaTab = "menu" | "orders";

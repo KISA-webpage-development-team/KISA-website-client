@@ -24,6 +24,7 @@ export async function getPochaInfoMock(date: Date) {
     title: "Halloween Pocha",
     description:
       "할로윈 포차 입니다. 한잔 포차에서 11월 2일 진행될 예정입니다! ^^",
+    ongoing: true,
   };
   return mockPochaInfo;
 }
