@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PochaHeading from "@/features/pocha/components/PochaHeading";
 import PochaCartButton from "@/features/pocha/components/PochaCartButton";
 import PochaHelpButton from "@/features/pocha/components/PochaHelpButton";
@@ -30,7 +30,7 @@ export default function PochaPage() {
       {/* [LATER] helper button */}
       <PochaHelpButton />
       {/* Selected menu details */}
-      <PochaMenuDetails />
+      {/* <PochaMenuDetails menu={Menu} /> */}
       {/* Button for viewing cart */}
       <PochaCartButton />
     </section>
