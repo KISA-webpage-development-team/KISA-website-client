@@ -27,7 +27,7 @@ export default function PochaPage() {
       <PochaTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       {/* Listing the menus OR orders */}
       {activeTab === "menu" ? <PochaMenuList /> : <PochaOrders />}
-      {/* helper button */}
+      {/* [LATER] helper button */}
       <PochaHelpButton />
       {/* Selected menu details */}
       <PochaMenuDetails />
