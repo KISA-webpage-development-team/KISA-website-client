@@ -139,7 +139,6 @@ export default function PochaMenuDetail({
           </button>
         </div>
       </div>
-      Add to Cart Button
       <div className="flex flex-col items-center">
         {/* for this, just shows the total price for the selected food, based on your quantity. */}
         <span>예상 가격: ${selectedMenu.price * quantity} </span>

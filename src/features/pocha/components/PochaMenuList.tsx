@@ -19,6 +19,7 @@ export default function PochaMenuList({ setSelectedMenu }) {
   // );
 
   const [onDetailPage, setOnDetailPage] = useState(false);
+
   // fetch pocha menu from server
   useEffect(() => {
     const fetchPochaMenu = async () => {
@@ -84,10 +85,6 @@ export default function PochaMenuList({ setSelectedMenu }) {
           </li>
         ))}
       </ul>
-      {/* TODO: Need to use the cart array to get all PRICES ONLY of added foods. */}
-      <span className="flex justify-center mt-4 bg-blue-500 text-white px-4 py-2 font-semibold">
-        Total Price: $150; 여기 Total은 임의 설정 값임. 코멘트 참고 바람.
-      </span>
     </div>
   );
 }

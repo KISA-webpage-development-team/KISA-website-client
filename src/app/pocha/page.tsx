@@ -3,12 +3,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PochaHeading from "@/features/pocha/components/PochaHeading";
-import PochaCartButton from "@/features/pocha/components/PochaCartButton";
+import OpenCartButton from "@/features/pocha/components/OpenCartButton";
 import PochaHelpButton from "@/features/pocha/components/PochaHelpButton";
 import PochaMenuDetails from "@/features/pocha/components/PochaMenuDetail";
 import PochaMenuList from "@/features/pocha/components/PochaMenuList";
 import PochaOrders from "@/features/pocha/components/PochaOrders";
 import PochaTabs from "@/features/pocha/components/PochaTabs";
+import PochaCartPage from "@/features/pocha/components/PochaCartPage";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import PochaMenuDetail from "@/features/pocha/components/PochaMenuDetail";
 
@@ -22,13 +23,14 @@ export default function PochaPage() {
     // Initializing as an empty map.
     new Map<number, CartItem>()
   );
-
   console.log("cart: ", cart);
 
   // state for selected menu to open detail page
   const [selectedMenu, setSelectedMenu] = useState<MenuItem | undefined>(
     undefined
   );
+
+  const [openCartPage, setOpenCartPage] = useState<boolean>(false);
 
   if (selectedMenu !== undefined) {
     return (
@@ -41,11 +43,9 @@ export default function PochaPage() {
     );
   }
 
-  // if (openCartPage) {
-  //   return (
-  //     <CartPage cart />
-  //   )
-  // }
+  if (openCartPage) {
+    return <PochaCartPage cart={cart} setOpenCartPage={setOpenCartPage} />;
+  }
 
   return (
     <section
@@ -66,7 +66,8 @@ export default function PochaPage() {
       {/* Selected menu details */}
       {/* <PochaMenuDetails menu={Menu} /> */}
       {/* Button for viewing cart */}
-      {/* <PochaCartButton /> */}
+      {/* TODO: Need to use the cart array to get all PRICES ONLY of added foods. */}
+      <OpenCartButton setOpenCartPage={setOpenCartPage} />
     </section>
   );
 }
