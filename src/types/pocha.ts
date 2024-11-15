@@ -9,9 +9,7 @@ interface PochaInfo {
 
 type PochaTab = "menu" | "orders";
 
-export type { PochaInfo, PochaTab };
-
-export interface MenuDetails {
+interface MenuItem {
   menuid: number;
   nameKor: string;
   nameEng: string;
@@ -21,8 +19,15 @@ export interface MenuDetails {
   parentPochaId: number;
 }
 
-export interface TotalCarts {
-  menu: MenuDetails;
-  quantity: number;
-  totalPrice: number;
+interface MenuByCategory {
+  category: string;
+  menusList: MenuItem[];
 }
+
+interface CartItem {
+  menu: MenuItem;
+  quantity: number;
+  // totalPrice: number;
+}
+
+export type { PochaInfo, PochaTab, MenuItem, MenuByCategory, CartItem };

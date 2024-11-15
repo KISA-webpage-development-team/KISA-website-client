@@ -1,5 +1,5 @@
 import client from "@/lib/axios/client";
-import { PochaInfo } from "@/types/pocha";
+import { MenuByCategory, PochaInfo } from "@/types/pocha";
 /**
  * @desc Fetch pocha info, if no upcoming pocha -> empty data, if else -> unempty data
  * @route GET /pocha/status-info/?date=${date}
@@ -33,7 +33,9 @@ export async function getPochaInfoMock(date: Date) {
  * @desc Fetch pocha menu
  * @route GET /pocha/menu/${pochaid}
  */
-export async function getPochaMenu(pochaid: number) {
+export async function getPochaMenu(
+  pochaid: number
+): Promise<MenuByCategory[] | undefined> {
   const url = `/pocha/menu/${pochaid}`;
   try {
     const response = await client.get(url);
@@ -47,7 +49,7 @@ export async function getPochaMenu(pochaid: number) {
 
 export async function getPochaMenuMock(pochaid: number) {
   // list of menu by category
-  const mockPochaMenu = [
+  const mockPochaMenu: MenuByCategory[] = [
     {
       category: "Food",
       menusList: [

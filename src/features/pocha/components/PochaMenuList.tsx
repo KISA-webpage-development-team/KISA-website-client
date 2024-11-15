@@ -3,17 +3,23 @@ import { useEffect, useState } from "react";
 import { getPochaMenu, getPochaMenuMock } from "@/apis/pocha/queries";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { select } from "@nextui-org/react";
-import PochaMenuDetails from "./PochaMenuDetails";
+import PochaMenuDetail from "./PochaMenuDetail";
 
 // Types
-import { MenuDetails, TotalCarts } from "@/types/pocha";
+import { MenuByCategory, MenuItem, CartItem } from "@/types/pocha";
 
-export default function PochaMenuList() {
-  const [pochaMenus, setPochaMenus] = useState(undefined);
-  const [selectedMenu, setSelectedMenu] = useState(null);
+export default function PochaMenuList({ setSelectedMenu }) {
+  const [pochaMenus, setPochaMenus] = useState<MenuByCategory[] | undefined>(
+    undefined
+  );
+
+  // state for selected menu to open detail page
+  // const [selectedMenu, setSelectedMenu] = useState<MenuItem | undefined>(
+  //   undefined
+  // );
+
   const [onDetailPage, setOnDetailPage] = useState(false);
-  const [cart, setCart] = useState<TotalCarts[]>([]);
-
+  // fetch pocha menu from server
   useEffect(() => {
     const fetchPochaMenu = async () => {
       // try API call first
@@ -34,30 +40,24 @@ export default function PochaMenuList() {
     setOnDetailPage(true);
   };
 
-  const handleBackButton = () => {
-    setOnDetailPage(false);
-    // This is to return back to original page = Show original PochaMenuList.
-    setSelectedMenu(null);
-  };
+  // const addToCart = (menu: MenuItem, quantity: number, totalPrice: number) => {
+  //   // Gets value from added, saves to the cart.
+  //   const toAdd = { menu, quantity, totalPrice };
+  //   setCart([toAdd]);
+  // };
 
-  const addToCart = (
-    menu: MenuDetails,
-    quantity: number,
-    totalPrice: number
-  ) => {
-    // Gets value from added, saves to the cart.
-    const toAdd = { menu, quantity, totalPrice };
-    setCart([toAdd]);
-  };
-
-  // () => {
-  //   return
-  // }
-
-  // () => ()
+  // hash map
+  // [menu id: 29] -> value
 
   return (
-    <div>
+    <div
+      className="h-full"
+      style={
+        {
+          // backgroundColor: "pink",
+        }
+      }
+    >
       <ul className="flex flex-col px-6 gap-8">
         {pochaMenus?.map(({ category, menusList }, idx) => (
           <li key={`${category}-${idx}`}>
@@ -84,13 +84,6 @@ export default function PochaMenuList() {
           </li>
         ))}
       </ul>
-      {
-        <PochaMenuDetails
-          selectedMenu={selectedMenu}
-          onBack={handleBackButton}
-          addToCart={addToCart}
-        />
-      }
       {/* TODO: Need to use the cart array to get all PRICES ONLY of added foods. */}
       <span className="flex justify-center mt-4 bg-blue-500 text-white px-4 py-2 font-semibold">
         Total Price: $150; 여기 Total은 임의 설정 값임. 코멘트 참고 바람.
