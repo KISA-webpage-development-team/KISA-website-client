@@ -27,9 +27,9 @@ function isAllowedIP(clientIP: string): boolean {
 export async function GET(req: NextRequest) {
   const clientIP = req.headers.get("x-forwarded-for") || req.ip || "";
 
-  if (!isAllowedIP(clientIP)) {
-    return new NextResponse("Forbidden", { status: 403 });
-  }
+  // if (!isAllowedIP(clientIP)) {
+  //   return new NextResponse("Forbidden", { status: 403 });
+  // }
 
   try {
     const filePath = path.join(
