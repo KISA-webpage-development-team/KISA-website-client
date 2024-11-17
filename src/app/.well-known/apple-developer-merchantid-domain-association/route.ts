@@ -14,6 +14,7 @@ export async function GET() {
       status: 200,
       headers: {
         "Content-Type": "text/plain",
+        "Allow-Origin": "*",
       },
     });
   } catch (error) {
