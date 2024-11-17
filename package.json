@@ -3,8 +3,8 @@
   "version": "2.0.1",
   "private": true,
   "scripts": {
-    "dev": "node devops/args.ts && next dev",
-    "dev:local": "node devops/args.ts -l && next dev",
+    "dev": "node devops/args.ts && next dev -p 80",
+    "dev:local": "node devops/args.ts -l && next dev -80",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
