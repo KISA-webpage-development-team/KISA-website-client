@@ -137,6 +137,12 @@ or
 npm run dev
 ```
 
+### 8. Open the browser and go to the following
+
+```
+<YOUR NGROK STATIC DOMAIN>
+```
+
 **NOTE**: development port has now changed from 3000 to 80 to match with Ngrok port.
 
 **I CAN'T BELIEVE IT! You are ready to test the Stripe payment methods on your local environment!**
