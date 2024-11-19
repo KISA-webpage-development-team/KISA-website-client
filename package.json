@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node devops/args.ts && next dev -p 80",
-    "dev:local": "node devops/args.ts -l && next dev -80",
+    "dev:local": "node devops/args.ts -l && next dev -p 80",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

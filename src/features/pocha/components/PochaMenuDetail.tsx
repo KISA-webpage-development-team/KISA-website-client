@@ -24,22 +24,23 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
+import { addItemToCart } from "@/apis/pocha/mutations";
 
 // Types
-import { MenuItem, CartItem } from "@/types/pocha";
+import { MenuItem, CartItem, PochaInfo } from "@/types/pocha";
 
 interface PochaMenuDetailProps {
   selectedMenu: MenuItem;
   setSelectedMenu: (selectedMenu: MenuItem | undefined) => void;
-  cart: Map<number, CartItem>;
-  setCart: (cart: Map<number, CartItem>) => void;
+  email: string;
+  pochaid: number;
 }
 
 export default function PochaMenuDetail({
   selectedMenu,
   setSelectedMenu,
-  cart,
-  setCart,
+  email,
+  pochaid,
 }: PochaMenuDetailProps) {
   // Counter Logic
   const [quantity, setQuantity] = useState<number>(1);
@@ -66,36 +67,21 @@ export default function PochaMenuDetail({
   };
 
   // add menu item and its quantity to the cart
-  const handleAddToCart = () => {
-    // setCart
-    const newCart = { ...cart };
+  const handleAddToCart = async () => {
+    // Posting info to DB.
+    const addedMenu = {
+      menuid: selectedMenu.menuid,
+      quantity: quantity,
+    };
 
-    // currently looking up menuid already exists in the cart
-    if (newCart[selectedMenu.menuid]) {
-      newCart[selectedMenu.menuid].quantity += quantity;
-    } else {
-      newCart[selectedMenu.menuid] = {
-        menu: selectedMenu,
-        quantity: quantity,
-      };
+    try {
+      const response = await addItemToCart(email, pochaid, addedMenu);
+    } catch (error) {
+      console.log("Error message: ", error);
     }
-
-    setCart(newCart);
 
     // redirect to the original page
     setSelectedMenu(undefined);
-
-    // 원래 Map (cart)
-    // 1. 이미 menuid가 추가되어있어
-
-    // cart[30] = { menu: dfasdfa, quantity: 10}
-    // 30으로 cart를 lookup해서 quantitiy를 늘린다
-
-    // 2. menuid가 처음 추가해
-    // cart[30] = { menu: dfasdfa, quantity: quantity}
-
-    // key: selectedMenu.menuid
-    // value: { menu: selectedMenu , quantity: quantity}
   };
 
   return (
