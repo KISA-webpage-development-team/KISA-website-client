@@ -9,13 +9,13 @@ import PochaMenuDetails from "@/features/pocha/components/PochaMenuDetail";
 import PochaMenuList from "@/features/pocha/components/PochaMenuList";
 import PochaOrders from "@/features/pocha/components/PochaOrders";
 import PochaTabs from "@/features/pocha/components/PochaTabs";
-import PochaCartPage from "@/features/pocha/components/cart/PochaCartPage";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import PochaMenuDetail from "@/features/pocha/components/PochaMenuDetail";
 
 // types
 import { MenuItem, PochaTab, CartItem, PochaInfo } from "@/types/pocha";
 import { getPochaInfoMock } from "@/apis/pocha/queries";
+import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 
 export default function PochaPage() {
   const fakeEmail = "dongsubk@umich.edu";
@@ -50,13 +50,17 @@ export default function PochaPage() {
     fetchPochaInfo();
   }, []);
 
+  if (pochaInfo === undefined) {
+    return <LoadingSpinner />;
+  }
+
   if (selectedMenu !== undefined) {
     return (
       <PochaMenuDetail
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
         email={fakeEmail}
-        pochaid={pochaInfo.pochaid}
+        pochaid={pochaInfo?.pochaid}
       />
     );
   }
@@ -81,7 +85,7 @@ export default function PochaPage() {
       {/* <PochaMenuDetails menu={Menu} /> */}
       {/* Button for viewing cart */}
       {/* TODO: Need to use the cart array to get all PRICES ONLY of added foods. */}
-      <OpenCartButton />
+      <OpenCartButton pochaid={pochaInfo?.pochaid} />
     </section>
   );
 }

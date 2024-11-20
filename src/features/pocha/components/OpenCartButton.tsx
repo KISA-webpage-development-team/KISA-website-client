@@ -1,16 +1,15 @@
 import React from "react";
 
 type PochaCartProps = {
-  params: {
-    email: string;
-    pochaid: number;
-  };
+  pochaid: number;
 };
 
-export default function OpenCartButton({ params }: PochaCartProps) {
+//
+// { pochaInfo }: PochaHeadingProps
+export default function OpenCartButton({ pochaid }: PochaCartProps) {
   const handleCartClick = () => {
-    const queryParams = `email=${params.email}&pochaid=${params.pochaid}`;
-    window.location.href = "/pocha/cart?${queryParams)";
+    const queryParams = `pochaid=${pochaid}`;
+    window.location.href = `/pocha/cart?${queryParams}`;
   };
 
   return (

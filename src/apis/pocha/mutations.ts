@@ -26,3 +26,18 @@ export async function addItemToCart(
     return undefined;
   }
 }
+
+// export async function updateCartItemQuantity(menuid: number, quantity: number) {
+//   const url = `/pocha/cart/`;
+//   const body = { menuid, quantity };
+//   try {
+//     const response = await client.post(url, body, {
+//       // headers: {
+//       //     Authorization: `Bearer ${token}`,
+//       // },
+//     });
+//     return response?.data;
+//   } catch (error) {
+//     return undefined;
+//   }
+// }
