@@ -24,9 +24,6 @@ export default function PochaPage() {
   // state for selected menu to open detail page
   const [selectedMenu, setSelectedMenu] = useState<MenuItem>(undefined);
 
-  // state for "view cart" button
-  const [openCartPage, setOpenCartPage] = useState<boolean>(false);
-
   // page.tsx는 CSR이기에 PochaHeading도 CSR --> async/await 못함
   // getPochaInfoMock만 부분적으로 async (await하려면 async)
   // const fetchPochaInfo = async () => {
@@ -64,16 +61,6 @@ export default function PochaPage() {
     );
   }
 
-  if (openCartPage) {
-    return (
-      <PochaCartPage
-        email={fakeEmail}
-        pochaid={pochaInfo.pochaid}
-        setOpenCartPage={setOpenCartPage}
-      />
-    );
-  }
-
   return (
     <section
       className={`${sejongHospitalLight.className} relative h-full w-screen -translate-x-4 `}
@@ -94,7 +81,7 @@ export default function PochaPage() {
       {/* <PochaMenuDetails menu={Menu} /> */}
       {/* Button for viewing cart */}
       {/* TODO: Need to use the cart array to get all PRICES ONLY of added foods. */}
-      <OpenCartButton setOpenCartPage={setOpenCartPage} />
+      <OpenCartButton />
     </section>
   );
 }

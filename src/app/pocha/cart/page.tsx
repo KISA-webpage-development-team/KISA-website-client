@@ -1,29 +1,28 @@
-// 얘는 이제 cart/page.tsx로 옮겨진 파일이니까 곧 없어질 존재임.
-
+import React from "react";
 import { getUserCartMock, getUserCart } from "@/apis/pocha/queries";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 import { Cart } from "@/types/pocha";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-interface PochaCartPageProps {
-  email: string;
-  pochaid: number;
-  setOpenCartPage: (openCartPage: boolean) => void;
-}
-
-export default function PochaCartPage({
-  email,
-  pochaid,
-  setOpenCartPage,
-}: PochaCartPageProps) {
+export default function PochaCartPage() {
   // cart: variable | setCart: function to set variable
   // setCart({ dfjiaosdjif }) -> cart = { dfjiaosdjif }
+
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+  const pochaid = parseInt(searchParams.get("pochaid"));
+
   const [cart, setCart] = useState<Cart>(undefined);
 
   // fetch initial cart
   useEffect(() => {
     const fetchCart = async () => {
       try {
+        if (!email || !pochaid) {
+          console.log("error");
+        }
+
         // const response = await getUserCart(email, pochaid);
         const response = await getUserCartMock(email, pochaid);
         setCart(response);
