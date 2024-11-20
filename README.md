@@ -16,8 +16,7 @@
 
 2. run following command to start running server in localhost
 
-`npm run dev` (with production backend) or
-`npm run dev:local` (for local backend)
+`npm run dev`
 
 3. run following command to build the project and run the server
 
@@ -130,10 +129,6 @@ please contact @retz8 for easy domain registration
 ### 7. Open the project in VSCode and run the following command to start the server:
 
 ```
-npm run dev:local
-
-or
-
 npm run dev
 ```
 
