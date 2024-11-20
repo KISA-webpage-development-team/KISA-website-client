@@ -1,5 +1,5 @@
 import client from "@/lib/axios/client";
-import { MenuByCategory, PochaInfo } from "@/types/pocha";
+import { MenuByCategory, PochaInfo, Cart, CartItem } from "@/types/pocha";
 /**
  * @desc Fetch pocha info, if no upcoming pocha -> empty data, if else -> unempty data
  * @route GET /pocha/status-info/?date=${date}
@@ -131,4 +131,52 @@ export async function getPochaMenuMock(pochaid: number) {
   ];
 
   return mockPochaMenu;
+}
+
+/**
+ * @desc Fetch user's cart
+ * @route GET /pocha/cart/${email}/${pochaid}
+ */
+export async function getUserCart(
+  email: string,
+  pochaid: number
+): Promise<Cart | undefined> {
+  const url = `/pocha/cart/${email}/${pochaid}`;
+  try {
+    const response = await client.get(url);
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
+export async function getUserCartMock(email: string, pochaid: number) {
+  const mockCart: Cart = new Map<number, CartItem>();
+  mockCart.set(29, {
+    menu: {
+      menuid: 29,
+      nameKor: "김치전",
+      nameEng: "Kimchi Pancake",
+      price: 20,
+      stock: 50,
+      isImmediatePrep: false,
+      parentPochaId: 1,
+    },
+    quantity: 2,
+  });
+  mockCart.set(30, {
+    menu: {
+      menuid: 30,
+      nameKor: "떡볶이",
+      nameEng: "Spicy Rice Cake",
+      price: 15,
+      stock: 100,
+      isImmediatePrep: false,
+      parentPochaId: 1,
+    },
+    quantity: 3,
+  });
+
+  return mockCart;
 }

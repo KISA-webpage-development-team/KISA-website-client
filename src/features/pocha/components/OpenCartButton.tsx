@@ -1,14 +1,15 @@
 import React from "react";
 
-interface PochaCartButtonProps {
-  setOpenCartPage: (openCartPage: boolean) => void;
-}
+type PochaCartProps = {
+  pochaid: number;
+};
 
-export default function OpenCartButton({
-  setOpenCartPage,
-}: PochaCartButtonProps) {
+//
+// { pochaInfo }: PochaHeadingProps
+export default function OpenCartButton({ pochaid }: PochaCartProps) {
   const handleCartClick = () => {
-    setOpenCartPage(true);
+    const queryParams = `pochaid=${pochaid}`;
+    window.location.href = `/pocha/cart?${queryParams}`;
   };
 
   return (

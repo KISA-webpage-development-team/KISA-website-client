@@ -75,7 +75,7 @@ export default function CheckoutPage({ amount }: { amount: number }) {
       {clientSecret && (
         <PaymentElement
           options={{
-            layout: "tabs",
+            layout: "accordion",
             paymentMethodOrder: ["apple_pay", "google_pay", "card"],
           }}
         />

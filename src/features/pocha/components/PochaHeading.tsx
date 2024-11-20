@@ -1,36 +1,12 @@
 import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-import { getPochaInfo, getPochaInfoMock } from "@/apis/pocha/queries";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import { PochaInfo } from "@/types/pocha";
 
-export default function PochaHeading() {
-  // page.tsx는 CSR이기에 PochaHeading도 CSR --> async/await 못함
-  // getPochaInfoMock만 부분적으로 async (await하려면 async)
-  // const fetchPochaInfo = async () => {
-  //   const pochaInfo = await getPochaInfoMock(new Date());
-  //   console.log("pochaInfo", pochaInfo);
-  // };
+interface PochaHeadingProps {
+  pochaInfo: PochaInfo;
+}
 
-  // const pochaInfo = await getPochaInfo(new Date()); // When real api is completed, change to this line
-  const [pochaInfo, setPochaInfo] = useState(undefined);
-
-  useEffect(() => {
-    // define fetchPochaInfo
-    const fetchPochaInfo = async () => {
-      // try API call first
-      try {
-        const res = await getPochaInfoMock(new Date());
-        setPochaInfo(res);
-        // If not
-      } catch (error) {
-        console.error("Error fetching like status: ", error);
-      }
-    };
-    // call fetchPochaInfo function
-    fetchPochaInfo();
-  }, []);
-
+export default function PochaHeading({ pochaInfo }: PochaHeadingProps) {
   return (
     <div className="flex flex-col items-center px-4">
       {/* Title - pocha name */}
