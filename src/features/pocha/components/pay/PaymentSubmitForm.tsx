@@ -63,7 +63,7 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `/pocha/payment-success?amount=${amount}`,
+        return_url: `https://moral-weasel-suited.ngrok-free.app/pocha/pay-success?amount=${amount}`,
       },
     });
 
@@ -123,6 +123,7 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
           <span className="text-xl font-bold">${finalPrice}</span>
         </div>
       </div>
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
       {/* Submit button (sticky on the bottom) */}
       <button
