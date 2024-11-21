@@ -9,7 +9,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { getSession } from "@/lib/next-auth/getSession";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import CartListItem from "@/features/pocha/components/cart/CartListItem";
+import CartListItem from "@/features/pocha/components/pay-cart/CartListItem";
+import { usePayCart } from "@/features/pocha/hooks/usePayCart";
 
 export default function PochaCartPage() {
   // cart: variable | setCart: function to set variable
@@ -20,6 +21,8 @@ export default function PochaCartPage() {
     status: string;
   };
   const email = session?.user.email;
+
+  const { setAmount, setHasImmediatePrep } = usePayCart();
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -39,6 +42,14 @@ export default function PochaCartPage() {
         // const response = await getUserCart(email, pochaid);
         const response = await getUserCartMock(email, pochaid);
         setCart(response);
+
+        // check whether the cart has immediate prep
+        const hasImmediatePrep = Array.from(response.values()).some(
+          (item) => item.menu.isImmediatePrep
+        );
+
+        setHasImmediatePrep(hasImmediatePrep);
+
         setCartItemStale(false);
         console.log("Cart: ", response);
       } catch (error) {
@@ -51,7 +62,7 @@ export default function PochaCartPage() {
     if (cartItemStale) {
       fetchCart();
     }
-  }, [email, pochaid, cartItemStale]);
+  }, [email, pochaid, cartItemStale, setHasImmediatePrep]);
 
   //   // Calculate total price with cart
   //   useEffect(() => {
@@ -71,11 +82,13 @@ export default function PochaCartPage() {
 
   // Button handlers
   const handleBackButton = () => {
-    router.push("/pocha");
+    router.back();
   };
 
   // Implementation needed.
   const handleCheckout = () => {
+    setAmount(parseFloat(getTotalPrice()));
+
     router.push("/pocha/pay");
   };
 

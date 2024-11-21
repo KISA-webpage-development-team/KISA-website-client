@@ -177,6 +177,18 @@ export async function getUserCartMock(email: string, pochaid: number) {
     },
     quantity: 3,
   });
+  mockCart.set(27, {
+    menu: {
+      menuid: 27,
+      nameKor: "참이슬",
+      nameEng: "Cham-e-seul",
+      price: 15,
+      stock: 999,
+      isImmediatePrep: true,
+      parentPochaId: 1,
+    },
+    quantity: 1,
+  });
 
   return mockCart;
 }

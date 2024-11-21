@@ -16,10 +16,10 @@ import {
 } from "@stripe/react-stripe-js";
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
+import { usePayCart } from "../../hooks/usePayCart";
 
 export default function PaymentSubmitForm({ amount }: { amount: number }) {
-  const transactionFee = (0.3 + amount * 0.029).toFixed(2);
-  const finalPrice = (amount + parseFloat(transactionFee)).toFixed(2);
+  const { fee, totalPrice, hasImmediatePrep } = usePayCart();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -40,10 +40,10 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
       .then((data) => setClientSecret(data.clientSecret));
   }, [amount]);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
-
+  /**
+   * @desc Process Payment with Stripe
+   */
+  const processPay = async () => {
     // stripe and elements should be available at this point
     if (!stripe || !elements) {
       return;
@@ -73,6 +73,19 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
       // This payment UI automatically closes with a success animation
       // redirect to "return_url"
     }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setLoading(true);
+
+    // 1. if cart has immediatePrep item (alcohol), check age
+
+    // 2. inventory check
+
+    // 3. payment
+    processPay();
 
     setLoading(false);
   };
@@ -112,7 +125,7 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
 
           <div className="flex items-center justify-between">
             <span>Transaction Fee</span>
-            <span>${transactionFee}</span>
+            <span>${fee}</span>
           </div>
         </div>
 
@@ -120,7 +133,7 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
 
         <div className="flex items-center justify-between self-stretch mt-2">
           <span className="font-bold">Transaction Fee</span>
-          <span className="text-xl font-bold">${finalPrice}</span>
+          <span className="text-xl font-bold">${totalPrice}</span>
         </div>
       </div>
       {errorMessage && <p className="text-red-500">{errorMessage}</p>}
@@ -133,7 +146,7 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
          bg-blue-500 text-white
         border-gray-200 border py-3 px-2 rounded-lg"
       >
-        {!loading ? `$${finalPrice} 결제하기` : "로딩중..."}
+        {!loading ? `$${totalPrice} 결제하기` : "로딩중..."}
       </button>
     </form>
   );

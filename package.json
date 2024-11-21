@@ -3,8 +3,10 @@
   "version": "2.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
-    "dev:stripe": "next dev -p 80",
+    "dev": "node devops/args.ts && next dev -p 3000",
+    "dev-local": "node devops/args.ts -l && next dev -p 3000",
+    "dev:stripe": "node devops/args.ts && next dev -p 3000",
+    "dev-local:stripe": "node devops/args.ts -l && next dev -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

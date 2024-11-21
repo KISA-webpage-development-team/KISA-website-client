@@ -5,13 +5,15 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { Cart } from "@/types/pocha";
-import PaymentSubmitForm from "@/features/pocha/components/pay/PaymentSubmitForm";
+import PaymentSubmitForm from "@/features/pocha/components/pay-cart/PaymentSubmitForm";
 
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 
 // Stripe
 import { Elements } from "@stripe/react-stripe-js"; // stripe payment element
 import { loadStripe } from "@stripe/stripe-js";
+import { usePayCart } from "@/features/pocha/hooks/usePayCart";
+import { useRouter } from "next/navigation";
 
 // defensive programming check
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
@@ -23,13 +25,16 @@ if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 export default function PayPage() {
-  const amount = 49.99; // how much money user is going to pay
-  const fee = (0.3 + amount * 0.029).toFixed(2); // transaction fee
+  // const amount = 49.99; // how much money user is going to pay
+
+  const { amount, fee, totalPrice } = usePayCart();
 
   const { data: session, status } = useSession() as {
     data: UserSession | null;
     status: string;
   };
+
+  const router = useRouter();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,28 +54,41 @@ export default function PayPage() {
   };
 
   const handleBackButton = () => {
-    window.location.href = "/pocha/cart";
+    router.back();
   };
 
-  //   const handlePayButton = async () => {
-  //     setIsProcessing(true);
-  //     setError(null);
+  const backToCart = () => {
+    router.push("/pocha/cart");
+  };
 
-  //     try {
-  //       const userBirthday = session?.user?.birthday;
-  //       if (!userBirthday) {
-  //         throw new Error("User birthday information is missing.");
-  //       }
+  const handlePayButton = async () => {
+    setIsProcessing(true);
+    setError(null);
 
-  //       const age = calculateAge(userBirthday);
-  //       if (age < 21) {
-  //         window.location.href = "/pocha/pay-fail";
-  //         return;
-  //       } else if (age >= 21) {
-  //         window.location.href = "/pocha/pay-success";
-  //       }
-  //     } catch (error) {}
-  //   };
+    // try {
+    //   const userBirthday = session?.user?.birthday;
+    //   if (!userBirthday) {
+    //     throw new Error("User birthday information is missing.");
+    //   }
+
+    //   const age = calculateAge(userBirthday);
+    //   if (age < 21) {
+    //     window.location.href = "/pocha/pay-fail";
+    //     return;
+    //   } else if (age >= 21) {
+    //     window.location.href = "/pocha/pay-success";
+    //   }
+    // } catch (error) {}
+  };
+
+  if (amount === undefined) {
+    return (
+      <div className="flex flex-col">
+        Invalid Access!
+        <button onClick={backToCart}>Back To Cart</button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -81,7 +99,7 @@ export default function PayPage() {
         stripe={stripePromise}
         options={{
           mode: "payment",
-          amount: convertToSubcurrency(amount + parseFloat(fee)), // dollars to cents, stripe accepts in the most basic? currency unit
+          amount: convertToSubcurrency(totalPrice), // dollars to cents, stripe accepts in the most basic? currency unit
           currency: "usd",
         }}
       >

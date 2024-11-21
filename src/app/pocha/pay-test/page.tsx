@@ -1,6 +1,6 @@
 "use client";
 
-import PaymentSubmitForm from "@/features/pocha/components/pay/PaymentSubmitForm";
+import PaymentSubmitForm from "@/features/pocha/components/cart/PaymentSubmitForm";
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 
 // Stripe
