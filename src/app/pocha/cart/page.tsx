@@ -63,6 +63,7 @@ export default function PochaCartPage() {
   //     }
   //   }, [cart]);
 
+  // Because price at that time is brought using API call, can directly access from cart.
   const getTotalPrice = () => {
     return Array.from(cart?.values())
       .reduce((sum, item) => sum + item.menu.price * item.quantity, 0)

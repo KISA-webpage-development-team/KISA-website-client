@@ -24,7 +24,7 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
-import { addItemToCart } from "@/apis/pocha/mutations";
+import { changeItemInCart } from "@/apis/pocha/mutations";
 
 // Types
 import { MenuItem, CartItem, PochaInfo } from "@/types/pocha";
@@ -75,7 +75,7 @@ export default function PochaMenuDetail({
     };
 
     try {
-      const response = await addItemToCart(email, pochaid, addedMenu);
+      const response = await changeItemInCart(email, pochaid, addedMenu);
     } catch (error) {
       console.log("Error message: ", error);
     }

@@ -2,14 +2,13 @@ import client from "@/lib/axios/client";
 import { AddItemToCartBody } from "@/types/pocha";
 
 /**
- * @desc Add items to cart
- * @route POST /pocha/cart/{email}/
+ * @desc Change items inside the cart
+ * @route POST /pocha/cart/{email}/{pochaid}
  * @example
  * valid: { message: "Items posted successfully" }
  * invalid: 401, { message: "Items not created" }
  */
-
-export async function addItemToCart(
+export async function changeItemInCart(
   email: string,
   pochaid: number,
   body: AddItemToCartBody
