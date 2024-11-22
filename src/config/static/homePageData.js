@@ -7,20 +7,18 @@
 // url
 const homeCarouselData = [
   {
-    id: "fa24_networking_session",
-    title: "KISA X MKoBi 네트워킹 세션",
+    id: "fa24_kisa_yearbook",
+    title: "KISA Yearbook",
     desc: (
       <p>
-        Consulting, Finance, UI/UX, Software Engineering에 관심 있는 사람~?🙋
-        11월 21일 오후 8:30에 열리는 온라인 네트워킹 세션에 참여하고 이 분야에서
-        활발히 활동 중이신 미시간 한인 동문분들과 소통할 수 있는 기회를
-        가져보세요!!{" "}
-        <a href="https://forms.gle/ticPCVa4XBuJ47YC7">
-          <strong>RSVP 작성하기</strong>
-        </a>
+        FA24 - WN25 졸업생 선배님들! 미시간 대학교에서 만들었던 소중한 추억과
+        경험들을 KISA Yearbook에 담아 간직해 보세요📽️🎞️ 이어북을 통해 오랫동안
+        기억에 남을 미시간에서의 순간들을 함께 회상해 보는 건
+        어떨까요?❄️선배님들의 학교생활과 노력을 한 권에 모은 특별한 앨범! 얼른
+        신청해 주세요⛄️
       </p>
     ),
-    url: "https://www.instagram.com/p/DCUbPJ3xBxy/?img_index=1",
+    url: "https://www.instagram.com/p/DCmf2f8R-JA/?img_index=1",
   },
   {
     id: "fa24_small_group_recruitment",
