@@ -42,7 +42,28 @@ interface AddItemToCartBody {
   quantity: number;
 }
 
-// key: menuid  value: CartItem
+// key: menuID  value: CartItem
 type Cart = Map<number, CartItem>;
 
 export type { Cart, CartItem, AddItemToCartBody };
+
+// ORDER -----------------------------------------------------------------------
+type OrderStatus = "pending" | "preparing" | "ready" | "closed";
+
+interface OrderItem {
+  orderItemID: number;
+  status: OrderStatus;
+  menu: MenuItem;
+  quantity: number;
+  createdAt: Date;
+}
+
+interface OrderItemWithWaiting {
+  waiting: number;
+  orderItem: OrderItem;
+}
+
+// key: orderID
+type Orders = Map<number, OrderItemWithWaiting[]>;
+
+export type { OrderItem, OrderItemWithWaiting, OrderStatus, Orders };
