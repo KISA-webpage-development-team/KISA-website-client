@@ -1,6 +1,5 @@
 import client from "@/lib/axios/client";
 import { AddItemToCartBody } from "@/types/pocha";
-import { ex } from "@fullcalendar/core/internal-common";
 
 /**
  * @desc Change items inside the cart

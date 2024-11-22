@@ -45,7 +45,7 @@ export default function PaySuccessPage() {
   };
 
   const directToOrders = () => {
-    router.push("/pocha?tab=orders&from=pay-success");
+    router.push("/pocha?tab=orders");
   };
 
   return (

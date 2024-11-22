@@ -66,7 +66,7 @@ export default function PochaCartPage() {
       fetchCart();
     }
 
-    if (cart !== undefined && Object.keys(cart).length > 0 && cartItemStale) {
+    if (cart !== undefined && Object.keys(cart).length > 0) {
       checkImmediatePrep();
     }
   }, [session, pochaid, cartItemStale, setHasImmediatePrep, cart]);

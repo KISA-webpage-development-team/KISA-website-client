@@ -53,6 +53,8 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
     setOnDetailPage(true);
   };
 
+  console.log("pochaMenus", pochaMenus);
+
   // const addToCart = (menu: MenuItem, quantity: number, totalPrice: number) => {
   //   // Gets value from added, saves to the cart.
   //   const toAdd = { menu, quantity, totalPrice };

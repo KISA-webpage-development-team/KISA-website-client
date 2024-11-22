@@ -16,9 +16,13 @@ import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 
 // types
 import { MenuItem, PochaTab, PochaInfo } from "@/types/pocha";
+import { useSearchParams } from "next/navigation";
 
 export default function PochaPage() {
-  const [activeTab, setActiveTab] = useState<PochaTab>("menu");
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<PochaTab>(
+    (searchParams.get("tab") as PochaTab) || "menu"
+  );
 
   // state for selected menu to open detail page
   const [selectedMenu, setSelectedMenu] = useState<MenuItem>(undefined);
@@ -69,7 +73,11 @@ export default function PochaPage() {
       {/* pocha title & description */}
       <PochaHeading pochaInfo={pochaInfo} />
       {/* menu and order history tabs */}
-      <PochaTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      <PochaTabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        searchParams={searchParams}
+      />
       {/* Listing the menus OR orders */}
       {activeTab === "menu" ? (
         <>

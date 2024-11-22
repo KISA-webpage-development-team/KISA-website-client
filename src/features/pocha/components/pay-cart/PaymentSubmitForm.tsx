@@ -91,6 +91,7 @@ export default function PaymentSubmitForm() {
 
     // 2. if cart has immediatePrep item (= alcohol), check age
     if (hasImmediatePrep) {
+      console.log("checking age");
       // check age
       if (userAgeStatus === "success" && underAge) {
         setErrorMessage("미성년자는 주류를 주문할 수 없습니다.");
