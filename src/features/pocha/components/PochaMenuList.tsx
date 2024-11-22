@@ -1,5 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
+
+import Image from "next/image";
 import { getPochaMenu, getPochaMenuMock } from "@/apis/pocha/queries";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { select } from "@nextui-org/react";
@@ -55,28 +57,19 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
 
   console.log("pochaMenus", pochaMenus);
 
-  // const addToCart = (menu: MenuItem, quantity: number, totalPrice: number) => {
-  //   // Gets value from added, saves to the cart.
-  //   const toAdd = { menu, quantity, totalPrice };
-  //   setCart([toAdd]);
-  // };
-
-  // hash map
-  // [menu id: 29] -> value
+  const getImagePath = (menuID: number) => {
+    // Just for the bulgogi case. Else, (menuID != 1) condition should be (menuID != null).
+    return menuID != 1
+      ? `/images/24_last_pocha/${menuID}.png`
+      : "/images/24_last_pocha/image_not_found.png";
+  };
 
   if (pochaMenus === undefined) {
     return <></>;
   }
 
   return (
-    <div
-      className="h-full w-full"
-      style={
-        {
-          // backgroundColor: "pink",
-        }
-      }
-    >
+    <div className="h-full w-full">
       <ul className="flex flex-col px-6 gap-8">
         {pochaMenus?.map(({ category, menusList }, idx) => (
           <li key={`${category}-${idx}`}>
@@ -92,11 +85,22 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
                   key={`menu-${menu?.menuID}`}
                   onClick={() => handleMenuClick(menu)}
                 >
-                  <span className={`${sejongHospitalBold.className}`}>
-                    {menu?.nameKor}
-                  </span>
-                  <span>{menu?.nameEng}</span>
-                  <span>{menu?.price}</span>
+                  <div className="flex gap-8 mb-6 items-center">
+                    <Image
+                      src={getImagePath(menu?.menuID)}
+                      alt={menu?.nameEng}
+                      width={100}
+                      height={100}
+                      className="rounded-full border-4 border-gray-300 shadow-md"
+                    ></Image>
+                    <div className="flex flex-col gap">
+                      <span className={`${sejongHospitalBold.className}`}>
+                        {menu?.nameKor}
+                      </span>
+                      <span>{menu?.nameEng}</span>
+                      <span>{`$${menu?.price}`}</span>
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>
