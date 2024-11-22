@@ -3,10 +3,11 @@
 import { updateCartIsPaidMock } from "@/apis/pocha/mutations";
 import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 export default function PaySuccessPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const pochaID = parseInt(searchParams.get("pochaid"));
 
@@ -38,5 +39,35 @@ export default function PaySuccessPage() {
       changeCartToPaid();
     }
   }, [session, pochaID]);
-  return <div>page</div>;
+
+  const directToMenuList = () => {
+    router.push("/pocha");
+  };
+
+  const directToOrders = () => {
+    router.push("/pocha?tab=orders&from=pay-success");
+  };
+
+  return (
+    <div className="">
+      <div className="flex">
+        <button onClick={directToMenuList}>X</button>
+        <p className="text-center text-lg font-bold">주문완료</p>
+      </div>
+      <span>
+        접수대기 중!<br></br> 가게에서 주문을 확인 중입니다.
+      </span>
+      <div>
+        <button
+          className="w-full flex justify-center mt-4 bg-blue-500 text-white px-4 py-2 font-semibold"
+          onClick={directToOrders}
+        >
+          주문내역 보기
+        </button>
+        <button className="" onClick={directToMenuList}>
+          홈으로 돌아가기
+        </button>
+      </div>
+    </div>
+  );
 }

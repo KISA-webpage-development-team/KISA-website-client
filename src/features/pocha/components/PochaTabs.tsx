@@ -2,17 +2,31 @@
 
 import React from "react";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 // types
 import { PochaTab } from "@/types/pocha";
 
 type PochaTabsProps = { activeTab: PochaTab; setActiveTab: (PochaTab) => void };
 
 export default function PochaTabs({ activeTab, setActiveTab }: PochaTabsProps) {
+  const searchParams = useSearchParams();
+  const currTabState = (searchParams.get("tab") as PochaTab) || "menu";
+
+  // This is used for redirection from pay-success --> directly to orders page.
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    const from = searchParams.get("from");
+
+    if (from === "pay-success" && tab) {
+      setActiveTab(tab as PochaTab);
+    } else {
+      setActiveTab("menu");
+    }
+  }, [searchParams, setActiveTab]);
+
   const handleTabChange = (selectedTab: PochaTab) => {
     setActiveTab(selectedTab);
-
-    // console.log("Tab changed to: ", selectedTab);
   };
 
   const generateTabStyle = (isCurTabSelected: boolean) => {
