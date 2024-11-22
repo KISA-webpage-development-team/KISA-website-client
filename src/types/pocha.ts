@@ -60,7 +60,7 @@ interface OrderItem {
 
 interface OrderItemWithWaiting {
   waiting: number;
-  orderItem: OrderItem;
+  orderItemsList: OrderItem[];
 }
 
 interface OrdersByStatus {
@@ -71,7 +71,7 @@ interface OrdersByStatus {
 }
 
 // key: orderID
-type Orders = Map<number, OrderItemWithWaiting[]>;
+type Orders = Map<number, OrderItemWithWaiting>;
 
 export type {
   OrderItem,
