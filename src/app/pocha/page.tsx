@@ -3,9 +3,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PochaHeading from "@/features/pocha/components/PochaHeading";
-import OpenCartButton from "@/features/pocha/components/OpenCartButton";
-import PochaHelpButton from "@/features/pocha/components/PochaHelpButton";
-import PochaMenuDetails from "@/features/pocha/components/PochaMenuDetail";
 import PochaMenuList from "@/features/pocha/components/PochaMenuList";
 import PochaOrderList from "@/features/pocha/components/order/PochaOrderList";
 import PochaTabs from "@/features/pocha/components/PochaTabs";
@@ -17,12 +14,15 @@ import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 // types
 import { MenuItem, PochaTab, PochaInfo } from "@/types/pocha";
 import { useSearchParams } from "next/navigation";
+import usePocha from "@/features/pocha/hooks/usePocha";
 
 export default function PochaPage() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<PochaTab>(
     (searchParams.get("tab") as PochaTab) || "menu"
   );
+
+  const { pochaInfo, status } = usePocha();
 
   // state for selected menu to open detail page
   const [selectedMenu, setSelectedMenu] = useState<MenuItem>(undefined);
@@ -35,24 +35,8 @@ export default function PochaPage() {
   // };
 
   // const pochaInfo = await getPochaInfo(new Date()); // When real api is completed, change to this line
-  const [pochaInfo, setPochaInfo] = useState<PochaInfo>(undefined);
 
-  useEffect(() => {
-    // define fetchPochaInfo
-    const fetchPochaInfo = async () => {
-      // try API call first
-      try {
-        const res = await getPochaInfo(new Date());
-        setPochaInfo(res);
-      } catch (error) {
-        console.error("Error fetching like status: ", error);
-      }
-    };
-    // call fetchPochaInfo function
-    fetchPochaInfo();
-  }, []);
-
-  if (pochaInfo === undefined) {
+  if (status === "loading") {
     return <LoadingSpinner />;
   }
 
