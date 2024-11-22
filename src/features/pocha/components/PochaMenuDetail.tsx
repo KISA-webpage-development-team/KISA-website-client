@@ -23,6 +23,7 @@
 // { menu: {} , quantity, price }
 
 import React from "react";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { changeItemInCart } from "@/apis/pocha/mutations";
 
@@ -97,6 +98,38 @@ export default function PochaMenuDetail({
     }
   };
 
+  const getImagePath = () => {
+    // 예전 방법.
+    // const imageFiles = [
+    //   "/images/24_last_pocha/seafoodpajeon-13.png",
+    //   "/images/24_last_pocha/kkanpoongi-14.png",
+    //   "/images/24_last_pocha/tteokbokki-15.png",
+    //   "/images/24_last_pocha/yookhwae-16.png",
+    //   "/images/24_last_pocha/jokbal-17.png",
+    //   "/images/24_last_pocha/soju-18.png",
+    //   "/images/24_last_pocha/beer-19.png",
+    //   "/images/24_last_pocha/image_not_found.png",
+    // ];
+
+    // // Find the image that matches the menuID
+    // const matchingImage = imageFiles.find((file) => {
+    //   const parts = file.split("-");
+    //   const menuIdPart = parts[parts.length - 1].split(".")[0];
+    //   return menuIdPart === selectedMenu.menuID.toString();
+    // });
+
+    // return matchingImage
+    //   ? matchingImage
+    //   : "/images/24_last_pocha/image_not_found.png";
+    //   console.log(getImagePath());
+
+    const menuID = selectedMenu.menuID;
+    // Just for the bulgogi case. Else, (menuID != 1) condition should be (menuID != null).
+    return menuID != 1
+      ? `/images/24_last_pocha/${menuID}.png`
+      : "/images/24_last_pocha/image_not_found.png";
+  };
+
   return (
     <div
       className="absolute w-full h-screen top-0 left-0
@@ -108,16 +141,31 @@ export default function PochaMenuDetail({
           Go Back
         </button>
       </div>
-      {/* [TODO] Image */}
+
+      {/* Food Image */}
+      <div>
+        {/* 430 x 932 standards */}
+        <Image
+          src={getImagePath()}
+          alt={selectedMenu.nameEng}
+          width={430}
+          height={430}
+          className="rounded-lg border-3 border-gray-300 shadow-sm"
+        ></Image>
+      </div>
+
       {/* Menu Name */}
-      <span className="text-xl font-bold ">
+      <span className="text-xl font-bold">
         {selectedMenu.nameKor} ({selectedMenu.nameEng})
       </span>
+      <span>Simple description of food. Allergy contents.</span>
+
       {/* Price */}
       <div className="flex justify-between w-full px-3">
         <span className="">Price:</span>
         <span className="">${selectedMenu.price}</span>
       </div>
+
       {/* Quantity Selector */}
       <div className="flex justify-between w-full">
         <span className="ml-3">수량:</span>
@@ -143,7 +191,6 @@ export default function PochaMenuDetail({
         <span>예상 가격: ${selectedMenu.price * quantity} </span>
         <button
           className="mt-4 bg-blue-500 text-white px-4 py-2 font-semibold"
-          // as the button is clicked, the price, quantity, and menu information is sent to PochaMenuList.tsx for TOTAL accumulation.
           onClick={handleAddToCart}
         >
           음식 담기

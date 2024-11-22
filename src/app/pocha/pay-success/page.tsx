@@ -50,11 +50,11 @@ export default function PaySuccessPage() {
 
   return (
     <div className="">
-      <div className="flex">
+      <div className="flex items-center justify-between">
         <button onClick={directToMenuList}>X</button>
-        <p className="text-center text-lg font-bold">주문완료</p>
+        <p className="flex-grow text-center text-lg font-bold mr-3">주문완료</p>
       </div>
-      <span>
+      <span className="flex flex-col text-center items-center">
         접수대기 중!<br></br> 가게에서 주문을 확인 중입니다.
       </span>
       <div>
@@ -64,7 +64,10 @@ export default function PaySuccessPage() {
         >
           주문내역 보기
         </button>
-        <button className="" onClick={directToMenuList}>
+        <button
+          className="w-full flex justify-center"
+          onClick={directToMenuList}
+        >
           홈으로 돌아가기
         </button>
       </div>
