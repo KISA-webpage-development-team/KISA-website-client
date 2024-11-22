@@ -12,6 +12,7 @@ import { MenuByCategory, MenuItem, CartItem } from "@/types/pocha";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import OpenCartButton from "./OpenCartButton";
+import useMenu from "../../hooks/useMenu";
 
 export default function PochaMenuList({ setSelectedMenu, pochaid }) {
   const { data: session, status } = useSession() as {
@@ -19,43 +20,11 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
     status: string;
   };
 
-  const [pochaMenus, setPochaMenus] = useState<MenuByCategory[] | undefined>(
-    undefined
-  );
-
-  // state for selected menu to open detail page
-  // const [selectedMenu, setSelectedMenu] = useState<MenuItem | undefined>(
-  //   undefined
-  // );
-
-  const [onDetailPage, setOnDetailPage] = useState(false);
-
-  // fetch pocha menu from server
-  useEffect(() => {
-    const fetchPochaMenu = async () => {
-      // try API call first
-      try {
-        const res = await getPochaMenu(pochaid, session?.token);
-
-        setPochaMenus(res);
-        // If not
-      } catch (error) {
-        console.error("Error fetching like status: ", error);
-      }
-    };
-
-    if (session) {
-      fetchPochaMenu();
-    }
-  }, [pochaid, session]);
+  const { menuList, status: menuStatus } = useMenu(pochaid, session?.token);
 
   const handleMenuClick = (selectedMenu) => {
-    //console.log(selectedMenu);
     setSelectedMenu(selectedMenu);
-    setOnDetailPage(true);
   };
-
-  console.log("pochaMenus", pochaMenus);
 
   const getImagePath = (menuID: number) => {
     // Just for the bulgogi case. Else, (menuID != 1) condition should be (menuID != null).
@@ -64,14 +33,14 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
       : "/images/24_last_pocha/image_not_found.png";
   };
 
-  if (pochaMenus === undefined) {
+  if (menuStatus === "loading") {
     return <></>;
   }
 
   return (
     <div className="h-full w-full">
       <ul className="flex flex-col px-6 gap-8">
-        {pochaMenus?.map(({ category, menusList }, idx) => (
+        {menuList?.map(({ category, menusList }, idx) => (
           <li key={`${category}-${idx}`}>
             <span
               className={`${sejongHospitalBold.className} text-2xl font-bold`}
@@ -92,7 +61,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
                       width={100}
                       height={100}
                       className="rounded-full border-4 border-gray-300 shadow-md"
-                    ></Image>
+                    />
                     <div className="flex flex-col gap">
                       <span className={`${sejongHospitalBold.className}`}>
                         {menu?.nameKor}

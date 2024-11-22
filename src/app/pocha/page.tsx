@@ -3,12 +3,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PochaHeading from "@/features/pocha/components/PochaHeading";
-import PochaMenuList from "@/features/pocha/components/PochaMenuList";
+import PochaMenuList from "@/features/pocha/components/menu/PochaMenuList";
 import PochaOrderList from "@/features/pocha/components/order/PochaOrderList";
 import PochaTabs from "@/features/pocha/components/PochaTabs";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
-import PochaMenuDetail from "@/features/pocha/components/PochaMenuDetail";
-import { getPochaInfo, getPochaInfoMock } from "@/apis/pocha/queries";
+import PochaMenuDetail from "@/features/pocha/components/menu/PochaMenuDetail";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 
 // types
