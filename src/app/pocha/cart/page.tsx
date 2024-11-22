@@ -20,38 +20,32 @@ export default function PochaCartPage() {
     data: UserSession | undefined;
     status: string;
   };
-  const email = session?.user.email;
 
-  const { setAmount, setHasImmediatePrep } = usePayCart();
+  const { setAmount, setHasImmediatePrep, setPochaID } = usePayCart();
 
   const searchParams = useSearchParams();
   const router = useRouter();
   const pochaid = parseInt(searchParams.get("pochaid"));
 
-  const [cart, setCart] = useState<Cart>(undefined);
+  const [cart, setCart] = useState<Cart>();
   const [cartItemStale, setCartItemStale] = useState<boolean>(true);
 
   // fetch initial cart
   useEffect(() => {
     const fetchCart = async () => {
       try {
+        const email = session?.user?.email;
         if (!email || !pochaid) {
           console.log("email or pochaid not found");
         }
 
         // const response = await getUserCart(email, pochaid);
-        const response = await getUserCartMock(email, pochaid);
+        const response = await getUserCart(email, pochaid);
         setCart(response);
 
         // check whether the cart has immediate prep
-        const hasImmediatePrep = Array.from(response.values()).some(
-          (item) => item.menu.isImmediatePrep
-        );
-
-        setHasImmediatePrep(hasImmediatePrep);
 
         setCartItemStale(false);
-        console.log("Cart: ", response);
       } catch (error) {
         console.error(
           "[PochaCartPage] error while fetching user's cart",
@@ -59,10 +53,33 @@ export default function PochaCartPage() {
         );
       }
     };
-    if (cartItemStale) {
+
+    const checkImmediatePrep = () => {
+      const hasImmediatePrep = Object.values(cart).some(
+        (item) => item.menu.isImmediatePrep
+      );
+
+      setHasImmediatePrep(hasImmediatePrep);
+    };
+
+    if (session && cartItemStale) {
       fetchCart();
     }
-  }, [email, pochaid, cartItemStale, setHasImmediatePrep]);
+
+    if (cart !== undefined && Object.keys(cart).length > 0 && cartItemStale) {
+      checkImmediatePrep();
+    }
+  }, [session, pochaid, cartItemStale, setHasImmediatePrep, cart]);
+
+  // keep track of total price
+  useEffect(() => {
+    setAmount(parseFloat(getTotalPrice()));
+  }, [cart]);
+
+  // set pochaID
+  useEffect(() => {
+    setPochaID(pochaid);
+  }, [pochaid]);
 
   //   // Calculate total price with cart
   //   useEffect(() => {
@@ -74,9 +91,12 @@ export default function PochaCartPage() {
   //     }
   //   }, [cart]);
 
+  // Because price at that time is brought using API call, can directly access from cart.
   const getTotalPrice = () => {
-    return Array.from(cart?.values())
-      .reduce((sum, item) => sum + item.menu.price * item.quantity, 0)
+    if (!cart) return 0;
+
+    return Array.from(Object.values(cart))
+      .reduce((total, item) => total + item.menu.price * item.quantity, 0)
       .toFixed(2);
   };
 
@@ -85,10 +105,8 @@ export default function PochaCartPage() {
     router.back();
   };
 
-  // Implementation needed.
   const handleCheckout = () => {
     setAmount(parseFloat(getTotalPrice()));
-
     router.push("/pocha/pay");
   };
 
@@ -102,28 +120,34 @@ export default function PochaCartPage() {
         Go Back
       </button>
 
-      {/* Cart List */}
-      <ul className="flex flex-col gap-2">
-        {Array.from(cart.entries()).map(([menuid, item]) => (
-          <CartListItem
-            key={menuid}
-            menuid={menuid}
-            item={item}
-            email={email}
-            pochaid={pochaid}
-            setCartItemStale={setCartItemStale}
-          />
-        ))}
-      </ul>
+      {Object.keys(cart).length > 0 ? (
+        <>
+          {/* Cart List */}
+          <ul className="flex flex-col gap-2">
+            {Object.entries(cart).map(([menuid, item]) => (
+              <CartListItem
+                key={menuid}
+                menuid={parseInt(menuid)}
+                item={item}
+                email={session?.user?.email}
+                pochaid={pochaid}
+                setCartItemStale={setCartItemStale}
+              />
+            ))}
+          </ul>
 
-      {/* Total Price */}
-      <div className="flex justify-between w-full">
-        <span className="font-bold">총 주문금액</span>
-        <span className="">${getTotalPrice()}</span>
-      </div>
+          {/* Total Price */}
+          <div className="flex justify-between w-full">
+            <span className="font-bold">총 주문금액</span>
+            <span className="">${getTotalPrice()}</span>
+          </div>
 
-      {/* Checkout button */}
-      <button onClick={handleCheckout}>Checkout</button>
+          {/* Checkout button */}
+          <button onClick={handleCheckout}>Checkout</button>
+        </>
+      ) : (
+        <div>Cart is empty</div>
+      )}
     </div>
   );
 }

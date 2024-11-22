@@ -5,7 +5,13 @@ import { MenuByCategory, PochaInfo, Cart, CartItem } from "@/types/pocha";
  * @route GET /pocha/status-info/?date=${date}
  */
 export async function getPochaInfo(date: Date): Promise<PochaInfo | undefined> {
-  const url = `/pocha/status-info/?date=${date}`;
+  const fakeDate = new Date("2024-11-16T23:00:00");
+
+  // [TODO] change fakeDate to date
+  const url = `/pocha/status-info/?date=${
+    fakeDate.toISOString().split(".")[0]
+  }`;
+
   try {
     const response = await client.get(url);
 
@@ -18,9 +24,9 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo | undefined> {
 
 export async function getPochaInfoMock(date: Date) {
   const mockPochaInfo: PochaInfo = {
-    pochaid: 1,
-    startTime: new Date(),
-    endTime: new Date(new Date().getTime() + 4 * 60 * 60 * 1000),
+    pochaID: 1,
+    startDate: new Date(),
+    endDate: new Date(new Date().getTime() + 4 * 60 * 60 * 1000),
     title: "Halloween Pocha",
     description:
       "할로윈 포차 입니다. 한잔 포차에서 11월 2일 진행될 예정입니다! ^^",
@@ -34,11 +40,16 @@ export async function getPochaInfoMock(date: Date) {
  * @route GET /pocha/menu/${pochaid}
  */
 export async function getPochaMenu(
-  pochaid: number
+  pochaid: number,
+  token: string
 ): Promise<MenuByCategory[] | undefined> {
-  const url = `/pocha/menu/${pochaid}`;
+  const url = `/pocha/menu/${pochaid}/`;
   try {
-    const response = await client.get(url);
+    const response = await client.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response?.data;
   } catch (error) {
@@ -141,9 +152,10 @@ export async function getUserCart(
   email: string,
   pochaid: number
 ): Promise<Cart | undefined> {
-  const url = `/pocha/cart/${email}/${pochaid}`;
+  const url = `/pocha/cart/${email}/${pochaid}/`;
   try {
     const response = await client.get(url);
+
     return response?.data;
   } catch (error) {
     console.log(error);
@@ -191,4 +203,27 @@ export async function getUserCartMock(email: string, pochaid: number) {
   });
 
   return mockCart;
+}
+
+/**
+ * @desc check whether user's cart contains any out-of-stock items
+ * @route GET /pocha/cart/${email}/${pochaid}/check-stock
+ */
+export async function checkCartStock(
+  email: string,
+  pochaid: number
+): Promise<boolean | undefined> {
+  const url = `/pocha/cart/${email}/${pochaid}/check-stock`;
+  try {
+    const response = await client.get(url);
+
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
+export async function checkCartStockMock(email: string, pochaid: number) {
+  return true;
 }

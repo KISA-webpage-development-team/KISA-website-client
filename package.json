@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "node devops/args.ts && next dev -p 3000",
     "dev-local": "node devops/args.ts -l && next dev -p 3000",
-    "dev:stripe": "node devops/args.ts && next dev -p 3000",
-    "dev-local:stripe": "node devops/args.ts -l && next dev -p 3000",
+    "dev:stripe": "node devops/args.ts && next dev -p 80",
+    "dev-local:stripe": "node devops/args.ts -l && next dev -p 80",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

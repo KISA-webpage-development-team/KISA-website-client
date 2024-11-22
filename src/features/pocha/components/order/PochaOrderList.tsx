@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function PochaOrders() {
+export default function PochaOrderList() {
   return <div>Orders</div>;
 }

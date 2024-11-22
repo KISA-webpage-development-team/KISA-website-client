@@ -27,58 +27,16 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 export default function PayPage() {
   // const amount = 49.99; // how much money user is going to pay
 
-  const { amount, fee, totalPrice } = usePayCart();
-
-  const { data: session, status } = useSession() as {
-    data: UserSession | null;
-    status: string;
-  };
+  const { amount, fee, totalPrice, pochaID } = usePayCart();
 
   const router = useRouter();
-
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const calculateAge = (birthday: string | null | undefined): number => {
-    if (!birthday) return 0;
-    const birthDate = new Date(birthday);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    return age;
-  };
 
   const handleBackButton = () => {
     router.back();
   };
 
   const backToCart = () => {
-    router.push("/pocha/cart");
-  };
-
-  const handlePayButton = async () => {
-    setIsProcessing(true);
-    setError(null);
-
-    // try {
-    //   const userBirthday = session?.user?.birthday;
-    //   if (!userBirthday) {
-    //     throw new Error("User birthday information is missing.");
-    //   }
-
-    //   const age = calculateAge(userBirthday);
-    //   if (age < 21) {
-    //     window.location.href = "/pocha/pay-fail";
-    //     return;
-    //   } else if (age >= 21) {
-    //     window.location.href = "/pocha/pay-success";
-    //   }
-    // } catch (error) {}
+    router.push(`/pocha/cart?pochaid=${pochaID}`);
   };
 
   if (amount === undefined) {
@@ -103,7 +61,7 @@ export default function PayPage() {
           currency: "usd",
         }}
       >
-        <PaymentSubmitForm amount={amount} />
+        <PaymentSubmitForm />
       </Elements>
     </div>
   );

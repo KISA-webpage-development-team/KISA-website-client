@@ -1,7 +1,7 @@
 import React from "react";
 import { CartItem } from "@/types/pocha";
 import { useEffect, useState } from "react";
-import { addItemToCart } from "@/apis/pocha/mutations";
+import { changeItemInCart } from "@/apis/pocha/mutations";
 
 type CartListItemProps = {
   item: CartItem;
@@ -22,12 +22,12 @@ export default function CartListItem({
 
   const handleQuantityChange = async (newQuantity: number) => {
     const body = {
-      menuid: menuid,
+      menuID: menuid,
       quantity: newQuantity,
     };
 
     try {
-      const res = await addItemToCart(email, pochaid, body);
+      const res = await changeItemInCart(email, pochaid, body);
 
       // if (!res) {
       //   console.error("Error updating cart item quantity");
@@ -35,26 +35,38 @@ export default function CartListItem({
       // }
 
       setCartItemStale(true);
-      setQuantity(newQuantity);
+      setQuantity(quantity + newQuantity);
     } catch (error) {
       console.error("Error", error);
     }
   };
 
   const incrementQuantity = () => {
-    handleQuantityChange(quantity + 1);
+    handleQuantityChange(1);
   };
 
   const decrementQuantity = () => {
     // Default quantity starts at 1.
     if (quantity > 0) {
-      handleQuantityChange(quantity - 1);
+      handleQuantityChange(-1);
     }
   };
 
+  const removeItemFromCart = () => {
+    handleQuantityChange(-quantity);
+  };
+
+  if (!item || quantity === 0) {
+    return <></>;
+  }
+
   return (
     <li className="flex flex-col">
-      <span>{item.menu.nameEng}</span>
+      <div className="flex justify-between">
+        <span>{item.menu.nameEng}</span>
+        <button onClick={removeItemFromCart}>X</button>
+      </div>
+
       {/* <span>Quantity: {item.quantity}</span> */}
       <span className="font-bold">
         Price: ${item.menu.price * item.quantity}
@@ -64,7 +76,6 @@ export default function CartListItem({
         <button
           className="bg-gray-200 px-3 py-1 font-bold"
           onClick={decrementQuantity}
-          // disabled={quantity === 1}
         >
           -
         </button>

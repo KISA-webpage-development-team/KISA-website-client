@@ -17,10 +17,20 @@ import {
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
 import { usePayCart } from "../../hooks/usePayCart";
+import { checkCartStock, checkCartStockMock } from "@/apis/pocha/queries";
+import { UserSession } from "@/lib/next-auth/types";
+import { useSession } from "next-auth/react";
+import useUserAge from "../../hooks/useUserAge";
 
-export default function PaymentSubmitForm({ amount }: { amount: number }) {
-  const { fee, totalPrice, hasImmediatePrep } = usePayCart();
+export default function PaymentSubmitForm() {
+  const { data: session, status } = useSession() as {
+    data: UserSession | undefined;
+    status: string;
+  };
+  const { amount, fee, totalPrice, hasImmediatePrep, pochaID } = usePayCart();
+  const { underAge, status: userAgeStatus } = useUserAge(session);
 
+  // [NOTE] useStripe and useElements should be called inside <Elements> wrapper
   const stripe = useStripe();
   const elements = useElements();
 
@@ -34,36 +44,22 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ amount: convertToSubcurrency(amount) }),
+      body: JSON.stringify({ amount: convertToSubcurrency(totalPrice) }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
-  }, [amount]);
+  }, [totalPrice]);
 
   /**
    * @desc Process Payment with Stripe
    */
   const processPay = async () => {
-    // stripe and elements should be available at this point
-    if (!stripe || !elements) {
-      return;
-    }
-
-    // this is doing form validation, not submitting the actual payment yet
-    const { error: submitError } = await elements.submit();
-
-    if (submitError) {
-      setErrorMessage(submitError.message);
-      setLoading(false);
-      return;
-    }
-
     // this is actual payment, confirm payment
     const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `https://moral-weasel-suited.ngrok-free.app/pocha/pay-success?amount=${amount}`,
+        return_url: `http://localhost:3000/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`,
       },
     });
 
@@ -80,12 +76,51 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
 
     setLoading(true);
 
-    // 1. if cart has immediatePrep item (alcohol), check age
+    // 0. check if stripe, elements, userAgeStatus is loaded
+    if (!stripe || !elements || userAgeStatus === "loading") {
+      return;
+    }
 
-    // 2. inventory check
+    // 1. check if there is an error in the card input form
+    const { error: formError } = await elements.submit();
+    if (formError) {
+      setErrorMessage(formError.message);
+      setLoading(false);
+      return;
+    }
 
-    // 3. payment
-    processPay();
+    // 2. if cart has immediatePrep item (= alcohol), check age
+    if (hasImmediatePrep) {
+      // check age
+      if (userAgeStatus === "success" && underAge) {
+        setErrorMessage("미성년자는 주류를 주문할 수 없습니다.");
+        setLoading(false);
+        return;
+      }
+    }
+
+    // 3. inventory check
+    try {
+      // const res = await checkCartStock(session?.user?.email, pochaID);
+      const res = await checkCartStockMock(session?.user?.email, pochaID);
+
+      if (!res) {
+        setErrorMessage("재고가 부족합니다.");
+        setLoading(false);
+        return;
+      }
+    } catch (error) {
+      console.error("Error while checking inventory", error);
+      setLoading(false);
+      return;
+    }
+
+    // 4. process payment
+    try {
+      await processPay();
+    } catch (error) {
+      console.error("Error while processing payment", error);
+    }
 
     setLoading(false);
   };
@@ -136,7 +171,7 @@ export default function PaymentSubmitForm({ amount }: { amount: number }) {
           <span className="text-xl font-bold">${totalPrice}</span>
         </div>
       </div>
-      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+      {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}
 
       {/* Submit button (sticky on the bottom) */}
       <button

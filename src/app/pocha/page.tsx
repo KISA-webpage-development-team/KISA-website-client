@@ -7,18 +7,17 @@ import OpenCartButton from "@/features/pocha/components/OpenCartButton";
 import PochaHelpButton from "@/features/pocha/components/PochaHelpButton";
 import PochaMenuDetails from "@/features/pocha/components/PochaMenuDetail";
 import PochaMenuList from "@/features/pocha/components/PochaMenuList";
-import PochaOrders from "@/features/pocha/components/PochaOrders";
+import PochaOrderList from "@/features/pocha/components/order/PochaOrderList";
 import PochaTabs from "@/features/pocha/components/PochaTabs";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import PochaMenuDetail from "@/features/pocha/components/PochaMenuDetail";
-
-// types
-import { MenuItem, PochaTab, CartItem, PochaInfo } from "@/types/pocha";
-import { getPochaInfoMock } from "@/apis/pocha/queries";
+import { getPochaInfo, getPochaInfoMock } from "@/apis/pocha/queries";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 
+// types
+import { MenuItem, PochaTab, PochaInfo } from "@/types/pocha";
+
 export default function PochaPage() {
-  const fakeEmail = "dongsubk@umich.edu";
   const [activeTab, setActiveTab] = useState<PochaTab>("menu");
 
   // state for selected menu to open detail page
@@ -39,9 +38,8 @@ export default function PochaPage() {
     const fetchPochaInfo = async () => {
       // try API call first
       try {
-        const res = await getPochaInfoMock(new Date());
+        const res = await getPochaInfo(new Date());
         setPochaInfo(res);
-        // If not
       } catch (error) {
         console.error("Error fetching like status: ", error);
       }
@@ -59,8 +57,7 @@ export default function PochaPage() {
       <PochaMenuDetail
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        email={fakeEmail}
-        pochaid={pochaInfo?.pochaid}
+        pochaid={pochaInfo?.pochaID}
       />
     );
   }
@@ -75,9 +72,14 @@ export default function PochaPage() {
       <PochaTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       {/* Listing the menus OR orders */}
       {activeTab === "menu" ? (
-        <PochaMenuList setSelectedMenu={setSelectedMenu} />
+        <>
+          <PochaMenuList
+            setSelectedMenu={setSelectedMenu}
+            pochaid={pochaInfo?.pochaID}
+          />
+        </>
       ) : (
-        <PochaOrders />
+        <PochaOrderList />
       )}
       {/* [LATER] helper button */}
       {/* <PochaHelpButton /> */}
@@ -85,7 +87,6 @@ export default function PochaPage() {
       {/* <PochaMenuDetails menu={Menu} /> */}
       {/* Button for viewing cart */}
       {/* TODO: Need to use the cart array to get all PRICES ONLY of added foods. */}
-      <OpenCartButton pochaid={pochaInfo?.pochaid} />
     </section>
   );
 }

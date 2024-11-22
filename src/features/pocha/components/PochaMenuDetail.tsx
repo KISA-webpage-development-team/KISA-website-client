@@ -24,24 +24,28 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
-import { addItemToCart } from "@/apis/pocha/mutations";
+import { changeItemInCart } from "@/apis/pocha/mutations";
 
 // Types
 import { MenuItem, CartItem, PochaInfo } from "@/types/pocha";
+import { UserSession } from "@/lib/next-auth/types";
+import { useSession } from "next-auth/react";
 
 interface PochaMenuDetailProps {
   selectedMenu: MenuItem;
   setSelectedMenu: (selectedMenu: MenuItem | undefined) => void;
-  email: string;
   pochaid: number;
 }
 
 export default function PochaMenuDetail({
   selectedMenu,
   setSelectedMenu,
-  email,
   pochaid,
 }: PochaMenuDetailProps) {
+  const { data: session, status } = useSession() as {
+    data: UserSession | undefined;
+    status: string;
+  };
   // Counter Logic
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -70,18 +74,27 @@ export default function PochaMenuDetail({
   const handleAddToCart = async () => {
     // Posting info to DB.
     const addedMenu = {
-      menuid: selectedMenu.menuid,
+      menuID: selectedMenu.menuID,
       quantity: quantity,
     };
 
     try {
-      const response = await addItemToCart(email, pochaid, addedMenu);
+      const response = await changeItemInCart(
+        session?.user?.email,
+        pochaid,
+        addedMenu
+      );
+
+      if (!response) {
+        console.error("Error updating cart item quantity");
+        return;
+      }
+
+      // redirect to the original page
+      setSelectedMenu(undefined);
     } catch (error) {
       console.log("Error message: ", error);
     }
-
-    // redirect to the original page
-    setSelectedMenu(undefined);
   };
 
   return (

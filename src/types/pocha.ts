@@ -1,7 +1,7 @@
 interface PochaInfo {
-  pochaid: number;
-  startTime: Date;
-  endTime: Date;
+  pochaID: number;
+  startDate: Date;
+  endDate: Date;
   title: string;
   description: string;
   ongoing: boolean;
@@ -14,7 +14,7 @@ export type { PochaInfo, PochaTab };
 // MENU -----------------------------------------------------------------------
 
 interface MenuItem {
-  menuid: number;
+  menuID: number;
   nameKor: string;
   nameEng: string;
   price: number;
@@ -38,7 +38,7 @@ interface CartItem {
 }
 
 interface AddItemToCartBody {
-  menuid: number;
+  menuID: number;
   quantity: number;
 }
 

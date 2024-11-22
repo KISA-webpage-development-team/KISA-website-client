@@ -7,8 +7,16 @@ import PochaMenuDetail from "./PochaMenuDetail";
 
 // Types
 import { MenuByCategory, MenuItem, CartItem } from "@/types/pocha";
+import { useSession } from "next-auth/react";
+import { UserSession } from "@/lib/next-auth/types";
+import OpenCartButton from "./OpenCartButton";
 
-export default function PochaMenuList({ setSelectedMenu }) {
+export default function PochaMenuList({ setSelectedMenu, pochaid }) {
+  const { data: session, status } = useSession() as {
+    data: UserSession | null;
+    status: string;
+  };
+
   const [pochaMenus, setPochaMenus] = useState<MenuByCategory[] | undefined>(
     undefined
   );
@@ -25,15 +33,19 @@ export default function PochaMenuList({ setSelectedMenu }) {
     const fetchPochaMenu = async () => {
       // try API call first
       try {
-        const res = await getPochaMenuMock(1);
+        const res = await getPochaMenu(pochaid, session?.token);
+
         setPochaMenus(res);
         // If not
       } catch (error) {
         console.error("Error fetching like status: ", error);
       }
     };
-    fetchPochaMenu();
-  }, []);
+
+    if (session) {
+      fetchPochaMenu();
+    }
+  }, [pochaid, session]);
 
   const handleMenuClick = (selectedMenu) => {
     //console.log(selectedMenu);
@@ -50,9 +62,13 @@ export default function PochaMenuList({ setSelectedMenu }) {
   // hash map
   // [menu id: 29] -> value
 
+  if (pochaMenus === undefined) {
+    return <></>;
+  }
+
   return (
     <div
-      className="h-full"
+      className="h-full w-full"
       style={
         {
           // backgroundColor: "pink",
@@ -71,20 +87,21 @@ export default function PochaMenuList({ setSelectedMenu }) {
               {menusList?.map((menu) => (
                 <li
                   className="flex flex-col"
-                  key={`menu-${menu.menuid}`}
+                  key={`menu-${menu?.menuID}`}
                   onClick={() => handleMenuClick(menu)}
                 >
                   <span className={`${sejongHospitalBold.className}`}>
-                    {menu.nameKor}
+                    {menu?.nameKor}
                   </span>
-                  <span>{menu.nameEng}</span>
-                  <span>{menu.price}</span>
+                  <span>{menu?.nameEng}</span>
+                  <span>{menu?.price}</span>
                 </li>
               ))}
             </ul>
           </li>
         ))}
       </ul>
+      <OpenCartButton pochaid={pochaid} />
     </div>
   );
 }
