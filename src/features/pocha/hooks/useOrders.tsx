@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 
 /**
  * @desc hook to fetch user orders (getUserOrders)
+ * @params email, token, pochaID
  */
 const useOrders = (email: string, token: string, pochaID: number) => {
   const [orders, setOrders] = useState<Orders>();
-  const [status, setStatus] = useState<string>("loading");
+  const [status, setStatus] = useState<"loading" | "success" | "error">(
+    "loading"
+  );
 
   // fetch orders
   useEffect(() => {

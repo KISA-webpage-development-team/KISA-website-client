@@ -338,6 +338,216 @@ export async function getUserOrdersMock(
       },
     ],
   });
+  mockOrders.set(3, {
+    waiting: 3,
+    orderItemsList: [
+      {
+        orderItemID: 4,
+        status: "pending",
+        menu: {
+          menuID: 31,
+          nameKor: "순대",
+          nameEng: "Blood Sausage",
+          price: 12,
+          stock: 80,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 2,
+        createdAt: new Date(),
+      },
+      {
+        orderItemID: 5,
+        status: "preparing",
+        menu: {
+          menuID: 32,
+          nameKor: "오뎅",
+          nameEng: "Fish Cake",
+          price: 10,
+          stock: 150,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 4,
+        createdAt: new Date(),
+      },
+    ],
+  });
+  mockOrders.set(4, {
+    waiting: 0,
+    orderItemsList: [
+      {
+        orderItemID: 6,
+        status: "ready",
+        menu: {
+          menuID: 33,
+          nameKor: "소주",
+          nameEng: "Soju",
+          price: 8,
+          stock: 200,
+          isImmediatePrep: true,
+          parentPochaId: 1,
+        },
+        quantity: 3,
+        createdAt: new Date(),
+      },
+      {
+        orderItemID: 7,
+        status: "closed",
+        menu: {
+          menuID: 34,
+          nameKor: "맥주",
+          nameEng: "Beer",
+          price: 10,
+          stock: 200,
+          isImmediatePrep: true,
+          parentPochaId: 1,
+        },
+        quantity: 2,
+        createdAt: new Date(),
+      },
+    ],
+  });
+  mockOrders.set(5, {
+    waiting: 4,
+    orderItemsList: [
+      {
+        orderItemID: 8,
+        status: "pending",
+        menu: {
+          menuID: 35,
+          nameKor: "감자전",
+          nameEng: "Potato Pancake",
+          price: 18,
+          stock: 60,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 1,
+        createdAt: new Date(),
+      },
+      {
+        orderItemID: 9,
+        status: "preparing",
+        menu: {
+          menuID: 36,
+          nameKor: "해물파전",
+          nameEng: "Seafood Pancake",
+          price: 25,
+          stock: 40,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 2,
+        createdAt: new Date(),
+      },
+    ],
+  });
+  mockOrders.set(6, {
+    waiting: 2,
+    orderItemsList: [
+      {
+        orderItemID: 10,
+        status: "pending",
+        menu: {
+          menuID: 37,
+          nameKor: "닭꼬치",
+          nameEng: "Chicken Skewer",
+          price: 15,
+          stock: 100,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 4,
+        createdAt: new Date(),
+      },
+      {
+        orderItemID: 11,
+        status: "ready",
+        menu: {
+          menuID: 38,
+          nameKor: "모듬전",
+          nameEng: "Assorted Pancakes",
+          price: 30,
+          stock: 30,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 1,
+        createdAt: new Date(),
+      },
+    ],
+  });
+  mockOrders.set(7, {
+    waiting: 1,
+    orderItemsList: [
+      {
+        orderItemID: 12,
+        status: "preparing",
+        menu: {
+          menuID: 39,
+          nameKor: "골뱅이무침",
+          nameEng: "Spicy Sea Snails",
+          price: 22,
+          stock: 45,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 2,
+        createdAt: new Date(),
+      },
+      {
+        orderItemID: 13,
+        status: "closed",
+        menu: {
+          menuID: 40,
+          nameKor: "계란말이",
+          nameEng: "Rolled Omelette",
+          price: 12,
+          stock: 70,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 3,
+        createdAt: new Date(),
+      },
+    ],
+  });
+  mockOrders.set(8, {
+    waiting: 3,
+    orderItemsList: [
+      {
+        orderItemID: 14,
+        status: "pending",
+        menu: {
+          menuID: 41,
+          nameKor: "마른안주",
+          nameEng: "Dried Snacks",
+          price: 8,
+          stock: 150,
+          isImmediatePrep: true,
+          parentPochaId: 1,
+        },
+        quantity: 5,
+        createdAt: new Date(),
+      },
+      {
+        orderItemID: 15,
+        status: "preparing",
+        menu: {
+          menuID: 42,
+          nameKor: "치즈볼",
+          nameEng: "Cheese Balls",
+          price: 15,
+          stock: 80,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 2,
+        createdAt: new Date(),
+      },
+    ],
+  });
 
   return mockOrders;
 }

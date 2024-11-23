@@ -70,7 +70,7 @@ export default function PochaPage() {
           />
         </>
       ) : (
-        <PochaOrderList />
+        <PochaOrderList pochaID={pochaInfo.pochaID} />
       )}
       {/* [LATER] helper button */}
       {/* <PochaHelpButton /> */}
