@@ -1,7 +1,10 @@
 import React from "react";
 
 import Image from "next/image";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
 
 // Types
 import { useSession } from "next-auth/react";
@@ -34,23 +37,23 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
 
   return (
     <div className="h-full w-full">
-      <ul className="flex flex-col px-6 gap-8">
+      <ul className="flex flex-col px-6 gap-6">
         {menuList?.map(({ category, menusList }, idx) => (
           <li key={`${category}-${idx}`}>
             <span
-              className={`${sejongHospitalBold.className} text-2xl font-bold`}
+              className={`${sejongHospitalBold.className} text-3xl font-bold border-b-4 border-gray-500 pb-1`}
             >
               {category}
             </span>
-            <ul className="flex flex-col mt-3 gap-4">
+            <ul className="flex flex-col mt-3 divide-y-2 divide-gray-200">
               {menusList?.map((menu) => (
                 <li
-                  className="flex items-center gap-4"
+                  className="flex items-center gap-4 py-3"
                   key={`menu-${menu?.menuID}`}
                   onClick={() => handleMenuClick(menu)}
                 >
                   {/* [NOTE] added figure tag for semantic html */}
-                  <figure className="relative h-24 aspect-square items-center">
+                  <figure className="relative h-24 aspect-square items-center flex-shrink-0">
                     <Image
                       src={getImagePath(menu?.menuID)}
                       alt={menu?.nameEng}
@@ -60,12 +63,22 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
                     />
                   </figure>
 
-                  <div className="flex flex-col gap">
-                    <span className={`${sejongHospitalBold.className}`}>
-                      {menu?.nameKor}
-                    </span>
-                    <span>{menu?.nameEng}</span>
-                    <span>{`$${menu?.price}`}</span>
+                  <div className="flex flex-col justify-center">
+                    <div>
+                      <span
+                        className={`${sejongHospitalBold.className} text-xl`}
+                      >
+                        {menu?.nameKor}
+                      </span>
+                      <span
+                        className={`${sejongHospitalLight.className} text-sm ml-1`}
+                      >
+                        {`(${menu?.nameEng})`}
+                      </span>
+                    </div>
+                    <span
+                      className={`${sejongHospitalLight.className} text-sm mt-1`}
+                    >{`$${menu?.price}`}</span>
                   </div>
                 </li>
               ))}

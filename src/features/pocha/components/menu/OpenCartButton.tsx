@@ -1,11 +1,11 @@
 import React from "react";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import PochaCartIcon from "@/final_refactor_src/components/icon/PochaCartIcon";
 
 type PochaCartProps = {
   pochaid: number;
 };
 
-//
-// { pochaInfo }: PochaHeadingProps
 export default function OpenCartButton({ pochaid }: PochaCartProps) {
   const handleCartClick = () => {
     const queryParams = `pochaid=${pochaid}`;
@@ -13,11 +13,23 @@ export default function OpenCartButton({ pochaid }: PochaCartProps) {
   };
 
   return (
-    <button
-      className="w-full flex justify-center mt-4 bg-blue-500 text-white px-4 py-2 font-semibold"
-      onClick={handleCartClick}
-    >
-      View Cart
-    </button>
+    <div className="flex justify-center w-full">
+      <button
+        className={`
+          w-[70%] flex py-3 mt-8
+          rounded-lg text-white font-semibold
+          bg-cyan-600/75 justify-between items-center
+          ${sejongHospitalBold.className}
+        `}
+        onClick={handleCartClick}
+      >
+        <span className={`ml-10 ${sejongHospitalBold.className}`}>
+          View Cart
+        </span>
+        <div className="mr-10">
+          <PochaCartIcon />
+        </div>
+      </button>
+    </div>
   );
 }

@@ -1,7 +1,10 @@
 "use client";
 
 import React from "react";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 // types
@@ -44,21 +47,20 @@ export default function PochaTabs({
   };
 
   const generateTabStyle = (isCurTabSelected: boolean) => {
-    // if (isCurTabSelected) {
-    //   return "flex-1 text-black font-semibold";
-    // } else {
-    //   return "flex-1 text-gray-400";
-    // }
+    return `flex-1 px-4 py-2 text-center relative transition-all duration-200 ease-in-out ${
+      // [NOTE]: 이렇게 했었는데 border-b-2에 ㅈ버그 생겨서 일단은 manually함.
+      // isCurTabSelected
+      //   ? `text-black font-semibold ${sejongHospitalBold.className} border-b-2 border-black`
+      //   : `text-gray-400 ${sejongHospitalLight.className}`
 
-    return `flex-1 ${
       isCurTabSelected
-        ? `text-black font-semibold ${sejongHospitalBold.className}`
-        : "text-gray-400"
+        ? `text-black font-semibold ${sejongHospitalBold.className} after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-black text-xl`
+        : `text-gray-400 ${sejongHospitalLight.className} text-xl`
     }`;
   };
 
   return (
-    <div className="flex">
+    <div className="flex divide-x divide-gray-300">
       <button
         className={generateTabStyle(activeTab === "menu")}
         onClick={() => handleTabChange("menu")}
