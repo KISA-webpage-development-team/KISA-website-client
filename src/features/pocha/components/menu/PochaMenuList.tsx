@@ -1,14 +1,9 @@
 import React from "react";
-import { useEffect, useState } from "react";
 
 import Image from "next/image";
-import { getPochaMenu, getPochaMenuMock } from "@/apis/pocha/queries";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { select } from "@nextui-org/react";
-import PochaMenuDetail from "./PochaMenuDetail";
 
 // Types
-import { MenuByCategory, MenuItem, CartItem } from "@/types/pocha";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import OpenCartButton from "./OpenCartButton";
@@ -47,28 +42,30 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
             >
               {category}
             </span>
-            <ul>
+            <ul className="flex flex-col mt-3 gap-4">
               {menusList?.map((menu) => (
                 <li
-                  className="flex flex-col"
+                  className="flex items-center gap-4"
                   key={`menu-${menu?.menuID}`}
                   onClick={() => handleMenuClick(menu)}
                 >
-                  <div className="flex gap-8 mb-6 items-center">
+                  {/* [NOTE] added figure tag for semantic html */}
+                  <figure className="relative h-24 aspect-square items-center">
                     <Image
                       src={getImagePath(menu?.menuID)}
                       alt={menu?.nameEng}
-                      width={100}
-                      height={100}
+                      fill
+                      sizes="(max-width: 768px) 20vw"
                       className="rounded-full border-4 border-gray-300 shadow-md"
                     />
-                    <div className="flex flex-col gap">
-                      <span className={`${sejongHospitalBold.className}`}>
-                        {menu?.nameKor}
-                      </span>
-                      <span>{menu?.nameEng}</span>
-                      <span>{`$${menu?.price}`}</span>
-                    </div>
+                  </figure>
+
+                  <div className="flex flex-col gap">
+                    <span className={`${sejongHospitalBold.className}`}>
+                      {menu?.nameKor}
+                    </span>
+                    <span>{menu?.nameEng}</span>
+                    <span>{`$${menu?.price}`}</span>
                   </div>
                 </li>
               ))}
