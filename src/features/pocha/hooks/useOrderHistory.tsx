@@ -1,8 +1,8 @@
 import {
-  getUserOrders,
-  getUserOrdersMock,
-  getPochaOrdersMock,
-  getPochaOrders,
+  getUserClosedOrders,
+  getUserClosedOrdersMock,
+  getPochaClosedOrders,
+  getPochaClosedOrdersMock,
 } from "@/apis/pocha/queries";
 import { OrderItem, Orders } from "@/types/pocha";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
  * @desc hook to fetch user orders (getUserOrders)
  * @params email, token, pochaID
  */
-const useOrders = (email: string, token: string, pochaID: number) => {
+const useOrderHistory = (email: string, token: string, pochaID: number) => {
   const [orders, setOrders] = useState<Orders>();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
@@ -24,8 +24,8 @@ const useOrders = (email: string, token: string, pochaID: number) => {
     // app
     const fetchUserOrders = async () => {
       try {
-        // const res = await getUserOrders(email, pochaID, token);
-        const res = await getUserOrdersMock(email, pochaID, token);
+        // const res = await getUserClosedOrders(email, pochaID, token);
+        const res = await getUserClosedOrdersMock(email, pochaID, token);
 
         setOrders(res);
         setStatus("success");
@@ -38,8 +38,8 @@ const useOrders = (email: string, token: string, pochaID: number) => {
     // dashboard
     const fetchAllOrders = async () => {
       try {
-        // const res = await getPochaOrders(pochaID, token);
-        const res = await getPochaOrdersMock(pochaID, token);
+        // const res = await getPochaClosedOrders(pochaID, token);
+        const res = await getPochaClosedOrdersMock(pochaID, token);
 
         setOrders(res);
         setStatus("success");
@@ -58,29 +58,6 @@ const useOrders = (email: string, token: string, pochaID: number) => {
     }
   }, [email, pochaID, token]);
 
-  // interface OrderItem {
-  //   orderItemID: number;
-  //   status: OrderStatus;
-  //   menu: MenuItem;
-  //   quantity: number;
-  //   createdAt: Date;
-  // }
-
-  // interface OrderItemWithWaiting {
-  //   waiting: number;
-  //   orderItemsList: OrderItem[];
-  // }
-
-  // interface OrdersByStatus {
-  //   pending: OrderItemWithWaiting[];
-  //   preparing: OrderItemWithWaiting[];
-  //   ready: OrderItemWithWaiting[];
-  //   closed: OrderItemWithWaiting[];
-  // }
-
-  // // key: orderID
-  // type Orders = Map<number, OrderItemWithWaiting>;
-
   // extract total list of order items from Orders (map<number, OrderItemWithWaiting>)
   useEffect(() => {
     if (!orders) {
@@ -97,22 +74,11 @@ const useOrders = (email: string, token: string, pochaID: number) => {
     setOrderItems(orderItemsList);
   }, [orders]);
 
-  // // divide and process orders based on status
-  const pendingOrders = orderItems?.filter(
-    (order) => order.status === "pending"
-  );
-  const preparingOrders = orderItems?.filter(
-    (order) => order.status === "preparing"
-  );
-  const readyOrders = orderItems?.filter((order) => order.status === "ready");
-
   return {
     orders,
-    pendingOrders,
-    preparingOrders,
-    readyOrders,
+    orderHistory: orderItems,
     status,
   };
 };
 
-export default useOrders;
+export default useOrderHistory;

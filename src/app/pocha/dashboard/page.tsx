@@ -1,5 +1,7 @@
 "use client";
 
+import OrderHistoryTable from "@/features/pocha/components/dashboard/OrderHistoryTable";
+import OrdersTable from "@/features/pocha/components/dashboard/OrdersTable";
 import useOrders from "@/features/pocha/hooks/useOrders";
 import usePocha from "@/features/pocha/hooks/usePocha";
 import {
@@ -17,17 +19,8 @@ export default function DashboardPage() {
   // each hook fetches with GET request
   const { isAdmin, email, token, status: adminStatus } = useAdmin();
   const { pochaInfo, status: pochaStatus } = usePocha();
-  const { orders, status: orderStatus } = useOrders(
-    email,
-    token,
-    pochaInfo?.pochaID
-  );
 
-  if (
-    adminStatus === "loading" ||
-    pochaStatus === "loading" ||
-    orderStatus === "loading"
-  ) {
+  if (adminStatus === "loading" || pochaStatus === "loading") {
     return <LoadingSpinner />;
   }
   // only admin can view this page
@@ -37,20 +30,17 @@ export default function DashboardPage() {
 
   // need to think about how to display orders on dashboard
 
-  // status에 따라 구분되어 있어야하며, 항상 createdAt을 기준으로 정렬되어 있어야 함
-  console.log("orders", orders);
-
   return (
     <section>
       <Tabs aria-label="Options">
         <Tab key="orders" title="Orders">
-          orders
+          <OrdersTable token={token} pochaID={pochaInfo?.pochaID} />
         </Tab>
         <Tab key="stock" title="Stock">
           stock
         </Tab>
         <Tab key="history" title="History">
-          history
+          <OrderHistoryTable token={token} pochaID={pochaInfo?.pochaID} />
         </Tab>
       </Tabs>
     </section>
