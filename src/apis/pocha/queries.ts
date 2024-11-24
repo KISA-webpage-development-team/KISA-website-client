@@ -221,7 +221,7 @@ export async function checkCartStock(
   email: string,
   pochaid: number
 ): Promise<boolean | undefined> {
-  const url = `/pocha/cart/${email}/${pochaid}/check-stock`;
+  const url = `/pocha/cart/${email}/${pochaid}/check-stock/`;
   try {
     const response = await client.get(url);
 
@@ -453,7 +453,7 @@ export async function getUserClosedOrders(
   pochaid: number,
   token: string
 ): Promise<OrderHistory | undefined> {
-  const url = `/pocha/orders/${email}/${pochaid}/closed`;
+  const url = `/pocha/orders/${email}/${pochaid}/closed/`;
   try {
     const response = await client.get(url, {
       headers: {
@@ -515,7 +515,7 @@ export async function getPochaClosedOrders(
   pochaid: number,
   token: string
 ): Promise<OrderHistory | undefined> {
-  const url = `/pocha/orders/${pochaid}/closed`;
+  const url = `/pocha/orders/${pochaid}/closed/`;
   try {
     const response = await client.get(url, {
       headers: {
@@ -570,7 +570,7 @@ export async function getPochaClosedOrdersMock(
 // [TODO] change route URL
 /**
  * @desc Fetch pay info by user (cart)
- * @route GET /pocha/cart/${email}/${pochaid}/info
+ * @route GET /pocha/cart/${email}/${pochaid}/checkout-info
  * @params email, token, pochaid
  */
 export async function getPayInfo(
@@ -578,7 +578,7 @@ export async function getPayInfo(
   pochaid: number,
   token: string
 ): Promise<PayInfo | undefined> {
-  const url = `/pocha/cart/${email}/${pochaid}/info`;
+  const url = `/pocha/cart/${email}/${pochaid}/checkout-info/`;
   try {
     const response = await client.get(url, {
       headers: {

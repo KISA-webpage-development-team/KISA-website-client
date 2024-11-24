@@ -122,10 +122,10 @@ export default function PaymentSubmitForm({
       }
     }
 
-    // 3. inventory check
+    // 3. inventory check ang
     try {
-      // const res = await checkCartStock(session?.user?.email, pochaID);
-      const res = await checkCartStockMock(session?.user?.email, pochaID);
+      const res = await checkCartStock(session?.user?.email, pochaID);
+      // const res = await checkCartStockMock(session?.user?.email, pochaID);
 
       if (!res) {
         setErrorMessage("재고가 부족합니다.");
