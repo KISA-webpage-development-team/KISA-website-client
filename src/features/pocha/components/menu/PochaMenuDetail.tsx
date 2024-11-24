@@ -26,6 +26,11 @@ import React from "react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { changeItemInCart } from "@/apis/pocha/mutations";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
+import PochaBackIcon from "@/final_refactor_src/components/icon/PochaBackIcon";
 
 // Types
 import { MenuItem, CartItem, PochaInfo } from "@/types/pocha";
@@ -131,71 +136,86 @@ export default function PochaMenuDetail({
   };
 
   return (
-    <div
-      className="absolute w-full h-screen top-0 left-0
-    bg-white
-    flex flex-col items-center top-gap-8"
-    >
-      <div className="self-stretch flex justify-start">
-        <button className="flex" onClick={handleBackButton}>
-          Go Back
+    <div className="w-full h-full flex flex-col items-center overflow-y-auto">
+      <div className="flex self-stretch justify-start">
+        <button className="flex mb-3" onClick={handleBackButton}>
+          <PochaBackIcon />
         </button>
       </div>
 
       {/* Food Image */}
-      <div>
-        {/* 430 x 932 standards */}
+      <div className="relative w-full h-[350px]">
         <Image
           src={getImagePath()}
           alt={selectedMenu.nameEng}
-          width={430}
-          height={430}
+          fill
           className="rounded-lg border-3 border-gray-300 shadow-sm"
-        ></Image>
+        />
       </div>
 
-      {/* Menu Name */}
-      <span className="text-xl font-bold">
-        {selectedMenu.nameKor} ({selectedMenu.nameEng})
-      </span>
-      <span>Simple description of food. Allergy contents.</span>
+      {/* Details */}
+      <div
+        className="flex flex-col relative w-[95%] bg-white rounded-lg p-6 shadow-lg mt-[-75px] items-center justify-center border-4 border-gray-300 z-10"
+        style={{
+          marginBottom: "25px", // Prevent overlapping with button
+        }}
+      >
+        {/* Menu Name */}
+        <span className={`${sejongHospitalBold.className} mt-4 text-4xl`}>
+          {selectedMenu.nameKor}
+        </span>
+        <span className={`${sejongHospitalBold.className} text-medium`}>
+          {selectedMenu.nameEng}
+        </span>
 
-      {/* Price */}
-      <div className="flex justify-between w-full px-3">
-        <span className="">Price:</span>
-        <span className="">${selectedMenu.price}</span>
-      </div>
+        {/* temporarily put in a value. */}
+        <p className="text-center text-gray-500 mt-2">
+          Comes with:
+          <br />
+          - Fish cake
+          <br />- Carrot
+        </p>
 
-      {/* Quantity Selector */}
-      <div className="flex justify-between w-full">
-        <span className="ml-3">수량:</span>
-        <div className="flex items-center gap-2">
-          <button
-            className="bg-gray-200 px-3 py-1 font-bold"
-            onClick={decrementQuantity}
-            disabled={quantity === 1}
+        {/* for this, just shows the total price for the selected food, based on your quantity. */}
+        <span className={`${sejongHospitalLight.className} text-lg mt-2`}>
+          ${selectedMenu.price * quantity}{" "}
+        </span>
+
+        {/* Quantity Selector */}
+        <div className="flex justify-center items-center bg-gray-200 border-4 border-gray-300 text-lg mt-4 pt-3 pb-3 rounded-2xl w-[90%]">
+          <span
+            className={`${sejongHospitalLight.className} pl-14`}
+            style={{ flexShrink: 0 }}
           >
-            -
-          </button>
-          <span className="text-2xl font-semibold">{quantity}</span>
-          <button
-            onClick={incrementQuantity}
-            className="bg-gray-200 px-3 py-1 font-bold"
-          >
-            +
-          </button>
+            수량
+          </span>
+          <div className="flex items-center gap-4 ml-auto pr-4">
+            <button
+              className="bg-white text-lg w-8 h-8 rounded-full flex justify-center items-center"
+              onClick={decrementQuantity}
+              disabled={quantity === 1}
+            >
+              -
+            </button>
+            <span className={`${sejongHospitalBold.className} text-lg`}>
+              {quantity}
+            </span>
+            <button
+              onClick={incrementQuantity}
+              className="bg-white text-lg w-8 h-8 rounded-full flex justify-center items-center"
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col items-center">
-        {/* for this, just shows the total price for the selected food, based on your quantity. */}
-        <span>예상 가격: ${selectedMenu.price * quantity} </span>
-        <button
-          className="mt-4 bg-blue-500 text-white px-4 py-2 font-semibold"
-          onClick={handleAddToCart}
-        >
-          음식 담기
-        </button>
-      </div>
+
+      <button
+        className={`py-3 rounded-lg text-white font-semibold bg-cyan-600/75 justify-center items-center w-[90%] ${sejongHospitalBold.className}`}
+        onClick={handleAddToCart}
+      >
+        Add to Cart
+      </button>
     </div>
   );
 }
