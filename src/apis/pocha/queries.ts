@@ -6,6 +6,7 @@ import {
   CartItem,
   Orders,
   OrderHistory,
+  PayInfo,
 } from "@/types/pocha";
 /**
  * @desc Fetch pocha info, if no upcoming pocha -> empty data, if else -> unempty data
@@ -564,4 +565,40 @@ export async function getPochaClosedOrdersMock(
     ],
   };
   return mockOrders;
+}
+
+// [TODO] change route URL
+/**
+ * @desc Fetch pay info by user (cart)
+ * @route GET /pocha/cart/${email}/${pochaid}/info
+ * @params email, token, pochaid
+ */
+export async function getPayInfo(
+  email: string,
+  pochaid: number,
+  token: string
+): Promise<PayInfo | undefined> {
+  const url = `/pocha/cart/${email}/${pochaid}/info`;
+  try {
+    const response = await client.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
+export async function getPayInfoMock(
+  email: string,
+  pochaid: number,
+  token: string
+): Promise<PayInfo> {
+  const mockPayInfo: PayInfo = {
+    amount: 100,
+    ageCheckRequired: false,
+  };
+  return mockPayInfo;
 }

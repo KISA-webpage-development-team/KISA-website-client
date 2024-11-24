@@ -1,6 +1,6 @@
 "use client";
 
-import { updateCartIsPaidMock } from "@/apis/pocha/mutations";
+import { notifyPayResult } from "@/apis/pocha/mutations";
 import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ export default function PaySuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pochaID = parseInt(searchParams.get("pochaid"));
+  const paymentIntent = searchParams.get("payment_intent");
 
   const { data: session, status } = useSession() as {
     data: UserSession | undefined;
@@ -17,28 +18,22 @@ export default function PaySuccessPage() {
   };
 
   useEffect(() => {
-    // send update isPaid order API
-    const changeCartToPaid = async () => {
-      try {
-        const res = await updateCartIsPaidMock(session?.user?.email, pochaID);
+    // Add a new entry to prevent direct back navigation
+    window.history.pushState({ from: "pay-success" }, "", window.location.href);
 
-        if (!res) {
-          console.error("Error while updating cart status");
-          // THIS SHOULD BE HANDLED BETTER
-        }
-
-        console.log("success");
-      } catch (error) {
-        console.error("Error while updating cart status", error);
-
-        // THIS SHOULD BE HANDLED BETTER
-      }
+    // Handle the popstate (back/forward button) event
+    const handlePopState = () => {
+      // Navigate to /pocha instead of going back
+      router.replace("/pocha");
     };
 
-    if (session && pochaID) {
-      changeCartToPaid();
-    }
-  }, [session, pochaID]);
+    window.addEventListener("popstate", handlePopState);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   const directToMenuList = () => {
     router.push("/pocha");
@@ -47,6 +42,11 @@ export default function PaySuccessPage() {
   const directToOrders = () => {
     router.push("/pocha?tab=orders");
   };
+
+  if (!paymentIntent) {
+    // [TODO] better handling
+    window.location.href = "/pocha";
+  }
 
   return (
     <div className="">

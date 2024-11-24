@@ -16,20 +16,28 @@ import {
 } from "@stripe/react-stripe-js";
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
-import { usePayCart } from "../../hooks/usePayCart";
 import { checkCartStock, checkCartStockMock } from "@/apis/pocha/queries";
 import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
 import useUserAge from "../../hooks/useUserAge";
+import { useRouter, useSearchParams } from "next/navigation";
+import { notifyPayResult } from "@/apis/pocha/mutations";
 
-export default function PaymentSubmitForm() {
-  const { data: session, status } = useSession() as {
+export default function PaymentSubmitForm({
+  amount,
+  fee,
+  totalPrice,
+  pochaID,
+  ageCheckRequired,
+}) {
+  const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
-  const { amount, fee, totalPrice, hasImmediatePrep, pochaID } = usePayCart();
+  // const { amount, fee, totalPrice, hasImmediatePrep, pochaID } = usePayCart();
   const { underAge, status: userAgeStatus } = useUserAge(session);
 
+  const router = useRouter();
   // [NOTE] useStripe and useElements should be called inside <Elements> wrapper
   const stripe = useStripe();
   const elements = useElements();
@@ -58,6 +66,7 @@ export default function PaymentSubmitForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,
+      // [NOTE] for production, return_url should be the actual URL
       confirmParams: {
         return_url: `http://localhost:3000/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`,
       },
@@ -90,7 +99,7 @@ export default function PaymentSubmitForm() {
     }
 
     // 2. if cart has immediatePrep item (= alcohol), check age
-    if (hasImmediatePrep) {
+    if (ageCheckRequired) {
       console.log("checking age");
       // check age
       if (userAgeStatus === "success" && underAge) {
@@ -119,6 +128,18 @@ export default function PaymentSubmitForm() {
     // 4. process payment
     try {
       await processPay();
+
+      // [TODO] @dkim1112 hard coding
+      try {
+        const res = await notifyPayResult(session?.user?.email, pochaID, {
+          result: "success",
+        });
+        if (!res) {
+          console.error("Error while updating cart status");
+        }
+      } catch (error) {
+        console.error("Error while updating cart status", error);
+      }
     } catch (error) {
       console.error("Error while processing payment", error);
     }
@@ -126,7 +147,13 @@ export default function PaymentSubmitForm() {
     setLoading(false);
   };
 
-  if (!clientSecret || !stripe || !elements) {
+  if (
+    sessionStatus === "loading" ||
+    userAgeStatus === "loading" ||
+    !clientSecret ||
+    !stripe ||
+    !elements
+  ) {
     return <></>;
   }
 

@@ -1,7 +1,7 @@
 import { MdArrowBackIosNew } from "react-icons/md";
 import "./styles.css";
 
-export default function PochaCartIcon() {
+export default function BackIcon() {
   return (
     <MdArrowBackIosNew
       className="icon

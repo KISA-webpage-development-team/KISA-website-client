@@ -30,7 +30,7 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
-import PochaBackIcon from "@/final_refactor_src/components/icon/PochaBackIcon";
+import BackIcon from "@/final_refactor_src/components/icon/BackIcon";
 
 // Types
 import { MenuItem, CartItem, PochaInfo } from "@/types/pocha";
@@ -137,7 +137,7 @@ export default function PochaMenuDetail({
 
   return (
     <div
-      className="h-full w-full flex flex-col 
+      className="w-full flex flex-col 
     items-center"
     >
       {/* Food Image */}
@@ -154,7 +154,7 @@ export default function PochaMenuDetail({
         className="flex self-stretch justify-start mt-3 z-10"
         onClick={handleBackButton}
       >
-        <PochaBackIcon />
+        <BackIcon />
       </button>
 
       <div

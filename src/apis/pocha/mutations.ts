@@ -48,11 +48,6 @@ export async function notifyPayResult(
   }
 }
 
-// [DEPRECATED]
-export async function updateCartIsPaidMock(email: string, pochaid: number) {
-  return true;
-}
-
 /**
  * @desc Change Status of order item
  * @route PUT /pocha/dashboard/${orderItemId}/change-status/

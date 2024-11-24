@@ -1,55 +1,52 @@
 "use client";
 
 import React from "react";
-import {
-  getUserCartMock,
-  getUserCart,
-  getPochaInfo,
-} from "@/apis/pocha/queries";
+import { getUserCart, getPochaInfo } from "@/apis/pocha/queries";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 import { Cart } from "@/types/pocha";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { getSession } from "@/lib/next-auth/getSession";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import CartListItem from "@/features/pocha/components/pay-cart/CartListItem";
-import { usePayCart } from "@/features/pocha/hooks/usePayCart";
 import ProceedToPaymentButton from "@/features/pocha/components/pay-cart/ProceedToPaymentButton";
 import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
+import BackIcon from "@/final_refactor_src/components/icon/BackIcon";
+import cartToAmount from "@/features/pocha/utils/cartToAmount";
 
 export default function PochaCartPage() {
   // cart: variable | setCart: function to set variable
   // setCart({ dfjiaosdjif }) -> cart = { dfjiaosdjif }
 
-  const { data: session, status } = useSession() as {
+  const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
 
-  const { setAmount, setHasImmediatePrep, setPochaID } = usePayCart();
+  const router = useRouter();
 
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pochaid = parseInt(searchParams.get("pochaid"));
+  const urlPochaID = parseInt(searchParams.get("pochaid"));
 
   const [cart, setCart] = useState<Cart>();
   const [cartItemStale, setCartItemStale] = useState<boolean>(true);
+
+  const [pochaID, setPochaID] = useState<number>(urlPochaID);
 
   // fetch initial cart
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const email = session?.user?.email;
-        if (!email || !pochaid) {
+        if (!email || !pochaID) {
           console.log("email or pochaid not found");
         }
 
         // const response = await getUserCart(email, pochaid);
-        const response = await getUserCart(email, pochaid);
+        const response = await getUserCart(email, pochaID);
         setCart(response);
 
         // check whether the cart has immediate prep
@@ -63,27 +60,10 @@ export default function PochaCartPage() {
       }
     };
 
-    const checkImmediatePrep = () => {
-      const hasImmediatePrep = Object.values(cart).some(
-        (item) => item.menu.isImmediatePrep
-      );
-
-      setHasImmediatePrep(hasImmediatePrep);
-    };
-
     if (session && cartItemStale) {
       fetchCart();
     }
-
-    if (cart !== undefined && Object.keys(cart).length > 0) {
-      checkImmediatePrep();
-    }
-  }, [session, pochaid, cartItemStale, setHasImmediatePrep, cart]);
-
-  // keep track of total price
-  useEffect(() => {
-    setAmount(parseFloat(getTotalPrice()));
-  }, [cart]);
+  }, [session, pochaID, cartItemStale]);
 
   // set pochaID
   // by fetching PochaID from API, ensure that the pochaID is there
@@ -98,80 +78,55 @@ export default function PochaCartPage() {
       }
     };
 
-    if (pochaid === undefined) {
+    // missing pochaID on the URL
+    if (!pochaID) {
       // need to fetch
+      console.log("need to fetch pochaID");
       fetchPochaInfo();
     } else {
-      setPochaID(pochaid);
+      setPochaID(pochaID);
     }
-  }, [pochaid, setPochaID]);
-
-  //   // Calculate total price with cart
-  //   useEffect(() => {
-  //     if (cart) {
-  //       const newTotalPrice = Array.from(cart.values())
-  //         .reduce((sum, item) => sum + item.menu.price * item.quantity, 0)
-  //         .toFixed(2);
-  //       setTotalPrice(parseFloat(newTotalPrice));
-  //     }
-  //   }, [cart]);
-
-  // Because price at that time is brought using API call, can directly access from cart.
-  const getTotalPrice = () => {
-    if (!cart) return 0;
-
-    return Array.from(Object.values(cart))
-      .reduce((total, item) => total + item.menu.price * item.quantity, 0)
-      .toFixed(2);
-  };
+  }, [pochaID, setPochaID]);
 
   // Button handlers
   const handleBackButton = () => {
     router.back();
   };
 
-  /*
-  const handleCheckout = () => {
-    setAmount(parseFloat(getTotalPrice()));
-    router.push("/pocha/pay");
-  };
-  */
-
-  if (!pochaid || !cart) {
+  if (sessionStatus === "loading" || !cart) {
     return <LoadingSpinner />;
   }
 
   return (
-    <div>
-      <button className="flex" onClick={handleBackButton}>
-        Go Back
-      </button>
-
-      <div className="text-center mb-1">
+    <section className="py-3">
+      <div className="flex items-center relative ">
+        <button className="flex" onClick={handleBackButton}>
+          <BackIcon />
+        </button>
         <h1
-          className={`${sejongHospitalBold.className} text-2xl text-blue-950`}
+          className={`${sejongHospitalBold.className} text-2xl text-blue-950
+          absolute top-0 left-0 w-full flex justify-center -z-10`}
         >
           Cart
         </h1>
-
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="351"
-          height="4"
-          viewBox="0 0 351 4"
-          fill="none"
-          className="mx-auto mt-1"
-          style={{ marginTop: "20px" }}
-        >
-          <path
-            d="M2 2.00003L349 2.00003"
-            stroke="#E3E3E3"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
       </div>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="351"
+        height="4"
+        viewBox="0 0 351 4"
+        fill="none"
+        className="mx-auto mt-1"
+      >
+        <path
+          d="M2 2.00003L349 2.00003"
+          stroke="#E3E3E3"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
 
       {Object.keys(cart).length > 0 ? (
         <>
@@ -183,7 +138,7 @@ export default function PochaCartPage() {
                 menuid={parseInt(menuid)}
                 item={item}
                 email={session?.user?.email}
-                pochaid={pochaid}
+                pochaid={pochaID}
                 setCartItemStale={setCartItemStale}
               />
             ))}
@@ -199,16 +154,16 @@ export default function PochaCartPage() {
             <span
               className={`${sejongHospitalLight.className} mr-7 mt-4 text-blue-950`}
             >
-              ${getTotalPrice()}
+              ${cartToAmount(cart)}
             </span>
           </div>
 
           {/* Checkout button */}
-          <ProceedToPaymentButton pochaid={pochaid} />
+          <ProceedToPaymentButton pochaid={pochaID} />
         </>
       ) : (
         <div>Cart is empty</div>
       )}
-    </div>
+    </section>
   );
 }

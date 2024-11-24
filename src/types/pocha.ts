@@ -46,7 +46,12 @@ interface AddItemToCartBody {
 // key: menuID  value: CartItem
 type Cart = Map<number, CartItem>;
 
-export type { Cart, CartItem, AddItemToCartBody };
+type PayInfo = {
+  amount: number;
+  ageCheckRequired: boolean;
+};
+
+export type { Cart, CartItem, AddItemToCartBody, PayInfo };
 
 // ORDER -----------------------------------------------------------------------
 type OrderStatus = "pending" | "preparing" | "ready" | "closed";

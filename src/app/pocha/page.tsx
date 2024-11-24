@@ -41,7 +41,7 @@ export default function PochaPage() {
 
   if (selectedMenu !== undefined) {
     return (
-      <section className="">
+      <section className="overflow-y-auto h-full">
         <PochaMenuDetail
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
