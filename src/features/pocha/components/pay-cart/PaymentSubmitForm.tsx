@@ -74,7 +74,20 @@ export default function PaymentSubmitForm({
 
     if (error) {
       setErrorMessage(error.message);
+
+      // send notify API with error
     } else {
+      // [TODO] @dkim1112 hard coding
+      try {
+        const res = await notifyPayResult(session?.user?.email, pochaID, {
+          result: "success",
+        });
+        if (!res) {
+          console.error("Error while updating cart status");
+        }
+      } catch (error) {
+        console.error("Error while updating cart status", error);
+      }
       // This payment UI automatically closes with a success animation
       // redirect to "return_url"
     }
@@ -128,18 +141,6 @@ export default function PaymentSubmitForm({
     // 4. process payment
     try {
       await processPay();
-
-      // [TODO] @dkim1112 hard coding
-      try {
-        const res = await notifyPayResult(session?.user?.email, pochaID, {
-          result: "success",
-        });
-        if (!res) {
-          console.error("Error while updating cart status");
-        }
-      } catch (error) {
-        console.error("Error while updating cart status", error);
-      }
     } catch (error) {
       console.error("Error while processing payment", error);
     }
