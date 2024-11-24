@@ -55,7 +55,6 @@ interface OrderItem {
   status: OrderStatus;
   menu: MenuItem;
   quantity: number;
-  createdAt: Date;
 }
 
 interface OrderItemWithWaiting {
