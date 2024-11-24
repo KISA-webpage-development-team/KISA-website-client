@@ -21,6 +21,7 @@ interface MenuItem {
   stock: number;
   isImmediatePrep: boolean;
   parentPochaId: number;
+  ageCheckRequired: boolean;
 }
 
 interface MenuByCategory {

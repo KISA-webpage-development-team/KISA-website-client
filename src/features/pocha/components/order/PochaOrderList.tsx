@@ -6,6 +6,7 @@ import { io, Socket } from "socket.io-client";
 import { UserSession } from "@/lib/next-auth/types";
 import { BACKEND_URL } from "@/constants/env";
 import PochaOrderItem from "./PochaOrderItem";
+import { OrderItem, OrderStatus } from "@/types/pocha";
 
 interface PochaOrderListProps {
   pochaID: number;
@@ -18,7 +19,8 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
   };
 
   const {
-    orders,
+    addNewOrders,
+    updateOrders,
     pendingOrders,
     preparingOrders,
     readyOrders,
@@ -54,6 +56,21 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
       console.error("WebSocket connection error:", error);
     });
 
+    // listen to status-change-{email} event
+    const statusChangeEvent = `status-change-${session?.user?.email}`;
+    socketInstance.on(
+      statusChangeEvent,
+      ({ menuID, newStatus }: { menuID: number; newStatus: OrderStatus }) => {
+        updateOrders(menuID, newStatus);
+      }
+    );
+
+    // listen to status-closed-{email} event
+    const closedEvent = `status-closed-${session?.user?.email}`;
+    socketInstance.on(closedEvent, ({ menuID }: { menuID: number }) => {
+      updateOrders(menuID, "closed");
+    });
+
     // Save socket instance to state
     setSocket(socketInstance);
 
@@ -65,6 +82,23 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
     };
   }, [session, ordersStatus, pochaID]);
 
+  const handleSocketTest = async () => {
+    try {
+      // /pocha/socket-test GET
+      const res = await fetch(`${BACKEND_URL}/pocha/socket-test/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.token}`,
+        },
+      });
+
+      console.log("Socket test response: ", res);
+    } catch (error) {
+      console.error("Error fetching orders: ", error);
+    }
+  };
+
   if (sessionStatus === "loading" || ordersStatus === "loading") {
     return <></>;
   }
@@ -72,6 +106,7 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
   return (
     <div className="w-full">
       <div className="p-4 space-y-4">
+        <button onClick={handleSocketTest}>Test Button</button>
         {/* ready */}
         <div className="text-xl font-bold">Ready</div>
         {readyOrders?.map((orderItem) => (

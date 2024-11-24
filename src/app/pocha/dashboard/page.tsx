@@ -34,7 +34,11 @@ export default function DashboardPage() {
     <section>
       <Tabs aria-label="Options">
         <Tab key="orders" title="Orders">
-          <OrdersTable token={token} pochaID={pochaInfo?.pochaID} />
+          <OrdersTable
+            email={email}
+            token={token}
+            pochaID={pochaInfo?.pochaID}
+          />
         </Tab>
         <Tab key="stock" title="Stock">
           stock

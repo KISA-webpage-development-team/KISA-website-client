@@ -29,11 +29,37 @@ export async function changeItemInCart(
 }
 
 /**
- * @desc Update isPaid status of cart to true
- * @route PUT /pocha/cart/{email}/{pochaid}/paid-cart
+ * @desc Notify the status of payment
+ * @route PUT /pocha/{email}/{pochaid}/pay-result/
+ * @params body: { result: "success" | "failure"}
  */
-export async function updateCartIsPaid(email: string, pochaid: number) {
-  const url = `/pocha/cart/${email}/${pochaid}/paid-cart`;
+export async function notifyPayResult(
+  email: string,
+  pochaid: number,
+  body: { result: "success" | "failure" }
+) {
+  const url = `/pocha/cart/${email}/${pochaid}/pay-result/`;
+
+  try {
+    const response = await client.put(url, body);
+    return response?.data;
+  } catch (error) {
+    return undefined;
+  }
+}
+
+// [DEPRECATED]
+export async function updateCartIsPaidMock(email: string, pochaid: number) {
+  return true;
+}
+
+/**
+ * @desc Change Status of order item
+ * @route PUT /pocha/dashboard/${orderItemId}/change-status/
+ * @params no body
+ */
+export async function changeOrderItemStatus(orderItemId: number) {
+  const url = `/pocha/dashboard/${orderItemId}/change-status/`;
 
   try {
     const response = await client.put(url);
@@ -41,8 +67,4 @@ export async function updateCartIsPaid(email: string, pochaid: number) {
   } catch (error) {
     return undefined;
   }
-}
-
-export async function updateCartIsPaidMock(email: string, pochaid: number) {
-  return true;
 }

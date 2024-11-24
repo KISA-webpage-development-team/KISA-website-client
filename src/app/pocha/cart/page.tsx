@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { getUserCartMock, getUserCart } from "@/apis/pocha/queries";
+import {
+  getUserCartMock,
+  getUserCart,
+  getPochaInfo,
+} from "@/apis/pocha/queries";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 import { Cart } from "@/types/pocha";
 import { useEffect, useState } from "react";
@@ -77,9 +81,25 @@ export default function PochaCartPage() {
   }, [cart]);
 
   // set pochaID
+  // by fetching PochaID from API, ensure that the pochaID is there
   useEffect(() => {
-    setPochaID(pochaid);
-  }, [pochaid]);
+    const fetchPochaInfo = async () => {
+      // try API call first
+      try {
+        const res = await getPochaInfo(new Date());
+        setPochaID(res?.pochaID);
+      } catch (error) {
+        console.error("Error fetching like status: ", error);
+      }
+    };
+
+    if (pochaid === undefined) {
+      // need to fetch
+      fetchPochaInfo();
+    } else {
+      setPochaID(pochaid);
+    }
+  }, [pochaid, setPochaID]);
 
   //   // Calculate total price with cart
   //   useEffect(() => {
@@ -110,7 +130,7 @@ export default function PochaCartPage() {
     router.push("/pocha/pay");
   };
 
-  if (!cart) {
+  if (!pochaid || !cart) {
     return <LoadingSpinner />;
   }
 

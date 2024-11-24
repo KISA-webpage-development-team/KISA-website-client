@@ -132,9 +132,8 @@ export default function PochaMenuDetail({
 
   return (
     <div
-      className="absolute w-full h-screen top-0 left-0
-    bg-white
-    flex flex-col items-center top-gap-8"
+      className="w-full top-0 left-0
+    flex flex-col items-center bg-white"
     >
       <div className="self-stretch flex justify-start">
         <button className="flex" onClick={handleBackButton}>
@@ -143,16 +142,16 @@ export default function PochaMenuDetail({
       </div>
 
       {/* Food Image */}
-      <div>
-        {/* 430 x 932 standards */}
-        <Image
-          src={getImagePath()}
-          alt={selectedMenu.nameEng}
-          width={430}
-          height={430}
-          className="rounded-lg border-3 border-gray-300 shadow-sm"
-        ></Image>
-      </div>
+      {/* <div> */}
+      {/* 430 x 932 standards */}
+      <Image
+        src={getImagePath()}
+        alt={selectedMenu.nameEng}
+        width={430}
+        height={430}
+        className="rounded-lg border-3 border-gray-300 shadow-sm"
+      />
+      {/* </div> */}
 
       {/* Menu Name */}
       <span className="text-xl font-bold">

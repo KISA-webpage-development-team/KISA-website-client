@@ -14,6 +14,7 @@ import { Elements } from "@stripe/react-stripe-js"; // stripe payment element
 import { loadStripe } from "@stripe/stripe-js";
 import { usePayCart } from "@/features/pocha/hooks/usePayCart";
 import { useRouter } from "next/navigation";
+import { getPochaInfo } from "@/apis/pocha/queries";
 
 // defensive programming check
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
@@ -27,7 +28,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 export default function PayPage() {
   // const amount = 49.99; // how much money user is going to pay
 
-  const { amount, fee, totalPrice, pochaID } = usePayCart();
+  const { amount, fee, totalPrice, pochaID, setPochaID } = usePayCart();
 
   const router = useRouter();
 
@@ -38,6 +39,24 @@ export default function PayPage() {
   const backToCart = () => {
     router.push(`/pocha/cart?pochaid=${pochaID}`);
   };
+
+  // [TODO] need better handling on pochaID
+  useEffect(() => {
+    const fetchPochaInfo = async () => {
+      // try API call first
+      try {
+        const res = await getPochaInfo(new Date());
+        setPochaID(res?.pochaID);
+      } catch (error) {
+        console.error("Error fetching like status: ", error);
+      }
+    };
+
+    if (pochaID === undefined) {
+      // need to fetch
+      fetchPochaInfo();
+    }
+  }, [pochaID, setPochaID]);
 
   if (amount === undefined) {
     return (

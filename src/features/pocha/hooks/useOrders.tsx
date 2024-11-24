@@ -4,7 +4,7 @@ import {
   getPochaOrdersMock,
   getPochaOrders,
 } from "@/apis/pocha/queries";
-import { OrderItem, Orders } from "@/types/pocha";
+import { OrderItem, Orders, OrderStatus } from "@/types/pocha";
 import { useEffect, useState } from "react";
 
 /**
@@ -16,8 +16,6 @@ const useOrders = (email: string, token: string, pochaID: number) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
-
-  const [orderItems, setOrderItems] = useState<OrderItem[]>();
 
   // fetch orders
   useEffect(() => {
@@ -58,8 +56,84 @@ const useOrders = (email: string, token: string, pochaID: number) => {
     }
   }, [email, pochaID, token]);
 
+  const addNewOrders = (items: OrderItem[]) => {
+    // add new items to the pending status list
+
+    // update the state
+    setOrders((prevOrders) => {
+      return {
+        ...prevOrders,
+        ["pending"]: [...prevOrders["pending"], ...items],
+      };
+    });
+
+    return;
+  };
+
+  const updateOrders = (menuID: number, newStatus: OrderStatus) => {
+    setOrders((prevOrders) => {
+      if (!prevOrders) return prevOrders;
+
+      // Create new state object
+      const updatedOrders = { ...prevOrders };
+
+      // Find the item in the appropriate list based on current status
+      let sourceList: OrderStatus | null = null;
+      let itemToMove: OrderItem | null = null;
+
+      // Find which list contains the item
+      if (newStatus === "preparing") {
+        const item = updatedOrders.pending.find(
+          (item) => item.menu.menuID === menuID
+        );
+        if (item) {
+          sourceList = "pending";
+          itemToMove = item;
+        }
+      } else if (newStatus === "ready") {
+        const item = updatedOrders.preparing.find(
+          (item) => item.menu.menuID === menuID
+        );
+        if (item) {
+          sourceList = "preparing";
+          itemToMove = item;
+        }
+      } else if (newStatus === "closed") {
+        // Check all lists for the item
+        ["pending", "preparing", "ready"].forEach((status) => {
+          const item = updatedOrders[status as OrderStatus].find(
+            (item) => item.menuID === menuID
+          );
+          if (item) {
+            sourceList = status as OrderStatus;
+            itemToMove = item;
+          }
+        });
+      }
+
+      // If item was found, update the lists
+      if (sourceList && itemToMove) {
+        // Remove item from source list
+        updatedOrders[sourceList] = updatedOrders[sourceList].filter(
+          (item) => item.menuID !== menuID
+        );
+
+        // Add item to destination list (except for closed status)
+        if (newStatus !== "closed") {
+          updatedOrders[newStatus] = [...updatedOrders[newStatus], itemToMove];
+        }
+      }
+
+      return updatedOrders;
+    });
+
+    return;
+  };
+
   return {
     orders,
+    addNewOrders,
+    updateOrders,
     pendingOrders: orders?.pending,
     preparingOrders: orders?.preparing,
     readyOrders: orders?.ready,

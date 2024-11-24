@@ -1,25 +1,80 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useOrders from "../../hooks/useOrders";
-import PochaOrderItem from "../order/PochaOrderItem";
+import DashboardOrderItem from "../dashboard/DashboardOrderItem";
+import { Socket, io } from "socket.io-client";
+import { useSession } from "next-auth/react";
+import { UserSession } from "@/lib/next-auth/types";
+import { OrderItem } from "@/types/pocha";
 
 interface OrdersTableProps {
+  email: string;
   token: string;
   pochaID: number;
 }
 
-export default function OrdersTable({ token, pochaID }: OrdersTableProps) {
+export default function OrdersTable({
+  email,
+  token,
+  pochaID,
+}: OrdersTableProps) {
+  // initial GET API call to fetch all orders
   const {
+    addNewOrders,
+
     pendingOrders,
     preparingOrders,
     readyOrders,
-    status: orderStatus,
-  } = useOrders(
-    "*", // fetch all orders
-    token,
-    pochaID
-  );
+    status: ordersStatus,
+  } = useOrders("*", token, pochaID);
 
-  if (orderStatus === "loading") {
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  // Socket.IO Connection
+  useEffect(() => {
+    // defensive check: no orders yet (i.e. no session, no token, no pochaID)
+    if (ordersStatus !== "success") {
+      return;
+    }
+    // Initialize socket connection
+    const socketInstance = io("localhost:8000", {
+      transports: ["websocket"],
+      auth: {
+        token: token,
+      },
+      query: {
+        email: email,
+        pochaId: pochaID,
+      },
+    });
+
+    // Connection event handlers
+    socketInstance.on("connect", () => {
+      console.log("Connected to WebSocket server");
+    });
+
+    socketInstance.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error);
+    });
+
+    // Listen for order-created event
+    socketInstance.on(
+      "order-created",
+      ({ newOrderItems }: { newOrderItems: OrderItem[] }) => {
+        addNewOrders(newOrderItems);
+      }
+    );
+
+    // Save socket instance to state
+
+    // Cleanup function
+    return () => {
+      if (socketInstance) {
+        socketInstance.disconnect();
+      }
+    };
+  }, [ordersStatus, email, pochaID, token, addNewOrders]);
+
+  if (ordersStatus === "loading") {
     return <></>;
   }
 
@@ -30,19 +85,28 @@ export default function OrdersTable({ token, pochaID }: OrdersTableProps) {
         {/* ready */}
         <div className="text-xl font-bold">Ready</div>
         {readyOrders?.map((orderItem) => (
-          <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
+          <DashboardOrderItem
+            key={orderItem.orderItemID}
+            orderItem={orderItem}
+          />
         ))}
 
         {/* preparing */}
         <div className="text-xl font-bold">Preparing</div>
         {preparingOrders?.map((orderItem) => (
-          <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
+          <DashboardOrderItem
+            key={orderItem.orderItemID}
+            orderItem={orderItem}
+          />
         ))}
 
         {/* pending */}
         <div className="text-xl font-bold">Pending</div>
         {pendingOrders?.map((orderItem) => (
-          <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
+          <DashboardOrderItem
+            key={orderItem.orderItemID}
+            orderItem={orderItem}
+          />
         ))}
       </div>
     </div>
