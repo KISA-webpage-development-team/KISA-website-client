@@ -14,6 +14,7 @@ import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 import { MenuItem, PochaTab, PochaInfo } from "@/types/pocha";
 import { useSearchParams } from "next/navigation";
 import usePocha from "@/features/pocha/hooks/usePocha";
+import { getPochaInfo } from "@/apis/pocha/queries";
 
 export default function PochaPage() {
   const searchParams = useSearchParams();
@@ -34,7 +35,6 @@ export default function PochaPage() {
   // };
 
   // const pochaInfo = await getPochaInfo(new Date()); // When real api is completed, change to this line
-
   if (status === "loading") {
     return <LoadingSpinner />;
   }
@@ -72,7 +72,7 @@ export default function PochaPage() {
           />
         </>
       ) : (
-        <PochaOrderList pochaID={pochaInfo.pochaID} />
+        <PochaOrderList pochaID={pochaInfo?.pochaID} />
       )}
       {/* [LATER] helper button */}
       {/* <PochaHelpButton /> */}
