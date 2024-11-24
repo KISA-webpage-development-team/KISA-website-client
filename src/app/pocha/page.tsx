@@ -41,17 +41,19 @@ export default function PochaPage() {
 
   if (selectedMenu !== undefined) {
     return (
-      <PochaMenuDetail
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-        pochaid={pochaInfo?.pochaID}
-      />
+      <section className="">
+        <PochaMenuDetail
+          selectedMenu={selectedMenu}
+          setSelectedMenu={setSelectedMenu}
+          pochaid={pochaInfo?.pochaID}
+        />
+      </section>
     );
   }
 
   return (
     <section
-      className={`${sejongHospitalLight.className} relative h-full w-screen -translate-x-4 `}
+      className={`${sejongHospitalLight.className} w-screen -translate-x-4 `}
     >
       {/* pocha title & description */}
       <PochaHeading pochaInfo={pochaInfo} />
