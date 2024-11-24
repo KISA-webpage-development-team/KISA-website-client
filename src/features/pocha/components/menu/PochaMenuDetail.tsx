@@ -132,7 +132,7 @@ export default function PochaMenuDetail({
 
   return (
     <div
-      className="absolute w-full h-screen top-0 left-0
+      className=" w-full top-0 left-0
     bg-white
     flex flex-col items-center top-gap-8"
     >

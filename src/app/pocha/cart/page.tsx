@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { sejongHospitalBold, sejongHospitalLight } from "@/utils/fonts/textFonts";
 import { getUserCartMock, getUserCart } from "@/apis/pocha/queries";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 import { Cart } from "@/types/pocha";
@@ -11,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import CartListItem from "@/features/pocha/components/pay-cart/CartListItem";
 import { usePayCart } from "@/features/pocha/hooks/usePayCart";
+import ProceedToPaymentButton from "@/features/pocha/components/pay-cart/ProceedToPaymentButton";
 
 export default function PochaCartPage() {
   // cart: variable | setCart: function to set variable
@@ -105,20 +107,49 @@ export default function PochaCartPage() {
     router.back();
   };
 
+  /*
   const handleCheckout = () => {
     setAmount(parseFloat(getTotalPrice()));
     router.push("/pocha/pay");
   };
+  */
 
   if (!cart) {
     return <LoadingSpinner />;
   }
 
   return (
-    <div>
+    <div> 
       <button className="flex" onClick={handleBackButton}>
         Go Back
       </button>
+
+      <div className="text-center mb-1">
+      <h1
+        className={`${sejongHospitalBold.className} text-2xl text-blue-950`}
+      >
+        Cart
+      </h1>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="351"
+        height="4"
+        viewBox="0 0 351 4"
+        fill="none"
+        className="mx-auto mt-1"
+        style={{marginTop: "20px"}}
+      >
+        <path
+          d="M2 2.00003L349 2.00003"
+          stroke="#E3E3E3"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+
+    </div>
 
       {Object.keys(cart).length > 0 ? (
         <>
@@ -138,12 +169,12 @@ export default function PochaCartPage() {
 
           {/* Total Price */}
           <div className="flex justify-between w-full">
-            <span className="font-bold">총 주문금액</span>
-            <span className="">${getTotalPrice()}</span>
+            <span className={`${sejongHospitalLight.className} ml-7 mt-4 text-blue-950`}>총 주문금액</span>
+            <span className={`${sejongHospitalLight.className} mr-7 mt-4 text-blue-950`}>${getTotalPrice()}</span>
           </div>
 
           {/* Checkout button */}
-          <button onClick={handleCheckout}>Checkout</button>
+          <ProceedToPaymentButton pochaid={pochaid} />
         </>
       ) : (
         <div>Cart is empty</div>
