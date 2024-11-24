@@ -63,20 +63,20 @@ interface OrderItemWithWaiting {
   orderItemsList: OrderItem[];
 }
 
-interface OrdersByStatus {
-  pending: OrderItemWithWaiting[];
-  preparing: OrderItemWithWaiting[];
-  ready: OrderItemWithWaiting[];
-  closed: OrderItemWithWaiting[];
+interface Orders {
+  pending: OrderItem[];
+  preparing: OrderItem[];
+  ready: OrderItem[];
 }
 
-// key: orderID
-type Orders = Map<number, OrderItemWithWaiting>;
+interface OrderHistory {
+  closed: OrderItem[];
+}
 
 export type {
   OrderItem,
   OrderItemWithWaiting,
   OrderStatus,
-  OrdersByStatus,
   Orders,
+  OrderHistory,
 };

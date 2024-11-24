@@ -6,6 +6,7 @@ import {
   CartItem,
   Orders,
   OrderItemWithWaiting,
+  OrderHistory,
 } from "@/types/pocha";
 /**
  * @desc Fetch pocha info, if no upcoming pocha -> empty data, if else -> unempty data
@@ -671,7 +672,7 @@ export async function getUserClosedOrdersMock(
 export async function getPochaClosedOrders(
   pochaid: number,
   token: string
-): Promise<Orders | undefined> {
+): Promise<OrderHistory | undefined> {
   const url = `/pocha/orders/${pochaid}/closed`;
   try {
     const response = await client.get(url, {
