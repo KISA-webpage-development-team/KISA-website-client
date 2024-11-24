@@ -16,6 +16,10 @@ import { UserSession } from "@/lib/next-auth/types";
 import CartListItem from "@/features/pocha/components/pay-cart/CartListItem";
 import { usePayCart } from "@/features/pocha/hooks/usePayCart";
 import ProceedToPaymentButton from "@/features/pocha/components/pay-cart/ProceedToPaymentButton";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
 
 export default function PochaCartPage() {
   // cart: variable | setCart: function to set variable
