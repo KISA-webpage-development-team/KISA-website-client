@@ -39,7 +39,6 @@ module.exports = {
             primary: {
               DEFAULT: "#00274C",
               foreground: "#FFCB05",
-              yellow: "#F7B750",
             },
             secondary: {
               DEFAULT: "#FFCB05",

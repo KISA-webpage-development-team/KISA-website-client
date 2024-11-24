@@ -4,7 +4,7 @@ import {
   getPochaClosedOrders,
   getPochaClosedOrdersMock,
 } from "@/apis/pocha/queries";
-import { OrderItem, Orders } from "@/types/pocha";
+import { OrderHistory, OrderItem, Orders } from "@/types/pocha";
 import { useEffect, useState } from "react";
 
 /**
@@ -12,22 +12,19 @@ import { useEffect, useState } from "react";
  * @params email, token, pochaID
  */
 const useOrderHistory = (email: string, token: string, pochaID: number) => {
-  const [orders, setOrders] = useState<Orders>();
+  const [orderHistory, setOrderHistory] = useState<OrderHistory>();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
-
-  const [orderItems, setOrderItems] = useState<OrderItem[]>();
-
   // fetch orders
   useEffect(() => {
     // app
     const fetchUserOrders = async () => {
       try {
-        // const res = await getUserClosedOrders(email, pochaID, token);
-        const res = await getUserClosedOrdersMock(email, pochaID, token);
+        const res = await getUserClosedOrders(email, pochaID, token);
+        // const res = await getUserClosedOrdersMock(email, pochaID, token);
 
-        setOrders(res);
+        setOrderHistory(res);
         setStatus("success");
       } catch (error) {
         console.error("Error fetching orders: ", error);
@@ -38,10 +35,10 @@ const useOrderHistory = (email: string, token: string, pochaID: number) => {
     // dashboard
     const fetchAllOrders = async () => {
       try {
-        // const res = await getPochaClosedOrders(pochaID, token);
-        const res = await getPochaClosedOrdersMock(pochaID, token);
+        const res = await getPochaClosedOrders(pochaID, token);
+        // const res = await getPochaClosedOrdersMock(pochaID, token);
 
-        setOrders(res);
+        setOrderHistory(res);
         setStatus("success");
       } catch (error) {
         console.error("Error fetching orders: ", error);
@@ -58,25 +55,8 @@ const useOrderHistory = (email: string, token: string, pochaID: number) => {
     }
   }, [email, pochaID, token]);
 
-  // extract total list of order items from Orders (map<number, OrderItemWithWaiting>)
-  useEffect(() => {
-    if (!orders) {
-      return;
-    }
-
-    const orderItemsList: OrderItem[] = [];
-    orders.forEach((order) => {
-      order.orderItemsList.forEach((orderItem) => {
-        orderItemsList.push(orderItem);
-      });
-    });
-
-    setOrderItems(orderItemsList);
-  }, [orders]);
-
   return {
-    orders,
-    orderHistory: orderItems,
+    orderHistory: orderHistory?.closed,
     status,
   };
 };

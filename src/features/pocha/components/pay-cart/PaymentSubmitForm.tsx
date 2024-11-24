@@ -16,7 +16,7 @@ import {
 } from "@stripe/react-stripe-js";
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
-import { checkCartStock, checkCartStockMock } from "@/apis/pocha/queries";
+import { checkCartStock, checkCartStockMock } from "@/apis/pocha/mutations";
 import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
 import useUserAge from "../../hooks/useUserAge";
@@ -124,8 +124,8 @@ export default function PaymentSubmitForm({
 
     // 3. inventory check ang
     try {
-      const res = await checkCartStock(session?.user?.email, pochaID);
-      // const res = await checkCartStockMock(session?.user?.email, pochaID);
+      // const res = await checkCartStock(session?.user?.email, pochaID);
+      const res = await checkCartStockMock(session?.user?.email, pochaID);
 
       if (!res) {
         setErrorMessage("재고가 부족합니다.");
@@ -205,7 +205,7 @@ export default function PaymentSubmitForm({
       {/* Submit button (sticky on the bottom) */}
       <button
         disabled={!stripe || loading}
-        className="fixed left-0 w-full 
+        className="mt-10 left-0 w-full 
         z-10 bottom-0 mb-4
          bg-blue-500 text-white
         border-gray-200 border py-3 px-2 rounded-lg"

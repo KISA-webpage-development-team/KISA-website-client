@@ -162,7 +162,11 @@ export default function PochaCartPage() {
           <ProceedToPaymentButton pochaid={pochaID} />
         </>
       ) : (
-        <div>Cart is empty</div>
+        <div
+          className={`${sejongHospitalBold.className} flex w-full justify-center`}
+        >
+          Cart is empty!
+        </div>
       )}
     </section>
   );

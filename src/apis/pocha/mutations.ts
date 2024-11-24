@@ -63,3 +63,29 @@ export async function changeOrderItemStatus(orderItemId: number) {
     return undefined;
   }
 }
+
+/**
+ * @desc check whether user's cart contains any out-of-stock items
+ * @route PUT /pocha/cart/${email}/${pochaid}/check-stock
+ */
+export async function checkCartStock(
+  email: string,
+  pochaid: number
+): Promise<boolean | undefined> {
+  const url = `/pocha/cart/${email}/${pochaid}/check-stock/`;
+  try {
+    const response = await client.put(url);
+
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
+export async function checkCartStockMock(
+  email: string,
+  pochaid: number
+): Promise<boolean | undefined> {
+  return true;
+}

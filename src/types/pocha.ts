@@ -48,7 +48,7 @@ type Cart = Map<number, CartItem>;
 
 type PayInfo = {
   amount: number;
-  ageCheckRequired: boolean;
+  ageCheckRequired: "true" | "false";
 };
 
 export type { Cart, CartItem, AddItemToCartBody, PayInfo };

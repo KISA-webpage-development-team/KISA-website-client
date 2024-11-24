@@ -7,6 +7,9 @@ import { UserSession } from "@/lib/next-auth/types";
 import { BACKEND_URL } from "@/constants/env";
 import PochaOrderItem from "./PochaOrderItem";
 import { OrderItem, OrderStatus } from "@/types/pocha";
+import { Accordion, AccordionItem } from "@nextui-org/react";
+import UserOrderHistories from "./UserOrderHistories";
+import OrderTicket from "./OrderTicket";
 
 interface PochaOrderListProps {
   pochaID: number;
@@ -26,6 +29,8 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
     readyOrders,
     status: ordersStatus,
   } = useOrders(session?.user?.email, session?.token, pochaID);
+
+  const [selectedOrder, setSelectedOrder] = useState<OrderItem>();
 
   const [socket, setSocket] = useState<Socket | null>(null);
 
@@ -60,16 +65,25 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
     const statusChangeEvent = `status-change-${session?.user?.email}`;
     socketInstance.on(
       statusChangeEvent,
-      ({ menuID, newStatus }: { menuID: number; newStatus: OrderStatus }) => {
-        updateOrders(menuID, newStatus);
+      ({
+        orderItemID,
+        status,
+      }: {
+        orderItemID: number;
+        status: OrderStatus;
+      }) => {
+        updateOrders(orderItemID, status);
       }
     );
 
     // listen to status-closed-{email} event
     const closedEvent = `status-closed-${session?.user?.email}`;
-    socketInstance.on(closedEvent, ({ menuID }: { menuID: number }) => {
-      updateOrders(menuID, "closed");
-    });
+    socketInstance.on(
+      closedEvent,
+      ({ orderItemID }: { orderItemID: number }) => {
+        updateOrders(orderItemID, "closed");
+      }
+    );
 
     // Save socket instance to state
     setSocket(socketInstance);
@@ -103,28 +117,54 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
     return <></>;
   }
 
+  if (selectedOrder !== undefined) {
+    return <OrderTicket orderItem={selectedOrder} />;
+  }
+
   return (
-    <div className="w-full">
-      <div className="p-4 space-y-4">
-        <button onClick={handleSocketTest}>Test Button</button>
+    <div className="w-full h-full flex flex-col justify-between">
+      <div className="flex flex-col p-4 space-y-4">
         {/* ready */}
         <div className="text-xl font-bold">Ready</div>
         {readyOrders?.map((orderItem) => (
-          <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
+          <PochaOrderItem
+            key={orderItem.orderItemID}
+            orderItem={orderItem}
+            setSelectedOrder={setSelectedOrder}
+          />
         ))}
 
         {/* preparing */}
         <div className="text-xl font-bold">Preparing</div>
         {preparingOrders?.map((orderItem) => (
-          <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
+          <PochaOrderItem
+            key={orderItem.orderItemID}
+            orderItem={orderItem}
+            setSelectedOrder={setSelectedOrder}
+          />
         ))}
 
         {/* pending */}
         <div className="text-xl font-bold">Pending</div>
         {pendingOrders?.map((orderItem) => (
-          <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
+          <PochaOrderItem
+            key={orderItem.orderItemID}
+            orderItem={orderItem}
+            setSelectedOrder={setSelectedOrder}
+          />
         ))}
       </div>
+
+      {/* Order History Accordion */}
+      <Accordion>
+        <AccordionItem key="1" aria-label="Order History" title="Order History">
+          <UserOrderHistories
+            email={session.user.email}
+            token={session.token}
+            pochaID={pochaID}
+          />
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }

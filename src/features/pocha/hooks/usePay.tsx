@@ -12,8 +12,8 @@ const usePay = (email: string, token: string, pochaID: number) => {
   useEffect(() => {
     const fetchPayInfo = async () => {
       try {
-        // const res = await getPayInfo(email, pochaID, token);
-        const res = await getPayInfoMock(email, pochaID, token);
+        const res = await getPayInfo(email, pochaID, token);
+        // const res = await getPayInfoMock(email, pochaID, token);
 
         setPayInfo(res);
         setStatus("success");
@@ -43,7 +43,7 @@ const usePay = (email: string, token: string, pochaID: number) => {
     tip,
     setTip,
     totalPrice: calculateTotalPrice(payInfo?.amount),
-    ageCheckRequired: payInfo?.ageCheckRequired,
+    ageCheckRequired: payInfo?.ageCheckRequired === "true" ? true : false,
     status,
   };
 };

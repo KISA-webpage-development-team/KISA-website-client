@@ -5,6 +5,7 @@ import { Socket, io } from "socket.io-client";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { OrderItem } from "@/types/pocha";
+import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
 
 interface OrdersTableProps {
   email: string;
@@ -20,7 +21,7 @@ export default function OrdersTable({
   // initial GET API call to fetch all orders
   const {
     addNewOrders,
-
+    updateOrders,
     pendingOrders,
     preparingOrders,
     readyOrders,
@@ -81,34 +82,64 @@ export default function OrdersTable({
   // TEMP: using PocahOrderItem component for just displaying
   return (
     <div className="w-full">
-      <div className="p-4 space-y-4">
-        {/* ready */}
-        <div className="text-xl font-bold">Ready</div>
-        {readyOrders?.map((orderItem) => (
-          <DashboardOrderItem
-            key={orderItem.orderItemID}
-            orderItem={orderItem}
-          />
-        ))}
+      <Accordion selectionMode="multiple" defaultSelectedKeys={"all"}>
+        <AccordionItem
+          key={1}
+          aria-label="Ready"
+          subtitle="Press to expand"
+          title="Ready"
+        >
+          {/* ready */}
+          <ul className="flex flex-col gap-2 py-4">
+            {readyOrders?.map((orderItem) => (
+              <DashboardOrderItem
+                key={orderItem.orderItemID}
+                orderItem={orderItem}
+                updateOrders={updateOrders}
+                nextStatus="closed"
+              />
+            ))}
+          </ul>
+        </AccordionItem>
 
-        {/* preparing */}
-        <div className="text-xl font-bold">Preparing</div>
-        {preparingOrders?.map((orderItem) => (
-          <DashboardOrderItem
-            key={orderItem.orderItemID}
-            orderItem={orderItem}
-          />
-        ))}
+        <AccordionItem
+          key={2}
+          aria-label="Preparing"
+          subtitle="Press to expand"
+          title="Preparing"
+        >
+          {/* preparing */}
+          <ul className="flex flex-col gap-2 py-4">
+            {preparingOrders?.map((orderItem) => (
+              <DashboardOrderItem
+                key={orderItem.orderItemID}
+                orderItem={orderItem}
+                updateOrders={updateOrders}
+                nextStatus="ready"
+              />
+            ))}
+          </ul>
+        </AccordionItem>
 
-        {/* pending */}
-        <div className="text-xl font-bold">Pending</div>
-        {pendingOrders?.map((orderItem) => (
-          <DashboardOrderItem
-            key={orderItem.orderItemID}
-            orderItem={orderItem}
-          />
-        ))}
-      </div>
+        <AccordionItem
+          key={3}
+          aria-label="Pending"
+          subtitle="Press to expand"
+          title="Pending"
+        >
+          {/* pending */}
+          <ul className="flex flex-col gap-2 py-4">
+            {pendingOrders?.map((orderItem) => (
+              <DashboardOrderItem
+                key={orderItem.orderItemID}
+                orderItem={orderItem}
+                updateOrders={updateOrders}
+                nextStatus="preparing"
+              />
+            ))}
+          </ul>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }

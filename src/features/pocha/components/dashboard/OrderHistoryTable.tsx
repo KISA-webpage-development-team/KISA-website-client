@@ -1,6 +1,6 @@
 import React from "react";
 import useOrderHistory from "../../hooks/useOrderHistory";
-import PochaOrderItem from "../order/PochaOrderItem";
+import DashboardOrderItem from "./DashboardOrderItem";
 
 interface OrderHistoryTableProps {
   token: string;
@@ -28,7 +28,11 @@ export default function OrderHistoryTable({
         {/* closed */}
         <div className="text-xl font-bold">closed</div>
         {orderHistory?.map((orderItem) => (
-          <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
+          <DashboardOrderItem
+            key={orderItem.orderItemID}
+            orderItem={orderItem}
+            nextStatus="none"
+          />
         ))}
       </div>
     </div>

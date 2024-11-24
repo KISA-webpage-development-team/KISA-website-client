@@ -214,29 +214,6 @@ export async function getUserCartMock(email: string, pochaid: number) {
 }
 
 /**
- * @desc check whether user's cart contains any out-of-stock items
- * @route GET /pocha/cart/${email}/${pochaid}/check-stock
- */
-export async function checkCartStock(
-  email: string,
-  pochaid: number
-): Promise<boolean | undefined> {
-  const url = `/pocha/cart/${email}/${pochaid}/check-stock/`;
-  try {
-    const response = await client.get(url);
-
-    return response?.data;
-  } catch (error) {
-    console.log(error);
-    return undefined;
-  }
-}
-
-export async function checkCartStockMock(email: string, pochaid: number) {
-  return true;
-}
-
-/**
  * @desc Fetch active orders of user from pocha
  * @route GET /pocha/orders/${email}/${pochaid}
  * @note Assume orders are returned in descending order of waiting
@@ -246,7 +223,7 @@ export async function getUserOrders(
   pochaid: number,
   token: string
 ): Promise<Orders | undefined> {
-  const url = `/pocha/orders/${email}/${pochaid}/`;
+  const url = `/pocha/order/${email}/${pochaid}/`;
   try {
     const response = await client.get(url, {
       headers: {
@@ -357,7 +334,7 @@ export async function getPochaOrders(
   pochaid: number,
   token: string
 ): Promise<Orders | undefined> {
-  const url = `/pocha/orders/${pochaid}/`;
+  const url = `/pocha/dashboard/${pochaid}/`;
   try {
     const response = await client.get(url, {
       headers: {
@@ -453,13 +430,15 @@ export async function getUserClosedOrders(
   pochaid: number,
   token: string
 ): Promise<OrderHistory | undefined> {
-  const url = `/pocha/orders/${email}/${pochaid}/closed/`;
+  const url = `/pocha/order/${email}/${pochaid}/closed/`;
   try {
     const response = await client.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    return response?.data;
   } catch (error) {
     console.log(error);
     return undefined;
@@ -515,13 +494,15 @@ export async function getPochaClosedOrders(
   pochaid: number,
   token: string
 ): Promise<OrderHistory | undefined> {
-  const url = `/pocha/orders/${pochaid}/closed/`;
+  const url = `/pocha/dashboard/${pochaid}/closed/`;
   try {
     const response = await client.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    return response?.data;
   } catch (error) {
     console.log(error);
     return undefined;
@@ -585,6 +566,10 @@ export async function getPayInfo(
         Authorization: `Bearer ${token}`,
       },
     });
+
+    console.log("response: ", response?.data);
+
+    return response?.data;
   } catch (error) {
     console.log(error);
     return undefined;

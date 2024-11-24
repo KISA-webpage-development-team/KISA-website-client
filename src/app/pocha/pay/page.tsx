@@ -75,7 +75,10 @@ export default function PayPage() {
     }
   }, [pochaID, setPochaID]);
 
-  if (sessionStatus === "loading" || payReadyStatus === "loading") {
+  if (
+    sessionStatus === "loading" ||
+    payReadyStatus === "loading"
+  ) {
     return <LoadingSpinner />;
   }
 
