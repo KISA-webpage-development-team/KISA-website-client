@@ -1,6 +1,5 @@
 "use client";
 
-import { notifyPayResult } from "@/apis/pocha/mutations";
 import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
