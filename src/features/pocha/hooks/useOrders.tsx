@@ -58,59 +58,11 @@ const useOrders = (email: string, token: string, pochaID: number) => {
     }
   }, [email, pochaID, token]);
 
-  // interface OrderItem {
-  //   orderItemID: number;
-  //   status: OrderStatus;
-  //   menu: MenuItem;
-  //   quantity: number;
-  //   createdAt: Date;
-  // }
-
-  // interface OrderItemWithWaiting {
-  //   waiting: number;
-  //   orderItemsList: OrderItem[];
-  // }
-
-  // interface OrdersByStatus {
-  //   pending: OrderItemWithWaiting[];
-  //   preparing: OrderItemWithWaiting[];
-  //   ready: OrderItemWithWaiting[];
-  //   closed: OrderItemWithWaiting[];
-  // }
-
-  // // key: orderID
-  // type Orders = Map<number, OrderItemWithWaiting>;
-
-  // extract total list of order items from Orders (map<number, OrderItemWithWaiting>)
-  useEffect(() => {
-    if (!orders) {
-      return;
-    }
-
-    const orderItemsList: OrderItem[] = [];
-    orders.forEach((order) => {
-      order.orderItemsList.forEach((orderItem) => {
-        orderItemsList.push(orderItem);
-      });
-    });
-
-    setOrderItems(orderItemsList);
-  }, [orders]);
-
-  // // divide and process orders based on status
-  const pendingOrders = orderItems?.filter(
-    (order) => order.status === "pending"
-  );
-  const preparingOrders = orderItems?.filter(
-    (order) => order.status === "preparing"
-  );
-  const readyOrders = orderItems?.filter((order) => order.status === "ready");
-
   return {
     orders,
-    pendingOrders,
-    preparingOrders,
-    readyOrders,
+    pendingOrders: orders?.pending,
+    preparingOrders: orders?.preparing,
+    readyOrders: orders?.ready,
     status,
   };
 };

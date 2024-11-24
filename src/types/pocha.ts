@@ -57,11 +57,6 @@ interface OrderItem {
   quantity: number;
 }
 
-interface OrderItemWithWaiting {
-  waiting: number;
-  orderItemsList: OrderItem[];
-}
-
 interface Orders {
   pending: OrderItem[];
   preparing: OrderItem[];
@@ -72,10 +67,4 @@ interface OrderHistory {
   closed: OrderItem[];
 }
 
-export type {
-  OrderItem,
-  OrderItemWithWaiting,
-  OrderStatus,
-  Orders,
-  OrderHistory,
-};
+export type { OrderItem, OrderStatus, Orders, OrderHistory };

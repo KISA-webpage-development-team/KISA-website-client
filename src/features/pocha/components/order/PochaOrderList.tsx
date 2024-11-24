@@ -28,42 +28,42 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   // Socket.IO Connection
-  // useEffect(() => {
-  //   // defensive check: no orders yet (i.e. no session, no token, no pochaID)
-  //   if (ordersStatus !== "success") {
-  //     return;
-  //   }
-  //   // Initialize socket connection
-  //   const socketInstance = io(BACKEND_URL, {
-  //     transports: ["websocket"],
-  //     auth: {
-  //       token: session.token,
-  //     },
-  //     query: {
-  //       email: session.user.email,
-  //       pochaId: pochaID,
-  //     },
-  //   });
+  useEffect(() => {
+    // defensive check: no orders yet (i.e. no session, no token, no pochaID)
+    if (ordersStatus !== "success") {
+      return;
+    }
+    // Initialize socket connection
+    const socketInstance = io("localhost:8000", {
+      transports: ["websocket"],
+      auth: {
+        token: session.token,
+      },
+      query: {
+        email: session.user.email,
+        pochaId: pochaID,
+      },
+    });
 
-  //   // Connection event handlers
-  //   socketInstance.on("connect", () => {
-  //     console.log("Connected to WebSocket server");
-  //   });
+    // Connection event handlers
+    socketInstance.on("connect", () => {
+      console.log("Connected to WebSocket server");
+    });
 
-  //   socketInstance.on("connect_error", (error) => {
-  //     console.error("WebSocket connection error:", error);
-  //   });
+    socketInstance.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error);
+    });
 
-  //   // Save socket instance to state
-  //   setSocket(socketInstance);
+    // Save socket instance to state
+    setSocket(socketInstance);
 
-  //   // Cleanup function
-  //   return () => {
-  //     if (socketInstance) {
-  //       socketInstance.disconnect();
-  //     }
-  //   };
-  // }, [session, ordersStatus, pochaID]);
+    // Cleanup function
+    return () => {
+      if (socketInstance) {
+        socketInstance.disconnect();
+      }
+    };
+  }, [session, ordersStatus, pochaID]);
 
   if (sessionStatus === "loading" || ordersStatus === "loading") {
     return <></>;

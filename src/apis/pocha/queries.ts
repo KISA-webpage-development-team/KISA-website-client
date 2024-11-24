@@ -5,7 +5,6 @@ import {
   Cart,
   CartItem,
   Orders,
-  OrderItemWithWaiting,
   OrderHistory,
 } from "@/types/pocha";
 /**
@@ -268,166 +267,26 @@ export async function getUserOrders(
 //   status: OrderStatus;
 //   menu: MenuItem;
 //   quantity: number;
-//   createdAt: Date;
 // }
 
-// interface OrderItemWithWaiting {
-//   waiting: number;
-//   orderItemsList: OrderItem[];
+// interface Orders {
+//   pending: OrderItem[];
+//   preparing: OrderItem[];
+//   ready: OrderItem[];
 // }
-
-// // key: orderID
-// type Orders = Map<number, OrderItemWithWaiting>;
 
 export async function getUserOrdersMock(
   email: string,
   pochaid: number,
   token: string
 ): Promise<Orders> {
-  const mockOrders: Orders = new Map<number, OrderItemWithWaiting>();
-  mockOrders.set(4, {
-    waiting: 0,
-    orderItemsList: [
+  const mockOrders: Orders = {
+    pending: [
       {
-        orderItemID: 20,
-        status: "ready",
-        menu: {
-          menuID: 33,
-          nameKor: "소주",
-          nameEng: "Soju",
-          price: 8,
-          stock: 200,
-          isImmediatePrep: true,
-          parentPochaId: 1,
-        },
-        quantity: 3,
-        createdAt: new Date(),
-      },
-      {
-        orderItemID: 21,
-        status: "ready",
-        menu: {
-          menuID: 34,
-          nameKor: "맥주",
-          nameEng: "Beer",
-          price: 10,
-          stock: 200,
-          isImmediatePrep: true,
-          parentPochaId: 1,
-        },
-        quantity: 2,
-        createdAt: new Date(),
-      },
-    ],
-  });
-  mockOrders.set(9, {
-    waiting: 1,
-    orderItemsList: [
-      {
-        orderItemID: 30,
-        status: "preparing",
-        menu: {
-          menuID: 27,
-          nameKor: "참이슬",
-          nameEng: "Cham-e-seul",
-          price: 15,
-          stock: 999,
-          isImmediatePrep: true,
-          parentPochaId: 1,
-        },
-        quantity: 1,
-        createdAt: new Date(),
-      },
-    ],
-  });
-  mockOrders.set(15, {
-    waiting: 7,
-    orderItemsList: [
-      {
-        orderItemID: 39,
-        status: "preparing",
-        menu: {
-          menuID: 39,
-          nameKor: "골뱅이무침",
-          nameEng: "Spicy Sea Snails",
-          price: 22,
-          stock: 45,
-          isImmediatePrep: false,
-          parentPochaId: 1,
-        },
-        quantity: 1,
-        createdAt: new Date(),
-      },
-      {
-        orderItemID: 40,
-        status: "preparing",
-        menu: {
-          menuID: 39,
-          nameKor: "골뱅이무침",
-          nameEng: "Spicy Sea Snails",
-          price: 22,
-          stock: 45,
-          isImmediatePrep: false,
-          parentPochaId: 1,
-        },
-        quantity: 1,
-        createdAt: new Date(),
-      },
-      {
-        orderItemID: 42,
+        orderItemID: 1,
         status: "pending",
         menu: {
-          menuID: 40,
-          nameKor: "계란말이",
-          nameEng: "Rolled Omelette",
-          price: 12,
-          stock: 70,
-          isImmediatePrep: false,
-          parentPochaId: 1,
-        },
-        quantity: 1,
-        createdAt: new Date(),
-      },
-      {
-        orderItemID: 43,
-        status: "pending",
-        menu: {
-          menuID: 40,
-          nameKor: "계란말이",
-          nameEng: "Rolled Omelette",
-          price: 12,
-          stock: 70,
-          isImmediatePrep: false,
-          parentPochaId: 1,
-        },
-        quantity: 1,
-        createdAt: new Date(),
-      },
-      {
-        orderItemID: 44,
-        status: "pending",
-        menu: {
-          menuID: 40,
-          nameKor: "계란말이",
-          nameEng: "Rolled Omelette",
-          price: 12,
-          stock: 70,
-          isImmediatePrep: false,
-          parentPochaId: 1,
-        },
-        quantity: 1,
-        createdAt: new Date(),
-      },
-    ],
-  });
-  mockOrders.set(24, {
-    waiting: 9,
-    orderItemsList: [
-      {
-        orderItemID: 51,
-        status: "pending",
-        menu: {
-          menuID: 29,
+          menuID: 1,
           nameKor: "김치전",
           nameEng: "Kimchi Pancake",
           price: 20,
@@ -436,13 +295,12 @@ export async function getUserOrdersMock(
           parentPochaId: 1,
         },
         quantity: 2,
-        createdAt: new Date(),
       },
       {
-        orderItemID: 52,
-        status: "preparing",
+        orderItemID: 2,
+        status: "pending",
         menu: {
-          menuID: 30,
+          menuID: 2,
           nameKor: "떡볶이",
           nameEng: "Spicy Rice Cake",
           price: 15,
@@ -451,45 +309,41 @@ export async function getUserOrdersMock(
           parentPochaId: 1,
         },
         quantity: 3,
-        createdAt: new Date(),
       },
     ],
-  });
-  mockOrders.set(30, {
-    waiting: 16,
-    orderItemsList: [
+    preparing: [
       {
-        orderItemID: 80,
-        status: "pending",
+        orderItemID: 3,
+        status: "preparing",
         menu: {
-          menuID: 37,
-          nameKor: "닭꼬치",
-          nameEng: "Chicken Skewer",
+          menuID: 3,
+          nameKor: "참이슬",
+          nameEng: "Cham-e-seul",
           price: 15,
-          stock: 100,
-          isImmediatePrep: false,
-          parentPochaId: 1,
-        },
-        quantity: 4,
-        createdAt: new Date(),
-      },
-      {
-        orderItemID: 81,
-        status: "pending",
-        menu: {
-          menuID: 38,
-          nameKor: "모듬전",
-          nameEng: "Assorted Pancakes",
-          price: 30,
-          stock: 30,
-          isImmediatePrep: false,
+          stock: 999,
+          isImmediatePrep: true,
           parentPochaId: 1,
         },
         quantity: 1,
-        createdAt: new Date(),
       },
     ],
-  });
+    ready: [
+      {
+        orderItemID: 4,
+        status: "ready",
+        menu: {
+          menuID: 4,
+          nameKor: "카스",
+          nameEng: "Cass",
+          price: 10,
+          stock: 999,
+          isImmediatePrep: true,
+          parentPochaId: 1,
+        },
+        quantity: 1,
+      },
+    ],
+  };
 
   return mockOrders;
 }
@@ -517,51 +371,47 @@ export async function getPochaOrders(
   }
 }
 
-export async function getPochaOrdersMock(pochaid: number, token: string) {
-  const mockOrders: Orders = new Map<number, OrderItemWithWaiting>();
-  mockOrders.set(4, {
-    waiting: 0,
-    orderItemsList: [
+export async function getPochaOrdersMock(
+  pochaid: number,
+  token: string
+): Promise<Orders> {
+  const mockOrders: Orders = {
+    pending: [
       {
-        orderItemID: 20,
-        status: "ready",
+        orderItemID: 1,
+        status: "pending",
         menu: {
-          menuID: 33,
-          nameKor: "소주",
-          nameEng: "Soju",
-          price: 8,
-          stock: 200,
-          isImmediatePrep: true,
-          parentPochaId: 1,
-        },
-        quantity: 3,
-        createdAt: new Date(),
-      },
-      {
-        orderItemID: 21,
-        status: "ready",
-        menu: {
-          menuID: 34,
-          nameKor: "맥주",
-          nameEng: "Beer",
-          price: 10,
-          stock: 200,
-          isImmediatePrep: true,
+          menuID: 1,
+          nameKor: "김치전",
+          nameEng: "Kimchi Pancake",
+          price: 20,
+          stock: 50,
+          isImmediatePrep: false,
           parentPochaId: 1,
         },
         quantity: 2,
-        createdAt: new Date(),
+      },
+      {
+        orderItemID: 2,
+        status: "pending",
+        menu: {
+          menuID: 2,
+          nameKor: "떡볶이",
+          nameEng: "Spicy Rice Cake",
+          price: 15,
+          stock: 100,
+          isImmediatePrep: false,
+          parentPochaId: 1,
+        },
+        quantity: 3,
       },
     ],
-  });
-  mockOrders.set(9, {
-    waiting: 1,
-    orderItemsList: [
+    preparing: [
       {
-        orderItemID: 30,
+        orderItemID: 3,
         status: "preparing",
         menu: {
-          menuID: 27,
+          menuID: 3,
           nameKor: "참이슬",
           nameEng: "Cham-e-seul",
           price: 15,
@@ -570,10 +420,25 @@ export async function getPochaOrdersMock(pochaid: number, token: string) {
           parentPochaId: 1,
         },
         quantity: 1,
-        createdAt: new Date(),
       },
     ],
-  });
+    ready: [
+      {
+        orderItemID: 4,
+        status: "ready",
+        menu: {
+          menuID: 4,
+          nameKor: "카스",
+          nameEng: "Cass",
+          price: 10,
+          stock: 999,
+          isImmediatePrep: true,
+          parentPochaId: 1,
+        },
+        quantity: 1,
+      },
+    ],
+  };
 
   return mockOrders;
 }
@@ -586,7 +451,7 @@ export async function getUserClosedOrders(
   email: string,
   pochaid: number,
   token: string
-): Promise<Orders | undefined> {
+): Promise<OrderHistory | undefined> {
   const url = `/pocha/orders/${email}/${pochaid}/closed`;
   try {
     const response = await client.get(url, {
@@ -604,16 +469,14 @@ export async function getUserClosedOrdersMock(
   email: string,
   pochaid: number,
   token: string
-) {
-  const mockOrders: Orders = new Map<number, OrderItemWithWaiting>();
-  mockOrders.set(4, {
-    waiting: 0,
-    orderItemsList: [
+): Promise<OrderHistory> {
+  const mockOrders: OrderHistory = {
+    closed: [
       {
-        orderItemID: 20,
+        orderItemID: 5,
         status: "closed",
         menu: {
-          menuID: 33,
+          menuID: 5,
           nameKor: "소주",
           nameEng: "Soju",
           price: 8,
@@ -622,13 +485,12 @@ export async function getUserClosedOrdersMock(
           parentPochaId: 1,
         },
         quantity: 3,
-        createdAt: new Date(),
       },
       {
-        orderItemID: 21,
+        orderItemID: 6,
         status: "closed",
         menu: {
-          menuID: 34,
+          menuID: 6,
           nameKor: "맥주",
           nameEng: "Beer",
           price: 10,
@@ -637,30 +499,9 @@ export async function getUserClosedOrdersMock(
           parentPochaId: 1,
         },
         quantity: 2,
-        createdAt: new Date(),
       },
     ],
-  });
-  mockOrders.set(9, {
-    waiting: 1,
-    orderItemsList: [
-      {
-        orderItemID: 30,
-        status: "closed",
-        menu: {
-          menuID: 27,
-          nameKor: "참이슬",
-          nameEng: "Cham-e-seul",
-          price: 15,
-          stock: 999,
-          isImmediatePrep: true,
-          parentPochaId: 1,
-        },
-        quantity: 1,
-        createdAt: new Date(),
-      },
-    ],
-  });
+  };
 
   return mockOrders;
 }
@@ -686,16 +527,17 @@ export async function getPochaClosedOrders(
   }
 }
 
-export async function getPochaClosedOrdersMock(pochaid: number, token: string) {
-  const mockOrders: Orders = new Map<number, OrderItemWithWaiting>();
-  mockOrders.set(4, {
-    waiting: 0,
-    orderItemsList: [
+export async function getPochaClosedOrdersMock(
+  pochaid: number,
+  token: string
+): Promise<OrderHistory> {
+  const mockOrders: OrderHistory = {
+    closed: [
       {
-        orderItemID: 20,
+        orderItemID: 5,
         status: "closed",
         menu: {
-          menuID: 33,
+          menuID: 5,
           nameKor: "소주",
           nameEng: "Soju",
           price: 8,
@@ -704,13 +546,12 @@ export async function getPochaClosedOrdersMock(pochaid: number, token: string) {
           parentPochaId: 1,
         },
         quantity: 3,
-        createdAt: new Date(),
       },
       {
-        orderItemID: 21,
+        orderItemID: 6,
         status: "closed",
         menu: {
-          menuID: 34,
+          menuID: 6,
           nameKor: "맥주",
           nameEng: "Beer",
           price: 10,
@@ -719,30 +560,8 @@ export async function getPochaClosedOrdersMock(pochaid: number, token: string) {
           parentPochaId: 1,
         },
         quantity: 2,
-        createdAt: new Date(),
       },
     ],
-  });
-  mockOrders.set(9, {
-    waiting: 1,
-    orderItemsList: [
-      {
-        orderItemID: 30,
-        status: "closed",
-        menu: {
-          menuID: 27,
-          nameKor: "참이슬",
-          nameEng: "Cham-e-seul",
-          price: 15,
-          stock: 999,
-          isImmediatePrep: true,
-          parentPochaId: 1,
-        },
-        quantity: 1,
-        createdAt: new Date(),
-      },
-    ],
-  });
-
+  };
   return mockOrders;
 }
