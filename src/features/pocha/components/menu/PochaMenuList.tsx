@@ -68,7 +68,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
                       alt={menu?.nameEng}
                       fill
                       sizes="(max-width: 768px) 20vw"
-                      className="rounded-full border-4 border-gray-300 shadow-md"
+                      className="rounded-full border-gray-300 shadow-md"
                     />
                   </figure>
 

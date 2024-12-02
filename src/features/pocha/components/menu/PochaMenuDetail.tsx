@@ -176,7 +176,7 @@ export default function PochaMenuDetail({
         <div
           className={`${sejongHospitalBold.className}
         flex flex-col w-full bg-white rounded-2xl shadow-lg
-        py-7 px-5 gap-3
+        py-7 px-9 gap-3
         items-center border-2 border-black/25 z-10`}
           // style={{
           //   marginBottom: "25px", // Prevent overlapping with button
