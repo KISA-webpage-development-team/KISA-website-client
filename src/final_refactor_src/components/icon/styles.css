@@ -9,3 +9,7 @@
 .small_icon {
   @apply text-base md:text-lg;
 }
+
+.extra_small_icon {
+  @apply text-xs md:text-sm;
+}

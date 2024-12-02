@@ -43,9 +43,9 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
 
   return (
     <div className="flex flex-col items-center py-4 px-8 w-full">
-      <ul className="flex flex-col gap-7 w-full">
-        {menuList?.map(({ category, menusList }, idx) => (
-          <li key={`${category}-${idx}`}>
+      <ul className="flex flex-col gap-7 w-full mb-16">
+        {menuList?.map(({ category, menusList }, categoryIdx) => (
+          <li key={`${category}-${categoryIdx}`}>
             {/* Category Title */}
             <span
               className={`${sejongHospitalBold.className} text-2xl text-michigan-blue
@@ -66,6 +66,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
                     <Image
                       src={getImagePath(menu?.menuID)}
                       alt={menu?.nameEng}
+                      priority={categoryIdx === 0}
                       fill
                       sizes="(max-width: 768px) 20vw"
                       className="rounded-full border-gray-300 shadow-md"

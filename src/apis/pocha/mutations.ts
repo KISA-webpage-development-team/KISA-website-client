@@ -38,8 +38,8 @@ export async function notifyPayResult(
   pochaid: number,
   body: { result: "success" | "failure" }
 ) {
-  const url = `/pocha/cart/${email}/${pochaid}/pay-result/`;
-
+  const url = `/pocha/payment/${email}/${pochaid}/pay-result/`;
+  console.log(" [notifyPayResult] sending body: ", body);
   try {
     const response = await client.put(url, body);
     return response?.data;

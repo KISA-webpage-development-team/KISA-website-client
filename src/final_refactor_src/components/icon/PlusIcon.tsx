@@ -2,7 +2,7 @@ import { FaPlus } from "react-icons/fa";
 import "./styles.css";
 
 interface PlusIconProps {
-  size?: "small" | "medium";
+  size?: "extra-small" | "small" | "medium";
   className?: string;
 }
 
@@ -12,7 +12,13 @@ export default function PlusIcon({
 }: PlusIconProps) {
   return (
     <FaPlus
-      className={`${size === "small" ? "small_icon" : "icon"} ${className}`}
+      className={`${
+        size === "extra-small"
+          ? "extra_small_icon"
+          : size === "small"
+          ? "small_icon"
+          : "icon"
+      } ${className}`}
     />
   );
 }

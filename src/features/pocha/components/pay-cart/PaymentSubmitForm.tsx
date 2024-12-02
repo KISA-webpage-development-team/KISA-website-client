@@ -20,76 +20,135 @@ import { checkCartStock, checkCartStockMock } from "@/apis/pocha/mutations";
 import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
 import useUserAge from "../../hooks/useUserAge";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { notifyPayResult } from "@/apis/pocha/mutations";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
+
+interface PaymentSubmitFormProps {
+  amount: number;
+  fee: number;
+  totalPrice: number;
+  tip: number;
+  setTip: (tip: number) => void;
+  pochaID: number;
+  ageCheckRequired: boolean;
+}
 
 export default function PaymentSubmitForm({
   amount,
   fee,
   totalPrice,
+  tip,
+  setTip,
   pochaID,
   ageCheckRequired,
-}) {
+}: PaymentSubmitFormProps) {
   const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
   // const { amount, fee, totalPrice, hasImmediatePrep, pochaID } = usePayCart();
-  const { underAge, status: userAgeStatus } = useUserAge(session);
+  const { underAge, status: userAgeStatus, fullname } = useUserAge(session);
 
   const router = useRouter();
   // [NOTE] useStripe and useElements should be called inside <Elements> wrapper
   const stripe = useStripe();
   const elements = useElements();
 
+  const [paymentIntentId, setPaymentIntentId] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const createPaymentIntent = async () => {
+      // fetch client secret from server
+      fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: convertToSubcurrency(totalPrice),
+          customer: {
+            email: session?.user?.email,
+            name: fullname,
+          },
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setClientSecret(data.clientSecret);
+          setPaymentIntentId(data.paymentIntentId);
+        });
+    };
+
+    if (session?.user?.email && fullname && totalPrice) {
+      createPaymentIntent();
+    }
+  }, [totalPrice, session?.user?.email, fullname]);
+
+  /**
+   * @desc Update Payment Intent with Tip
+   */
+  const updateTip = async () => {
+    // fetch updated client secret from server
     fetch("/api/create-payment-intent", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ amount: convertToSubcurrency(totalPrice) }),
+      body: JSON.stringify({
+        id: paymentIntentId,
+        tip: parseFloat(tip.toFixed(2)),
+      }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
-  }, [totalPrice]);
+  };
 
   /**
    * @desc Process Payment with Stripe
    */
   const processPay = async () => {
     // this is actual payment, confirm payment
-    const { error } = await stripe.confirmPayment({
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       clientSecret,
       // [NOTE] for production, return_url should be the actual URL
       confirmParams: {
         return_url: `http://localhost:3000/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`,
       },
+      redirect: "if_required",
     });
 
     if (error) {
       setErrorMessage(error.message);
 
-      // send notify API with error
+      // notify pay result with failure
+      const res = await notifyPayResult(session?.user?.email, pochaID, {
+        result: "failure",
+      });
+
+      if (!res) {
+        console.error("Error while updating cart status");
+      }
     } else {
-      // [TODO] @dkim1112 hard coding
-      try {
-        const res = await notifyPayResult(session?.user?.email, pochaID, {
-          result: "success",
-        });
-        if (!res) {
-          console.error("Error while updating cart status");
-        }
-      } catch (error) {
-        console.error("Error while updating cart status", error);
+      // notify pay result with success
+      const res = await notifyPayResult(session?.user?.email, pochaID, {
+        result: "success",
+      });
+      if (!res) {
+        console.error("Error while updating cart status");
       }
       // This payment UI automatically closes with a success animation
       // redirect to "return_url"
+      router.push(
+        `/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}&payment_intent=${paymentIntent}`
+      );
     }
   };
 
@@ -138,7 +197,14 @@ export default function PaymentSubmitForm({
       return;
     }
 
-    // 4. process payment
+    // 4. update tip
+    try {
+      await updateTip();
+    } catch (error) {
+      console.error("Error while updating tip", error);
+    }
+
+    // 5. process payment
     try {
       await processPay();
     } catch (error) {
@@ -146,6 +212,10 @@ export default function PaymentSubmitForm({
     }
 
     setLoading(false);
+  };
+
+  const handleTipTest = (e) => {
+    setTip(Number(e.target.value));
   };
 
   if (
@@ -163,7 +233,7 @@ export default function PaymentSubmitForm({
       onSubmit={handleSubmit}
       className="relative w-full
     flex flex-col
-    bg-white rounded-md"
+    bg-white rounded-md py-2"
     >
       {/* Payment form input */}
       {clientSecret && (
@@ -177,13 +247,16 @@ export default function PaymentSubmitForm({
 
       {/* Total Price + Transaction fee display */}
       <div
-        className="w-full flex flex-col items-start 
-      border-gray-200 border py-6 px-3 mt-4"
+        className={`w-full flex flex-col items-start 
+          rounded-xl
+      border-gray-300 border p-5 mt-4 ${sejongHospitalBold.className}`}
       >
-        <span className="text-lg font-bold">결제금액</span>
-        <div className="flex flex-col self-stretch mt-4 mb-2">
+        <span className="text-lg font-bold">Summary</span>
+        <div
+          className={`flex flex-col self-stretch mt-4 mb-2 ${sejongHospitalLight.className}`}
+        >
           <div className="flex items-center justify-between">
-            <span>주문금액</span>
+            <span>Subtotal</span>
             <span>${amount}</span>
           </div>
 
@@ -191,26 +264,48 @@ export default function PaymentSubmitForm({
             <span>Transaction Fee</span>
             <span>${fee}</span>
           </div>
+
+          {tip > 0 && (
+            <div className="flex items-center justify-between">
+              <span>Tip</span>
+              <span>${tip}</span>
+            </div>
+          )}
         </div>
 
-        <HorizontalDivider />
+        <HorizontalDivider color="gray" />
 
         <div className="flex items-center justify-between self-stretch mt-2">
-          <span className="font-bold">Transaction Fee</span>
+          <span className="font-bold">Total</span>
           <span className="text-xl font-bold">${totalPrice}</span>
         </div>
       </div>
       {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}
 
+      <input
+        type="number"
+        placeholder="Tip"
+        className={`mt-4
+            text-lg ${sejongHospitalBold.className}
+             left-0 w-full 
+            z-10 bottom-0 mb-4
+             rounded-lg font-semibold
+            border-gray-200 border py-3 px-2`}
+        onChange={handleTipTest}
+      />
+
       {/* Submit button (sticky on the bottom) */}
       <button
         disabled={!stripe || loading}
-        className="mt-10 left-0 w-full 
+        className={`mt-4
+        text-lg ${sejongHospitalBold.className}
+         left-0 w-full 
         z-10 bottom-0 mb-4
-         bg-blue-500 text-white
-        border-gray-200 border py-3 px-2 rounded-lg"
+         rounded-lg text-white font-semibold
+          bg-cyan-600/75
+        border-gray-200 border py-3 px-2`}
       >
-        {!loading ? `$${totalPrice} 결제하기` : "로딩중..."}
+        {!loading ? `Pay $${totalPrice}` : "Loading..."}
       </button>
     </form>
   );

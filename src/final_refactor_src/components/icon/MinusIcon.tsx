@@ -2,7 +2,7 @@ import { FaMinus } from "react-icons/fa";
 import "./styles.css";
 
 interface MinusIconProps {
-  size?: "small" | "medium";
+  size?: "extra-small" | "small" | "medium";
   className?: string;
 }
 
@@ -12,7 +12,13 @@ export default function MinusIcon({
 }: MinusIconProps) {
   return (
     <FaMinus
-      className={`${size === "small" ? "small_icon" : "icon"} ${className}`}
+      className={`${
+        size === "extra-small"
+          ? "extra_small_icon"
+          : size === "small"
+          ? "small_icon"
+          : "icon"
+      } ${className}`}
     />
   );
 }

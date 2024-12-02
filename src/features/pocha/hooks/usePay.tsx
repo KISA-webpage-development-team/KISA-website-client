@@ -1,6 +1,6 @@
 import { PayInfo } from "@/types/pocha";
 import { useEffect, useState } from "react";
-import { getPayInfo, getPayInfoMock } from "@/apis/pocha/queries";
+import { getPayInfo } from "@/apis/pocha/queries";
 
 const usePay = (email: string, token: string, pochaID: number) => {
   const [payInfo, setPayInfo] = useState<PayInfo>();
@@ -34,7 +34,7 @@ const usePay = (email: string, token: string, pochaID: number) => {
   };
 
   const calculateTotalPrice = (amount: number) => {
-    return amount + calculateFee(amount) + tip;
+    return parseFloat((amount + calculateFee(amount) + tip).toFixed(2));
   };
 
   return {

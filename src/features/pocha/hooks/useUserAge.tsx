@@ -9,16 +9,21 @@ const useUserAge = (session: UserSession | null) => {
     "loading"
   );
   const [underAge, setUnderAge] = useState<boolean>(false);
+  const [fullname, setFullname] = useState<string>("");
 
   // fetch user's age
   useEffect(() => {
     const fetchUserAge = async () => {
       try {
         const res = await getUser(session?.user.email, session?.token);
-        const { bornDate, bornMonth, bornYear } = res;
+
+        const { bornDate, bornMonth, bornYear, fullname } = res;
+        setFullname(fullname);
+
+        console.log("fullname: ", fullname);
+
         const age = calculateAge(`${bornYear}-${bornMonth}-${bornDate}`);
         setUnderAge(age < 21);
-
         setStatus("success");
       } catch (error) {
         console.error("Error while fetching user's age", error);
@@ -33,7 +38,7 @@ const useUserAge = (session: UserSession | null) => {
     }
   }, [session]);
 
-  return { underAge, status };
+  return { underAge, status, fullname };
 };
 
 const calculateAge = (birthday: string | null | undefined): number => {

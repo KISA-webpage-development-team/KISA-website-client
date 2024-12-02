@@ -3,7 +3,7 @@
 import React from "react";
 import { getUserCart, getPochaInfo } from "@/apis/pocha/queries";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
-import { Cart } from "@/types/pocha";
+import { Cart, PochaInfo } from "@/types/pocha";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -16,6 +16,7 @@ import {
 } from "@/utils/fonts/textFonts";
 import BackIcon from "@/final_refactor_src/components/icon/BackIcon";
 import cartToAmount from "@/features/pocha/utils/cartToAmount";
+import { ApiError } from "@/lib/axios/types";
 
 export default function PochaCartPage() {
   // cart: variable | setCart: function to set variable
@@ -35,6 +36,7 @@ export default function PochaCartPage() {
   const [cartItemStale, setCartItemStale] = useState<boolean>(true);
 
   const [pochaID, setPochaID] = useState<number>(urlPochaID);
+  const [pochaIDError, setPochaIDError] = useState<ApiError>();
 
   // fetch initial cart
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function PochaCartPage() {
       }
     };
 
-    if (session && cartItemStale) {
+    if (session && pochaID && cartItemStale) {
       fetchCart();
     }
   }, [session, pochaID, cartItemStale]);
@@ -70,11 +72,16 @@ export default function PochaCartPage() {
   useEffect(() => {
     const fetchPochaInfo = async () => {
       // try API call first
-      try {
-        const res = await getPochaInfo(new Date());
-        setPochaID(res?.pochaID);
-      } catch (error) {
-        console.error("Error fetching like status: ", error);
+      const res = await getPochaInfo(new Date());
+
+      if ((res as ApiError)?.statusCode) {
+        setPochaIDError(res as ApiError);
+      } else {
+        setPochaID((res as PochaInfo)?.pochaID);
+        // update URL search params with the fetched pochaID
+        const params = new URLSearchParams(window.location.search);
+        params.set("pochaid", (res as PochaInfo).pochaID.toString());
+        window.history.replaceState({}, "", `?${params.toString()}`);
       }
     };
 
@@ -145,16 +152,12 @@ export default function PochaCartPage() {
           </ul>
 
           {/* Total Price */}
-          <div className="flex justify-between w-full">
-            <span
-              className={`${sejongHospitalLight.className} ml-7 mt-4 text-blue-950`}
-            >
-              총 주문금액
-            </span>
-            <span
-              className={`${sejongHospitalLight.className} mr-7 mt-4 text-blue-950`}
-            >
-              ${cartToAmount(cart)}
+          <div
+            className={`flex justify-between w-full ${sejongHospitalBold.className} text-lg`}
+          >
+            <span className={`ml-7 mt-4 text-blue-950`}>Total</span>
+            <span className={`mr-7 mt-4 text-blue-950`}>
+              US${cartToAmount(cart)}
             </span>
           </div>
 

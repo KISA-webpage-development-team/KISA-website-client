@@ -4,7 +4,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import { Cart } from "@/types/pocha";
+import { Cart, PochaInfo } from "@/types/pocha";
 import PaymentSubmitForm from "@/features/pocha/components/pay-cart/PaymentSubmitForm";
 
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
@@ -18,6 +18,7 @@ import usePay from "@/features/pocha/hooks/usePay";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 import BackIcon from "@/final_refactor_src/components/icon/BackIcon";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import { ApiError } from "@/lib/axios/types";
 
 // defensive programming check
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
@@ -39,11 +40,14 @@ export default function PayPage() {
   const searchParams = useSearchParams();
   const urlPochaID = parseInt(searchParams.get("pochaid"));
 
+  const [pochaIDError, setPochaIDError] = useState<ApiError>();
   const [pochaID, setPochaID] = useState<number>(urlPochaID);
 
   const {
     amount,
     fee,
+    tip,
+    setTip,
     totalPrice,
     ageCheckRequired,
     status: payReadyStatus,
@@ -58,31 +62,34 @@ export default function PayPage() {
   useEffect(() => {
     const fetchPochaInfo = async () => {
       // try API call first
-      try {
-        const res = await getPochaInfo(new Date());
-        setPochaID(res?.pochaID);
-      } catch (error) {
-        console.error("Error fetching like status: ", error);
+      const res = await getPochaInfo(new Date());
+
+      if ((res as ApiError)?.statusCode) {
+        setPochaIDError(res as ApiError);
+      } else {
+        setPochaID((res as PochaInfo)?.pochaID);
+        // update URL search params with the fetched pochaID
+        const params = new URLSearchParams(window.location.search);
+        params.set("pochaid", (res as PochaInfo).pochaID.toString());
+        window.history.replaceState({}, "", `?${params.toString()}`);
       }
     };
 
     // missing pochaID on the URL
     if (!pochaID) {
       // need to fetch
+      console.log("need to fetch pochaID");
       fetchPochaInfo();
     } else {
       setPochaID(pochaID);
     }
   }, [pochaID, setPochaID]);
 
-  if (
-    sessionStatus === "loading" ||
-    payReadyStatus === "loading"
-  ) {
+  if (sessionStatus === "loading" || payReadyStatus === "loading") {
     return <LoadingSpinner />;
   }
 
-  if (payReadyStatus === "error") {
+  if (payReadyStatus === "error" || !totalPrice) {
     // [IMPORTANT]
     // this will occur mostly from back button behavior
     // from API, if the cart is empty (already paid or no items)
@@ -118,6 +125,8 @@ export default function PayPage() {
           amount={amount}
           fee={fee}
           totalPrice={totalPrice}
+          tip={tip}
+          setTip={setTip}
           pochaID={pochaID}
           ageCheckRequired={ageCheckRequired}
         />
