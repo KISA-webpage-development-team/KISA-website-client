@@ -96,23 +96,6 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
     };
   }, [session, ordersStatus, pochaID]);
 
-  const handleSocketTest = async () => {
-    try {
-      // /pocha/socket-test GET
-      const res = await fetch(`${BACKEND_URL}/pocha/socket-test/`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.token}`,
-        },
-      });
-
-      console.log("Socket test response: ", res);
-    } catch (error) {
-      console.error("Error fetching orders: ", error);
-    }
-  };
-
   if (sessionStatus === "loading" || ordersStatus === "loading") {
     return <></>;
   }

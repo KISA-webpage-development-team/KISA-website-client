@@ -41,10 +41,12 @@ export default function DashboardOrderItem({
   };
 
   return (
-    <li className="flex justify-between">
-      <span>{orderItem.orderItemID}</span>
-      <span>{orderItem.menu.nameKor}</span>
-      <span>{orderItem.quantity}</span>
+    <li className="flex justify-between items-center h-fit">
+      <div className="flex items-center gap-2">
+        <span>{orderItem.orderItemID}</span>
+        <span>{orderItem.menu.nameKor}</span>
+        <span>{orderItem.quantity}</span>
+      </div>
       <span
         className={`${STATUS_COLORS[orderItem.status]} 
         rounded-md py-1 px-2 text-white font-bold`}
@@ -52,12 +54,11 @@ export default function DashboardOrderItem({
         {orderItem.status}
       </span>
 
-      {nextStatus !== "none" && (
+      {/* {nextStatus !== "none" && (
         <Popover
           isOpen={isOpen}
           onOpenChange={(open) => setIsOpen(open)}
-          placement="left"
-          className=""
+          placement="left-end"
         >
           <PopoverTrigger>
             <Button>Change Status</Button>
@@ -68,6 +69,18 @@ export default function DashboardOrderItem({
             >{`Change to ${nextStatus}`}</Button>
           </PopoverContent>
         </Popover>
+      )} */}
+      {nextStatus !== "none" && (
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={handleStatusChange}
+            className={`
+                ${STATUS_COLORS[nextStatus]}
+                ${isOpen ? "block" : "hidden"}
+              `}
+          >{`Change to ${nextStatus}`}</Button>
+          <Button onClick={() => setIsOpen(!isOpen)}>Change Status</Button>
+        </div>
       )}
     </li>
   );

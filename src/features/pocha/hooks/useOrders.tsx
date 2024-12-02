@@ -1,9 +1,4 @@
-import {
-  getUserOrders,
-  getUserOrdersMock,
-  getPochaOrdersMock,
-  getPochaOrders,
-} from "@/apis/pocha/queries";
+import { getUserOrders, getPochaOrders } from "@/apis/pocha/queries";
 import { OrderItem, Orders, OrderStatus } from "@/types/pocha";
 import { useEffect, useState } from "react";
 
@@ -86,20 +81,22 @@ const useOrders = (email: string, token: string, pochaID: number) => {
 
   const updateOrders = (orderItemID: number, newStatus: OrderStatus) => {
     if (newStatus === "preparing") {
-      // remove orderItemID from pending
-      // add orderItemID to preparing
-      const orderToMove = pendingOrders?.find(
-        (order) => order.orderItemID === orderItemID
+      // find the order item in pending orders
+      const orderItem = pendingOrders?.find(
+        (item) => item.orderItemID === orderItemID
       );
-      if (orderToMove) {
-        orderToMove.status = newStatus;
-        preparingOrders?.push(orderToMove);
-      }
-      setPreparingOrders(preparingOrders);
 
-      setPendingOrders(
-        pendingOrders?.filter((order) => order.orderItemID !== orderItemID)
-      );
+      orderItem.status = newStatus;
+
+      // remove the order item from pending orders
+      setPendingOrders((prevOrders) => {
+        return prevOrders?.filter((item) => item.orderItemID !== orderItemID);
+      });
+
+      // add the order item to preparing orders
+      setPreparingOrders((prevOrders) => {
+        return [...prevOrders!, orderItem];
+      });
 
       // update the state
       setOrders((prevOrders) => {
@@ -109,26 +106,23 @@ const useOrders = (email: string, token: string, pochaID: number) => {
           ["preparing"]: preparingOrders,
         };
       });
-
-      console.log("pendingOrders: ", pendingOrders);
-      console.log("preparingOrders: ", preparingOrders);
-    }
-
-    if (newStatus === "ready") {
-      // remove orderItemID from preparing
-      // add orderItemID to ready
-      const orderToMove = preparingOrders?.find(
-        (order) => order.orderItemID === orderItemID
+    } else if (newStatus === "ready") {
+      // find the order item in preparing orders
+      const orderItem = preparingOrders?.find(
+        (item) => item.orderItemID === orderItemID
       );
-      if (orderToMove) {
-        orderToMove.status = newStatus;
-        readyOrders?.push(orderToMove);
-      }
-      setReadyOrders(readyOrders);
 
-      setPreparingOrders(
-        preparingOrders?.filter((order) => order.orderItemID !== orderItemID)
-      );
+      orderItem.status = newStatus;
+
+      // remove the order item from preparing orders
+      setPreparingOrders((prevOrders) => {
+        return prevOrders?.filter((item) => item.orderItemID !== orderItemID);
+      });
+
+      // add the order item to ready orders
+      setReadyOrders((prevOrders) => {
+        return [...prevOrders!, orderItem];
+      });
 
       // update the state
       setOrders((prevOrders) => {
@@ -138,13 +132,18 @@ const useOrders = (email: string, token: string, pochaID: number) => {
           ["ready"]: readyOrders,
         };
       });
-    }
-
-    if (newStatus === "closed") {
-      // remove orderItemID from ready
-      setReadyOrders(
-        readyOrders?.filter((order) => order.orderItemID !== orderItemID)
+    } else if (newStatus === "closed") {
+      // find the order item in ready orders
+      const orderItem = readyOrders?.find(
+        (item) => item.orderItemID === orderItemID
       );
+
+      orderItem.status = newStatus;
+
+      // remove the order item from ready orders
+      setReadyOrders((prevOrders) => {
+        return prevOrders?.filter((item) => item.orderItemID !== orderItemID);
+      });
 
       // update the state
       setOrders((prevOrders) => {
