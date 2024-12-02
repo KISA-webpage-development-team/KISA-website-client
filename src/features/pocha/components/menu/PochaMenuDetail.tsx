@@ -36,6 +36,8 @@ import BackIcon from "@/final_refactor_src/components/icon/BackIcon";
 import { MenuItem, CartItem, PochaInfo } from "@/types/pocha";
 import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
+import PlusIcon from "@/final_refactor_src/components/icon/PlusIcon";
+import MinusIcon from "@/final_refactor_src/components/icon/MinusIcon";
 
 interface PochaMenuDetailProps {
   selectedMenu: MenuItem;
@@ -48,10 +50,13 @@ export default function PochaMenuDetail({
   setSelectedMenu,
   pochaid,
 }: PochaMenuDetailProps) {
-  const { data: session, status } = useSession() as {
+  const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
+
+  // Loading state for add to cart button
+  const [addingToCart, setAddingToCart] = useState<boolean>(false);
   // Counter Logic
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -78,6 +83,7 @@ export default function PochaMenuDetail({
 
   // add menu item and its quantity to the cart
   const handleAddToCart = async () => {
+    setAddingToCart(true);
     // Posting info to DB.
     const addedMenu = {
       menuID: selectedMenu.menuID,
@@ -95,6 +101,7 @@ export default function PochaMenuDetail({
         console.error("Error updating cart item quantity");
         return;
       }
+      setAddingToCart(false);
 
       // redirect to the original page
       setSelectedMenu(undefined);
@@ -135,6 +142,10 @@ export default function PochaMenuDetail({
       : "/images/24_last_pocha/image_not_found.png";
   };
 
+  if (sessionStatus === "loading") {
+    <></>;
+  }
+
   return (
     <div
       className="w-full flex flex-col 
@@ -163,24 +174,26 @@ export default function PochaMenuDetail({
       >
         {/* Details */}
         <div
-          className="
+          className={`${sejongHospitalBold.className}
         flex flex-col w-full bg-white rounded-2xl shadow-lg
-        py-7 px-5 gap-2
-        items-center border-2 border-black/25 z-10"
+        py-7 px-5 gap-3
+        items-center border-2 border-black/25 z-10`}
           // style={{
           //   marginBottom: "25px", // Prevent overlapping with button
           // }}
         >
           {/* Menu Name */}
-          <span className={`${sejongHospitalBold.className} text-4xl`}>
-            {selectedMenu.nameKor}
-          </span>
-          <span className={`${sejongHospitalBold.className} text-medium`}>
-            {selectedMenu.nameEng}
-          </span>
+          <div className="flex flex-col items-center gap-0">
+            <span className={`text-michigan-blue text-4xl`}>
+              {selectedMenu.nameKor}
+            </span>
+            <span className={` text-michigan-blue text-medium`}>
+              ({selectedMenu.nameEng})
+            </span>
+          </div>
 
           {/* temporarily put in a value. */}
-          <p className="text-center text-gray-500">
+          <p className={`text-center text-gray-500`}>
             Comes with:
             <br />
             - Fish cake
@@ -188,14 +201,12 @@ export default function PochaMenuDetail({
           </p>
 
           {/* for this, just shows the total price for the selected food, based on your quantity. */}
-          <span className={`${sejongHospitalLight.className} text-lg`}>
-            ${selectedMenu.price * quantity}{" "}
-          </span>
+          <span className={`text-lg`}>${selectedMenu.price * quantity} </span>
 
           {/* Quantity Selector */}
           <div
             className="w-full 
-        flex justify-center items-center bg-gray-200 border-4 border-gray-300 
+        flex justify-center items-center bg-gray-200 border-3 border-gray-300 
         text-lg py-3 rounded-2xl"
           >
             <span
@@ -210,7 +221,7 @@ export default function PochaMenuDetail({
                 onClick={decrementQuantity}
                 disabled={quantity === 1}
               >
-                -
+                <MinusIcon size="small" />
               </button>
               <span className={`${sejongHospitalBold.className} text-lg`}>
                 {quantity}
@@ -219,7 +230,7 @@ export default function PochaMenuDetail({
                 onClick={incrementQuantity}
                 className="bg-white text-lg w-8 h-8 rounded-full flex justify-center items-center"
               >
-                +
+                <PlusIcon size="small" />
               </button>
             </div>
           </div>
@@ -228,11 +239,12 @@ export default function PochaMenuDetail({
         <button
           className={`
            py-3 rounded-lg text-white font-semibold bg-cyan-600/75 
-           justify-center items-center w-[85%] 
+           justify-center items-center w-[85%] mb-6
            ${sejongHospitalBold.className}`}
           onClick={handleAddToCart}
+          disabled={addingToCart}
         >
-          Add to Cart
+          {addingToCart ? "Adding to Cart..." : "Add to Cart"}
         </button>
       </div>
     </div>
