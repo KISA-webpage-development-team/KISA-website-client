@@ -73,6 +73,8 @@ export default function PochaPage() {
     );
   }
 
+  // [MAIN UI] --------------------------------------------------------------------------------
+  // IF any menu is selected, show the menu detail
   if (selectedMenu !== undefined) {
     return (
       <section className="overflow-y-auto h-full">
@@ -87,16 +89,12 @@ export default function PochaPage() {
 
   return (
     <section
-      className={`${sejongHospitalLight.className} w-screen -translate-x-4 `}
+      className={`${sejongHospitalLight.className} w-screen -translate-x-4 py-2`}
     >
       {/* pocha title & description */}
       <PochaHeading pochaInfo={pochaInfo} />
       {/* menu and orders tabs */}
-      <PochaTabs
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        searchParams={searchParams}
-      />
+      <PochaTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       {/* Listing the menus OR orders */}
       {activeTab === "menu" ? (
         <PochaMenuList
