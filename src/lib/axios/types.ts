@@ -8,4 +8,10 @@ import { AxiosError } from "axios";
 interface CustomServerError {
   error: string;
 }
+
+interface ApiError {
+  statusCode: number;
+}
+
 export type CustomAxiosError = AxiosError<CustomServerError>;
+export type { ApiError };

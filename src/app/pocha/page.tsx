@@ -1,42 +1,76 @@
 "use client";
 
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { sejongHospitalLight } from "@/utils/fonts/textFonts";
+
+// ui components
 import PochaHeading from "@/features/pocha/components/PochaHeading";
 import PochaMenuList from "@/features/pocha/components/menu/PochaMenuList";
 import PochaOrderList from "@/features/pocha/components/order/PochaOrderList";
 import PochaTabs from "@/features/pocha/components/PochaTabs";
-import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import PochaMenuDetail from "@/features/pocha/components/menu/PochaMenuDetail";
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import {
+  LoadingSpinner,
+  NotFound,
+  NotLogin,
+} from "@/final_refactor_src/components/feedback";
+
+// hooks
+import usePocha from "@/features/pocha/hooks/usePocha";
 
 // types
-import { MenuItem, PochaTab, PochaInfo } from "@/types/pocha";
+import { MenuItem, PochaTab } from "@/types/pocha";
 import { useSearchParams } from "next/navigation";
-import usePocha from "@/features/pocha/hooks/usePocha";
-import { getPochaInfo } from "@/apis/pocha/queries";
+import UnexpectedError from "@/final_refactor_src/components/feedback/UnexpectedError";
 
 export default function PochaPage() {
+  // "/pocha?tab=menu" [default] or "/pocha?tab=orders"
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<PochaTab>(
     (searchParams.get("tab") as PochaTab) || "menu"
   );
 
-  const { pochaInfo, status } = usePocha();
+  // state for selected menu to open menu detail tab
+  const [selectedMenu, setSelectedMenu] = useState<MenuItem>();
 
-  // state for selected menu to open detail page
-  const [selectedMenu, setSelectedMenu] = useState<MenuItem>(undefined);
+  // fetch pocha information (GET /pocha/status-info/)
+  const { pochaInfo, status, error } = usePocha();
 
-  // page.tsx는 CSR이기에 PochaHeading도 CSR --> async/await 못함
-  // getPochaInfoMock만 부분적으로 async (await하려면 async)
-  // const fetchPochaInfo = async () => {
-  //   const pochaInfo = await getPochaInfoMock(new Date());
-  //   console.log("pochaInfo", pochaInfo);
-  // };
-
-  // const pochaInfo = await getPochaInfo(new Date()); // When real api is completed, change to this line
   if (status === "loading") {
     return <LoadingSpinner />;
+  }
+
+  // [TODO] need better way of Error handling
+  if (status === "error") {
+    if (error.statusCode === 401) {
+      return <NotLogin />;
+    } else if (error.statusCode === 404) {
+      return <NotFound />;
+    } else {
+      return <UnexpectedError />;
+    }
+  }
+
+  // [TODO] better UI
+  // if pochaInfo === {}, then there is no scheduled pocha
+  if (Object.keys(pochaInfo).length === 0) {
+    return (
+      <section className="flex justify-center items-center h-full">
+        <p className="text-3xl font-bold">No scheduled pocha</p>
+      </section>
+    );
+  }
+
+  // [TODO] better UI
+  // else if pochaInfo.ongoing === false, then show the upcoming pocha
+  if (pochaInfo?.ongoing === false) {
+    return (
+      <section className="flex justify-center items-center h-full">
+        <p className="text-3xl font-bold">Upcoming pocha</p>
+        <PochaHeading pochaInfo={pochaInfo} />
+      </section>
+    );
   }
 
   if (selectedMenu !== undefined) {
@@ -57,7 +91,7 @@ export default function PochaPage() {
     >
       {/* pocha title & description */}
       <PochaHeading pochaInfo={pochaInfo} />
-      {/* menu and order history tabs */}
+      {/* menu and orders tabs */}
       <PochaTabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -65,21 +99,13 @@ export default function PochaPage() {
       />
       {/* Listing the menus OR orders */}
       {activeTab === "menu" ? (
-        <>
-          <PochaMenuList
-            setSelectedMenu={setSelectedMenu}
-            pochaid={pochaInfo?.pochaID}
-          />
-        </>
+        <PochaMenuList
+          setSelectedMenu={setSelectedMenu}
+          pochaid={pochaInfo?.pochaID}
+        />
       ) : (
         <PochaOrderList pochaID={pochaInfo?.pochaID} />
       )}
-      {/* [LATER] helper button */}
-      {/* <PochaHelpButton /> */}
-      {/* Selected menu details */}
-      {/* <PochaMenuDetails menu={Menu} /> */}
-      {/* Button for viewing cart */}
-      {/* TODO: Need to use the cart array to get all PRICES ONLY of added foods. */}
     </section>
   );
 }
