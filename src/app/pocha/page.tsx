@@ -2,7 +2,10 @@
 
 import React from "react";
 import { useState } from "react";
-import { sejongHospitalLight } from "@/utils/fonts/textFonts";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
 
 // ui components
 import PochaHeading from "@/features/pocha/components/PochaHeading";
@@ -23,6 +26,8 @@ import usePocha from "@/features/pocha/hooks/usePocha";
 import { MenuItem, PochaTab } from "@/types/pocha";
 import { useSearchParams } from "next/navigation";
 import UnexpectedError from "@/final_refactor_src/components/feedback/UnexpectedError";
+import PochaCartIcon from "@/final_refactor_src/components/icon/PochaCartIcon";
+import OnlyMobileView from "@/final_refactor_src/components/feedback/OnlyMobileView";
 
 export default function PochaPage() {
   // "/pocha?tab=menu" [default] or "/pocha?tab=orders"
@@ -88,22 +93,32 @@ export default function PochaPage() {
   }
 
   return (
-    <section
-      className={`${sejongHospitalLight.className} w-screen -translate-x-4 py-2`}
-    >
-      {/* pocha title & description */}
-      <PochaHeading pochaInfo={pochaInfo} />
-      {/* menu and orders tabs */}
-      <PochaTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-      {/* Listing the menus OR orders */}
-      {activeTab === "menu" ? (
-        <PochaMenuList
-          setSelectedMenu={setSelectedMenu}
-          pochaid={pochaInfo?.pochaID}
-        />
-      ) : (
-        <PochaOrderList pochaID={pochaInfo?.pochaID} />
-      )}
-    </section>
+    <>
+      <section className="hidden md:block">
+        <OnlyMobileView />
+      </section>
+      <section
+        className={`
+        md:hidden
+        ${sejongHospitalLight.className} relative w-screen h-[90vh] -translate-x-4 py-2 !gap-0`}
+      >
+        {/* pocha title & description */}
+        <PochaHeading pochaInfo={pochaInfo} />
+        {/* menu and orders tabs */}
+        <PochaTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+
+        {/* Listing the menus OR orders */}
+        <div className="flex-1 overflow-y-auto w-full">
+          {activeTab === "menu" ? (
+            <PochaMenuList
+              setSelectedMenu={setSelectedMenu}
+              pochaid={pochaInfo?.pochaID}
+            />
+          ) : (
+            <PochaOrderList pochaID={pochaInfo?.pochaID} />
+          )}
+        </div>
+      </section>
+    </>
   );
 }
