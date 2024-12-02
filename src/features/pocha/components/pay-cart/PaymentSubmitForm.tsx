@@ -26,6 +26,8 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
+import { Select, SelectItem } from "@nextui-org/react";
+import { cp } from "fs";
 
 interface PaymentSubmitFormProps {
   amount: number;
@@ -61,7 +63,10 @@ export default function PaymentSubmitForm({
   const [paymentIntentId, setPaymentIntentId] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [clientSecret, setClientSecret] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [tipPercentage, setTipPercentage] = useState(new Set(["0"]));
+  const [isTipModalOpen, setIsTipModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const createPaymentIntent = async () => {
@@ -95,6 +100,7 @@ export default function PaymentSubmitForm({
    * @desc Update Payment Intent with Tip
    */
   const updateTip = async () => {
+    // console.log("new Tip: ", tip);
     // fetch updated client secret from server
     fetch("/api/create-payment-intent", {
       method: "PUT",
@@ -114,6 +120,7 @@ export default function PaymentSubmitForm({
    * @desc Process Payment with Stripe
    */
   const processPay = async () => {
+    console.log("paying totalPrice: ", totalPrice);
     // this is actual payment, confirm payment
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
@@ -198,24 +205,29 @@ export default function PaymentSubmitForm({
     }
 
     // 4. update tip
+    setTipPercentage(new Set(["15"]));
+
+    const defaultTip = (amount * 15) / 100;
+    setTip(defaultTip);
+    setIsTipModalOpen(true);
+  };
+
+  const handleTipSubmit = async () => {
     try {
       await updateTip();
+
+      setIsTipModalOpen(false);
+      // 5. process payment
+      try {
+        await processPay();
+      } catch (error) {
+        console.error("Error while processing payment", error);
+      }
     } catch (error) {
       console.error("Error while updating tip", error);
     }
 
-    // 5. process payment
-    try {
-      await processPay();
-    } catch (error) {
-      console.error("Error while processing payment", error);
-    }
-
     setLoading(false);
-  };
-
-  const handleTipTest = (e) => {
-    setTip(Number(e.target.value));
   };
 
   if (
@@ -229,84 +241,133 @@ export default function PaymentSubmitForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="relative w-full
+    <>
+      <form
+        onSubmit={handleSubmit}
+        className="relative w-full
     flex flex-col
     bg-white rounded-md py-2"
-    >
-      {/* Payment form input */}
-      {clientSecret && (
-        <PaymentElement
-          options={{
-            layout: "accordion",
-            paymentMethodOrder: ["apple_pay", "google_pay", "card"],
-          }}
-        />
-      )}
+      >
+        {/* Payment form input */}
+        {clientSecret && (
+          <PaymentElement
+            options={{
+              layout: "accordion",
+              paymentMethodOrder: ["apple_pay", "google_pay", "card"],
+            }}
+          />
+        )}
 
-      {/* Total Price + Transaction fee display */}
-      <div
-        className={`w-full flex flex-col items-start 
+        {/* Total Price + Transaction fee display */}
+        <div
+          className={`w-full flex flex-col items-start 
           rounded-xl
       border-gray-300 border p-5 mt-4 ${sejongHospitalBold.className}`}
-      >
-        <span className="text-lg font-bold">Summary</span>
-        <div
-          className={`flex flex-col self-stretch mt-4 mb-2 ${sejongHospitalLight.className}`}
         >
-          <div className="flex items-center justify-between">
-            <span>Subtotal</span>
-            <span>${amount}</span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span>Transaction Fee</span>
-            <span>${fee}</span>
-          </div>
-
-          {tip > 0 && (
+          <span className="text-lg font-bold">Summary</span>
+          <div
+            className={`flex flex-col self-stretch mt-4 mb-2 ${sejongHospitalLight.className}`}
+          >
             <div className="flex items-center justify-between">
-              <span>Tip</span>
-              <span>${tip}</span>
+              <span>Subtotal</span>
+              <span>${amount}</span>
             </div>
-          )}
+
+            <div className="flex items-center justify-between">
+              <span>Transaction Fee</span>
+              <span>${fee}</span>
+            </div>
+
+            {tip > 0 && (
+              <div className="flex items-center justify-between">
+                <span>Tip</span>
+                <span>${tip}</span>
+              </div>
+            )}
+          </div>
+
+          <HorizontalDivider color="gray" />
+
+          <div className="flex items-center justify-between self-stretch mt-2">
+            <span className="font-bold">Total</span>
+            <span className="text-xl font-bold">${totalPrice}</span>
+          </div>
         </div>
+        {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}
 
-        <HorizontalDivider color="gray" />
-
-        <div className="flex items-center justify-between self-stretch mt-2">
-          <span className="font-bold">Total</span>
-          <span className="text-xl font-bold">${totalPrice}</span>
-        </div>
-      </div>
-      {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}
-
-      <input
-        type="number"
-        placeholder="Tip"
-        className={`mt-4
-            text-lg ${sejongHospitalBold.className}
-             left-0 w-full 
-            z-10 bottom-0 mb-4
-             rounded-lg font-semibold
-            border-gray-200 border py-3 px-2`}
-        onChange={handleTipTest}
-      />
-
-      {/* Submit button (sticky on the bottom) */}
-      <button
-        disabled={!stripe || loading}
-        className={`mt-4
+        {/* Submit button (sticky on the bottom) */}
+        <button
+          disabled={!stripe || loading}
+          className={`mt-4
         text-lg ${sejongHospitalBold.className}
          left-0 w-full 
-        z-10 bottom-0 mb-4
+        bottom-0 mb-4
          rounded-lg text-white font-semibold
           bg-cyan-600/75
         border-gray-200 border py-3 px-2`}
-      >
-        {!loading ? `Pay $${totalPrice}` : "Loading..."}
-      </button>
-    </form>
+        >
+          {!loading ? `Pay $${totalPrice}` : "Loading..."}
+        </button>
+      </form>
+
+      {/* {Tip Modal} */}
+      {isTipModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-lg font-bold mb-4">
+              잠깐! 팁은 주고 가야지 ㅋㅋ
+            </h2>
+            <Select
+              label="Choose a tip amount"
+              selectedKeys={tipPercentage}
+              onSelectionChange={(value) => {
+                const selectedTip = Array.from(value)[0] as string;
+
+                if (selectedTip === undefined) {
+                  console.log("tipPercentage: ", tipPercentage);
+                  return;
+                }
+
+                setTipPercentage(value);
+                setTip((amount * parseInt(selectedTip)) / 100);
+              }}
+              isRequired={true}
+              className="w-full mb-4"
+            >
+              <SelectItem key="0">No Tip</SelectItem>
+              <SelectItem key="15">15%</SelectItem>
+              <SelectItem key="18">18%</SelectItem>
+              <SelectItem key="20">20%</SelectItem>
+            </Select>
+            <div className="flex justify-between">
+              <button
+                onClick={() => {
+                  setIsTipModalOpen(false);
+                  setLoading(false);
+                }}
+                className="bg-gray-300 text-black px-4 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (tip !== null) {
+                    handleTipSubmit();
+                  }
+                }}
+                disabled={tip === null} // Disable button if no value is selected
+                className={`px-4 py-2 rounded-lg ${
+                  tip !== null
+                    ? "bg-blue-500 text-white cursor-pointer"
+                    : "bg-gray-300 text-black cursor-not-allowed"
+                }`}
+              >
+                Submit Tip
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
