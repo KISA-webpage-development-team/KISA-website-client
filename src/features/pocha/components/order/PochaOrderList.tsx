@@ -12,6 +12,7 @@ import UserOrderHistories from "./UserOrderHistories";
 import OrderTicket from "./OrderTicket";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
+import { cn } from "@/utils/styles/cn";
 
 interface PochaOrderListProps {
   pochaID: number;
@@ -111,53 +112,85 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
       className="w-full h-full py-6 px-8
     flex flex-col justify-between bg-white"
     >
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-2">
         {/* ready */}
-        <div className="flex flex-col items-start gap-2">
+        <div className="flex flex-col items-start gap-1">
           <h2
             className={`${sejongHospitalBold.className} text-xl text-michigan-blue
-              border-b-3 border-gray-400`}
+              flex flex-col items-start`}
           >
-            Ready
+            Ready <span className="text-base">( Pick up at the counter )</span>
           </h2>
           <ul className="self-stretch flex flex-col">
-            {readyOrders?.map((orderItem) => (
+            {readyOrders?.map((orderItem, idx) => (
               <>
                 <PochaOrderItem
                   key={orderItem.orderItemID}
                   orderItem={orderItem}
                   setSelectedOrder={setSelectedOrder}
                 />
-                <HorizontalDivider />
+                {idx !== readyOrders.length - 1 && <HorizontalDivider />}
               </>
             ))}
           </ul>
         </div>
+        <HorizontalDivider color="gray" />
 
         {/* preparing */}
-        <div className="text-xl font-bold">Preparing</div>
-        {preparingOrders?.map((orderItem) => (
-          <PochaOrderItem
-            key={orderItem.orderItemID}
-            orderItem={orderItem}
-            setSelectedOrder={setSelectedOrder}
-          />
-        ))}
-
+        <div className="flex flex-col items-start gap-1">
+          <h2
+            className={`${sejongHospitalBold.className} text-xl text-michigan-blue
+              `}
+          >
+            Preparing
+          </h2>
+          <ul className="self-stretch flex flex-col">
+            {preparingOrders?.map((orderItem, idx) => (
+              <>
+                <PochaOrderItem
+                  key={orderItem.orderItemID}
+                  orderItem={orderItem}
+                  setSelectedOrder={setSelectedOrder}
+                />
+                {idx !== preparingOrders.length - 1 && <HorizontalDivider />}
+              </>
+            ))}
+          </ul>
+        </div>
+        <HorizontalDivider color="gray" />
         {/* pending */}
-        <div className="text-xl font-bold">Pending</div>
-        {pendingOrders?.map((orderItem) => (
-          <PochaOrderItem
-            key={orderItem.orderItemID}
-            orderItem={orderItem}
-            setSelectedOrder={setSelectedOrder}
-          />
-        ))}
+        <div className="flex flex-col items-start gap-1">
+          <h2
+            className={`${sejongHospitalBold.className} text-xl text-michigan-blue
+              `}
+          >
+            Pending
+          </h2>
+          <ul className="self-stretch flex flex-col">
+            {pendingOrders?.map((orderItem, idx) => (
+              <>
+                <PochaOrderItem
+                  key={orderItem.orderItemID}
+                  orderItem={orderItem}
+                  setSelectedOrder={setSelectedOrder}
+                />
+                {idx !== pendingOrders.length - 1 && <HorizontalDivider />}
+              </>
+            ))}
+          </ul>
+        </div>
+        <HorizontalDivider color="gray" />
       </div>
 
       {/* Order History Accordion */}
       <Accordion>
-        <AccordionItem key="1" aria-label="Order History" title="Order History">
+        <AccordionItem
+          key="1"
+          aria-label="Order History"
+          title="Order History"
+          className={`${sejongHospitalBold.className} text-xl !text-gray-300 
+          `}
+        >
           <UserOrderHistories
             email={session.user.email}
             token={session.token}

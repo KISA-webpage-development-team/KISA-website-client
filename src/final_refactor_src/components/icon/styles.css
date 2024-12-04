@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.extra_large_icon {
+  @apply text-3xl md:text-4xl;
+}
+
+.large_icon {
+  @apply text-2xl md:text-3xl;
+}
+
 .icon {
   @apply text-xl md:text-2xl;
 }

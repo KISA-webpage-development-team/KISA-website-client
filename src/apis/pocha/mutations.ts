@@ -95,3 +95,23 @@ export async function checkCartStockMock(
 ): Promise<boolean | undefined> {
   return true;
 }
+
+interface ChangeStockBody {
+  menuID: number;
+  quantity: number;
+}
+
+/**
+ * @desc change stock of menu item
+ * @route PUT /pocha/dashboard/change-stock/
+ */
+export async function changeStock(body: ChangeStockBody) {
+  const url = `/pocha/dashboard/change-stock/`;
+
+  try {
+    const response = await client.put(url, body);
+    return response?.data;
+  } catch (error) {
+    return undefined;
+  }
+}

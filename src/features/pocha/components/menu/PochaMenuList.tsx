@@ -73,7 +73,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
                        bg-slate-500/50 w-full h-full flex justify-center items-center"
                       >
                         <span
-                          className={`text-lg text-red-500 ${sejongHospitalBold.className}`}
+                          className={`text-lg text-red-600 ${sejongHospitalBold.className}`}
                         >
                           Only for 21+
                         </span>
