@@ -37,3 +37,24 @@ section {
   pb-[100px] md:pb-[125px] lg:pb-[150px]
   px-[20px] md:px-[60px] lg:px-[75px];
 }
+
+/* WILL BE REMOVED */
+/* [1. PRIMARY] */
+/* blue background + maize text */
+.primary_btn {
+  @apply flex items-center justify-center gap-2
+  bg-[#00274c] border border-[#00274c] text-[#ffcb05] 
+  rounded-md cursor-pointer
+  px-3 md:px-4 py-1;
+
+  &:hover {
+    @apply flex items-center justify-center font-bold bg-[#00274c] border border-[#ffcb05] text-[#ffcb05] rounded-md cursor-pointer;
+  }
+
+  &:disabled {
+    @apply flex items-center justify-center bg-gray-300 border border-gray-300 text-white rounded-md cursor-not-allowed;
+  }
+}
+.primary_btn_text {
+  @apply text-sm md:text-base;
+}

@@ -1,8 +1,6 @@
 import {
   getUserClosedOrders,
-  getUserClosedOrdersMock,
   getPochaClosedOrders,
-  getPochaClosedOrdersMock,
 } from "@/apis/pocha/queries";
 import { OrderHistory, OrderItem, Orders } from "@/types/pocha";
 import { useEffect, useState } from "react";

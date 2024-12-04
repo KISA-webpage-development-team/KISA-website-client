@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import useOrders from "../../hooks/useOrders";
 import { useSession } from "next-auth/react";
 import { io, Socket } from "socket.io-client";
 
 import { UserSession } from "@/lib/next-auth/types";
-import { BACKEND_URL } from "@/constants/env";
 import PochaOrderItem from "./PochaOrderItem";
 import { OrderItem, OrderStatus } from "@/types/pocha";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import UserOrderHistories from "./UserOrderHistories";
 import OrderTicket from "./OrderTicket";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
-import { cn } from "@/utils/styles/cn";
 
 interface PochaOrderListProps {
   pochaID: number;

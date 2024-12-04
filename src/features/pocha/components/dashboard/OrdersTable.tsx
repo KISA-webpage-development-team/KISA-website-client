@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DashboardOrderItem from "../dashboard/DashboardOrderItem";
 import { Socket, io } from "socket.io-client";
-import { useSession } from "next-auth/react";
-import { UserSession } from "@/lib/next-auth/types";
 import { OrderItem } from "@/types/pocha";
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
 import useDashboardOrders from "../../hooks/useDashboardOrders";

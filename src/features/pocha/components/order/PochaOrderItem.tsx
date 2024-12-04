@@ -1,12 +1,8 @@
 import { OrderItem } from "@/types/pocha";
 import React from "react";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { STATUS_COLORS } from "../../utils/statusToColor";
 import Image from "next/image";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import TicketIcon from "@/final_refactor_src/components/icon/TicketIcon";
 import {
   Modal,
