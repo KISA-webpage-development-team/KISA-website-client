@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { sejongHospitalBold, sejongHospitalLight, } from "@/utils/fonts/textFonts";
 import useOrders from "../../hooks/useOrders";
 import { useSession } from "next-auth/react";
 import { io, Socket } from "socket.io-client";
@@ -7,6 +8,7 @@ import { UserSession } from "@/lib/next-auth/types";
 import { BACKEND_URL } from "@/constants/env";
 import PochaOrderItem from "./PochaOrderItem";
 import { OrderItem, OrderStatus } from "@/types/pocha";
+import OpenCartButton from "@/features/pocha/components/menu/OpenCartButton";
 
 interface PochaOrderListProps {
   pochaID: number;
@@ -108,23 +110,24 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
       <div className="p-4 space-y-4">
         <button onClick={handleSocketTest}>Test Button</button>
         {/* ready */}
-        <div className="text-xl font-bold">Ready</div>
+        <div className={`${sejongHospitalBold.className} text-xl font-bold`}>Ready</div>
         {readyOrders?.map((orderItem) => (
           <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
         ))}
 
         {/* preparing */}
-        <div className="text-xl font-bold">Preparing</div>
+        <div className={`${sejongHospitalBold.className} text-xl font-bold`}>Preparing</div>
         {preparingOrders?.map((orderItem) => (
           <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
         ))}
 
         {/* pending */}
-        <div className="text-xl font-bold">Pending</div>
+        <div className={`${sejongHospitalBold.className} text-xl font-bold`}>Pending</div>
         {pendingOrders?.map((orderItem) => (
           <PochaOrderItem key={orderItem.orderItemID} orderItem={orderItem} />
         ))}
       </div>
+      <OpenCartButton pochaid={pochaID} />
     </div>
   );
 }
