@@ -37,7 +37,7 @@ export default function OrdersTable({
       return;
     }
     // Initialize socket connection
-    const socketInstance = io("localhost:8000", {
+    const socketInstance = io("https://umichkisa-api.com", {
       transports: ["websocket"],
       auth: {
         token: token,

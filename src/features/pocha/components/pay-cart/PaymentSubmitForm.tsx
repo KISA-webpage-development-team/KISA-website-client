@@ -127,7 +127,7 @@ export default function PaymentSubmitForm({
       clientSecret,
       // [NOTE] for production, return_url should be the actual URL
       confirmParams: {
-        return_url: `http://localhost:3000/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`,
+        return_url: `https://umichkisa.com/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`,
       },
       redirect: "if_required",
     });
