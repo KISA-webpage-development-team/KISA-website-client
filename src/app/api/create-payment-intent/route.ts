@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     let stripeCustomer;
 
-    // Check if a customer exists, or create a new one
+    // Check if a customer exists, or create a new one.
     const existingCustomer = await stripe.customers.list({
       email: customer.email,
       limit: 1,
