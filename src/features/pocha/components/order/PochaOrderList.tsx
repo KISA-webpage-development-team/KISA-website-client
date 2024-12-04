@@ -10,6 +10,8 @@ import { OrderItem, OrderStatus } from "@/types/pocha";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import UserOrderHistories from "./UserOrderHistories";
 import OrderTicket from "./OrderTicket";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import { HorizontalDivider } from "@/final_refactor_src/components/divider";
 
 interface PochaOrderListProps {
   pochaID: number;
@@ -105,17 +107,24 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
   }
 
   return (
-    <div className="w-full h-full flex flex-col justify-between">
-      <div className="flex flex-col p-4 space-y-4">
+    <div className="w-full h-full flex flex-col justify-between bg-white">
+      <div className="flex flex-col px-8 py-6 space-y-4">
         {/* ready */}
-        <div className="text-xl font-bold">Ready</div>
-        {readyOrders?.map((orderItem) => (
-          <PochaOrderItem
-            key={orderItem.orderItemID}
-            orderItem={orderItem}
-            setSelectedOrder={setSelectedOrder}
-          />
-        ))}
+        <div className="flex flex-col items-start gap-2">
+          <h2 className={`${sejongHospitalBold.className} text-xl`}>Ready</h2>
+          <ul className="self-stretch flex flex-col">
+            {readyOrders?.map((orderItem) => (
+              <>
+                <PochaOrderItem
+                  key={orderItem.orderItemID}
+                  orderItem={orderItem}
+                  setSelectedOrder={setSelectedOrder}
+                />
+                <HorizontalDivider />
+              </>
+            ))}
+          </ul>
+        </div>
 
         {/* preparing */}
         <div className="text-xl font-bold">Preparing</div>

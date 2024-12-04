@@ -190,10 +190,10 @@ export default function PaymentSubmitForm({
 
     // 3. inventory check ang
     try {
-      // const res = await checkCartStock(session?.user?.email, pochaID);
-      const res = await checkCartStockMock(session?.user?.email, pochaID);
+      const res = await checkCartStock(session?.user?.email, pochaID);
+      // const res = await checkCartStockMock(session?.user?.email, pochaID);
 
-      if (!res) {
+      if (res?.isStocked === false) {
         setErrorMessage("재고가 부족합니다.");
         setLoading(false);
         return;
@@ -205,11 +205,20 @@ export default function PaymentSubmitForm({
     }
 
     // 4. update tip
-    setTipPercentage(new Set(["15"]));
+    // setTipPercentage(new Set(["15"]));
 
-    const defaultTip = (amount * 15) / 100;
-    setTip(defaultTip);
-    setIsTipModalOpen(true);
+    // const defaultTip = (amount * 15) / 100;
+    // setTip(defaultTip);
+    // setIsTipModalOpen(true);
+
+    // 5. [TODO: remove] process payment
+    try {
+      await processPay();
+    } catch (error) {
+      console.error("Error while processing payment", error);
+    }
+
+    setLoading(false);
   };
 
   const handleTipSubmit = async () => {
@@ -311,7 +320,7 @@ export default function PaymentSubmitForm({
       </form>
 
       {/* {Tip Modal} */}
-      {isTipModalOpen && (
+      {/* {isTipModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-bold mb-4">
@@ -367,7 +376,7 @@ export default function PaymentSubmitForm({
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

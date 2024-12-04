@@ -71,8 +71,8 @@ export async function changeOrderItemStatus(orderItemId: number) {
 export async function checkCartStock(
   email: string,
   pochaid: number
-): Promise<boolean | undefined> {
-  const url = `/pocha/cart/${email}/${pochaid}/check-stock/`;
+): Promise<{ isStocked: boolean } | undefined> {
+  const url = `/pocha/payment/${email}/${pochaid}/check-stock/`;
   try {
     const response = await client.put(url);
 
