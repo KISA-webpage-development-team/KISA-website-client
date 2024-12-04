@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
 import useOrders from "../../hooks/useOrders";
 import { useSession } from "next-auth/react";
 import { io, Socket } from "socket.io-client";
