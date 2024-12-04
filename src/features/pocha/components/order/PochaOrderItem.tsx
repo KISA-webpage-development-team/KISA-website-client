@@ -67,11 +67,9 @@ export default function PochaOrderItem({
           >
             {`(${menu?.nameEng})`}
           </span>
+          {/* quantity */}
+          <span>x {quantity}</span>
         </div>
-
-        {/* quantity */}
-
-        <span>x {quantity}</span>
       </div>
 
       {/* 3. Detail/Ticket buttons */}

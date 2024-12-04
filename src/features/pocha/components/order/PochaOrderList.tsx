@@ -107,11 +107,19 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
   }
 
   return (
-    <div className="w-full h-full flex flex-col justify-between bg-white">
-      <div className="flex flex-col px-8 py-6 space-y-4">
+    <div
+      className="w-full h-full py-6 px-8
+    flex flex-col justify-between bg-white"
+    >
+      <div className="flex flex-col space-y-4">
         {/* ready */}
         <div className="flex flex-col items-start gap-2">
-          <h2 className={`${sejongHospitalBold.className} text-xl`}>Ready</h2>
+          <h2
+            className={`${sejongHospitalBold.className} text-xl text-michigan-blue
+              border-b-3 border-gray-400`}
+          >
+            Ready
+          </h2>
           <ul className="self-stretch flex flex-col">
             {readyOrders?.map((orderItem) => (
               <>

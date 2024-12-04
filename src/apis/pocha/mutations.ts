@@ -1,5 +1,11 @@
 import client from "@/lib/axios/client";
 import { AddItemToCartBody } from "@/types/pocha";
+import { booleanValue } from "aws-sdk/clients/finspace";
+
+interface ChangeItemCartResponse {
+  isStocked: boolean;
+  message: string;
+}
 
 /**
  * @desc Change items inside the cart
@@ -12,7 +18,7 @@ export async function changeItemInCart(
   email: string,
   pochaid: number,
   body: AddItemToCartBody
-) {
+): Promise<ChangeItemCartResponse | undefined> {
   const url = `/pocha/cart/${email}/${pochaid}/`;
 
   console.log("sending body: ", body);

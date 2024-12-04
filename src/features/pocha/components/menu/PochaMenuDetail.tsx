@@ -38,6 +38,7 @@ import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
 import PlusIcon from "@/final_refactor_src/components/icon/PlusIcon";
 import MinusIcon from "@/final_refactor_src/components/icon/MinusIcon";
+import ErrorMsg from "../shared/ErrorMsg";
 
 interface PochaMenuDetailProps {
   selectedMenu: MenuItem;
@@ -59,6 +60,8 @@ export default function PochaMenuDetail({
   const [addingToCart, setAddingToCart] = useState<boolean>(false);
   // Counter Logic
   const [quantity, setQuantity] = useState<number>(1);
+  // Error Message
+  const [error, setError] = useState<string | null>(null);
 
   // useEffect needed because the price cumulation should reset for each menu.
   useEffect(() => {
@@ -70,6 +73,10 @@ export default function PochaMenuDetail({
   };
 
   const decrementQuantity = () => {
+    if (error !== null) {
+      setError(null);
+    }
+
     // Default quantity starts at 1.
     if (quantity > 1) {
       setQuantity(quantity - 1);
@@ -91,16 +98,26 @@ export default function PochaMenuDetail({
     };
 
     try {
-      const response = await changeItemInCart(
+      const res = await changeItemInCart(
         session?.user?.email,
         pochaid,
         addedMenu
       );
 
-      if (!response) {
+      if (!res) {
         console.error("Error updating cart item quantity");
+        setAddingToCart(false);
         return;
       }
+
+      //  1. out of stock
+      if (res.isStocked === false) {
+        setError("Out of stock");
+        setAddingToCart(false);
+        return;
+      }
+
+      // 2. success
       setAddingToCart(false);
 
       // redirect to the original page
@@ -234,6 +251,9 @@ export default function PochaMenuDetail({
               </button>
             </div>
           </div>
+
+          {/* Error Message */}
+          {error !== null && <ErrorMsg message={error} />}
         </div>
 
         <button

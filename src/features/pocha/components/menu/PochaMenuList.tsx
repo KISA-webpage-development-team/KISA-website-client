@@ -9,17 +9,18 @@ import {
 // Types
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import OpenCartButton from "./OpenCartButton";
 import useMenu from "../../hooks/useMenu";
 import PochaCartIcon from "@/final_refactor_src/components/icon/PochaCartIcon";
+import useUserAge from "../../hooks/useUserAge";
 
 export default function PochaMenuList({ setSelectedMenu, pochaid }) {
-  const { data: session, status } = useSession() as {
+  const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | null;
     status: string;
   };
 
   const { menuList, status: menuStatus } = useMenu(pochaid, session?.token);
+  const { underAge, status: userStatus } = useUserAge(session);
 
   const handleMenuItemClick = (selectedMenu) => {
     setSelectedMenu(selectedMenu);
@@ -37,12 +38,16 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
       : "/pocha/24_last_pocha/image_not_found.png";
   };
 
-  if (menuStatus === "loading") {
+  if (
+    sessionStatus === "loading" ||
+    menuStatus === "loading" ||
+    userStatus === "loading"
+  ) {
     return <></>;
   }
 
   return (
-    <div className="flex flex-col items-center py-4 px-8 w-full">
+    <div className="flex flex-col items-center py-6 px-8 w-full">
       <ul className="flex flex-col gap-7 w-full mb-16">
         {menuList?.map(({ category, menusList }, categoryIdx) => (
           <li key={`${category}-${categoryIdx}`}>
@@ -55,43 +60,66 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
             </span>
             {/* List of specific menu items (photo, name, price) */}
             <ul className="flex flex-col mt-3 divide-y-2 divide-gray-200">
-              {menusList?.map((menu) => (
-                <li
-                  className="flex items-center gap-4 py-3"
-                  key={`menu-${menu?.menuID}`}
-                  onClick={() => handleMenuItemClick(menu)}
-                >
-                  {/* [NOTE] added figure tag for semantic html */}
-                  <figure className="relative h-24 aspect-square items-center flex-shrink-0">
-                    <Image
-                      src={getImagePath(menu?.menuID)}
-                      alt={menu?.nameEng}
-                      priority={categoryIdx === 0}
-                      fill
-                      sizes="(max-width: 768px) 20vw"
-                      className="rounded-full border-gray-300 shadow-md"
-                    />
-                  </figure>
+              {menusList?.map((menu) => {
+                const { menuID, nameEng, nameKor, price, ageCheckRequired } =
+                  menu;
+                const notForUnderAge = ageCheckRequired && underAge;
 
-                  <div className="flex flex-col justify-center">
-                    <div className="flex items-center gap-1">
-                      <span
-                        className={`${sejongHospitalBold.className} text-lg text-michigan-blue`}
+                return (
+                  <li key={`menu-${menuID}`} className="relative self-stretch">
+                    {notForUnderAge ? (
+                      <div
+                        className="absolute z-50 rounded-lg
+                       bg-slate-500/50 w-full h-full flex justify-center items-center"
                       >
-                        {menu?.nameKor}
-                      </span>
-                      <span
-                        className={`${sejongHospitalBold.className} text-sm text-michigan-blue`}
-                      >
-                        {`(${menu?.nameEng})`}
-                      </span>
-                    </div>
-                    <span
-                      className={`font-semibold text mt-1 text-black`}
-                    >{`$${menu?.price}`}</span>
-                  </div>
-                </li>
-              ))}
+                        <span
+                          className={`text-lg text-red-500 ${sejongHospitalBold.className}`}
+                        >
+                          Only for 21+
+                        </span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+
+                    <button
+                      className="self-stretch flex items-center gap-4 py-3"
+                      onClick={() => handleMenuItemClick(menu)}
+                      disabled={notForUnderAge}
+                    >
+                      {/* [NOTE] added figure tag for semantic html */}
+                      <figure className="relative h-24 aspect-square items-center flex-shrink-0">
+                        <Image
+                          src={getImagePath(menuID)}
+                          alt={nameEng}
+                          priority={categoryIdx === 0}
+                          fill
+                          sizes="(max-width: 768px) 20vw"
+                          className="rounded-full border-gray-300 shadow-md"
+                        />
+                      </figure>
+
+                      <div className="flex flex-col justify-center items-start">
+                        <div className="flex items-center gap-1">
+                          <span
+                            className={`${sejongHospitalBold.className} text-lg text-michigan-blue`}
+                          >
+                            {nameKor}
+                          </span>
+                          <span
+                            className={`${sejongHospitalBold.className} text-sm text-michigan-blue`}
+                          >
+                            {`(${nameEng})`}
+                          </span>
+                        </div>
+                        <span
+                          className={`font-semibold text mt-1 text-black`}
+                        >{`$${price}`}</span>
+                      </div>
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </li>
         ))}
