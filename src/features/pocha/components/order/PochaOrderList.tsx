@@ -94,7 +94,7 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
         socketInstance.disconnect();
       }
     };
-  }, [session, ordersStatus, pochaID]);
+  }, [session, ordersStatus, pochaID, updateOrders]);
 
   if (sessionStatus === "loading" || ordersStatus === "loading") {
     return <></>;

@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
  * @desc hook to fetch user orders (getUserOrders)
  * @params email, token, pochaID
  */
-const useOrders = (email: string, token: string, pochaID: number) => {
+const useDashboardOrders = (email: string, token: string, pochaID: number) => {
   const [orders, setOrders] = useState<Orders>();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
@@ -154,4 +154,4 @@ const useOrders = (email: string, token: string, pochaID: number) => {
   };
 };
 
-export default useOrders;
+export default useDashboardOrders;

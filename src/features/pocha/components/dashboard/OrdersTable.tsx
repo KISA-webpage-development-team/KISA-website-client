@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import useOrders from "../../hooks/useOrders";
 import DashboardOrderItem from "../dashboard/DashboardOrderItem";
 import { Socket, io } from "socket.io-client";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { OrderItem } from "@/types/pocha";
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
+import useDashboardOrders from "../../hooks/useDashboardOrders";
 
 interface OrdersTableProps {
   email: string;
@@ -19,6 +19,8 @@ export default function OrdersTable({
   pochaID,
 }: OrdersTableProps) {
   // initial GET API call to fetch all orders
+  // [NOTE] I believe you can use `useOrders` here for the production.
+  // for testing, I will use `useDashboardOrders` because browsers are sharing the same session.
   const {
     addNewOrders,
     updateOrders,
@@ -26,7 +28,7 @@ export default function OrdersTable({
     preparingOrders,
     readyOrders,
     status: ordersStatus,
-  } = useOrders("*", token, pochaID);
+  } = useDashboardOrders("*", token, pochaID);
 
   const [socket, setSocket] = useState<Socket | null>(null);
 

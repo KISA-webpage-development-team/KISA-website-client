@@ -31,8 +31,8 @@ export default function CartListItem({
 
   const getImagePath = (menuID: number) => {
     return menuID !== 1
-      ? `/images/24_last_pocha/${menuID}.png`
-      : "/images/24_last_pocha/image_not_found.png";
+      ? `/pocha/24_last_pocha/${menuID}.png`
+      : "/pocha/24_last_pocha/image_not_found.png";
   };
 
   const handleQuantityChange = async (newQuantity: number) => {
