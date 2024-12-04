@@ -1,8 +1,9 @@
+import { STRIPE_SECRET_KEY } from "@/constants/env";
 import { NextRequest, NextResponse } from "next/server";
 
 // route only happens on the server, so it's safe to expose the secret key here
 import Stripe from "stripe";
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+const stripe = new Stripe(STRIPE_SECRET_KEY as string);
 
 // this route creates a payment intent with a given amount and returns the client secret
 // client secret is from new paymentIntent object

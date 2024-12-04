@@ -22,3 +22,6 @@ const useLocalBackend = process.env.NEXT_PUBLIC_USE_LOCAL_BACKEND === "true";
 export const BACKEND_URL = useLocalBackend
   ? process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL
   : process.env.NEXT_PUBLIC_BACKEND_URL;
+
+// Stripe
+export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
