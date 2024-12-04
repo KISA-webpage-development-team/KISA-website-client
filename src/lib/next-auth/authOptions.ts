@@ -33,7 +33,7 @@ const authOptions = {
       }
       return token;
     },
-    async signIn({ user, account, profile, credentials }) {
+    async signIn({ user, account, profile, credentials, userinfo }) {
       try {
         const res = await client.get(
           `${BACKEND_URL}/auth/userExists/${profile.email}`
@@ -42,6 +42,7 @@ const authOptions = {
         if (res.status === 200) {
           const fullname = res.data?.fullname;
           user.name = fullname;
+          user.birthday = profile?.birthday;
 
           return true;
         }

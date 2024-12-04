@@ -26,6 +26,7 @@ export const config = {
     "/posts/create/:path*",
     "/posts/update/:path*",
     "/posts/delete/:path*",
+    "/pocha/:path*",
   ],
 };
 

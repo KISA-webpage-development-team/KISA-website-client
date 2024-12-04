@@ -7,11 +7,16 @@
     "Heebo",
     "KISA",
     "livingqa",
+    "menuid",
     "NEXTAUTH",
     "nextui",
+    "Pocha",
+    "pochaid",
     "postid",
     "Sejonghospital",
+    "Subcurrency",
     "umich",
     "umichkisa"
-  ]
+  ],
+  "compile-hero.disable-compile-files-on-did-save-code": false
 }

@@ -30,7 +30,8 @@
     "**/*.tsx",
     "src/app/template.tsx",
     "src/app/page.tsx",
-    "src/app/layout.tsx"
+    "src/app/layout.tsx",
+    "build/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

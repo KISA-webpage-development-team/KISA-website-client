@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import InstagramLinkIcon from "../shared/InstagramLinkIcon";
 import FacebookLinkIcon from "../shared/FacebookLinkIcon";
@@ -6,11 +8,18 @@ import {
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // instagram + facebook icons
 // umich kisa text
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/pocha")) {
+    return null;
+  }
+
   return (
     <div
       className={`${sejongHospitalLight.className} 
