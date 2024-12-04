@@ -97,7 +97,7 @@ const CustomFormItem = ({
   return (
     <div
       className="relative
-    flex flex-col gap-1 items-start !bg-pink-200"
+    flex flex-col gap-1 items-start"
     >
       <CustomLabel htmlFor={htmlFor} text={labelText} required={required} />
 
