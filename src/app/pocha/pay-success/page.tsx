@@ -32,7 +32,7 @@ export default function PaySuccessPage() {
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, []);
+  }, [router]);
 
   const directToMenuList = () => {
     router.push("/pocha");
