@@ -129,7 +129,7 @@ export default function PochaPage() {
       </section>
       <section
         className={`
-        md:hidden
+        md:hidden overflow-hidden
         ${sejongHospitalLight.className} relative w-screen h-[90vh] -translate-x-4 py-2 !gap-0`}
       >
         {/* pocha title & description */}
@@ -143,7 +143,7 @@ export default function PochaPage() {
         </div> */}
         <div
           className={`transition-transform duration-500 ease-in-out 
-            shrink-0
+            shrink-0 overflow-clip
             ${
               isHeadingVisible
                 ? "opacity-100 translate-y-0"
@@ -173,7 +173,7 @@ export default function PochaPage() {
           <div
             className="fixed bottom-0 left-0 right-0 z-50
       
-         w-full flex justify-center items-end pb-6 pt-8 mb-2"
+         w-full flex justify-center items-end pb-6 pt-8 mb-6"
           >
             <button
               className={`
