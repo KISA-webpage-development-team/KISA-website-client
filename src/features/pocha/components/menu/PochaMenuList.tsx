@@ -125,7 +125,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
         ))}
       </ul>
       {/* <OpenCartButton pochaid={pochaid} /> */}
-      {/* <div className="fixed left-0 w-full flex justify-center pb-4 pt-8">
+      <div className="fixed left-0 w-full flex justify-center pb-4 pt-8">
         <button
           className={`
           w-[70%] flex py-3 mt-8
@@ -142,7 +142,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
             <PochaCartIcon />
           </div>
         </button>
-      </div> */}
+      </div>
     </div>
   );
 }

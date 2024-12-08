@@ -124,7 +124,7 @@ export default function PochaPage() {
           )}
         </div>
 
-        {activeTab === "menu" && (
+        {/* {activeTab === "menu" && (
           <div
             className="fixed bottom-0 left-0
          w-full flex justify-center pb-6 pt-8"
@@ -146,7 +146,7 @@ export default function PochaPage() {
               </div>
             </button>
           </div>
-        )}
+        )} */}
       </section>
     </>
   );

@@ -108,7 +108,7 @@ export default function PochaOrderItem({
             <span
               className={`${sejongHospitalBold.className} text-lg text-michigan-blue`}
             >
-              {menu?.nameKor}
+              {orderItemID}. {menu?.nameKor}
             </span>
             <span
               className={`${sejongHospitalBold.className} text-sm text-michigan-blue`}
