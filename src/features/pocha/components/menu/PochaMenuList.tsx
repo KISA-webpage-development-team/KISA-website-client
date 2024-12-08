@@ -47,7 +47,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
   }
 
   return (
-    <div className="relative flex flex-col items-center py-6 px-8 w-full pb-[20%]">
+    <div className="relative flex flex-col items-center py-6 px-8 w-full">
       <ul className="flex flex-col gap-7 w-full mb-16">
         {menuList?.map(({ category, menusList }, categoryIdx) => (
           <li key={`${category}-${categoryIdx}`}>
