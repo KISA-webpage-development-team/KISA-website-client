@@ -8,7 +8,7 @@ interface PochaHeadingProps {
 
 export default function PochaHeading({ pochaInfo }: PochaHeadingProps) {
   return (
-    <div className="flex flex-col items-center px-6 gap-2">
+    <div className="flex flex-col items-center px-6 gap-2" id="pocha-heading">
       {/* Title - pocha name */}
       <h1 className={`${sejongHospitalBold.className} text-xl`}>
         {pochaInfo?.title}

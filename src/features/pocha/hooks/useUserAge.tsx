@@ -8,8 +8,24 @@ const useUserAge = (session: UserSession | null) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
-  const [underAge, setUnderAge] = useState<boolean>(false);
+  const [underAge, setUnderAge] = useState<boolean>();
   const [fullname, setFullname] = useState<string>("");
+
+  const calculateAge = async (
+    birthday: string | null | undefined
+  ): Promise<number> => {
+    if (!birthday) return 0;
+    const birthDate = new Date(birthday);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  };
 
   // fetch user's age
   useEffect(() => {
@@ -20,9 +36,12 @@ const useUserAge = (session: UserSession | null) => {
         const { bornDate, bornMonth, bornYear, fullname } = res;
         setFullname(fullname);
 
-        console.log("fullname: ", fullname);
+        // Ensure proper date formatting
+        const formattedMonth = bornMonth.toString().padStart(2, "0");
+        const formattedDate = bornDate.toString().padStart(2, "0");
+        const birthday = `${bornYear}-${formattedMonth}-${formattedDate}`;
 
-        const age = calculateAge(`${bornYear}-${bornMonth}-${bornDate}`);
+        const age = await calculateAge(birthday);
         setUnderAge(age < 21);
         setStatus("success");
       } catch (error) {
@@ -39,20 +58,6 @@ const useUserAge = (session: UserSession | null) => {
   }, [session]);
 
   return { underAge, status, fullname };
-};
-
-const calculateAge = (birthday: string | null | undefined): number => {
-  if (!birthday) return 0;
-  const birthDate = new Date(birthday);
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
-
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-
-  return age;
 };
 
 export default useUserAge;
