@@ -173,7 +173,7 @@ export default function PochaPage() {
           <div
             className="fixed bottom-0 left-0 right-0 z-50
       
-         w-full flex justify-center items-end pb-6 pt-8"
+         w-full flex justify-center items-end pb-6 pt-8 mb-2"
           >
             <button
               className={`

@@ -37,6 +37,10 @@ export default function Header({ session }) {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
+  if (pathname.startsWith("/pocha")) {
+    return null;
+  }
+
   return (
     <div
       className={`mx-auto ${headerContentWidth}
