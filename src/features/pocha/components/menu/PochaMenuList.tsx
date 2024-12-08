@@ -47,7 +47,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
   }
 
   return (
-    <div className="flex flex-col items-center py-6 px-8 w-full">
+    <div className="relative flex flex-col items-center py-6 px-8 w-full">
       <ul className="flex flex-col gap-7 w-full mb-16">
         {menuList?.map(({ category, menusList }, categoryIdx) => (
           <li key={`${category}-${categoryIdx}`}>
@@ -125,7 +125,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
         ))}
       </ul>
       {/* <OpenCartButton pochaid={pochaid} /> */}
-      <div className="fixed bottom-0 left-0 w-full flex justify-center pb-4 pt-8">
+      {/* <div className="fixed left-0 w-full flex justify-center pb-4 pt-8">
         <button
           className={`
           w-[70%] flex py-3 mt-8
@@ -142,7 +142,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
             <PochaCartIcon />
           </div>
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -42,6 +42,11 @@ export default function PochaPage() {
   // fetch pocha information (GET /pocha/status-info/)
   const { pochaInfo, status, error } = usePocha();
 
+  const handleCartClick = () => {
+    const queryParams = `pochaid=${pochaInfo?.pochaID}`;
+    window.location.href = `/pocha/cart?${queryParams}`;
+  };
+
   if (status === "loading") {
     return <LoadingSpinner />;
   }
@@ -117,6 +122,28 @@ export default function PochaPage() {
           ) : (
             <PochaOrderList pochaID={pochaInfo?.pochaID} />
           )}
+        </div>
+
+        <div
+          className="fixed bottom-0 left-0
+         w-full flex justify-center pb-6 pt-8"
+        >
+          <button
+            className={`
+          w-[70%] flex py-3 mt-8
+          rounded-lg text-white font-semibold
+          bg-cyan-600/90 justify-between items-center
+          ${sejongHospitalBold.className}
+        `}
+            onClick={handleCartClick}
+          >
+            <span className={`ml-10 ${sejongHospitalBold.className}`}>
+              View Cart
+            </span>
+            <div className="mr-10">
+              <PochaCartIcon />
+            </div>
+          </button>
         </div>
       </section>
     </>
