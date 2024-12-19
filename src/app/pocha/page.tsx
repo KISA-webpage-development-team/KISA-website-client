@@ -129,7 +129,7 @@ export default function PochaPage() {
       </section>
       <section
         className={`
-        md:hidden overflow-hidden
+        md:hidden overflow-y-clip flex-shrink-0
         ${sejongHospitalLight.className} relative w-screen h-[90vh] -translate-x-4 py-2 !gap-0`}
       >
         {/* pocha title & description */}

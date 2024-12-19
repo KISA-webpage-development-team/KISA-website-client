@@ -7,19 +7,6 @@
 // url
 const homeCarouselData = [
   {
-    id: "fa24_last_pocha",
-    title: "연말 포차",
-    desc: (
-      <p>
-        단풍도 지고 이제 진정한 겨울이 찾아오며, 이번 학기 또한 끝이 얼마 안
-        남았네요.❄️❄️키사에서 종강을 위한 연말 포차를 열게 되었습니다. 🎉이번
-        학기도 열심히 공부한 여러분, 키사 연말 포차에서 신나게 놀아보아요! 모두
-        포차에서 봬요‼️
-      </p>
-    ),
-    url: "https://www.instagram.com/p/DDDQ1lvy4ED/?img_index=1",
-  },
-  {
     id: "fa24_kisa_yearbook",
     title: "KISA Yearbook",
     desc: (
