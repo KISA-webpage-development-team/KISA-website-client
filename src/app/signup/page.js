@@ -243,19 +243,13 @@ export default function SignUpPage() {
           />
         </>
 
-        {disabled ? (
-          <button
-            type="submit"
-            disabled
-            className="w-full disabled_blue_button"
-          >
-            제출
-          </button>
-        ) : (
-          <button type="submit" className="w-full blue_button">
-            제출
-          </button>
-        )}
+        <button
+          type="submit"
+          className="w-full primary_btn"
+          disabled={disabled}
+        >
+          제출
+        </button>
       </form>
     </div>
   );
