@@ -9,8 +9,8 @@ import {
 
 // ui components
 import PochaHeading from "@/features/pocha/components/PochaHeading";
-import PochaMenuList from "@/features/pocha/components/menu/PochaMenuList";
-import PochaOrderList from "@/features/pocha/components/order/PochaOrderList";
+import PochaMenuTab from "@/features/pocha/components/menu/PochaMenuTab";
+import PochaOrderTab from "@/features/pocha/components/order/PochaOrderTab";
 import PochaTabs from "@/features/pocha/components/PochaTabs";
 import PochaMenuDetail from "@/features/pocha/components/menu/PochaMenuDetail";
 import {
@@ -132,15 +132,6 @@ export default function PochaPage() {
         md:hidden overflow-y-clip flex-shrink-0
         ${sejongHospitalLight.className} relative w-screen h-[90vh] -translate-x-4 py-2 !gap-0`}
       >
-        {/* pocha title & description */}
-        {/* <div
-          className="
-        
-        
-        "
-        >
-          <PochaHeading pochaInfo={pochaInfo} />
-        </div> */}
         <div
           className={`transition-transform duration-500 ease-in-out 
             shrink-0 overflow-clip
@@ -160,12 +151,12 @@ export default function PochaPage() {
         {/* Listing the menus OR orders */}
         <div className="flex-1 overflow-y-auto w-full h-full">
           {activeTab === "menu" ? (
-            <PochaMenuList
+            <PochaMenuTab
               setSelectedMenu={setSelectedMenu}
               pochaid={pochaInfo?.pochaID}
             />
           ) : (
-            <PochaOrderList pochaID={pochaInfo?.pochaID} />
+            <PochaOrderTab pochaID={pochaInfo?.pochaID} />
           )}
         </div>
 

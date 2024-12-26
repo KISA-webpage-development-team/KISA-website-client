@@ -13,7 +13,7 @@ import useMenu from "../../hooks/useMenu";
 import PochaCartIcon from "@/final_refactor_src/components/icon/PochaCartIcon";
 import useUserAge from "../../hooks/useUserAge";
 
-export default function PochaMenuList({ setSelectedMenu, pochaid }) {
+export default function PochaMenuTab({ setSelectedMenu, pochaid }) {
   const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | null;
     status: string;

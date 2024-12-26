@@ -11,12 +11,13 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 import UserOrderHistories from "./UserOrderHistories";
 import OrderTicket from "./OrderTicket";
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
+import OrderStatusSelector from "./OrderStatusSelector";
 
-interface PochaOrderListProps {
+interface PochaOrderTabProps {
   pochaID: number;
 }
 
-export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
+export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
   const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;
     status: string;
@@ -33,9 +34,7 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
 
   const [selectedOrder, setSelectedOrder] = useState<OrderItem>();
 
-  const [socket, setSocket] = useState<Socket | null>(null);
-
-  // Socket.IO Connection
+  // Socket.IO Connection --------------------------------------
   useEffect(() => {
     // defensive check: no orders yet (i.e. no session, no token, no pochaID)
     if (ordersStatus !== "success") {
@@ -86,8 +85,8 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
       }
     );
 
-    // Save socket instance to state
-    setSocket(socketInstance);
+    // You can save socket instance to state like below
+    // setSocket(socketInstance);
 
     // Cleanup function
     return () => {
@@ -97,6 +96,7 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
     };
   }, [session, ordersStatus, pochaID, updateOrders]);
 
+  // UI Rendering ----------------------------------------------
   if (sessionStatus === "loading" || ordersStatus === "loading") {
     return <></>;
   }
@@ -110,6 +110,9 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
       className="w-full h-full py-6 px-8
     flex flex-col justify-between bg-white"
     >
+      {/* Order Status Section */}
+      <OrderStatusSelector />
+
       <div className="flex flex-col space-y-2">
         {/* ready */}
         <div className="flex flex-col items-start gap-1">
