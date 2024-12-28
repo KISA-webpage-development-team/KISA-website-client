@@ -36,7 +36,8 @@ export default function PostViewPage({ params }: PageProps) {
 
   // [TODO] temporarily sets studyGroupPost as whether post title starts with 스터디 그룹 모집
   // later, this needs to be changed by integrating backend with new column
-  const studyGroupPost = post?.title.startsWith("스터디 그룹 모집");
+  const studyGroupPost =
+    post?.postid === 368 || post?.title.startsWith("스터디 그룹 모집");
   console.log("studyGroupPost: ", studyGroupPost);
 
   const canComment = !post?.isAnnouncement && !isAnnouncementBoard(post?.type);
