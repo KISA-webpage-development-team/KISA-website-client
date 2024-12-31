@@ -15,7 +15,7 @@ export default function ProceedToPaymentButton({ pochaid }: PaymentProps) {
     <div className="flex justify-center w-full">
       <button
         className={`
-          w-[70%] py-3 mt-4
+          w-[95%] py-3 mb-4
           rounded-lg text-white font-semibold
           bg-cyan-600/90
           flex justify-center items-center

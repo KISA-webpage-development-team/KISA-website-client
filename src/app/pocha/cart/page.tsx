@@ -160,10 +160,8 @@ export default function PochaCartPage() {
           <div
             className={`flex justify-between w-full ${sejongHospitalBold.className} text-lg`}
           >
-            <span className={`ml-7 mt-4 text-blue-950`}>Total</span>
-            <span className={`mr-7 mt-4 text-blue-950`}>
-              ${cartToAmount(cart)}
-            </span>
+            <span className={`ml-4 text-blue-950`}>Total</span>
+            <span className={`mr-4 text-blue-950`}>${cartToAmount(cart)}</span>
           </div>
 
           {/* Checkout button */}
