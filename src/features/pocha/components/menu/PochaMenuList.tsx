@@ -48,18 +48,17 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
 
   return (
     <div className="relative flex flex-col items-center py-6 px-8 w-full">
-      <ul className="flex flex-col gap-7 w-full mb-16">
+      <ul className="flex flex-col gap-6 w-full mb-16">
         {menuList?.map(({ category, menusList }, categoryIdx) => (
           <li key={`${category}-${categoryIdx}`}>
             {/* Category Title */}
             <span
-              className={`${sejongHospitalBold.className} text-2xl text-michigan-blue
-              font-bold border-b-3 border-gray-400 pb-1`}
+              className={`${sejongHospitalBold.className} text-2xl text-black`}
             >
               {category}
             </span>
             {/* List of specific menu items (photo, name, price) */}
-            <ul className="flex flex-col mt-3 divide-y-2 divide-gray-200">
+            <ul className="flex flex-col mt-1 divide-y-2 divide-gray-200">
               {menusList?.map((menu) => {
                 const { menuID, nameEng, nameKor, price, ageCheckRequired } =
                   menu;
@@ -83,7 +82,7 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
                     )}
 
                     <button
-                      className="self-stretch flex items-center gap-4 py-3"
+                      className="self-stretch flex items-center gap-4 py-4"
                       onClick={() => handleMenuItemClick(menu)}
                       disabled={notForUnderAge}
                     >
@@ -95,25 +94,20 @@ export default function PochaMenuList({ setSelectedMenu, pochaid }) {
                           priority={categoryIdx === 0}
                           fill
                           sizes="(max-width: 768px) 20vw"
-                          className="rounded-full border-gray-300 shadow-md"
+                          className="rounded-[15px] border-gray-300 shadow-md object-cover"
                         />
                       </figure>
 
-                      <div className="flex flex-col justify-center items-start">
-                        <div className="flex items-center gap-1">
+                      <div className="flex flex-col items-start justify-start">
+                        <div className="flex items-center mb-1">
                           <span
-                            className={`${sejongHospitalBold.className} text-lg text-michigan-blue`}
+                            className={`${sejongHospitalBold.className} text-lg text-black`}
                           >
-                            {nameKor}
-                          </span>
-                          <span
-                            className={`${sejongHospitalBold.className} text-sm text-michigan-blue`}
-                          >
-                            {`(${nameEng})`}
+                            {nameKor} {nameEng}
                           </span>
                         </div>
                         <span
-                          className={`font-semibold text mt-1 text-black`}
+                          className={`${sejongHospitalBold.className} mt-1 text-gray-500`}
                         >{`$${price}`}</span>
                       </div>
                     </button>

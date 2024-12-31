@@ -15,17 +15,15 @@ export default function ProceedToPaymentButton({ pochaid }: PaymentProps) {
     <div className="flex justify-center w-full">
       <button
         className={`
-          w-[70%]  py-3 mt-8
+          w-[70%] py-3 mt-4
           rounded-lg text-white font-semibold
-          bg-cyan-600/75
+          bg-cyan-600/90
           flex justify-center items-center
           ${sejongHospitalBold.className}
         `}
         onClick={handlePaymentClick}
       >
-        <span className={`${sejongHospitalBold.className}`}>
-          Proceed to Payment
-        </span>
+        <span className={`${sejongHospitalBold.className}`}>Checkout</span>
       </button>
     </div>
   );

@@ -10,6 +10,8 @@ import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import CartListItem from "@/features/pocha/components/pay-cart/CartListItem";
 import ProceedToPaymentButton from "@/features/pocha/components/pay-cart/ProceedToPaymentButton";
+import Image from "next/image";
+
 import {
   sejongHospitalBold,
   sejongHospitalLight,
@@ -106,7 +108,7 @@ export default function PochaCartPage() {
 
   return (
     <section className="py-3">
-      <div className="flex items-center relative ">
+      <div className="flex items-center relative">
         <button className="flex" onClick={handleBackButton}>
           <BackIcon />
         </button>
@@ -120,14 +122,14 @@ export default function PochaCartPage() {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="351"
+        width="375"
         height="4"
-        viewBox="0 0 351 4"
+        viewBox="0 0 375 4"
         fill="none"
         className="mx-auto mt-1"
       >
         <path
-          d="M2 2.00003L349 2.00003"
+          d="M0 2L375 2"
           stroke="#E3E3E3"
           strokeWidth="3"
           strokeLinecap="round"
@@ -138,18 +140,21 @@ export default function PochaCartPage() {
       {Object.keys(cart).length > 0 ? (
         <>
           {/* Cart List */}
-          <ul className="flex flex-col gap-2">
-            {Object.entries(cart).map(([menuid, item]) => (
-              <CartListItem
-                key={menuid}
-                menuid={parseInt(menuid)}
-                item={item}
-                email={session?.user?.email}
-                pochaid={pochaID}
-                setCartItemStale={setCartItemStale}
-              />
-            ))}
-          </ul>
+          <div className="flex-grow overflow-y-auto">
+            <ul className="flex flex-col h-screen gap-2">
+              {Object.entries(cart).map(([menuid, item]) => (
+                <CartListItem
+                  key={menuid}
+                  menuid={parseInt(menuid)}
+                  item={item}
+                  email={session?.user?.email}
+                  pochaid={pochaID}
+                  setCartItemStale={setCartItemStale}
+                />
+              ))}
+            </ul>
+          </div>
+          <div className="border-t border-gray-300"></div>
 
           {/* Total Price */}
           <div
@@ -157,7 +162,7 @@ export default function PochaCartPage() {
           >
             <span className={`ml-7 mt-4 text-blue-950`}>Total</span>
             <span className={`mr-7 mt-4 text-blue-950`}>
-              US${cartToAmount(cart)}
+              ${cartToAmount(cart)}
             </span>
           </div>
 
@@ -165,10 +170,16 @@ export default function PochaCartPage() {
           <ProceedToPaymentButton pochaid={pochaID} />
         </>
       ) : (
-        <div
-          className={`${sejongHospitalBold.className} flex w-full justify-center`}
-        >
-          Cart is empty!
+        <div className="flex flex-col justify-center items-center">
+          <Image
+            src={`/images/empty_cart.png`}
+            alt="Empty Cart Icon"
+            width={300}
+            height={300}
+          />
+          <div className={`${sejongHospitalBold.className} text-center mt-4`}>
+            Your Cart is Empty
+          </div>
         </div>
       )}
     </section>

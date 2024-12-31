@@ -76,62 +76,59 @@ export default function CartListItem({
   }
 
   return (
-    <li className="flex items-start py-4 border-b border-gray-300 mx-5">
+    <li className="flex items-center py-4 border-b border-gray-300 mx-3">
       <figure className="relative h-20 aspect-square flex-shrink-0 rounded-full border-gray-300 shadow-md">
         <Image
           src={getImagePath(menuid)}
           alt={item.menu.nameEng}
           fill
           sizes="(max-width: 768px) 20vw"
-          className="rounded-full object-contain"
+          className="rounded-[15px] border-gray-300 object-cover"
         />
       </figure>
 
-      {/* <span>Quantity: {item.quantity}</span> */}
-      <div className="flex flex-col ml-5 flex-grow">
-        <div className="flex justify-between items-start">
-          <div className="flex items-center gap-1">
-            <span
-              className={`${sejongHospitalBold.className} text-lg text-michigan-blue`}
-            >
-              {item?.menu?.nameKor}
-            </span>
-            <span
-              className={`${sejongHospitalBold.className} text-sm text-michigan-blue`}
-            >
-              {`(${item?.menu?.nameEng})`}
-            </span>
-          </div>
+      <div className="flex flex-col flex-grow gap-2 ml-4">
+        <span className={`${sejongHospitalBold.className} text-md text-black`}>
+          {item?.menu?.nameKor} {item?.menu?.nameEng}
+        </span>
+        <span className={`${sejongHospitalBold.className} text-gray-500`}>
+          ${(item?.menu?.price * item?.quantity).toFixed(2)}
+        </span>
+      </div>
 
+      {/* counter logic */}
+      <div className="flex items-center border border-gray-200 rounded-full px-2 py-1 gap-3 w-fit">
+        {/* Decrement Button */}
+        {quantity > 1 ? (
+          <button
+            className={`${sejongHospitalBold.className} bg-gray-200 p-0.5 text-xs font-bold rounded-full`}
+            onClick={decrementQuantity}
+          >
+            <MinusIcon size="small" />
+          </button>
+        ) : (
           <button
             onClick={removeItemFromCart}
-            className="text-gray-500 hover:text-gray-700 mr-4"
+            className="text-gray-500 hover:text-gray-700"
           >
             <CrossIcon size="medium" />
           </button>
-        </div>
-        <span className={`text-sm text-black`}>
-          ${(item?.menu?.price * item?.quantity).toFixed(2)}
+        )}
+
+        {/* Quantity Display */}
+        <span
+          className={`${sejongHospitalBold.className} font-semibold text-black`}
+        >
+          {quantity}
         </span>
 
-        <div className="flex items-center text-blue-950 mt-2 gap-3">
-          <button
-            className={`${sejongHospitalBold.className} bg-gray-200 p-2 text-sm font-bold rounded-lg hover:bg-gray-300`}
-            onClick={decrementQuantity}
-            disabled={quantity <= 1}
-          >
-            <MinusIcon size="extra-small" />
-          </button>
-          <span className={`${sejongHospitalBold.className} font-semibold`}>
-            {quantity}
-          </span>
-          <button
-            onClick={incrementQuantity}
-            className={`${sejongHospitalBold.className} bg-gray-200 p-2 text-sm font-bold rounded-lg hover:bg-gray-300`}
-          >
-            <PlusIcon size="extra-small" />
-          </button>
-        </div>
+        {/* Increment Button */}
+        <button
+          onClick={incrementQuantity}
+          className={`${sejongHospitalBold.className} bg-gray-200 p-0.5 text-xs font-bold rounded-full`}
+        >
+          <PlusIcon size="small" />
+        </button>
       </div>
     </li>
   );

@@ -15,7 +15,7 @@ import {
  * @route GET /pocha/status-info/?date=${date}
  */
 export async function getPochaInfo(date: Date): Promise<PochaInfo | ApiError> {
-  const fakeDate = new Date("2024-11-16T23:00:00");
+  const fakeDate = new Date("2024-11-17T13:00:00");
 
   // [TODO] change fakeDate to date
   const url = `/pocha/status-info/?date=${
