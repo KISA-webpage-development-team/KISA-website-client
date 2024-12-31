@@ -266,7 +266,7 @@ export default function PaymentSubmitForm({
             }}
           />
         )}
-
+        {/*?*/}
         {/* Total Price + Transaction fee display */}
         <div
           className={`w-full flex flex-col items-start 
