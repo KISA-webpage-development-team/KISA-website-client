@@ -17,7 +17,7 @@ export default function ProceedToPaymentButton({ pochaid }: PaymentProps) {
         className={`
           w-[95%] py-3 mb-4
           rounded-lg text-white font-semibold
-          bg-cyan-600/90
+          bg-cyan-600
           flex justify-center items-center
           ${sejongHospitalBold.className}
         `}

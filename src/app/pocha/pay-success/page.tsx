@@ -9,12 +9,15 @@ import {
 } from "@/utils/fonts/textFonts";
 import React, { useEffect } from "react";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function PaySuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pochaID = parseInt(searchParams.get("pochaid"));
   const paymentIntent = searchParams.get("payment_intent");
+  const [menuClicked, setMenuClicked] = useState(false);
+  const [homeClicked, setHomeClicked] = useState(false);
 
   const { data: session, status } = useSession() as {
     data: UserSession | undefined;
@@ -40,11 +43,17 @@ export default function PaySuccessPage() {
   }, [router]);
 
   const directToMenuList = () => {
-    router.push("/pocha");
+    setHomeClicked(true);
+    setTimeout(() => {
+      router.push("/pocha");
+    }, 150);
   };
 
   const directToOrders = () => {
-    router.push("/pocha?tab=orders");
+    setMenuClicked(true);
+    setTimeout(() => {
+      router.push("/pocha?tab=orders");
+    }, 150);
   };
 
   if (!paymentIntent) {
@@ -71,8 +80,10 @@ export default function PaySuccessPage() {
           </div>
           <div className="flex flex-col items-center gap-4">
             <button
-              className={`w-[297px] h-[55px] rounded-lg text-white text-lg
-                bg-cyan-600/90 justify-between items-center
+              className={`w-[297px] h-[55px] rounded-lg text-white text-lg ${
+                menuClicked ? "bg-blue-900" : "bg-cyan-600"
+              }
+               justify-between items-center
                 ${sejongHospitalBold.className}
               `}
               onClick={directToOrders}
@@ -80,8 +91,10 @@ export default function PaySuccessPage() {
               주문 내역 보기
             </button>
             <button
-              className={`w-[297px] h-[55px] rounded-lg text-white text-lg
-                bg-cyan-600/90 justify-between items-center
+              className={`w-[297px] h-[55px] rounded-lg text-white text-lg ${
+                homeClicked ? "bg-blue-900" : "bg-cyan-600"
+              }
+               justify-between items-center
                 ${sejongHospitalBold.className}
               `}
               onClick={directToMenuList}

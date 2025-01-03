@@ -138,10 +138,10 @@ export default function PochaCartPage() {
       </svg>
 
       {Object.keys(cart).length > 0 ? (
-        <>
+        <div className="flex flex-col h-screen">
           {/* Cart List */}
           <div className="flex-grow overflow-y-auto">
-            <ul className="flex flex-col h-screen gap-2">
+            <ul className="flex flex-col gap-2">
               {Object.entries(cart).map(([menuid, item]) => (
                 <CartListItem
                   key={menuid}
@@ -154,19 +154,23 @@ export default function PochaCartPage() {
               ))}
             </ul>
           </div>
-          <div className="border-t border-gray-300"></div>
+          <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300">
+            {/* Total Price */}
+            <div
+              className={`flex justify-between w-full px-4 py-2 ${sejongHospitalBold.className} text-lg`}
+            >
+              <span className="text-blue-950 pb-3 pt-1">Total</span>
+              <span className="text-blue-950 pb-3 pt-1">
+                ${cartToAmount(cart)}
+              </span>
+            </div>
 
-          {/* Total Price */}
-          <div
-            className={`flex justify-between w-full ${sejongHospitalBold.className} text-lg`}
-          >
-            <span className={`ml-4 text-blue-950`}>Total</span>
-            <span className={`mr-4 text-blue-950`}>${cartToAmount(cart)}</span>
+            {/* Checkout Button */}
+            <div className="w-full flex justify-center pb-2">
+              <ProceedToPaymentButton pochaid={pochaID} />
+            </div>
           </div>
-
-          {/* Checkout button */}
-          <ProceedToPaymentButton pochaid={pochaID} />
-        </>
+        </div>
       ) : (
         <div className="flex flex-col justify-center items-center">
           <Image

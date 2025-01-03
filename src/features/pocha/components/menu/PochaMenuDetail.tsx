@@ -255,7 +255,7 @@ export default function PochaMenuDetail({
 
         <button
           className={`
-           py-3 rounded-lg text-white font-semibold bg-cyan-600/75 
+           py-3 rounded-lg text-white font-semibold bg-cyan-600 
            justify-center items-center w-[85%] mb-6
            ${sejongHospitalBold.className}`}
           onClick={handleAddToCart}

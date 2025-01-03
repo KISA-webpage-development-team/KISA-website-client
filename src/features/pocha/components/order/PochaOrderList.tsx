@@ -27,6 +27,7 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
   };
 
   const {
+    orders,
     addNewOrders,
     updateOrders,
     pendingOrders,
@@ -128,97 +129,89 @@ export default function PochaOrderList({ pochaID }: PochaOrderListProps) {
       >
         {/* All Tab */}
         <Tab key="all" title="All">
-          <Card>
-            <CardBody>
-              <h3 className="text-xl font-bold text-michigan-blue mb-2">All</h3>
-              <ul className="self-stretch flex flex-col">
-                {/* {readyOrders?.map((orderItem, idx) => (
-                  <>
+          {(() => {
+            // An array that combines all 3: pending, preparing, ready.
+            const allOrders = [
+              ...(orders?.pending || []),
+              ...(orders?.preparing || []),
+              ...(orders?.ready || []),
+            ];
+
+            // If allOrders array length = 0 --> No order request has been made.
+            return allOrders.length === 0 ? (
+              <div className="text-center mt-4">
+                You haven't placed any orders yet.
+              </div>
+            ) : (
+              // Else
+              <ul className="self-stretch flex flex-col gap-4">
+                {allOrders.map((orderItem) => (
+                  <div
+                    key={orderItem.orderItemID}
+                    className="bg-white shadow-md rounded-lg border border-gray-200"
+                  >
                     <PochaOrderItem
-                      key={orderItem.orderItemID}
                       orderItem={orderItem}
                       setSelectedOrder={setSelectedOrder}
                     />
-                    {idx !== readyOrders.length - 1 && <HorizontalDivider />}
-                  </>
-                ))} */}
+                  </div>
+                ))}
               </ul>
-            </CardBody>
-          </Card>
+            );
+          })()}
         </Tab>
 
         {/* Pending Tab */}
         <Tab key="pending" title="Pending">
-          <Card>
-            <CardBody>
-              <h3 className="text-xl font-bold text-michigan-blue mb-2">
-                Pending
-              </h3>
-              <ul className="self-stretch flex flex-col">
-                {pendingOrders?.map((orderItem, idx) => (
-                  <>
-                    <PochaOrderItem
-                      key={orderItem.orderItemID}
-                      orderItem={orderItem}
-                      setSelectedOrder={setSelectedOrder}
-                    />
-                    {idx !== pendingOrders.length - 1 && <HorizontalDivider />}
-                  </>
-                ))}
-              </ul>
-            </CardBody>
-          </Card>
+          <ul className="self-stretch flex flex-col gap-4">
+            {pendingOrders?.map((orderItem, idx) => (
+              <div
+                key={orderItem.orderItemID}
+                className="bg-white shadow-md rounded-lg border border-gray-200"
+              >
+                <PochaOrderItem
+                  orderItem={orderItem}
+                  setSelectedOrder={setSelectedOrder}
+                />
+              </div>
+            ))}
+          </ul>
         </Tab>
 
         {/* Preparing Tab */}
         <Tab key="preparing" title="Preparing">
-          <Card>
-            <CardBody>
-              <h3 className="text-xl font-bold text-michigan-blue mb-2">
-                Preparing
-              </h3>
-              <ul className="self-stretch flex flex-col">
-                {preparingOrders?.map((orderItem, idx) => (
-                  <>
-                    <PochaOrderItem
-                      key={orderItem.orderItemID}
-                      orderItem={orderItem}
-                      setSelectedOrder={setSelectedOrder}
-                    />
-                    {idx !== preparingOrders.length - 1 && (
-                      <HorizontalDivider />
-                    )}
-                  </>
-                ))}
-              </ul>
-            </CardBody>
-          </Card>
+          <ul className="self-stretch flex flex-col gap-4">
+            {preparingOrders?.map((orderItem, idx) => (
+              <div
+                key={orderItem.orderItemID}
+                className="bg-white shadow-md rounded-lg border border-gray-200"
+              >
+                <PochaOrderItem
+                  key={orderItem.orderItemID}
+                  orderItem={orderItem}
+                  setSelectedOrder={setSelectedOrder}
+                />
+              </div>
+            ))}
+          </ul>
         </Tab>
 
         {/* Ready Tab */}
         <Tab key="ready" title="Ready">
-          <Card>
-            <CardBody>
-              <h3 className="text-xl font-bold text-michigan-blue mb-2">
-                Ready{" "}
-                <span className="text-base text-gray-500">
-                  (Pick up at the counter)
-                </span>
-              </h3>
-              <ul className="self-stretch flex flex-col">
-                {readyOrders?.map((orderItem, idx) => (
-                  <>
-                    <PochaOrderItem
-                      key={orderItem.orderItemID}
-                      orderItem={orderItem}
-                      setSelectedOrder={setSelectedOrder}
-                    />
-                    {idx !== readyOrders.length - 1 && <HorizontalDivider />}
-                  </>
-                ))}
-              </ul>
-            </CardBody>
-          </Card>
+          <ul className="self-stretch flex flex-col gap-4">
+            {readyOrders?.map((orderItem, idx) => (
+              <div
+                key={orderItem.orderItemID}
+                className="bg-white shadow-md rounded-lg border border-gray-200"
+              >
+                <PochaOrderItem
+                  key={orderItem.orderItemID}
+                  orderItem={orderItem}
+                  setSelectedOrder={setSelectedOrder}
+                />
+              </div>
+            ))}
+          </ul>
         </Tab>
       </Tabs>
     </div>
