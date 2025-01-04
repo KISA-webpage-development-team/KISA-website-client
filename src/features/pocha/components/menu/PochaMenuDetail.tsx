@@ -168,6 +168,12 @@ export default function PochaMenuDetail({
       className="w-full flex flex-col 
     items-center"
     >
+      <div className="absolute top-0 left-0 w-full bg-white shadow-md z-50 flex items-center h-16">
+        <button className="flex ml-4 z-50 w-full" onClick={handleBackButton}>
+          <BackIcon />
+        </button>
+      </div>
+
       {/* Food Image */}
       <figure className="absolute top-0 w-screen aspect-square">
         <Image
@@ -178,91 +184,106 @@ export default function PochaMenuDetail({
         />
       </figure>
 
-      <button
-        className="flex self-stretch justify-start mt-3 z-10"
-        onClick={handleBackButton}
-      >
-        <BackIcon />
-      </button>
-
       <div
-        className="mt-[80vw] z-10 gap-5 w-[85%]
+        className="mt-[80vw] z-10 gap-5 w-[95%]
       flex flex-col items-center"
       >
         {/* Details */}
         <div
           className={`${sejongHospitalBold.className}
-        flex flex-col w-full bg-white rounded-[10px] shadow-lg
-        py-7 px-7 gap-3
-        items-center border-2 border-black/25 z-10`}
+        flex flex-col w-full bg-white rounded-[8px] shadow-lg
+        py-7 px-5 gap-3
+        items-center border-2 border-gray-300 z-10`}
         >
           {/* Menu Name */}
           <div className="flex flex-col items-center">
-            <span className={`text-black text-2xl`}>
-              {selectedMenu.nameKor}
-            </span>
-            <span className={` text-gray-500 text-xl`}>
+            <span className={`text-black text-xl`}>{selectedMenu.nameKor}</span>
+            <span className={` text-gray-500 text-lg`}>
               {selectedMenu.nameEng}
             </span>
           </div>
-
-          {/* temporarily put in a value. */}
-          <p className={`text-center text-gray-500`}>
-            Comes with:
-            <br />
-            - Fish cake
-            <br />- Carrot
-          </p>
+          <hr className="w-full border-t border-gray-300" />
 
           {/* for this, just shows the total price for the selected food, based on your quantity. */}
-          <span className={`text-lg`}>${selectedMenu.price * quantity} </span>
+          <span className={`text-4xl mt-1`}>
+            ${selectedMenu.price * quantity}{" "}
+          </span>
+
+          {/* temporarily put in a value. */}
+          <div className="w-full bg-gray-50 p-4 rounded-lg shadow-sm">
+            <p className="text-black">Comes with:</p>
+            <ul className="list-disc list-inside text-gray-600">
+              <li>Jioh</li>
+              <li>Dongsub</li>
+              <li>Dongeun</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Scroll Tests</li>
+              <li>Scroll Tests</li>
+              <li>Scroll Tests</li>
+              <li>Scroll Tests</li>
+              <li>Scroll Tests</li>
+            </ul>
+          </div>
 
           {/* Quantity Selector */}
-          <div
-            className="w-full 
-        flex justify-center items-center bg-gray-200 border-3 border-gray-300 
-        text-lg py-3 rounded-2xl"
-          >
-            <span
-              className={`${sejongHospitalBold.className} pl-8`}
-              style={{ flexShrink: 0 }}
-            >
+          <div className="flex items-center w-full bg-gray-50 p-4 rounded-lg shadow-sm">
+            {/* Label */}
+            <span className={`${sejongHospitalBold.className} text-2xl ml-3`}>
               수량
             </span>
-            <div className="flex items-center gap-4 ml-auto pr-4">
+
+            {/* Quantity Controls */}
+            <div className="flex items-center gap-7 ml-auto">
+              {/* Decrement Button */}
               <button
-                className="bg-white text-lg w-8 h-8 rounded-full flex justify-center items-center"
+                className="text-lg w-8 h-8 rounded-full flex justify-center items-center border border-gray-600"
                 onClick={decrementQuantity}
                 disabled={quantity === 1}
               >
                 <MinusIcon size="small" />
               </button>
-              <span className={`${sejongHospitalBold.className} text-lg`}>
+
+              {/* Quantity Display */}
+              <span
+                className={`${sejongHospitalBold.className} text-lg`}
+                style={{
+                  width: "1rem", // Fixed width ensures no layout shifting
+                  textAlign: "center",
+                }}
+              >
                 {quantity}
               </span>
+
+              {/* Increment Button */}
               <button
+                className="text-lg w-8 h-8 rounded-full flex justify-center items-center border border-gray-600"
                 onClick={incrementQuantity}
-                className="bg-white text-lg w-8 h-8 rounded-full flex justify-center items-center"
               >
                 <PlusIcon size="small" />
               </button>
             </div>
           </div>
 
+          <button
+            className={`
+           py-3 rounded-lg text-white font-semibold bg-cyan-600 
+           justify-center items-center w-full
+           ${sejongHospitalBold.className}`}
+            onClick={handleAddToCart}
+            disabled={addingToCart}
+          >
+            {addingToCart ? "Adding to Cart..." : "Add to Cart"}
+          </button>
+
           {/* Error Message */}
           {error !== null && <ErrorMsg message={error} />}
         </div>
-
-        <button
-          className={`
-           py-3 rounded-lg text-white font-semibold bg-cyan-600 
-           justify-center items-center w-[85%] mb-6
-           ${sejongHospitalBold.className}`}
-          onClick={handleAddToCart}
-          disabled={addingToCart}
-        >
-          {addingToCart ? "Adding to Cart..." : "Add to Cart"}
-        </button>
       </div>
     </div>
   );
