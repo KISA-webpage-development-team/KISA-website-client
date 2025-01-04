@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
 import useOrders from "../../hooks/useOrders";
 import { useSession } from "next-auth/react";
 import { io, Socket } from "socket.io-client";
@@ -10,6 +13,7 @@ import { OrderItem, OrderStatus } from "@/types/pocha";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import UserOrderHistories from "./UserOrderHistories";
 import OrderTicket from "./OrderTicket";
+import { Tabs, Tab, Card, CardBody } from "@nextui-org/react"; // Using Tabs
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
 import OrderStatusSelector from "./OrderStatusSelector";
 
@@ -24,6 +28,7 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
   };
 
   const {
+    orders,
     addNewOrders,
     updateOrders,
     pendingOrders,
@@ -106,99 +111,127 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
   }
 
   return (
-    <div
-      className="w-full h-full py-6 px-8
-    flex flex-col justify-between bg-white"
-    >
-      {/* Order Status Section */}
-      <OrderStatusSelector />
+    // sejong hospital font
+    <div className="flex flex-col w-full h-full px-5">
+      <p
+        className={`${sejongHospitalLight.className} my-3.5 text-sm text-black text-center`}
+      >
+        Track your order status.
+      </p>
 
-      <div className="flex flex-col space-y-2">
-        {/* ready */}
-        <div className="flex flex-col items-start gap-1">
-          <h2
-            className={`${sejongHospitalBold.className} text-xl text-michigan-blue
-              flex flex-col items-start`}
-          >
-            Ready <span className="text-base">( Pick up at the counter )</span>
-          </h2>
-          <ul className="self-stretch flex flex-col">
-            {readyOrders?.map((orderItem, idx) => (
-              <>
-                <PochaOrderItem
-                  key={orderItem.orderItemID}
-                  orderItem={orderItem}
-                  setSelectedOrder={setSelectedOrder}
-                />
-                {idx !== readyOrders.length - 1 && <HorizontalDivider />}
-              </>
-            ))}
-          </ul>
-        </div>
-        <HorizontalDivider color="gray" />
+      {/* Tabs for Order Status */}
+      <Tabs
+        className={`${sejongHospitalBold.className} w-full`}
+        size="lg"
+        fullWidth
+        aria-label="Order Status"
+        radius="sm"
+      >
+        {/* All Tab */}
+        <Tab key="all" title="All">
+          {(() => {
+            // An array that combines all 3: pending, preparing, ready.
+            const allOrders = [
+              ...(orders?.pending || []),
+              ...(orders?.preparing || []),
+              ...(orders?.ready || []),
+            ];
 
-        {/* preparing */}
-        <div className="flex flex-col items-start gap-1">
-          <h2
-            className={`${sejongHospitalBold.className} text-xl text-michigan-blue
-              `}
-          >
-            Preparing
-          </h2>
-          <ul className="self-stretch flex flex-col">
-            {preparingOrders?.map((orderItem, idx) => (
-              <>
-                <PochaOrderItem
-                  key={orderItem.orderItemID}
-                  orderItem={orderItem}
-                  setSelectedOrder={setSelectedOrder}
-                />
-                {idx !== preparingOrders.length - 1 && <HorizontalDivider />}
-              </>
-            ))}
-          </ul>
-        </div>
-        <HorizontalDivider color="gray" />
-        {/* pending */}
-        <div className="flex flex-col items-start gap-1">
-          <h2
-            className={`${sejongHospitalBold.className} text-xl text-michigan-blue
-              `}
-          >
-            Pending
-          </h2>
-          <ul className="self-stretch flex flex-col">
+            // If allOrders array length = 0 --> No order request has been made.
+            return allOrders.length === 0 ? (
+              <div className="text-center mt-4">
+                You haven&apos;t placed any orders yet.
+              </div>
+            ) : (
+              // Else
+              <ul className="self-stretch flex flex-col gap-4">
+                {allOrders.map((orderItem) => (
+                  <div
+                    key={orderItem.orderItemID}
+                    className="bg-white shadow-md rounded-lg border border-gray-200"
+                  >
+                    <PochaOrderItem
+                      orderItem={orderItem}
+                      setSelectedOrder={setSelectedOrder}
+                    />
+                  </div>
+                ))}
+              </ul>
+            );
+          })()}
+        </Tab>
+
+        {/* Pending Tab */}
+        <Tab key="pending" title="Pending">
+          <ul className="self-stretch flex flex-col gap-4">
             {pendingOrders?.map((orderItem, idx) => (
-              <>
+              <div
+                key={orderItem.orderItemID}
+                className="bg-white shadow-md rounded-lg border border-gray-200"
+              >
+                <PochaOrderItem
+                  orderItem={orderItem}
+                  setSelectedOrder={setSelectedOrder}
+                />
+              </div>
+            ))}
+          </ul>
+        </Tab>
+
+        {/* Preparing Tab */}
+        <Tab key="preparing" title="Preparing">
+          <ul className="self-stretch flex flex-col gap-4">
+            {preparingOrders?.map((orderItem, idx) => (
+              <div
+                key={orderItem.orderItemID}
+                className="bg-white shadow-md rounded-lg border border-gray-200"
+              >
                 <PochaOrderItem
                   key={orderItem.orderItemID}
                   orderItem={orderItem}
                   setSelectedOrder={setSelectedOrder}
                 />
-                {idx !== pendingOrders.length - 1 && <HorizontalDivider />}
-              </>
+              </div>
             ))}
           </ul>
-        </div>
-        <HorizontalDivider color="gray" />
-      </div>
+        </Tab>
 
-      {/* Order History Accordion */}
-      <Accordion>
-        <AccordionItem
-          key="1"
-          aria-label="Order History"
-          title="Order History"
-          className={`${sejongHospitalBold.className} text-xl !text-gray-300 
-          `}
-        >
-          <UserOrderHistories
-            email={session.user.email}
-            token={session.token}
-            pochaID={pochaID}
-          />
-        </AccordionItem>
-      </Accordion>
+        {/* Ready Tab */}
+        <Tab key="ready" title="Ready">
+          <ul className="self-stretch flex flex-col gap-4">
+            {readyOrders?.map((orderItem, idx) => (
+              <div
+                key={orderItem.orderItemID}
+                className="bg-white shadow-md rounded-lg border border-gray-200"
+              >
+                <PochaOrderItem
+                  key={orderItem.orderItemID}
+                  orderItem={orderItem}
+                  setSelectedOrder={setSelectedOrder}
+                />
+              </div>
+            ))}
+          </ul>
+        </Tab>
+      </Tabs>
     </div>
+
+    //   {/* Order History Accordion */}
+    //   <Accordion>
+    //     <AccordionItem
+    //       key="1"
+    //       aria-label="Order History"
+    //       title="Order History"
+    //       className={`${sejongHospitalBold.className} text-xl !text-gray-300
+    //       `}
+    //     >
+    //       <UserOrderHistories
+    //         email={session.user.email}
+    //         token={session.token}
+    //         pochaID={pochaID}
+    //       />
+    //     </AccordionItem>
+    //   </Accordion>
+    // </div>
   );
 }

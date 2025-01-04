@@ -22,7 +22,7 @@ export default function OpenCartButton({ pochaid }: PochaCartProps) {
         `}
       onClick={handleCartClick}
     >
-      <span className={`ml-10 ${sejongHospitalBold.className}`}>View Cart</span>
+      <span className={`ml-10 ${sejongHospitalBold.className}`}></span>
       <div className="mr-10">
         <PochaCartIcon />
       </div>

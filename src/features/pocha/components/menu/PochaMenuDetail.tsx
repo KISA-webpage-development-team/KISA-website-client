@@ -192,20 +192,17 @@ export default function PochaMenuDetail({
         {/* Details */}
         <div
           className={`${sejongHospitalBold.className}
-        flex flex-col w-full bg-white rounded-2xl shadow-lg
-        py-7 px-9 gap-3
+        flex flex-col w-full bg-white rounded-[10px] shadow-lg
+        py-7 px-7 gap-3
         items-center border-2 border-black/25 z-10`}
-          // style={{
-          //   marginBottom: "25px", // Prevent overlapping with button
-          // }}
         >
           {/* Menu Name */}
-          <div className="flex flex-col items-center gap-0">
-            <span className={`text-michigan-blue text-4xl`}>
+          <div className="flex flex-col items-center">
+            <span className={`text-black text-2xl`}>
               {selectedMenu.nameKor}
             </span>
-            <span className={` text-michigan-blue text-medium`}>
-              ({selectedMenu.nameEng})
+            <span className={` text-gray-500 text-xl`}>
+              {selectedMenu.nameEng}
             </span>
           </div>
 
@@ -258,7 +255,7 @@ export default function PochaMenuDetail({
 
         <button
           className={`
-           py-3 rounded-lg text-white font-semibold bg-cyan-600/75 
+           py-3 rounded-lg text-white font-semibold bg-cyan-600 
            justify-center items-center w-[85%] mb-6
            ${sejongHospitalBold.className}`}
           onClick={handleAddToCart}

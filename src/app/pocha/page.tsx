@@ -162,25 +162,25 @@ export default function PochaPage() {
 
         {activeTab === "menu" && (
           <div
-            className="fixed bottom-0 left-0 right-0 z-50
+            className="fixed bottom-0 left-0 right-0 
       
          w-full flex justify-center items-end pb-6 pt-8 mb-6"
           >
             <button
               className={`
-          w-[70%] h-fit flex py-3 mt-8
+          flex w-[70%] h-fit py-4 px-16 mt-8
           rounded-lg text-white font-semibold
-          bg-cyan-600/90 justify-between items-center
+          bg-cyan-600 justify-between items-center
           ${sejongHospitalBold.className}
         `}
               onClick={handleCartClick}
             >
-              <span className={`ml-10 ${sejongHospitalBold.className}`}>
-                View Cart
-              </span>
-              <div className="mr-10">
+              <div className="flex items-center ml-4">
                 <PochaCartIcon />
               </div>
+              <span className={`mr-4 text-lg ${sejongHospitalBold.className}`}>
+                View Cart
+              </span>
             </button>
           </div>
         )}
