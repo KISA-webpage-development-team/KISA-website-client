@@ -1,6 +1,5 @@
 import client from "@/lib/axios/client";
 import { AddItemToCartBody } from "@/types/pocha";
-import { booleanValue } from "aws-sdk/clients/finspace";
 
 interface ChangeItemCartResponse {
   isStocked: boolean;

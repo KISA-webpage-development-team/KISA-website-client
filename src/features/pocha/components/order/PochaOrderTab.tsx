@@ -81,7 +81,7 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
     socketInstance.on(
       closedEvent,
       ({ orderItemID }: { orderItemID: number }) => {
-        updateOrders(orderItemID, "closed");
+        updateOrders(orderItemID, OrderStatus.CLOSED);
       }
     );
 
