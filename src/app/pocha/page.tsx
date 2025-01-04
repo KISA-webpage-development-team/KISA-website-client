@@ -42,31 +42,6 @@ export default function PochaPage() {
   // fetch pocha information (GET /pocha/status-info/)
   const { pochaInfo, status, error } = usePocha();
 
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const scrollContainer = document.getElementById("menu-scroll-container");
-
-    if (!scrollContainer) {
-      console.error(
-        "Scroll container with id 'menu-scroll-container' not found"
-      );
-      return;
-    }
-
-    const handleScroll = () => {
-      console.log("Scrolling:", scrollContainer.scrollTop); // Debugging log
-      setScrollPosition(scrollContainer.scrollTop);
-    };
-
-    scrollContainer.addEventListener("scroll", handleScroll);
-    return () => {
-      scrollContainer.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  const isHeadingVisible = scrollPosition < 100;
-
   const handleCartClick = () => {
     const queryParams = `pochaid=${pochaInfo?.pochaID}`;
     window.location.href = `/pocha/cart?${queryParams}`;
@@ -132,15 +107,7 @@ export default function PochaPage() {
         md:hidden overflow-y-clip flex-shrink-0
         ${sejongHospitalLight.className} relative w-screen h-[90vh] -translate-x-4 py-2 !gap-0`}
       >
-        <div
-          className={`transition-transform duration-500 ease-in-out 
-            shrink-0 overflow-clip
-            ${
-              isHeadingVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-10"
-            }`}
-        >
+        <div>
           <PochaHeading pochaInfo={pochaInfo} />
         </div>
         {/* menu and orders tabs */}

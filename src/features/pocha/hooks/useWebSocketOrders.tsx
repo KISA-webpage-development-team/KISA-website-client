@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { OrderItem } from "@/types/pocha";
+import { WEBSOCKET_URL } from "@/constants/env";
 
 interface UseWebSocketOrdersProps {
   token: string;
@@ -21,7 +22,7 @@ const useWebSocketOrders = ({
     if (!token || !pochaID) return;
 
     // Initialize socket connection
-    socketRef.current = io("https://umichkisa-api.com", {
+    socketRef.current = io(WEBSOCKET_URL, {
       transports: ["websocket"],
       auth: { token },
       query: { email, pochaId: pochaID },

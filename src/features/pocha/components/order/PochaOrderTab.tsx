@@ -16,6 +16,7 @@ import OrderTicket from "./OrderTicket";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react"; // Using Tabs
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
 import OrderStatusSelector from "./OrderStatusSelector";
+import { WEBSOCKET_URL } from "@/constants/env";
 
 interface PochaOrderTabProps {
   pochaID: number;
@@ -28,9 +29,8 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
   };
 
   const {
-    orders,
-    addNewOrders,
-    updateOrders,
+    updateOrder,
+    addNewOrderItem,
     pendingOrders,
     preparingOrders,
     readyOrders,
@@ -46,7 +46,7 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
       return;
     }
     // Initialize socket connection
-    const socketInstance = io("https://umichkisa-api.com", {
+    const socketInstance = io(WEBSOCKET_URL, {
       transports: ["websocket"],
       auth: {
         token: session.token,
@@ -77,7 +77,7 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
         orderItemID: number;
         status: OrderStatus;
       }) => {
-        updateOrders(orderItemID, status);
+        updateOrder(orderItemID);
       }
     );
 
@@ -86,7 +86,7 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
     socketInstance.on(
       closedEvent,
       ({ orderItemID }: { orderItemID: number }) => {
-        updateOrders(orderItemID, OrderStatus.CLOSED);
+        updateOrder(orderItemID);
       }
     );
 
@@ -99,7 +99,7 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
         socketInstance.disconnect();
       }
     };
-  }, [session, ordersStatus, pochaID, updateOrders]);
+  }, [session, ordersStatus, pochaID, updateOrder]);
 
   // UI Rendering ----------------------------------------------
   if (sessionStatus === "loading" || ordersStatus === "loading") {
@@ -132,9 +132,9 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
           {(() => {
             // An array that combines all 3: pending, preparing, ready.
             const allOrders = [
-              ...(orders?.pending || []),
-              ...(orders?.preparing || []),
-              ...(orders?.ready || []),
+              ...readyOrders,
+              ...preparingOrders,
+              ...pendingOrders,
             ];
 
             // If allOrders array length = 0 --> No order request has been made.
