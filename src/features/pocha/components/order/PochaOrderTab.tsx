@@ -17,6 +17,7 @@ import { Tabs, Tab, Card, CardBody } from "@nextui-org/react"; // Using Tabs
 import { HorizontalDivider } from "@/final_refactor_src/components/divider";
 import OrderStatusSelector from "./OrderStatusSelector";
 import { WEBSOCKET_URL } from "@/constants/env";
+import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
 
 interface PochaOrderTabProps {
   pochaID: number;
@@ -103,7 +104,7 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
 
   // UI Rendering ----------------------------------------------
   if (sessionStatus === "loading" || ordersStatus === "loading") {
-    return <></>;
+    return <LoadingSpinner />;
   }
 
   if (selectedOrder !== undefined) {
@@ -112,17 +113,11 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
 
   return (
     // sejong hospital font
-    <div className="flex flex-col w-full h-full px-5">
-      <p
-        className={`${sejongHospitalLight.className} my-3.5 text-sm text-black text-center`}
-      >
-        Track your order status.
-      </p>
-
+    <div className="flex flex-col w-full h-full px-[1.2rem] py-[0.6rem]">
       {/* Tabs for Order Status */}
       <Tabs
         className={`${sejongHospitalBold.className} w-full`}
-        size="lg"
+        size="sm"
         fullWidth
         aria-label="Order Status"
         radius="sm"
@@ -144,17 +139,13 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
               </div>
             ) : (
               // Else
-              <ul className="self-stretch flex flex-col gap-4">
+              <ul className="self-stretch flex flex-col gap-[1rem]">
                 {allOrders.map((orderItem) => (
-                  <div
+                  <PochaOrderItem
                     key={orderItem.orderItemID}
-                    className="bg-white shadow-md rounded-lg border border-gray-200"
-                  >
-                    <PochaOrderItem
-                      orderItem={orderItem}
-                      setSelectedOrder={setSelectedOrder}
-                    />
-                  </div>
+                    orderItem={orderItem}
+                    setSelectedOrder={setSelectedOrder}
+                  />
                 ))}
               </ul>
             );
@@ -163,53 +154,39 @@ export default function PochaOrderTab({ pochaID }: PochaOrderTabProps) {
 
         {/* Pending Tab */}
         <Tab key="pending" title="Pending">
-          <ul className="self-stretch flex flex-col gap-4">
+          <ul className="self-stretch flex flex-col gap-[1rem]">
             {pendingOrders?.map((orderItem, idx) => (
-              <div
+              <PochaOrderItem
                 key={orderItem.orderItemID}
-                className="bg-white shadow-md rounded-lg border border-gray-200"
-              >
-                <PochaOrderItem
-                  orderItem={orderItem}
-                  setSelectedOrder={setSelectedOrder}
-                />
-              </div>
+                orderItem={orderItem}
+                setSelectedOrder={setSelectedOrder}
+              />
             ))}
           </ul>
         </Tab>
 
         {/* Preparing Tab */}
         <Tab key="preparing" title="Preparing">
-          <ul className="self-stretch flex flex-col gap-4">
+          <ul className="self-stretch flex flex-col gap-[1rem]">
             {preparingOrders?.map((orderItem, idx) => (
-              <div
+              <PochaOrderItem
                 key={orderItem.orderItemID}
-                className="bg-white shadow-md rounded-lg border border-gray-200"
-              >
-                <PochaOrderItem
-                  key={orderItem.orderItemID}
-                  orderItem={orderItem}
-                  setSelectedOrder={setSelectedOrder}
-                />
-              </div>
+                orderItem={orderItem}
+                setSelectedOrder={setSelectedOrder}
+              />
             ))}
           </ul>
         </Tab>
 
         {/* Ready Tab */}
         <Tab key="ready" title="Ready">
-          <ul className="self-stretch flex flex-col gap-4">
+          <ul className="self-stretch flex flex-col gap-[1rem]">
             {readyOrders?.map((orderItem, idx) => (
-              <div
+              <PochaOrderItem
                 key={orderItem.orderItemID}
-                className="bg-white shadow-md rounded-lg border border-gray-200"
-              >
-                <PochaOrderItem
-                  key={orderItem.orderItemID}
-                  orderItem={orderItem}
-                  setSelectedOrder={setSelectedOrder}
-                />
-              </div>
+                orderItem={orderItem}
+                setSelectedOrder={setSelectedOrder}
+              />
             ))}
           </ul>
         </Tab>

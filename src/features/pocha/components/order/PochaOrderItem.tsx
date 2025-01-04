@@ -45,52 +45,51 @@ export default function PochaOrderItem({
 
   return (
     <li
-      className="flex self-stretch items-center
-      py-4 space-x-3
+      className="h-full
+      shadow-md rounded-lg
+      border border-zinc-200 bg-white
+      flex self-stretch items-center
+      py-4 px-3 space-x-[1rem]
     "
     >
       <Modal
         backdrop="opaque"
-        radius="lg"
-        size="xs"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        placement="center"
         classNames={{
-          backdrop: "backdrop-opacity-40",
-          wrapper: "items-center",
-          body: "py-6",
+          wrapper: "h-fit",
+          body: "py-9 ",
+          backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+          closeButton: "hover:bg-white/5 active:bg-white/10",
         }}
+        isOpen={isOpen}
+        radius="lg"
+        onOpenChange={onOpenChange}
+        placement="auto"
       >
         <ModalContent>
           {(onClose) => (
             // Testing purpose - put background as pink
-            <div className="flex flex-col items-center justify-center bg-pink-800 shadow-lg rounded-lg p-6">
-              <ModalBody className="py-6">
-                <div
-                  className={`flex flex-col items-center justify-center space-y-4 ${sejongHospitalBold.className}`}
+            <ModalBody
+              className="
+              border border-[#71717A] rounded-lg
+            "
+            >
+              <div
+                className={`flex flex-col items-center justify-center space-y-4 ${sejongHospitalBold.className}`}
+              >
+                <span className="text-lg text-black">Order Ready!</span>
+                <span className="text-4xl text-black">{`#${orderItem?.orderItemID}`}</span>
+                <span
+                  className={`text-lg text-gray-500 font-medium ${sejongHospitalLight.className}`}
                 >
-                  <span className="text-lg text-black">Order Ready!</span>
-                  <span className="text-4xl text-black">{`#${orderItem?.orderItemID}`}</span>
-                  <span
-                    className={`text-lg text-gray-500 font-medium ${sejongHospitalLight.className}`}
-                  >
-                    is ready for pickup.
-                  </span>
-                </div>
-              </ModalBody>
-
-              {/* <ModalFooter>
-                <button onClick={onClose}>Close</button>
-              </ModalFooter> */}
-            </div>
+                  {orderItem.menu.nameKor} is ready for pickup
+                </span>
+              </div>
+            </ModalBody>
           )}
         </ModalContent>
       </Modal>
       <>
-        <div
-          className={`w-3 h-3 rounded-full ml-3 ${STATUS_COLORS[status]}`}
-        ></div>
+        <div className={`w-3 h-3 rounded-full ${STATUS_COLORS[status]}`} />
 
         {/* 1. Image or Ticket number */}
         <figure className="relative w-[4rem] h-[4rem]">
@@ -105,18 +104,20 @@ export default function PochaOrderItem({
 
         {/* 2. Info/Description */}
         <div
-          className={`flex-1 flex flex-col h-full justify-center
-    ${sejongHospitalBold.className} text-michigan-blue text-medium`}
+          className={`flex-1 flex flex-col h-full justify-center space-y-1
+    ${sejongHospitalBold.className}
+            text-[.9375rem] font-bold leading-[150%] text-black
+    `}
         >
           {/* Name */}
-          <div className="flex items-center gap-1">
-            <span className="text-michigan-blue">
+          <div className="flex items-center gap-[0.25rem]">
+            <span className="text-overflow">
               {menu?.nameKor} {menu?.nameEng}
             </span>
           </div>
 
           {/* Price */}
-          <div className="flex mt-1 text-gray-500 space-x-2">
+          <div className="flex text-gray-500 space-x-[0.25rem]">
             <span>{`x ${quantity}`}</span>
             <span>|</span>
             <span>{`$${menu?.price * quantity}`}</span>
@@ -124,36 +125,40 @@ export default function PochaOrderItem({
 
           {/* specially displaying orderItemID for "ready" status */}
           {status === "ready" && (
-            <div className="h-[22px] w-[41px] text-sm bg-zinc-100 rounded-[9px] flex items-center justify-center">
-              # {orderItem?.orderItemID}
+            <div
+              className="
+                bg-zinc-100 rounded-[9px] flex items-center justify-center
+                w-fit px-2 py-[0.25rem] text-[11px]
+              "
+            >
+              <span className="text-black"># {orderItem?.orderItemID}</span>
             </div>
           )}
         </div>
 
         {/* status & ticket button */}
         <div
-          className={`flex items-center justify-center rounded-md text-[14px] pr-6 ${sejongHospitalBold.className} ${STATUS_TEXT_COLORS[status]}`}
+          className={`flex items-center justify-center rounded-md 
+            text-xs ${sejongHospitalBold.className} ${STATUS_TEXT_COLORS[status]}`}
         >
           {status === "ready" ? (
             <div className="flex flex-col items-end">
-              <div>{capitalizeStatus(orderItem?.status)}</div>
+              <span>{capitalizeStatus(orderItem?.status)}</span>
               {/* View Ticket Button */}
               <button
                 onClick={handleViewTicket}
-                className="mt-[10px] w-[121px] h-[31px] px-[13px] py-[5px] bg-green-100 rounded-[5px] border border-[#1c8241]/50 flex items-center justify-center gap-2"
+                className="mt-[10px]
+                inline-flex flex-shrink-0 justify-center items-center px-[0.8125rem] py-[0.5rem]
+                bg-green-100 rounded-[5px] border border-[#1c8241]/50 gap-2"
               >
                 <TicketIcon className="mr-1" size="small" />
-                <span className="text-[11px] font-bold leading-none">
+                <span className="text-[11px] font-bold leading-[150%]">
                   View Ticket
                 </span>
               </button>
             </div>
           ) : (
-            <div
-              className={`${sejongHospitalBold.className} ${STATUS_TEXT_COLORS[status]}`}
-            >
-              {capitalizeStatus(orderItem?.status)}
-            </div>
+            <span className={``}>{capitalizeStatus(orderItem?.status)}</span>
           )}
         </div>
       </>

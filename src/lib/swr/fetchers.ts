@@ -36,10 +36,10 @@ const fetcherWithToken = ([url, token]) =>
 const GlobalOnErrorRetry = (error, key, config, revalidate, { retryCount }) => {
   console.log("errork : ", error);
   // 404에서 재시도 안함
-  if (error.response.status === 404) return;
+  if (error?.response?.status === 404) return;
 
   // 401에서 재시도 안함
-  if (error.response.status === 401) return;
+  if (error?.response?.status === 401) return;
 
   // 1번까지만 재시도함
   if (retryCount >= 1) return;
