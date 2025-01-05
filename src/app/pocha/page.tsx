@@ -4,20 +4,14 @@ import React, { useState } from "react";
 
 // ui components
 import PochaHeading from "@/features/pocha/components/PochaHeading";
-import PochaMenuDetail from "@/features/pocha/components/menu/PochaMenuDetail";
-import {
-  LoadingSpinner,
-  NotFound,
-  NotLogin,
-  UnexpectedError,
-} from "@/final_refactor_src/components/feedback";
+import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 
 // hooks
 import { useSearchParams } from "next/navigation";
 import usePocha from "@/features/pocha/hooks/usePocha";
 
 // types
-import { MenuItem, PochaTab } from "@/types/pocha";
+import { PochaTab } from "@/types/pocha";
 import PochaHomeTabs from "@/features/pocha/components/PochaHomeTabs";
 import PochaHomeTabContent from "@/features/pocha/components/PochaHomeTabContent";
 
@@ -27,9 +21,6 @@ export default function PochaPage() {
   const [activeTab, setActiveTab] = useState<PochaTab>(
     (searchParams.get("tab") as PochaTab) || "menu"
   );
-
-  // state for selected menu to open menu detail tab
-  const [selectedMenu, setSelectedMenu] = useState<MenuItem>();
 
   // fetch pocha information (GET /pocha/status-info/)
   const { pochaInfo, status, error } = usePocha();
@@ -65,20 +56,6 @@ export default function PochaPage() {
     );
   }
 
-  // [Home UI] --------------------------------------------------------------------------------
-  // IF any menu is selected, show the menu detail
-  if (selectedMenu !== undefined) {
-    return (
-      <section className="overflow-y-auto h-full">
-        <PochaMenuDetail
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          pochaid={pochaInfo?.pochaID}
-        />
-      </section>
-    );
-  }
-
   return (
     <section
       className={`
@@ -100,7 +77,6 @@ export default function PochaPage() {
         <PochaHomeTabContent
           activeTab={activeTab}
           pochaID={pochaInfo?.pochaID}
-          setSelectedMenu={setSelectedMenu}
         />
       </div>
     </section>

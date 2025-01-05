@@ -13,20 +13,15 @@ import { memo } from "react";
 interface PochaHomeTabContentProps {
   activeTab: PochaTab;
   pochaID: number | undefined;
-  setSelectedMenu: (menu: MenuItem) => void;
 }
 
-function PochaHomeTabContent({
-  activeTab,
-  pochaID,
-  setSelectedMenu,
-}: PochaHomeTabContentProps) {
+function PochaHomeTabContent({ activeTab, pochaID }: PochaHomeTabContentProps) {
   return (
     <div className="flex flex-col justify-between w-full min-h-screen relative">
       {/* Content Area with Scrollable Section */}
       {activeTab === "menu" ? (
         <>
-          <MenuList setSelectedMenu={setSelectedMenu} pochaid={pochaID} />
+          <MenuList pochaid={pochaID} />
           <ViewCartButton pochaID={pochaID} />
         </>
       ) : activeTab === "orders" ? (

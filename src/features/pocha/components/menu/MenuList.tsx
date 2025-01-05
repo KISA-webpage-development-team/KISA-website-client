@@ -5,7 +5,7 @@
  * - render MenuListItems for each category
  */
 
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 
 import MenuListItem from "./MenuListItem";
 import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
@@ -19,13 +19,13 @@ import useUserAge from "../../hooks/useUserAge";
 import { UserSession } from "@/lib/next-auth/types";
 import { MenuItem } from "@/types/pocha";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import MenuItemDetail from "./MenuItemDetail";
 
 interface MenuListProps {
-  setSelectedMenu: (menu: MenuItem) => void;
   pochaid: number | undefined;
 }
 
-function MenuList({ setSelectedMenu, pochaid }: MenuListProps) {
+function MenuList({ pochaid }: MenuListProps) {
   const { data: session } = useSession() as {
     data: UserSession | null;
     status: string;
@@ -36,6 +36,7 @@ function MenuList({ setSelectedMenu, pochaid }: MenuListProps) {
   // to learn more about SWR, visit https://swr.vercel.app/ko or ask @retz8
   const { menuList, status: menuStatus } = useMenu(pochaid, session?.token);
   const { underAge, status: userStatus } = useUserAge(session);
+  const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null);
 
   if (menuStatus === "loading" || userStatus === "loading") {
     return <LoadingSpinner fullScreen={false} />;
@@ -47,6 +48,18 @@ function MenuList({ setSelectedMenu, pochaid }: MenuListProps) {
 
   if (userStatus === "error") {
     throw new Error("Error fetching user info");
+  }
+
+  // IF menu is selected, show the menu detail
+  if (selectedMenu) {
+    return (
+      <MenuItemDetail
+        session={session}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        pochaid={pochaid}
+      />
+    );
   }
 
   return (

@@ -22,7 +22,7 @@ export default function ViewCartButton({ pochaID }: ViewCartButtonProps) {
   return (
     <div
       className="fixed bottom-0 left-0 w-full flex justify-center bg-transparent
-     pb-5 z-50"
+     pb-5 z-20"
     >
       <PochaButton
         label="View Cart"
