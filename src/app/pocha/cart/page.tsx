@@ -74,16 +74,18 @@ export default function PochaCartPage() {
   useEffect(() => {
     const fetchPochaInfo = async () => {
       // try API call first
-      const res = await getPochaInfo(new Date());
 
-      if ((res as ApiError)?.statusCode) {
-        setPochaIDError(res as ApiError);
-      } else {
+      try {
+        const res = await getPochaInfo(new Date());
         setPochaID((res as PochaInfo)?.pochaID);
+
         // update URL search params with the fetched pochaID
         const params = new URLSearchParams(window.location.search);
         params.set("pochaid", (res as PochaInfo).pochaID.toString());
         window.history.replaceState({}, "", `?${params.toString()}`);
+      } catch (error) {
+        console.error("[PochaCartPage] error while fetching pocha info", error);
+        setPochaIDError(error as ApiError);
       }
     };
 

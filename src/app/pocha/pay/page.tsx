@@ -62,16 +62,18 @@ export default function PayPage() {
   useEffect(() => {
     const fetchPochaInfo = async () => {
       // try API call first
-      const res = await getPochaInfo(new Date());
 
-      if ((res as ApiError)?.statusCode) {
-        setPochaIDError(res as ApiError);
-      } else {
-        setPochaID((res as PochaInfo)?.pochaID);
+      try {
+        const res = await getPochaInfo(new Date());
+        setPochaID(res.pochaID);
+
         // update URL search params with the fetched pochaID
         const params = new URLSearchParams(window.location.search);
-        params.set("pochaid", (res as PochaInfo).pochaID.toString());
+        params.set("pochaid", res.pochaID.toString());
         window.history.replaceState({}, "", `?${params.toString()}`);
+      } catch (error) {
+        console.error("[PochaPayPage] error while fetching pocha info", error);
+        setPochaIDError(error as ApiError);
       }
     };
 
