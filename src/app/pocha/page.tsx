@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   sejongHospitalBold,
   sejongHospitalLight,
@@ -20,14 +19,14 @@ import {
   UnexpectedError,
   OnlyMobileView,
 } from "@/final_refactor_src/components/feedback";
+import PochaCartIcon from "@/final_refactor_src/components/icon/PochaCartIcon";
 
 // hooks
+import { useSearchParams } from "next/navigation";
 import usePocha from "@/features/pocha/hooks/usePocha";
 
 // types
 import { MenuItem, PochaTab } from "@/types/pocha";
-import { useSearchParams } from "next/navigation";
-import PochaCartIcon from "@/final_refactor_src/components/icon/PochaCartIcon";
 
 export default function PochaPage() {
   // "/pocha?tab=menu" [default] or "/pocha?tab=orders"
@@ -98,60 +97,51 @@ export default function PochaPage() {
   }
 
   return (
-    <>
-      <section className="hidden md:block">
-        <OnlyMobileView />
-      </section>
-      <section
-        className={`
+    <section
+      className={`
         md:hidden overflow-y-clip flex-shrink-0
         ${sejongHospitalLight.className} relative w-screen h-[90vh] -translate-x-4 py-2 !gap-0`}
-      >
-        <div>
-          <PochaHeading pochaInfo={pochaInfo} />
-        </div>
-        {/* menu and orders tabs */}
-        <div className="shrink-0">
-          <PochaTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        </div>
+    >
+      <PochaHeading pochaInfo={pochaInfo} />
+      {/* menu and orders tabs */}
+      <PochaTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {/* Listing the menus OR orders */}
-        <div className="flex-1 overflow-y-auto w-full h-full">
-          {activeTab === "menu" ? (
-            <PochaMenuTab
-              setSelectedMenu={setSelectedMenu}
-              pochaid={pochaInfo?.pochaID}
-            />
-          ) : (
-            <PochaOrderTab pochaID={pochaInfo?.pochaID} />
-          )}
-        </div>
+      {/* Listing the menus OR orders */}
+      <div className="flex-1 overflow-y-auto w-full h-full">
+        {activeTab === "menu" ? (
+          <PochaMenuTab
+            setSelectedMenu={setSelectedMenu}
+            pochaid={pochaInfo?.pochaID}
+          />
+        ) : (
+          <PochaOrderTab pochaID={pochaInfo?.pochaID} />
+        )}
+      </div>
 
-        {activeTab === "menu" && (
-          <div
-            className="fixed bottom-0 left-0 right-0 
+      {activeTab === "menu" && (
+        <div
+          className="fixed bottom-0 left-0 right-0 
       
          w-full flex justify-center items-end pb-6 pt-8 mb-6"
-          >
-            <button
-              className={`
+        >
+          <button
+            className={`
           flex w-[70%] h-fit py-4 px-16 mt-8
           rounded-lg text-white font-semibold
           bg-cyan-600 justify-between items-center
           ${sejongHospitalBold.className}
         `}
-              onClick={handleCartClick}
-            >
-              <div className="flex items-center ml-4">
-                <PochaCartIcon />
-              </div>
-              <span className={`mr-4 text-lg ${sejongHospitalBold.className}`}>
-                View Cart
-              </span>
-            </button>
-          </div>
-        )}
-      </section>
-    </>
+            onClick={handleCartClick}
+          >
+            <div className="flex items-center ml-4">
+              <PochaCartIcon />
+            </div>
+            <span className={`mr-4 text-lg ${sejongHospitalBold.className}`}>
+              View Cart
+            </span>
+          </button>
+        </div>
+      )}
+    </section>
   );
 }
