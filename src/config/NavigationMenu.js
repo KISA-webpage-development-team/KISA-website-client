@@ -99,10 +99,6 @@ const menu = [
         name: "취업·진로",
         href: "/everykisa/career",
       },
-      {
-        name: "생활 Q&A",
-        href: "/everykisa/livingqa",
-      },
     ],
   },
 ];
