@@ -15,11 +15,12 @@ import {
  * @route GET /pocha/status-info/?date=${date}
  */
 export async function getPochaInfo(date: Date): Promise<PochaInfo | ApiError> {
-  const fakeDate = new Date("2024-11-17T13:00:00");
+  const fakeDateEST = new Date("2024-11-16T23:00:00");
+  const fakeDateKST = new Date("2024-11-17T13:00:00");
 
   // [TODO] change fakeDate to date
   const url = `/pocha/status-info/?date=${
-    fakeDate.toISOString().split(".")[0]
+    fakeDateEST.toISOString().split(".")[0]
   }`;
   // const url = `/pocha/status-info/?date=${
   //   new Date().toISOString().split(".")[0]
