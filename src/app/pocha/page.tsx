@@ -38,6 +38,8 @@ export default function PochaPage() {
     return <LoadingSpinner />;
   }
 
+  // Error Handling using error.tsx,
+  // just throw the error, and it will be handled by error.tsx
   if (status === "error") {
     throw new Error(error || "Unexpected error occurred");
   }

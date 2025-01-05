@@ -34,7 +34,6 @@ const fetcherWithToken = ([url, token]) =>
 // [NOTE] (24.07.10 ~) 불필요한 api 콜 재시도를 줄이기 위해 재시도 자체를 안하는 옵션을 사용중
 // 이후에 재시도 로직이 필요하다면 아래 Configuration을 사용 및 수정할 것
 const GlobalOnErrorRetry = (error, key, config, revalidate, { retryCount }) => {
-  console.log("errork : ", error);
   // 404에서 재시도 안함
   if (error?.response?.status === 404) return;
 

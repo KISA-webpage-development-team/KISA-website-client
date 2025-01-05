@@ -18,7 +18,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center">
       <UnexpectedError />
       <button
         className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"

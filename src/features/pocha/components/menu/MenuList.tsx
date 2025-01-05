@@ -1,148 +1,82 @@
-import React from "react";
+/*
+ * MenuList
+ * - fetch necessary data for menu list (menuList, underAge)
+ * - process data for MenuListItem
+ * - render MenuListItems for each category
+ */
 
-import Image from "next/image";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
+import React, { memo } from "react";
+
+import MenuListItem from "./MenuListItem";
+import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
+
+// Hooks
+import { useSession } from "next-auth/react";
+import useMenu from "../../hooks/useMenu";
+import useUserAge from "../../hooks/useUserAge";
 
 // Types
-import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import useMenu from "../../hooks/useMenu";
-import PochaCartIcon from "@/final_refactor_src/components/icon/PochaCartIcon";
-import useUserAge from "../../hooks/useUserAge";
 import { MenuItem } from "@/types/pocha";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
 interface MenuListProps {
   setSelectedMenu: (menu: MenuItem) => void;
   pochaid: number | undefined;
 }
 
-export default function MenuList({ setSelectedMenu, pochaid }: MenuListProps) {
-  const { data: session, status: sessionStatus } = useSession() as {
+function MenuList({ setSelectedMenu, pochaid }: MenuListProps) {
+  const { data: session } = useSession() as {
     data: UserSession | null;
     status: string;
   };
 
+  // fetch menu and user age (for under age check)
+  // [NOTE] useMenu and useUserAge uses SWR for better UX
+  // to learn more about SWR, visit https://swr.vercel.app/ko or ask @retz8
   const { menuList, status: menuStatus } = useMenu(pochaid, session?.token);
   const { underAge, status: userStatus } = useUserAge(session);
 
-  const handleMenuItemClick = (selectedMenu) => {
-    setSelectedMenu(selectedMenu);
-  };
+  if (menuStatus === "loading" || userStatus === "loading") {
+    return <LoadingSpinner fullScreen={false} />;
+  }
 
-  const handleCartClick = () => {
-    const queryParams = `pochaid=${pochaid}`;
-    window.location.href = `/pocha/cart?${queryParams}`;
-  };
+  if (menuStatus === "error") {
+    throw new Error("Error fetching menu");
+  }
 
-  const getImagePath = (menuID: number) => {
-    // Just for the bulgogi case. Else, (menuID != 1) condition should be (menuID != null).
-    return menuID != 1
-      ? `/pocha/24_last_pocha/${menuID}.png`
-      : "/pocha/24_last_pocha/image_not_found.png";
-  };
-
-  if (
-    sessionStatus === "loading" ||
-    menuStatus === "loading" ||
-    userStatus === "loading"
-  ) {
-    return <></>;
+  if (userStatus === "error") {
+    throw new Error("Error fetching user info");
   }
 
   return (
-    <div className="relative flex flex-col items-center py-6 w-full">
-      <ul className="flex flex-col gap-6 w-full mb-16">
-        {menuList?.map(({ category, menusList }, categoryIdx) => (
-          <li key={`${category}-${categoryIdx}`}>
-            {/* Category Title */}
-            <span
-              className={`${sejongHospitalBold.className} text-xl text-black`}
-            >
-              {category}
-            </span>
-            {/* List of specific menu items (photo, name, price) */}
-            <ul className="flex flex-col mt-1 divide-y-2 divide-gray-200">
-              {menusList?.map((menu) => {
-                const { menuID, nameEng, nameKor, price, ageCheckRequired } =
-                  menu;
-                const notForUnderAge = ageCheckRequired && underAge;
-
-                return (
-                  <li key={`menu-${menuID}`} className="relative self-stretch">
-                    {notForUnderAge ? (
-                      <div
-                        className="absolute z-50 rounded-lg
-                       bg-slate-500/50 w-full h-full flex justify-center items-center"
-                      >
-                        <span
-                          className={`text-lg text-red-600 ${sejongHospitalBold.className}`}
-                        >
-                          Only for 21+
-                        </span>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-
-                    <button
-                      className="self-stretch flex items-center gap-4 py-4"
-                      onClick={() => handleMenuItemClick(menu)}
-                      disabled={notForUnderAge}
-                    >
-                      {/* [NOTE] added figure tag for semantic html */}
-                      <figure className="relative h-24 aspect-square items-center flex-shrink-0">
-                        <Image
-                          src={getImagePath(menuID)}
-                          alt={nameEng}
-                          priority={categoryIdx === 0}
-                          fill
-                          sizes="(max-width: 768px) 20vw"
-                          className="rounded-[15px] border-gray-300 shadow-md object-cover"
-                        />
-                      </figure>
-
-                      <div className="flex flex-col items-start justify-start">
-                        <div className="flex items-center mb-1">
-                          <span
-                            className={`${sejongHospitalBold.className} text-lg text-black`}
-                          >
-                            {nameKor} {nameEng}
-                          </span>
-                        </div>
-                        <span
-                          className={`${sejongHospitalBold.className} mt-1 text-gray-500`}
-                        >{`$${price}`}</span>
-                      </div>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </li>
-        ))}
-      </ul>
-      {/* <OpenCartButton pochaid={pochaid} /> */}
-      {/* <div className="absolute bottom-0 left-0 w-full flex justify-center pb-4 pt-8">
-        <button
-          className={`
-          w-[70%] flex py-3 mt-8
-          rounded-lg text-white font-semibold
-          bg-cyan-600/90 justify-between items-center
-          ${sejongHospitalBold.className}
-        `}
-          onClick={handleCartClick}
+    <div className="w-full flex flex-col items-center py-5 mb-16 gap-4">
+      {menuList?.map(({ category, menusList }, categoryIdx) => (
+        // menu list by category
+        <div
+          key={`${category}-${categoryIdx}`}
+          className="w-full flex flex-col"
         >
-          <span className={`ml-10 ${sejongHospitalBold.className}`}>
-            View Cart
+          <span
+            className={`${sejongHospitalBold.className} text-xl text-black`}
+          >
+            {category}
           </span>
-          <div className="mr-10">
-            <PochaCartIcon />
-          </div>
-        </button>
-      </div> */}
+          <ul className="mt-1 flex flex-col divide-y-2 divide-gray-200">
+            {menusList.map((menu, menuIdx) => (
+              <MenuListItem
+                key={`${menu.menuID}-${menuIdx}`}
+                menu={menu}
+                underAge={underAge}
+                setSelectedMenu={setSelectedMenu}
+                isPriority={categoryIdx === 0 && menuIdx < 3}
+              />
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 }
+
+export default memo(MenuList);

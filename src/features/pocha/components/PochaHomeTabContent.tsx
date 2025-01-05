@@ -8,6 +8,7 @@ import { MenuItem, PochaTab } from "@/types/pocha";
 import MenuList from "@/features/pocha/components/menu/MenuList";
 import OrderList from "@/features/pocha/components/order/OrderList";
 import ViewCartButton from "./menu/ViewCartButton";
+import { memo } from "react";
 
 interface PochaHomeTabContentProps {
   activeTab: PochaTab;
@@ -15,7 +16,7 @@ interface PochaHomeTabContentProps {
   setSelectedMenu: (menu: MenuItem) => void;
 }
 
-export default function PochaHomeTabContent({
+function PochaHomeTabContent({
   activeTab,
   pochaID,
   setSelectedMenu,
@@ -26,7 +27,7 @@ export default function PochaHomeTabContent({
       {activeTab === "menu" ? (
         <>
           <MenuList setSelectedMenu={setSelectedMenu} pochaid={pochaID} />
-          {pochaID && <ViewCartButton pochaID={pochaID} />}
+          <ViewCartButton pochaID={pochaID} />
         </>
       ) : activeTab === "orders" ? (
         <OrderList pochaID={pochaID} />
@@ -36,3 +37,5 @@ export default function PochaHomeTabContent({
     </div>
   );
 }
+
+export default memo(PochaHomeTabContent);
