@@ -1,6 +1,7 @@
 "use client";
 
 import OnlyMobileView from "@/final_refactor_src/components/feedback/OnlyMobileView";
+import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import { SessionProvider } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
@@ -13,16 +14,17 @@ export default function PochaLayout({ children }) {
     <SessionProvider>
       {/* ✅ /dashboard is tablet view, others are mobile view restrictions applied */}
       {isDashboard ? (
-        <>{children}</>
+        <div className="w-full h-full">{children}</div>
       ) : (
         <>
-          {/* Mobile-only screen */}
+          {/* This message only shows on larger screens */}
           <div className="hidden md:block">
             <OnlyMobileView />
           </div>
-
-          {/* Only render mobile-only content */}
-          <div className="md:hidden bg-yellow-500 h-full w-full">
+          {/* Main content for mobile screens */}
+          <div
+            className={`md:hidden h-full w-full ${sejongHospitalLight.className}`}
+          >
             {children}
           </div>
         </>

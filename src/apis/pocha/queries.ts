@@ -14,7 +14,7 @@ import {
  * @desc Fetch pocha info, if no upcoming pocha -> empty data, if else -> unempty data
  * @route GET /pocha/status-info/?date=${date}
  */
-export async function getPochaInfo(date: Date): Promise<PochaInfo | ApiError> {
+export async function getPochaInfo(date: Date): Promise<PochaInfo> {
   const fakeDateEST = new Date("2024-11-16T23:00:00");
   const fakeDateKST = new Date("2024-11-17T13:00:00");
 
@@ -29,10 +29,9 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo | ApiError> {
 
   try {
     const response = await client.get(url);
-
-    return response?.data;
+    return response.data;
   } catch (error) {
-    return handleApiError(error, "Fetching pocha info");
+    throw new Error("Error fetching pocha information");
   }
 }
 

@@ -13,76 +13,74 @@
 #### ✅ Standard Naming
 
 - **PascalCase** for all component names.
-- Prefix components with `Pocha` only when necessary for clarity.
-- **Examples:**
-  - `PochaTabContent` (Clear project association)
-  - `PochaOrderCard`
-  - `TabSelector` (if it's more generic)
+- Prefix components with `Pocha` only if they are **specific to a particular page** in the Pocha project and not reusable elsewhere.
+- Avoid using the `Pocha` prefix for components where **folder structure already defines the domain clearly**.
 
 #### ✅ When to Use the `Pocha` Prefix
 
-- When the component is **project-specific** or **domain-specific**.
-- Avoid if the component is generic or reusable across different contexts.
-- **Good Example:** `PochaTabSelector` (project-specific)
-- **Avoid:** `Button`, `Modal` (common UI components)
+- **Use `Pocha` Prefix:** For components specific to a single view or page.
+  - ✅ `PochaHeading`, `PochaMainTabs` (Pocha main page specific)
+- **Do Not Use `Pocha` Prefix:** When the folder structure defines the domain clearly.
+  - ✅ `MenuList.tsx` (inside `menu` folder, clearly a menu component)
+  - ✅ `OrderTab.tsx` (inside `order` folder, already specific to order domain)
+
+---
+
+### 📦 **Folder Structure Guidelines**
+
+- **`shared/`** → Common UI components used across the project (e.g., `Button.tsx`, `Modal.tsx`).
+- **Feature-Specific Folders:**
+  - `menu/` → Contains components for menu functionality.
+  - `order/` → Contains components for order management.
+  - `dashboard/` → Dashboard-specific components.
+- **Page-Specific Components:**
+  - `PochaMainTabs.tsx` and `PochaHeading.tsx` belong in their respective feature folders, as they are specific to the Pocha main page.
 
 ---
 
 ### 🛠️ **Variable Naming Rules**
 
-- Use **camelCase** for all variables and function names.
-- **Boolean Variables:** Should start with `is`, `has`, or `can`.
+- Use **camelCase** for variables and function names.
+- **Boolean Variables:** Use `is`, `has`, or `can` as a prefix.
   - ✅ `isLoading`, `hasError`, `canSubmit`
-- **Descriptive Naming:** Avoid generic names like `data`, `info`.
-  - ✅ `userOrders`, `pochaMenuItems`
 
 ---
 
 ### 📡 **Hook Naming Rules**
 
-- **Prefix with `use`** for all React Hooks.
-- Ensure the name clearly describes the purpose.
+- Prefix all custom React hooks with `use`.
   - ✅ `usePochaOrders`, `useFetchMenu`
 
 ---
 
 ### 📑 **File & Folder Naming Rules**
 
-- **Folder Structure:** Group related components together based on feature scope.
-- **File Naming:** Use **PascalCase** for files (`PochaMenuDetail.tsx`).
-- **Feature Separation:**
-  - `pocha/components/`
-  - `pocha/hooks/`
-  - `pocha/types/`
+- **Folder Structure:** Group components by feature scope.
+- **File Naming:** Use **PascalCase** for all file names.
+- **File Scope Clarity:** Avoid redundant naming if the folder already clarifies the domain.
 
 ---
 
 ### 🔧 **Function Naming Rules**
 
 - **Action-Oriented:** Use verbs for functions performing actions.
-- **Examples:**
-  - ✅ `fetchPochaOrders`, `handleMenuClick`
-- Avoid ambiguous names like `doSomething`.
-
----
-
-### 📊 **State Naming Rules (useState, useReducer)**
-
-- Use `[noun, setNoun]` for state variables.
-- Use descriptive names for complex state.
-  - ✅ `activeTab`, `setActiveTab`
+- ✅ `fetchPochaOrders`, `handleMenuClick`
 
 ---
 
 ### ✅ **Best Practices Summary:**
 
-1. **Use the `Pocha` prefix for project-specific components.**
-2. **Avoid generic naming when context is important.**
-3. **Maintain clarity and consistency across the entire codebase.**
+1. **Use the `Pocha` prefix only for page-specific components.**
+2. **Avoid redundant naming when folder structure provides enough context.**
+3. **Ensure consistency across the entire codebase.**
 
 ---
 
 ### 📌 **Review Process:**
 
-- Ensure all PRs adhere to the naming convention.
-- Use this guide as part of the **code review checklist**.
+- Ensure all PRs adhere to this naming convention.
+- Use this guide during code reviews.
+
+---
+
+✅ **This guide ensures code clarity, consistency, and maintainability for the entire Pocha project.**
