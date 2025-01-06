@@ -5,12 +5,13 @@ import {
 } from "@/utils/fonts/textFonts";
 import Image from "next/image";
 import { RxCross2 } from "react-icons/rx";
-import { CartItem } from "@/types/pocha";
+import { CartItem, MenuItem, MenuItemWithQuantity } from "@/types/pocha";
 import { useEffect, useState } from "react";
 import { changeItemInCart } from "@/apis/pocha/mutations";
 import MinusIcon from "@/final_refactor_src/components/icon/MinusIcon";
 import PlusIcon from "@/final_refactor_src/components/icon/PlusIcon";
 import CrossIcon from "@/final_refactor_src/components/icon/CrossIcon";
+import { debounce } from "lodash";
 
 type CartListItemProps = {
   item: CartItem;
@@ -35,25 +36,38 @@ export default function CartListItem({
       : "/pocha/24_last_pocha/image_not_found.png";
   };
 
+  // update item's quantity in UI (optimistic UI)
+  const updateQuantityUI = (newQuantity: number) => {
+    setQuantity((prev) => prev + newQuantity);
+  };
+
+  // debounce quantity change (actual API call)
+  // [NOTE] what is debounce? https://velog.io/@ansrjsdn/Debounce%EB%9E%80
+  // or ask @retz8
+  const debouncedUpdateQuantity = debounce(
+    async (
+      email: string,
+      pochaid: number,
+      newMenuItem: MenuItemWithQuantity
+    ) => {
+      try {
+        await changeItemInCart(email, pochaid, newMenuItem);
+      } catch (error) {
+        throw error;
+      }
+    },
+    1000
+  ); // delay 1000ms before calling the API
+
   const handleQuantityChange = async (newQuantity: number) => {
-    const body = {
+    updateQuantityUI(newQuantity);
+
+    const newMenuItem: MenuItemWithQuantity = {
       menuID: menuid,
       quantity: newQuantity,
     };
 
-    try {
-      const res = await changeItemInCart(email, pochaid, body);
-
-      // if (!res) {
-      //   console.error("Error updating cart item quantity");
-      //   return;
-      // }
-
-      setCartItemStale(true);
-      setQuantity(quantity + newQuantity);
-    } catch (error) {
-      console.error("Error", error);
-    }
+    debouncedUpdateQuantity(email, pochaid, newMenuItem);
   };
 
   const incrementQuantity = () => {
@@ -92,7 +106,7 @@ export default function CartListItem({
           {item?.menu?.nameKor} {item?.menu?.nameEng}
         </span>
         <span className={`${sejongHospitalBold.className} text-gray-500`}>
-          ${(item?.menu?.price * item?.quantity).toFixed(2)}
+          ${(item?.menu?.price * quantity).toFixed(2)}
         </span>
       </div>
 

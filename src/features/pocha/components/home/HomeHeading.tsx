@@ -2,11 +2,11 @@ import React from "react";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { PochaInfo } from "@/types/pocha";
 
-interface PochaHeadingProps {
+interface HomeHeadingProps {
   pochaInfo: PochaInfo;
 }
 
-export default function PochaHeading({ pochaInfo }: PochaHeadingProps) {
+export default function HomeHeading({ pochaInfo }: HomeHeadingProps) {
   return (
     <div
       className="flex flex-col items-center px-4 pt-2 gap-2"

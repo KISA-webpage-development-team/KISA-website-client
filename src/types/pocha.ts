@@ -24,12 +24,17 @@ interface MenuItem {
   ageCheckRequired: boolean;
 }
 
+interface MenuItemWithQuantity {
+  menuID: number;
+  quantity: number;
+}
+
 interface MenuByCategory {
   category: string;
   menusList: MenuItem[];
 }
 
-export type { MenuItem, MenuByCategory };
+export type { MenuItem, MenuByCategory, MenuItemWithQuantity };
 
 // CART -----------------------------------------------------------------------
 interface CartItem {

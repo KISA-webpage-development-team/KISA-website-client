@@ -3,8 +3,10 @@
 import React, { useState } from "react";
 
 // ui components
-import PochaHeading from "@/features/pocha/components/PochaHeading";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import HomeHeading from "@/features/pocha/components/home/HomeHeading";
+import HomeTabs from "@/features/pocha/components/home/HomeTabs";
+import HomeTabContent from "@/features/pocha/components/home/HomeTabContent";
 
 // hooks
 import { useSearchParams } from "next/navigation";
@@ -12,8 +14,6 @@ import usePocha from "@/features/pocha/hooks/usePocha";
 
 // types
 import { PochaTab } from "@/types/pocha";
-import PochaHomeTabs from "@/features/pocha/components/PochaHomeTabs";
-import PochaHomeTabContent from "@/features/pocha/components/PochaHomeTabContent";
 
 export default function PochaPage() {
   // "/pocha?tab=menu" [default] or "/pocha?tab=orders"
@@ -51,7 +51,7 @@ export default function PochaPage() {
     return (
       <section className="flex justify-center items-center h-full">
         <p className="text-3xl font-bold">Upcoming pocha</p>
-        <PochaHeading pochaInfo={pochaInfo} />
+        <HomeHeading pochaInfo={pochaInfo} />
       </section>
     );
   }
@@ -64,20 +64,17 @@ export default function PochaPage() {
     >
       {/* PochaHeading (at the top, disappear when scrolling) */}
       <div className="relative z-40 flex-shrink-0">
-        <PochaHeading pochaInfo={pochaInfo} />
+        <HomeHeading pochaInfo={pochaInfo} />
       </div>
 
       {/* Sticky Tabs (fixed at the top) */}
       <div className="sticky top-0 z-50 bg-white flex-shrink-0">
-        <PochaHomeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <HomeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
       {/* Main Content Area (scrollable) */}
       <div className="flex-1 overflow-y-auto">
-        <PochaHomeTabContent
-          activeTab={activeTab}
-          pochaID={pochaInfo?.pochaID}
-        />
+        <HomeTabContent activeTab={activeTab} pochaID={pochaInfo?.pochaID} />
       </div>
     </section>
   );

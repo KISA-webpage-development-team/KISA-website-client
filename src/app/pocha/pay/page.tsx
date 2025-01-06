@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { Cart, PochaInfo } from "@/types/pocha";
-import PaymentSubmitForm from "@/features/pocha/components/pay-cart/PaymentSubmitForm";
+import PaymentSubmitForm from "@/features/pocha/components/cart-pay/PaymentSubmitForm";
 
 // Stripe
 import { Elements } from "@stripe/react-stripe-js"; // stripe payment element

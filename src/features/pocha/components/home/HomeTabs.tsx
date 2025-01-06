@@ -1,5 +1,5 @@
 /**
- * PochaHomeTabs
+ * HomeTabs
  * - render Tabs UI for Pocha Home Page
  * - handle tab change logic
  */
@@ -11,17 +11,14 @@ import {
 } from "@/utils/fonts/textFonts";
 // types
 import { PochaTab } from "@/types/pocha";
-import { updateURLWithTab } from "../utils/updateURL";
+import { updateURLWithTab } from "../../utils/updateURL";
 
-type PochaHomeTabsProps = {
+type HomeTabsProps = {
   activeTab: PochaTab;
   setActiveTab: (tab: PochaTab) => void;
 };
 
-export default function PochaHomeTabs({
-  activeTab,
-  setActiveTab,
-}: PochaHomeTabsProps) {
+export default function HomeTabs({ activeTab, setActiveTab }: HomeTabsProps) {
   const handleTabChange = (selectedTab: PochaTab) => {
     updateURLWithTab(selectedTab);
     setActiveTab(selectedTab);
