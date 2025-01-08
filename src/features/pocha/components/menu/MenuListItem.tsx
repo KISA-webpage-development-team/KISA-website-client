@@ -24,7 +24,7 @@ const AGE_RESTRICTION_MESSAGE = "Only for 21+";
 function AgeRestrictionOverlay() {
   return (
     <div
-      className="absolute z-50 rounded-lg bg-slate-500/50 w-full h-full 
+      className="absolute z-20 rounded-lg bg-slate-500/50 w-full h-full 
       flex justify-center items-center"
     >
       <span className={`text-lg text-red-600 ${sejongHospitalBold.className}`}>
@@ -70,7 +70,10 @@ export default function MenuListItem({
         </figure>
 
         {/* Menu Info */}
-        <div className="flex flex-col items-start justify-start text-lg leading-[150%]">
+        <div
+          className="flex flex-col items-start justify-center 
+        text-left text-lg leading-[150%]"
+        >
           <span className={`${sejongHospitalBold.className} text-black`}>
             {nameKor} {nameEng}
           </span>
