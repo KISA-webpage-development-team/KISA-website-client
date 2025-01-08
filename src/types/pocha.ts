@@ -8,8 +8,9 @@ interface PochaInfo {
 }
 
 type PochaTab = "menu" | "orders";
+type PochaDashboardTab = "orders" | "stock" | "history";
 
-export type { PochaInfo, PochaTab };
+export type { PochaInfo, PochaTab, PochaDashboardTab };
 
 // MENU -----------------------------------------------------------------------
 
@@ -24,12 +25,17 @@ interface MenuItem {
   ageCheckRequired: boolean;
 }
 
+interface MenuItemWithQuantity {
+  menuID: number;
+  quantity: number;
+}
+
 interface MenuByCategory {
   category: string;
   menusList: MenuItem[];
 }
 
-export type { MenuItem, MenuByCategory };
+export type { MenuItem, MenuByCategory, MenuItemWithQuantity };
 
 // CART -----------------------------------------------------------------------
 interface CartItem {

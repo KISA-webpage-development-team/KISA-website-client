@@ -10,6 +10,7 @@ import {
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useState } from "react";
+import PochaButton from "@/features/pocha/components/shared/PochaButton";
 
 export default function PaySuccessPage() {
   const router = useRouter();
@@ -62,48 +63,40 @@ export default function PaySuccessPage() {
   }
 
   return (
-    <div className="">
-      <div className="flex flex-col justify-center items-center h-screen">
-        <div className="flex flex-col items-center gap-14">
-          <div
-            className={`${sejongHospitalBold.className} text-center text-black text-[30px]`}
-          >
-            결제가 완료되었습니다
-          </div>
-          <div>
-            <Image
-              src={`/images/check_circle.png`}
-              alt="Success Icon"
-              width={250}
-              height={250}
-            />
-          </div>
-          <div className="flex flex-col items-center gap-4">
-            <button
-              className={`w-[297px] h-[55px] rounded-lg text-white text-lg ${
-                menuClicked ? "bg-blue-900" : "bg-cyan-600"
-              }
-               justify-between items-center
-                ${sejongHospitalBold.className}
-              `}
-              onClick={directToOrders}
-            >
-              주문 내역 보기
-            </button>
-            <button
-              className={`w-[297px] h-[55px] rounded-lg text-white text-lg ${
-                homeClicked ? "bg-blue-900" : "bg-cyan-600"
-              }
-               justify-between items-center
-                ${sejongHospitalBold.className}
-              `}
-              onClick={directToMenuList}
-            >
-              홈으로 돌아가기
-            </button>
-          </div>
-        </div>
+    <section
+      className="flex flex-col justify-center items-center h-full
+    gap-6"
+    >
+      <span
+        className={`${sejongHospitalBold.className} text-center text-black text-2xl`}
+      >
+        결제가 완료되었습니다
+      </span>
+      <figure
+        className="relative w-[12rem] h-[12rem] 
+      flex justify-center items-center flex-shrink-0"
+      >
+        <Image
+          src={`/images/check_circle.png`}
+          alt="Success Icon"
+          fill
+          sizes="12rem"
+          className="object-contain"
+        />
+      </figure>
+      <div className="flex flex-col items-center gap-4 w-full">
+        <PochaButton
+          label="주문 내역 보기"
+          onClick={directToOrders}
+          widthPercentage={85}
+        />
+
+        <PochaButton
+          label="홈으로 돌아가기"
+          onClick={directToMenuList}
+          widthPercentage={85}
+        />
       </div>
-    </div>
+    </section>
   );
 }

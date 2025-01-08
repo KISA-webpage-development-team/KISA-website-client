@@ -1,42 +1,23 @@
-import {
-  getUserClosedOrders,
-  getPochaClosedOrders,
-} from "@/apis/pocha/queries";
-import { OrderHistory, OrderItem, Orders } from "@/types/pocha";
+import { getPochaClosedOrders } from "@/apis/pocha/queries";
+import { OrderHistory } from "@/types/pocha";
 import { useEffect, useState } from "react";
 
 /**
  * @desc hook to fetch user orders (getUserOrders)
  * @params email, token, pochaID
  */
-const useOrderHistory = (email: string, token: string, pochaID: number) => {
+const useOrderHistory = (token: string, pochaID: number) => {
   const [orderHistory, setOrderHistory] = useState<OrderHistory>();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
   // fetch orders
   useEffect(() => {
-    // app
-    const fetchUserOrders = async () => {
-      try {
-        const res = await getUserClosedOrders(email, pochaID, token);
-        // const res = await getUserClosedOrdersMock(email, pochaID, token);
-
-        setOrderHistory(res);
-        setStatus("success");
-      } catch (error) {
-        console.error("Error fetching orders: ", error);
-        setStatus("error");
-      }
-    };
-
-    // dashboard
-    const fetchAllOrders = async () => {
+    const fetchPochaClosedOrders = async () => {
       try {
         const res = await getPochaClosedOrders(pochaID, token);
-        // const res = await getPochaClosedOrdersMock(pochaID, token);
 
-        setOrderHistory(res);
+        setOrderHistory({ ...res, closed: res.closed.reverse() });
         setStatus("success");
       } catch (error) {
         console.error("Error fetching orders: ", error);
@@ -45,13 +26,9 @@ const useOrderHistory = (email: string, token: string, pochaID: number) => {
     };
 
     if (pochaID && token) {
-      if (email === "*") {
-        fetchAllOrders();
-      } else {
-        fetchUserOrders();
-      }
+      fetchPochaClosedOrders();
     }
-  }, [email, pochaID, token]);
+  }, [pochaID, token]);
 
   return {
     orderHistory: orderHistory?.closed,

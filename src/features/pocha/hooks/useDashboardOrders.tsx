@@ -96,7 +96,7 @@ const usePochaOrdersMap = (pochaID: number, token: string) => {
   @param token: string
   @return { immediatePrepOrders, notImmediatePrepOrders, addNewOrderItem, updateOrderItemStatusUI, status }
 */
-const useDashboard = (pochaID: number, token: string) => {
+const useDashboardOrders = (pochaID: number, token: string) => {
   const { ordersMap, status, setOrdersMap, setStatus } = usePochaOrdersMap(
     pochaID,
     token
@@ -155,4 +155,4 @@ const useDashboard = (pochaID: number, token: string) => {
   };
 };
 
-export default useDashboard;
+export default useDashboardOrders;

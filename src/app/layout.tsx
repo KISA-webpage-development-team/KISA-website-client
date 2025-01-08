@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html className={globalFont.className} lang="en">
       {/* <SessionProvider session={session}> */}
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col">
         {/* template.js : header + main */}
         <div className="flex-1 flex flex-col w-full">{children}</div>
 
