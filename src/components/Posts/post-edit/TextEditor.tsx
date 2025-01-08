@@ -45,7 +45,7 @@ export default function TextEditor({ text, setText }: TextEditorProps) {
     quill.root.innerHTML = textRef.current;
 
     quill.on("text-change", () => {
-      const content = quill.root.innerHTML;
+      // const content = quill.root.innerHTML;
       setTextRef.current(content);
     });
 
