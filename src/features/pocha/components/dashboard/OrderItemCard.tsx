@@ -10,21 +10,20 @@ interface OrderItemCardProps {
   updateOrderItemStatusUI: (orderItemID: number) => void;
 }
 
-// orderItemID
-// status
-// quantity
-// menuNameKor
-// name (for now, hard code)
+// orderItemID: number;
+// status: OrderStatus;
+// menu: MenuItem;
+// quantity: number;
+// ordererName: string;
+// ordererEmail: string;
 
 export default function OrderItemCard({
   isDrink = false, // this is a temporary solution, need to refactor later
   order,
   updateOrderItemStatusUI,
 }: OrderItemCardProps) {
-  const { orderItemID, status, quantity, menu } = order;
+  const { orderItemID, status, quantity, menu, ordererName } = order;
   const { nameKor } = menu;
-
-  const fakeName = "인지오";
 
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(false);
@@ -70,7 +69,7 @@ export default function OrderItemCard({
           </span>
         </div>
         <span className="text-lg">
-          Customer: <strong>{fakeName}</strong>
+          Customer: <strong>{ordererName}</strong>
         </span>
         <div className="flex justify-between w-full">
           <div

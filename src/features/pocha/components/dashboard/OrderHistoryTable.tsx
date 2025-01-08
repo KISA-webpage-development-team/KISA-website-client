@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { OrderItem } from "@/types/pocha";
+
 import useOrderHistory from "../../hooks/useOrderHistory";
+import { usePochaMenu } from "@/apis/pocha/swrHooks";
 import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
 import { calculateStripeTotalPrice } from "../../utils/calculateStripeFee";
 
 interface OrderHistoryTableProps {
   token: string;
   pochaID: number;
+  order: OrderItem;
 }
 
 type FilterOption = "all" | "food" | "drink";
@@ -13,12 +17,12 @@ type FilterOption = "all" | "food" | "drink";
 export default function OrderHistoryTable({
   token,
   pochaID,
+  order,
 }: OrderHistoryTableProps) {
   const { orderHistory, status } = useOrderHistory(token, pochaID);
-  const [filter, setFilter] = useState<FilterOption>("all");
+  const { ordererName, ordererEmail } = order;
 
-  const fakeName = "인지오";
-  const fakeEmail = "jiohin@umich.edu";
+  const [filter, setFilter] = useState<FilterOption>("all");
 
   const filteredOrderHistory = orderHistory?.filter(({ menu }) => {
     if (filter === "all") return true;
@@ -168,10 +172,10 @@ export default function OrderHistoryTable({
                     ${calculateStripeTotalPrice(menu.price).toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                    {fakeName}
+                    {ordererName}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                    {fakeEmail}
+                    {ordererEmail}
                   </td>
                 </tr>
               )

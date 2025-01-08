@@ -73,6 +73,8 @@ interface OrderItem {
   status: OrderStatus;
   menu: MenuItem;
   quantity: number;
+  ordererName: string;
+  ordererEmail: string;
 }
 
 interface Orders {

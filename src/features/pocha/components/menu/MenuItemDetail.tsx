@@ -27,13 +27,14 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { changeItemInCart } from "@/apis/pocha/mutations";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import BackIcon from "@/final_refactor_src/components/icon/BackIcon";
+import PochaBackIcon from "@/final_refactor_src/components/icon/PochaBackIcon";
+import PochaButton from "../shared/PochaButton";
 
 // Types
 import { MenuItem } from "@/types/pocha";
 import { UserSession } from "@/lib/next-auth/types";
-import PlusIcon from "@/final_refactor_src/components/icon/PlusIcon";
-import MinusIcon from "@/final_refactor_src/components/icon/MinusIcon";
+import PochaMenuPlusIcon from "@/final_refactor_src/components/icon/PochaMenuPlusIcon";
+import PochaMenuMinusIcon from "@/final_refactor_src/components/icon/PochaMenuMinusIcon";
 import PochaErrorMsg from "../shared/PochaErrorMsg";
 import { getMenuImagePath } from "../../utils/getImagePath";
 
@@ -128,8 +129,7 @@ export default function MenuItemDetail({
     >
       <div className="top-0 left-0 w-full bg-white shadow-md z-10 flex items-center py-4">
         <button className="flex ml-4 z-50 w-full" onClick={handleBackButton}>
-          {/* @dkim1112 버튼 아이콘 변경, react icons 참고하고 PochaBackIcon 컴포넌트 만들어서 사용하기 */}
-          <BackIcon />
+          <PochaBackIcon size="large" />
         </button>
       </div>
 
@@ -188,13 +188,12 @@ export default function MenuItemDetail({
             {/* Quantity Controls */}
             <div className="flex items-center gap-7 ml-auto">
               {/* Decrement Button */}
-              {/* @dkim1112 플러스랑 마이너스 버튼 아이콘으로 대체, button은 그냥 기능적으로 감싸기만 하고, 동그란 디자인 넣지 마셈, 아이콘 자체가 동그라미 안에 기호가 있어야함 */}
               <button
-                className="text-lg w-8 h-8 rounded-full flex justify-center items-center border border-gray-600"
+                className="flex justify-center items-center"
                 onClick={decrementQuantity}
                 disabled={quantity === 1}
               >
-                <MinusIcon size="small" />
+                <PochaMenuMinusIcon size="extra-large" />
               </button>
 
               {/* Quantity Display */}
@@ -210,10 +209,10 @@ export default function MenuItemDetail({
 
               {/* Increment Button */}
               <button
-                className="text-lg w-8 h-8 rounded-full flex justify-center items-center border border-gray-600"
+                className="flex justify-center items-center"
                 onClick={incrementQuantity}
               >
-                <PlusIcon size="small" />
+                <PochaMenuPlusIcon size="extra-large" />
               </button>
             </div>
           </div>
@@ -221,17 +220,17 @@ export default function MenuItemDetail({
           {/* Error Message */}
           {error !== null && <PochaErrorMsg message={error} />}
 
-          {/* @dkim1112 ViewCartButton이 현재 어떻게 구현되어있는지 확인해보셈. 비슷하게 AddToCartButton을 만드셈 */}
-          <button
+          <div
             className={`
-           py-3 rounded-lg text-white font-semibold bg-cyan-600 
-           justify-center items-center w-full
+            w-full
            ${sejongHospitalBold.className}`}
-            onClick={handleAddToCart}
-            disabled={addingToCart}
           >
-            {addingToCart ? "Adding to Cart..." : "Add to Cart"}
-          </button>
+            <PochaButton
+              label={addingToCart ? "Adding to Cart..." : "Add to Cart"}
+              onClick={handleAddToCart}
+              widthPercentage={100}
+            />
+          </div>
         </div>
       </div>
     </div>
