@@ -7,7 +7,7 @@ import PaymentSubmitForm from "@/features/pocha/components/pay/PaymentSubmitForm
 
 // Stripe
 import { Elements } from "@stripe/react-stripe-js"; // stripe payment element
-import { loadStripe } from "@stripe/stripe-js";
+import stripePromise from "@/lib/stripe/stripeClient";
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 
 import { useRouter } from "next/navigation";
@@ -16,15 +16,7 @@ import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import PochaBackHeading from "@/features/pocha/components/shared/PochaBackHeading";
 import PochaHorizontalDivider from "@/features/pocha/components/shared/PochaHorizontalDivider";
-
-// defensive programming check
-if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
-  throw new Error("Stripe publishable key is not set");
-}
-
-// load Stripe object to manage stripe-related operations throughout the app
-// this should be loaded once, not every time the component is rendered to prevent recreating the object
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+import useUserAge from "@/features/pocha/hooks/useUserAge";
 
 export default function PayPage() {
   const { data: session, status: sessionStatus } = useSession() as {
@@ -39,32 +31,28 @@ export default function PayPage() {
   const {
     amount,
     fee,
-    tip,
-    setTip,
     totalPrice,
     ageCheckRequired,
     status: payReadyStatus,
   } = usePay(session?.user?.email, session?.token, pochaID);
 
-  if (
+  const { underAge, status: userAgeStatus, fullname } = useUserAge(session);
+
+  const isLoading =
     sessionStatus === "loading" ||
     pochaIDStatus === "loading" ||
-    payReadyStatus === "loading"
-  ) {
-    return <LoadingSpinner />;
-  }
+    payReadyStatus === "loading" ||
+    userAgeStatus === "loading";
+  const hasError =
+    pochaIDStatus === "error" ||
+    payReadyStatus === "error" ||
+    userAgeStatus === "error" ||
+    !totalPrice;
 
-  if (pochaIDStatus === "error") {
-    throw new Error(pochaIDError || "Unexpected error occurred");
-  }
-
-  if (payReadyStatus === "error" || !totalPrice) {
-    // [IMPORTANT]
-    // this will occur mostly from back button behavior
-    // from API, if the cart is empty (already paid or no items)
-
-    // redirect to /pocha
+  if (isLoading) return <LoadingSpinner />;
+  if (hasError) {
     router.push("/pocha");
+    return null;
   }
 
   return (
@@ -84,10 +72,11 @@ export default function PayPage() {
           amount={amount}
           fee={fee}
           totalPrice={totalPrice}
-          tip={tip}
-          setTip={setTip}
           pochaID={pochaID}
           ageCheckRequired={ageCheckRequired}
+          userEmail={session?.user?.email}
+          underAge={underAge}
+          fullname={fullname}
         />
       </Elements>
     </section>

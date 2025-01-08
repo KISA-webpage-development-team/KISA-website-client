@@ -4,9 +4,10 @@ import React from "react";
 interface PochaButtonProps {
   label: string;
   icon?: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   widthPercentage?: number;
+  type?: "button" | "submit" | "reset";
 }
 
 export default function PochaButton({
@@ -15,6 +16,7 @@ export default function PochaButton({
   onClick,
   disabled = false,
   widthPercentage = 100,
+  type = "button",
 }: PochaButtonProps) {
   return (
     <button
