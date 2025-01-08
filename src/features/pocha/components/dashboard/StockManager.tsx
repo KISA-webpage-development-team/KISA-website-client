@@ -23,11 +23,18 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
     setSelectedMenu(menuID);
   };
 
-  const handleSetStock = async (quantity: number | null) => {
+  const handleSetStock = async (quantity: number) => {
     if (selectedMenu === null) return;
 
-    if (quantity === null) {
-      alert("Please enter a valid number");
+    if (quantity < 0 || customStock === "") {
+      alert("Please type a valid number");
+      setCustomStock("");
+      return;
+    }
+
+    if (isNaN(quantity)) {
+      alert("Please type a valid number");
+      setCustomStock("");
       return;
     }
 
@@ -95,6 +102,8 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
         </button>
         <input
           type="number"
+          min="0"
+          pattern="[0-9]+"
           value={customStock}
           onChange={(e) => setCustomStock(e.target.value)}
           className="px-4 py-2 border"
