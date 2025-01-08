@@ -1,24 +1,18 @@
 "use client";
 
 import React from "react";
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import { Cart, PochaInfo } from "@/types/pocha";
-import PaymentSubmitForm from "@/features/pocha/components/cart-pay/PaymentSubmitForm";
+import PaymentSubmitForm from "@/features/pocha/components/pay/PaymentSubmitForm";
 
 // Stripe
 import { Elements } from "@stripe/react-stripe-js"; // stripe payment element
 import { loadStripe } from "@stripe/stripe-js";
 import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { getPochaInfo } from "@/apis/pocha/queries";
+import { useRouter } from "next/navigation";
 import usePay from "@/features/pocha/hooks/usePay";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
-import BackIcon from "@/final_refactor_src/components/icon/BackIcon";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { ApiError } from "@/lib/axios/types";
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import PochaBackHeading from "@/features/pocha/components/shared/PochaBackHeading";
 import PochaHorizontalDivider from "@/features/pocha/components/shared/PochaHorizontalDivider";
