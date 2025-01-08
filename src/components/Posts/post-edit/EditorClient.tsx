@@ -87,24 +87,6 @@ export default function EditorClient({
     }
   }, [curPostId]);
 
-  // form states for announcement board
-  const [announcementTag, setAnnouncementTag] = useState<string>("");
-  const [customTag, setCustomTag] = useState<string>("");
-  // set initial tags
-  useEffect(() => {
-    const setInitialTag = () => {
-      if (mode === "create") return "";
-      const tag = title.startsWith("[") ? title.split("]")[0].slice(1) : "";
-
-      if (getKoreanBoardType(tag) === "none") {
-        setCustomTag(tag);
-      } else {
-        setAnnouncementTag(getKoreanBoardType(tag));
-      }
-    };
-    setInitialTag();
-  }, [title, mode]);
-
   // submit button state
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(true);
 
@@ -148,9 +130,7 @@ export default function EditorClient({
   return (
     <div className="flex flex-col h-full gap-4">
       <TitleInput title={title} setTitle={setTitle} />
-      {isAdmin !== null && (
-        <TextEditor isAdmin={isAdmin} text={text} setText={setText} />
-      )}
+      <TextEditor text={text} setText={setText} />
 
       <div
         className={`flex
@@ -169,10 +149,6 @@ export default function EditorClient({
               isBoardAnnouncement={isAnnouncementBoard(boardType)}
               isAnnouncement={isAnnouncement}
               setIsAnnouncement={setIsAnnouncement}
-              announcementTag={announcementTag}
-              setAnnouncementTag={setAnnouncementTag}
-              customTag={customTag}
-              setCustomTag={setCustomTag}
             />
           )}
           {/* If isEveryKisa, show anonymous checkbox options */}
@@ -208,17 +184,11 @@ export default function EditorClient({
             mode === "create"
               ? {
                   type: boardType,
-                  title:
-                    boardType !== "announcement"
-                      ? `${title}`
-                      : announcementTag === ""
-                      ? `[${customTag}] ${title}`
-                      : `[${getEnglishBoardType(announcementTag)}] ${title}`,
+                  title: title,
                   fullname: session?.user.name,
                   email: session?.user.email,
                   text: text,
                   isAnnouncement,
-                  tag: announcementTag === "" ? customTag : announcementTag,
                   anonymous: isEveryKisa
                     ? anonymousValue === "anonymous"
                     : false,
@@ -227,15 +197,9 @@ export default function EditorClient({
               : // when updating a post
                 {
                   type: boardType,
-                  title:
-                    boardType !== "announcement"
-                      ? `${title}`
-                      : announcementTag === ""
-                      ? `[${customTag}] ${title}`
-                      : `[${getEnglishBoardType(announcementTag)}] ${title}`,
+                  title: title,
                   text: text,
                   isAnnouncement,
-                  tag: announcementTag === "" ? customTag : announcementTag,
                   // when updating a post, anonymous status should be the same as the original post
                 }
           }

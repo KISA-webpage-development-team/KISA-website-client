@@ -29,7 +29,6 @@ interface NewPostBody {
   email: string;
   text: string;
   isAnnouncement: boolean;
-  tag: string;
   anonymous: boolean;
   readCount: number;
 }
@@ -39,7 +38,6 @@ interface UpdatePostBody {
   title: string;
   text: string;
   isAnnouncement: boolean;
-  tag: string;
 }
 
 // TODO: UserBoardPost -> SimplePost로 통일 (getBoardPosts와 동일한 리턴 타입을 가져야함)
