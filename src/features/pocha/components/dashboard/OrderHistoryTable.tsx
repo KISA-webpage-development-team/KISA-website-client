@@ -9,7 +9,6 @@ import { calculateStripeTotalPrice } from "../../utils/calculateStripeFee";
 interface OrderHistoryTableProps {
   token: string;
   pochaID: number;
-  order: OrderItem;
 }
 
 type FilterOption = "all" | "food" | "drink";
@@ -17,10 +16,8 @@ type FilterOption = "all" | "food" | "drink";
 export default function OrderHistoryTable({
   token,
   pochaID,
-  order,
 }: OrderHistoryTableProps) {
   const { orderHistory, status } = useOrderHistory(token, pochaID);
-  const { ordererName, ordererEmail } = order;
 
   const [filter, setFilter] = useState<FilterOption>("all");
 
@@ -86,6 +83,10 @@ export default function OrderHistoryTable({
 
   if (status === "error") {
     throw new Error("Error fetching order history");
+  }
+
+  if (!filteredOrderHistory) {
+    return <div>No order history found</div>;
   }
 
   return (
@@ -154,7 +155,10 @@ export default function OrderHistoryTable({
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredOrderHistory?.map(
-              ({ orderItemID, menu, quantity }, index) => (
+              (
+                { orderItemID, menu, quantity, ordererName, ordererEmail },
+                index
+              ) => (
                 <tr key={`${orderItemID}-${index}`} className="text-center">
                   <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                     #{orderItemID}

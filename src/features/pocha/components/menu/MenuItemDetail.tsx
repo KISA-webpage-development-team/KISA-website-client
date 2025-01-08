@@ -171,12 +171,12 @@ export default function MenuItemDetail({
           </span>
 
           {/* [TODO] temporarily put in a value. */}
-          <div className="w-full bg-[#F9FAFB] px-8 py-6 rounded-lg shadow-sm text-base">
+          {/* <div className="w-full bg-[#F9FAFB] px-8 py-6 rounded-lg shadow-sm text-base">
             <p className="text-black">Comes with:</p>
             <ul className="list-disc list-inside text-gray-500">
               <li>Jioh</li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Quantity Selector */}
           <div className="flex items-center w-full bg-[#F9FAFB] py-3 px-5 rounded-lg shadow-sm">
@@ -220,6 +220,7 @@ export default function MenuItemDetail({
           {/* Error Message */}
           {error !== null && <PochaErrorMsg message={error} />}
 
+          {/* Add to Cart Button */}
           <div
             className={`
             w-full

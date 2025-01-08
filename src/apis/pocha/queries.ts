@@ -211,8 +211,6 @@ export async function getPayInfo(
       },
     });
 
-    console.log("response: ", response?.data);
-
     return response?.data;
   } catch (error) {
     console.log(error);
