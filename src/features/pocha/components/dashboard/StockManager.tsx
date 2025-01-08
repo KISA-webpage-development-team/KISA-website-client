@@ -23,8 +23,13 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
     setSelectedMenu(menuID);
   };
 
-  const handleSetStock = async (quantity: number) => {
+  const handleSetStock = async (quantity: number | null) => {
     if (selectedMenu === null) return;
+
+    if (quantity === null) {
+      alert("Please enter a valid number");
+      return;
+    }
 
     setIsLoading(true);
     const res = await changeStock({ menuID: selectedMenu, quantity });
@@ -80,7 +85,7 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
         </button>
 
         <button
-          onClick={() => handleSetStock(Number(customStock)) || 0}
+          onClick={() => handleSetStock(Number(customStock))}
           disabled={selectedMenu === null || isLoading}
           className={`px-4 py-2 rounded-lg ${
             selectedMenu !== null ? "bg-green-500 text-white" : "bg-gray-300"
