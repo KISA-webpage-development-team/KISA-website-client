@@ -1,5 +1,4 @@
 import React from "react";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import PochaButton from "../shared/PochaButton";
 
 type PaymentProps = {
@@ -13,7 +12,7 @@ export default function ProceedToPaymentButton({ pochaid }: PaymentProps) {
   };
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full flex justify-center">
       <PochaButton label="Checkout" onClick={handlePaymentClick} />
     </div>
   );

@@ -10,20 +10,20 @@ import { Cart } from "@/types/pocha";
 import { debounce } from "lodash";
 import { HookStatus } from "./types";
 
+const cartToTotalAmount = (cart: Cart) => {
+  if (!cart) return 0;
+
+  return Array.from(Object.values(cart))
+    .reduce((total, item) => total + item.menu.price * item.quantity, 0)
+    .toFixed(2);
+};
+
 const useCart = (email: string, pochaID: number) => {
   const [cart, setCart] = useState<Cart>();
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
   const [status, setStatus] = useState<HookStatus>("loading");
   const [error, setError] = useState<string>();
-
-  const cartToTotalAmount = (cart: Cart) => {
-    if (!cart) return 0;
-
-    return Array.from(Object.values(cart))
-      .reduce((total, item) => total + item.menu.price * item.quantity, 0)
-      .toFixed(2);
-  };
 
   const fetchCart = useCallback(async () => {
     setStatus("loading");
@@ -66,15 +66,18 @@ const useCart = (email: string, pochaID: number) => {
   const debouncedChangeItemInCart = debounce(
     async (menuid: number, newQuantity: number) => {
       try {
-        const body = { menuID: menuid, quantity: newQuantity };
-        await changeItemInCart(email, pochaID, body);
+        await changeItemInCart(email, pochaID, {
+          menuID: menuid,
+          quantity: newQuantity,
+        });
       } catch (error) {
         console.error("Error updating cart item", error);
         setError("Failed to update cart");
+        fetchCart(); // Revert the cart state on failure
       }
     },
     1000
-  ); // 1 second delay
+  );
 
   // Optimistic UI Update + Total 즉시 업데이트
   const handleQuantityChange = (menuid: number, newQuantity: number) => {
@@ -83,10 +86,7 @@ const useCart = (email: string, pochaID: number) => {
     // so most of the time, UI and database will be synced
     updateQuantityUI(menuid, newQuantity);
 
-    debouncedChangeItemInCart(menuid, newQuantity).catch(() => {
-      // If API Call fails, revert the UI
-      fetchCart();
-    });
+    debouncedChangeItemInCart(menuid, newQuantity);
   };
 
   return {

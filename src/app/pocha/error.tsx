@@ -19,7 +19,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center">
+    <div className="h-full flex flex-col items-center justify-center">
       <UnexpectedError />
       <PochaButton onClick={reset} label="다시 시도하기" />
     </div>

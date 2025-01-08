@@ -30,7 +30,7 @@ export default function HomeTabs({ activeTab, setActiveTab }: HomeTabsProps) {
     ${
       isCurTabSelected
         ? `text-michigan-blue font-semibold ${sejongHospitalBold.className} after:bg-michigan-blue`
-        : `text-gray-400 ${sejongHospitalLight.className} after:bg-gray-200`
+        : `text-gray-400 ${sejongHospitalBold.className} after:bg-gray-200`
     }`;
   };
 
