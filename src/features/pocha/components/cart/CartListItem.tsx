@@ -22,9 +22,7 @@ export default function CartListItem({
   handleQuantityChange,
 }: CartListItemProps) {
   const getImagePath = (menuID: number) => {
-    return menuID !== 1
-      ? `/pocha/24_last_pocha/${menuID}.png`
-      : "/pocha/24_last_pocha/image_not_found.png";
+    return `/pocha/24_last_pocha/${menuID}.png`;
   };
 
   const incrementQuantity = () => {
