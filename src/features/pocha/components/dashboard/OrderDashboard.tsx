@@ -33,7 +33,9 @@ export default function OrderDashboard({
   });
 
   if (status === "loading") {
-    return <LoadingSpinner />;
+    return (
+      <LoadingSpinner fullScreen={false} label="주문 정보를 가져오는중..." />
+    );
   }
 
   return (

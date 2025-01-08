@@ -121,23 +121,5 @@ export default function OrderList({ pochaID }: OrderListProps) {
         </Tab>
       </Tabs>
     </div>
-
-    //   {/* Order History Accordion */}
-    //   <Accordion>
-    //     <AccordionItem
-    //       key="1"
-    //       aria-label="Order History"
-    //       title="Order History"
-    //       className={`${sejongHospitalBold.className} text-xl !text-gray-300
-    //       `}
-    //     >
-    //       <UserOrderHistories
-    //         email={session.user.email}
-    //         token={session.token}
-    //         pochaID={pochaID}
-    //       />
-    //     </AccordionItem>
-    //   </Accordion>
-    // </div>
   );
 }
