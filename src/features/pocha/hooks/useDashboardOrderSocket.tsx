@@ -3,19 +3,19 @@ import { io, Socket } from "socket.io-client";
 import { OrderItem } from "@/types/pocha";
 import { WEBSOCKET_URL } from "@/constants/env";
 
-interface UseWebSocketOrdersProps {
+interface useDashboardOrderSocketProps {
   token: string;
   email: string;
   pochaID: number;
   addNewOrderItem: (orderItem: OrderItem) => void;
 }
 
-const useWebSocketOrders = ({
+const useDashboardOrderSocket = ({
   token,
   email,
   pochaID,
   addNewOrderItem,
-}: UseWebSocketOrdersProps) => {
+}: useDashboardOrderSocketProps) => {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
@@ -55,4 +55,4 @@ const useWebSocketOrders = ({
   return socketRef;
 };
 
-export default useWebSocketOrders;
+export default useDashboardOrderSocket;

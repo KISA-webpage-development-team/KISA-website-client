@@ -1,22 +1,12 @@
-import React, { useEffect, useState } from "react";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
-import useOrders from "../../hooks/useOrders";
+import React from "react";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import useUserOrders from "../../hooks/useUserOrders";
 import { useSession } from "next-auth/react";
-import { io, Socket } from "socket.io-client";
 
 import { UserSession } from "@/lib/next-auth/types";
 import PochaOrderItem from "./PochaOrderItem";
-import { OrderItem, OrderStatus } from "@/types/pocha";
-import { Accordion, AccordionItem } from "@nextui-org/react";
-import UserOrderHistories from "./UserOrderHistories";
-import OrderTicket from "./OrderTicket";
-import { Tabs, Tab, Card, CardBody } from "@nextui-org/react"; // Using Tabs
-import { HorizontalDivider } from "@/final_refactor_src/components/divider";
-import OrderStatusSelector from "./OrderStatusSelector";
-import { WEBSOCKET_URL } from "@/constants/env";
+import { Tabs, Tab } from "@nextui-org/react"; // Using Tabs
+import useUserOrderSocket from "../../hooks/useUserOrderSocket";
 import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
 
 interface OrderListProps {
@@ -35,74 +25,21 @@ export default function OrderList({ pochaID }: OrderListProps) {
     pendingOrders,
     preparingOrders,
     readyOrders,
+    closedOrders,
     status: ordersStatus,
-  } = useOrders(session?.user?.email, session?.token, pochaID);
+  } = useUserOrders(session?.user?.email, session?.token, pochaID);
 
-  // Socket.IO Connection --------------------------------------
-  useEffect(() => {
-    // defensive check: no orders yet (i.e. no session, no token, no pochaID)
-    if (ordersStatus !== "success") {
-      return;
-    }
-    // Initialize socket connection
-    const socketInstance = io(WEBSOCKET_URL, {
-      transports: ["websocket"],
-      auth: {
-        token: session.token,
-      },
-      query: {
-        email: session.user.email,
-        pochaId: pochaID,
-      },
-    });
-
-    // Connection event handlers
-    socketInstance.on("connect", () => {
-      console.log("Connected to WebSocket server");
-    });
-
-    socketInstance.on("connect_error", (error) => {
-      console.error("WebSocket connection error:", error);
-    });
-
-    // listen to status-change-{email} event
-    const statusChangeEvent = `status-change-${session?.user?.email}`;
-    socketInstance.on(
-      statusChangeEvent,
-      ({
-        orderItemID,
-        status,
-      }: {
-        orderItemID: number;
-        status: OrderStatus;
-      }) => {
-        updateOrder(orderItemID);
-      }
-    );
-
-    // listen to status-closed-{email} event
-    const closedEvent = `status-closed-${session?.user?.email}`;
-    socketInstance.on(
-      closedEvent,
-      ({ orderItemID }: { orderItemID: number }) => {
-        updateOrder(orderItemID);
-      }
-    );
-
-    // You can save socket instance to state like below
-    // setSocket(socketInstance);
-
-    // Cleanup function
-    return () => {
-      if (socketInstance) {
-        socketInstance.disconnect();
-      }
-    };
-  }, [session, ordersStatus, pochaID, updateOrder]);
+  useUserOrderSocket({
+    token: session?.token,
+    email: session?.user?.email,
+    pochaID,
+    updateOrder,
+    addNewOrderItem,
+  });
 
   // UI Rendering ----------------------------------------------
   if (sessionStatus === "loading" || ordersStatus === "loading") {
-    return <></>;
+    return <LoadingSpinner fullScreen={false} />;
   }
 
   return (
@@ -124,6 +61,7 @@ export default function OrderList({ pochaID }: OrderListProps) {
               ...readyOrders,
               ...preparingOrders,
               ...pendingOrders,
+              ...closedOrders,
             ];
 
             // If allOrders array length = 0 --> No order request has been made.
