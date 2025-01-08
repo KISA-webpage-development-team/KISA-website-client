@@ -59,21 +59,21 @@ export default function PochaPage() {
   return (
     <section
       className={`
-        md:hidden flex flex-col min-h-screen
+        md:hidden flex flex-col h-screen
         relative !gap-0`}
     >
       {/* PochaHeading (at the top, disappear when scrolling) */}
-      <div className="relative z-40 flex-shrink-0">
+      <div className="relative z-10 flex-shrink-0">
         <HomeHeading pochaInfo={pochaInfo} />
       </div>
 
       {/* Sticky Tabs (fixed at the top) */}
-      <div className="sticky top-0 z-50 bg-white flex-shrink-0">
+      <div className="sticky top-0 z-50 bg-white">
         <HomeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
       {/* Main Content Area (scrollable) */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1">
         <HomeTabContent activeTab={activeTab} pochaID={pochaInfo?.pochaID} />
       </div>
     </section>
