@@ -69,8 +69,6 @@ export default function OrderHistoryTable({
     alert(`총 금액: $${calculateTotalSales()}
 안주 수익: $${anjuRevenue}
 주류 수익: $${drinkRevenue}
-가장 많이 팔린 안주 Top 3: ${mostSoldAnju}
-가장 수익성이 높은 안주 Top 3: ${mostProfitableAnju}
 
 (참고: 실제로 음식이 나간 주문들을 기반으로 한 "요약" 기능입니다. 실제 정산과는 차이가 있을 수 있습니다.)
 `);

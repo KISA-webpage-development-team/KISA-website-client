@@ -26,6 +26,18 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
   const handleSetStock = async (quantity: number) => {
     if (selectedMenu === null) return;
 
+    if (quantity < 0 || customStock === "") {
+      alert("Please type a valid number");
+      setCustomStock("");
+      return;
+    }
+
+    if (isNaN(quantity)) {
+      alert("Please type a valid number");
+      setCustomStock("");
+      return;
+    }
+
     setIsLoading(true);
     const res = await changeStock({ menuID: selectedMenu, quantity });
     if (res) {
@@ -80,7 +92,7 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
         </button>
 
         <button
-          onClick={() => handleSetStock(Number(customStock)) || 0}
+          onClick={() => handleSetStock(Number(customStock))}
           disabled={selectedMenu === null || isLoading}
           className={`px-4 py-2 rounded-lg ${
             selectedMenu !== null ? "bg-green-500 text-white" : "bg-gray-300"
@@ -90,6 +102,8 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
         </button>
         <input
           type="number"
+          min="0"
+          pattern="[0-9]+"
           value={customStock}
           onChange={(e) => setCustomStock(e.target.value)}
           className="px-4 py-2 border"
