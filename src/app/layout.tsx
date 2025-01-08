@@ -21,12 +21,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html className={globalFont.className} lang="en">
       {/* <SessionProvider session={session}> */}
-      <body className="flex flex-col overflow-x-hidden relative">
+      <body className="flex flex-col min-h-screen">
         {/* template.js : header + main */}
-        <div className="grow">{children}</div>
+        <div className="flex-1 flex flex-col w-full">{children}</div>
 
         {/* Footer */}
-        <footer className="bottom-0 z-0">
+        <footer className="mt-auto w-full">
           <Footer />
         </footer>
         {/* <Analytics />

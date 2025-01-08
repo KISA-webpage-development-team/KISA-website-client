@@ -25,3 +25,10 @@ export const BACKEND_URL = useLocalBackend
 
 // Stripe
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+
+// WebSocket
+const useLocalWebsocket =
+  process.env.NEXT_PUBLIC_USE_LOCAL_WEBSOCKET === "true";
+export const WEBSOCKET_URL = useLocalWebsocket
+  ? process.env.NEXT_PUBLIC_LOCAL_WEBSOCKET_URL
+  : process.env.NEXT_PUBLIC_WEBSOCKET_URL;

@@ -1,4 +1,8 @@
-"use client";
+/**
+ * PochaHomeTabs
+ * - render Tabs UI for Pocha Home Page
+ * - handle tab change logic
+ */
 
 import React from "react";
 import {
@@ -7,26 +11,25 @@ import {
 } from "@/utils/fonts/textFonts";
 // types
 import { PochaTab } from "@/types/pocha";
+import { updateURLWithTab } from "../utils/updateURL";
 
-type PochaTabsProps = {
+type PochaHomeTabsProps = {
   activeTab: PochaTab;
-  setActiveTab: (PochaTab) => void;
+  setActiveTab: (tab: PochaTab) => void;
 };
 
-export default function PochaTabs({ activeTab, setActiveTab }: PochaTabsProps) {
+export default function PochaHomeTabs({
+  activeTab,
+  setActiveTab,
+}: PochaHomeTabsProps) {
   const handleTabChange = (selectedTab: PochaTab) => {
-    const searchParams = new URLSearchParams({ tab: selectedTab });
-    window.history.pushState(
-      {},
-      "",
-      `${window.location.pathname}?${searchParams}`
-    );
+    updateURLWithTab(selectedTab);
     setActiveTab(selectedTab);
   };
 
-  const generateTabStyle = (isCurTabSelected: boolean) => {
-    return `flex-1 px-4 py-1 text-center relative transition-all duration-200 ease-in-out 
-    after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 text-base
+  const getTabClassName = (isCurTabSelected: boolean) => {
+    return `flex-1 px-4 py-3 text-center relative transition-all duration-200 ease-in-out 
+    after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 text-lg
     ${
       isCurTabSelected
         ? `text-michigan-blue font-semibold ${sejongHospitalBold.className} after:bg-michigan-blue`
@@ -37,13 +40,13 @@ export default function PochaTabs({ activeTab, setActiveTab }: PochaTabsProps) {
   return (
     <div className="flex">
       <button
-        className={generateTabStyle(activeTab === "menu")}
+        className={getTabClassName(activeTab === "menu")}
         onClick={() => handleTabChange("menu")}
       >
         Menu
       </button>
       <button
-        className={generateTabStyle(activeTab === "orders")}
+        className={getTabClassName(activeTab === "orders")}
         onClick={() => handleTabChange("orders")}
       >
         Orders

@@ -1,63 +1,61 @@
-// custom hook to handle user's age logics
-
-import { getUser } from "@/apis/users/queries";
+import useSWR from "swr";
+import { fetcherWithToken } from "@/lib/swr/fetchers";
 import { UserSession } from "@/lib/next-auth/types";
-import { useEffect, useState } from "react";
 
+const calculateAge = (birthday: string): number => {
+  const birthDate = new Date(birthday);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+  return age;
+};
+
+/**
+ * @desc Hook to fetch and calculate user's age using SWR
+ */
 const useUserAge = (session: UserSession | null) => {
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
+  const { data, error, isLoading } = useSWR(
+    session ? [`/users/${session.user.email}/`, session.token] : null,
+    fetcherWithToken,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
+      dedupingInterval: 60 * 10000 * 1, // 1 min
+    }
   );
-  const [underAge, setUnderAge] = useState<boolean>();
-  const [fullname, setFullname] = useState<string>("");
 
-  const calculateAge = async (
-    birthday: string | null | undefined
-  ): Promise<number> => {
-    if (!birthday) return 0;
-    const birthDate = new Date(birthday);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
+  // Explicit loading state
+  if (isLoading) {
+    return { underAge: null, status: "loading", fullname: "" };
+  }
 
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
+  // Error handling
+  if (error) {
+    console.error("Error fetching user's age:", error);
+    return { underAge: null, status: "error", fullname: "" };
+  }
 
-    return age;
-  };
+  // Success: Calculate age and determine underage
+  if (data) {
+    const { bornDate, bornMonth, bornYear, fullname } = data;
+    const formattedBirthday = `${bornYear}-${bornMonth
+      .toString()
+      .padStart(2, "0")}-${bornDate.toString().padStart(2, "0")}`;
+    const age = calculateAge(formattedBirthday);
+    const underAge = age < 21;
 
-  // fetch user's age
-  useEffect(() => {
-    const fetchUserAge = async () => {
-      try {
-        const res = await getUser(session?.user.email, session?.token);
+    return { underAge, status: "success", fullname };
+  }
 
-        const { bornDate, bornMonth, bornYear, fullname } = res;
-        setFullname(fullname);
-
-        // Ensure proper date formatting
-        const formattedMonth = bornMonth.toString().padStart(2, "0");
-        const formattedDate = bornDate.toString().padStart(2, "0");
-        const birthday = `${bornYear}-${formattedMonth}-${formattedDate}`;
-
-        const age = await calculateAge(birthday);
-        setUnderAge(age < 21);
-        setStatus("success");
-      } catch (error) {
-        console.error("Error while fetching user's age", error);
-        setStatus("error");
-      }
-    };
-
-    if (session) {
-      fetchUserAge();
-    } else {
-      setStatus("error");
-    }
-  }, [session]);
-
-  return { underAge, status, fullname };
+  // Fallback (edge case)
+  return { underAge: null, status: "loading", fullname: "" };
 };
 
 export default useUserAge;

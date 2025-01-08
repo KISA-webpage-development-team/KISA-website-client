@@ -1,35 +1,33 @@
-import { getPochaMenu } from "@/apis/pocha/queries";
-import { MenuByCategory } from "@/types/pocha";
-import { useEffect, useState } from "react";
+// [NOTE]
+// This is to prevent the menu from being fetched multiple times when the user scrolls up and down
+// 기존의 pocha 훅들과는 다르게 생겼으나, 당황하지 말고 SWR 공식문서를 참고하자
+// https://swr.vercel.app/ko
+
+import useSWR from "swr";
+import { fetcherWithToken } from "@/lib/swr/fetchers";
 
 /**
- * @desc hook to fetch menu of pocha (getPochaMenu)
+ * @desc hook to fetch menu of pocha with SWR and existing fetcher
  */
 const useMenu = (pochaID: number, token: string) => {
-  const [menuList, setMenuList] = useState<MenuByCategory[]>(undefined);
-  const [status, setStatus] = useState<string>("loading");
-
-  // fetch orders
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        // const res = await getUserOrders(email, pochaID, token);
-        const res = await getPochaMenu(pochaID, token);
-
-        setMenuList(res);
-        setStatus("success");
-      } catch (error) {
-        console.error("Error fetching orders: ", error);
-        setStatus("error");
-      }
-    };
-
-    if (pochaID && token) {
-      fetchOrders();
+  const {
+    data: menuList,
+    error,
+    isLoading,
+  } = useSWR(
+    pochaID && token ? [`/pocha/menu/${pochaID}/`, token] : null,
+    fetcherWithToken,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
     }
-  }, [pochaID, token]);
+  );
 
-  return { menuList, status };
+  return {
+    menuList,
+    status: error ? "error" : isLoading ? "loading" : "success",
+  };
 };
 
 export default useMenu;

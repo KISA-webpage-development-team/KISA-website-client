@@ -23,6 +23,14 @@ export default function BoardsSummary() {
         console.error(err);
       }
     };
+    const fetchAcademicPosts = async () => {
+      try {
+        const res = await getBoardPosts("academic", 10, 0);
+        setHotPosts(res.slice(0, 5));
+      } catch (err) {
+        console.error(err);
+      }
+    };
     const fetchCommunityPosts = async () => {
       try {
         const res = await getBoardPosts("community", 10, 0);
@@ -32,7 +40,8 @@ export default function BoardsSummary() {
       }
     };
 
-    fetchAnnouncementPosts();
+    // fetchAnnouncementPosts();
+    fetchAcademicPosts();
     fetchCommunityPosts();
   }, []);
 
@@ -42,7 +51,7 @@ export default function BoardsSummary() {
   flex flex-col justify-center 
   md:flex-row gap-4"
     >
-      <HomePostView type="announcement" posts={hotPosts} />
+      <HomePostView type="academic" posts={hotPosts} />
       <HomePostView type="community" posts={recentPosts} />
     </div>
   );

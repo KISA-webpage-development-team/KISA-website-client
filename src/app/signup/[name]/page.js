@@ -12,7 +12,7 @@ export default function SignUpSuccessPage({ params }) {
     px-[20px] md:px-[60px] lg:px-[75px]"
     >
       <p className="text-xl mb-4">{`${decodedName}님 환영합니다!`}</p>{" "}
-      <button className="blue_button" onClick={() => signIn()}>
+      <button className="primary_btn" onClick={() => signIn()}>
         로그인
       </button>
     </div>

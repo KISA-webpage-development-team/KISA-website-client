@@ -54,7 +54,13 @@ type PayInfo = {
 export type { Cart, CartItem, AddItemToCartBody, PayInfo };
 
 // ORDER -----------------------------------------------------------------------
-type OrderStatus = "pending" | "preparing" | "ready" | "closed";
+
+const enum OrderStatus {
+  PENDING = "pending",
+  PREPARING = "preparing",
+  READY = "ready",
+  CLOSED = "closed",
+}
 
 interface OrderItem {
   orderItemID: number;
@@ -73,4 +79,5 @@ interface OrderHistory {
   closed: OrderItem[];
 }
 
-export type { OrderItem, OrderStatus, Orders, OrderHistory };
+export { OrderStatus };
+export type { OrderItem, Orders, OrderHistory };

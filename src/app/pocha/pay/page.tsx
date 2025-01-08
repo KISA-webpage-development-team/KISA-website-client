@@ -7,11 +7,11 @@ import { UserSession } from "@/lib/next-auth/types";
 import { Cart, PochaInfo } from "@/types/pocha";
 import PaymentSubmitForm from "@/features/pocha/components/pay-cart/PaymentSubmitForm";
 
-import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
-
 // Stripe
 import { Elements } from "@stripe/react-stripe-js"; // stripe payment element
 import { loadStripe } from "@stripe/stripe-js";
+import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { getPochaInfo } from "@/apis/pocha/queries";
 import usePay from "@/features/pocha/hooks/usePay";
@@ -62,16 +62,18 @@ export default function PayPage() {
   useEffect(() => {
     const fetchPochaInfo = async () => {
       // try API call first
-      const res = await getPochaInfo(new Date());
 
-      if ((res as ApiError)?.statusCode) {
-        setPochaIDError(res as ApiError);
-      } else {
-        setPochaID((res as PochaInfo)?.pochaID);
+      try {
+        const res = await getPochaInfo(new Date());
+        setPochaID(res.pochaID);
+
         // update URL search params with the fetched pochaID
         const params = new URLSearchParams(window.location.search);
-        params.set("pochaid", (res as PochaInfo).pochaID.toString());
+        params.set("pochaid", res.pochaID.toString());
         window.history.replaceState({}, "", `?${params.toString()}`);
+      } catch (error) {
+        console.error("[PochaPayPage] error while fetching pocha info", error);
+        setPochaIDError(error as ApiError);
       }
     };
 
@@ -112,6 +114,23 @@ export default function PayPage() {
           Pay
         </h1>
       </div>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="375"
+        height="4"
+        viewBox="0 0 375 4"
+        fill="none"
+        className="mx-auto mt-1"
+      >
+        <path
+          d="M0 2L375 2"
+          stroke="#E3E3E3"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
 
       <Elements
         stripe={stripePromise}

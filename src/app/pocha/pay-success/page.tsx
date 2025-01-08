@@ -3,13 +3,21 @@
 import { UserSession } from "@/lib/next-auth/types";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
 import React, { useEffect } from "react";
+import Image from "next/image";
+import { useState } from "react";
 
 export default function PaySuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pochaID = parseInt(searchParams.get("pochaid"));
   const paymentIntent = searchParams.get("payment_intent");
+  const [menuClicked, setMenuClicked] = useState(false);
+  const [homeClicked, setHomeClicked] = useState(false);
 
   const { data: session, status } = useSession() as {
     data: UserSession | undefined;
@@ -35,11 +43,17 @@ export default function PaySuccessPage() {
   }, [router]);
 
   const directToMenuList = () => {
-    router.push("/pocha");
+    setHomeClicked(true);
+    setTimeout(() => {
+      router.push("/pocha");
+    }, 150);
   };
 
   const directToOrders = () => {
-    router.push("/pocha?tab=orders");
+    setMenuClicked(true);
+    setTimeout(() => {
+      router.push("/pocha?tab=orders");
+    }, 150);
   };
 
   if (!paymentIntent) {
@@ -49,26 +63,46 @@ export default function PaySuccessPage() {
 
   return (
     <div className="">
-      <div className="flex items-center justify-between">
-        <button onClick={directToMenuList}>X</button>
-        <p className="flex-grow text-center text-lg font-bold mr-3">주문완료</p>
-      </div>
-      <span className="flex flex-col text-center items-center">
-        접수대기 중!<br></br> 가게에서 주문을 확인 중입니다.
-      </span>
-      <div>
-        <button
-          className="w-full flex justify-center mt-4 bg-blue-500 text-white px-4 py-2 font-semibold"
-          onClick={directToOrders}
-        >
-          주문내역 보기
-        </button>
-        <button
-          className="w-full flex justify-center"
-          onClick={directToMenuList}
-        >
-          홈으로 돌아가기
-        </button>
+      <div className="flex flex-col justify-center items-center h-screen">
+        <div className="flex flex-col items-center gap-14">
+          <div
+            className={`${sejongHospitalBold.className} text-center text-black text-[30px]`}
+          >
+            결제가 완료되었습니다
+          </div>
+          <div>
+            <Image
+              src={`/images/check_circle.png`}
+              alt="Success Icon"
+              width={250}
+              height={250}
+            />
+          </div>
+          <div className="flex flex-col items-center gap-4">
+            <button
+              className={`w-[297px] h-[55px] rounded-lg text-white text-lg ${
+                menuClicked ? "bg-blue-900" : "bg-cyan-600"
+              }
+               justify-between items-center
+                ${sejongHospitalBold.className}
+              `}
+              onClick={directToOrders}
+            >
+              주문 내역 보기
+            </button>
+            <button
+              className={`w-[297px] h-[55px] rounded-lg text-white text-lg ${
+                homeClicked ? "bg-blue-900" : "bg-cyan-600"
+              }
+               justify-between items-center
+                ${sejongHospitalBold.className}
+              `}
+              onClick={directToMenuList}
+            >
+              홈으로 돌아가기
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

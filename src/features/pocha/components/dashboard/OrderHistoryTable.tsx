@@ -1,6 +1,5 @@
 import React from "react";
 import useOrderHistory from "../../hooks/useOrderHistory";
-import DashboardOrderItem from "./DashboardOrderItem";
 
 interface OrderHistoryTableProps {
   token: string;
@@ -27,13 +26,6 @@ export default function OrderHistoryTable({
       <div className="p-4 space-y-4">
         {/* closed */}
         <div className="text-xl font-bold">closed</div>
-        {orderHistory?.map((orderItem) => (
-          <DashboardOrderItem
-            key={orderItem.orderItemID}
-            orderItem={orderItem}
-            nextStatus="none"
-          />
-        ))}
       </div>
     </div>
   );

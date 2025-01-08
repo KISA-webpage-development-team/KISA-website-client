@@ -266,12 +266,12 @@ export default function PaymentSubmitForm({
             }}
           />
         )}
-
+        {/*?*/}
         {/* Total Price + Transaction fee display */}
         <div
           className={`w-full flex flex-col items-start 
           rounded-xl
-      border-gray-300 border p-5 mt-4 ${sejongHospitalBold.className}`}
+      border-gray-300 border p-5 mt-3 ${sejongHospitalBold.className}`}
         >
           <span className="text-lg font-bold">Summary</span>
           <div
@@ -300,6 +300,15 @@ export default function PaymentSubmitForm({
           <div className="flex items-center justify-between self-stretch mt-2">
             <span className="font-bold">Total</span>
             <span className="text-xl font-bold">${totalPrice}</span>
+          </div>
+
+          <div
+            className={`flex items-center justify-between text-[8.5px] ${sejongHospitalLight.className}`}
+          >
+            <span>
+              *수수료는 Stripe 결제 서비스 비용이며, 고정 ($0.45)와 결제 금액의
+              2.9%를 합산하여 계산됩니다.
+            </span>
           </div>
         </div>
         {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}

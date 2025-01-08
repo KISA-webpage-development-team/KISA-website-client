@@ -34,6 +34,14 @@ export default function PostViewPage({ params }: PageProps) {
 
   const { post, isLoading, error } = usePost(Number(postid));
 
+  // [TODO] temporarily sets studyGroupPost as whether post title starts with 스터디 그룹 모집
+  // later, this needs to be changed by integrating backend with new column
+  const studyGroupPost =
+    post?.postid === 368 || post?.title.startsWith("스터디 그룹 모집");
+  console.log("studyGroupPost: ", studyGroupPost);
+
+  const canComment = !post?.isAnnouncement && !isAnnouncementBoard(post?.type);
+
   // useEffect(() => {
   //   const fetchPost = async () => {
 
@@ -64,7 +72,8 @@ export default function PostViewPage({ params }: PageProps) {
         <PostView post={post} />
 
         {/* Comments는 로딩되는대로 */}
-        {!post?.isAnnouncement && !isAnnouncementBoard(post.type) && (
+        {/* if study group or  canComment */}
+        {studyGroupPost || canComment ? (
           // bit worry about props drilling on post.type to handle every kisa
           <CommentsView
             isEveryKisa={isEveryKisaBoard(post?.type)}
@@ -72,7 +81,7 @@ export default function PostViewPage({ params }: PageProps) {
             postid={post?.postid}
             email={post?.email}
           />
-        )}
+        ) : null}
       </SessionProvider>
     </section>
   );

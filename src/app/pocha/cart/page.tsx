@@ -10,6 +10,8 @@ import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import CartListItem from "@/features/pocha/components/pay-cart/CartListItem";
 import ProceedToPaymentButton from "@/features/pocha/components/pay-cart/ProceedToPaymentButton";
+import Image from "next/image";
+
 import {
   sejongHospitalBold,
   sejongHospitalLight,
@@ -72,16 +74,18 @@ export default function PochaCartPage() {
   useEffect(() => {
     const fetchPochaInfo = async () => {
       // try API call first
-      const res = await getPochaInfo(new Date());
 
-      if ((res as ApiError)?.statusCode) {
-        setPochaIDError(res as ApiError);
-      } else {
+      try {
+        const res = await getPochaInfo(new Date());
         setPochaID((res as PochaInfo)?.pochaID);
+
         // update URL search params with the fetched pochaID
         const params = new URLSearchParams(window.location.search);
         params.set("pochaid", (res as PochaInfo).pochaID.toString());
         window.history.replaceState({}, "", `?${params.toString()}`);
+      } catch (error) {
+        console.error("[PochaCartPage] error while fetching pocha info", error);
+        setPochaIDError(error as ApiError);
       }
     };
 
@@ -106,7 +110,7 @@ export default function PochaCartPage() {
 
   return (
     <section className="py-3">
-      <div className="flex items-center relative ">
+      <div className="flex items-center relative">
         <button className="flex" onClick={handleBackButton}>
           <BackIcon />
         </button>
@@ -120,14 +124,14 @@ export default function PochaCartPage() {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="351"
+        width="375"
         height="4"
-        viewBox="0 0 351 4"
+        viewBox="0 0 375 4"
         fill="none"
         className="mx-auto mt-1"
       >
         <path
-          d="M2 2.00003L349 2.00003"
+          d="M0 2L375 2"
           stroke="#E3E3E3"
           strokeWidth="3"
           strokeLinecap="round"
@@ -136,39 +140,50 @@ export default function PochaCartPage() {
       </svg>
 
       {Object.keys(cart).length > 0 ? (
-        <>
+        <div className="flex flex-col h-screen">
           {/* Cart List */}
-          <ul className="flex flex-col gap-2">
-            {Object.entries(cart).map(([menuid, item]) => (
-              <CartListItem
-                key={menuid}
-                menuid={parseInt(menuid)}
-                item={item}
-                email={session?.user?.email}
-                pochaid={pochaID}
-                setCartItemStale={setCartItemStale}
-              />
-            ))}
-          </ul>
-
-          {/* Total Price */}
-          <div
-            className={`flex justify-between w-full ${sejongHospitalBold.className} text-lg`}
-          >
-            <span className={`ml-7 mt-4 text-blue-950`}>Total</span>
-            <span className={`mr-7 mt-4 text-blue-950`}>
-              US${cartToAmount(cart)}
-            </span>
+          <div className="flex-grow overflow-y-auto">
+            <ul className="flex flex-col gap-2">
+              {Object.entries(cart).map(([menuid, item]) => (
+                <CartListItem
+                  key={menuid}
+                  menuid={parseInt(menuid)}
+                  item={item}
+                  email={session?.user?.email}
+                  pochaid={pochaID}
+                  setCartItemStale={setCartItemStale}
+                />
+              ))}
+            </ul>
           </div>
+          <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300">
+            {/* Total Price */}
+            <div
+              className={`flex justify-between w-full px-4 py-2 ${sejongHospitalBold.className} text-lg`}
+            >
+              <span className="text-blue-950 pb-3 pt-1">Total</span>
+              <span className="text-blue-950 pb-3 pt-1">
+                ${cartToAmount(cart)}
+              </span>
+            </div>
 
-          {/* Checkout button */}
-          <ProceedToPaymentButton pochaid={pochaID} />
-        </>
+            {/* Checkout Button */}
+            <div className="w-full flex justify-center pb-2">
+              <ProceedToPaymentButton pochaid={pochaID} />
+            </div>
+          </div>
+        </div>
       ) : (
-        <div
-          className={`${sejongHospitalBold.className} flex w-full justify-center`}
-        >
-          Cart is empty!
+        <div className="flex flex-col justify-center items-center">
+          <Image
+            src={`/images/empty_cart.png`}
+            alt="Empty Cart Icon"
+            width={300}
+            height={300}
+          />
+          <div className={`${sejongHospitalBold.className} text-center mt-4`}>
+            Your Cart is Empty
+          </div>
         </div>
       )}
     </section>
