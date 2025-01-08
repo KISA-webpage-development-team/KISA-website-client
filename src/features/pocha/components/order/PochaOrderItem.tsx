@@ -63,7 +63,7 @@ export default function PochaOrderItem({
         isOpen={isOpen}
         radius="lg"
         onOpenChange={onOpenChange}
-        placement="auto"
+        placement="center"
       >
         <ModalContent>
           {(onClose) => (
