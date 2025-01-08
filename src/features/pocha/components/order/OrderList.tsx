@@ -39,11 +39,12 @@ export default function OrderList({ pochaID }: OrderListProps) {
 
   // UI Rendering ----------------------------------------------
   if (sessionStatus === "loading" || ordersStatus === "loading") {
-    return <LoadingSpinner fullScreen={false} />;
+    return (
+      <LoadingSpinner fullScreen={false} label="주문 목록 가져오는중..." />
+    );
   }
 
   return (
-    // sejong hospital font
     <div className="flex flex-col w-full h-full py-[0.6rem]">
       {/* Tabs for Order Status */}
       <Tabs

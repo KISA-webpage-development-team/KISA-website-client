@@ -38,7 +38,13 @@ export default function PochaOrderItem({ orderItem }: PochaOrderItemProps) {
       <li
         className={`h-full
       shadow-md rounded-lg
-      border border-zinc-200 bg-white 
+      
+          ${
+            status === "ready"
+              ? "border-2 border-green-500"
+              : " border border-zinc-200"
+          }
+      bg-white 
       flex self-stretch items-center
       py-[1rem] px-[1rem] space-x-[1rem]
     `}
@@ -67,17 +73,15 @@ export default function PochaOrderItem({ orderItem }: PochaOrderItemProps) {
         >
           {/* Name */}
           <div className="flex items-center gap-[0.25rem]">
-            <span className="text-overflow">
+            <span className="text-overflow-two-lines">
               {menu?.nameKor} {menu?.nameEng}
             </span>
           </div>
 
           {/* Price */}
-          <div className="flex text-gray-500 space-x-[0.25rem]">
-            <span>{`x ${quantity}`}</span>
-            <span>|</span>
-            <span>{`$${menu?.price * quantity}`}</span>
-          </div>
+          <span className="text-gray-500 text-sm">
+            {`x ${quantity}`} | {`$${menu?.price * quantity}`}
+          </span>
 
           {/* specially displaying orderItemID for "ready" status */}
           {status === "ready" && (
@@ -103,11 +107,11 @@ export default function PochaOrderItem({ orderItem }: PochaOrderItemProps) {
               {/* View Ticket Button */}
               <button
                 onClick={handleViewTicket}
-                className="mt-[10px]
-                inline-flex flex-shrink-0 justify-center items-center px-[0.8125rem] py-[0.5rem]
+                className="mt-[0.5rem]
+                flex justify-center items-center w-[8rem] h-[2rem]
                 bg-green-100 rounded-[5px] border border-[#1c8241]/50 gap-2"
               >
-                <TicketIcon className="mr-1" size="small" />
+                <TicketIcon className="mr-[0.25rem]" size="small" />
                 <span className="leading-[150%]">View Ticket</span>
               </button>
             </div>
