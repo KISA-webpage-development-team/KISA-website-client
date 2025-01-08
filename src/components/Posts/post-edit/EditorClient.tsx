@@ -130,7 +130,9 @@ export default function EditorClient({
   return (
     <div className="flex flex-col h-full gap-4">
       <TitleInput title={title} setTitle={setTitle} />
-      <TextEditor text={text} setText={setText} />
+      {isAdmin !== null && (
+        <TextEditor isAdmin={isAdmin} text={text} setText={setText} />
+      )}
 
       <div
         className={`flex
