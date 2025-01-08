@@ -24,7 +24,7 @@ export default function PochaLayout({ children }) {
           {/* Main content for mobile screens */}
           <div
             className={`md:hidden min-h-screen h-full
-               ${sejongHospitalLight.className}`}
+               ${sejongHospitalLight.className} overflow-visible`}
           >
             {children}
           </div>

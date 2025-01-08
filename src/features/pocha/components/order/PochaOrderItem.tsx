@@ -1,5 +1,5 @@
 import { OrderItem } from "@/types/pocha";
-import React from "react";
+import React, { useState } from "react";
 import {
   sejongHospitalBold,
   sejongHospitalLight,
@@ -7,14 +7,8 @@ import {
 import { STATUS_TEXT_COLORS, STATUS_COLORS } from "../../utils/statusToColor";
 import Image from "next/image";
 import TicketIcon from "@/final_refactor_src/components/icon/TicketIcon";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/react";
+import { getMenuImagePath } from "../../utils/getImagePath";
+import OrderTicketModal from "./OrderTicketModal";
 
 interface PochaOrderItemProps {
   orderItem: OrderItem;
@@ -25,76 +19,38 @@ export function capitalizeStatus(status: string): string {
   return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
 }
 
-export default function PochaOrderItem({
-  orderItem,
-  setSelectedOrder,
-}: PochaOrderItemProps) {
-  const { orderItemID, menu, quantity, status } = orderItem;
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+export default function PochaOrderItem({ orderItem }: PochaOrderItemProps) {
+  const { menu, quantity, status } = orderItem;
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const handleViewTicket = () => {
-    // setSelectedOrder(orderItem);
-    onOpen();
-  };
-
-  const getImagePath = (menuID: number) => {
-    return menuID != 1
-      ? `/pocha/24_last_pocha/${menuID}.png`
-      : "/pocha/24_last_pocha/image_not_found.png";
+    setIsOpenModal(true);
   };
 
   return (
-    <li
-      className="h-full
+    <>
+      {isOpenModal && (
+        <OrderTicketModal
+          orderItem={orderItem}
+          setIsOpenModal={setIsOpenModal}
+        />
+      )}
+      <li
+        className="h-full
       shadow-md rounded-lg
       border border-zinc-200 bg-white
       flex self-stretch items-center
-      py-4 px-3 space-x-[1rem]
+      py-[1rem] px-[1rem] space-x-[1rem]
     "
-    >
-      <Modal
-        backdrop="opaque"
-        classNames={{
-          wrapper: "h-fit",
-          body: "py-9 ",
-          backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-          closeButton: "hover:bg-white/5 active:bg-white/10",
-        }}
-        isOpen={isOpen}
-        radius="lg"
-        onOpenChange={onOpenChange}
-        placement="center"
       >
-        <ModalContent>
-          {(onClose) => (
-            // Testing purpose - put background as pink
-            <ModalBody
-              className="
-              border border-[#71717A] rounded-lg
-            "
-            >
-              <div
-                className={`flex flex-col items-center justify-center space-y-4 ${sejongHospitalBold.className}`}
-              >
-                <span className="text-lg text-black">Order Ready!</span>
-                <span className="text-4xl text-black">{`#${orderItem?.orderItemID}`}</span>
-                <span
-                  className={`text-lg text-gray-500 font-medium ${sejongHospitalLight.className}`}
-                >
-                  {orderItem.menu.nameKor} is ready for pickup
-                </span>
-              </div>
-            </ModalBody>
-          )}
-        </ModalContent>
-      </Modal>
-      <>
-        <div className={`w-3 h-3 rounded-full ${STATUS_COLORS[status]}`} />
+        <div
+          className={`w-[0.75rem] h-[0.75rem] rounded-full ${STATUS_COLORS[status]}`}
+        />
 
         {/* 1. Image or Ticket number */}
-        <figure className="relative w-[4rem] h-[4rem]">
+        <figure className="relative w-[4rem] h-[4rem] flex items-center justify-center">
           <Image
-            src={getImagePath(menu?.menuID)}
+            src={getMenuImagePath(menu?.menuID)}
             alt={`Image of ${menu?.nameKor}`}
             fill
             sizes="4rem"
@@ -104,9 +60,9 @@ export default function PochaOrderItem({
 
         {/* 2. Info/Description */}
         <div
-          className={`flex-1 flex flex-col h-full justify-center space-y-1
+          className={`flex-1 flex flex-col h-full justify-center space-y-0.5
     ${sejongHospitalBold.className}
-            text-[.9375rem] font-bold leading-[150%] text-black
+            text-base leading-[150%] text-black
     `}
         >
           {/* Name */}
@@ -128,7 +84,7 @@ export default function PochaOrderItem({
             <div
               className="
                 bg-zinc-100 rounded-[9px] flex items-center justify-center
-                w-fit px-2 py-[0.25rem] text-[11px]
+                w-fit px-2 py-[0.25rem] text-sm
               "
             >
               <span className="text-black"># {orderItem?.orderItemID}</span>
@@ -139,7 +95,7 @@ export default function PochaOrderItem({
         {/* status & ticket button */}
         <div
           className={`flex items-center justify-center rounded-md 
-            text-xs ${sejongHospitalBold.className} ${STATUS_TEXT_COLORS[status]}`}
+            text-sm ${sejongHospitalBold.className} ${STATUS_TEXT_COLORS[status]}`}
         >
           {status === "ready" ? (
             <div className="flex flex-col items-end">
@@ -152,16 +108,14 @@ export default function PochaOrderItem({
                 bg-green-100 rounded-[5px] border border-[#1c8241]/50 gap-2"
               >
                 <TicketIcon className="mr-1" size="small" />
-                <span className="text-[11px] font-bold leading-[150%]">
-                  View Ticket
-                </span>
+                <span className="leading-[150%]">View Ticket</span>
               </button>
             </div>
           ) : (
             <span className={``}>{capitalizeStatus(orderItem?.status)}</span>
           )}
         </div>
-      </>
-    </li>
+      </li>
+    </>
   );
 }

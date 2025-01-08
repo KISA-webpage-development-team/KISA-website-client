@@ -38,8 +38,6 @@ export default function OrderList({ pochaID }: OrderListProps) {
     status: ordersStatus,
   } = useOrders(session?.user?.email, session?.token, pochaID);
 
-  const [selectedOrder, setSelectedOrder] = useState<OrderItem>();
-
   // Socket.IO Connection --------------------------------------
   useEffect(() => {
     // defensive check: no orders yet (i.e. no session, no token, no pochaID)
@@ -107,10 +105,6 @@ export default function OrderList({ pochaID }: OrderListProps) {
     return <></>;
   }
 
-  if (selectedOrder !== undefined) {
-    return <OrderTicket orderItem={selectedOrder} />;
-  }
-
   return (
     // sejong hospital font
     <div className="flex flex-col w-full h-full py-[0.6rem]">
@@ -144,7 +138,6 @@ export default function OrderList({ pochaID }: OrderListProps) {
                   <PochaOrderItem
                     key={orderItem.orderItemID}
                     orderItem={orderItem}
-                    setSelectedOrder={setSelectedOrder}
                   />
                 ))}
               </ul>
@@ -159,7 +152,6 @@ export default function OrderList({ pochaID }: OrderListProps) {
               <PochaOrderItem
                 key={orderItem.orderItemID}
                 orderItem={orderItem}
-                setSelectedOrder={setSelectedOrder}
               />
             ))}
           </ul>
@@ -172,7 +164,6 @@ export default function OrderList({ pochaID }: OrderListProps) {
               <PochaOrderItem
                 key={orderItem.orderItemID}
                 orderItem={orderItem}
-                setSelectedOrder={setSelectedOrder}
               />
             ))}
           </ul>
@@ -185,7 +176,6 @@ export default function OrderList({ pochaID }: OrderListProps) {
               <PochaOrderItem
                 key={orderItem.orderItemID}
                 orderItem={orderItem}
-                setSelectedOrder={setSelectedOrder}
               />
             ))}
           </ul>
