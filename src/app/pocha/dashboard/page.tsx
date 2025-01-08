@@ -9,11 +9,13 @@ import {
   NotAuthorized,
 } from "@/final_refactor_src/components/feedback";
 import useAdmin from "@/lib/next-auth/useAdmin";
-import { MenuItem, Orders } from "@/types/pocha";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { Tab, Tabs } from "@nextui-org/react";
-import Image from "next/image";
 import OrderDashboard from "@/features/pocha/components/dashboard/OrderDashboard";
+import { PochaDashboardTab } from "@/types/pocha";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import DashboardTabs from "@/features/pocha/components/dashboard/DashboardTabs";
+import DashboardTabContent from "@/features/pocha/components/dashboard/DashboardTabContent";
+import usePochaID from "@/features/pocha/hooks/usePochaID";
 // import React, { useEffect, useState } from "react";
 // [TODO] put this page into auth middleware (no need to handle missing session)
 
@@ -21,8 +23,12 @@ export default function DashboardPage() {
   // fetch necessary information for the dashboard
   // each hook fetches with GET request
   const { isAdmin, email, token, status: adminStatus } = useAdmin();
-  const { pochaInfo, status: pochaStatus } = usePocha();
-  const { menuList, status: menuStatus } = useMenu(pochaInfo?.pochaID, token);
+  const { pochaID, status: pochaIDStatus, error: pochaIDError } = usePochaID();
+
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<PochaDashboardTab>(
+    (searchParams.get("tab") as PochaDashboardTab) || "orders"
+  );
 
   // const [stockTestVal, setStockTestVal] = useState<number>(0);
 
@@ -41,13 +47,14 @@ export default function DashboardPage() {
   //   }
   // };
 
-  if (
-    adminStatus === "loading" ||
-    pochaStatus === "loading" ||
-    menuStatus === "loading"
-  ) {
+  if (adminStatus === "loading" || pochaIDStatus === "loading") {
     return <LoadingSpinner />;
   }
+
+  if (pochaIDStatus === "error") {
+    throw new Error(pochaIDError);
+  }
+
   // only admin can view this page
   if (!isAdmin) {
     return <NotAuthorized />;
@@ -57,17 +64,20 @@ export default function DashboardPage() {
 
   return (
     <section className="full-width-container px-2">
-      <p className="text-lg">
-        To promote Order Item to next status, 1. select the order item, 2. click
-        the Promote button
-      </p>
-      <>
-        <OrderDashboard
-          email={email}
-          token={token}
-          pochaID={pochaInfo?.pochaID}
-        />
-      </>
+      <div className="flex w-full justify-between items-center">
+        <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <p className="text-lg">
+          To promote Order Item to next status, 1. select the order item, 2.
+          click the Promote button
+        </p>
+      </div>
+
+      <DashboardTabContent
+        email={email}
+        token={token}
+        pochaID={pochaID}
+        activeTab={activeTab}
+      />
 
       {/* <Tabs aria-label="Options">
         <Tab key="orders" title="Orders">

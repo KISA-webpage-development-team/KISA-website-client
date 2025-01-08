@@ -8,8 +8,9 @@ interface PochaInfo {
 }
 
 type PochaTab = "menu" | "orders";
+type PochaDashboardTab = "orders" | "stock" | "history";
 
-export type { PochaInfo, PochaTab };
+export type { PochaInfo, PochaTab, PochaDashboardTab };
 
 // MENU -----------------------------------------------------------------------
 

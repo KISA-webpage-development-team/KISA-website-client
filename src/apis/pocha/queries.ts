@@ -1,6 +1,4 @@
 import client from "@/lib/axios/client";
-import { handleApiError } from "@/lib/axios/errorHandling";
-import { ApiError } from "@/lib/axios/types";
 import {
   MenuByCategory,
   PochaInfo,

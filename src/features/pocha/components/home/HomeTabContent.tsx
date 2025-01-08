@@ -17,7 +17,7 @@ interface HomeTabContentProps {
 
 function HomeTabContent({ activeTab, pochaID }: HomeTabContentProps) {
   return (
-    <div className="flex flex-col justify-between w-full min-h-screen relative">
+    <div className="flex flex-col justify-between w-full relative">
       {/* Content Area with Scrollable Section */}
       {activeTab === "menu" ? (
         <>

@@ -1,13 +1,10 @@
 "use client";
 
 import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
-import useDashboard from "../../hooks/useDashboard";
-import useWebSocketOrders from "../../hooks/useWebSocketOrders";
+import useDashboard from "../../hooks/useDashboardOrders";
+import useDashboardOrderSocket from "../../hooks/useDashboardOrderSocket";
 import FoodOrderGrid from "./FoodOrderGrid";
 import DrinkOrderGrid from "./DrinkOrderGrid";
-import { io } from "socket.io-client";
-import { useEffect } from "react";
-import { OrderItem } from "@/types/pocha";
 
 interface OrderDashboardProps {
   email: string;
@@ -28,7 +25,7 @@ export default function OrderDashboard({
     status,
   } = useDashboard(pochaID, token);
 
-  useWebSocketOrders({
+  useDashboardOrderSocket({
     token,
     email,
     pochaID,
@@ -36,7 +33,9 @@ export default function OrderDashboard({
   });
 
   if (status === "loading") {
-    return <LoadingSpinner />;
+    return (
+      <LoadingSpinner fullScreen={false} label="주문 정보를 가져오는중..." />
+    );
   }
 
   return (
