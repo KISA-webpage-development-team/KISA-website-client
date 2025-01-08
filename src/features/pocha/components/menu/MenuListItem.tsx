@@ -40,7 +40,7 @@ export default function MenuListItem({
   setSelectedMenu,
   isPriority = false,
 }: MenuItemCardProps) {
-  const { menuID, nameEng, nameKor, price, ageCheckRequired } = menu;
+  const { menuID, nameEng, nameKor, price, ageCheckRequired, stock } = menu;
   const notForUnderAge = ageCheckRequired && underAge;
 
   const handleMenuClick = () => {
@@ -55,7 +55,7 @@ export default function MenuListItem({
         className="w-full flex flex-row items-center gap-4 py-4
         transition-all duration-300 hover:bg-gray-100"
         onClick={handleMenuClick}
-        disabled={notForUnderAge}
+        disabled={notForUnderAge || stock === 0}
       >
         {/* Menu Item Image */}
         <figure className="relative h-[6rem] w-[6rem] items-center flex-shrink-0">
@@ -74,12 +74,18 @@ export default function MenuListItem({
           className="flex flex-col items-start justify-center 
         text-left text-lg leading-[150%] text-overflow"
         >
-          <span className={`${sejongHospitalBold.className} text-black`}>
+          <span
+            className={`${sejongHospitalBold.className} 
+          ${stock === 0 ? "text-gray-500 line-through" : "text-black"}`}
+          >
             {nameKor} {nameEng}
           </span>
           <span
-            className={`${sejongHospitalBold.className} mt-2 text-gray-500`}
-          >{`$${price}`}</span>
+            className={`${sejongHospitalBold.className} mt-2
+            ${stock === 0 ? "text-red-500" : "text-gray-500"}`}
+          >
+            {stock === 0 ? "Out of Stock" : `$${price}`}
+          </span>
         </div>
       </button>
     </li>

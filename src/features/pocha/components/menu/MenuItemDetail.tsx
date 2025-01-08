@@ -218,6 +218,9 @@ export default function MenuItemDetail({
             </div>
           </div>
 
+          {/* Error Message */}
+          {error !== null && <PochaErrorMsg message={error} />}
+
           {/* @dkim1112 ViewCartButton이 현재 어떻게 구현되어있는지 확인해보셈. 비슷하게 AddToCartButton을 만드셈 */}
           <button
             className={`
@@ -229,9 +232,6 @@ export default function MenuItemDetail({
           >
             {addingToCart ? "Adding to Cart..." : "Add to Cart"}
           </button>
-
-          {/* Error Message */}
-          {error !== null && <PochaErrorMsg message={error} />}
         </div>
       </div>
     </div>

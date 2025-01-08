@@ -5,6 +5,7 @@
 
 import useSWR from "swr";
 import { fetcherWithToken } from "@/lib/swr/fetchers";
+import { MenuByCategory } from "@/types/pocha";
 
 /**
  * @desc hook to fetch menu of pocha with SWR and existing fetcher
@@ -25,7 +26,7 @@ const useMenu = (pochaID: number, token: string) => {
   );
 
   return {
-    menuList,
+    menuList: menuList as MenuByCategory[],
     status: error ? "error" : isLoading ? "loading" : "success",
   };
 };

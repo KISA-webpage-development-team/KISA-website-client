@@ -1,0 +1,95 @@
+import React, { useState } from "react";
+import useMenu from "../../hooks/useMenu";
+import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
+import { changeStock } from "@/apis/pocha/mutations";
+
+interface StockManagerProps {
+  pochaID: number;
+  token: string;
+}
+
+export default function StockManager({ pochaID, token }: StockManagerProps) {
+  const { menuList, status } = useMenu(pochaID, token);
+  const [selectedMenu, setSelectedMenu] = useState<number | null>(null);
+  const [customStock, setCustomStock] = useState<number>(0);
+
+  const handleReload = () => {
+    window.location.reload();
+  };
+
+  const handleSelectMenu = (menuID: number) => {
+    setSelectedMenu(menuID);
+  };
+
+  const handleSetStock = async (quantity: number) => {
+    if (selectedMenu === null) return;
+    const res = await changeStock({ menuID: selectedMenu, quantity });
+    if (res) {
+      alert(`Stock updated to ${quantity} successfully`);
+      window.location.reload();
+    } else {
+      alert("Failed to update stock");
+    }
+  };
+
+  const handleSetStockToZero = () => {
+    handleSetStock(0);
+  };
+
+  if (status === "loading") {
+    return <LoadingSpinner fullScreen={false} label="메뉴를 가져오는중..." />;
+  }
+
+  return (
+    <div className="w-full">
+      <button
+        onClick={handleReload}
+        className="px-4 py-2 bg-blue-500 text-white"
+      >
+        Reload Stock
+      </button>
+      <ul className="mt-4 space-y-2">
+        {menuList?.map(({ menusList }) =>
+          menusList.map((menu) => (
+            <li
+              key={menu.menuID}
+              className={`p-2 border ${
+                selectedMenu === menu.menuID ? "bg-gray-300" : ""
+              }`}
+              onClick={() => handleSelectMenu(menu.menuID)}
+            >
+              {menu.nameKor} - Stock: {menu.stock}
+            </li>
+          ))
+        )}
+      </ul>
+      <div className="flex flex-row gap-4 mt-4">
+        <button
+          onClick={handleSetStockToZero}
+          disabled={selectedMenu === null}
+          className={`px-4 py-2 rounded-lg ${
+            selectedMenu !== null ? "bg-red-500 text-white" : "bg-gray-300"
+          }`}
+        >
+          Set Stock to 0
+        </button>
+
+        <button
+          onClick={() => handleSetStock(customStock)}
+          disabled={selectedMenu === null}
+          className={`px-4 py-2 rounded-lg ${
+            selectedMenu !== null ? "bg-green-500 text-white" : "bg-gray-300"
+          }`}
+        >
+          Set Stock to Custom Value:
+        </button>
+        <input
+          type="number"
+          value={customStock}
+          onChange={(e) => setCustomStock(Number(e.target.value))}
+          className="px-4 py-2 border"
+        />
+      </div>
+    </div>
+  );
+}
