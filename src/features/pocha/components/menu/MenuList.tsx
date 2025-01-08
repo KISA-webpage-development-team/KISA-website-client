@@ -39,7 +39,7 @@ function MenuList({ pochaid }: MenuListProps) {
   const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null);
 
   if (menuStatus === "loading" || userStatus === "loading") {
-    return <LoadingSpinner fullScreen={false} />;
+    return <LoadingSpinner fullScreen={false} label="메뉴를 가져오는 중..." />;
   }
 
   if (menuStatus === "error") {

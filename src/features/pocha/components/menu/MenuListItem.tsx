@@ -21,16 +21,18 @@ interface MenuItemCardProps {
  */
 const AGE_RESTRICTION_MESSAGE = "Only for 21+";
 
-const AgeRestrictionOverlay = () => (
-  <div
-    className="absolute z-50 rounded-lg bg-slate-500/50 w-full h-full 
+function AgeRestrictionOverlay() {
+  return (
+    <div
+      className="absolute z-50 rounded-lg bg-slate-500/50 w-full h-full 
       flex justify-center items-center"
-  >
-    <span className={`text-lg text-red-600 ${sejongHospitalBold.className}`}>
-      {AGE_RESTRICTION_MESSAGE}
-    </span>
-  </div>
-);
+    >
+      <span className={`text-lg text-red-600 ${sejongHospitalBold.className}`}>
+        {AGE_RESTRICTION_MESSAGE}
+      </span>
+    </div>
+  );
+}
 
 export default function MenuListItem({
   menu,

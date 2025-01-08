@@ -1,4 +1,5 @@
 "use client";
+import PochaButton from "@/features/pocha/components/shared/PochaButton";
 import {
   NotFound,
   NotLogin,
@@ -18,14 +19,9 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="h-full flex flex-col items-center justify-center">
       <UnexpectedError />
-      <button
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-        onClick={reset}
-      >
-        Try Again
-      </button>
+      <PochaButton onClick={reset} label="다시 시도하기" />
     </div>
   );
 }
