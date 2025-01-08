@@ -11,7 +11,9 @@ interface StockManagerProps {
 export default function StockManager({ pochaID, token }: StockManagerProps) {
   const { menuList, status } = useMenu(pochaID, token);
   const [selectedMenu, setSelectedMenu] = useState<number | null>(null);
-  const [customStock, setCustomStock] = useState<number>(0);
+  const [customStock, setCustomStock] = useState<string>("");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleReload = () => {
     window.location.reload();
@@ -23,6 +25,8 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
 
   const handleSetStock = async (quantity: number) => {
     if (selectedMenu === null) return;
+
+    setIsLoading(true);
     const res = await changeStock({ menuID: selectedMenu, quantity });
     if (res) {
       alert(`Stock updated to ${quantity} successfully`);
@@ -30,6 +34,7 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
     } else {
       alert("Failed to update stock");
     }
+    setIsLoading(false);
   };
 
   const handleSetStockToZero = () => {
@@ -66,27 +71,27 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
       <div className="flex flex-row gap-4 mt-4">
         <button
           onClick={handleSetStockToZero}
-          disabled={selectedMenu === null}
+          disabled={selectedMenu === null || isLoading}
           className={`px-4 py-2 rounded-lg ${
             selectedMenu !== null ? "bg-red-500 text-white" : "bg-gray-300"
           }`}
         >
-          Set Stock to 0
+          {isLoading ? "Loading..." : "Set Stock to 0"}
         </button>
 
         <button
-          onClick={() => handleSetStock(customStock)}
-          disabled={selectedMenu === null}
+          onClick={() => handleSetStock(Number(customStock)) || 0}
+          disabled={selectedMenu === null || isLoading}
           className={`px-4 py-2 rounded-lg ${
             selectedMenu !== null ? "bg-green-500 text-white" : "bg-gray-300"
           }`}
         >
-          Set Stock to Custom Value:
+          {isLoading ? "Loading..." : "Set Stock to Custom Value"}
         </button>
         <input
           type="number"
           value={customStock}
-          onChange={(e) => setCustomStock(Number(e.target.value))}
+          onChange={(e) => setCustomStock(e.target.value)}
           className="px-4 py-2 border"
         />
       </div>
