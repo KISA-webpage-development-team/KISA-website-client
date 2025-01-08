@@ -72,7 +72,7 @@ export default function MenuListItem({
         {/* Menu Info */}
         <div
           className="flex flex-col items-start justify-center 
-        text-left text-lg leading-[150%]"
+        text-left text-lg leading-[150%] text-overflow"
         >
           <span className={`${sejongHospitalBold.className} text-black`}>
             {nameKor} {nameEng}
