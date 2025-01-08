@@ -113,11 +113,11 @@ export default function OrderList({ pochaID }: OrderListProps) {
 
   return (
     // sejong hospital font
-    <div className="flex flex-col w-full h-full px-[1.2rem] py-[0.6rem]">
+    <div className="flex flex-col w-full h-full py-[0.6rem]">
       {/* Tabs for Order Status */}
       <Tabs
         className={`${sejongHospitalBold.className} w-full`}
-        size="sm"
+        size="md"
         fullWidth
         aria-label="Order Status"
         radius="sm"
