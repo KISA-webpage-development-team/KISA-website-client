@@ -36,12 +36,12 @@ export default function PochaOrderItem({ orderItem }: PochaOrderItemProps) {
         />
       )}
       <li
-        className="h-full
+        className={`h-full
       shadow-md rounded-lg
-      border border-zinc-200 bg-white
+      border border-zinc-200 bg-white 
       flex self-stretch items-center
       py-[1rem] px-[1rem] space-x-[1rem]
-    "
+    `}
       >
         <div
           className={`w-[0.75rem] h-[0.75rem] rounded-full ${STATUS_COLORS[status]}`}
