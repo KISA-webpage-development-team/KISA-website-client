@@ -14,7 +14,7 @@ export default function PochaLayout({ children }) {
     <SessionProvider>
       {/* ✅ /dashboard is tablet view, others are mobile view restrictions applied */}
       {isDashboard ? (
-        <div className="w-full h-full">{children}</div>
+        <div className="w-full">{children}</div>
       ) : (
         <>
           {/* This message only shows on larger screens */}
@@ -23,7 +23,8 @@ export default function PochaLayout({ children }) {
           </div>
           {/* Main content for mobile screens */}
           <div
-            className={`md:hidden h-full w-full ${sejongHospitalLight.className}`}
+            className={`md:hidden min-h-screen
+               ${sejongHospitalLight.className}`}
           >
             {children}
           </div>

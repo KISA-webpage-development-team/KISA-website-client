@@ -101,7 +101,7 @@ export default function PaymentSubmitForm({
     <form
       onSubmit={handlePaymentSubmit}
       className="relative w-full
-    flex flex-col
+    flex flex-col gap-4
     bg-white rounded-md py-4"
     >
       {/* Payment form input */}

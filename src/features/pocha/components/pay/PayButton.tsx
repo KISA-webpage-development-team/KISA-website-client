@@ -8,7 +8,7 @@ interface PayButtonProps {
 
 export default function PayButton({ loading, totalPrice }: PayButtonProps) {
   return (
-    <div className="w-full mt-2">
+    <div className="w-full">
       <PochaButton
         label={!loading ? `Pay $${totalPrice}` : "Loading..."}
         disabled={loading}

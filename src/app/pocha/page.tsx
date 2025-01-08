@@ -59,7 +59,7 @@ export default function PochaPage() {
   return (
     <section
       className={`
-        md:hidden flex flex-col h-screen
+        md:hidden flex flex-col min-h-screen
         relative !gap-0`}
     >
       {/* PochaHeading (at the top, disappear when scrolling) */}

@@ -48,7 +48,7 @@ export default function PochaCartPage() {
   }
 
   return (
-    <section className="!gap-0">
+    <section className="flex flex-col w-full min-h-screen !gap-0">
       <PochaBackHeading title="Cart" />
       <PochaHorizontalDivider />
 
@@ -56,10 +56,13 @@ export default function PochaCartPage() {
         <EmptyCartAlert />
       ) : (
         <>
-          <div className="flex-grow overflow-y-auto">
+          <div className="flex-grow">
             <CartList cart={cart} handleQuantityChange={handleQuantityChange} />
           </div>
-          <div className="sticky bottom-0 w-full bg-white pb-4 gap-2 z-50">
+          <div
+            className="sticky bottom-0 self-stretch w-full
+           bg-white pb-4 gap-2 z-50"
+          >
             <PochaHorizontalDivider />
             <CartTotalSummary totalAmount={totalAmount} />
             <ProceedToPaymentButton pochaid={pochaID} />

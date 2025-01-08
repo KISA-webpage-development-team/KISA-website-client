@@ -151,7 +151,7 @@ export default function MenuItemDetail({
         <div
           className={`${sejongHospitalBold.className}
         flex flex-col w-full bg-white rounded-[8px] shadow-lg
-        py-7 px-5 gap-6
+        py-7 px-5 gap-5
         items-center border-2 border-gray-300 z-10`}
         >
           {/* Menu Name */}
@@ -175,20 +175,6 @@ export default function MenuItemDetail({
             <p className="text-black">Comes with:</p>
             <ul className="list-disc list-inside text-gray-500">
               <li>Jioh</li>
-              <li>Dongsub</li>
-              <li>Dongeun</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Scroll Tests</li>
-              <li>Scroll Tests</li>
-              <li>Scroll Tests</li>
-              <li>Scroll Tests</li>
-              <li>Scroll Tests</li>
             </ul>
           </div>
 
