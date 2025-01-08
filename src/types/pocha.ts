@@ -59,7 +59,7 @@ type PayInfo = {
 
 export type { Cart, CartItem, AddItemToCartBody, PayInfo };
 
-// ORDER -----------------------------------------------------------------------
+// ORDER ------------------------------------------------------------------------
 
 const enum OrderStatus {
   PENDING = "pending",
