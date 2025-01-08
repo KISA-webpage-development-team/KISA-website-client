@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import "react-quill/dist/quill.snow.css";
 import Quill from "quill";
 
@@ -12,16 +12,19 @@ export default function TextEditor({ text, setText }: TextEditorProps) {
   const textRef = useRef<string>(text);
   const setTextRef = useRef(setText);
 
-  const QuillModules = {
-    toolbar: [
-      ["image", "link"],
-      [{ size: ["small", false, "large", "huge"] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["bold", "underline", "italic"],
-      [{ color: [] }, { background: [] }],
-      [{ align: [] }],
-    ],
-  };
+  const QuillModules = useMemo(
+    () => ({
+      toolbar: [
+        ["image", "link"],
+        [{ size: ["small", false, "large", "huge"] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["bold", "underline", "italic"],
+        [{ color: [] }, { background: [] }],
+        [{ align: [] }],
+      ],
+    }),
+    []
+  );
 
   useEffect(() => {
     setTextRef.current = setText;
@@ -42,7 +45,7 @@ export default function TextEditor({ text, setText }: TextEditorProps) {
     quill.root.innerHTML = textRef.current;
 
     quill.on("text-change", () => {
-      // const content = quill.root.innerHTML;
+      const content = quill.root.innerHTML;
       setTextRef.current(content);
     });
 
