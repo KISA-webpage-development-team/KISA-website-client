@@ -13,13 +13,13 @@ import {
  * @route GET /pocha/status-info/?date=${date}
  */
 export async function getPochaInfo(date: Date): Promise<PochaInfo> {
-  const fakeDateEST = new Date("2024-11-16T23:00:00");
-  // const fakeDateKST = new Date("2024-11-17T13:00:00");
+  // const fakeDateEST = new Date("2024-11-16T23:00:00");
+  const fakeDateKST = new Date("2024-11-17T13:00:00");
 
   // [TODO] change fakeDate to date
   // For testing, `dev` branch uses fakeDateKST, `main` branch uses fakeDateEST
   const url = `/pocha/status-info/?date=${
-    fakeDateEST.toISOString().split(".")[0]
+    fakeDateKST.toISOString().split(".")[0]
   }`;
   // const url = `/pocha/status-info/?date=${
   //   new Date().toISOString().split(".")[0]
