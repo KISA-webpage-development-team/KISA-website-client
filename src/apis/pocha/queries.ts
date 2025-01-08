@@ -13,17 +13,26 @@ import {
  * @route GET /pocha/status-info/?date=${date}
  */
 export async function getPochaInfo(date: Date): Promise<PochaInfo> {
-  // const fakeDateEST = new Date("2024-11-16T23:00:00");
-  const fakeDateKST = new Date("2024-11-17T13:00:00");
+  // [TODO] change fakeDateEST to date for production
+  const fakeDateEST = new Date("2024-11-16T23:00:00");
 
-  // [TODO] change fakeDate to date
-  // For testing, `dev` branch uses fakeDateKST, `main` branch uses fakeDateEST
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Detect user's time zone
+  const KST_OFFSET = 14; // KST is UTC+9, EST is UTC-5 => Difference is +14 hours
+
+  let convertedDate;
+
+  // Check if the user's time zone is KST
+  if (userTimeZone === "Asia/Seoul") {
+    convertedDate = new Date(
+      fakeDateEST.getTime() + KST_OFFSET * 60 * 60 * 1000
+    );
+  } else {
+    convertedDate = fakeDateEST; // If not in KST, no adjustment
+  }
+
   const url = `/pocha/status-info/?date=${
-    fakeDateKST.toISOString().split(".")[0]
+    convertedDate.toISOString().split(".")[0]
   }`;
-  // const url = `/pocha/status-info/?date=${
-  //   new Date().toISOString().split(".")[0]
-  // }`;
 
   try {
     const response = await client.get(url);
