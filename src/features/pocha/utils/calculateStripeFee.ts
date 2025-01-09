@@ -1,6 +1,6 @@
 const calculateStripeFee = (amount: number) => {
   // calculate fee based on the amount
-  return parseFloat((0.45 + amount * 0.029).toFixed(2));
+  return parseFloat((amount * 0.031 + 0.3).toFixed(2));
 };
 
 const calculateStripeTotalPrice = (amount: number) => {

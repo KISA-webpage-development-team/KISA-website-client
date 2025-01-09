@@ -60,38 +60,42 @@ export default function PaymentSubmitForm({
     pochaID,
     totalPrice,
     userEmail,
+    fullname,
     underAge,
     ageCheckRequired
   );
 
-  useEffect(() => {
-    const createPaymentIntent = async () => {
-      // fetch client secret from server
-      fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: convertToSubcurrency(totalPrice),
-          customer: {
-            email: userEmail,
-            name: fullname,
-          },
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setClientSecret(data.clientSecret);
-        });
-    };
+  // useEffect(() => {
+  //   const createPaymentIntent = async () => {
+  //     // fetch client secret from server
+  //     fetch("/api/create-payment-intent", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         amount: convertToSubcurrency(totalPrice),
+  //         customer: {
+  //           email: userEmail,
+  //           name: fullname,
+  //         },
+  //       }),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setClientSecret(data.clientSecret);
+  //       });
+  //   };
 
-    if (userEmail && fullname && totalPrice) {
-      createPaymentIntent();
-    }
-  }, [totalPrice, userEmail, fullname]);
+  //   if (userEmail && fullname && totalPrice) {
+  //     if (!clientSecret) {
+  //     createPaymentIntent();
+  //     }
+  //   }
+  // }, [totalPrice, userEmail, fullname, clientSecret]);
 
-  if (!clientSecret || !stripe || !elements) {
+  // if (!clientSecret || !stripe || !elements) {
+  if (!stripe || !elements) {
     return (
       <LoadingSpinner fullScreen={false} label="결제 정보를 가져오는 중..." />
     );
@@ -105,14 +109,14 @@ export default function PaymentSubmitForm({
     bg-white rounded-md py-4"
     >
       {/* Payment form input */}
-      {clientSecret && (
-        <PaymentElement
-          options={{
-            layout: "accordion",
-            paymentMethodOrder: ["apple_pay", "google_pay", "card"],
-          }}
-        />
-      )}
+      {/* {clientSecret && ( */}
+      <PaymentElement
+        options={{
+          layout: "accordion",
+          paymentMethodOrder: ["apple_pay", "google_pay", "card"],
+        }}
+      />
+      {/* )} */}
       {/*?*/}
       {/* Total Price + Transaction fee display */}
       <PaySummaryCard amount={amount} fee={fee} totalPrice={totalPrice} />

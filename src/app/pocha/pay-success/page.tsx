@@ -1,29 +1,40 @@
 "use client";
 
-import { UserSession } from "@/lib/next-auth/types";
-import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useState } from "react";
 import PochaButton from "@/features/pocha/components/shared/PochaButton";
+import TipModal from "@/features/pocha/components/pay/TipModal";
 
 export default function PaySuccessPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const pochaID = parseInt(searchParams.get("pochaid"));
-  const paymentIntent = searchParams.get("payment_intent");
-  const [menuClicked, setMenuClicked] = useState(false);
-  const [homeClicked, setHomeClicked] = useState(false);
 
-  const { data: session, status } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  // [WIP] tip-related states
+  const [showTipModal, setShowTipModal] = useState(true);
+  const [paymentMethodId, setPaymentMethodId] = useState<string>();
+  const [customerName, setCustomerName] = useState<string>();
+  const [customerEmail, setCustomerEmail] = useState<string>();
+  const [customerID, setCustomerID] = useState<string>();
+
+  // decode stripe token to process tip payment
+  useEffect(() => {
+    const storedPaymentMethodId = localStorage.getItem("paymentMethodId");
+    const storedCustomerName = localStorage.getItem("customerName");
+    const storedCustomerEmail = localStorage.getItem("customerEmail");
+    const storedCustomerID = localStorage.getItem("customerID");
+
+    if (storedPaymentMethodId && storedCustomerName && storedCustomerEmail) {
+      setPaymentMethodId(storedPaymentMethodId);
+      setCustomerName(storedCustomerName);
+      setCustomerEmail(storedCustomerEmail);
+      setCustomerID(storedCustomerID);
+    } else {
+      router.replace("/pocha");
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     // Add a new entry to prevent direct back navigation
@@ -43,30 +54,48 @@ export default function PaySuccessPage() {
     };
   }, [router]);
 
+  // prevent tip modal showing again when user refreshes the page
+  // useEffect(() => {
+  //   if (showTipModal) {
+  //     localStorage.removeItem("paymentMethodId");
+  //     localStorage.removeItem("customerName");
+  //     localStorage.removeItem("customerEmail");
+  //     localStorage.removeItem("customerID");
+  //   }
+  // }, [showTipModal]);
+
   const directToMenuList = () => {
-    setHomeClicked(true);
     setTimeout(() => {
       router.push("/pocha");
     }, 150);
   };
 
   const directToOrders = () => {
-    setMenuClicked(true);
     setTimeout(() => {
       router.push("/pocha?tab=orders");
     }, 150);
   };
 
-  if (!paymentIntent) {
-    // [TODO] better handling
-    window.location.href = "/pocha";
-  }
+  // if (!paymentIntentId) {
+  //   // [TODO] better handling
+  //   window.location.href = "/pocha";
+  // }
 
   return (
     <section
       className="flex flex-col justify-center items-center h-full
     gap-6"
     >
+      {showTipModal && paymentMethodId && (
+        <TipModal
+          totalPrice={50}
+          paymentMethodId={paymentMethodId}
+          customerName={customerName}
+          customerEmail={customerEmail}
+          customerID={customerID}
+          onClose={() => setShowTipModal(false)}
+        />
+      )}
       <span
         className={`${sejongHospitalBold.className} text-center text-black text-2xl`}
       >
@@ -74,7 +103,7 @@ export default function PaySuccessPage() {
       </span>
       <figure
         className="relative w-[12rem] h-[12rem] 
-      flex justify-center items-center flex-shrink-0"
+      flex justify-center items-center flex-shrink-0 -z-10"
       >
         <Image
           src={`/images/check_circle.png`}
@@ -84,6 +113,11 @@ export default function PaySuccessPage() {
           className="object-contain"
         />
       </figure>
+      {!showTipModal && (
+        <span className={`${sejongHospitalBold.className} text-lg`}>
+          팁을 주셔서 감사합니다! Thank you for the tip!
+        </span>
+      )}
       <div className="flex flex-col items-center gap-4 w-full">
         <PochaButton
           label="주문 내역 보기"

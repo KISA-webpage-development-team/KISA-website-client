@@ -3,12 +3,14 @@ import { FormEvent, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { checkCartStock, notifyPayResult } from "@/apis/pocha/mutations";
 import { useRouter } from "next/navigation";
+import { STRIPE_SECRET_KEY } from "@/constants/env";
 
 const useStripePayment = (
   clientSecret: string,
   pochaID: number,
   totalPrice: number,
   userEmail: string,
+  fullname: string,
   underAge: boolean,
   ageCheckRequired: boolean
 ) => {
@@ -46,20 +48,107 @@ const useStripePayment = (
 
   /** Step 4: Process Payment */
   const processPayment = async () => {
-    // this is actual payment, confirm payment
-    const { error, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      clientSecret,
-      // [NOTE] for production, return_url should be the actual URL
-      confirmParams: {
-        return_url: `https://umichkisa.com/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`,
-      },
-      redirect: "if_required",
-    });
+    try {
+      // step 1. 고객 생성 또는 기존 고객 확인
+      const customerResponse = await fetch("/api/create-customer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, name: fullname }),
+      });
 
-    if (error) {
-      setErrorMessage(error.message);
+      const { customerID } = await customerResponse.json();
 
+      if (!customerID) throw new Error("고객 생성에 실패했습니다.");
+
+      // create payment method
+      // const createPaymentMethodResponse = await stripe.createPaymentMethod({
+      //   elements,
+      // });
+      // if (createPaymentMethodResponse.error) {
+      //   throw new Error("결제 수단 생성 실패");
+      // }
+
+      // const paymentMethodID = createPaymentMethodResponse.paymentMethod.id;
+
+      // console.log("paymentMethodID: ", paymentMethodID);
+
+      // step 2. paymentIntent 생성 (customerID 포함)
+      const createPaymentIntentResponse = await fetch(
+        "/api/create-payment-intent",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: totalPrice * 100, // cents 단위로 변환
+            customerID: customerID, // ✅ 고객 ID 포함
+          }),
+        }
+      );
+
+      const { clientSecret } = await createPaymentIntentResponse.json();
+      if (!clientSecret) throw new Error("PaymentIntent 생성에 실패했습니다.");
+
+      // Step 3: 결제 진행 및 PaymentMethod 생성 (confirmPayment)
+      // this is actual payment, confirm payment
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+
+        // [NOTE] for production, return_url should be the actual URL
+        confirmParams: {
+          return_url: `https://umichkisa.com/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`,
+        },
+        redirect: "if_required",
+      });
+
+      if (error) {
+        console.error("Error while confirming payment:", error);
+        setErrorMessage(error.message);
+        throw new Error("결제 진행 중 오류 발생");
+      }
+
+      // // ✅ Step 4: PaymentMethod를 Customer에 연결
+      // const attachPaymentMethodResponse = await fetch(
+      //   "/api/attach-payment-method",
+      //   {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({
+      //       paymentMethodID: paymentIntent.payment_method,
+      //       customerID: customerID,
+      //     }),
+      //   }
+      // );
+
+      // const attachResult = await attachPaymentMethodResponse.json();
+      // if (!attachResult.success) {
+      //   throw new Error("PaymentMethod 연결에 실패했습니다.");
+      // }
+
+      // Step 5: 카트 업데이트
+      // notify pay result with success
+      const res = await notifyPayResult(userEmail, pochaID, {
+        result: "success",
+      });
+      if (!res) {
+        throw new Error("Error while updating cart status");
+      }
+
+      // store necessary data in localStorage
+      localStorage.setItem(
+        "paymentMethodId",
+        paymentIntent.payment_method as string
+      );
+      localStorage.setItem("customerName", fullname);
+      localStorage.setItem("customerEmail", userEmail);
+      localStorage.setItem("customerID", customerID);
+
+      router.push(
+        `/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}&payment_intent=${paymentIntent.id}`
+      );
+    } catch (error) {
+      alert("결제 오류가 발생했습니다. 키사에 문의해주세요.");
+      setErrorMessage(error.message || "결제 실패");
       // notify pay result with failure
       const res = await notifyPayResult(userEmail, pochaID, {
         result: "failure",
@@ -69,18 +158,6 @@ const useStripePayment = (
         throw new Error("Error while updating cart status");
       }
     }
-    // notify pay result with success
-    const res = await notifyPayResult(userEmail, pochaID, {
-      result: "success",
-    });
-    if (!res) {
-      throw new Error("Error while updating cart status");
-    }
-    // This payment UI automatically closes with a success animation
-    // redirect to "return_url"
-    router.push(
-      `/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}&payment_intent=${paymentIntent}`
-    );
   };
 
   /** Main Submit Function */

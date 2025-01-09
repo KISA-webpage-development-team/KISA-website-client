@@ -66,6 +66,7 @@ export default function PayPage() {
           mode: "payment",
           amount: convertToSubcurrency(totalPrice), // dollars to cents, stripe accepts in the most basic? currency unit
           currency: "usd",
+          setup_future_usage: "off_session",
         }}
       >
         <PaymentSubmitForm

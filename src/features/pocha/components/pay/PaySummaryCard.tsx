@@ -42,7 +42,7 @@ export default function PaySummaryCard({
       </div>
 
       <span className={`mt-1 text-[0.6rem] ${sejongHospitalLight.className}`}>
-        *수수료는 Stripe 결제 서비스 비용이며, 고정 ($0.45)와 결제 금액의 2.9%를
+        *수수료는 Stripe 결제 서비스 비용이며, 고정 ($0.3)와 결제 금액의 3.1%를
         합산하여 계산됩니다.
       </span>
     </div>

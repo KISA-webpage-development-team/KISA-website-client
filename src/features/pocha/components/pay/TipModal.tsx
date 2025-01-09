@@ -1,105 +1,112 @@
-// [NOTE] Currently not in use
+// TipModal
+// - use paymentMethodId and customerId from pay page to process tip payment
 
 import { Select, SelectItem } from "@nextui-org/react";
 import React, { useState } from "react";
 
-export default function TipModal() {
-  const [tipPercentage, setTipPercentage] = useState<string | null>(null);
-  const [tip, setTip] = useState<number | null>(null);
-  const [isTipModalOpen, setIsTipModalOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [amount, setAmount] = useState<number | null>(null);
-  const [fee, setFee] = useState<number | null>(null);
-  const [totalPrice, setTotalPrice] = useState<number | null>(null);
+interface TipModalProps {
+  totalPrice: number;
+  paymentMethodId: string;
+  customerName: string;
+  customerEmail: string;
+  customerID: string;
+  onClose: () => void;
+}
 
-  //   const handleTipSubmit = async () => {
-  //     try {
-  //       await updateTip();
+export default function TipModal({
+  totalPrice,
+  paymentMethodId,
+  customerName,
+  customerEmail,
+  customerID,
+  onClose,
+}: TipModalProps) {
+  const [tipAmount, setTipAmount] = useState<number>((totalPrice * 12) / 100);
+  const [tipPercentage, setTipPercentage] = useState<string>("12");
+  const [loading, setLoading] = useState(false);
 
-  //       setIsTipModalOpen(false);
-  //       // 5. process payment
-  //       try {
-  //         await processPay();
-  //       } catch (error) {
-  //         console.error("Error while processing payment", error);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error while updating tip", error);
-  //     }
+  const handleTipSelection = (value: string) => {
+    setTipPercentage(value);
+    const calculatedTip = (totalPrice * parseInt(value)) / 100;
+    setTipAmount(calculatedTip);
+  };
 
-  //     setLoading(false);
-  //   };
+  const handleSubmitTip = async () => {
+    if (tipAmount === 0) {
+      onClose();
+      return;
+    }
 
-  /**
-   * @desc Update Payment Intent with Tip
-   */
-  // const updateTip = async () => {
-  //     // console.log("new Tip: ", tip);
-  //     // fetch updated client secret from server
-  //     fetch("/api/create-payment-intent", {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         id: paymentIntentId,
-  //         tip: parseFloat(tip.toFixed(2)),
-  //       }),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => setClientSecret(data.clientSecret));
-  //   };
+    setLoading(true);
+    try {
+      const createTipIntentResponse = await fetch(
+        "/api/create-tip-payment-intent",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            tipAmount: tipAmount * 100, // currency format (dollars to cents)
+            paymentMethodId,
+            customer: {
+              name: customerName,
+              email: customerEmail,
+              id: customerID,
+            },
+          }),
+        }
+      );
+
+      const createTipResult = await createTipIntentResponse.json();
+      if (!createTipResult.success) {
+        throw new Error("팁 결제 실패");
+      }
+
+      alert("팁 결제가 성공적으로 완료되었습니다!");
+      onClose();
+    } catch (error) {
+      alert("팁 결제 중 오류가 발생했습니다.");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-lg font-bold mb-4">잠깐! 팁은 주고 가야지 ㅋㅋ</h2>
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96 z-50">
+        <h2 className="text-lg font-bold mb-4">
+          웹사이트 개발을 위해 힘쓰는 KISA Dev 팀에게 팁을 남겨주시면
+          감사하겠습니다
+        </h2>
         <Select
           label="Choose a tip amount"
-          selectedKeys={tipPercentage}
-          onSelectionChange={(value) => {
-            const selectedTip = Array.from(value)[0] as string;
-
-            if (selectedTip === undefined) {
-              console.log("tipPercentage: ", tipPercentage);
-              return;
-            }
-
-            // setTipPercentage(value);
-            setTip((amount * parseInt(selectedTip)) / 100);
-          }}
-          isRequired={true}
+          selectedKeys={[tipPercentage]}
+          onSelectionChange={(value) =>
+            handleTipSelection(Array.from(value)[0] as string)
+          }
+          isRequired
           className="w-full mb-4"
+          size="lg"
         >
           <SelectItem key="0">No Tip</SelectItem>
+          <SelectItem key="10">10%</SelectItem>
+          <SelectItem key="12">12%</SelectItem>
           <SelectItem key="15">15%</SelectItem>
-          <SelectItem key="18">18%</SelectItem>
-          <SelectItem key="20">20%</SelectItem>
         </Select>
-        <div className="flex justify-between">
-          <button
-            onClick={() => {
-              setIsTipModalOpen(false);
-              setLoading(false);
-            }}
+        <div className="flex justify-end">
+          {/* <button
+            onClick={onClose}
             className="bg-gray-300 text-black px-4 py-2 rounded-lg"
           >
             Cancel
-          </button>
+          </button> */}
           <button
-            onClick={() => {
-              if (tip !== null) {
-                // handleTipSubmit();
-              }
-            }}
-            disabled={tip === null} // Disable button if no value is selected
-            className={`px-4 py-2 rounded-lg ${
-              tip !== null
-                ? "bg-blue-500 text-white cursor-pointer"
-                : "bg-gray-300 text-black cursor-not-allowed"
-            }`}
+            onClick={handleSubmitTip}
+            className={`px-4 py-2 rounded-lg ${"bg-blue-500 text-white"}`}
           >
-            Submit Tip
+            {loading ? "결제중..." : "Submit Tip"}
           </button>
         </div>
       </div>
