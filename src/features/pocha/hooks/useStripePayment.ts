@@ -143,6 +143,8 @@ const useStripePayment = (
       localStorage.setItem("customerEmail", userEmail);
       localStorage.setItem("customerID", customerID);
 
+      alert("결제가 완료되었습니다.");
+
       router.push(
         `/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}&payment_intent=${paymentIntent.id}`
       );

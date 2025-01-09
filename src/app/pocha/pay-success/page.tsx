@@ -118,7 +118,7 @@ export default function PaySuccessPage() {
         />
       </figure>
       {!showTipModal && (
-        <span className={`${sejongHospitalBold.className} text-lg`}>
+        <span className={`${sejongHospitalBold.className} text-lg text-center`}>
           팁을 주셔서 감사합니다! Thank you for the tip!
         </span>
       )}

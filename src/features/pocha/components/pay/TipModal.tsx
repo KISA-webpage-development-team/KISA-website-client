@@ -1,6 +1,7 @@
 // TipModal
 // - use paymentMethodId and customerId from pay page to process tip payment
 
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { Select, SelectItem } from "@nextui-org/react";
 import React, { useState } from "react";
 
@@ -69,7 +70,7 @@ export default function TipModal({
         throw new Error("팁 결제 실패");
       }
 
-      alert("팁 결제가 성공적으로 완료되었습니다!");
+      alert(`팁 결제가 성공적으로 완료되었습니다! $${tipAmount}`);
 
       const searchParams = new URLSearchParams({ tip_completed: "true" });
       window.history.replaceState(
@@ -89,10 +90,14 @@ export default function TipModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96 z-50">
-        <h2 className="text-lg font-bold mb-4">
+      <div
+        className="bg-white rounded-lg shadow-lg 
+      flex flex-col items-center justify-center 
+      px-8 py-6 z-50 gap-4 max-w-[85%]"
+      >
+        <h2 className="text-lg">
           웹사이트 개발을 위해 힘쓰는 KISA Dev 팀에게 팁을 남겨주시면
-          감사하겠습니다
+          감사하겠습니다.
         </h2>
         <Select
           label="Choose a tip amount"
@@ -101,7 +106,7 @@ export default function TipModal({
             handleTipSelection(Array.from(value)[0] as string)
           }
           isRequired
-          className="w-full mb-4"
+          className="w-full"
           size="lg"
         >
           <SelectItem key="0">No Tip</SelectItem>
@@ -109,7 +114,7 @@ export default function TipModal({
           <SelectItem key="12">12%</SelectItem>
           <SelectItem key="15">15%</SelectItem>
         </Select>
-        <div className="flex justify-end">
+        <div className="flex w-full justify-end">
           {/* <button
             onClick={onClose}
             className="bg-gray-300 text-black px-4 py-2 rounded-lg"
@@ -118,7 +123,7 @@ export default function TipModal({
           </button> */}
           <button
             onClick={handleSubmitTip}
-            className={`px-4 py-2 rounded-lg ${"bg-blue-500 text-white"}`}
+            className={`px-4 py-2 rounded-lg ${sejongHospitalBold.className} bg-blue-500 text-white`}
           >
             {loading ? "결제중..." : "Submit Tip"}
           </button>
