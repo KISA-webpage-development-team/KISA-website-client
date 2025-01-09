@@ -33,6 +33,12 @@ export default function TipModal({
 
   const handleSubmitTip = async () => {
     if (tipAmount === 0) {
+      const searchParams = new URLSearchParams({ tip_completed: "true" });
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}?${searchParams}`
+      );
       onClose();
       return;
     }
@@ -64,6 +70,14 @@ export default function TipModal({
       }
 
       alert("팁 결제가 성공적으로 완료되었습니다!");
+
+      const searchParams = new URLSearchParams({ tip_completed: "true" });
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}?${searchParams}`
+      );
+
       onClose();
     } catch (error) {
       alert("팁 결제 중 오류가 발생했습니다.");

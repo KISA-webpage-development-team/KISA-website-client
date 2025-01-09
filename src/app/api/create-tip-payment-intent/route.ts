@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("wwww");
     const tipPaymentIntent = await stripe.paymentIntents.create({
       amount: tipAmount, // cents 단위
       currency: "usd",

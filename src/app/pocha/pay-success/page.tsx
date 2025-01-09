@@ -10,6 +10,10 @@ import TipModal from "@/features/pocha/components/pay/TipModal";
 
 export default function PaySuccessPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // extract tip-success from searchParams
+  const tipCompleted = searchParams.get("tip_completed");
 
   // [WIP] tip-related states
   const [showTipModal, setShowTipModal] = useState(true);
@@ -17,6 +21,12 @@ export default function PaySuccessPage() {
   const [customerName, setCustomerName] = useState<string>();
   const [customerEmail, setCustomerEmail] = useState<string>();
   const [customerID, setCustomerID] = useState<string>();
+
+  useEffect(() => {
+    if (tipCompleted) {
+      setShowTipModal(false);
+    }
+  }, [tipCompleted]);
 
   // decode stripe token to process tip payment
   useEffect(() => {
@@ -31,8 +41,12 @@ export default function PaySuccessPage() {
       setCustomerEmail(storedCustomerEmail);
       setCustomerID(storedCustomerID);
     } else {
-      router.replace("/pocha");
-      return;
+      if (!showTipModal) {
+        return;
+      } else {
+        router.replace("/pocha");
+        return;
+      }
     }
   }, [router]);
 
@@ -53,16 +67,6 @@ export default function PaySuccessPage() {
       window.removeEventListener("popstate", handlePopState);
     };
   }, [router]);
-
-  // prevent tip modal showing again when user refreshes the page
-  // useEffect(() => {
-  //   if (showTipModal) {
-  //     localStorage.removeItem("paymentMethodId");
-  //     localStorage.removeItem("customerName");
-  //     localStorage.removeItem("customerEmail");
-  //     localStorage.removeItem("customerID");
-  //   }
-  // }, [showTipModal]);
 
   const directToMenuList = () => {
     setTimeout(() => {
