@@ -14,6 +14,7 @@ import usePocha from "@/features/pocha/hooks/usePocha";
 
 // types
 import { PochaTab } from "@/types/pocha";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
 export default function PochaPage() {
   // "/pocha?tab=menu" [default] or "/pocha?tab=orders"
@@ -40,7 +41,9 @@ export default function PochaPage() {
   if (Object.keys(pochaInfo).length === 0) {
     return (
       <section className="flex justify-center items-center h-full">
-        <p className="text-3xl font-bold">No scheduled pocha</p>
+        <p className={`text-3xl ${sejongHospitalBold.className}`}>
+          No scheduled pocha
+        </p>
       </section>
     );
   }
@@ -50,7 +53,9 @@ export default function PochaPage() {
   if (pochaInfo?.ongoing === false) {
     return (
       <section className="flex justify-center items-center h-full">
-        <p className="text-3xl font-bold">Upcoming pocha</p>
+        <p className={`text-3xl ${sejongHospitalBold.className}`}>
+          Upcoming pocha
+        </p>
         <HomeHeading pochaInfo={pochaInfo} />
       </section>
     );
