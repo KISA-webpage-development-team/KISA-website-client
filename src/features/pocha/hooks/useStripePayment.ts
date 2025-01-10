@@ -3,10 +3,8 @@ import { FormEvent, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { checkCartStock, notifyPayResult } from "@/apis/pocha/mutations";
 import { useRouter } from "next/navigation";
-import { STRIPE_SECRET_KEY } from "@/constants/env";
 
 const useStripePayment = (
-  clientSecret: string,
   pochaID: number,
   totalPrice: number,
   userEmail: string,
@@ -145,9 +143,7 @@ const useStripePayment = (
 
       alert("결제가 완료되었습니다.");
 
-      router.push(
-        `/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}&payment_intent=${paymentIntent.id}`
-      );
+      router.push(`/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`);
     } catch (error) {
       alert("결제 오류가 발생했습니다. 키사에 문의해주세요.");
       setErrorMessage(error.message || "결제 실패");

@@ -49,14 +49,11 @@ export default function PaymentSubmitForm({
   const stripe = useStripe();
   const elements = useElements();
 
-  const [clientSecret, setClientSecret] = useState("");
-
   const {
     handlePaymentSubmit,
     loading: paymentLoading,
     errorMessage,
   } = useStripePayment(
-    clientSecret,
     pochaID,
     totalPrice,
     userEmail,

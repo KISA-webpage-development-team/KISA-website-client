@@ -14,6 +14,8 @@ export default function PaySuccessPage() {
 
   // extract tip-success from searchParams
   const tipCompleted = searchParams.get("tip_completed");
+  const pochaID = searchParams.get("pochaid");
+  const amount = searchParams.get("amount");
 
   // [WIP] tip-related states
   const [showTipModal, setShowTipModal] = useState(true);
@@ -48,7 +50,7 @@ export default function PaySuccessPage() {
         return;
       }
     }
-  }, [router]);
+  }, [router, showTipModal]);
 
   useEffect(() => {
     // Add a new entry to prevent direct back navigation
@@ -80,10 +82,9 @@ export default function PaySuccessPage() {
     }, 150);
   };
 
-  // if (!paymentIntentId) {
-  //   // [TODO] better handling
-  //   window.location.href = "/pocha";
-  // }
+  if (!pochaID || !amount) {
+    window.location.href = "/pocha";
+  }
 
   return (
     <section

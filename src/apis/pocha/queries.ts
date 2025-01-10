@@ -3,7 +3,6 @@ import {
   MenuByCategory,
   PochaInfo,
   Cart,
-  CartItem,
   Orders,
   OrderHistory,
   PayInfo,
@@ -14,7 +13,7 @@ import {
  */
 export async function getPochaInfo(date: Date): Promise<PochaInfo> {
   // [TODO] change fakeDateEST to date for production
-  const fakeDateEST = new Date("2025-01-10T21:00:00");
+  // const fakeDateEST = new Date("2025-01-10T21:00:00");
 
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Detect user's time zone
   const KST_OFFSET = 14; // KST is UTC+9, EST is UTC-5 => Difference is +14 hours
@@ -23,11 +22,9 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo> {
 
   // Check if the user's time zone is KST
   if (userTimeZone === "Asia/Seoul") {
-    convertedDate = new Date(
-      fakeDateEST.getTime() + KST_OFFSET * 60 * 60 * 1000
-    );
+    convertedDate = new Date(date.getTime() + KST_OFFSET * 60 * 60 * 1000);
   } else {
-    convertedDate = fakeDateEST; // If not in KST, no adjustment
+    convertedDate = date; // If not in KST, no adjustment
   }
 
   const url = `/pocha/status-info/?date=${
