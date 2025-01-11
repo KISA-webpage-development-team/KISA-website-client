@@ -102,7 +102,7 @@ const useStripePayment = (
       if (error) {
         console.error("Error while confirming payment:", error);
         setErrorMessage(error.message);
-        throw new Error("결제 진행 중 오류 발생");
+        throw new Error(error.message);
       }
 
       // // ✅ Step 4: PaymentMethod를 Customer에 연결
