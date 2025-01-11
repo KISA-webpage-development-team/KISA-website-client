@@ -93,7 +93,7 @@ export default function PaySuccessPage() {
     >
       {showTipModal && paymentMethodId && (
         <TipModal
-          totalPrice={50}
+          totalPrice={parseInt(amount)}
           paymentMethodId={paymentMethodId}
           customerName={customerName}
           customerEmail={customerEmail}
