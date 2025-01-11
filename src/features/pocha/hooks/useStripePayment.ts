@@ -145,7 +145,7 @@ const useStripePayment = (
 
       router.push(`/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`);
     } catch (error) {
-      alert("결제 오류가 발생했습니다. 키사에 문의해주세요.");
+      alert("결제 오류가 발생했습니다. 카드 정보를 확인해주세요");
       setErrorMessage(error.message || "결제 실패");
       // notify pay result with failure
       const res = await notifyPayResult(userEmail, pochaID, {
