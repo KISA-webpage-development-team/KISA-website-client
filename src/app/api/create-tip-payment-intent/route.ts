@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
   try {
     // customer: email, name
     const { tipAmount, paymentMethodId, customer } = await request.json();
+
     if (
       !tipAmount ||
       !paymentMethodId ||
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     const tipPaymentIntent = await stripe.paymentIntents.create({
-      amount: tipAmount, // cents 단위
+      amount: parseInt(tipAmount), // cents 단위
       currency: "usd",
       payment_method: paymentMethodId, // 기존 카드 재사용
       customer: customer.id,
@@ -44,8 +45,6 @@ export async function POST(request: NextRequest) {
         return_url: `https://umichkisa.com/pocha/pay-success`,
       }
     );
-
-    console.log("confirmPaymentIntent:", confirmPaymentIntent);
 
     return NextResponse.json({
       // clientSecret: tipPaymentIntent.client_secret,

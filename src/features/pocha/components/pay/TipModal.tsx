@@ -66,11 +66,12 @@ export default function TipModal({
       );
 
       const createTipResult = await createTipIntentResponse.json();
+      // console.log("createTipResult", createTipResult);
       if (!createTipResult.success) {
         throw new Error("팁 결제 실패");
       }
 
-      alert(`팁 결제가 성공적으로 완료되었습니다! $${tipAmount}`);
+      alert(`팁 결제가 성공적으로 완료되었습니다! $${tipAmount.toFixed(2)}`);
 
       const searchParams = new URLSearchParams({ tip_completed: "true" });
       window.history.replaceState(
