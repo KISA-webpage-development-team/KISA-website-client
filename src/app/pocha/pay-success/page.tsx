@@ -82,7 +82,7 @@ export default function PaySuccessPage() {
     }, 150);
   };
 
-  if (!pochaID || !amount) {
+  if (!tipCompleted && (!pochaID || !amount)) {
     window.location.href = "/pocha";
   }
 
