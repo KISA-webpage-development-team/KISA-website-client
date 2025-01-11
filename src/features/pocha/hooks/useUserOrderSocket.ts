@@ -73,7 +73,7 @@ const useUserOrderSocket = ({
 
     // Cleanup on unmount
     return () => {
-      if (socketRef.current) {
+      if (socketRef.current && socketRef.current.connected) {
         socketRef.current.disconnect();
       }
     };
