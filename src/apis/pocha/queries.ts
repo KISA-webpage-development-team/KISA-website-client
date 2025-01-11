@@ -27,9 +27,7 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo> {
     convertedDate = date; // If not in KST, no adjustment
   }
 
-  const url = `/pocha/status-info/?date=${
-    convertedDate.toISOString().split(".")[0]
-  }`;
+  const url = `/pocha/status-info/?date=${date.toISOString().split(".")[0]}`;
 
   try {
     const response = await client.get(url);
