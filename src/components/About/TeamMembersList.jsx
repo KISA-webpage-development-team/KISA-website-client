@@ -10,9 +10,9 @@ export default function TeamMembersList({ team, name }) {
       </p>
       <ul className="flex flex-col gap-8">
         {team.map(({ role, members }, index) => (
-          <div key={`${role} - ${index}`}>
+          <li key={`${role} - ${index}`}>
             <SubTeamCard role={role} members={members} />
-          </div>
+          </li>
         ))}
       </ul>
     </div>
