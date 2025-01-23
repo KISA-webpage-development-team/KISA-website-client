@@ -21,18 +21,28 @@ export default function SponsorPage() {
   const groupedSponsors = groupByDivision(sponsorsFakeData);
 
   return (
-    <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 gap-8 md:gap-16">
+    // Note: This is when we divide the tiers.
+    // <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 gap-8 md:gap-16">
+    //   <InfoTitle title="스폰서 소개" />
+    //   {Object.entries(groupedSponsors).map(([division, sponsors]) => (
+    //     <div key={division} className="w-full">
+    //       <h2 className="text-2xl font-bold mb-4">{division} Sponsors</h2>
+    //       <div className="flex gap-4">
+    //         {sponsors.map((sponsor) => (
+    //           <SponsorByTier key={sponsor.sponsorId} sponsor={sponsor} />
+    //         ))}
+    //       </div>
+    //     </div>
+    //   ))}
+    // </section>
+    // <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 gap-8 md:gap-16">
+    <section>
       <InfoTitle title="스폰서 소개" />
-      {Object.entries(groupedSponsors).map(([division, sponsors]) => (
-        <div key={division} className="w-full">
-          <h2 className="text-2xl font-bold mb-4">{division} Sponsors</h2>
-          <div className="flex gap-4">
-            {sponsors.map((sponsor) => (
-              <SponsorByTier key={sponsor.sponsorId} sponsor={sponsor} />
-            ))}
-          </div>
-        </div>
-      ))}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20 sm:gap-4 px-10">
+        {sponsorsFakeData.map((sponsor) => (
+          <SponsorByTier key={sponsor.sponsorId} sponsor={sponsor} />
+        ))}
+      </div>
     </section>
   );
 }
