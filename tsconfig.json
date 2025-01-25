@@ -33,7 +33,8 @@
     "src/app/layout.tsx",
     "build/types/**/*.ts",
     "src/components/Posts/post-edit/ImageUploader.js",
-    "src/components/Posts/post-edit/ImageUploader.js"
+    "src/components/Posts/post-edit/ImageUploader.js",
+    "src/app/about/members/page.js"
   ],
   "exclude": ["node_modules"]
 }
