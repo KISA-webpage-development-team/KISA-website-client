@@ -36,14 +36,17 @@ export default function SponsorPage() {
     //   ))}
     // </section>
     // <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 gap-8 md:gap-16">
-    <section>
-      <InfoTitle title="스폰서 소개" />
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20 sm:gap-4 px-10">
+    <div className="space-y-6">
+      <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4">
+        <InfoTitle title="스폰서 소개" />
+      </section>
+
+      <div className="grid justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20 sm:gap-4 px-10">
         {sponsorsFakeData.map((sponsor) => (
           <SponsorByTier key={sponsor.sponsorId} sponsor={sponsor} />
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
