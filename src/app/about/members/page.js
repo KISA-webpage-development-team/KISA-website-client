@@ -1,15 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import SubTeamCard from "../../../components/About/SubTeamCard";
 import TeamMembersList from "../../../components/About/TeamMembersList";
-import { boardsData } from "../../../config/static/memberPageData";
+import { membersData } from "../../../config/static/memberPageData";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
 export default function MemberPage() {
-  const [selectedBoard, setSelectedBoard] = useState(new Set(["members-0"]));
-
   const accordionItemClass = {
     base: "py-4",
     title: `text-4xl font-bold ${sejongHospitalBold.className}`,
@@ -30,8 +27,8 @@ export default function MemberPage() {
         itemClasses={accordionItemClass}
         defaultSelectedKeys={["members-0"]}
       >
-        {/*loop through the boardsData and create an AccordionItem for each board*/}
-        {boardsData.map((board, idx) => (
+        {/*loop through the members and create an AccordionItem for each board*/}
+        {membersData?.map((board, idx) => (
           <AccordionItem key={`members-${idx}`} title={`${board.year} Board`}>
             <div className="flex flex-col items-center w-full gap-12">
               <SubTeamCard

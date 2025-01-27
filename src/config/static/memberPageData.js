@@ -1,8 +1,7 @@
 // president, operations, public_relations are destructured from members object
 
-import { m } from "framer-motion";
 
-export const boardsData = [
+export const membersData = [
   {
     year: "24-25",
     teams: [
@@ -103,6 +102,16 @@ export const boardsData = [
                 major: "Computer Science",
                 year: "2028",
               },
+              {
+                name: "Yunseong Na",
+                major: "Computer Science",
+                year: "2026",
+              },
+              {
+                name: "Hannah Lee",
+                major: "Data Science",
+                year: "2027",
+              },
             ],
           },
           {
@@ -129,6 +138,16 @@ export const boardsData = [
                 major: "Data Science",
                 year: "2028",
               },
+              {
+                name: "Minjun Hur",
+                major: "Biomolecular Science",
+                year: "2026",
+              },
+              {
+                name: "Rachel Lee",
+                major: "Biomedical Engineering",
+                year: "2028",
+              },
             ],
           },
         ],
@@ -143,32 +162,6 @@ export const boardsData = [
                 name: "Stella Han",
                 major: "Computer Science",
                 year: "2025",
-              },
-            ],
-          },
-          {
-            role: "Design",
-            members: [
-              {
-                isLead: true,
-                name: "Kailey Hwang",
-                major: "Computer Science",
-                year: "2026",
-              },
-              {
-                name: "Kelly Koo",
-                major: "BHS",
-                year: "2027",
-              },
-              {
-                name: "Soomin Kang",
-                major: "LSA Undeclared",
-                year: "2028",
-              },
-              {
-                name: "Lauren Kim",
-                major: "Computer Science",
-                year: "2026",
               },
             ],
           },
@@ -198,6 +191,42 @@ export const boardsData = [
               {
                 name: "Younghyun Choi",
                 major: "Psychology",
+                year: "2026",
+              },
+              {
+                name: "Joowon Kang",
+                major: "Psychology",
+                year: "2026",
+              },
+              {
+                name: "Sarah Kim",
+                major: "Neuroscience",
+                year: "2027",
+              },
+            ],
+          },
+          {
+            role: "Design",
+            members: [
+              {
+                isLead: true,
+                name: "Kailey Hwang",
+                major: "Computer Science",
+                year: "2026",
+              },
+              {
+                name: "Kelly Koo",
+                major: "BHS",
+                year: "2027",
+              },
+              {
+                name: "Soomin Kang",
+                major: "LSA Undeclared",
+                year: "2028",
+              },
+              {
+                name: "Lauren Kim",
+                major: "Computer Science",
                 year: "2026",
               },
             ],
