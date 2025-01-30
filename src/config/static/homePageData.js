@@ -47,37 +47,74 @@ const homeCarouselData = [
     url: "https://open.kakao.com/o/gFbE6Hng",
   },
 ];
-
+// Quick link data
 // <homeQuickLinksData>
 // id: image id
 // title
 // url: link
-const homeQuickLinksData = [
+// const homeQuickLinksData = [
+//   {
+//     id: "wolverine_access",
+//     title: "Wolverine Access",
+//     url: "https://csprod.dsc.umich.edu/psc/csprodnonop/EMPLOYEE/SA/c/NUI_FRAMEWORK.PT_AGSTARTPAGE_NUI.GBL?CONTEXTIDPARAMS=TEMPLATE_ID%3aPTPPNAVCOL&scname=ADMN_CAMPUS_FINANCES&PanelCollapsible=Y&PTPPB_GROUPLET_ID=M_SF_CAMPUS_FIN&CRefName=ADMN_CAMPUS_FIN",
+//   },
+//   {
+//     id: "canvas",
+//     title: "Canvas",
+//     url: "https://canvas.it.umich.edu/",
+//   },
+//   {
+//     id: "atlas",
+//     title: "Atlas",
+//     url: "https://atlas.ai.umich.edu/",
+//   },
+//   {
+//     id: "mprint",
+//     title: "MPrint",
+//     url: "https://mprint.umich.edu/",
+//   },
+//   {
+//     id: "mdining",
+//     title: "MDining",
+//     url: "https://dining.umich.edu/menus-locations/dining-halls/",
+//   },
+// ];
+
+// <homeSponsorCarouselData>
+// id: sponsor id (image id)
+// title
+// url: link
+const homeSponsorCarouselData = [
   {
-    id: "wolverine_access",
-    title: "Wolverine Access",
-    url: "https://csprod.dsc.umich.edu/psc/csprodnonop/EMPLOYEE/SA/c/NUI_FRAMEWORK.PT_AGSTARTPAGE_NUI.GBL?CONTEXTIDPARAMS=TEMPLATE_ID%3aPTPPNAVCOL&scname=ADMN_CAMPUS_FINANCES&PanelCollapsible=Y&PTPPB_GROUPLET_ID=M_SF_CAMPUS_FIN&CRefName=ADMN_CAMPUS_FIN",
+    id: "1",
+    title: "Apple",
+    url: "https://apple.com",
   },
   {
-    id: "canvas",
-    title: "Canvas",
-    url: "https://canvas.it.umich.edu/",
+    id: "2",
+    title: "Orange Market",
+    url: "https://google.com",
   },
   {
-    id: "atlas",
-    title: "Atlas",
-    url: "https://atlas.ai.umich.edu/",
+    id: "3",
+    title: "Hello Med",
+    url: "https://www.hello-med.com",
   },
   {
-    id: "mprint",
+    id: "4",
     title: "MPrint",
     url: "https://mprint.umich.edu/",
   },
   {
-    id: "mdining",
+    id: "5",
     title: "MDining",
     url: "https://dining.umich.edu/menus-locations/dining-halls/",
   },
+  {
+    id: "6",
+    title: "Meta",
+    url: "https://meta.com",
+  },
 ];
 
-export { homeCarouselData, homeQuickLinksData };
+export { homeCarouselData, homeSponsorCarouselData };

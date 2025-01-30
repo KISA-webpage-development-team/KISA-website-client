@@ -4,6 +4,7 @@ import QuickLinks from "../components/Home/QuickLinks";
 import BoardsSummary from "../components/Home/BoardsSummary";
 import SchoolCalendar from "../components/Home/SchoolCalendar";
 import SponsorBanner from "../components/Home/SponsorBanner";
+import SponsorCarousel from "../components/Home/SponsorCarousel";
 import "./home.css";
 
 export default function Home() {
@@ -16,7 +17,8 @@ export default function Home() {
     >
       <HomeCarousel />
       <BoardsSummary />
-      <QuickLinks />
+      {/* <QuickLinks /> */}
+      <SponsorCarousel />
       <SchoolCalendar />
       {/* <SponsorBanner /> */}
     </section>
