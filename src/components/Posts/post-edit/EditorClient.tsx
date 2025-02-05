@@ -77,6 +77,8 @@ export default function EditorClient({
         setTitle(res.title);
         setText(res.text);
         setIsAnnouncement(res.isAnnouncement);
+
+        console.log("res: ", res);
       } catch (error) {
         console.log("Error occured while fetching post: ", error);
       }
