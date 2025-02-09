@@ -88,32 +88,32 @@ const homeQuickLinksData = [
 const homeSponsorCarouselData = [
   {
     id: "1",
-    title: "Apple",
-    url: "https://apple.com",
+    title: "Fast Campus",
+    url: "https://fastcampus.co.kr/",
   },
   {
     id: "2",
-    title: "Orange Market",
-    url: "https://google.com",
+    title: "Meta Code",
+    url: "https://www.metacodes.co.kr/",
   },
   {
     id: "3",
-    title: "Hello Med",
-    url: "https://www.hello-med.com",
+    title: "Rezi",
+    url: "https://www.rezi.ai/",
   },
   {
     id: "4",
-    title: "MPrint",
+    title: "Mock 4",
     url: "https://mprint.umich.edu/",
   },
   {
     id: "5",
-    title: "MDining",
+    title: "Mock 5",
     url: "https://dining.umich.edu/menus-locations/dining-halls/",
   },
   {
     id: "6",
-    title: "Meta",
+    title: "Mock 6",
     url: "https://meta.com",
   },
 ];

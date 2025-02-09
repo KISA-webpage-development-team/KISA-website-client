@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import "react-multi-carousel/lib/styles.css";
+import NextIconTail from "../ui/NextIconTail";
 
 // import Carousel from "react-multi-carousel";
 import "./test.css";
@@ -41,7 +42,7 @@ export default function SponsorCarousel() {
     >
       <h2 className="section_title">Sponsors</h2>
       <h2 className={`${sejongHospitalLight.className}`}>
-        Proudly supported by leading organizations
+        Proudly supported by leading organizations.
       </h2>
       <Carousel
         opts={{
@@ -76,6 +77,23 @@ export default function SponsorCarousel() {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
+      {/* Become a Sponsor Button (Directed to external google form) */}
+      <div className="w-full flex justify-end">
+        <button
+          className="bg-[#31506E] text-white text-2xl px-[50px] py-4 rounded-2xl hover:bg-[#1f3750] transition flex items-center"
+          onClick={() =>
+            window.open(
+              "https://docs.google.com/forms/d/e/1FAIpQLSfVLLhSbYzwLLCJKsy_GCkbP-R8igUUYUgH700vcK6qvu5x2g/viewform?usp=sharing",
+              "_blank"
+            )
+          }
+        >
+          Become a Sponsor{" "}
+          <span className="mb-1">
+            <NextIconTail></NextIconTail>
+          </span>
+        </button>
+      </div>
     </div>
   );
 }

@@ -76,6 +76,10 @@ const menu = [
         name: "하우징/룸메이트",
         href: "/boards/housing",
       },
+      {
+        name: "스폰서/후원사",
+        href: "/boards/sponsor",
+      },
     ],
   },
 

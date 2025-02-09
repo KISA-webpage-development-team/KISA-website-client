@@ -47,23 +47,23 @@ export async function getBoardAnnouncements(
 // export async function getBoardAnnouncementsMock(
 //   boardType: BoardType
 // ): Promise<SimplePost[] | undefined> {
-//   // interface SimplePost {
-//   //   postid: number;
-//   //   title: string;
-//   //   created: string;
-//   //   type: BoardType;
-//   //   fullname: string;
-//   //   email: string; // FK - User.email
-//   //   readCount: number;
-//   //   commentsCount: number;
-//   // }
+//   interface SimplePost {
+//     postid: number;
+//     title: string;
+//     created: string;
+//     type: BoardType;
+//     fullname: string;
+//     email: string; // FK - User.email
+//     readCount: number;
+//     commentsCount: number;
+//   }
 
 //   const announcements = [
 //     {
 //       postid: 500,
-//       title: "공지사항 1",
+//       title: "tmv 1",
 //       created: "2022-01-01T00:00:00",
-//       type: BoardType.Community,
+//       type: BoardType.Sponsor,
 //       fullname: "인지오",
 //       email: "jiohin@umich.edu",
 //       readCount: 100,
@@ -74,7 +74,7 @@ export async function getBoardAnnouncements(
 //       postid: 501,
 //       title: "공지사항 2",
 //       created: "2022-01-02T00:00:00",
-//       type: BoardType.Community,
+//       type: BoardType.Sponsor,
 //       fullname: "김동섭",
 //       email: "dongsubk@umich.edu",
 //       readCount: 150,
@@ -85,6 +85,7 @@ export async function getBoardAnnouncements(
 
 //   return announcements;
 // }
+
 /**
  * @desc Fetch the number of posts in a board
  * @route GET /boards/{boardType}/count/
