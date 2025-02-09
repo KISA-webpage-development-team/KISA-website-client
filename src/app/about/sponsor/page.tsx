@@ -20,33 +20,32 @@ export default function SponsorPage() {
 
   const groupedSponsors = groupByDivision(sponsorsFakeData);
 
+  // Note: This is for when we divide the tiers.
+  // <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 gap-8 md:gap-16">
+  //   <InfoTitle title="스폰서 소개" />
+  //   {Object.entries(groupedSponsors).map(([division, sponsors]) => (
+  //     <div key={division} className="w-full">
+  //       <h2 className="text-2xl font-bold mb-4">{division} Sponsors</h2>
+  //       <div className="flex gap-4">
+  //         {sponsors.map((sponsor) => (
+  //           <SponsorByTier key={sponsor.sponsorId} sponsor={sponsor} />
+  //         ))}
+  //       </div>
+  //     </div>
+  //   ))}
+  // </section>
   return (
-    // Note: This is when we divide the tiers.
-    // <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 gap-8 md:gap-16">
-    //   <InfoTitle title="스폰서 소개" />
-    //   {Object.entries(groupedSponsors).map(([division, sponsors]) => (
-    //     <div key={division} className="w-full">
-    //       <h2 className="text-2xl font-bold mb-4">{division} Sponsors</h2>
-    //       <div className="flex gap-4">
-    //         {sponsors.map((sponsor) => (
-    //           <SponsorByTier key={sponsor.sponsorId} sponsor={sponsor} />
-    //         ))}
-    //       </div>
-    //     </div>
-    //   ))}
-    // </section>
-    // <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 gap-8 md:gap-16">
-    <div className="space-y-6">
-      <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4">
+    <section className="space-y-6">
+      <header className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4">
         <InfoTitle title="스폰서 소개" />
-      </section>
+      </header>
 
       <div className="grid justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20 sm:gap-4 px-10">
         {sponsorsFakeData.map((sponsor) => (
           <SponsorByTier key={sponsor.sponsorId} sponsor={sponsor} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 

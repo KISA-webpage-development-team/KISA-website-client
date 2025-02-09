@@ -47,38 +47,39 @@ const homeCarouselData = [
     url: "https://open.kakao.com/o/gFbE6Hng",
   },
 ];
+
 // Quick link data
 // <homeQuickLinksData>
 // id: image id
 // title
 // url: link
-// const homeQuickLinksData = [
-//   {
-//     id: "wolverine_access",
-//     title: "Wolverine Access",
-//     url: "https://csprod.dsc.umich.edu/psc/csprodnonop/EMPLOYEE/SA/c/NUI_FRAMEWORK.PT_AGSTARTPAGE_NUI.GBL?CONTEXTIDPARAMS=TEMPLATE_ID%3aPTPPNAVCOL&scname=ADMN_CAMPUS_FINANCES&PanelCollapsible=Y&PTPPB_GROUPLET_ID=M_SF_CAMPUS_FIN&CRefName=ADMN_CAMPUS_FIN",
-//   },
-//   {
-//     id: "canvas",
-//     title: "Canvas",
-//     url: "https://canvas.it.umich.edu/",
-//   },
-//   {
-//     id: "atlas",
-//     title: "Atlas",
-//     url: "https://atlas.ai.umich.edu/",
-//   },
-//   {
-//     id: "mprint",
-//     title: "MPrint",
-//     url: "https://mprint.umich.edu/",
-//   },
-//   {
-//     id: "mdining",
-//     title: "MDining",
-//     url: "https://dining.umich.edu/menus-locations/dining-halls/",
-//   },
-// ];
+const homeQuickLinksData = [
+  {
+    id: "wolverine_access",
+    title: "Wolverine Access",
+    url: "https://csprod.dsc.umich.edu/psc/csprodnonop/EMPLOYEE/SA/c/NUI_FRAMEWORK.PT_AGSTARTPAGE_NUI.GBL?CONTEXTIDPARAMS=TEMPLATE_ID%3aPTPPNAVCOL&scname=ADMN_CAMPUS_FINANCES&PanelCollapsible=Y&PTPPB_GROUPLET_ID=M_SF_CAMPUS_FIN&CRefName=ADMN_CAMPUS_FIN",
+  },
+  {
+    id: "canvas",
+    title: "Canvas",
+    url: "https://canvas.it.umich.edu/",
+  },
+  {
+    id: "atlas",
+    title: "Atlas",
+    url: "https://atlas.ai.umich.edu/",
+  },
+  {
+    id: "mprint",
+    title: "MPrint",
+    url: "https://mprint.umich.edu/",
+  },
+  {
+    id: "mdining",
+    title: "MDining",
+    url: "https://dining.umich.edu/menus-locations/dining-halls/",
+  },
+];
 
 // <homeSponsorCarouselData>
 // id: sponsor id (image id)
@@ -117,4 +118,4 @@ const homeSponsorCarouselData = [
   },
 ];
 
-export { homeCarouselData, homeSponsorCarouselData };
+export { homeCarouselData, homeQuickLinksData, homeSponsorCarouselData };
