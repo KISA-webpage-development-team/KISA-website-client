@@ -58,7 +58,9 @@ export default function SponsorCarousel() {
     flex flex-col gap-4 ${sejongHospitalBold.className}`}
     >
       <h2 className="section_title">Sponsors</h2>
-
+      <h2 className={`${sejongHospitalLight.className}`}>
+        Proudly supported by leading organizations
+      </h2>
       <Carousel
         opts={{
           align: "start",
@@ -72,7 +74,7 @@ export default function SponsorCarousel() {
               className="sm:basis-1/4 md:basis-1/3 lg:basis-1/5"
             >
               <div className="p-1">
-                <Card>
+                <Card className="border-5 border-[#31506E] rounded-3xl">
                   <Link href={item.url}>
                     <CardContent className="flex aspect-square items-center justify-center p-6">
                       <Image
