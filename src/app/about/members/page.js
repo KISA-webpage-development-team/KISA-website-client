@@ -1,16 +1,14 @@
 "use client";
 
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { useState } from "react";
+import { Select, SelectItem } from "@nextui-org/react";
 import SubTeamCard from "../../../components/About/SubTeamCard";
 import TeamMembersList from "../../../components/About/TeamMembersList";
 import { membersData } from "../../../config/static/memberPageData";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
 export default function MemberPage() {
-  const accordionItemClass = {
-    base: "py-4",
-    title: `text-4xl font-bold ${sejongHospitalBold.className}`,
-  };
+  const [selectedBoard, setSelectedBoard] = useState(null);
 
   const getPresident = (board) => {
     return board.teams.find((team) => team.teamName === "President");
@@ -20,34 +18,49 @@ export default function MemberPage() {
     return board.teams.filter((team) => team.teamName !== "President");
   };
 
+  const [selectedYear, setSelectedYear] = useState(null);
+
+  const handleSelectChange = (keys) => {
+    const [year] = Array.from(keys);
+    setSelectedYear(year);
+
+    const foundBoard = membersData.find((b) => b.year === year);
+    setSelectedBoard(foundBoard || null);
+  };
+
   return (
-    <section className="flex flex-col gap-12">
-      <Accordion
-        selectionMode="multiple"
-        itemClasses={accordionItemClass}
-        defaultSelectedKeys={["members-0"]}
+
+    <div className="flex flex-col gap-12">
+      <Select 
+        className="max-w-xs" 
+        label="Select a year"
+        selectedKeys={selectedYear ? new Set([selectedYear]) : new Set()}
+        onSelectionChange={handleSelectChange}
       >
-        {/*loop through the members and create an AccordionItem for each board*/}
         {membersData?.map((board, idx) => (
-          <AccordionItem key={`members-${idx}`} title={`${board.year} Board`}>
-            <div className="flex flex-col items-center w-full gap-12">
-              <SubTeamCard
-                role="President"
-                members={getPresident(board).subteams[0]?.members || []}
-              />
-              <div className="flex flex-col md:flex-row md:justify-center gap-24 md:gap-28 lg:gap-32 w-full">
-                {getMembersWithoutPresident(board).map((team) => (
-                  <TeamMembersList
-                    key={team.teamName}
-                    team={team.subteams}
-                    name={team.teamName}
-                  />
-                ))}
-              </div>
-            </div>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    </section>
+            <SelectItem key={board.year}>
+              {board.year}
+            </SelectItem>
+          ))}
+      </Select>
+
+      {selectedBoard && (
+      <div className="flex flex-col items-center w-full gap-12">
+        <SubTeamCard
+          role="President"
+          members={getPresident(selectedBoard).subteams[0]?.members || []}
+        />
+        <div className="flex flex-col md:flex-row md:justify-center gap-24 md:gap-28 lg:gap-32 w-full">
+          {getMembersWithoutPresident(selectedBoard).map((team) => (
+            <TeamMembersList
+              key={team.teamName}
+              team={team.subteams}
+              name={team.teamName}
+            />
+          ))}
+        </div>
+      </div>
+    )}
+    </div>
   );
 }
