@@ -3,6 +3,7 @@ import InfoTitle from "../../../components/shared/InfoTitle";
 import SubTeamCard from "../../../components/About/SubTeamCard";
 import TeamMembersList from "../../../components/About/TeamMembersList";
 import { members } from "../../../config/static/memberPageData";
+import {Select, SelectItem} from "@nextui-org/react";
 
 export const metadata = {
   title: "조직도",
