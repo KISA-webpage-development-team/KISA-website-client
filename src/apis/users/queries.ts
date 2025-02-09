@@ -3,7 +3,6 @@
 
 // ---------------------------------------------------------------------------
 // Types
-import { CustomAxiosError } from "@/lib/axios/types";
 import { User } from "@/types/user";
 import { UserBoardPost } from "@/types/post";
 import { Comment } from "@/types/comment";

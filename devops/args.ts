@@ -26,12 +26,21 @@ const updatedEnvLines = envLines.map((line) => {
       useLocalBackend ? "true" : "false"
     }`;
   }
+  if (line.startsWith("NEXT_PUBLIC_USE_LOCAL_WEBSOCKET=")) {
+    found = true;
+    return `NEXT_PUBLIC_USE_LOCAL_WEBSOCKET=${
+      useLocalBackend ? "true" : "false"
+    }`;
+  }
   return line;
 });
 
 if (!found) {
   updatedEnvLines.push(
     `NEXT_PUBLIC_USE_LOCAL_BACKEND=${useLocalBackend ? "true" : "false"}`
+  );
+  updatedEnvLines.push(
+    `NEXT_PUBLIC_USE_LOCAL_WEBSOCKET=${useLocalBackend ? "true" : "false"}`
   );
 }
 

@@ -8,8 +8,9 @@ interface PochaInfo {
 }
 
 type PochaTab = "menu" | "orders";
+type PochaDashboardTab = "orders" | "stock" | "history";
 
-export type { PochaInfo, PochaTab };
+export type { PochaInfo, PochaTab, PochaDashboardTab };
 
 // MENU -----------------------------------------------------------------------
 
@@ -24,12 +25,17 @@ interface MenuItem {
   ageCheckRequired: boolean;
 }
 
+interface MenuItemWithQuantity {
+  menuID: number;
+  quantity: number;
+}
+
 interface MenuByCategory {
   category: string;
   menusList: MenuItem[];
 }
 
-export type { MenuItem, MenuByCategory };
+export type { MenuItem, MenuByCategory, MenuItemWithQuantity };
 
 // CART -----------------------------------------------------------------------
 interface CartItem {
@@ -53,14 +59,22 @@ type PayInfo = {
 
 export type { Cart, CartItem, AddItemToCartBody, PayInfo };
 
-// ORDER -----------------------------------------------------------------------
-type OrderStatus = "pending" | "preparing" | "ready" | "closed";
+// ORDER ----------------------------------------------------------------------
+
+const enum OrderStatus {
+  PENDING = "pending",
+  PREPARING = "preparing",
+  READY = "ready",
+  CLOSED = "closed",
+}
 
 interface OrderItem {
   orderItemID: number;
   status: OrderStatus;
   menu: MenuItem;
   quantity: number;
+  ordererName: string;
+  ordererEmail: string;
 }
 
 interface Orders {
@@ -73,4 +87,5 @@ interface OrderHistory {
   closed: OrderItem[];
 }
 
-export type { OrderItem, OrderStatus, Orders, OrderHistory };
+export { OrderStatus };
+export type { OrderItem, Orders, OrderHistory };

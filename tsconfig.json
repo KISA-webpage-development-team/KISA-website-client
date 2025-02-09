@@ -31,7 +31,10 @@
     "src/app/template.tsx",
     "src/app/page.tsx",
     "src/app/layout.tsx",
-    "build/types/**/*.ts"
+    "build/types/**/*.ts",
+    "src/components/Posts/post-edit/ImageUploader.js",
+    "src/components/Posts/post-edit/ImageUploader.js",
+    "src/app/about/members/page.js"
   ],
   "exclude": ["node_modules"]
 }

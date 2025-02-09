@@ -5,7 +5,7 @@ export default function UnexpectedError() {
   return (
     <div
       className="md:text-lg 
-    w-full h-full flex flex-col items-center "
+    w-full flex flex-col items-center "
     >
       <p className={`${sejongHospitalBold.className} mb-2`}>
         예기치 못한 오류가 발생했습니다!

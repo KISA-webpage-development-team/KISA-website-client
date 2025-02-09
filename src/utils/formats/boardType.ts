@@ -47,21 +47,6 @@ export function getEnglishBoardType(boardName: string): string {
 }
 
 /**
- * Get the list of tags for the announcement board
- * @returns An array of objects containing name and type for each tag
- */
-export function getTagListForAnnouncement(): { name: string; type: string }[] {
-  return [
-    { name: "태그 없음", type: "" },
-    ...Object.entries(boardTypeMap)
-      // Filter out "announcement" and empty string
-      .filter(([key]) => key !== "announcement" && key !== "")
-      // Map the remaining entries to the required format
-      .map(([type, name]) => ({ name, type })),
-  ];
-}
-
-/**
  * Check whether a board type is for EveryKISA
  */
 export function isEveryKisaBoard(boardType: string): boolean {
