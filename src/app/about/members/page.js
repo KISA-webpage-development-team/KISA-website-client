@@ -31,18 +31,22 @@ export default function MemberPage() {
   return (
 
     <div className="flex flex-col gap-12">
-      <Select 
-        className="max-w-xs" 
-        label="Select a year"
-        selectedKeys={selectedYear ? new Set([selectedYear]) : new Set()}
-        onSelectionChange={handleSelectChange}
-      >
-        {membersData?.map((board, idx) => (
-            <SelectItem key={board.year}>
-              {board.year}
-            </SelectItem>
-          ))}
-      </Select>
+      <div className="flex justify-end">
+        <Select 
+          className="max-w-xs" 
+          label="Select year"
+          variant={"bordered"}
+          radius={"full"}
+          selectedKeys={selectedYear ? new Set([selectedYear]) : new Set()}
+          onSelectionChange={handleSelectChange}
+        >
+          {membersData?.map((board, idx) => (
+              <SelectItem key={board.year}>
+                {board.year}
+              </SelectItem>
+            ))}
+        </Select>
+      </div>
 
       {selectedBoard && (
       <div className="flex flex-col items-center w-full gap-12">
