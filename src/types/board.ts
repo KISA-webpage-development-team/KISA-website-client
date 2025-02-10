@@ -6,6 +6,7 @@ export enum BoardType {
   Announcement = "announcement",
   BuyAndSell = "buyandsell",
   Housing = "housing",
+  Sponsor = "sponsor",
   // Every Kisa
   Community = "community",
   Concern = "concern",
@@ -19,6 +20,7 @@ export enum KoreanBoardType {
   Announcement = "공지사항",
   BuyAndSell = "사고팔기",
   Housing = "하우징/룸메이트",
+  Sponsor = "후원사",
   // Every Kisa
   Community = "자유게시판",
   Concern = "고민게시판",

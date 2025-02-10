@@ -48,6 +48,7 @@ const homeCarouselData = [
   },
 ];
 
+// Quick link data
 // <homeQuickLinksData>
 // id: image id
 // title
@@ -80,4 +81,41 @@ const homeQuickLinksData = [
   },
 ];
 
-export { homeCarouselData, homeQuickLinksData };
+// <homeSponsorCarouselData>
+// id: sponsor id (image id)
+// title
+// url: link
+const homeSponsorCarouselData = [
+  {
+    id: "1",
+    title: "hello_med",
+    url: "https://www.hello-med.com/",
+  },
+  {
+    id: "2",
+    title: "meta_code",
+    url: "https://www.metacodes.co.kr/",
+  },
+  {
+    id: "3",
+    title: "fast_campus",
+    url: "https://fastcampus.co.kr/",
+  },
+  {
+    id: "4",
+    title: "rezi",
+    url: "https://www.rezi.ai/",
+  },
+  {
+    id: "5",
+    title: "mock5",
+    url: "https://www.umichkisa.com/",
+  },
+  {
+    id: "6",
+    title: "mock6",
+    url: "https://www.umichkisa.com/",
+  },
+];
+
+export { homeCarouselData, homeQuickLinksData, homeSponsorCarouselData };
