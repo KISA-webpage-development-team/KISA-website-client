@@ -5,7 +5,6 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "../../utils/fonts/textFonts";
-// import { Button, Card, CardBody, CardFooter } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import "react-multi-carousel/lib/styles.css";
@@ -31,8 +30,11 @@ export default function SponsorCarousel() {
     return `/sponsor/${sponsorID}.png`;
   };
 
-  const navigateToLink = (link) => {
-    window.open(link, "_blank");
+  const handleSponsorClick = () => {
+    window.open(
+      "https://umich.qualtrics.com/jfe/form/SV_3pEWxPBxDOahdps",
+      "_blank"
+    );
   };
 
   return (
@@ -44,25 +46,25 @@ export default function SponsorCarousel() {
       <h2 className={`${sejongHospitalLight.className}`}>
         Proudly supported by leading organizations.
       </h2>
-      <Carousel
-        opts={{
-          align: "start",
-        }}
-        className="w-full"
-      >
-        <CarouselContent>
+      <Carousel className="w-full">
+        {/* For phone view, when only 3 box (it becomes scrollable) */}
+        <CarouselContent className="flex snap-x scroll-smooth scrollbar-hide">
           {items.map((item, index) => (
             <CarouselItem
               key={index}
-              className="sm:basis-1/4 md:basis-1/3 lg:basis-1/5"
+              className="snap-start basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/5"
             >
               <div className="p-1">
                 <Card className="border-5 border-[#31506E] rounded-3xl">
-                  <Link href={item.url}>
+                  <Link href={item.url} target="_blank">
                     <CardContent className="flex aspect-square items-center justify-center p-6">
                       <Image
                         className="h-full object-contain"
-                        src={getImagePath(item.id)}
+                        src={
+                          item.id === "5" || item.id === "6"
+                            ? getImagePath("kisa")
+                            : getImagePath(item.id)
+                        }
                         alt={item.title}
                         width={500}
                         height={500}
@@ -77,20 +79,15 @@ export default function SponsorCarousel() {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-      {/* Become a Sponsor Button (Directed to external google form) */}
-      <div className="w-full flex justify-end">
+      {/* Become a Sponsor Button (directed to external form) */}
+      <div className="flex w-full justify-end">
         <button
-          className="bg-[#31506E] text-white text-2xl px-[50px] py-4 rounded-2xl hover:bg-[#1f3750] transition flex items-center"
-          onClick={() =>
-            window.open(
-              "https://docs.google.com/forms/d/e/1FAIpQLSfVLLhSbYzwLLCJKsy_GCkbP-R8igUUYUgH700vcK6qvu5x2g/viewform?usp=sharing",
-              "_blank"
-            )
-          }
+          className="flex bg-[#31506E] text-white text-base sm:text-lg md:text-xl lg:text-2xl px-4 sm:px-6 md:px-10 lg:px-12 py-2 sm:py-3 md:py-4 rounded-2xl hover:bg-[#1f3750] items-center transition-all duration-200"
+          onClick={handleSponsorClick}
         >
-          Become a Sponsor{" "}
-          <span className="mb-1">
-            <NextIconTail></NextIconTail>
+          Become a Sponsor
+          <span className="pl-1">
+            <NextIconTail />
           </span>
         </button>
       </div>

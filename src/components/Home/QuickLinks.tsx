@@ -47,7 +47,7 @@ export default function QuickLinks() {
         responsive={responsive}
         swipeable={true}
         draggable={true}
-        partialVisbile={false}
+        partialVisible={false}
         infinite={true}
         className="relative"
         itemClass="py-1 px-1"

@@ -1,6 +1,7 @@
 import React from "react";
 import InfoTitle from "@/components/shared/InfoTitle";
 import SponsorByTier from "@/components/About/SponsorByTier";
+import { homeSponsorCarouselData as items } from "@/config/static/homePageData";
 
 export default function SponsorPage() {
   const groupByDivision = (sponsors) => {
@@ -17,8 +18,7 @@ export default function SponsorPage() {
     });
     return grouped;
   };
-
-  const groupedSponsors = groupByDivision(sponsorsFakeData);
+  // const groupedSponsors = groupByDivision(sponsorsFakeData);
 
   // Note: This is for when we divide the tiers.
   // <section className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 gap-8 md:gap-16">
@@ -41,49 +41,49 @@ export default function SponsorPage() {
       </header>
 
       <div className="grid justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20 sm:gap-4 px-10">
-        {sponsorsFakeData.map((sponsor) => (
-          <SponsorByTier key={sponsor.sponsorId} sponsor={sponsor} />
+        {items.map((sponsor) => (
+          <SponsorByTier key={sponsor.id} sponsor={sponsor} />
         ))}
       </div>
     </section>
   );
 }
 
-const sponsorsFakeData = [
-  {
-    sponsorId: "1",
-    link: "https://google.com",
-    division: "Gold",
-    imageTitle: "Google",
-  },
-  {
-    sponsorId: "2",
-    link: "https://apple.com",
-    division: "Gold",
-    imageTitle: "Apple",
-  },
-  {
-    sponsorId: "3",
-    link: "https://youtube.com",
-    division: "Silver",
-    imageTitle: "Youtube",
-  },
-  {
-    sponsorId: "4",
-    link: "https://instagram.com",
-    division: "Bronze",
-    imageTitle: "Instagram",
-  },
-  {
-    sponsorId: "5",
-    link: "https://naver.com",
-    division: "Gold",
-    imageTitle: "Naver",
-  },
-  {
-    sponsorId: "6",
-    link: "https://meta.com",
-    division: "Gold",
-    imageTitle: "Meta",
-  },
-];
+// const sponsorsFakeData = [
+//   {
+//     sponsorId: "1",
+//     link: "https://google.com",
+//     division: "Gold",
+//     imageTitle: "Google",
+//   },
+//   {
+//     sponsorId: "2",
+//     link: "https://apple.com",
+//     division: "Gold",
+//     imageTitle: "Apple",
+//   },
+//   {
+//     sponsorId: "3",
+//     link: "https://youtube.com",
+//     division: "Silver",
+//     imageTitle: "Youtube",
+//   },
+//   {
+//     sponsorId: "4",
+//     link: "https://instagram.com",
+//     division: "Bronze",
+//     imageTitle: "Instagram",
+//   },
+//   {
+//     sponsorId: "5",
+//     link: "https://naver.com",
+//     division: "Gold",
+//     imageTitle: "Naver",
+//   },
+//   {
+//     sponsorId: "6",
+//     link: "https://meta.com",
+//     division: "Gold",
+//     imageTitle: "Meta",
+//   },
+// ];

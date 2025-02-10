@@ -88,33 +88,33 @@ const homeQuickLinksData = [
 const homeSponsorCarouselData = [
   {
     id: "1",
-    title: "Fast Campus",
-    url: "https://fastcampus.co.kr/",
+    title: "hello_med",
+    url: "https://www.hello-med.com/",
   },
   {
     id: "2",
-    title: "Meta Code",
+    title: "meta_code",
     url: "https://www.metacodes.co.kr/",
   },
   {
     id: "3",
-    title: "Rezi",
-    url: "https://www.rezi.ai/",
+    title: "fast_campus",
+    url: "https://fastcampus.co.kr/",
   },
   {
     id: "4",
-    title: "Mock 4",
-    url: "https://mprint.umich.edu/",
+    title: "rezi",
+    url: "https://www.rezi.ai/",
   },
   {
     id: "5",
-    title: "Mock 5",
-    url: "https://dining.umich.edu/menus-locations/dining-halls/",
+    title: "mock5",
+    url: "https://www.umichkisa.com/",
   },
   {
     id: "6",
-    title: "Mock 6",
-    url: "https://meta.com",
+    title: "mock6",
+    url: "https://www.umichkisa.com/",
   },
 ];
 
