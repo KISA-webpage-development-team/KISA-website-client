@@ -15,23 +15,32 @@ export default function HomePostView({ type, posts }) {
     <div
       className="w-full flex flex-col
   rounded-lg  border-gray-300 border-1 
-  p-3 md:p-6 gap-2"
+    p-4 gap-1"
     >
       <Link href={`/${boardLink}/${type}`}>
         <h2
-          className={`${sejongHospitalBold.className} text-lg sm:text-xl mb-0 hover:underline cursor-pointer`}
+          className={`${sejongHospitalBold.className} text-lg mb-0 hover:underline cursor-pointer`}
         >{`${getKoreanBoardType(type)}`}</h2>
       </Link>
 
       <HorizontalDivider color="gray" />
 
-      {/* table */}
-      <MobileBoardList
-        isEveryKisa={isEveryKisaBoard(type)}
-        posts={posts}
-        announcements={null}
-        hasBorder={false}
-      />
+      <div className="flex flex-col md:flex-row">
+        {/* table */}
+        <MobileBoardList
+          isEveryKisa={isEveryKisaBoard(type)}
+          posts={posts.slice(0, 3)}
+          announcements={null}
+          hasBorder={false}
+        />
+
+        <MobileBoardList
+          isEveryKisa={isEveryKisaBoard(type)}
+          posts={posts.slice(3, 6)}
+          announcements={null}
+          hasBorder={false}
+        />
+      </div>
     </div>
   );
 }

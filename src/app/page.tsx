@@ -11,8 +11,7 @@ export default function Home() {
     <section
       className="h-full w-full 
     flex flex-col items-center
-     gap-10 md:gap-16 lg:gap-20 
-     mt-0 md:mt-6"
+     gap-8 md:gap-8 -mt-2"
     >
       <HomeCarousel />
       <BoardsSummary />

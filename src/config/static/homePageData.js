@@ -111,11 +111,6 @@ const homeSponsorCarouselData = [
     title: "mock5",
     url: "https://www.umichkisa.com/",
   },
-  {
-    id: "6",
-    title: "mock6",
-    url: "https://www.umichkisa.com/",
-  },
 ];
 
 export { homeCarouselData, homeQuickLinksData, homeSponsorCarouselData };

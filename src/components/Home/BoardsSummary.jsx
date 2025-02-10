@@ -18,7 +18,7 @@ export default function BoardsSummary() {
     const fetchAnnouncementPosts = async () => {
       try {
         const res = await getBoardPosts("announcement", 10, 0);
-        setHotPosts(res.slice(0, 5));
+        setHotPosts(res.slice(0, 6));
       } catch (err) {
         console.error(err);
       }
@@ -26,7 +26,7 @@ export default function BoardsSummary() {
     const fetchAcademicPosts = async () => {
       try {
         const res = await getBoardPosts("academic", 10, 0);
-        setHotPosts(res.slice(0, 5));
+        setHotPosts(res.slice(0, 6));
       } catch (err) {
         console.error(err);
       }
@@ -34,7 +34,7 @@ export default function BoardsSummary() {
     const fetchCommunityPosts = async () => {
       try {
         const res = await getBoardPosts("community", 10, 0);
-        setRecentPosts(res.slice(0, 5));
+        setRecentPosts(res.slice(0, 6));
       } catch (err) {
         console.error(err);
       }
@@ -51,7 +51,7 @@ export default function BoardsSummary() {
   flex flex-col justify-center 
   md:flex-row gap-4"
     >
-      <HomePostView type="academic" posts={hotPosts} />
+      {/* <HomePostView type="academic" posts={hotPosts} /> */}
       <HomePostView type="community" posts={recentPosts} />
     </div>
   );
