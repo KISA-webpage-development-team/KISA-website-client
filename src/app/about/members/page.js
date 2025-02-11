@@ -13,10 +13,7 @@ export const metadata = {
 };
 
 export default function MemberPage() {
-  const { president, operations, public_relations } = members;
-
-  console.log(operations);
-
+  const { presidents, operations, public_relations } = members;
   {
     /* <div className="flex flex-col items-center w-full gap-12">
     <SubTeamCard role="President" members={president.members} />
@@ -31,21 +28,18 @@ export default function MemberPage() {
   </div> */
   }
   return (
-    <section
-      className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
+    <section className="space-y-6">
+      <header
+        className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
     gap-8 md:gap-16"
-    >
-      <InfoTitle title="24-25 Board" />
+      >
+        <InfoTitle title="24-25 Board" />
+      </header>
       {/* Your code here */}
-      {/* op */}
-      {/* {operations.members.map(({ isLead, name, major, year }, index) => (
-        <MemberCard role={role} name={name} major={major} year={year} />
-
-        ))} */}
-
-      {operations.map(({ role, members }, outer_index) => (
-        <div key={outer_index}>
-          {members.map(({ name, major, year }, inner_index) => (
+      {/* presidents */}
+      {Object.entries(members).map(([team, teamMembers], outer_index) => (
+        <div key={outer_index} className="grid grid-cols-3 gap-x-20 gap-y-8">
+          {teamMembers.map(({ name, major, year, role }, inner_index) => (
             <div key={`${outer_index}_${inner_index}`}>
               <MemberCard role={role} name={name} major={major} year={year} />
             </div>

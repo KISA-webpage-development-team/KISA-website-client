@@ -10,8 +10,8 @@ import {
 
 export default function MemberCard({ role, name, major, year }) {
   return (
-    <Card className="py-4">
-      <CardBody className="flex flex-col items-center gap-4 overflow-visible py-2">
+    <Card className="py-4 bg-[#eeeeee] shadow-none">
+      <CardBody className="flex flex-col items-center gap-1 overflow-visible py-2 h-full">
         <Image
           alt="Card background"
           className="rounded-full object-cover w-60 h-60"
@@ -20,14 +20,13 @@ export default function MemberCard({ role, name, major, year }) {
           height={200}
         />
 
-        <div className="flex items-center">
+        <div className="flex flex-col items-center">
           <span
             className={`${sejongHospitalBold.className} text-xl md:text-2xl`}
           >
             {name}
           </span>
           <span>{`${major} | ${year}`}</span>
-          <span>{role}</span>
         </div>
       </CardBody>
     </Card>
