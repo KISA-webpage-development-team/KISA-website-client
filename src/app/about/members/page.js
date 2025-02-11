@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Select, SelectItem } from "@nextui-org/react";
+
 import SubTeamCard from "../../../components/About/SubTeamCard";
 import TeamMembersList from "../../../components/About/TeamMembersList";
 import { membersData } from "../../../config/static/memberPageData";
@@ -33,7 +34,8 @@ export default function MemberPage() {
     <div className="flex flex-col gap-12">
       <div className="flex justify-end">
         <Select 
-          className="max-w-xs" 
+          className="max-w-xs"
+          classNames={{trigger:"border border-black hover:border-black focus:border-black"}} 
           label="Select year"
           variant={"bordered"}
           radius={"full"}
