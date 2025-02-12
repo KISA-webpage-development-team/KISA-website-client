@@ -7,17 +7,6 @@
 // url
 const homeCarouselData = [
   {
-    id: "w25_fast_campus_event",
-    title: "[KISA X FAST CAMPUS] Special Partnership Event",
-    desc: (
-      <p>
-        패스트캠퍼스와 키사가 함께하는 특별한 제휴 이벤트를 통해 관심있는 분야의
-        강의들을 쉽게 접해보세요!
-      </p>
-    ),
-    url: "umichkisa.com/posts/393",
-  },
-  {
     id: "w25_valentine_pocha",
     title: "Chill한 포차",
     desc: (
@@ -29,6 +18,17 @@ const homeCarouselData = [
       </p>
     ),
     url: "https://www.instagram.com/p/DF3L-mLR8LQ/?img_index=1",
+  },
+  {
+    id: "w25_fast_campus_event",
+    title: "[KISA X FAST CAMPUS] Special Partnership Event",
+    desc: (
+      <p>
+        패스트캠퍼스와 키사가 함께하는 특별한 제휴 이벤트를 통해 관심있는 분야의
+        강의들을 쉽게 접해보세요!
+      </p>
+    ),
+    url: "umichkisa.com/posts/393",
   },
   {
     id: "fa24_kisa_yearbook",
