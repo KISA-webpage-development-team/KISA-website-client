@@ -27,6 +27,7 @@ export default function MemberCard({ role, name, major, year }) {
             {name}
           </span>
           <span>{`${major} | ${year}`}</span>
+          <span>{role}</span>
         </div>
       </CardBody>
     </Card>
