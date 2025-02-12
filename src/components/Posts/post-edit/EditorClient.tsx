@@ -131,7 +131,7 @@ export default function EditorClient({
     <div className="flex flex-col h-full gap-4">
       <TitleInput title={title} setTitle={setTitle} />
       {isAdmin !== null && (
-        <TextEditor isAdmin={isAdmin} text={text} setText={setText} />
+        <TextEditor token={session?.token} text={text} setText={setText} />
       )}
 
       <div

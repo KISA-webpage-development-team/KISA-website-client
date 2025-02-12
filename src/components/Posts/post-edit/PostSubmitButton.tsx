@@ -27,10 +27,8 @@ export default function PostSubmitButton({
     try {
       setLoading(true);
       const res = await createPost(formData as NewPostBody, token);
+      console.log(formData.text);
       setLoading(false);
-
-      // router.push(`/boards/${(formData as PostFormData).type}`);
-      // router.back();
 
       if (isEveryKisaBoard(formData.type)) {
         window.location.href = `/everykisa/${formData.type}`;

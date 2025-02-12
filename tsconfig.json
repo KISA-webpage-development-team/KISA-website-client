@@ -34,7 +34,8 @@
     "build/types/**/*.ts",
     "src/components/Posts/post-edit/ImageUploader.js",
     "src/components/Posts/post-edit/ImageUploader.js",
-    "src/app/about/members/page.js"
+    "src/app/about/members/page.js",
+    "src/components/Posts/post-edit/quill.imageUploader.js"
   ],
   "exclude": ["node_modules"]
 }
