@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useEffect } from "react";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import { postPresignedURL, getPresignedURL } from "@/apis/images/queries";
@@ -14,8 +14,39 @@ export default function TextEditor({ token, text, setText }: TextEditorProps) {
   // Refers to the ReactQuill component when passed to the ref prop
   const reactQuillRef: any = useRef(null);
 
-  // Custom toolbar image uploader
-  const imageHandler = async () => {
+  // Add event listener to the quill container for image drop
+  useEffect(() => {
+    const quillContainer = document.querySelector(".quill");
+    if (quillContainer) {
+      quillContainer.addEventListener("drop", imageDropHandler);
+      quillContainer.addEventListener("paste", imagePasteHandler);
+    }
+
+    // Cleanup: remove event listener from DOM when dismounted
+    return () => {
+      quillContainer.removeEventListener("drop", imageDropHandler);
+      quillContainer.removeEventListener("paste", imagePasteHandler);
+    };
+  }, []);
+
+  const uploadImage = async (file: File, quill: any) => {
+    // Make api call to get presigned URL
+    let fileKey = `temp/${new Date().toISOString()}-${file.name}`;
+    let fileType = file.type;
+    const postRes = await postPresignedURL(token, { fileKey, fileType });
+
+    // Upload file to S3 using presigned URL
+    await putImageToS3(postRes?.presignedURL, file);
+    const getRes = await getPresignedURL(token, { fileKey, fileType });
+
+    // Insert image into editor
+    const cursorPosition = quill.getSelection()?.index || 0;
+    quill.insertEmbed(cursorPosition, "image", getRes?.fileURL);
+    quill.setSelection(cursorPosition + 1);
+  };
+
+  // Custom toolbar image input handler
+  const imageToolbarHandler = async () => {
     const quill = reactQuillRef?.current?.getEditor();
 
     if (!quill) return;
@@ -31,30 +62,54 @@ export default function TextEditor({ token, text, setText }: TextEditorProps) {
     input.onchange = async () => {
       if (input.files) {
         for (const file of Array.from(input.files)) {
-          // Make api call to get presigned URL
-          let fileKey = `temp/${new Date().toISOString()}-${file.name}`;
-          let fileType = file.type;
-          const postRes = await postPresignedURL(token, {
-            fileKey,
-            fileType,
-          });
-
-          // Upload file to S3 using presigned URL
-          await putImageToS3(postRes?.presignedURL, file);
-
-          // Get presigned URL of uploaded image
-          const getRes = await getPresignedURL(token, {
-            fileKey,
-            fileType,
-          });
-
-          // Insert image into editor
-          const cursorPosition = quill.getSelection()?.index || 0;
-          quill.insertEmbed(cursorPosition, "image", getRes?.fileURL);
-          quill.setSelection(cursorPosition + 1);
+          // Upload image to S3
+          await uploadImage(file, quill);
         }
       }
     };
+  };
+
+  const imagePasteHandler = async (event: ClipboardEvent) => {
+    const quill = reactQuillRef.current?.getEditor();
+    if (!quill || !event.clipboardData) return;
+
+    const items = event.clipboardData.items;
+    let isImagePasted = false;
+
+    for (const item of items) {
+      if (item.type.startsWith("image/")) {
+        // Prevent Quill from inserting base64 image
+        event.preventDefault();
+
+        // Upload image to S3
+        isImagePasted = true;
+        const file = item.getAsFile();
+        if (file) {
+          await uploadImage(file, quill);
+        }
+      }
+    }
+
+    // Allow non-image clipboard data to be pasted using default behavior
+    if (!isImagePasted) {
+      return;
+    }
+  };
+
+  // Custom editor drop handler
+  const imageDropHandler = async (event: DragEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const quill = reactQuillRef.current?.getEditor();
+    if (!quill || !event.dataTransfer?.files) return;
+
+    for (const file of Array.from(event.dataTransfer.files)) {
+      if (!file.type.startsWith("image/")) continue;
+
+      // Upload image to S3
+      await uploadImage(file, quill);
+    }
   };
 
   const modules = useMemo(
@@ -69,9 +124,12 @@ export default function TextEditor({ token, text, setText }: TextEditorProps) {
           [{ align: [] }],
         ],
         handlers: {
-          image: imageHandler,
+          image: imageToolbarHandler,
         },
       },
+      // clipboard: {
+      //   matchers: [["img", imagePasteHandler]],
+      // },
     }),
     []
   );
@@ -147,6 +205,11 @@ export default function TextEditor({ token, text, setText }: TextEditorProps) {
 
         .ql-size-huge {
           font-size: 24px;
+        }
+
+        .image-upload-wrapper {
+          position: relative;
+          display: inline-block;
         }
       `}</style>
       <ReactQuill

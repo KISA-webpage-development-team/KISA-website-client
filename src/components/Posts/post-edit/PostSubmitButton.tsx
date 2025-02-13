@@ -27,7 +27,6 @@ export default function PostSubmitButton({
     try {
       setLoading(true);
       const res = await createPost(formData as NewPostBody, token);
-      console.log(formData.text);
       setLoading(false);
 
       if (isEveryKisaBoard(formData.type)) {
