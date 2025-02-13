@@ -12,7 +12,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "s3.amazonaws.com",
+        hostname: "kisaweb-cdn-bucket.s3.amazonaws.com",
       },
     ],
   },
