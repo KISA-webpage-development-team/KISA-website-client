@@ -11,6 +11,7 @@ export async function putImageToS3(
   file: File
 ): Promise<void> {
   try {
+    console.log("PUT presigned_url", presigned_url);
     await client.put(presigned_url, file, {
       headers: {
         "Content-Type": file.type,
