@@ -1,14 +1,11 @@
 import React from "react";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import Image from "next/image";
-import { useState } from "react";
-import MinusIcon from "@/final_refactor_src/components/icon/MinusIcon";
-import PlusIcon from "@/final_refactor_src/components/icon/PlusIcon";
-import CrossIcon from "@/final_refactor_src/components/icon/CrossIcon";
 import { CartItem } from "@/types/pocha";
 import PochaMinusIcon from "@/final_refactor_src/components/icon/PochaMinusIcon";
 import PochaPlusIcon from "@/final_refactor_src/components/icon/PochaPlusIcon";
 import PochaTrashIcon from "@/final_refactor_src/components/icon/PochaTrashIcon";
+import { getMenuImagePath } from "../../utils/getImagePath";
 
 type CartListItemProps = {
   item: CartItem;
@@ -21,10 +18,6 @@ export default function CartListItem({
   menuid,
   handleQuantityChange,
 }: CartListItemProps) {
-  const getImagePath = (menuID: number) => {
-    return `/pocha/24_last_pocha/${menuID}.png`;
-  };
-
   const incrementQuantity = () => {
     handleQuantityChange(menuid, 1);
   };
@@ -48,7 +41,7 @@ export default function CartListItem({
     <li className="flex items-center py-4 border-b border-[#CACACA]">
       <figure className="relative h-[5rem] w-[5rem] flex-shrink-0 rounded-full border-gray-300 shadow-md">
         <Image
-          src={getImagePath(menuid)}
+          src={getMenuImagePath(menuid)}
           alt={item.menu.nameEng}
           fill
           sizes="(max-width: 768px) 20vw"

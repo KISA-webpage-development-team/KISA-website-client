@@ -2,6 +2,9 @@ import useSWR from "swr";
 import { fetcherWithToken } from "@/lib/swr/fetchers";
 import { UserSession } from "@/lib/next-auth/types";
 
+// secret list of allowed underage users
+const UNDERAGE_WHITE_LIST = ["jiohin@umich.edu"];
+
 const calculateAge = (birthday: string): number => {
   const birthDate = new Date(birthday);
   const today = new Date();
@@ -49,7 +52,9 @@ const useUserAge = (session: UserSession | null) => {
       .toString()
       .padStart(2, "0")}-${bornDate.toString().padStart(2, "0")}`;
     const age = calculateAge(formattedBirthday);
-    const underAge = age < 21;
+    const underAge = UNDERAGE_WHITE_LIST.includes(session?.user?.email)
+      ? false
+      : age < 21;
 
     return { underAge, status: "success", fullname };
   }
