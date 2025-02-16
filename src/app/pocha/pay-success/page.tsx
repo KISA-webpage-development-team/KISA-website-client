@@ -91,7 +91,7 @@ export default function PaySuccessPage() {
       className="flex flex-col justify-center items-center h-full
     gap-6"
     >
-      {showTipModal && paymentMethodId && (
+      {/* {showTipModal && paymentMethodId && (
         <TipModal
           totalPrice={parseFloat(amount)}
           paymentMethodId={paymentMethodId}
@@ -100,7 +100,7 @@ export default function PaySuccessPage() {
           customerID={customerID}
           onClose={() => setShowTipModal(false)}
         />
-      )}
+      )} */}
       <span
         className={`${sejongHospitalBold.className} text-center text-black text-2xl`}
       >
