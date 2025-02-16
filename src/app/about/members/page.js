@@ -13,20 +13,21 @@ export const metadata = {
 };
 
 export default function MemberPage() {
-  const { presidents, operations, public_relations } = members;
-  {
-    /* <div className="flex flex-col items-center w-full gap-12">
-    <SubTeamCard role="President" members={president.members} />
+  const allMembers = [
+    ...members.presidents.map((member) => ({
+      ...member,
+      section: "presidents",
+    })),
+    ...members.operations.map((member) => ({
+      ...member,
+      section: "operations",
+    })),
+    ...members.public_relations.map((member) => ({
+      ...member,
+      section: "public_relations",
+    })),
+  ];
 
-    <div
-      className="flex flex-col md:flex-row md:justify-center 
-    gap-24 md:gap-28 lg:gap-32 w-full "
-    >
-      <TeamMembersList team={operations} name="Operations" />
-      <TeamMembersList team={public_relations} name="Public Relations" />
-    </div>
-  </div> */
-  }
   return (
     <section className="space-y-6">
       <header
@@ -37,15 +38,17 @@ export default function MemberPage() {
       </header>
       {/* Your code here */}
       {/* presidents */}
-      {Object.entries(members).map(([team, teamMembers], outer_index) => (
-        <div key={outer_index} className="grid grid-cols-3 gap-x-20 gap-y-8">
-          {teamMembers.map(({ name, major, year, role }, inner_index) => (
-            <div key={`${outer_index}_${inner_index}`}>
-              <MemberCard role={role} name={name} major={major} year={year} />
-            </div>
-          ))}
-        </div>
-      ))}
+      <div className="grid justify-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-[60px] auto-rows-fr">
+        {allMembers.map(({ name, major, year, role }, index) => (
+          <MemberCard
+            key={index}
+            role={role}
+            name={name}
+            major={major}
+            year={year}
+          />
+        ))}
+      </div>
     </section>
   );
 }
