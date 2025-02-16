@@ -25,6 +25,7 @@ export default function OrderHistoryTable({
     if (filter === "all") return true;
     return filter === "food" ? !menu.isImmediatePrep : menu.isImmediatePrep;
   });
+  // console.log(filteredOrderHistory);
 
   const calculateTotalSales = () => {
     return filteredOrderHistory
