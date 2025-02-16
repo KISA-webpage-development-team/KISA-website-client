@@ -1,8 +1,10 @@
 
 import Link from "next/link"
-import { FaGithub, FaLinkedin, FaGlobe, FaEnvelope } from "react-icons/fa"
 import { creditData } from "@/config/static/memberCreditData"
-import { SiGmail } from 'react-icons/si';
+import { LinkedInIcon } from '@/final_refactor_src/components/icon';
+import { EmailIcon } from '@/final_refactor_src/components/icon';
+import { GitIcon } from '@/final_refactor_src/components/icon';
+
 export default function CreditPage() {
   return (
     <div className='min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 py-12 px-4 sm:px-6 lg:px-8'>
@@ -44,7 +46,7 @@ export default function CreditPage() {
                       target='_blank'
                       rel='noopener noreferrer'
                     >
-                      <FaGithub size={20} />
+                      <GitIcon/>
                     </Link>
                   )}
                   {person.linkedin && (
@@ -54,7 +56,7 @@ export default function CreditPage() {
                       target='_blank'
                       rel='noopener noreferrer'
                     >
-                      <FaLinkedin size={20} />
+                 <LinkedInIcon/>
                     </Link>
                   )}
 
@@ -62,7 +64,7 @@ export default function CreditPage() {
                     href={`mailto:${person.email}`}
                     className='text-red-500 hover:text-red-700 transition-colors duration-200'
                   >
-                    <SiGmail size={20} />
+                   <EmailIcon/>
                   </Link>
                 </div>
               </div>

@@ -8,4 +8,5 @@ export { default as CommentIcon } from "./CommentIcon";
 export { default as PencilIcon } from "./PencilIcon";
 export { default as TrashcanIcon } from "./TrashcanIcon";
 export { default as ClockIcon } from "./ClockIcon";
+export { default as GitIcon } from "./GitIcon";
 // ... other icon exports
