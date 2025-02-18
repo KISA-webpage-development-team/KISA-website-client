@@ -212,7 +212,6 @@ const members_2024 = {
   ],
 };
 
-// president, operations, public_relations are destructured from members object
 const members_2023 = {
   // Presidents
   presidents: [
