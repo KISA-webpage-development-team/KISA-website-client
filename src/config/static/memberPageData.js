@@ -88,13 +88,13 @@ const members = {
     {
       name: "Hannah Lee",
       major: "Data Science",
-      year: "?",
+      year: "2027",
       role: ["Web Development"],
     },
     {
       name: "Yunseong Na",
       major: "Computer Science",
-      year: "?",
+      year: "2026",
       role: ["Web Development"],
     },
 
@@ -126,13 +126,13 @@ const members = {
     {
       name: "Rachel Lee",
       major: "BME",
-      year: "?",
+      year: "2028",
       role: ["Outreach"],
     },
     {
       name: "Minjun Hur",
       major: "BME",
-      year: "?",
+      year: "2026",
       role: ["Outreach"],
     },
   ],
@@ -196,13 +196,13 @@ const members = {
     {
       name: "Joowon Kang",
       major: "Psychology",
-      year: "?",
+      year: "2026",
       role: ["Social Media/Marketing"],
     },
     {
       name: "Sarah Kim",
-      major: "Neuro",
-      year: "?",
+      major: "Neuroscience",
+      year: "2027",
       role: ["Social Media/Marketing"],
     },
   ],
