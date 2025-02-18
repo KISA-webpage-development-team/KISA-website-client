@@ -38,7 +38,7 @@ export default function MemberPage() {
       </header>
       {/* Your code here */}
       {/* presidents */}
-      <div className="grid justify-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-[40px] auto-rows-fr">
+      <div className="grid justify-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-x-20 md:gap-y-[60px]">
         {allMembers.map(({ name, major, year, role }, index) => (
           <MemberCard
             key={index}

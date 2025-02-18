@@ -10,11 +10,11 @@ import {
 
 export default function MemberCard({ role, name, major, year }) {
   return (
-    <Card className="flex flex-col bg-[#eeeeee] shadow-none pt-2 h-full w-[90%] sm:w-[80%] md:w-[300px] md:h-[400px] mx-auto">
-      <CardBody className="flex flex-row md:flex-col items-center overflow-visible flex-grow">
+    <Card className="flex flex-col md:py-4 bg-[#eeeeee] shadow-none h-full">
+      <CardBody className="flex flex-row md:flex-col items-center gap-1 overflow-visible py-2 h-full">
         <Image
           alt="Profile Images"
-          className="rounded-full object-cover w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44"
+          className="w-24 h-24 md:w-60 md:h-60 rounded-full object-cover"
           src="/kisa_logo.png"
           width={200}
           height={200}
@@ -22,9 +22,9 @@ export default function MemberCard({ role, name, major, year }) {
 
         <div className="flex flex-col justify-center items-center w-full">
           {/* Name & Major Section (Ensures they are centered) */}
-          <div className="flex flex-col items-center text-center min-h-[70px]">
+          <div className="flex flex-col items-center text-center">
             <span
-              className={`${sejongHospitalBold.className} text-lg sm:text-2xl md:text-2xl`}
+              className={`${sejongHospitalBold.className} text-lg sm:text-2xl`}
             >
               {name}
             </span>
@@ -32,12 +32,12 @@ export default function MemberCard({ role, name, major, year }) {
           </div>
 
           {/* Role Container (Centered & aligned properly) */}
-          <div className="flex flex-col items-center justify-center w-full mt-2">
+          <div className="flex items-center justify-center w-full mt-2">
             {Array.isArray(role) ? (
               role.map((r, index) => (
                 <span
                   key={index}
-                  className={`${sejongHospitalBold.className} text-base text-[#31506E] sm:text-lg md:text-lg`}
+                  className={`${sejongHospitalBold.className}  text-[#31506E] sm:text-lg`}
                 >
                   {r}
                 </span>
