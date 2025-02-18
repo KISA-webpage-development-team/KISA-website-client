@@ -1,28 +1,46 @@
+"use client";
+
 import React from "react";
 import InfoTitle from "../../../components/shared/InfoTitle";
 import SubTeamCard from "../../../components/About/SubTeamCard";
 import TeamMembersList from "../../../components/About/TeamMembersList";
-import MemberCard from "@/components/About/MemberCard";
-import { members } from "../../../config/static/memberPageData";
-import { divide } from "lodash";
+import { Select, SelectItem } from "@nextui-org/react";
 
-export const metadata = {
-  title: "조직도",
-  description:
-    "미시간 대학교 한인 학부 학생회의 멤버들입니다. 회장단, OP팀, PR팀으로 나뉘어져있습니다.",
-};
+import MemberCard from "@/components/About/MemberCard";
+import {
+  members_2024,
+  members_2023,
+} from "../../../config/static/memberPageData";
+import { divide } from "lodash";
+import { useState, useEffect } from "react";
 
 export default function MemberPage() {
+  const membersData = {
+    "24-25": members_2024,
+    "23-24": members_2023,
+  };
+
+  const sortedYears = Object.keys(membersData).sort((a, b) => b - a);
+
+  // To select the most recent year
+  const [selectedYear, setSelectedYear] = useState(sortedYears[0]);
+
+  const handleSelectChange = (keys) => {
+    setSelectedYear(keys.values().next().value);
+  };
+
+  const selectedMembers = membersData[selectedYear];
+
   const allMembers = [
-    ...members.presidents.map((member) => ({
+    ...selectedMembers.presidents.map((member) => ({
       ...member,
       section: "presidents",
     })),
-    ...members.operations.map((member) => ({
+    ...selectedMembers.operations.map((member) => ({
       ...member,
       section: "operations",
     })),
-    ...members.public_relations.map((member) => ({
+    ...selectedMembers.public_relations.map((member) => ({
       ...member,
       section: "public_relations",
     })),
@@ -34,10 +52,28 @@ export default function MemberPage() {
         className="flex flex-col items-center pt-2 md:pt-3 lg:pt-4 
     gap-8 md:gap-16"
       >
-        <InfoTitle title="24-25 Board" />
+        <InfoTitle title={`${selectedYear} Board`} />
       </header>
-      {/* Your code here */}
-      {/* presidents */}
+      <div className="flex justify-end">
+        <Select
+          className="max-w-xs"
+          classNames={{
+            trigger:
+              "border border-black hover:border-black focus:border-black",
+          }}
+          label="Select Year"
+          variant="bordered"
+          radius="full"
+          selectedKeys={selectedYear ? new Set([selectedYear]) : new Set()}
+          onSelectionChange={handleSelectChange}
+        >
+          {Object.keys(membersData).map((year) => (
+            <SelectItem key={year}>{year}</SelectItem>
+          ))}
+        </Select>
+      </div>
+
+      {/* Grid Style Cards Display */}
       <div className="grid justify-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-x-20 md:gap-y-[60px]">
         {allMembers.map(({ name, major, year, role }, index) => (
           <MemberCard
