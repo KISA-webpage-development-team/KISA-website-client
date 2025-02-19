@@ -1,6 +1,6 @@
-import { RiShoppingCartFill } from "react-icons/ri";
+import { LuShoppingCart } from "react-icons/lu";
 import "./styles.css";
 
 export default function PochaCartIcon() {
-  return <RiShoppingCartFill className="icon" />;
+  return <LuShoppingCart className="icon" />;
 }

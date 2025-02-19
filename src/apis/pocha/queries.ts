@@ -1,11 +1,8 @@
 import client from "@/lib/axios/client";
-import { handleApiError } from "@/lib/axios/errorHandling";
-import { ApiError } from "@/lib/axios/types";
 import {
   MenuByCategory,
   PochaInfo,
   Cart,
-  CartItem,
   Orders,
   OrderHistory,
   PayInfo,
@@ -14,23 +11,29 @@ import {
  * @desc Fetch pocha info, if no upcoming pocha -> empty data, if else -> unempty data
  * @route GET /pocha/status-info/?date=${date}
  */
-export async function getPochaInfo(date: Date): Promise<PochaInfo | ApiError> {
-  const fakeDate = new Date("2024-11-16T23:00:00");
+export async function getPochaInfo(date: Date): Promise<PochaInfo> {
+  // [TODO] change fakeDateEST to date for production
+  // const fakeDateEST = new Date("2025-01-10T21:00:00");
 
-  // [TODO] change fakeDate to date
-  const url = `/pocha/status-info/?date=${
-    fakeDate.toISOString().split(".")[0]
-  }`;
-  // const url = `/pocha/status-info/?date=${
-  //   new Date().toISOString().split(".")[0]
-  // }`;
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Detect user's time zone
+  const KST_OFFSET = 14; // KST is UTC+9, EST is UTC-5 => Difference is +14 hours
+
+  let convertedDate;
+
+  // Check if the user's time zone is KST
+  if (userTimeZone === "Asia/Seoul") {
+    convertedDate = new Date(date.getTime() + KST_OFFSET * 60 * 60 * 1000);
+  } else {
+    convertedDate = date; // If not in KST, no adjustment
+  }
+
+  const url = `/pocha/status-info/?date=${date.toISOString().split(".")[0]}`;
 
   try {
     const response = await client.get(url);
-
-    return response?.data;
+    return response.data;
   } catch (error) {
-    return handleApiError(error, "Fetching pocha info");
+    throw new Error("Error fetching pocha information");
   }
 }
 
@@ -202,8 +205,6 @@ export async function getPayInfo(
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log("response: ", response?.data);
 
     return response?.data;
   } catch (error) {

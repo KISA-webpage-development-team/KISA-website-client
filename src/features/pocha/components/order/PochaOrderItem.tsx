@@ -1,90 +1,62 @@
 import { OrderItem } from "@/types/pocha";
-import React from "react";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { STATUS_COLORS } from "../../utils/statusToColor";
+import React, { useState } from "react";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
+import { STATUS_TEXT_COLORS, STATUS_COLORS } from "../../utils/statusToColor";
 import Image from "next/image";
 import TicketIcon from "@/final_refactor_src/components/icon/TicketIcon";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/react";
+import { getMenuImagePath } from "../../utils/getImagePath";
+import OrderTicketModal from "./OrderTicketModal";
 
 interface PochaOrderItemProps {
   orderItem: OrderItem;
   setSelectedOrder?: (orderItem: OrderItem) => void;
 }
-export default function PochaOrderItem({
-  orderItem,
-  setSelectedOrder,
-}: PochaOrderItemProps) {
-  const { orderItemID, menu, quantity, status } = orderItem;
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+export function capitalizeStatus(status: string): string {
+  return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+}
+
+export default function PochaOrderItem({ orderItem }: PochaOrderItemProps) {
+  const { menu, quantity, status } = orderItem;
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const handleViewTicket = () => {
-    // setSelectedOrder(orderItem);
-    onOpen();
-  };
-
-  const getImagePath = (menuID: number) => {
-    return menuID != 1
-      ? `/pocha/24_last_pocha/${menuID}.png`
-      : "/pocha/24_last_pocha/image_not_found.png";
+    setIsOpenModal(true);
   };
 
   return (
-    <li
-      className="self-stretch flex
-      py-4 space-x-3
-    "
-    >
-      <Modal
-        backdrop="opaque"
-        radius="lg"
-        size="full"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        placement="bottom"
-        classNames={{
-          body: "py-6 ",
-          backdrop: "backdrop-opacity-40",
-          base: "",
-          header: "border-b-[1px] border-[#292f46]",
-          footer: "border-t-[1px] border-[#292f46]",
-          closeButton: "hover:bg-white/5 active:bg-white/10",
-        }}
+    <>
+      {isOpenModal && (
+        <OrderTicketModal
+          orderItem={orderItem}
+          setIsOpenModal={setIsOpenModal}
+        />
+      )}
+      <li
+        className={`h-full
+      shadow-md rounded-lg
+      
+          ${
+            status === "ready"
+              ? "border-2 border-green-500"
+              : " border border-zinc-200"
+          }
+      bg-white 
+      flex self-stretch items-center
+      py-[1rem] px-[1rem] space-x-[1rem]
+    `}
       >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Modal Title
-              </ModalHeader>
+        <div
+          className={`w-[0.75rem] h-[0.75rem] rounded-full ${STATUS_COLORS[status]}`}
+        />
 
-              <ModalBody className="h-48">
-                <div className="flex flex-col items-center justify-center h-full w-full">
-                  <span className="text-4xl">#{orderItem?.orderItemID}</span>
-                  <span>{orderItem.menu.nameKor}</span>
-                  <span>{orderItem.quantity}</span>
-                </div>
-              </ModalBody>
-
-              <ModalFooter>
-                <button onClick={onClose}>Close</button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-      <>
-        {/* <div>{orderItem?.orderItemID}</div> */}
         {/* 1. Image or Ticket number */}
-        <figure className="relative w-[4rem] h-[4rem]">
+        <figure className="relative w-[4rem] h-[4rem] flex items-center justify-center">
           <Image
-            src={getImagePath(menu?.menuID)}
+            src={getMenuImagePath(menu?.menuID)}
             alt={`Image of ${menu?.nameKor}`}
             fill
             sizes="4rem"
@@ -92,69 +64,62 @@ export default function PochaOrderItem({
           />
         </figure>
 
-        {/* <div
-        className={`${sejongHospitalBold.className} w-[4rem] h-[4rem] bg-pink-200`}
-      >
-        <span className="text-[3rem]">{orderItemID}</span>
-      </div> */}
-
         {/* 2. Info/Description */}
         <div
-          className={`flex-1 flex flex-col h-full justify-center
-        ${sejongHospitalBold.className} text-michigan-blue`}
+          className={`flex-1 flex flex-col h-full justify-center space-y-0.5
+    ${sejongHospitalBold.className}
+            text-base leading-[150%] text-black
+    `}
         >
-          {/* name */}
-          <div className="flex items-center gap-1">
-            <span
-              className={`${sejongHospitalBold.className} text-lg text-michigan-blue`}
-            >
-              {orderItemID}. {menu?.nameKor}
-            </span>
-            <span
-              className={`${sejongHospitalBold.className} text-sm text-michigan-blue`}
-            >
-              {`(${menu?.nameEng})`}
+          {/* Name */}
+          <div className="flex items-center gap-[0.25rem]">
+            <span className="text-overflow-two-lines">
+              {menu?.nameKor} {menu?.nameEng}
             </span>
           </div>
-          {/* price */}
-          <div
-            className={`flex font-semibold text mt-1 text-gray-500 space-x-3`}
-          >
-            <span>{`x ${quantity}`}</span>
-            <span>|</span>
-            <span> {`$${menu?.price * quantity}`}</span>
-          </div>
-        </div>
 
-        {/* 3. Detail/Ticket buttons */}
-        <div className="flex items-start gap-2">
+          {/* Price */}
+          <span className="text-gray-500 text-sm">
+            {`x ${quantity}`} | {`$${menu?.price * quantity}`}
+          </span>
+
+          {/* specially displaying orderItemID for "ready" status */}
           {status === "ready" && (
-            <button
-              onClick={handleViewTicket}
-              className="flex items-center gap-2"
+            <div
+              className="
+                bg-zinc-100 rounded-[9px] flex items-center justify-center
+                w-fit px-2 py-[0.25rem] text-sm
+              "
             >
-              {/* <span
-              className={`${sejongHospitalBold.className} text-sm text-michigan-light-blue`}
-            >
-              View Ticket
-            </span> */}
-              <TicketIcon className="text-michigan-dark-maize" size="large" />
-            </button>
+              <span className="text-black"># {orderItem?.orderItemID}</span>
+            </div>
           )}
-
-          {/* <div
-          className={`${STATUS_COLORS[orderItem?.status]} 
-        rounded-md py-1 px-2 text-white font-bold
-      `}
-        >
-          {orderItem?.status}
-        </div> */}
-
-          {/* <button onClick={handleViewTicket}>
-          <RightArrowIcon className="text-gray-500" size="small" />
-        </button> */}
         </div>
-      </>
-    </li>
+
+        {/* status & ticket button */}
+        <div
+          className={`flex items-center justify-center rounded-md 
+            text-sm ${sejongHospitalBold.className} ${STATUS_TEXT_COLORS[status]}`}
+        >
+          {status === "ready" ? (
+            <div className="flex flex-col items-end">
+              <span>{capitalizeStatus(orderItem?.status)}</span>
+              {/* View Ticket Button */}
+              <button
+                onClick={handleViewTicket}
+                className="mt-[0.5rem]
+                flex justify-center items-center w-[8rem] h-[2rem]
+                bg-green-100 rounded-[5px] border border-[#1c8241]/50 gap-2"
+              >
+                <TicketIcon className="mr-[0.25rem]" size="small" />
+                <span className="leading-[150%]">View Ticket</span>
+              </button>
+            </div>
+          ) : (
+            <span className={``}>{capitalizeStatus(orderItem?.status)}</span>
+          )}
+        </div>
+      </li>
+    </>
   );
 }

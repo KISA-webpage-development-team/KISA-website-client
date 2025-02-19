@@ -1,33 +1,22 @@
 "use client";
 
 import React from "react";
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import { Cart, PochaInfo } from "@/types/pocha";
-import PaymentSubmitForm from "@/features/pocha/components/pay-cart/PaymentSubmitForm";
-
-import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
+import PaymentSubmitForm from "@/features/pocha/components/pay/PaymentSubmitForm";
 
 // Stripe
 import { Elements } from "@stripe/react-stripe-js"; // stripe payment element
-import { loadStripe } from "@stripe/stripe-js";
-import { useRouter, useSearchParams } from "next/navigation";
-import { getPochaInfo } from "@/apis/pocha/queries";
+import stripePromise from "@/lib/stripe/stripeClient";
+import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
+
+import { useRouter } from "next/navigation";
 import usePay from "@/features/pocha/hooks/usePay";
 import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
-import BackIcon from "@/final_refactor_src/components/icon/BackIcon";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { ApiError } from "@/lib/axios/types";
-
-// defensive programming check
-if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
-  throw new Error("Stripe publishable key is not set");
-}
-
-// load Stripe object to manage stripe-related operations throughout the app
-// this should be loaded once, not every time the component is rendered to prevent recreating the object
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+import usePochaID from "@/features/pocha/hooks/usePochaID";
+import PochaBackHeading from "@/features/pocha/components/shared/PochaBackHeading";
+import PochaHorizontalDivider from "@/features/pocha/components/shared/PochaHorizontalDivider";
+import useUserAge from "@/features/pocha/hooks/useUserAge";
 
 export default function PayPage() {
   const { data: session, status: sessionStatus } = useSession() as {
@@ -37,81 +26,39 @@ export default function PayPage() {
 
   const router = useRouter();
 
-  const searchParams = useSearchParams();
-  const urlPochaID = parseInt(searchParams.get("pochaid"));
-
-  const [pochaIDError, setPochaIDError] = useState<ApiError>();
-  const [pochaID, setPochaID] = useState<number>(urlPochaID);
+  const { pochaID, status: pochaIDStatus, error: pochaIDError } = usePochaID();
 
   const {
     amount,
     fee,
-    tip,
-    setTip,
     totalPrice,
     ageCheckRequired,
     status: payReadyStatus,
   } = usePay(session?.user?.email, session?.token, pochaID);
 
-  const backToCart = () => {
-    router.back();
-  };
+  const { underAge, status: userAgeStatus, fullname } = useUserAge(session);
 
-  // set pochaID
-  // by fetching PochaID from API, ensure that the pochaID is there
-  useEffect(() => {
-    const fetchPochaInfo = async () => {
-      // try API call first
-      const res = await getPochaInfo(new Date());
+  const isLoading =
+    sessionStatus === "loading" ||
+    pochaIDStatus === "loading" ||
+    payReadyStatus === "loading" ||
+    userAgeStatus === "loading";
+  const hasError =
+    pochaIDStatus === "error" ||
+    payReadyStatus === "error" ||
+    userAgeStatus === "error" ||
+    !totalPrice;
 
-      if ((res as ApiError)?.statusCode) {
-        setPochaIDError(res as ApiError);
-      } else {
-        setPochaID((res as PochaInfo)?.pochaID);
-        // update URL search params with the fetched pochaID
-        const params = new URLSearchParams(window.location.search);
-        params.set("pochaid", (res as PochaInfo).pochaID.toString());
-        window.history.replaceState({}, "", `?${params.toString()}`);
-      }
-    };
-
-    // missing pochaID on the URL
-    if (!pochaID) {
-      // need to fetch
-      console.log("need to fetch pochaID");
-      fetchPochaInfo();
-    } else {
-      setPochaID(pochaID);
-    }
-  }, [pochaID, setPochaID]);
-
-  if (sessionStatus === "loading" || payReadyStatus === "loading") {
-    return <LoadingSpinner />;
-  }
-
-  if (payReadyStatus === "error" || !totalPrice) {
-    // [IMPORTANT]
-    // this will occur mostly from back button behavior
-    // from API, if the cart is empty (already paid or no items)
-
-    // redirect to /pocha
+  if (isLoading) return <LoadingSpinner />;
+  if (hasError) {
     router.push("/pocha");
+    return null;
   }
 
   return (
-    <section className="py-3">
-      <div className="flex items-center  relative">
-        <button onClick={backToCart}>
-          <BackIcon />
-        </button>
-
-        <h1
-          className={`${sejongHospitalBold.className} text-2xl text-blue-950
-          absolute top-0 left-0 w-full flex justify-center -z-10`}
-        >
-          Pay
-        </h1>
-      </div>
+    <section className="!gap-0">
+      <PochaBackHeading title="Pay" />
+      <PochaHorizontalDivider />
 
       <Elements
         stripe={stripePromise}
@@ -119,16 +66,18 @@ export default function PayPage() {
           mode: "payment",
           amount: convertToSubcurrency(totalPrice), // dollars to cents, stripe accepts in the most basic? currency unit
           currency: "usd",
+          setup_future_usage: "off_session",
         }}
       >
         <PaymentSubmitForm
           amount={amount}
           fee={fee}
           totalPrice={totalPrice}
-          tip={tip}
-          setTip={setTip}
           pochaID={pochaID}
           ageCheckRequired={ageCheckRequired}
+          userEmail={session?.user?.email}
+          underAge={underAge}
+          fullname={fullname}
         />
       </Elements>
     </section>
