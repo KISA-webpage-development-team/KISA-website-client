@@ -146,7 +146,7 @@ const members_2024 = {
       name: "Jungin Hwang",
       major: "Computer Science",
       year: "2026",
-      role: ["Design Lead"],
+      role: ["Design Lead / Web UI Design"],
     },
     {
       name: "Kelly Koo",

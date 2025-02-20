@@ -36,7 +36,7 @@ export default function MemberCard({ role, name, major, year }) {
           </div>
 
           {/* Role Container (Centered & aligned properly) */}
-          <div className="flex flex-col items-center justify-center w-full">
+          <div className="flex flex-col items-center justify-center w-full ">
             {Array.isArray(role) ? (
               role.map((r, index) => (
                 <span
