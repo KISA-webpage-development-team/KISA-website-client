@@ -2,16 +2,11 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useState } from "react";
 import PochaButton from "@/features/pocha/components/shared/PochaButton";
-import TipModal from "@/features/pocha/components/pay/TipModal";
-import Image from "next/image";
-import { useState } from "react";
-import PochaButton from "@/features/pocha/components/shared/PochaButton";
-import TipModal from "@/features/pocha/components/pay/TipModal";
+// import TipModal from "@/features/pocha/components/pay/TipModal";
 
 export default function PaySuccessPage() {
   const router = useRouter();
@@ -56,18 +51,6 @@ export default function PaySuccessPage() {
       }
     }
   }, [router, showTipModal]);
-
-  // extract tip-success from searchParams
-  const tipCompleted = searchParams.get("tip_completed");
-  const pochaID = searchParams.get("pochaid");
-  const amount = searchParams.get("amount");
-
-  // [WIP] tip-related states
-  const [showTipModal, setShowTipModal] = useState(true);
-  const [paymentMethodId, setPaymentMethodId] = useState<string>();
-  const [customerName, setCustomerName] = useState<string>();
-  const [customerEmail, setCustomerEmail] = useState<string>();
-  const [customerID, setCustomerID] = useState<string>();
 
   useEffect(() => {
     if (tipCompleted) {
