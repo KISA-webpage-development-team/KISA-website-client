@@ -2,7 +2,12 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import React, { useEffect } from "react";
+import Image from "next/image";
+import { useState } from "react";
+import PochaButton from "@/features/pocha/components/shared/PochaButton";
+import TipModal from "@/features/pocha/components/pay/TipModal";
 import Image from "next/image";
 import { useState } from "react";
 import PochaButton from "@/features/pocha/components/shared/PochaButton";
@@ -11,6 +16,46 @@ import TipModal from "@/features/pocha/components/pay/TipModal";
 export default function PaySuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // extract tip-success from searchParams
+  const tipCompleted = searchParams.get("tip_completed");
+  const pochaID = searchParams.get("pochaid");
+  const amount = searchParams.get("amount");
+
+  // [WIP] tip-related states
+  const [showTipModal, setShowTipModal] = useState(true);
+  const [paymentMethodId, setPaymentMethodId] = useState<string>();
+  const [customerName, setCustomerName] = useState<string>();
+  const [customerEmail, setCustomerEmail] = useState<string>();
+  const [customerID, setCustomerID] = useState<string>();
+
+  useEffect(() => {
+    if (tipCompleted) {
+      setShowTipModal(false);
+    }
+  }, [tipCompleted]);
+
+  // decode stripe token to process tip payment
+  useEffect(() => {
+    const storedPaymentMethodId = localStorage.getItem("paymentMethodId");
+    const storedCustomerName = localStorage.getItem("customerName");
+    const storedCustomerEmail = localStorage.getItem("customerEmail");
+    const storedCustomerID = localStorage.getItem("customerID");
+
+    if (storedPaymentMethodId && storedCustomerName && storedCustomerEmail) {
+      setPaymentMethodId(storedPaymentMethodId);
+      setCustomerName(storedCustomerName);
+      setCustomerEmail(storedCustomerEmail);
+      setCustomerID(storedCustomerID);
+    } else {
+      if (!showTipModal) {
+        return;
+      } else {
+        router.replace("/pocha");
+        return;
+      }
+    }
+  }, [router, showTipModal]);
 
   // extract tip-success from searchParams
   const tipCompleted = searchParams.get("tip_completed");

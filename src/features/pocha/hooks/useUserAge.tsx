@@ -1,5 +1,7 @@
 import useSWR from "swr";
 import { fetcherWithToken } from "@/lib/swr/fetchers";
+import useSWR from "swr";
+import { fetcherWithToken } from "@/lib/swr/fetchers";
 import { UserSession } from "@/lib/next-auth/types";
 
 // secret list of allowed underage users
