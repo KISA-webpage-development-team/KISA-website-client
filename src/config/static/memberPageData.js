@@ -79,7 +79,7 @@ const members_2024 = {
       name: "Dongsub Kim",
       major: "Computer Science",
       year: "2023",
-      role: ["Web Development"],
+      role: ["Web Development Lead"],
     },
     {
       name: "Jioh In",
@@ -105,7 +105,7 @@ const members_2024 = {
       name: "Seungmin Shin",
       major: "Statistics",
       year: "2025",
-      role: ["Outreach"],
+      role: ["Outreach Lead"],
     },
     {
       name: "Wookwan Kwon",
@@ -146,7 +146,7 @@ const members_2024 = {
       name: "Jungin Hwang",
       major: "Computer Science",
       year: "2026",
-      role: ["Design"],
+      role: ["Design Lead"],
     },
     {
       name: "Kelly Koo",
@@ -279,7 +279,7 @@ const members_2023 = {
       name: "Dongsub Kim",
       major: "Computer Science",
       year: "2023",
-      role: ["Web Development"],
+      role: ["Web Development Lead"],
     },
     {
       name: "Jioh In",
@@ -296,7 +296,7 @@ const members_2023 = {
       name: "Chaeyoon Park",
       major: "STAMPS",
       year: "2025",
-      role: ["Design"],
+      role: ["Design Lead"],
     },
     {
       name: "Kelly Koo",
@@ -347,7 +347,7 @@ const members_2023 = {
       name: "Yoonjoo Lee",
       major: "Art History & Philosophy",
       year: "2025",
-      role: ["Outreach"],
+      role: ["Outreach Lead"],
     },
     {
       name: "Huymin Lee",
