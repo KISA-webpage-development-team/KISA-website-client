@@ -7,18 +7,18 @@
 // url
 const homeCarouselData = [
   {
-    id: "fa24_kisa_yearbook",
-    title: "KISA Yearbook",
+    id: "w25_kisa_ksag",
+    title: "KISA X KSAG 멘토멘티",
     desc: (
       <p>
-        FA24 - WN25 졸업생 선배님들! 미시간 대학교에서 만들었던 소중한 추억과
-        경험들을 KISA Yearbook에 담아 간직해 보세요📽️🎞️ 이어북을 통해 오랫동안
-        기억에 남을 미시간에서의 순간들을 함께 회상해 보는 건
-        어떨까요?❄️선배님들의 학교생활과 노력을 한 권에 모은 특별한 앨범! 얼른
-        신청해 주세요⛄️
+        💬혹시 대학원 진학이나 진로에 대해서 고민하고 계신가요?🤓 그렇다면
+        주저하지 마시고 저희가 준비한 KISA x KSAG 멘토-멘티 세션에 참석하러
+        오세요! 세부적인 연구 분야와 대학원 생활, 그리고 SUGS 프로그램까지⭐️
+        실제 미시간대 대학원에 재학중이신 대학원생분들로부터 실질적인 조언도
+        듣고 궁금한 점까지 질문할 수 있는 알차고 유익한 시간이랍니다💙
       </p>
     ),
-    url: "https://www.instagram.com/p/DCmf2f8R-JA/?img_index=1",
+    url: "https://www.instagram.com/p/DG_HERIOzOe/?img_index=1",
   },
   {
     id: "fa24_small_group_recruitment",
