@@ -19,6 +19,10 @@ const menu = [
         name: "회칙",
         href: "/about/rule",
       },
+      {
+        name: "개발팀 소개",
+        href: "/about/credits",
+      },
       // {
       //   name: "스폰서",
       //   href: "/about/sponsor",

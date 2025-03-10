@@ -23,7 +23,7 @@ export default function CreditPage() {
         >
           Credits
         </h1>
-        <p className="mt-3 max-w-md mx-auto text-gray-500 text-lg sm:text-xl md:mt-5">
+        <p className="mt-3 mx-auto text-gray-800 sm:text-xl md:mt-5">
           <span className={`${sejongHospitalBold.className}`}>
             umichkisa.com
           </span>{" "}
