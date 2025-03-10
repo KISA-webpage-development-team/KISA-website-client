@@ -56,7 +56,7 @@ export default function CreditPage() {
                       target='_blank'
                       rel='noopener noreferrer'
                     >
-                 <LinkedInIcon/>
+                <LinkedInIcon/>
                     </Link>
                   )}
 

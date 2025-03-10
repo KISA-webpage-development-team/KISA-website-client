@@ -24,6 +24,7 @@ export default function OrderTicketModal({
           className="relative flex flex-col items-center justify-center
          space-y-4 bg-white rounded-lg shadow-md text-black
          border-2 border-[#71717A] h-[30%] aspect-[8/5]"
+          
         >
           <button
             className="absolute top-[1rem] right-[1rem]"

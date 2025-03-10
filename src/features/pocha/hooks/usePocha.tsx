@@ -1,16 +1,16 @@
-"use client";
-import { useEffect, useState } from "react";
-import { getPochaInfo } from "@/apis/pocha/queries";
+'use client';
+import { useEffect, useState } from 'react';
+import { getPochaInfo } from '@/apis/pocha/queries';
 
 // types
-import { PochaInfo } from "@/types/pocha";
-import { HookStatus } from "./types";
+import { PochaInfo } from '@/types/pocha';
+import { HookStatus } from './types';
 
 /**
  * @desc hook to fetch pocha information (getPochaInfo)
  */
 const usePocha = () => {
-  const [status, setStatus] = useState<HookStatus>("loading");
+  const [status, setStatus] = useState<HookStatus>('loading');
   const [pochaInfo, setPochaInfo] = useState<PochaInfo>();
   const [error, setError] = useState<string>();
 
@@ -19,14 +19,14 @@ const usePocha = () => {
       try {
         const res = await getPochaInfo(new Date());
         setPochaInfo(res);
-        setStatus("success");
+        setStatus('success');
       } catch (error) {
         // ✅ Error message directly from the error object
-        setStatus("error");
+        setStatus('error');
         if (error instanceof Error) {
           setError(error.message);
         } else {
-          setError("An unexpected error occurred.");
+          setError('An unexpected error occurred.');
         }
       }
     };
