@@ -1,4 +1,4 @@
-# Pocha App - Web Version ([link](https://wwww.umichkisa.com/pocha))
+# Pocha App - Web Version ([link](https://www.umichkisa.com/pocha))
 
 - Built with Next.js, integrated with Flask backend
 - Payment integration (cards, Apple Pay, Google Pay) via **Stripe API**
