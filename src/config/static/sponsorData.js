@@ -24,9 +24,9 @@ const sponsorData = [
     url: "https://www.rezi.ai/",
   },
   {
-    id: "kisa_logo",
-    title: "KISA",
-    url: "https://www.umichkisa.com/",
+    id: "potobox",
+    title: "Potobox",
+    url: "https://www.potobox.com/",
   },
 ];
 
