@@ -34,6 +34,7 @@ const homeCarouselData = [
   },
 ];
 
+// Quick link data
 // <homeQuickLinksData>
 // id: image id
 // title

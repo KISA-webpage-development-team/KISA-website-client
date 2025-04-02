@@ -46,7 +46,7 @@ export default function HomeCarousel() {
       lg:flex-row"
     >
       <div
-        className="lg:basis-[55%] aspect-[3/2] flex justify-center 
+        className="lg:basis-[45%] aspect-[3/2] flex justify-center 
       transition-all duration-150 delay-300 ease-in-out
       "
       >
@@ -86,7 +86,7 @@ export default function HomeCarousel() {
       <div
         className="flex-1
       mt-6 lg:mt-0
-      lg:ml-10
+      lg:mx-10
       flex flex-col justify-center"
       >
         <div

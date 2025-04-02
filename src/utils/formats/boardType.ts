@@ -4,6 +4,7 @@ const boardTypeMap = {
   "job-announcement": "취업공고",
   buyandsell: "사고팔기",
   housing: "하우징/룸메이트",
+  sponsor: "스폰서/후원사",
   // Every Kisa
   community: "자유게시판",
   concern: "고민게시판",
