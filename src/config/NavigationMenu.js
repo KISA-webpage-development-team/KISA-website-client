@@ -81,7 +81,7 @@ const menu = [
         href: "/boards/housing",
       },
       {
-        name: "스폰서/후원사",
+        name: "스폰서",
         href: "/boards/sponsor",
       },
     ],
