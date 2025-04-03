@@ -7,6 +7,20 @@
 // url
 const homeCarouselData = [
   {
+    id: "w25_networking_event",
+    title: "Industry Professional Networking Session🧑‍🏫",
+    desc: (
+      <p>
+        KISA is hosting a dynamic networking event designed to connect
+        undergraduate students with industry professionals from diverse fields.
+        This is a great opportunity to gain career insights, ask questions, and
+        receive advice from professionals with extensive experience. Please come
+        join us on April 5th📢
+      </p>
+    ),
+    url: "https://www.instagram.com/p/DH3_Bq_xVS5/?img_index=1",
+  },
+  {
     id: "fa24_small_group_recruitment",
     title: "소그룹 신규 모집",
     desc: (
