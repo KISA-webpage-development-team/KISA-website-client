@@ -107,7 +107,7 @@ const useUserOrders = (email: string, token: string, pochaID: number) => {
           status: OrderStatus.READY,
         });
       } else {
-        const nextStatus = getNextStatus(orderItem?.status);
+        let nextStatus = getNextStatus(orderItem?.status);
         if (nextStatus) {
           newMap.delete(orderItemID);
           newMap.set(orderItemID, { ...orderItem, status: nextStatus });
