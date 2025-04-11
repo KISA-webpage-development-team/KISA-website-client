@@ -8,7 +8,7 @@ interface UseUserOrderSocketProps {
   token: string;
   email: string;
   pochaID: number;
-  updateOrder: (orderItemID: number) => void;
+  updateOrder: (orderItemID: number, newStatus: OrderStatus) => void;
   addNewOrderItem: (orderItem: OrderItem) => void;
 }
 
@@ -24,11 +24,21 @@ const useUserOrderSocket = ({
   useEffect(() => {
     if (!token || !email || !pochaID) return;
 
+    // Cleanup previous connection if exists
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+      socketRef.current.removeAllListeners();
+    }
+
     // Initialize socket connection
     socketRef.current = io(WEBSOCKET_URL, {
       transports: ["websocket"],
       auth: { token },
       query: { email, pochaId: pochaID },
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5,
     });
 
     // Connection event handlers
@@ -38,11 +48,15 @@ const useUserOrderSocket = ({
     socketRef.current.on("connect_error", (error) =>
       console.error("[UserSocket] Connection error:", error)
     );
+    socketRef.current.on("reconnect", (attemptNumber) =>
+      console.log("[UserSocket] Reconnected after", attemptNumber, "attempts")
+    );
 
     // Listen for order-created event (new orders)
     socketRef.current.on(
       "order-created",
       ({ newOrderItems }: { newOrderItems: OrderItem[] }) => {
+        // Process orders in batch instead of one by one
         newOrderItems.forEach(addNewOrderItem);
       }
     );
@@ -58,7 +72,7 @@ const useUserOrderSocket = ({
         orderItemID: number;
         status: OrderStatus;
       }) => {
-        updateOrder(orderItemID);
+        updateOrder(orderItemID, status);
       }
     );
 
@@ -67,14 +81,16 @@ const useUserOrderSocket = ({
     socketRef.current.on(
       closedEvent,
       ({ orderItemID }: { orderItemID: number }) => {
-        updateOrder(orderItemID);
+        updateOrder(orderItemID, OrderStatus.CLOSED);
       }
     );
 
-    // Cleanup on unmount
+    // Cleanup on unmount or when dependencies change
     return () => {
-      if (socketRef.current && socketRef.current.connected) {
+      if (socketRef.current) {
         socketRef.current.disconnect();
+        socketRef.current.removeAllListeners();
+        socketRef.current = null;
       }
     };
   }, [token, email, pochaID, updateOrder, addNewOrderItem]);

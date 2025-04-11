@@ -89,29 +89,15 @@ const useUserOrders = (email: string, token: string, pochaID: number) => {
     pochaID
   );
 
-  const updateOrder = (orderItemID: number) => {
+  const updateOrder = (orderItemID: number, newStatus: OrderStatus) => {
     setOrdersMap((prevMap) => {
       const newMap = new Map(prevMap);
       const orderItem = prevMap.get(orderItemID);
 
-      // if orderItem.menu.isImmediatePrep, then we need to "jump" preparing step
-      // pending -> ready
-      // ready -> closed
-
-      if (
-        orderItem?.menu.isImmediatePrep &&
-        orderItem?.status === OrderStatus.PENDING
-      ) {
-        newMap.set(orderItemID, {
-          ...orderItem,
-          status: OrderStatus.READY,
-        });
-      } else {
-        let nextStatus = getNextStatus(orderItem?.status);
-        if (nextStatus) {
-          newMap.delete(orderItemID);
-          newMap.set(orderItemID, { ...orderItem, status: nextStatus });
-        }
+      // update order items status based on the new status
+      if (orderItem && orderItem.status) {
+        newMap.delete(orderItemID);
+        newMap.set(orderItemID, { ...orderItem, status: newStatus });
       }
 
       return newMap;
