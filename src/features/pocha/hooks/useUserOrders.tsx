@@ -4,6 +4,7 @@ import {
   getUserClosedOrders,
 } from "@/apis/pocha/queries";
 import { OrderHistory, OrderItem, Orders, OrderStatus } from "@/types/pocha";
+import { registerServiceWorker } from "@/utils/serviceWorker/register";
 import { useCallback, useEffect, useState } from "react";
 
 /*
@@ -88,6 +89,19 @@ const useUserOrders = (email: string, token: string, pochaID: number) => {
     token,
     pochaID
   );
+
+  useEffect(() => {
+    // Register service worker
+    registerServiceWorker();
+
+    // Listen for messages from service worker
+    navigator.serviceWorker?.addEventListener("message", (event) => {
+      if (event.data.type === "ORDERS_UPDATED") {
+        const orders = event.data.orders;
+        setOrdersMap(convertOrdersToMap(orders));
+      }
+    });
+  }, []);
 
   const updateOrder = (orderItemID: number, newStatus: OrderStatus) => {
     setOrdersMap((prevMap) => {

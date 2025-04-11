@@ -35,10 +35,6 @@ const useUserOrderSocket = ({
       transports: ["websocket"],
       auth: { token },
       query: { email, pochaId: pochaID },
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5,
     });
 
     // Connection event handlers
@@ -47,9 +43,6 @@ const useUserOrderSocket = ({
     );
     socketRef.current.on("connect_error", (error) =>
       console.error("[UserSocket] Connection error:", error)
-    );
-    socketRef.current.on("reconnect", (attemptNumber) =>
-      console.log("[UserSocket] Reconnected after", attemptNumber, "attempts")
     );
 
     // Listen for order-created event (new orders)
@@ -87,7 +80,7 @@ const useUserOrderSocket = ({
 
     // Cleanup on unmount or when dependencies change
     return () => {
-      if (socketRef.current) {
+      if (socketRef.current && socketRef.current.connected) {
         socketRef.current.disconnect();
         socketRef.current.removeAllListeners();
         socketRef.current = null;
