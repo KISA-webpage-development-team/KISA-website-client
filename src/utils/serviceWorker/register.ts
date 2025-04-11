@@ -19,6 +19,7 @@ declare global {
 }
 
 export function registerServiceWorker() {
+  console.log("registering service worker");
   if (
     "serviceWorker" in navigator &&
     "periodicsync" in navigator.serviceWorker
