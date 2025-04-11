@@ -51,51 +51,52 @@ export default function SignUpPage() {
       {
         value: name,
         setValue: setName,
-        label: "이름 (본명)",
+        label: "Name",
         type: "text",
-        placeholder: "예) 홍길동",
+        placeholder: "ex) Jioh In",
         isError: true,
-        errorMsg: "게시판에 사용될 이름입니다. 반드시 실명으로 작성해주세요.",
+        errorMsg:
+          "This is the name that will be used on the bulletin board.Please use your real name.",
         errorState: "alert",
       },
       {
         value: email,
         setValue: setEmail,
-        label: "umich 이메일",
+        label: "UMich Email",
         type: "email",
-        placeholder: "예) example@umich.edu",
+        placeholder: "ex) example@umich.edu",
         isError:
           (!email?.endsWith("@umich.edu") && email?.length > 0) ||
           email?.length === 0,
-        errorMsg: "유효한 미시간 이메일을 입력해주세요.",
+        errorMsg: "Please enter a valid umich email.",
         errorState: "error",
       },
       {
         value: major,
         setValue: setMajor,
-        label: "전공 (major)",
+        label: "Major",
         type: "text",
-        placeholder: "예) Computer Science",
+        placeholder: "ex) Computer Science",
         isError: major?.length === 0,
-        errorMsg: "전공을 입력해주세요.",
+        errorMsg: "Please enter your major.",
         errorState: "error",
       },
       {
         value: bornDate,
         setValue: setBornDate,
-        label: "생년월일",
+        label: "Birthdate",
         type: "date",
         isError: bornDate !== null && bornDate?.length !== 10,
-        errorMsg: "출생년도를 입력해주세요.",
+        errorMsg: "Please enter your birthdate.",
         errorState: "error",
       },
       {
         value: gradYear,
         setValue: setGradYear,
-        label: "졸업년도 (YYYY)",
+        label: "Graduation Year (YYYY)",
         type: "number",
         isError: gradYear !== null && gradYear?.length !== 4,
-        errorMsg: "정확한 졸업년도를 입력해주세요.",
+        errorMsg: "Please enter a valid graduation year.",
         errorState: "error",
       },
     ],
@@ -197,10 +198,10 @@ export default function SignUpPage() {
     >
       <div className="flex flex-col text-center gap-1 items-center">
         <h1 className={`${sejongHospitalBold.className} text-2xl`}>
-          키사에 처음 오신걸 환영합니다!
+          Welcome to KISA!
         </h1>
         <h2 className={`${sejongHospitalLight.className}`}>
-          회원가입을 위해 아래 정보를 입력해주세요.
+          Please enter the following information to sign up.
         </h2>
       </div>
 
@@ -248,7 +249,7 @@ export default function SignUpPage() {
           className="w-full primary_btn"
           disabled={disabled}
         >
-          제출
+          Sign Up
         </button>
       </form>
     </div>

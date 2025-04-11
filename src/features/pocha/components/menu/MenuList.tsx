@@ -50,6 +50,8 @@ function MenuList({ pochaid }: MenuListProps) {
     throw new Error("Error fetching user info");
   }
 
+  console.log("menuList: ", menuList);
+
   // IF menu is selected, show the menu detail
   if (selectedMenu) {
     return (

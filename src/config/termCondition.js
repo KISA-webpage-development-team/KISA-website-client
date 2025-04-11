@@ -1,7 +1,5 @@
-import { checkbox } from "@nextui-org/react";
-
 export const personalInfoTerm = {
-  label: "개인 정보 수집 약관",
+  label: "Personal Information Collection Agreement",
   text: (
     <p>
       다음 개인정보 처리 방침은 2024년 4월 19일부터 유효합니다.
@@ -167,11 +165,11 @@ export const personalInfoTerm = {
       제외하곤 파기됩니다.
     </p>
   ),
-  checkboxLabel: "개인 정보 수집 약관에 동의합니다.",
+  checkboxLabel: "I agree to the personal information collection agreement.",
 };
 
 export const websiteTerm = {
-  label: "웹사이트 이용 약관",
+  label: "Website Terms of Use",
   text: (
     <p>
       제1조 (목적)
@@ -314,7 +312,7 @@ export const websiteTerm = {
       영리목적으로 이용하거나 제3자에게 이용하게 하여서는 안됩니다.
     </p>
   ),
-  checkboxLabel: "웹사이트 이용 약관에 동의합니다.",
+  checkboxLabel: "I agree to the website terms of use.",
 };
 
 export const boardTerms = {
