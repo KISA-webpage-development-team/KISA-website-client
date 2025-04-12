@@ -3,7 +3,7 @@ import { fetcherWithToken } from "@/lib/swr/fetchers";
 import { UserSession } from "@/lib/next-auth/types";
 
 // secret list of allowed underage users
-const UNDERAGE_WHITE_LIST = ["jiohin@umich.edu"];
+const UNDERAGE_WHITE_LIST = ["jiohin@umich.edu", "dongeunk@umich.edu"];
 
 const calculateAge = (birthday: string): number => {
   const birthDate = new Date(birthday);
