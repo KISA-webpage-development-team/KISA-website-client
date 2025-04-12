@@ -90,19 +90,6 @@ const useUserOrders = (email: string, token: string, pochaID: number) => {
     pochaID
   );
 
-  useEffect(() => {
-    // Register service worker
-    registerServiceWorker();
-
-    // Listen for messages from service worker
-    navigator.serviceWorker?.addEventListener("message", (event) => {
-      if (event.data.type === "ORDERS_UPDATED") {
-        const orders = event.data.orders;
-        setOrdersMap(convertOrdersToMap(orders));
-      }
-    });
-  }, []);
-
   const updateOrder = (orderItemID: number, newStatus: OrderStatus) => {
     setOrdersMap((prevMap) => {
       const newMap = new Map(prevMap);
