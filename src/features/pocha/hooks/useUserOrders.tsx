@@ -4,7 +4,6 @@ import {
   getUserClosedOrders,
 } from "@/apis/pocha/queries";
 import { OrderHistory, OrderItem, Orders, OrderStatus } from "@/types/pocha";
-import { registerServiceWorker } from "@/utils/serviceWorker/register";
 import { useCallback, useEffect, useState } from "react";
 
 /*
