@@ -7,19 +7,6 @@
 // url
 const homeCarouselData = [
   {
-    id: "w25_last_pocha",
-    title: "KISA 종강포차🎉",
-    desc: (
-      <p>
-        음식/주류는 모두 키사 주문 앱으로 주문 가능하니, 꼭 포차 오기 전에 앱을
-        설치해 주세요📲 돌림판 돌려서 숙취해소제 포함 다양한 상품들도 받고🎯
-        키사가 준비한 술게임 테이블에서 새로운 사람들과 함께 신나게 즐기고🍻
-        파이널 전 후회 없는 최고로 재미있는 시간😆 저희 곧 종강포차에서 만나요💙
-      </p>
-    ),
-    url: "https://www.instagram.com/p/DIB1NLsOWGP/?img_index=1",
-  },
-  {
     id: "fa24_small_group_recruitment",
     title: "소그룹 신규 모집",
     desc: (
