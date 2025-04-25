@@ -19,10 +19,14 @@ const menu = [
         name: "회칙",
         href: "/about/rule",
       },
-      // {
-      //   name: "스폰서",
-      //   href: "/about/sponsor",
-      // },
+      {
+        name: "개발팀 소개",
+        href: "/about/credits",
+      },
+      {
+        name: "스폰서",
+        href: "/about/sponsor",
+      },
     ],
   },
   {
@@ -75,6 +79,10 @@ const menu = [
       {
         name: "하우징/룸메이트",
         href: "/boards/housing",
+      },
+      {
+        name: "스폰서",
+        href: "/boards/sponsor",
       },
     ],
   },

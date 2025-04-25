@@ -1,5 +1,5 @@
 .section_title {
-  @apply text-xl sm:text-2xl lg:text-3xl;
+  @apply text-lg sm:text-xl lg:text-2xl;
 }
 
 .react-multi-carousel-list {

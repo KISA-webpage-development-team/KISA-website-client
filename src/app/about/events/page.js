@@ -1,6 +1,7 @@
 import React from "react";
 
 // sub-ui components
+// test
 import InfoTitle from "../../../components/shared/InfoTitle";
 import EventSection from "../../../components/About/EventSection";
 

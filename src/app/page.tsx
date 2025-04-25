@@ -3,7 +3,7 @@ import HomeCarousel from "../components/Home/HomeCarousel";
 import QuickLinks from "../components/Home/QuickLinks";
 import BoardsSummary from "../components/Home/BoardsSummary";
 import SchoolCalendar from "../components/Home/SchoolCalendar";
-import SponsorBanner from "../components/Home/SponsorBanner";
+import SponsorCarousel from "../components/Home/SponsorCarousel";
 import "./home.css";
 
 export default function Home() {
@@ -11,14 +11,13 @@ export default function Home() {
     <section
       className="h-full w-full 
     flex flex-col items-center
-     gap-10 md:gap-16 lg:gap-20 
-     mt-0 md:mt-6"
+     gap-8 md:gap-8 -mt-2"
     >
       <HomeCarousel />
       <BoardsSummary />
-      <QuickLinks />
+      <SponsorCarousel />
       <SchoolCalendar />
-      {/* <SponsorBanner /> */}
+      <QuickLinks />
     </section>
   );
 }

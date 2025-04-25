@@ -72,7 +72,7 @@ export default function PaginationSizeSelector({
           page={pageNum}
           size="md"
           onChange={handlePageChange}
-          color="primary"
+          color="primary" // check tailwind.config.js for more information
         />
       </>
     </div>

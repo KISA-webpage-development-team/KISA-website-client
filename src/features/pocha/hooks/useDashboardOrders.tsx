@@ -116,18 +116,18 @@ const useDashboardOrders = (pochaID: number, token: string) => {
 
   // More efficient order item status update using Map
   const updateOrderItemStatusUI = useCallback(
-    (orderItemID: number) => {
+    (orderItemID: number, newStatus: OrderStatus) => {
       setOrdersMap((prevOrdersMap) => {
         const updatedMap = new Map(prevOrdersMap);
         const order = updatedMap.get(orderItemID);
         if (!order) return updatedMap;
 
-        const nextStatus = getNextStatus(order.status);
-        if (nextStatus) {
+        // const nextStatus = getNextStatus(order.status);
+        if (newStatus) {
           // Clone the order object to avoid mutating the original
           // Remove the order first, then add it back to the end of the Map
           updatedMap.delete(orderItemID);
-          updatedMap.set(orderItemID, { ...order, status: nextStatus });
+          updatedMap.set(orderItemID, { ...order, status: newStatus });
         }
         return updatedMap;
       });

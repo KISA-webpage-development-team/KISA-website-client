@@ -1,4 +1,4 @@
-import { OrderItem } from "@/types/pocha";
+import { OrderItem, OrderStatus } from "@/types/pocha";
 import React, { useState } from "react";
 import { STATUS_COLORS } from "../../utils/statusToColor";
 import { changeOrderItemStatus } from "@/apis/pocha/mutations";
@@ -7,7 +7,10 @@ import { Spinner } from "@nextui-org/react";
 interface OrderItemCardProps {
   isDrink?: boolean;
   order: OrderItem;
-  updateOrderItemStatusUI: (orderItemID: number) => void;
+  updateOrderItemStatusUI: (
+    orderItemID: number,
+    newStatus: OrderStatus
+  ) => void;
 }
 
 // orderItemID: number;
@@ -40,11 +43,7 @@ export default function OrderItemCard({
 
     const res = await changeOrderItemStatus(orderItemID);
     if (res) {
-      if (isDrink) {
-        await changeOrderItemStatus(orderItemID);
-        updateOrderItemStatusUI(orderItemID);
-      }
-      updateOrderItemStatusUI(orderItemID);
+      updateOrderItemStatusUI(orderItemID, res?.newStatus);
     }
 
     setLoading(false);

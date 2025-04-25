@@ -46,7 +46,7 @@ export default function Header({ session }) {
       className={`mx-auto ${headerContentWidth}
         relative inset-x-0 w-full z-50 
         flex justify-between items-center 
-        py-3 md:py-5
+        py-3 md:py-4
       `}
     >
       {/* LEFT SIDE */}
