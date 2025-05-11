@@ -1,14 +1,18 @@
 "use client";
 
+// Post View page (/posts/[postid])
+
 // [UI]
 // BoardTitle
 // PostView
 // CommentsView
 
 // [Rendering Method]: CSR (Client Side Rendering) with SWR
-import BoardTitle from "../../../components/Boards/BoardTitle";
+
+import BoardTitle from "@/features/bulletin-board/components/shared/BoardTitle";
 import CommentsView from "../../../components/Posts/comment/CommentsView";
-import PostView from "../../../components/Posts/post-view/PostView";
+// import PostView from "../../../components/Posts/post-view/PostView";
+import PostView from "@/features/bulletin-board/components/post-view/PostView";
 import { SessionProvider } from "next-auth/react";
 import {
   LoadingSpinner,
@@ -30,7 +34,6 @@ type PageProps = {
 
 export default function PostViewPage({ params }: PageProps) {
   const { postid } = params;
-  // const [post, setPost] = useState();
 
   const { post, isLoading, error } = usePost(Number(postid));
 
@@ -41,20 +44,6 @@ export default function PostViewPage({ params }: PageProps) {
 
   const canComment = !post?.isAnnouncement && !isAnnouncementBoard(post?.type);
 
-  // useEffect(() => {
-  //   const fetchPost = async () => {
-
-  //     try {
-  //     const response = await getPost(Number(postid));
-
-  //     }
-  //       catch(error) {
-  //       console.error("Error fetching post: ", error);
-  //       }
-  //   }
-  // }, [])
-
-  // [TODO]: when there's no post "error.tsx" should be rendered
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -71,7 +60,7 @@ export default function PostViewPage({ params }: PageProps) {
         <PostView post={post} />
 
         {/* Comments는 로딩되는대로 */}
-        {/* if study group or  canComment */}
+        {/* if study group or canComment */}
         {studyGroupPost || canComment ? (
           // bit worry about props drilling on post.type to handle every kisa
           <CommentsView

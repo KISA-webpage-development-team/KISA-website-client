@@ -1,47 +1,41 @@
 import React from "react";
-import VerticalDivider from "../../shared/VerticalDivider";
-import ClockIcon from "../../ui/ClockIcon";
 import Link from "next/link";
-import { formatDateTimeString, formatRelativeTime } from "@/utils/formats/date";
+
+// sub-ui components
+import VerticalDivider from "@/final_refactor_src/components/divider/VerticalDivider";
+import { ClockIcon } from "@/final_refactor_src/components/icon";
+
+// utils
+import { formatRelativeTime, formatDateTimeString } from "@/utils/formats/date";
 
 type PostOwnerBarProps = {
-  isPostAuthor?: boolean;
   email: string;
   fullname: string;
   created: string;
   readCount: number;
   commentsCount: number;
-  anonymous: boolean;
 };
 
 export default function PostOwnerBar({
-  isPostAuthor = false,
   email,
   fullname,
   created,
   readCount,
   commentsCount,
-  anonymous,
 }: PostOwnerBarProps) {
+  // for accessibility
+  const linkLabel = `View ${fullname}'s profile`;
+
   return (
     <div
       className="flex justify-between items-center 
-    text-xs sm:text-sm"
+    text-xs sm:text-sm "
     >
       {/* left: fullname + created */}
-      <div className="flex items-center gap-2 font-semibold">
-        {/* later, fullname will be linked to user profile */}
-        {anonymous ? (
-          isPostAuthor ? (
-            <p className="">{`${fullname} (익명)`}</p>
-          ) : (
-            <p className="">익명</p>
-          )
-        ) : (
-          <Link href={`/users/${email}`}>
-            <p className=" hover:underline">{fullname}</p>
-          </Link>
-        )}
+      <div className="flex items-center gap-2">
+        <Link href={`/users/${email}`} title={linkLabel} aria-label={linkLabel}>
+          <p className="font-semibold hover:underline">{fullname}</p>
+        </Link>
 
         <VerticalDivider size="small" />
         <div className="flex items-center gap-1">

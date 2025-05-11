@@ -26,7 +26,7 @@ export default function PostSubmitButton({
   const handleCreatePost = async () => {
     try {
       setLoading(true);
-      const res = await createPost(formData as NewPostBody, token);
+      await createPost(formData as NewPostBody, token);
       setLoading(false);
 
       if (isEveryKisaBoard(formData.type)) {
@@ -40,6 +40,11 @@ export default function PostSubmitButton({
     }
   };
 
+  // [FIXME] there's a problem here
+  // post update isn't working, server returning "Decode Failed" 401
+  // this is very likely due to the server
+  // need to check the how token is being received at the server
+  // attention: handleCreatePost is working fine, and that's the weird part
   const handleUpdatePost = async () => {
     if (postid === null) {
       window.alert("게시글 수정에 실패했습니다.");
@@ -48,8 +53,7 @@ export default function PostSubmitButton({
 
     try {
       setLoading(true);
-      const res = await updatePost(postid, formData, token);
-
+      await updatePost(postid, formData, token);
       setLoading(false);
 
       window.location.href = `/posts/${postid}`;

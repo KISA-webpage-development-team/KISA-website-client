@@ -2,28 +2,30 @@
 // 2. Edit Button [Only when the user is the author]
 // 3. Delete Button [Only when the user is the author]
 
-import React, { useEffect, useState } from "react";
-import ImageButton from "../../shared/ImageButton";
+import React from "react";
 import { useRouter } from "next/navigation";
+
+// sub-ui components
 import {
   PencilIcon,
   TrashcanIcon,
   ListIcon,
 } from "@/final_refactor_src/components/icon";
-import { BoardType } from "@/types/board";
 import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
-import GoBlueButton from "./GoBlueButton";
+import GoBlueButton from "@/features/bulletin-board/components/shared/GoBlueButton";
+
+// utils
 import { isEveryKisaBoard } from "@/utils/formats/boardType";
-import { LikeBody } from "@/types/like";
-import { getLikeByUser } from "@/apis/likes/queries";
+
+// types
 import { UserSession } from "@/lib/next-auth/types";
+import { BoardType } from "@/types/board";
 
 type PostButtonBarProps = {
   email: string; // post email
   session?: UserSession | null;
   type: BoardType;
   postid: number;
-  title: string;
 };
 
 export default function PostButtonBar({
@@ -31,55 +33,18 @@ export default function PostButtonBar({
   session = null,
   type,
   postid,
-  title,
 }: PostButtonBarProps) {
-  // TODO: add "didLike" to GoBlueButton
   const route = useRouter();
+
   const isEveryKisa = isEveryKisaBoard(type);
-
   const isAuthor = session?.user?.email === email;
-  const loggedInEmail = session?.user?.email;
-  const token = session?.token;
-
-  // session user가 현재 postid의 post를 좋아했는가?
-  const [didLike, setDidLike] = useState<boolean | null>(null);
-  // stale state for like button to prevent multiple clicks and re-renders
-  const [likeBtnStale, setLikeBtnStale] = useState<boolean>(false);
-
-  // fetch like status
-  useEffect(() => {
-    const fetchLikeStatus = async () => {
-      try {
-        const body = {
-          email: session?.user.email,
-          target: "post",
-        };
-
-        const res = await getLikeByUser(
-          postid,
-          body as LikeBody,
-          session?.token
-        );
-        if (!res) {
-          console.log("Failed to fetch like status");
-        } else {
-          setDidLike(res.liked);
-        }
-      } catch (error) {
-        console.error("Error fetching like status: ", error);
-      }
-    };
-
-    if (session) {
-      fetchLikeStatus();
-    }
-  }, [postid, session, likeBtnStale]);
 
   const OnClickBackToList = () => {
     // [TODO]: fix back to list logic
     // need to change this to just "go back"
     // This is very interesting, when user navigates to post from non-list page, just "going back" is not enough
     // for now, it is just going back to the board page without remembering pageNum and pageSize
+    // maybe this is because of misuse of SWR caching
 
     if (isEveryKisaBoard(type)) {
       window.location.href = `/everykisa/${type}`;
@@ -93,8 +58,6 @@ export default function PostButtonBar({
   };
 
   const onClickPostDelete = () => {
-    const formattedTitle = title.replace("/", "-");
-    // window.location.href = `/posts/delete/${type}/${formattedTitle}/${postid}`;
     route.push(`/posts/delete/${type}/posts/${postid}`);
   };
 
@@ -112,17 +75,7 @@ export default function PostButtonBar({
       />
       <div className="flex items-center gap-2">
         {/* Go Blue Button */}
-        {/* NOTE: has separate logic, we made custom button component */}
-        {isEveryKisa && (
-          <GoBlueButton
-            postid={postid}
-            didLike={didLike}
-            email={loggedInEmail}
-            token={token}
-            likeBtnStale={likeBtnStale}
-            setLikeBtnStale={setLikeBtnStale}
-          />
-        )}
+        {isEveryKisa && <GoBlueButton postid={postid} session={session} />}
 
         {/* Edit + Delete Button */}
         {isAuthor && (
@@ -132,12 +85,14 @@ export default function PostButtonBar({
               icon={<PencilIcon color="gray" />}
               text="수정"
               onClick={onClickPostUpdate}
+              aria-label="Edit post"
             />
             <CustomImageButton
               type="secondary"
               icon={<TrashcanIcon color="gray" />}
               text="삭제"
               onClick={onClickPostDelete}
+              aria-label="Delete post"
             />
           </div>
         )}

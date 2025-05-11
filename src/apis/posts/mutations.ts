@@ -22,7 +22,7 @@ export async function createPost(data: NewPostBody, token: Token) {
     return response;
   } catch (error) {
     console.error(error);
-    return undefined;
+    throw new Error("Failed to create post");
   }
 }
 
@@ -38,14 +38,12 @@ export async function updatePost(
   const url = `/posts/${postid}/`;
   try {
     const response = await client.patch(url, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response;
   } catch (error) {
     console.error(error);
-    return undefined;
+    throw new Error("Failed to update post");
   }
 }
 

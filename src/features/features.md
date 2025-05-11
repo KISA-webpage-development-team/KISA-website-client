@@ -1,3 +1,5 @@
 # features
 
-아직 리팩토링이 끝나지 않은 폴더이다. 지금은 넘어가도 좋다.
+pocha - pocha mobile app
+
+bulletin-board - 게시판, 에브리키사, post

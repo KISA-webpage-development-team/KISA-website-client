@@ -1,8 +1,8 @@
 import useSWR, { SWRConfiguration } from "swr";
+
 import { immutableOption } from "@/lib/swr/options";
-import { Post } from "@/types/post";
 import { CustomAxiosError } from "@/lib/axios/types";
-import { BoardType } from "@/types/board";
+import { Post } from "@/types/post";
 
 /**
  * @desc Fetch a post with the given postid [TOKEN NOT REQUIRED]
@@ -30,27 +30,10 @@ export function usePost(
 } {
   const url = `/posts/${postid}/`;
 
-  const fakeData = {
-    postid: 507,
-    title: "캠퍼스 시설 이용 안내",
-    created: "2022-01-06T11:00:00",
-    type: BoardType.Community,
-    fullname: "정현우",
-    email: "hyunwooj@umich.edu",
-    readCount: 120,
-    commentsCount: 8,
-    anonymous: true,
-    text: "안녕하세요. 캠퍼스 시설 이용 안내입니다. 캠퍼스 시설을 이용하실 때 주의사항을 꼭 숙지하시기 바랍니다.",
-    isAnnouncement: false,
-  };
-
-  const { data, error, isLoading } = useSWR(
-    postid && postid !== 507 ? url : null,
-    options
-  );
+  const { data, error, isLoading } = useSWR(postid ? url : null, options);
 
   return {
-    post: postid === 507 ? fakeData : data,
+    post: data,
     isLoading,
     error,
   };

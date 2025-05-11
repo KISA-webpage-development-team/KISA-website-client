@@ -9,6 +9,7 @@ type CustomImageButtonProps = {
   background?: "none" | "gray";
   onClick?: () => void;
   className?: string;
+  props?: React.HTMLAttributes<HTMLButtonElement>;
 };
 
 export default function CustomImageButton({
@@ -19,13 +20,18 @@ export default function CustomImageButton({
   background = "gray",
   onClick,
   className = "",
+  ...props
 }: CustomImageButtonProps) {
   const btnClassName = `${type}_button ${
     disabled ? `${type}_button_disabled` : ""
   } ${className}`.trim();
 
   return (
-    <button className={`${btnClassName} gap-1 h-fit`} onClick={onClick}>
+    <button
+      className={`${btnClassName} gap-1 h-fit`}
+      onClick={onClick}
+      {...props}
+    >
       {icon}
       {text !== "" && (
         <p
