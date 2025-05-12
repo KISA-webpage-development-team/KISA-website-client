@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { creditData } from "@/config/static/memberCreditData";
-import { LinkedInIcon } from "@/final_refactor_src/components/icon";
-import { EmailIcon } from "@/final_refactor_src/components/icon";
-import { GitIcon } from "@/final_refactor_src/components/icon";
+import { LinkedInIcon } from "@/components/ui/icon";
+import { EmailIcon } from "@/components/ui/icon";
+import { GitIcon } from "@/components/ui/icon";
 import {
   sejongHospitalBold,
   sejongHospitalLight,

@@ -1,6 +1,6 @@
 import { updateUser } from "@/apis/users/mutations";
-import { CustomButton } from "@/final_refactor_src/components/button";
-import { CustomFormItem } from "@/final_refactor_src/components/form";
+import { CustomButton } from "@/components/ui/button";
+import { CustomFormItem } from "@/components/ui/form";
 import React, { memo, useCallback, useState } from "react";
 
 type UserEditFormProps = {

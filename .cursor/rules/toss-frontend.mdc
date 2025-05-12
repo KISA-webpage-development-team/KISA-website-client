@@ -1,7 +1,7 @@
 ---
-description: 
+description: Frontend development guideline, especially for React
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Frontend Design Guideline

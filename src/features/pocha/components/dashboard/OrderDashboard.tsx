@@ -1,6 +1,6 @@
 "use client";
 
-import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
 import useDashboard from "../../hooks/useDashboardOrders";
 import useDashboardOrderSocket from "../../hooks/useDashboardOrderSocket";
 import FoodOrderGrid from "./FoodOrderGrid";

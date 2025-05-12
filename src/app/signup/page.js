@@ -8,20 +8,20 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { BACKEND_URL } from "../../constants/env";
+import { BACKEND_URL } from "@/constants/env";
 
 // sub-ui components
-import RequiredFields from "../../components/SignUp/RequiredFields";
-import OptionalFields from "../../components/SignUp/OptionalFields";
-import HorizontalDivider from "../../components/shared/HorizontalDivider";
-import TermConditions from "../../components/SignUp/TermConditions";
+import RequiredFields from "@/deprecated-components/SignUp/RequiredFields";
+import OptionalFields from "@/deprecated-components/SignUp/OptionalFields";
+import HorizontalDivider from "@/deprecated-components/shared/HorizontalDivider";
+import TermConditions from "@/deprecated-components/SignUp/TermConditions";
 import {
   sejongHospitalBold,
   sejongHospitalLight,
-} from "../../utils/fonts/textFonts";
+} from "@/utils/fonts/textFonts";
 
-import { personalInfoTerm } from "../../config/termCondition";
-import { websiteTerm } from "../../config/termCondition";
+import { personalInfoTerm } from "@/config/termCondition";
+import { websiteTerm } from "@/config/termCondition";
 
 export default function SignUpPage() {
   const router = useRouter();

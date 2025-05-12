@@ -27,16 +27,16 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { changeItemInCart } from "@/apis/pocha/mutations";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import PochaBackIcon from "@/final_refactor_src/components/icon/PochaBackIcon";
+import PochaBackIcon from "@/components/ui/icon/PochaBackIcon";
 import PochaButton from "../shared/PochaButton";
 
 // Types
 import { MenuItem } from "@/types/pocha";
 import { UserSession } from "@/lib/next-auth/types";
-import PochaMenuPlusIcon from "@/final_refactor_src/components/icon/PochaMenuPlusIcon";
-import PochaMenuMinusIcon from "@/final_refactor_src/components/icon/PochaMenuMinusIcon";
+import PochaMenuPlusIcon from "@/components/ui/icon/PochaMenuPlusIcon";
+import PochaMenuMinusIcon from "@/components/ui/icon/PochaMenuMinusIcon";
 import PochaErrorMsg from "../shared/PochaErrorMsg";
-import { getMenuImagePath } from "../../utils/getImagePath";
+import { getMenuImagePath } from "@/utils/getImagePath";
 
 interface MenuItemDetailProps {
   session: UserSession | undefined;

@@ -2,8 +2,8 @@ import React from "react";
 import { getBoardAnnouncements } from "@/apis/boards/queries";
 
 // sub-ui components
-import BoardBar from "../../../components/Boards/BoardBar";
-import BoardClient from "../../../components/Boards/BoardClient";
+import BoardBar from "@/deprecated-components/Boards/BoardBar";
+import BoardClient from "@/deprecated-components/Boards/BoardClient";
 import { BoardType } from "@/types/board";
 
 type CommunityPageProps = {

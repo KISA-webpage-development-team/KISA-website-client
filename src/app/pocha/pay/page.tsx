@@ -12,7 +12,7 @@ import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 
 import { useRouter } from "next/navigation";
 import usePay from "@/features/pocha/hooks/usePay";
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import { LoadingSpinner } from "@/components/ui/feedback";
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import PochaBackHeading from "@/features/pocha/components/shared/PochaBackHeading";
 import PochaHorizontalDivider from "@/features/pocha/components/shared/PochaHorizontalDivider";

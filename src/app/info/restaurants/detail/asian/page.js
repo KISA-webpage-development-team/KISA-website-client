@@ -1,9 +1,9 @@
 import React from "react";
-import DetailThumbnail from "../../../../../components/Info/DetailThumbnail";
-import DetailTitle from "../../../../../components/Info/DetailTitle";
-import DetailDescription from "../../../../../components/Info/DetailDescription";
+import DetailThumbnail from "@/deprecated-components/Info/DetailThumbnail";
+import DetailTitle from "@/deprecated-components/Info/DetailTitle";
+import DetailDescription from "@/deprecated-components/Info/DetailDescription";
 
-import { restaurantsAsianData } from "../../../../../config/static/detailPageData";
+import { restaurantsAsianData } from "@/config/static/detailPageData";
 import "../../../info.css";
 
 export default function AsianRestaurantsPage() {

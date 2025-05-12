@@ -4,10 +4,7 @@ import { changeStock } from "@/apis/pocha/mutations";
 import OrderHistoryTable from "@/features/pocha/components/dashboard/OrderHistoryTable";
 import useMenu from "@/features/pocha/hooks/useMenu";
 import usePocha from "@/features/pocha/hooks/usePocha";
-import {
-  LoadingSpinner,
-  NotAuthorized,
-} from "@/final_refactor_src/components/feedback";
+import { LoadingSpinner, NotAuthorized } from "@/components/ui/feedback";
 import useAdmin from "@/lib/next-auth/useAdmin";
 import OrderDashboard from "@/features/pocha/components/dashboard/OrderDashboard";
 import { PochaDashboardTab } from "@/types/pocha";

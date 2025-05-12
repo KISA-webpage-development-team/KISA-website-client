@@ -4,10 +4,10 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
-import { STATUS_TEXT_COLORS, STATUS_COLORS } from "../../utils/statusToColor";
+import { STATUS_TEXT_COLORS, STATUS_COLORS } from "@/utils/statusToColor";
 import Image from "next/image";
-import TicketIcon from "@/final_refactor_src/components/icon/TicketIcon";
-import { getMenuImagePath } from "../../utils/getImagePath";
+import TicketIcon from "@/components/ui/icon/TicketIcon";
+import { getMenuImagePath } from "@/utils/getImagePath";
 import OrderTicketModal from "./OrderTicketModal";
 
 interface PochaOrderItemProps {

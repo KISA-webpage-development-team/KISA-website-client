@@ -11,7 +11,7 @@ import {
 } from "@/utils/fonts/textFonts";
 // types
 import { PochaTab } from "@/types/pocha";
-import { updateURLWithTab } from "../../utils/updateURL";
+import { updateURLWithTab } from "@/utils/updateURL";
 
 type HomeTabsProps = {
   activeTab: PochaTab;

@@ -2,13 +2,13 @@
 import React from "react";
 
 // sub-ui components
-import InfoTitle from "../../../components/shared/InfoTitle";
-import CheckList from "../../../components/Info/CheckList";
+import InfoTitle from "@/deprecated-components/shared/InfoTitle";
+import CheckList from "@/deprecated-components/Info/CheckList";
 
 import {
   sejongHospitalBold,
   sejongHospitalLight,
-} from "../../../utils/fonts/textFonts";
+} from "@/utils/fonts/textFonts";
 
 import "../info.css";
 

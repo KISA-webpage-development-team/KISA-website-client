@@ -1,7 +1,7 @@
 // [TEST] for Next-Auth Middleware functionality
 
 import React from "react";
-import { NotLogin } from "@/final_refactor_src/components/feedback";
+import { NotLogin } from "@/components/ui/feedback";
 
 export default function page({ searchParams }) {
   const { callbackUrl } = searchParams;

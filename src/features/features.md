@@ -8,5 +8,5 @@ TODO:
 
 - comment refactor + optimization 마무리
 - post-create
-- post-edit
+- post-create-edit
 - post-delete

@@ -2,10 +2,10 @@ import React from "react";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import Image from "next/image";
 import { CartItem } from "@/types/pocha";
-import PochaMinusIcon from "@/final_refactor_src/components/icon/PochaMinusIcon";
-import PochaPlusIcon from "@/final_refactor_src/components/icon/PochaPlusIcon";
-import PochaTrashIcon from "@/final_refactor_src/components/icon/PochaTrashIcon";
-import { getMenuImagePath } from "../../utils/getImagePath";
+import PochaMinusIcon from "@/components/ui/icon/PochaMinusIcon";
+import PochaPlusIcon from "@/components/ui/icon/PochaPlusIcon";
+import PochaTrashIcon from "@/components/ui/icon/PochaTrashIcon";
+import { getMenuImagePath } from "@/utils/getImagePath";
 
 type CartListItemProps = {
   item: CartItem;

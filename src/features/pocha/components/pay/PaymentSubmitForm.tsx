@@ -18,7 +18,7 @@ import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 import { useRouter } from "next/navigation";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import PaySummaryCard from "./PaySummaryCard";
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import { LoadingSpinner } from "@/components/ui/feedback";
 
 // hooks
 import useStripePayment from "../../hooks/useStripePayment";

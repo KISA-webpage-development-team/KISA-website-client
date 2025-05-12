@@ -1,14 +1,14 @@
 import React from "react";
-import { sejongHospitalLight } from "../../../utils/fonts/textFonts";
+import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 
 // data
-import { sportsPageData } from "../../../config/static/infoPageData";
+import { sportsPageData } from "@/config/static/infoPageData";
 
 // sub-ui components
-import InfoTitle from "../../../components/shared/InfoTitle";
-import SectionTitle from "../../../components/Info/SectionTitle";
-import SectionGrid from "../../../components/Info/SectionGrid";
-import SectionIntro from "../../../components/Info/SectionIntro";
+import InfoTitle from "@/deprecated-components/shared/InfoTitle";
+import SectionTitle from "@/deprecated-components/Info/SectionTitle";
+import SectionGrid from "@/deprecated-components/Info/SectionGrid";
+import SectionIntro from "@/deprecated-components/Info/SectionIntro";
 import "../info.css";
 
 export const metadata = {

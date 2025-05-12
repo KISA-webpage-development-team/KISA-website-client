@@ -8,7 +8,7 @@
 import React, { memo, useState } from "react";
 
 import MenuListItem from "./MenuListItem";
-import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
 
 // Hooks
 import { useSession } from "next-auth/react";

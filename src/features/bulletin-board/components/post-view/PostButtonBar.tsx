@@ -6,12 +6,8 @@ import React from "react";
 import { useRouter } from "next/navigation";
 
 // sub-ui components
-import {
-  PencilIcon,
-  TrashcanIcon,
-  ListIcon,
-} from "@/final_refactor_src/components/icon";
-import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
+import { PencilIcon, TrashcanIcon, ListIcon } from "@/components/ui/icon";
+import CustomImageButton from "@/components/ui/button/CustomImageButton";
 import GoBlueButton from "@/features/bulletin-board/components/shared/GoBlueButton";
 
 // utils
@@ -58,7 +54,7 @@ export default function PostButtonBar({
   };
 
   const onClickPostDelete = () => {
-    route.push(`/posts/delete/${type}/posts/${postid}`);
+    route.push(`/posts/delete/${type}/${postid}`);
   };
 
   return (

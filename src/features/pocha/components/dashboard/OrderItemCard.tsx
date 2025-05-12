@@ -1,6 +1,6 @@
 import { OrderItem, OrderStatus } from "@/types/pocha";
 import React, { useState } from "react";
-import { STATUS_COLORS } from "../../utils/statusToColor";
+import { STATUS_COLORS } from "@/utils/statusToColor";
 import { changeOrderItemStatus } from "@/apis/pocha/mutations";
 import { Spinner } from "@nextui-org/react";
 

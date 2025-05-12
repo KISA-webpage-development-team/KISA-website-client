@@ -1,78 +1,76 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { deleteComment } from "@/apis/comments/mutations";
 
 // sub-ui components
 import CommentEditor from "./CommentEditor";
-
-import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
-import PencilIcon from "@/final_refactor_src/components/icon/PencilIcon";
-import TrashcanIcon from "@/final_refactor_src/components/icon/TrashcanIcon";
-import CommentIcon from "@/final_refactor_src/components/icon/CommentIcon";
-import ReplyIcon from "@/final_refactor_src/components/icon/ReplyIcon";
+import GoBlueButton from "@/features/bulletin-board/components/shared/GoBlueButton";
+import CustomImageButton from "@/components/ui/button/CustomImageButton";
+import PencilIcon from "@/components/ui/icon/PencilIcon";
+import TrashcanIcon from "@/components/ui/icon/TrashcanIcon";
+import CommentIcon from "@/components/ui/icon/CommentIcon";
+import ReplyIcon from "@/components/ui/icon/ReplyIcon";
 
 // utils
 import { formatRelativeTime } from "@/utils/formats/date";
 
 // apis
-import { getLikeByUser } from "@/apis/likes/queries";
-import SecretIcon from "@/final_refactor_src/components/icon/SecretIcon";
+import SecretIcon from "@/components/ui/icon/SecretIcon";
 
 // types
-import { LikeBody } from "@/types/like";
 import { Comment } from "@/types/comment";
-import { UserSession } from "@/lib/next-auth/types";
-import GoBlueButton from "../shared/GoBlueButton";
+
+import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
 
 type CommentItemProps = {
-  isEveryKisa?: boolean;
-  session: UserSession;
   comment: Comment;
-  parentCommentid?: number;
   refreshComments: () => void;
-  postAuthorEmail: string;
   commentAuthorMap: Map<string, number>;
+  onCommentAdded?: () => void;
   onCommentDeleted?: () => void;
 };
 
 export default function CommentItem({
-  isEveryKisa = false,
-  session,
   comment,
-  parentCommentid = 0,
   refreshComments,
-  postAuthorEmail,
   commentAuthorMap,
+  onCommentAdded,
   onCommentDeleted,
 }: CommentItemProps) {
-  // TODO: add "didLike" state
+  const { session, isEveryKisa, postAuthorEmail } = useCommentsContext();
   const {
     commentid,
     email,
-    postid,
     fullname,
     created,
     text,
     childComments,
     isCommentOfComment,
     anonymous,
-    likesCount,
     secret,
   } = comment;
-  // constants for comment item
-  const isAuthor = session?.user?.email === email;
-  const isPostAuthor = postAuthorEmail === email;
-  const token = session?.token;
 
   // states for reply editor
   const [openReplyEditor, setOpenReplyEditor] = useState(false);
   const [openCommentEditor, setOpenCommentEditor] = useState(false);
   // states for delete comment
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  // states for like
-  const [didLike, setDidLike] = useState<boolean | null>(null);
-  // stale state for like button to prevent multiple clicks and re-renders
-  const [likeBtnStale, setLikeBtnStale] = useState<boolean>(false);
+
+  // derived states
+  const isCommentAuthor = session?.user?.email === comment.email;
+  const isPostAuthor = postAuthorEmail === comment.email;
+
+  const canEdit = isCommentAuthor;
+  const canDelete = isCommentAuthor;
+  const canReply = !(
+    secret &&
+    !(session?.user?.email === postAuthorEmail) &&
+    !isCommentAuthor
+  );
+  const canSeeText =
+    isCommentAuthor || !secret || session?.user?.email === postAuthorEmail;
+  const showSecretIcon =
+    secret && (session?.user?.email === postAuthorEmail || isCommentAuthor);
 
   const handleOpenReplyEditor = () => {
     // session이 존재하지 않으면, 로그인 필수 모달을 띄워야 함
@@ -90,7 +88,7 @@ export default function CommentItem({
 
   const handleCommentDelete = async () => {
     setIsDeleteLoading(true);
-    const res = await deleteComment(commentid, token);
+    const res = await deleteComment(commentid, session?.token);
     if (res?.success) {
       // modify states after comment has been deleted
       refreshComments();
@@ -102,47 +100,18 @@ export default function CommentItem({
     }
   };
 
-  // fetch like status
-  useEffect(() => {
-    const fetchLikeStatus = async () => {
-      try {
-        const body = {
-          email: session?.user.email,
-          target: "comment",
-        };
-
-        const res = await getLikeByUser(
-          commentid,
-          body as LikeBody,
-          session?.token
-        );
-        if (!res) {
-          console.log("Failed to fetch like status");
-        } else {
-          setDidLike(res.liked);
-        }
-      } catch (error) {
-        console.error("Error fetching like status: ", error);
-      }
-    };
-
-    if (session) {
-      fetchLikeStatus();
-    }
-  }, [postid, session, commentid, likeBtnStale]);
-
   /**
    * @desc Renders the author of the comment following anonymous logic
    *
    */
   const renderCommentAuthor = () => {
-    if (isAuthor && anonymous) {
+    if (isCommentAuthor && anonymous) {
       return (
         <Link href={`/users/${email}`}>
           <span className="font-semibold hover:underline">{`${fullname}(익명)`}</span>
         </Link>
       );
-    } else if (isAuthor || !anonymous) {
+    } else if (isCommentAuthor || !anonymous) {
       return (
         <Link href={`/users/${email}`}>
           <span className="font-semibold hover:underline">{fullname}</span>
@@ -181,9 +150,7 @@ export default function CommentItem({
               className="flex items-center gap-1 md:gap-2
             text-sm md:text-base"
             >
-              {isAuthor ||
-              !secret ||
-              session?.user?.email === postAuthorEmail ? (
+              {canSeeText ? (
                 <>
                   {renderCommentAuthor()}
                   <p className="text-gray-500">{formatRelativeTime(created)}</p>
@@ -196,10 +163,7 @@ export default function CommentItem({
                 </>
               )}
 
-              {secret &&
-              (session?.user?.email === postAuthorEmail || isAuthor) ? (
-                <SecretIcon />
-              ) : null}
+              {showSecretIcon ? <SecretIcon /> : null}
             </div>
 
             {/* 2. Buttons */}
@@ -211,7 +175,7 @@ export default function CommentItem({
                   session={session}
                 />
               )}
-              {isAuthor && (
+              {canEdit && canDelete && (
                 <>
                   <CustomImageButton
                     type="tertiary"
@@ -224,16 +188,13 @@ export default function CommentItem({
                     type="tertiary"
                     background="none"
                     icon={<TrashcanIcon color="gray" noResize />}
-                    text={"삭제"}
+                    text={isDeleteLoading ? "삭제중..." : "삭제"}
                     onClick={handleCommentDelete}
+                    disabled={isDeleteLoading}
                   />
                 </>
               )}
-              {!(
-                secret &&
-                !(session?.user?.email === postAuthorEmail) &&
-                !isAuthor
-              ) && (
+              {canReply && (
                 <>
                   <CustomImageButton
                     type="tertiary"
@@ -249,16 +210,12 @@ export default function CommentItem({
           {/* 3. Text */}
           <div
             className={`${
-              isAuthor && "text-blue-500"
+              isCommentAuthor && "text-blue-500"
             } pt-1 pb-3 text-sm md:text-base
             text-wrap `}
           >
             {/* 텍스트 자체가 보이는 경우: 유저가 댓글 작성자일때, 시크릿이 아닐때, 유저가 포스트 작성자일때*/}
-            {isAuthor || !secret || session?.user?.email === postAuthorEmail ? (
-              text
-            ) : (
-              <p className="italic">비밀 댓글입니다.</p>
-            )}
+            {canSeeText ? text : <p className="italic">비밀 댓글입니다.</p>}
             {/* 로그인한 사람이, 포스트 작성자 + 비밀댓글 = 자물쇠  */}
             {/* 로그인한 사람이, 댓글 작성자 + 비밀댓글 = 자물쇠 */}
           </div>
@@ -270,9 +227,7 @@ export default function CommentItem({
         <div className="mb-4">
           <CommentEditor
             mode="update"
-            session={session}
             commentid={commentid}
-            postid={postid}
             curCommentId={commentid}
             placeholder={text}
             secret={secret}
@@ -285,15 +240,13 @@ export default function CommentItem({
         <div className="ml-8 mb-4 flex items-center gap-4">
           <ReplyIcon type="flip" />
           <CommentEditor
-            isEveryKisa={isEveryKisa}
             mode="reply"
-            session={session}
             commentid={commentid}
-            postid={postid}
             curCommentId={commentid}
             secret={secret}
             refreshComments={refreshComments}
             setOpenCommentEditor={setOpenReplyEditor}
+            onCommentAdded={onCommentAdded}
           />
         </div>
       )}
@@ -306,13 +259,11 @@ export default function CommentItem({
             className="ml-3 md:ml-4"
           >
             <CommentItem
-              isEveryKisa={isEveryKisa}
               comment={subComment}
-              session={session}
-              parentCommentid={commentid}
               refreshComments={refreshComments}
-              postAuthorEmail={postAuthorEmail}
               commentAuthorMap={commentAuthorMap}
+              onCommentAdded={onCommentAdded}
+              onCommentDeleted={onCommentDeleted}
             />
           </div>
         ))}

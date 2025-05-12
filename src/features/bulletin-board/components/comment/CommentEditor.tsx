@@ -1,16 +1,13 @@
 import React, { ChangeEvent, useState } from "react";
 import { createComment, updateComment } from "@/apis/comments/mutations";
 import { NewCommentBody } from "@/types/comment";
-import { CustomButton } from "@/final_refactor_src/components/button";
+import { CustomButton } from "@/components/ui/button";
 import { Radio, RadioGroup } from "@nextui-org/react";
 import { cn } from "@/utils/styles/cn";
-import { UserSession } from "@/lib/next-auth/types";
+import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
 
 type CommentEditorProps = {
-  isEveryKisa?: boolean;
   mode: "create" | "update" | "reply";
-  session: UserSession;
-  postid: number;
   commentid?: number;
   curCommentId?: number | null;
   placeholder?: string;
@@ -21,10 +18,7 @@ type CommentEditorProps = {
 };
 
 export default function CommentEditor({
-  isEveryKisa = false,
   mode,
-  session,
-  postid,
   commentid = 0,
   curCommentId = null,
   placeholder = "댓글을 입력해주세요",
@@ -33,6 +27,8 @@ export default function CommentEditor({
   setOpenCommentEditor = () => {},
   onCommentAdded = () => {},
 }: CommentEditorProps) {
+  const { session, isEveryKisa, postid } = useCommentsContext();
+
   // comment content
   const [text, setText] = useState<string>(
     placeholder === "댓글을 입력해주세요" ? "" : placeholder
@@ -43,6 +39,11 @@ export default function CommentEditor({
 
   // state to prevent multiple comment submissions at the same time
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const isTextEmpty = text.length === 0;
+  const isAnonymousNotSelected = isEveryKisa && anonymousValue === "none";
+  const isSubmitDisabled =
+    isTextEmpty || isAnonymousNotSelected || isSubmitting;
 
   const [checked, setChecked] = useState<boolean>(
     mode === "update" ? secret : false
@@ -73,8 +74,8 @@ export default function CommentEditor({
 
     if (res) {
       // modify states after new comment has been submitted
-      refreshComments();
       onCommentAdded(); // Optimistically update comments count
+      refreshComments();
       setOpenCommentEditor(false);
       setText("");
 
@@ -114,6 +115,9 @@ export default function CommentEditor({
     }
   };
 
+  const handleSubmit =
+    mode === "update" ? handleSubmitUpdate : handleSubmitComment;
+
   const handleSecretChecked = () => {
     setChecked(!checked);
   };
@@ -136,18 +140,10 @@ export default function CommentEditor({
           if (
             e.key === "Enter" &&
             e.target === document.activeElement &&
-            !(
-              text.length === 0 ||
-              (isEveryKisa && anonymousValue === "none") ||
-              isSubmitting
-            )
+            !isSubmitDisabled
           ) {
             e.preventDefault();
-            if (mode === "update") {
-              handleSubmitUpdate();
-            } else {
-              handleSubmitComment();
-            }
+            handleSubmit();
           }
         }}
       />
@@ -229,12 +225,8 @@ export default function CommentEditor({
 
         {/* If isEveryKisa, anonymousValue should be selected */}
         <CustomButton
-          disabled={
-            text.length === 0 ||
-            (isEveryKisa && anonymousValue === "none") ||
-            isSubmitting
-          }
-          onClick={mode === "update" ? handleSubmitUpdate : handleSubmitComment}
+          disabled={isSubmitDisabled}
+          onClick={handleSubmit}
           text={isSubmitting ? "..." : "댓글 등록"}
           className="w-fit md:w-full h-fit md:h-fit"
         />

@@ -2,8 +2,8 @@ import React from "react";
 import Link from "next/link";
 
 // sub-ui components
-import VerticalDivider from "@/final_refactor_src/components/divider/VerticalDivider";
-import { ClockIcon } from "@/final_refactor_src/components/icon";
+import VerticalDivider from "@/components/ui/divider/VerticalDivider";
+import { ClockIcon } from "@/components/ui/icon";
 
 // utils
 import { formatRelativeTime, formatDateTimeString } from "@/utils/formats/date";

@@ -2,12 +2,12 @@ import React from "react";
 import {
   sejongHospitalLight,
   sejongHospitalBold,
-} from "../../../utils/fonts/textFonts";
-import InfoTitle from "../../../components/shared/InfoTitle";
-import SectionTitle from "../../../components/Info/SectionTitle";
-import SectionGrid from "../../../components/Info/SectionGrid";
-import { campusPageData } from "../../../config/static/infoPageData";
-import SectionIntro from "../../../components/Info/SectionIntro";
+} from "@/utils/fonts/textFonts";
+import InfoTitle from "@/deprecated-components/shared/InfoTitle";
+import SectionTitle from "@/deprecated-components/Info/SectionTitle";
+import SectionGrid from "@/deprecated-components/Info/SectionGrid";
+import { campusPageData } from "@/config/static/infoPageData";
+import SectionIntro from "@/deprecated-components/Info/SectionIntro";
 import "../info.css";
 
 export const metadata = {

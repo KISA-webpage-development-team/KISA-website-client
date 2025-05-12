@@ -6,7 +6,6 @@
 // 3. comment list
 
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 
 // ui components
 import CommentEditor from "./CommentEditor";
@@ -16,25 +15,14 @@ import CommentsList from "./CommentsList";
 import { useComments } from "@/features/bulletin-board/hooks/useComments";
 
 // types
-import { UserSession } from "@/lib/next-auth/types";
+import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
 
 type CommentsViewProps = {
-  isEveryKisa?: boolean;
   commentsCount: number;
-  postid: number;
-  email: string;
 };
 
-export default function CommentsView({
-  isEveryKisa = false,
-  commentsCount,
-  postid,
-  email,
-}: CommentsViewProps) {
-  const { data: session, status: sessionStatus } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+export default function CommentsView({ commentsCount }: CommentsViewProps) {
+  const { isAuthenticated, postid } = useCommentsContext();
 
   const {
     comments,
@@ -43,7 +31,7 @@ export default function CommentsView({
     refreshComments,
   } = useComments(postid);
 
-  // optimistic update on comments count to solve comments count sync issue
+  // optimistic UI update on comments count to solve comments count sync issue
   // [NOTE] this needs delicate attention on implementation, it would be better if we have a separate api for updating comments count
   const [optimisticCommentsCount, setOptimisticCommentsCount] =
     useState<number>(commentsCount);
@@ -53,14 +41,16 @@ export default function CommentsView({
     setOptimisticCommentsCount(commentsCount);
   }, [commentsCount]);
 
-  const handleCommentAdded = () => setOptimisticCommentsCount((c) => c + 1);
+  const handleCommentAdded = () => {
+    setOptimisticCommentsCount((c) => c + 1);
+    console.log("handleCommentAdded");
+  };
 
   const handleCommentDeleted = () =>
     setOptimisticCommentsCount((c) => Math.max(0, c - 1));
   // ------------------------------------------------------------
 
-  const isLoading = sessionStatus === "loading" || commentsStatus === "loading";
-  const isAuthenticated = sessionStatus === "authenticated";
+  const isLoading = commentsStatus === "loading";
 
   if (isLoading) {
     return null;
@@ -78,10 +68,7 @@ export default function CommentsView({
       {/* 2. default comment editor to add direct comment on the post */}
       {isAuthenticated && (
         <CommentEditor
-          isEveryKisa={isEveryKisa}
           mode="create"
-          session={session}
-          postid={postid}
           refreshComments={refreshComments}
           onCommentAdded={handleCommentAdded}
         />
@@ -89,11 +76,9 @@ export default function CommentsView({
 
       {/* 3. comment list */}
       <CommentsList
-        isEveryKisa={isEveryKisa}
         comments={comments}
-        session={session}
         refreshComments={refreshComments}
-        email={email}
+        onCommentAdded={handleCommentAdded}
         onCommentDeleted={handleCommentDeleted}
       />
     </div>

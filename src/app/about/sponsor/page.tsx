@@ -1,6 +1,6 @@
 import React from "react";
-import InfoTitle from "@/components/shared/InfoTitle";
-import SponsorBanner from "@/components/About/SponsorBanner";
+import InfoTitle from "@/deprecated-components/shared/InfoTitle";
+import SponsorBanner from "@/deprecated-components/About/SponsorBanner";
 import { sponsorData } from "@/config/static/sponsorData";
 
 export default function SponsorPage() {

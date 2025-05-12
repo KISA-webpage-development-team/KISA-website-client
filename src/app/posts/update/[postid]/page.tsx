@@ -1,7 +1,13 @@
-import BoardTitle from "../../../../components/Boards/BoardTitle";
 import dynamic from "next/dynamic";
 import { getServerSession } from "next-auth";
+
+// ui components
+import BoardTitle from "@/features/bulletin-board/components/shared/BoardTitle";
+
+// auth
 import authOptions from "@/lib/next-auth/authOptions";
+
+// types
 import { BoardType } from "@/types/board";
 
 type PageProps = {
@@ -13,11 +19,12 @@ type PageProps = {
   };
 };
 
-// need to force EditorClient to be rendered on client-side
+// need to force PostEditor to be rendered on client-side
 // I don't know why NextJS doesn't automatically render it on client-side
 // this will remove the error "document is not defined"
-const EditorClient = dynamic(
-  () => import("../../../../components/Posts/post-edit/EditorClient"),
+const PostEditor = dynamic(
+  () =>
+    import("@/features/bulletin-board/components/post-create-edit/PostEditor"),
   {
     ssr: false,
   }
@@ -43,7 +50,7 @@ export default async function PostUpdatePage({
       {/* Text Editor */}
 
       <div className="grow w-full">
-        <EditorClient
+        <PostEditor
           session={session}
           boardType={board_type}
           curPostId={postid}

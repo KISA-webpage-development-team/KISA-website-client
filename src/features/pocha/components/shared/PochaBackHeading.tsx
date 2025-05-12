@@ -1,4 +1,4 @@
-import PochaBackIcon from "@/final_refactor_src/components/icon/PochaBackIcon";
+import PochaBackIcon from "@/components/ui/icon/PochaBackIcon";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { useRouter } from "next/navigation";
 import React from "react";

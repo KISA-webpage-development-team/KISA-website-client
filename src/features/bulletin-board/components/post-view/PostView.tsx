@@ -13,8 +13,8 @@ import PostContent from "./PostContent";
 import PostButtonBar from "./PostButtonBar";
 
 // TODO: final_refactor_src -> @components
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
-import { HorizontalDivider } from "@/final_refactor_src/components/divider";
+import { LoadingSpinner } from "@/components/ui/feedback";
+import { HorizontalDivider } from "@/components/ui/divider";
 
 // Libs
 import ReactCookieProvider from "@/lib/react-cookie/provider";

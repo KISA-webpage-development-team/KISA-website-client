@@ -14,10 +14,7 @@ import { getSession } from "@/lib/next-auth/getSession";
 import UserProfile from "@/features/users/components/view/UserProfile";
 import UserBoard from "@/features/users/components/view/UserBoard";
 
-import {
-  NotLogin,
-  NotAuthorized,
-} from "@/final_refactor_src/components/feedback";
+import { NotLogin, NotAuthorized } from "@/components/ui/feedback";
 
 type UserViewPageProps = {
   params: {

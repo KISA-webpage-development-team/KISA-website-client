@@ -2,10 +2,7 @@ import React from "react";
 import UserEditClient from "@/features/users/components/edit/UserEditClient";
 import { getSession } from "@/lib/next-auth/getSession";
 
-import {
-  NotAuthorized,
-  NotLogin,
-} from "@/final_refactor_src/components/feedback";
+import { NotAuthorized, NotLogin } from "@/components/ui/feedback";
 
 type UserEditPageProps = {
   params: {

@@ -3,8 +3,8 @@ import { OrderItem } from "@/types/pocha";
 
 import useOrderHistory from "../../hooks/useOrderHistory";
 import { usePochaMenu } from "@/apis/pocha/swrHooks";
-import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
-import { calculateStripeTotalPrice } from "../../utils/calculateStripeFee";
+import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
+import { calculateStripeTotalPrice } from "@/utils/calculateStripeFee";
 
 interface OrderHistoryTableProps {
   token: string;

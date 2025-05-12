@@ -1,4 +1,4 @@
-import { EmailIcon } from "@/final_refactor_src/components/icon";
+import { EmailIcon } from "@/components/ui/icon";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import Image from "next/image";
 import React, { memo } from "react";

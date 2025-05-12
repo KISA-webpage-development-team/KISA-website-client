@@ -1,6 +1,6 @@
 "use client";
 
-import OnlyMobileView from "@/final_refactor_src/components/feedback/OnlyMobileView";
+import OnlyMobileView from "@/components/ui/feedback/OnlyMobileView";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import { SessionProvider } from "next-auth/react";
 import { usePathname } from "next/navigation";

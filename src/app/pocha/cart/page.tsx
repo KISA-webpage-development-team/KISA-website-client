@@ -6,7 +6,7 @@ import PochaHorizontalDivider from "@/features/pocha/components/shared/PochaHori
 import EmptyCartAlert from "@/features/pocha/components/cart/EmptyCartAlert";
 import CartList from "@/features/pocha/components/cart/CartList";
 import CartTotalSummary from "@/features/pocha/components/cart/CartTotalSummary";
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import { LoadingSpinner } from "@/components/ui/feedback";
 import ProceedToPaymentButton from "@/features/pocha/components/cart/ProceedToPaymentButton";
 
 // hooks

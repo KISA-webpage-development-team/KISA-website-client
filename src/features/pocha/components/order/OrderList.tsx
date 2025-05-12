@@ -7,7 +7,7 @@ import { UserSession } from "@/lib/next-auth/types";
 import PochaOrderItem from "./PochaOrderItem";
 import { Tabs, Tab } from "@nextui-org/react"; // Using Tabs
 import useUserOrderSocket from "../../hooks/useUserOrderSocket";
-import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
 
 interface OrderListProps {
   pochaID: number;

@@ -1,16 +1,22 @@
 import React from "react";
-import BoardTitle from "../../../../components/Boards/BoardTitle";
-
 import dynamic from "next/dynamic";
 import { getServerSession } from "next-auth";
+
+// ui components
+import BoardTitle from "@/features/bulletin-board/components/shared/BoardTitle";
+
+// auth
 import authOptions from "@/lib/next-auth/authOptions";
+
+// types
 import { BoardType } from "@/types/board";
 
-// need to force EditorClient to be rendered on client-side
+// need to force PostEditor to be rendered on client-side
 // I don't know why NextJS doesn't automatically render it on client-side
 // this will remove the error "document is not defined"
-const EditorClient = dynamic(
-  () => import("../../../../components/Posts/post-edit/EditorClient"),
+const PostEditor = dynamic(
+  () =>
+    import("@/features/bulletin-board/components/post-create-edit/PostEditor"),
   {
     ssr: false,
   }
@@ -34,7 +40,7 @@ export default async function CreatePostPage({ params }: PageProps) {
 
       {/* Text Editor */}
       <div className="grow w-full">
-        <EditorClient session={session} boardType={boardType} mode="create" />
+        <PostEditor session={session} boardType={boardType} mode="create" />
       </div>
     </section>
   );
@@ -42,5 +48,5 @@ export default async function CreatePostPage({ params }: PageProps) {
 
 // [NOTE on rendering method]
 // This page is rendered as SSR (Server Side Rendering) dynamically.
-// Client-Side Components like BoardTitle and EditorClient are rendered and
+// Client-Side Components like BoardTitle and PostEditor are rendered and
 // become interactive in the browser after the initial HTML is loaded

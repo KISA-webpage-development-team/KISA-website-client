@@ -2,10 +2,10 @@
 
 // Rule to prevent importing individual files from components folder
 const createComponentImportRule = (folderName) => ({
-  target: "./src/final_refactor_src/features",
-  from: `./src/final_refactor_src/components/${folderName}`,
+  target: "./src/features",
+  from: `./src/components/${folderName}`,
   except: ["./index.ts", "./styles.css", "./types.ts"],
-  message: `Please import ${folderName} from "@/components/${folderName}" instead of individual files.`,
+  message: `Please import ${folderName} from "@/deprecated-components/${folderName}" instead of individual files.`,
 });
 
 const componentFolders = ["icon", "button", "feedback", "toggle"];

@@ -3,6 +3,8 @@ import { UserSession } from "./types";
 import { useEffect, useState } from "react";
 import { getIsAdmin } from "@/apis/auth/queries";
 
+// [NOTE]: I think this hook should be moved to shared folder or something
+
 /**
  * @desc hook to check if the user is an admin (getIsAdmin)
  * @returns isAdmin: boolean, email: string, token: string, status: string

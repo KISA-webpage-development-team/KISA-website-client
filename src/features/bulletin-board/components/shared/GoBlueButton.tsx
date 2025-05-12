@@ -1,6 +1,6 @@
 // GoBlueButton for post
 
-import LikeIcon from "@/final_refactor_src/components/icon/LikeIcon";
+import LikeIcon from "@/components/ui/icon/LikeIcon";
 import useLike, {
   LikeTargetType,
 } from "@/features/bulletin-board/hooks/useLike";

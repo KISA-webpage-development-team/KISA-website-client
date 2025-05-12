@@ -19,7 +19,7 @@ import { useUser } from "@/apis/users/swrHooks";
 // sub-ui components
 import UserEditForm from "./UserEditForm";
 import UserEditFixed from "./UserEditFixed";
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import { LoadingSpinner } from "@/components/ui/feedback";
 
 // types
 import { UserSession } from "@/lib/next-auth/types";

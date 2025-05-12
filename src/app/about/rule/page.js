@@ -1,9 +1,9 @@
 import React from "react";
-import InfoTitle from "../../../components/shared/InfoTitle";
+import InfoTitle from "@/deprecated-components/shared/InfoTitle";
 import {
   sejongHospitalBold,
   sejongHospitalLight,
-} from "../../../utils/fonts/textFonts";
+} from "@/utils/fonts/textFonts";
 
 export const metadata = {
   title: "회칙",

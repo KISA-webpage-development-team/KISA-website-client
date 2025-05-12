@@ -1,10 +1,6 @@
 "use client";
 import PochaButton from "@/features/pocha/components/shared/PochaButton";
-import {
-  NotFound,
-  NotLogin,
-  UnexpectedError,
-} from "@/final_refactor_src/components/feedback";
+import { NotFound, NotLogin, UnexpectedError } from "@/components/ui/feedback";
 
 interface ErrorProps {
   error: Error & { digest?: string };

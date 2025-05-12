@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 // ui components
-import { LoadingSpinner } from "@/final_refactor_src/components/feedback";
+import { LoadingSpinner } from "@/components/ui/feedback";
 import HomeHeading from "@/features/pocha/components/home/HomeHeading";
 import HomeTabs from "@/features/pocha/components/home/HomeTabs";
 import HomeTabContent from "@/features/pocha/components/home/HomeTabContent";

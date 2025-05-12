@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useMenu from "../../hooks/useMenu";
-import LoadingSpinner from "@/final_refactor_src/components/feedback/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
 import { changeStock } from "@/apis/pocha/mutations";
 
 interface StockManagerProps {

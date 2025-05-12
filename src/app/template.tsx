@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 
-import Header from "@/components/Header/Header";
+import Header from "@/deprecated-components/Header/Header";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/next-auth/authOptions";
 import { getIsAdmin } from "@/apis/auth/queries";
-import { UnderConstruction } from "@/final_refactor_src/components/feedback";
+import { UnderConstruction } from "@/components/ui/feedback";
 
 export default async function Template({ children }: { children: ReactNode }) {
   // flag to show under construction page

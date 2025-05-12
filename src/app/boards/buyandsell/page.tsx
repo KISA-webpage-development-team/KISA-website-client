@@ -1,6 +1,6 @@
 import React from "react";
-import BoardBar from "../../../components/Boards/BoardBar";
-import BoardClient from "../../../components/Boards/BoardClient";
+import BoardBar from "@/deprecated-components/Boards/BoardBar";
+import BoardClient from "@/deprecated-components/Boards/BoardClient";
 import { getBoardAnnouncements } from "@/apis/boards/queries";
 import { BoardType } from "@/types/board";
 

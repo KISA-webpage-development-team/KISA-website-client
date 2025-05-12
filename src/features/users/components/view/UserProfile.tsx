@@ -18,16 +18,9 @@ import { useUser } from "@/apis/users/swrHooks";
 // sub-ui components
 import UserProfileInfo from "./UserProfileInfo";
 import UserProfileDetails from "./UserProfileDetails";
-import {
-  LoadingSpinner,
-  NotFound,
-} from "@/final_refactor_src/components/feedback";
-import CustomLinkButton from "@/final_refactor_src/components/button/CustomLinkButton";
-import {
-  EmailIcon,
-  GradIcon,
-  LinkedInIcon,
-} from "@/final_refactor_src/components/icon";
+import { LoadingSpinner, NotFound } from "@/components/ui/feedback";
+import CustomLinkButton from "@/components/ui/button/CustomLinkButton";
+import { EmailIcon, GradIcon, LinkedInIcon } from "@/components/ui/icon";
 
 // Types
 import { UserSession } from "@/lib/next-auth/types";

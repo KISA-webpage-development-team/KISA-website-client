@@ -3,15 +3,15 @@
 import React from "react";
 
 // hook
-import useUserBoard from "../../hooks/useUserBoard";
+import useUserBoard from "@/features/users/hooks/useUserBoard";
 
 // sub-ui components
 import UserPostsTable from "./UserPostsTable";
 import MobileUserPostsList from "./MobileUserPostsList";
 import UserCommentsTable from "./UserCommentsTable";
 import MobileUserCommentsList from "./MobileUserCommentsList";
-import { ListIcon, CommentIcon } from "@/final_refactor_src/components/icon";
-import { CustomToggleBar } from "@/final_refactor_src/components/toggle";
+import { ListIcon, CommentIcon } from "@/components/ui/icon";
+import { CustomToggleBar } from "@/components/ui/toggle";
 
 // types
 import { UserSession } from "@/lib/next-auth/types";

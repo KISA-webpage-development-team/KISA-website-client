@@ -6,7 +6,7 @@
 
 import React from "react";
 import PochaButton from "../shared/PochaButton";
-import PochaCartIcon from "@/final_refactor_src/components/icon/PochaCartIcon";
+import PochaCartIcon from "@/components/ui/icon/PochaCartIcon";
 
 interface ViewCartButtonProps {
   pochaID: number;
