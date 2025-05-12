@@ -10,6 +10,10 @@
 
 ## Getting Started
 
+**If you're responsible for the project, please check out [GUIDE.md](GUIDE.md) for more detailed information.**
+
+---
+
 1. run following command to install necessary packages
 
 `npm install`
