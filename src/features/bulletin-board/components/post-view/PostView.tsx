@@ -50,6 +50,7 @@ export default function PostView({ post }: PostViewProps) {
     created,
     readCount,
     commentsCount,
+    anonymous,
   } = post;
 
   if (status === "loading") {
@@ -72,6 +73,7 @@ export default function PostView({ post }: PostViewProps) {
             created={created}
             readCount={didRead ? Number(readCount) + 1 : readCount}
             commentsCount={commentsCount}
+            anonymous={anonymous}
           />
         </div>
 

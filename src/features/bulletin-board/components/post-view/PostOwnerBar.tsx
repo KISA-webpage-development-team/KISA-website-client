@@ -14,6 +14,7 @@ type PostOwnerBarProps = {
   created: string;
   readCount: number;
   commentsCount: number;
+  anonymous: boolean;
 };
 
 export default function PostOwnerBar({
@@ -22,6 +23,7 @@ export default function PostOwnerBar({
   created,
   readCount,
   commentsCount,
+  anonymous,
 }: PostOwnerBarProps) {
   // for accessibility
   const linkLabel = `View ${fullname}'s profile`;
@@ -34,7 +36,9 @@ export default function PostOwnerBar({
       {/* left: fullname + created */}
       <div className="flex items-center gap-2">
         <Link href={`/users/${email}`} title={linkLabel} aria-label={linkLabel}>
-          <p className="font-semibold hover:underline">{fullname}</p>
+          <p className="font-semibold hover:underline">
+            {anonymous ? "익명" : fullname}
+          </p>
         </Link>
 
         <VerticalDivider size="small" />

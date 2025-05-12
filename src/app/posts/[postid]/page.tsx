@@ -9,22 +9,25 @@
 
 // [Rendering Method]: CSR (Client Side Rendering) with SWR
 
-import BoardTitle from "@/features/bulletin-board/components/shared/BoardTitle";
-import CommentsView from "../../../components/Posts/comment/CommentsView";
-// import PostView from "../../../components/Posts/post-view/PostView";
-import PostView from "@/features/bulletin-board/components/post-view/PostView";
 import { SessionProvider } from "next-auth/react";
+
+// sub-ui components
 import {
   LoadingSpinner,
   NotFound,
 } from "@/final_refactor_src/components/feedback";
+import BoardTitle from "@/features/bulletin-board/components/shared/BoardTitle";
+import PostView from "@/features/bulletin-board/components/post-view/PostView";
+import CommentsView from "@/features/bulletin-board/components/comment/CommentsView";
+
+// apis
 import { usePost } from "@/apis/posts/swrHooks";
+
+// utils
 import {
   isAnnouncementBoard,
   isEveryKisaBoard,
 } from "@/utils/formats/boardType";
-import { useEffect, useState } from "react";
-import { getPost } from "@/apis/posts/queries";
 
 type PageProps = {
   params: {

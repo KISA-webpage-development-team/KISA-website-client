@@ -5,19 +5,24 @@ import { deleteComment } from "@/apis/comments/mutations";
 // sub-ui components
 import CommentEditor from "./CommentEditor";
 
-import ImageButton from "../../shared/ImageButton";
-import PencilIcon from "../../ui/PencilIcon";
-import TrashcanIcon from "../../ui/TrashcanIcon";
-import CommentIcon from "../../ui/CommentIcon";
-import ReplyIcon from "../../ui/ReplyIcon";
-import { UserSession } from "@/lib/next-auth/types";
-import { Comment } from "@/types/comment";
-import { formatRelativeTime } from "@/utils/formats/date";
-import GoBlueButton from "../post-view/GoBlueButton";
+import CustomImageButton from "@/final_refactor_src/components/button/CustomImageButton";
+import PencilIcon from "@/final_refactor_src/components/icon/PencilIcon";
+import TrashcanIcon from "@/final_refactor_src/components/icon/TrashcanIcon";
+import CommentIcon from "@/final_refactor_src/components/icon/CommentIcon";
+import ReplyIcon from "@/final_refactor_src/components/icon/ReplyIcon";
 import CommentGoBlueButton from "./CommentGoBlueButton";
-import { LikeBody } from "@/types/like";
+
+// utils
+import { formatRelativeTime } from "@/utils/formats/date";
+
+// apis
 import { getLikeByUser } from "@/apis/likes/queries";
 import SecretIcon from "@/final_refactor_src/components/icon/SecretIcon";
+
+// types
+import { LikeBody } from "@/types/like";
+import { Comment } from "@/types/comment";
+import { UserSession } from "@/lib/next-auth/types";
 
 type CommentItemProps = {
   isEveryKisa?: boolean;
@@ -159,7 +164,7 @@ export default function CommentItem({
     <div className="flex flex-col">
       <div className="flex items-center">
         {isCommentOfComment ? (
-          <ReplyIcon type="flip" customClassName="-translate-y-2" />
+          <ReplyIcon type="flip" className="-translate-y-2" />
         ) : null}
 
         {/* Comment contents */}
@@ -195,7 +200,7 @@ export default function CommentItem({
             </div>
 
             {/* 2. Buttons */}
-            <div className="flex gap-3">
+            <div className="flex">
               {isEveryKisa && !secret && (
                 <CommentGoBlueButton
                   didLike={didLike}
@@ -209,13 +214,15 @@ export default function CommentItem({
               )}
               {isAuthor && (
                 <>
-                  <ImageButton
+                  <CustomImageButton
+                    type="tertiary"
                     background="none"
                     text={`${openCommentEditor ? "취소" : "수정"}`}
                     icon={<PencilIcon color="gray" noResize />}
                     onClick={handleOpenCommentEditor}
                   />
-                  <ImageButton
+                  <CustomImageButton
+                    type="tertiary"
                     background="none"
                     icon={<TrashcanIcon color="gray" noResize />}
                     text={"삭제"}
@@ -229,7 +236,8 @@ export default function CommentItem({
                 !isAuthor
               ) && (
                 <>
-                  <ImageButton
+                  <CustomImageButton
+                    type="tertiary"
                     background="none"
                     icon={<CommentIcon color="gray" noResize />}
                     text={`${openReplyEditor ? "닫기" : "답글"}`}

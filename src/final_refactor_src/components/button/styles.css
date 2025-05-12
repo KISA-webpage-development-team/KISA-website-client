@@ -31,3 +31,18 @@
 .secondary_button_disabled {
   @apply secondary_button !bg-gray-300 border !border-gray-300 !text-white !cursor-not-allowed;
 }
+
+/* tertiary: black */
+.tertiary_button {
+  @apply inline-flex items-center justify-center self-center gap-1
+  px-2 md:px-3 py-1 md:py-2 
+  border-none
+  text-black text-sm md:text-base
+  rounded-md cursor-pointer;
+}
+.tertiary_button:hover {
+  @apply underline text-black;
+}
+.tertiary_button_disabled {
+  @apply tertiary_button !text-gray-400 !cursor-not-allowed;
+}
