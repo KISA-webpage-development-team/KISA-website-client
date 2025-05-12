@@ -27,14 +27,19 @@ export function usePost(
   post: Post | undefined;
   isLoading: boolean;
   error: CustomAxiosError | undefined;
+  refreshPost: () => Promise<void>;
 } {
   const url = `/posts/${postid}/`;
 
-  const { data, error, isLoading } = useSWR(postid ? url : null, options);
+  const { data, error, isLoading, mutate } = useSWR(
+    postid ? url : null,
+    options
+  );
 
   return {
     post: data,
     isLoading,
     error,
+    refreshPost: mutate,
   };
 }

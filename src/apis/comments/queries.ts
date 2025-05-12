@@ -15,8 +15,8 @@ export async function getCommentsByPostid(
     const response = await client.get(url);
     return response?.data;
   } catch (error) {
-    //console.error(error);
-    return undefined;
+    console.error(error);
+    throw new Error("Failed to fetch comments");
   }
 }
 

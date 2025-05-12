@@ -7,14 +7,15 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { getCommentsByPostid } from "@/apis/comments/queries";
 
-// sub-ui components
+// ui components
 import CommentEditor from "./CommentEditor";
 import CommentsList from "./CommentsList";
 
+// hooks
+import { useComments } from "@/features/bulletin-board/hooks/useComments";
+
 // types
-import { Comment } from "@/types/comment";
 import { UserSession } from "@/lib/next-auth/types";
 
 type CommentsViewProps = {
@@ -30,45 +31,59 @@ export default function CommentsView({
   postid,
   email,
 }: CommentsViewProps) {
-  const { data: session, status } = useSession() as {
+  const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
 
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [commentsStale, setCommentsStale] = useState<boolean>(true); // keep comments up-to-date
+  const {
+    comments,
+    status: commentsStatus,
+    error,
+    refreshComments,
+  } = useComments(postid);
 
-  // fetch comments to keep comments up-to-date
+  // optimistic update on comments count to solve comments count sync issue
+  // [NOTE] this needs delicate attention on implementation, it would be better if we have a separate api for updating comments count
+  const [optimisticCommentsCount, setOptimisticCommentsCount] =
+    useState<number>(commentsCount);
+
+  // Sync with prop if post is refetched
   useEffect(() => {
-    const getComments = async () => {
-      const comments_res = await getCommentsByPostid(postid);
-      // const comments_res = await getCommentsByPostidMock(postid);
-      setComments(comments_res);
-      setCommentsStale(false);
-      return;
-    };
+    setOptimisticCommentsCount(commentsCount);
+  }, [commentsCount]);
 
-    // trigger fetching comments whenever comment is added/updated/deleted by logged-in user
-    if (commentsStale) getComments();
-  }, [commentsStale, postid]);
+  const handleCommentAdded = () => setOptimisticCommentsCount((c) => c + 1);
 
-  if (status === "loading") {
-    return <></>;
+  const handleCommentDeleted = () =>
+    setOptimisticCommentsCount((c) => Math.max(0, c - 1));
+  // ------------------------------------------------------------
+
+  const isLoading = sessionStatus === "loading" || commentsStatus === "loading";
+  const isAuthenticated = sessionStatus === "authenticated";
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (commentsStatus === "error") {
+    throw new Error(error || "Failed to fetch comments");
   }
 
   return (
     <div className="flex flex-col py-4 gap-2 self-stretch">
       {/* 1. comment count */}
-      {/* [TODO] post의 commentsCount를 상시 업데이트하지 못하고 있음. */}
-      <p className="text-sm md:text-base">{`댓글 ${commentsCount}개`}</p>
+      <span className="text-sm md:text-base">{`댓글 ${optimisticCommentsCount}개`}</span>
+
       {/* 2. default comment editor to add direct comment on the post */}
-      {status === "authenticated" && (
+      {isAuthenticated && (
         <CommentEditor
           isEveryKisa={isEveryKisa}
           mode="create"
           session={session}
           postid={postid}
-          setCommentsStale={setCommentsStale}
+          refreshComments={refreshComments}
+          onCommentAdded={handleCommentAdded}
         />
       )}
 
@@ -77,10 +92,10 @@ export default function CommentsView({
         isEveryKisa={isEveryKisa}
         comments={comments}
         session={session}
-        setCommentsStale={setCommentsStale}
+        refreshComments={refreshComments}
         email={email}
+        onCommentDeleted={handleCommentDeleted}
       />
-      {/* <CommentsList commentsCount={commentsCount} comments={comments} /> */}
     </div>
   );
 }

@@ -7,8 +7,9 @@ type CommentsListProps = {
   isEveryKisa?: boolean;
   comments: Comment[];
   session: UserSession;
-  setCommentsStale: (stale: boolean) => void;
+  refreshComments: () => void;
   email: string;
+  onCommentDeleted?: () => void;
 };
 
 // TODO: should I add "isEveryKisa"?
@@ -16,8 +17,9 @@ export default function CommentsList({
   isEveryKisa = false,
   comments,
   session,
-  setCommentsStale,
+  refreshComments,
   email,
+  onCommentDeleted,
 }: CommentsListProps) {
   const commentAuthorMap = getCommentAuthorMap(comments, session?.user?.email);
 
@@ -30,9 +32,10 @@ export default function CommentsList({
           session={session}
           comment={comment}
           parentCommentid={comment.commentid}
-          setCommentsStale={setCommentsStale}
+          refreshComments={refreshComments}
           postAuthorEmail={email}
           commentAuthorMap={commentAuthorMap}
+          onCommentDeleted={onCommentDeleted}
         />
       ))}
     </ul>

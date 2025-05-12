@@ -1,10 +1,17 @@
+// useLike
+// : hook to manage anything about like for both post and comment
+
 import { useState, useEffect, useCallback } from "react";
+
+// apis
 import {
   getLikeByUser,
   getPostLikesCount,
   getCommentLikesCount,
 } from "@/apis/likes/queries";
 import { createLike, deleteLike } from "@/apis/likes/mutations";
+
+// types
 import { LikeBody, NewLikeBody, DeleteLikeParams } from "@/types/like";
 import { UserSession } from "@/lib/next-auth/types";
 

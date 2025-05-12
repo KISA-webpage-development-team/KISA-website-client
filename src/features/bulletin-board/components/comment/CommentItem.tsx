@@ -29,9 +29,10 @@ type CommentItemProps = {
   session: UserSession;
   comment: Comment;
   parentCommentid?: number;
-  setCommentsStale: (stale: boolean) => void;
+  refreshComments: () => void;
   postAuthorEmail: string;
   commentAuthorMap: Map<string, number>;
+  onCommentDeleted?: () => void;
 };
 
 export default function CommentItem({
@@ -39,9 +40,10 @@ export default function CommentItem({
   session,
   comment,
   parentCommentid = 0,
-  setCommentsStale,
+  refreshComments,
   postAuthorEmail,
   commentAuthorMap,
+  onCommentDeleted,
 }: CommentItemProps) {
   // TODO: add "didLike" state
   const {
@@ -91,7 +93,8 @@ export default function CommentItem({
     const res = await deleteComment(commentid, token);
     if (res?.success) {
       // modify states after comment has been deleted
-      setCommentsStale(true);
+      refreshComments();
+      onCommentDeleted?.();
       setIsDeleteLoading(false);
     } else {
       // error handling
@@ -273,7 +276,7 @@ export default function CommentItem({
             curCommentId={commentid}
             placeholder={text}
             secret={secret}
-            setCommentsStale={setCommentsStale}
+            refreshComments={refreshComments}
             setOpenCommentEditor={setOpenCommentEditor}
           />
         </div>
@@ -289,7 +292,7 @@ export default function CommentItem({
             postid={postid}
             curCommentId={commentid}
             secret={secret}
-            setCommentsStale={setCommentsStale}
+            refreshComments={refreshComments}
             setOpenCommentEditor={setOpenReplyEditor}
           />
         </div>
@@ -307,7 +310,7 @@ export default function CommentItem({
               comment={subComment}
               session={session}
               parentCommentid={commentid}
-              setCommentsStale={setCommentsStale}
+              refreshComments={refreshComments}
               postAuthorEmail={postAuthorEmail}
               commentAuthorMap={commentAuthorMap}
             />

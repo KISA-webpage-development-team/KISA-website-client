@@ -15,8 +15,9 @@ type CommentEditorProps = {
   curCommentId?: number | null;
   placeholder?: string;
   secret?: boolean;
-  setCommentsStale: (value: boolean) => void;
+  refreshComments: () => void;
   setOpenCommentEditor?: (value: boolean) => void;
+  onCommentAdded?: () => void;
 };
 
 export default function CommentEditor({
@@ -28,8 +29,9 @@ export default function CommentEditor({
   curCommentId = null,
   placeholder = "댓글을 입력해주세요",
   secret,
-  setCommentsStale,
+  refreshComments,
   setOpenCommentEditor = () => {},
+  onCommentAdded = () => {},
 }: CommentEditorProps) {
   // comment content
   const [text, setText] = useState<string>(
@@ -71,7 +73,8 @@ export default function CommentEditor({
 
     if (res) {
       // modify states after new comment has been submitted
-      setCommentsStale(true);
+      refreshComments();
+      onCommentAdded(); // Optimistically update comments count
       setOpenCommentEditor(false);
       setText("");
 
@@ -100,7 +103,7 @@ export default function CommentEditor({
 
     const res = await updateComment(curCommentId, data, session?.token);
     if (res) {
-      setCommentsStale(true);
+      refreshComments();
       setOpenCommentEditor(false);
       setIsSubmitting(false);
 
