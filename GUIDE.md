@@ -301,3 +301,12 @@ src/utils/
 ### 2.10. middleware.ts
 
 Checkout the comments in the file for more information.
+
+## 3. Future Steps
+
+Need further refactoring and cleanup. Features below are not fully refactored. They still rely on the old components and have messy codes.
+
+- bulletin-board: board
+- home-sponsor
+- info-page
+- users: signup
