@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { creditData } from "@/config/static/memberCreditData";
+import { creditData } from "@/features/about-page/data/memberCreditData";
 import { LinkedInIcon } from "@/components/ui/icon";
 import { EmailIcon } from "@/components/ui/icon";
 import { GitIcon } from "@/components/ui/icon";

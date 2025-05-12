@@ -1,6 +1,6 @@
 import React from "react";
-import { checkListData } from "@/config/static/checkListPageData";
-import CheckListItem from "@/deprecated-components/Info/CheckListItem";
+import { checkListData } from "@/features/info-page/data/checkListPageData";
+import CheckListItem from "@/features/info-page/components/CheckListItem";
 
 export default function CheckList() {
   return (

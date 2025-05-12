@@ -3,11 +3,16 @@ import {
   sejongHospitalLight,
   sejongHospitalBold,
 } from "@/utils/fonts/textFonts";
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
-import SectionTitle from "@/deprecated-components/Info/SectionTitle";
-import SectionGrid from "@/deprecated-components/Info/SectionGrid";
-import { campusPageData } from "@/config/static/infoPageData";
-import SectionIntro from "@/deprecated-components/Info/SectionIntro";
+
+// ui components
+import InfoTitle from "@/features/info-page/components/InfoTitle";
+import SectionTitle from "@/features/info-page/components/SectionTitle";
+import SectionGrid from "@/features/info-page/components/SectionGrid";
+import SectionIntro from "@/features/info-page/components/SectionIntro";
+
+// data
+import { campusPageData } from "@/features/info-page/data/infoPageData";
+
 import "../info.css";
 
 export const metadata = {

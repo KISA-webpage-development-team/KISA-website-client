@@ -1,10 +1,10 @@
 "use client";
 
 import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
-import useDashboard from "../../hooks/useDashboardOrders";
-import useDashboardOrderSocket from "../../hooks/useDashboardOrderSocket";
-import FoodOrderGrid from "./FoodOrderGrid";
-import DrinkOrderGrid from "./DrinkOrderGrid";
+import useDashboard from "@/features/pocha/hooks/useDashboardOrders";
+import useDashboardOrderSocket from "@/features/pocha/hooks/useDashboardOrderSocket";
+import FoodOrderGrid from "@/features/pocha/components/dashboard/FoodOrderGrid";
+import DrinkOrderGrid from "@/features/pocha/components/dashboard/DrinkOrderGrid";
 
 interface OrderDashboardProps {
   email: string;

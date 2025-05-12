@@ -1,7 +1,7 @@
 import { OrderStatus, Orders } from "@/types/pocha";
 import React from "react";
-import OrderItemCard from "./OrderItemCard";
-import { STATUS_COLORS } from "@/utils/statusToColor";
+import OrderItemCard from "@/features/pocha/components/dashboard/OrderItemCard";
+import { STATUS_COLORS } from "@/features/pocha/utils/statusToColor";
 
 interface FoodOrderGridProps {
   orders: Orders;

@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import { homeQuickLinksData as items } from "@/config/static/homePageData";
+import { homeQuickLinksData as items } from "@/features/home-sponsor/data/homePageData";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { Card } from "@nextui-org/react";
 import Image from "next/image";
 import "react-multi-carousel/lib/styles.css";
 
 import Carousel from "react-multi-carousel";
-import "./test.css";
 
 export default function QuickLinks() {
   const responsive = {

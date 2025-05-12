@@ -3,8 +3,8 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import BoardTitle from "./BoardTitle";
-import CutomButton from "@/deprecated-components/shared/CutomButton";
-import PencilIcon from "@/deprecated-components/ui/PencilIcon";
+import { CustomImageButton } from "@/components/ui/button";
+import PencilIcon from "@/components/ui/icon/PencilIcon";
 
 type BoardBarProps = {
   boardType: string;
@@ -20,10 +20,12 @@ export default function BoardBar({ boardType }: BoardBarProps) {
   return (
     <div className="self-stretch flex items-center justify-between">
       <BoardTitle boardType={boardType} />
-      <CutomButton
+      <CustomImageButton
+        type="primary"
         onClick={handleCreatePostClick}
-        beforeIcon={<PencilIcon />}
-        btnText="글쓰기"
+        icon={<PencilIcon />}
+        text="글쓰기"
+        className="!py-1"
       />
     </div>
   );

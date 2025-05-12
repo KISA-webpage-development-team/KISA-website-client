@@ -6,9 +6,9 @@
 
 import { PochaDashboardTab } from "@/types/pocha";
 import { memo } from "react";
-import OrderDashboard from "./OrderDashboard";
-import OrderHistoryTable from "./OrderHistoryTable";
-import StockManager from "./StockManager";
+import OrderDashboard from "@/features/pocha/components/dashboard/OrderDashboard";
+import OrderHistoryTable from "@/features/pocha/components/dashboard/OrderHistoryTable";
+import StockManager from "@/features/pocha/components/dashboard/StockManager";
 
 interface DashboardTabContentProps {
   email: string | undefined;

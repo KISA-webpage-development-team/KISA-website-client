@@ -1,7 +1,7 @@
 import React from "react";
-import LoginButton from "@/deprecated-components/Header/LoginButton";
+import LoginButton from "@/components/layout/header/LoginButton";
 
-export default function NotLoginModal() {
+export default function NotLogin() {
   return (
     <div
       className="md:text-lg 

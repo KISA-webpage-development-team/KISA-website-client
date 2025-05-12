@@ -2,7 +2,7 @@ import React from "react";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 // types
 import { PochaDashboardTab } from "@/types/pocha";
-import { updateURLWithTab } from "@/utils/updateURL";
+import { updateURLWithTab } from "@/features/pocha/utils/updateURL";
 
 type DashboardTabsProps = {
   activeTab: PochaDashboardTab;

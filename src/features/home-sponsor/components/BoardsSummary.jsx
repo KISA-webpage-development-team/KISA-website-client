@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 // need to change this api call to "getRecentPosts" and "getHotPosts"
-import HomePostView from "./HomePostView";
+import HomePostView from "@/features/home-sponsor/components/HomePostView";
 import { getBoardPosts } from "@/apis/boards/queries";
 
 export default function BoardsSummary() {

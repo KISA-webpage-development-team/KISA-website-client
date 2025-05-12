@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { homeCarouselData as items } from "@/config/static/homePageData";
+import { homeCarouselData as items } from "@/features/home-sponsor/data/homePageData";
 import Image from "next/image";
 import {
   sejongHospitalBold,

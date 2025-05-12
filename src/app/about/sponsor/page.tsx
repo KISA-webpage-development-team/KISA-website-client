@@ -1,7 +1,7 @@
 import React from "react";
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
-import SponsorBanner from "@/deprecated-components/About/SponsorBanner";
-import { sponsorData } from "@/config/static/sponsorData";
+import InfoTitle from "@/features/info-page/components/InfoTitle";
+import SponsorBanner from "@/features/about-page/components/SponsorBanner";
+import { sponsorData } from "@/features/home-sponsor/data/sponsorData";
 
 export default function SponsorPage() {
   const groupByDivision = (sponsors) => {

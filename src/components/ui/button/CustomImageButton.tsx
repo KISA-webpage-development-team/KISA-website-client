@@ -1,5 +1,6 @@
 import React from "react";
 import { ButtonType } from "./types";
+import "./styles.css";
 
 type CustomImageButtonProps = {
   type?: ButtonType;
@@ -37,7 +38,7 @@ export default function CustomImageButton({
         <p
           className={`
           ${"hidden sm:block"}
-        text-sm md:text-base text-gray-600
+        text-sm md:text-base
         hover:underline`}
         >
           {text}

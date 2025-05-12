@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import menu from "@/config/NavigationMenu";
+import menu from "@/components/layout/header/navigationMenu";
 import Link from "next/link";
 
 import DownIcon from "@/deprecated-components/ui/DownIcon";

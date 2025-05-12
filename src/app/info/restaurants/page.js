@@ -1,9 +1,10 @@
 import React from "react";
-import SectionTitle from "@/deprecated-components/Info/SectionTitle";
-import SectionGrid from "@/deprecated-components/Info/SectionGrid";
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
-import { restaurantsPageData } from "@/config/static/infoPageData";
-import SectionIntro from "@/deprecated-components/Info/SectionIntro";
+import SectionTitle from "@/features/info-page/components/SectionTitle";
+import SectionGrid from "@/features/info-page/components/SectionGrid";
+import InfoTitle from "@/features/info-page/components/InfoTitle";
+import { restaurantsPageData } from "@/features/info-page/data/infoPageData";
+import SectionIntro from "@/features/info-page/components/SectionIntro";
+
 import "../info.css";
 
 export const metadata = {

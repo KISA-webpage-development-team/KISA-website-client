@@ -1,5 +1,5 @@
 import React from "react";
-import CartListItem from "./CartListItem";
+import CartListItem from "@/features/pocha/components/cart/CartListItem";
 import { Cart } from "@/types/pocha";
 
 interface CartListProps {

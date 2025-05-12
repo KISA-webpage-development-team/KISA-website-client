@@ -2,8 +2,8 @@
 // 2. 텍스트
 
 import React from "react";
-import AboutMainText from "@/deprecated-components/About/AboutMainText";
-import KisaAll from "@/deprecated-components/About/KisaAll";
+import AboutMainText from "@/features/about-page/components/AboutMainText";
+import KisaAll from "@/features/about-page/components/KisaAll";
 
 export const metadata = {
   title: "소개",

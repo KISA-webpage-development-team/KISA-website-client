@@ -1,9 +1,9 @@
 import React from "react";
-import DetailThumbnail from "@/deprecated-components/Info/DetailThumbnail";
-import DetailTitle from "@/deprecated-components/Info/DetailTitle";
-import DetailDescription from "@/deprecated-components/Info/DetailDescription";
+import DetailThumbnail from "@/features/info-page/components/DetailThumbnail";
+import DetailTitle from "@/features/info-page/components/DetailTitle";
+import DetailDescription from "@/features/info-page/components/DetailDescription";
 
-import { restaurantsKoreanData } from "@/config/static/detailPageData";
+import { restaurantsKoreanData } from "@/features/info-page/data/detailPageData";
 import "../../../info.css";
 
 export default function KoreanRestaurantsPage() {

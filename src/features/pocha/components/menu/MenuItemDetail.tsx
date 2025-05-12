@@ -35,8 +35,8 @@ import { MenuItem } from "@/types/pocha";
 import { UserSession } from "@/lib/next-auth/types";
 import PochaMenuPlusIcon from "@/components/ui/icon/PochaMenuPlusIcon";
 import PochaMenuMinusIcon from "@/components/ui/icon/PochaMenuMinusIcon";
-import PochaErrorMsg from "../shared/PochaErrorMsg";
-import { getMenuImagePath } from "@/utils/getImagePath";
+import PochaErrorMsg from "@/features/pocha/components/shared/PochaErrorMsg";
+import { getMenuImagePath } from "@/features/pocha/utils/getImagePath";
 
 interface MenuItemDetailProps {
   session: UserSession | undefined;

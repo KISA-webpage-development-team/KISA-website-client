@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { useState } from "react";
 
-import menu from "@/config/NavigationMenu";
+import menu from "@/components/layout/header/navigationMenu";
 
 export default function Menu() {
   const [showDropdown, setShowDropdown] = useState(false);

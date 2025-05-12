@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import Header from "@/deprecated-components/Header/Header";
+import Header from "@/components/layout/header/Header";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/next-auth/authOptions";

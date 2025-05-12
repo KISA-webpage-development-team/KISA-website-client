@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { OrderItem } from "@/types/pocha";
 
-import useOrderHistory from "../../hooks/useOrderHistory";
-import { usePochaMenu } from "@/apis/pocha/swrHooks";
+import useOrderHistory from "@/features/pocha/hooks/useOrderHistory";
 import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
-import { calculateStripeTotalPrice } from "@/utils/calculateStripeFee";
+import { calculateStripeTotalPrice } from "@/features/pocha/utils/calculateStripeFee";
 
 interface OrderHistoryTableProps {
   token: string;

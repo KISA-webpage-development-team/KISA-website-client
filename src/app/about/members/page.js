@@ -1,11 +1,14 @@
 "use client";
 
 import React from "react";
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
+import InfoTitle from "@/features/info-page/components/InfoTitle";
 import { Select, SelectItem } from "@nextui-org/react";
 
-import MemberCard from "@/deprecated-components/About/MemberCard";
-import { members_2024, members_2023 } from "@/config/static/memberPageData";
+import MemberCard from "@/features/about-page/components/MemberCard";
+import {
+  members_2024,
+  members_2023,
+} from "@/features/about-page/data/memberPageData";
 import { useState } from "react";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 

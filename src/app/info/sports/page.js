@@ -2,13 +2,13 @@ import React from "react";
 import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 
 // data
-import { sportsPageData } from "@/config/static/infoPageData";
+import { sportsPageData } from "@/features/info-page/data/infoPageData";
 
 // sub-ui components
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
-import SectionTitle from "@/deprecated-components/Info/SectionTitle";
-import SectionGrid from "@/deprecated-components/Info/SectionGrid";
-import SectionIntro from "@/deprecated-components/Info/SectionIntro";
+import InfoTitle from "@/features/info-page/components/InfoTitle";
+import SectionTitle from "@/features/info-page/components/SectionTitle";
+import SectionGrid from "@/features/info-page/components/SectionGrid";
+import SectionIntro from "@/features/info-page/components/SectionIntro";
 import "../info.css";
 
 export const metadata = {

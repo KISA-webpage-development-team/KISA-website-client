@@ -2,7 +2,7 @@ import React from "react";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import Link from "next/link";
 import HorizontalDivider from "@/deprecated-components/shared/HorizontalDivider";
-import MobileBoardList from "@/deprecated-components/Boards/MobileBoardList";
+import MobileBoardList from "@/features/bulletin-board/components/board/MobileBoardList";
 import {
   getKoreanBoardType,
   isEveryKisaBoard,

@@ -1,9 +1,9 @@
 // sub-ui components
-import HomeCarousel from "@/deprecated-components/Home/HomeCarousel";
-import QuickLinks from "@/deprecated-components/Home/QuickLinks";
-import BoardsSummary from "@/deprecated-components/Home/BoardsSummary";
-import SchoolCalendar from "@/deprecated-components/Home/SchoolCalendar";
-import SponsorCarousel from "@/deprecated-components/Home/SponsorCarousel";
+import HomeCarousel from "@/features/home-sponsor/components/HomeCarousel";
+import QuickLinks from "@/features/home-sponsor/components/QuickLinks";
+import BoardsSummary from "@/features/home-sponsor/components/BoardsSummary";
+import SchoolCalendar from "@/features/home-sponsor/components/SchoolCalendar";
+import SponsorCarousel from "@/features/home-sponsor/components/SponsorCarousel";
 import "./home.css";
 
 export default function Home() {

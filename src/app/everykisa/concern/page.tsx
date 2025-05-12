@@ -2,8 +2,8 @@ import React from "react";
 import { getBoardAnnouncements } from "@/apis/boards/queries";
 
 // sub-ui components
-import BoardBar from "@/deprecated-components/Boards/BoardBar";
-import BoardClient from "@/deprecated-components/Boards/BoardClient";
+import BoardBar from "@/features/bulletin-board/components/board/BoardBar";
+import BoardClient from "@/features/bulletin-board/components/board/BoardClient";
 import { BoardType } from "@/types/board";
 
 type ConcernPageProps = {

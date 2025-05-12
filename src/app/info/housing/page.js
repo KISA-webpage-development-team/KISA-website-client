@@ -1,14 +1,14 @@
 import React from "react";
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
+import InfoTitle from "@/features/info-page/components/InfoTitle";
 
-import SectionGrid from "@/deprecated-components/Info/SectionGrid";
-import SectionTitle from "@/deprecated-components/Info/SectionTitle";
-import SectionIntro from "@/deprecated-components/Info/SectionIntro";
+import SectionGrid from "@/features/info-page/components/SectionGrid";
+import SectionTitle from "@/features/info-page/components/SectionTitle";
+import SectionIntro from "@/features/info-page/components/SectionIntro";
 
 import {
   housingPageOnCampusData,
   housingPageOffCampusData,
-} from "@/config/static/infoPageData";
+} from "@/features/info-page/data/infoPageData";
 import "../info.css";
 
 export const metadata = {

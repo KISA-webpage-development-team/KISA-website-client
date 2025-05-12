@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { sponsorData } from "@/config/static/sponsorData";
+import { sponsorData } from "@/features/home-sponsor/data/sponsorData";
 import {
   sejongHospitalBold,
   sejongHospitalLight,
@@ -11,7 +11,6 @@ import "react-multi-carousel/lib/styles.css";
 import NextIconTail from "@/components/ui/icon/NextIconTail";
 
 // import Carousel from "react-multi-carousel";
-import "./test.css";
 
 // import Carousel from "shadcn/ui"
 import {

@@ -1,7 +1,7 @@
 // [2024.06.18 ~] Testing on semantic html on board table
 
 import React from "react";
-import BoardTableRow from "@/deprecated-components/Boards/BoardTableRow";
+import BoardTableRow from "@/features/bulletin-board/components/board/BoardTableRow";
 import "@/app/boards/board.css";
 import { SimplePost } from "@/types/post";
 

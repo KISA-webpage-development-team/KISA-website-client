@@ -5,7 +5,7 @@ import { CartItem } from "@/types/pocha";
 import PochaMinusIcon from "@/components/ui/icon/PochaMinusIcon";
 import PochaPlusIcon from "@/components/ui/icon/PochaPlusIcon";
 import PochaTrashIcon from "@/components/ui/icon/PochaTrashIcon";
-import { getMenuImagePath } from "@/utils/getImagePath";
+import { getMenuImagePath } from "@/features/pocha/utils/getImagePath";
 
 type CartListItemProps = {
   item: CartItem;

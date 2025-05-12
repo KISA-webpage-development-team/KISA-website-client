@@ -1,5 +1,6 @@
 import { BiPencil } from "react-icons/bi";
 import React from "react";
+import "./styles.css";
 
 type PencilIconProps = {
   color?: "white" | "gray";

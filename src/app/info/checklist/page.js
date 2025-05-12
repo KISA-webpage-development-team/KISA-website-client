@@ -2,8 +2,8 @@
 import React from "react";
 
 // sub-ui components
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
-import CheckList from "@/deprecated-components/Info/CheckList";
+import InfoTitle from "@/features/info-page/components/InfoTitle";
+import CheckList from "@/features/info-page/components/CheckList";
 
 import {
   sejongHospitalBold,

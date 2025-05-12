@@ -11,17 +11,18 @@ import axios from "axios";
 import { BACKEND_URL } from "@/constants/env";
 
 // sub-ui components
-import RequiredFields from "@/deprecated-components/SignUp/RequiredFields";
-import OptionalFields from "@/deprecated-components/SignUp/OptionalFields";
+import RequiredFields from "@/features/users/components/signup/RequiredFields";
+import OptionalFields from "@/features/users/components/signup/OptionalFields";
+import TermConditions from "@/features/users/components/signup/TermConditions";
 import HorizontalDivider from "@/deprecated-components/shared/HorizontalDivider";
-import TermConditions from "@/deprecated-components/SignUp/TermConditions";
+
 import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
 
-import { personalInfoTerm } from "@/config/termCondition";
-import { websiteTerm } from "@/config/termCondition";
+import { personalInfoTerm } from "@/features/users/data/termCondition";
+import { websiteTerm } from "@/features/users/data/termCondition";
 
 export default function SignUpPage() {
   const router = useRouter();

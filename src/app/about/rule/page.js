@@ -1,5 +1,5 @@
 import React from "react";
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
+import InfoTitle from "@/features/info-page/components/InfoTitle";
 import {
   sejongHospitalBold,
   sejongHospitalLight,

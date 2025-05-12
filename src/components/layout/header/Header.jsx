@@ -5,23 +5,23 @@
 // for the header to switch from desktop to mobile view
 
 import React, { useState } from "react";
-import LoginButton from "./LoginButton";
+import LoginButton from "@/components/layout/header/LoginButton";
 import VerticalDivider from "@/deprecated-components/shared/VerticalDivider";
 import InstagramLinkIcon from "@/deprecated-components/shared/InstagramLinkIcon";
-import UserInfo from "./UserInfo";
-import MobileMenuButton from "./MobileMenuButton";
+import UserInfo from "@/components/layout/header/UserInfo";
+import MobileMenuButton from "@/components/layout/header/MobileMenuButton";
 import {
   HoveredLink,
   Menu,
   MenuItem,
   MobileMenu,
   MobileMenuItem,
-} from "@/deprecated-components/ui/aceternity/navbar-menu";
+} from "@/components/ui/aceternity/navbar-menu";
 
-import menu from "@/config/NavigationMenu";
+import menu from "@/components/layout/header/navigationMenu";
 
 // sub-ui components
-import WebTitle from "@/deprecated-components/Header/WebTitle";
+import WebTitle from "@/components/layout/header/WebTitle";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";

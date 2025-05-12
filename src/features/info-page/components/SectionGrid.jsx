@@ -1,5 +1,5 @@
 import React from "react";
-import SectionImage from "@/deprecated-components/Info/SectionImage";
+import SectionImage from "@/features/info-page/components/SectionImage";
 
 export default function SectionGrid({ infoType, sectionName, contentList }) {
   const sectionLink = `/info/${infoType}/detail/${sectionName}`;

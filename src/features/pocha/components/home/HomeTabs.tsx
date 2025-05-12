@@ -5,13 +5,10 @@
  */
 
 import React from "react";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 // types
 import { PochaTab } from "@/types/pocha";
-import { updateURLWithTab } from "@/utils/updateURL";
+import { updateURLWithTab } from "@/features/pocha/utils/updateURL";
 
 type HomeTabsProps = {
   activeTab: PochaTab;

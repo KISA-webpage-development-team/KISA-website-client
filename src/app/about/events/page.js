@@ -2,10 +2,10 @@ import React from "react";
 
 // sub-ui components
 // test
-import InfoTitle from "@/deprecated-components/shared/InfoTitle";
-import EventSection from "@/deprecated-components/About/EventSection";
+import InfoTitle from "@/features/info-page/components/InfoTitle";
+import EventSection from "@/features/about-page/components/EventSection";
 
-import { eventsPageData } from "@/config/static/eventsPageData";
+import { eventsPageData } from "@/features/about-page/data/eventsPageData";
 
 export default function EventsPages() {
   return (

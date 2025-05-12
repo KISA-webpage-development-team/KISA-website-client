@@ -2,12 +2,12 @@ import Image from "next/image";
 import React from "react";
 
 // sub-ui components
-import DetailThumbnail from "@/deprecated-components/Info/DetailThumbnail";
-import DetailTitle from "@/deprecated-components/Info/DetailTitle";
-import DetailDescription from "@/deprecated-components/Info/DetailDescription";
+import DetailThumbnail from "@/features/info-page/components/DetailThumbnail";
+import DetailTitle from "@/features/info-page/components/DetailTitle";
+import DetailDescription from "@/features/info-page/components/DetailDescription";
 
-import { campusCentralData } from "@/config/static/detailPageData";
-import DetailPageTitle from "@/deprecated-components/Info/DetailPageTitle";
+import { campusCentralData } from "@/features/info-page/data/detailPageData";
+import DetailPageTitle from "@/features/info-page/components/DetailPageTitle";
 import "../../../info.css";
 
 export default function CentralCampusDetail() {
