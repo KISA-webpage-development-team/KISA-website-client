@@ -310,3 +310,27 @@ Need further refactoring and cleanup. Features below are not fully refactored. T
 - home-sponsor
 - info-page
 - users: signup
+
+## 4. Additional Notes for future leadership
+
+To keep the codes clean and maintainable throughout the project, please follow the guidelines below.
+
+### Respect the feature-based structure
+
+Yeah, this is a big project. It has a lot of features. It's okay to be messy. But please respect the feature-based structure.
+
+### Keep the codes clean and elegant
+
+Check out this component: [`src/features/bulletin-board/components/comment/CommentsView.tsx`](https://github.com/KISA-webpage-development-team/KISA-website-client/blob/main/src/features/bulletin-board/components/comment/CommentsView.tsx)
+
+It's a good example of how to keep the codes clean and elegant.
+
+#### Here are few personal tips for you.
+
+- Single Responsibility Principle is important. Keep the components small and focused.
+- Usually, JSX component is only responsible for "Rendering UI".
+- Other state, api calls, etc should be managed in the separate hook file. (like `useComments(postid)`)
+- When you need to do api calls, be careful about the error handling. `CommentsView.tsx` is indeed a good example. You need to check out how [`error.tsx` works](https://nextjs.org/docs/app/building-your-application/routing/error-handling) in Next.js.
+- Write explanatory comments, but not too much.
+- Use explicit naming for variables, functions, components, etc. Don't be lazy. Don't write something like `item` or `element`. Do it like `postItem` or `commentItem`.
+- When you need to write conditional rendering, avoid using `&&` or `||` directly in JSX. Create a separate const variable to handle this. For example, `const isLoading = commentsStatus === "loading" || sessionStatus === "loading"`, then use `isLoading && <div>Loading...</div>` in JSX. [`CommentItem.tsx`](https://github.com/KISA-webpage-development-team/KISA-website-client/blob/main/src/features/bulletin-board/components/comment/CommentItem.tsx) is a good example.
