@@ -36,7 +36,7 @@ export default function usePostLike(
    * Fetches both the user's like status and the total like count for the post.
    * Called on mount and after like/unlike actions.
    */
-  const fetchStatus = useCallback(async () => {
+  const fetchLikeStatus = useCallback(async () => {
     // If no session or postid, reset state and exit
     if (!session || !postid) {
       setDidLike(null);
@@ -72,8 +72,8 @@ export default function usePostLike(
 
   // Fetch status on mount and whenever postid/session changes
   useEffect(() => {
-    fetchStatus();
-  }, [fetchStatus]);
+    fetchLikeStatus();
+  }, [fetchLikeStatus]);
 
   /**
    * Handles the 'like' action for the post.
@@ -89,13 +89,13 @@ export default function usePostLike(
         target: "post",
       };
       await createLike(postid, likeBody, session.token);
-      await fetchStatus(); // Refresh after liking
+      await fetchLikeStatus(); // Refresh after liking
     } catch (err) {
       setError(err as Error);
     } finally {
       setIsLoading(false);
     }
-  }, [postid, session, fetchStatus]);
+  }, [postid, session, fetchLikeStatus]);
 
   /**
    * Handles the 'unlike' action for the post.
@@ -111,13 +111,13 @@ export default function usePostLike(
         target: "post",
       };
       await deleteLike(postid, likeBody, session.token);
-      await fetchStatus(); // Refresh after unliking
+      await fetchLikeStatus(); // Refresh after unliking
     } catch (err) {
       setError(err as Error);
     } finally {
       setIsLoading(false);
     }
-  }, [postid, session, fetchStatus]);
+  }, [postid, session, fetchLikeStatus]);
 
   // Return a standardized object for easy consumption in UI
   return { didLike, likeCount, isLoading, error, like, unlike };

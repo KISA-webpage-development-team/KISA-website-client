@@ -75,7 +75,9 @@ export default function PostButtonBar({
       />
       <div className="flex items-center gap-2">
         {/* Go Blue Button */}
-        {isEveryKisa && <GoBlueButton postid={postid} session={session} />}
+        {isEveryKisa && (
+          <GoBlueButton targetType="post" id={postid} session={session} />
+        )}
 
         {/* Edit + Delete Button */}
         {isAuthor && (

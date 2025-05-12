@@ -10,7 +10,6 @@ import PencilIcon from "@/final_refactor_src/components/icon/PencilIcon";
 import TrashcanIcon from "@/final_refactor_src/components/icon/TrashcanIcon";
 import CommentIcon from "@/final_refactor_src/components/icon/CommentIcon";
 import ReplyIcon from "@/final_refactor_src/components/icon/ReplyIcon";
-import CommentGoBlueButton from "./CommentGoBlueButton";
 
 // utils
 import { formatRelativeTime } from "@/utils/formats/date";
@@ -23,6 +22,7 @@ import SecretIcon from "@/final_refactor_src/components/icon/SecretIcon";
 import { LikeBody } from "@/types/like";
 import { Comment } from "@/types/comment";
 import { UserSession } from "@/lib/next-auth/types";
+import GoBlueButton from "../shared/GoBlueButton";
 
 type CommentItemProps = {
   isEveryKisa?: boolean;
@@ -202,14 +202,10 @@ export default function CommentItem({
             {/* 2. Buttons */}
             <div className="flex">
               {isEveryKisa && !secret && (
-                <CommentGoBlueButton
-                  didLike={didLike}
-                  commentid={commentid}
-                  email={session?.user?.email}
-                  likes={likesCount}
-                  token={session?.token}
-                  likeBtnStale={likeBtnStale}
-                  setLikeBtnStale={setLikeBtnStale}
+                <GoBlueButton
+                  targetType="comment"
+                  id={commentid}
+                  session={session}
                 />
               )}
               {isAuthor && (
