@@ -7,11 +7,14 @@ import { ReactNode } from "react";
 
 export const metadata = {
   title: {
-    default: "UMich KISA",
-    template: "UMich KISA | %s",
+    default: 'UMich KISA',
+    template: 'UMich KISA | %s',
+  },
+  icons: {
+    icon: '/favicon.ico', // 명시적으로 설정
   },
   description:
-    "미시간 대학교 한인 학부생 학생회 공식 웹사이트 | University of Michigan Korean International Student Association (KISA) official website",
+    '미시간 대학교 한인 학부생 학생회 공식 웹사이트 | University of Michigan Korean International Student Association (KISA) official website',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

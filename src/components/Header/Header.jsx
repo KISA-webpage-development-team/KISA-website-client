@@ -9,6 +9,8 @@ import LoginButton from "./LoginButton";
 import VerticalDivider from "../shared/VerticalDivider";
 import InstagramLinkIcon from "../shared/InstagramLinkIcon";
 import UserInfo from "./UserInfo";
+import Link from 'next/link';
+import Image from 'next/image';
 import MobileMenuButton from "./MobileMenuButton";
 import {
   HoveredLink,
@@ -20,7 +22,8 @@ import {
 import menu from "../../config/NavigationMenu";
 
 // sub-ui components
-import WebTitle from "./WebTitle";
+import HeaderTitleBlock from "./HeaderTitleBlock"
+//import WebTitle from "./WebTitle";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -57,11 +60,22 @@ export default function Header({ session }) {
         md:gap-8 
        `}
       >
+        {/* <Link href='/' className="flex flex-col items-start gap-0">
+          <Image
+            src='/images/kisa_logo.png'
+            alt='KISA Logo'
+            width={42}
+            height={42}
+            className='object-contain'
+          />
+        </Link> */}
+
         {/* Web Name home link */}
-        <WebTitle />
+        {/* <WebTitle /> */}
+        <HeaderTitleBlock />
         {/* Navigation Menu */}
         {/* !!! in mobile menu, this menu should go down and become hidden */}
-        <div className="hidden md:flex">
+        <div className='hidden md:flex'>
           <Menu setActive={setActive}>
             {menu?.map((item, index) => (
               <MenuItem
@@ -70,7 +84,7 @@ export default function Header({ session }) {
                 active={active}
                 item={item.name}
               >
-                <div className="flex flex-col space-y-4 text-sm">
+                <div className='flex flex-col space-y-4 text-sm'>
                   {item.dropdowns.map((dropdown) => (
                     <HoveredLink key={dropdown.href} href={dropdown.href}>
                       {dropdown.name}
@@ -82,7 +96,7 @@ export default function Header({ session }) {
           </Menu>
         </div>
 
-        <div className="flex md:hidden">
+        <div className='flex md:hidden'>
           <MobileMenu
             active={active}
             setActive={setActive}
@@ -95,7 +109,7 @@ export default function Header({ session }) {
                 active={active}
                 item={item.name}
               >
-                <div className="flex flex-col space-y-4 text-sm">
+                <div className='flex flex-col space-y-4 text-sm'>
                   {item.dropdowns.map((dropdown) => (
                     <HoveredLink key={dropdown.href} href={dropdown.href}>
                       {dropdown.name}
@@ -110,16 +124,16 @@ export default function Header({ session }) {
 
       {/* RIGHT SIDE */}
       <div
-        className="hidden md:flex
-       justify-center items-center gap-3 lg:gap-4"
+        className='hidden md:flex
+       justify-center items-center gap-3 lg:gap-4'
       >
         <InstagramLinkIcon />
-        <div className="hidden lg:block">
+        <div className='hidden lg:block'>
           <VerticalDivider />
         </div>
 
         {session && (
-          <div className="ml-0 lg:ml-3 flex items-center">
+          <div className='ml-0 lg:ml-3 flex items-center'>
             <UserInfo
               email={session.user.email}
               image={session.user.image}
@@ -127,15 +141,15 @@ export default function Header({ session }) {
             />
           </div>
         )}
-        <div className="block ml-2 lg:ml-3">
+        <div className='block ml-2 lg:ml-3'>
           <LoginButton session={session} />
         </div>
       </div>
 
       <div
-        className="absolute right-0 top-0
+        className='absolute right-0 top-0
       mt-6 mr-4
-      flex items-center md:hidden"
+      flex items-center md:hidden'
       >
         <MobileMenuButton
           isMobileMenuOpen={isMobileMenuOpen}
@@ -144,9 +158,9 @@ export default function Header({ session }) {
       </div>
       {isMobileMenuOpen && (
         <motion.div
-          className="absolute top-0 mt-16
+          className='absolute top-0 mt-16
         right-0 mr-4
-        flex items-center gap-2"
+        flex items-center gap-2'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }} // Add exit animation
@@ -160,7 +174,7 @@ export default function Header({ session }) {
             />
           )}
 
-          <LoginButton session={session} size="sm" />
+          <LoginButton session={session} size='sm' />
         </motion.div>
       )}
     </div>
