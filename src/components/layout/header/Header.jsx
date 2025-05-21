@@ -6,8 +6,8 @@
 
 import React, { useState } from "react";
 import LoginButton from "./LoginButton";
-import VerticalDivider from "../shared/VerticalDivider";
-import InstagramLinkIcon from "../shared/InstagramLinkIcon";
+import VerticalDivider from "@/deprecated-components/shared/VerticalDivider";
+import InstagramLinkIcon from '@/deprecated-components/shared/InstagramLinkIcon';
 import UserInfo from "./UserInfo";
 import Link from 'next/link';
 import Image from 'next/image';
