@@ -10,9 +10,9 @@ export const metadata = {
     default: 'UMich KISA',
     template: 'UMich KISA | %s',
   },
-  icons: {
-    icon: '/favicon.ico', // 명시적으로 설정
-  },
+  // icons: {
+  //   icon: '/favicon-v2.ico', // 명시적으로 설정
+  // },
   description:
     '미시간 대학교 한인 학부생 학생회 공식 웹사이트 | University of Michigan Korean International Student Association (KISA) official website',
 };
