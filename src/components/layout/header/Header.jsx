@@ -7,10 +7,10 @@
 import React, { useState } from "react";
 import LoginButton from "./LoginButton";
 import VerticalDivider from "@/deprecated-components/shared/VerticalDivider";
-import InstagramLinkIcon from '@/deprecated-components/shared/InstagramLinkIcon';
+import InstagramLinkIcon from "@/deprecated-components/shared/InstagramLinkIcon";
 import UserInfo from "./UserInfo";
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from "next/link";
+import Image from "next/image";
 import MobileMenuButton from "./MobileMenuButton";
 import {
   HoveredLink,
@@ -19,11 +19,12 @@ import {
   MobileMenu,
   MobileMenuItem,
 } from "@/components/ui/aceternity/navbar-menu";
+import JobsCuratorHeaderTitle from "@/features/jobs-curator/layout/JobsCuratorHeaderTitle";
 
 import menu from "@/components/layout/header/navigationMenu";
 
 // sub-ui components
-import HeaderTitleBlock from "./HeaderTitleBlock"
+import HeaderTitleBlock from "./HeaderTitleBlock";
 //import WebTitle from "./WebTitle";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -37,11 +38,15 @@ export default function Header({ session }) {
   const [active, setActive] = useState(null);
 
   const pathname = usePathname();
+  const isPocha = pathname.startsWith("/pocha");
+  const isJobsCurator = pathname.startsWith("/jobs");
+  const showMenu = !isPocha && !isJobsCurator;
+
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  if (pathname.startsWith("/pocha")) {
+  if (isPocha) {
     return null;
   }
 
@@ -73,68 +78,72 @@ export default function Header({ session }) {
 
         {/* Web Name home link */}
         {/* <WebTitle /> */}
-        <HeaderTitleBlock />
+        {isJobsCurator ? <JobsCuratorHeaderTitle /> : <HeaderTitleBlock />}
         {/* Navigation Menu */}
         {/* !!! in mobile menu, this menu should go down and become hidden */}
-        <div className='hidden md:flex'>
-          <Menu setActive={setActive}>
-            {menu?.map((item, index) => (
-              <MenuItem
-                key={item.href}
-                setActive={setActive}
-                active={active}
-                item={item.name}
-              >
-                <div className='flex flex-col space-y-4 text-sm'>
-                  {item.dropdowns.map((dropdown) => (
-                    <HoveredLink key={dropdown.href} href={dropdown.href}>
-                      {dropdown.name}
-                    </HoveredLink>
-                  ))}
-                </div>
-              </MenuItem>
-            ))}
-          </Menu>
-        </div>
+        {showMenu && (
+          <div className="hidden md:flex">
+            <Menu setActive={setActive}>
+              {menu?.map((item, index) => (
+                <MenuItem
+                  key={item.href}
+                  setActive={setActive}
+                  active={active}
+                  item={item.name}
+                >
+                  <div className="flex flex-col space-y-4 text-sm">
+                    {item.dropdowns.map((dropdown) => (
+                      <HoveredLink key={dropdown.href} href={dropdown.href}>
+                        {dropdown.name}
+                      </HoveredLink>
+                    ))}
+                  </div>
+                </MenuItem>
+              ))}
+            </Menu>
+          </div>
+        )}
 
-        <div className='flex md:hidden'>
-          <MobileMenu
-            active={active}
-            setActive={setActive}
-            isMobileMenuOpen={isMobileMenuOpen}
-          >
-            {menu?.map((item, index) => (
-              <MobileMenuItem
-                key={item.href}
-                setActive={setActive}
-                active={active}
-                item={item.name}
-              >
-                <div className='flex flex-col space-y-4 text-sm'>
-                  {item.dropdowns.map((dropdown) => (
-                    <HoveredLink key={dropdown.href} href={dropdown.href}>
-                      {dropdown.name}
-                    </HoveredLink>
-                  ))}
-                </div>
-              </MobileMenuItem>
-            ))}
-          </MobileMenu>
-        </div>
+        {showMenu && (
+          <div className="flex md:hidden">
+            <MobileMenu
+              active={active}
+              setActive={setActive}
+              isMobileMenuOpen={isMobileMenuOpen}
+            >
+              {menu?.map((item, index) => (
+                <MobileMenuItem
+                  key={item.href}
+                  setActive={setActive}
+                  active={active}
+                  item={item.name}
+                >
+                  <div className="flex flex-col space-y-4 text-sm">
+                    {item.dropdowns.map((dropdown) => (
+                      <HoveredLink key={dropdown.href} href={dropdown.href}>
+                        {dropdown.name}
+                      </HoveredLink>
+                    ))}
+                  </div>
+                </MobileMenuItem>
+              ))}
+            </MobileMenu>
+          </div>
+        )}
       </div>
 
       {/* RIGHT SIDE */}
       <div
-        className='hidden md:flex
-       justify-center items-center gap-3 lg:gap-4'
+        className="hidden md:flex
+       justify-center items-center gap-3 lg:gap-4"
       >
         <InstagramLinkIcon />
-        <div className='hidden lg:block'>
+        <div className="hidden lg:block">
           <VerticalDivider />
         </div>
 
         {session && (
-          <div className='ml-0 lg:ml-3 flex items-center'>
+          <div className="ml-0 lg:ml-3 flex items-center">
             <UserInfo
               email={session.user.email}
               image={session.user.image}
@@ -142,15 +151,15 @@ export default function Header({ session }) {
             />
           </div>
         )}
-        <div className='block ml-2 lg:ml-3'>
+        <div className="block ml-2 lg:ml-3">
           <LoginButton session={session} />
         </div>
       </div>
 
       <div
-        className='absolute right-0 top-0
+        className="absolute right-0 top-0
       mt-6 mr-4
-      flex items-center md:hidden'
+      flex items-center md:hidden"
       >
         <MobileMenuButton
           isMobileMenuOpen={isMobileMenuOpen}
@@ -159,9 +168,9 @@ export default function Header({ session }) {
       </div>
       {isMobileMenuOpen && (
         <motion.div
-          className='absolute top-0 mt-16
+          className="absolute top-0 mt-16
         right-0 mr-4
-        flex items-center gap-2'
+        flex items-center gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }} // Add exit animation
@@ -175,7 +184,7 @@ export default function Header({ session }) {
             />
           )}
 
-          <LoginButton session={session} size='sm' />
+          <LoginButton session={session} size="sm" />
         </motion.div>
       )}
     </div>
