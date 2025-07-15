@@ -5,19 +5,21 @@
 // title
 // descr
 // url
+
 const homeCarouselData = [
   {
-    id: 'f25-26_new_student_chatroom',
-    title: '[25-26] 신/편입생 톡방',
+    id: 'f25-26_new_student_pocha',
+    title: '[25-26] 신/편입생 환영회',
     desc: (
       <p>
-        미시간 대학교 입학을 축하드립니다!! KISA에서 준비한 신/편입생 톡방에
-        들어오셔서 다양한 정보를 얻고 새로운 사람들도 만나보세요!
+        앤아버는 처음이라 한편으로는 걱정되신다고요? 그런 걱정 싹 날려버리게
+        👉신입생 환영회👈로 오세요
         <br />
-        오픈채팅방 비밀번호는 @kisa_michigan 인스타 디엠으로 물어봐주세요!
+        25-26 신/편입생분들이 미시간 생활의 첫 페이지를 설레게 여실 수 있도록
+        저희 키사가 열심히 준비했습니다 ❤️
       </p>
     ),
-    url: 'https://open.kakao.com/o/gqnJuhsh',
+    url: 'https://www.instagram.com/p/DLyzKkXztO-/?img_index=1',
   },
   {
     id: 'fa24_small_group_recruitment',
@@ -31,7 +33,7 @@ const homeCarouselData = [
       </p>
     ),
     url: 'https://www.instagram.com/p/DAtXy-0OWwa/?img_index=1',
-  }
+  },
 ];
 
 // Quick link data
