@@ -5,8 +5,11 @@
 // title
 // descr
 // url
+
 const homeCarouselData = [
   {
+    id: 'f25-26_new_student_pocha',
+    title: '[25-26] 신/편입생 환영회',
     id: 'f25-26_new_student_pocha',
     title: '[25-26] 신/편입생 환영회',
     desc: (
@@ -18,6 +21,7 @@ const homeCarouselData = [
         만날 수 있는 신환회로 초대합니다 💌
       </p>
     ),
+    url: 'https://www.instagram.com/p/DLyzKkXztO-/?img_index=1',
     url: 'https://www.instagram.com/p/DLyzKkXztO-/?img_index=1',
   },
   {
@@ -32,6 +36,7 @@ const homeCarouselData = [
       </p>
     ),
     url: 'https://www.instagram.com/p/DAtXy-0OWwa/?img_index=1',
+  },
   },
 ];
 
