@@ -37,7 +37,7 @@ const homeCarouselData = [
     ),
     url: 'https://www.instagram.com/p/DAtXy-0OWwa/?img_index=1',
   },
-  },
+
 ];
 
 // Quick link data
