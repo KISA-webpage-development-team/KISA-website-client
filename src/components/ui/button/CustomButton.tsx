@@ -1,6 +1,7 @@
 import React from "react";
 import { ButtonType } from "./types";
 import "./styles.css";
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
 type CustomButtonProps = {
   type?: ButtonType;
@@ -19,7 +20,7 @@ export default function CustomButton({
   forSubmit = false,
   className = "",
 }: CustomButtonProps) {
-  const btnClassName = `${type}_button ${
+  const btnClassName = `${type}_button ${sejongHospitalBold.className} ${
     disabled ? `${type}_button_disabled` : ""
   } ${className}`.trim();
 
