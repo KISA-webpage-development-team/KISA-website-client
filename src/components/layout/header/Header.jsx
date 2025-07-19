@@ -19,7 +19,7 @@ import {
   MobileMenu,
   MobileMenuItem,
 } from "@/components/ui/aceternity/navbar-menu";
-import JobsCuratorHeaderTitle from "@/features/jobs-curator/layout/JobsCuratorHeaderTitle";
+import JobsCuratorHeaderTitle from "@/features/jobs-curator/layout/HaederTitle";
 
 import menu from "@/components/layout/header/navigationMenu";
 
