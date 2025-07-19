@@ -5,7 +5,8 @@ import WebLogo from "@/components/layout/header/WebLogo";
 
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
-export default function JobsCuratorHeaderTitle() {
+// TODO: need to change app name (right now it's working title)
+export default function HeaderTitle() {
   return (
     <div className="flex items-center gap-5">
       <WebLogo />
