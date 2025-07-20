@@ -29,4 +29,4 @@ export type JobCategory = "developer" | "marketing" | "hr" | "design" | "sales";
 export type EmploymentType = "fulltime" | "internship";
 
 // Internship type
-export type InternshipType = "convertible" | "experiential";
+export type InternshipType = "convertible" | "experiential" | "global";
