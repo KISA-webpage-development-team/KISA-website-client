@@ -11,9 +11,9 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "@/deprecated-components",
+    "components": "@/components",
     "utils": "@//utils/styles/cn",
-    "ui": "@/deprecated-components/ui",
+    "ui": "@/components/ui/shadcn",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
