@@ -1,13 +1,25 @@
 import React from "react";
-import { Job } from "../../types/jobs";
+
 import JobPostingCard from "./JobPostingCard";
+import USAFallbackContent from "./USAFallbackContent";
+
+import { useJobsCurator } from "../../contexts/JobsCuratorContext";
 import useFormattedJobs from "../../hooks/useFormattedJobs";
+import { Job } from "../../types/jobs";
 
 interface JobPostingGridProps {
   jobs: Job[];
 }
 
 export default function JobPostingGrid({ jobs }: JobPostingGridProps) {
+  const { selectedCountry } = useJobsCurator();
+  const isUSAFallback = selectedCountry === "미국";
+
+  // TODO: implement USA fallback view
+  if (isUSAFallback) {
+    return <USAFallbackContent />;
+  }
+
   if (jobs.length === 0) {
     return <div>No job postings found</div>;
   }

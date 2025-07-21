@@ -1,4 +1,4 @@
-import { Job } from "@/features/jobs-curator/types/jobs";
+import { Job, JobListQueryParams } from "@/features/jobs-curator/types/jobs";
 import client from "@/lib/axios/client";
 
 // API response structure
@@ -38,9 +38,15 @@ export async function getInternshipJobs() {
  * @desc Mock function to fetch jobs data from local JSON
  * @route GET /api/v2/jobs/
  */
-export async function getJobsMock(): Promise<JobsResponse> {
+export async function getJobsMock(
+  queryParams: JobListQueryParams
+): Promise<JobsResponse> {
   try {
-    const response = await fetch("/mocks/jobs.json");
+    const response = await fetch(
+      `/mocks/jobs.json?${new URLSearchParams(
+        queryParams as Record<string, string>
+      ).toString()}`
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch mock jobs data");
     }

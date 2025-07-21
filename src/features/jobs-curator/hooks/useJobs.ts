@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { HookStatus } from "@/types/hook";
 import { getJobsMock } from "@/apis/jobs/queries";
-import { Job } from "../types/jobs";
+import { Job, JobListQueryParams } from "../types/jobs";
 
 // TODO: change it to use real API endpoint
-const useJobs = () => {
+const useJobs = (queryParams: JobListQueryParams) => {
   const [status, setStatus] = useState<HookStatus>("loading");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [error, setError] = useState<string>();
@@ -12,7 +12,7 @@ const useJobs = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await getJobsMock();
+        const res = await getJobsMock(queryParams);
         // setJobs(res?.data); // NOTE: uncomment when using a real data
         setJobs(res?.jobs);
         setStatus("success");
@@ -27,7 +27,7 @@ const useJobs = () => {
     };
 
     fetchJobs();
-  }, []);
+  }, [queryParams]);
 
   return { jobs, status, error };
 };

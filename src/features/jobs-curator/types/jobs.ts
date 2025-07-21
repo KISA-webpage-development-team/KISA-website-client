@@ -40,3 +40,17 @@ export type EmploymentType = "fulltime" | "internship";
 
 // Internship type
 export type InternshipType = "convertible" | "experiential" | "global";
+
+// Country
+export type SupportedCountry = "한국" | "미국";
+
+// Query parameters for the job list API
+type Tag = "fulltime" | "intern" | "convertible" | "experiential" | "global";
+export interface JobListQueryParams {
+  category?: string;
+  tags?: Tag[];
+  startDate?: string;
+  endDate?: string;
+  offset?: number;
+  limit?: number;
+}
