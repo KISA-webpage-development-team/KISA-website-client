@@ -1,11 +1,32 @@
 import { createContext, useContext, useState } from "react";
-import { SupportedCountry } from "../types/jobs";
+import {
+  EmploymentType,
+  InternshipType,
+  SupportedCountry,
+} from "../types/jobs";
+import { getDefaultInternshipDateRange } from "../utils/getDefaultDateRange";
+
+// Date range type
+type DateRangeState = {
+  startDate: Date | undefined;
+  setStartDate: (d: Date | undefined) => void;
+  endDate: Date | undefined;
+  setEndDate: (d: Date | undefined) => void;
+};
 
 type JobsCuratorState = {
   category: string | undefined;
   setCategory: (c: string | undefined) => void;
-  selectedCountry: "한국" | "미국";
-  setSelectedCountry: (c: "한국" | "미국") => void;
+  selectedCountry: SupportedCountry;
+  setSelectedCountry: (c: SupportedCountry) => void;
+  employmentType: EmploymentType | undefined;
+  setEmploymentType: (e: EmploymentType | undefined) => void;
+  internshipTypes: InternshipType[];
+  setInternshipTypes: (i: InternshipType[]) => void;
+  startDate: Date | undefined;
+  setStartDate: (d: Date | undefined) => void;
+  endDate: Date | undefined;
+  setEndDate: (d: Date | undefined) => void;
 };
 
 const JobsCuratorContext = createContext<JobsCuratorState | undefined>(
@@ -20,11 +41,44 @@ export const JobsCuratorProvider = ({
   const [selectedCountry, setSelectedCountry] =
     useState<SupportedCountry>("한국");
 
+  // category header
   const [category, setCategory] = useState<string | undefined>(undefined);
+
+  // tag filters
+  // NOTE: business decision: default to experiential internship
+  // because this is the main target of the app
+  const [employmentType, setEmploymentType] = useState<
+    EmploymentType | undefined
+  >("internship");
+  const [internshipTypes, setInternshipTypes] = useState<InternshipType[]>([
+    "experiential",
+  ]);
+
+  // date range global state
+  const defaultDateRange = getDefaultInternshipDateRange();
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    defaultDateRange.start
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    defaultDateRange.end
+  );
 
   return (
     <JobsCuratorContext.Provider
-      value={{ category, setCategory, selectedCountry, setSelectedCountry }}
+      value={{
+        category,
+        setCategory,
+        selectedCountry,
+        setSelectedCountry,
+        employmentType,
+        setEmploymentType,
+        internshipTypes,
+        setInternshipTypes,
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
+      }}
     >
       {children}
     </JobsCuratorContext.Provider>
