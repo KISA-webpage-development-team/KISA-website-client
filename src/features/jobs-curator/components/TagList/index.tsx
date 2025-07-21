@@ -1,88 +1,81 @@
 "use client";
 
-import React, { useState } from "react";
-import { sejongHospitalLight } from "@/utils/fonts/textFonts";
-import TagDetailModal from "./TagDetailModal";
+import React, { useMemo, useState } from "react";
 import { CountryDropdown } from "./CountryDropdown";
 import TagButton from "./TagButton";
 import EmploymentTypeDetailModal from "./EmploymentTypeDetailModal";
-
-// Duration Filter Modal
-export function DurationTagDetailModal({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) {
-  const [selectedDuration, setSelectedDuration] = useState("단기");
-
-  const durations = [
-    { value: "단기", label: "단기 (1-3개월)" },
-    { value: "중기", label: "중기 (3-6개월)" },
-    { value: "장기", label: "장기 (6개월+)" },
-  ];
-
-  return (
-    <TagDetailModal isOpen={isOpen} onClose={onClose} title="기간">
-      <div className="flex h-full">
-        {/* Left Pane - Duration Selection */}
-        <div className="w-1/2 border-r p-4 overflow-y-auto">
-          <div>
-            <label
-              className={`block text-sm font-medium mb-2 ${sejongHospitalLight.className}`}
-            >
-              기간
-            </label>
-            <div className="space-y-1">
-              {durations.map((duration) => (
-                <button
-                  key={duration.value}
-                  onClick={() => setSelectedDuration(duration.value)}
-                  className={`w-full text-left p-2 rounded ${
-                    selectedDuration === duration.value
-                      ? "bg-gray-100 text-blue-600"
-                      : "hover:bg-gray-50"
-                  } ${sejongHospitalLight.className}`}
-                >
-                  {duration.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Right Pane - Information */}
-        <div className="w-1/2 p-4 flex items-center justify-center">
-          <p
-            className={`text-gray-500 text-center ${sejongHospitalLight.className}`}
-          >
-            기간을 선택하면 상세 정보를 확인할 수 있습니다.
-          </p>
-        </div>
-      </div>
-    </TagDetailModal>
-  );
-}
+import { useJobsCurator } from "../../contexts/JobsCuratorContext";
+import { formatTagToLabel } from "../../utils/formatTagToLabel";
+import { internshipTypeLabels } from "../../constant";
+import { InternshipType } from "../../types/jobs";
+import DateRangeDetailModal from "./DateRangeDetailModal";
+import { addMonths } from "date-fns";
+import { formatKoreanDate } from "../../utils/date";
 
 // Main TagList component
 export default function TagList() {
+  const { employmentType, internshipTypes, startDate, endDate } =
+    useJobsCurator();
+
+  // employment type modal
   const [isEmploymentTypeModalOpen, setIsEmploymentTypeModalOpen] =
     useState(false);
 
+  const employmentTypeLabel = useMemo(() => {
+    if (employmentType === "internship") {
+      const allTypes = Object.keys(internshipTypeLabels) as InternshipType[];
+
+      // if all types are selected, show "전체"
+      const allSelected =
+        internshipTypes.length === allTypes.length &&
+        allTypes.every((type) => internshipTypes.includes(type));
+      return `인턴 (${
+        allSelected
+          ? "전체"
+          : internshipTypes.map((type) => formatTagToLabel(type)).join(", ")
+      })`;
+    }
+    return formatTagToLabel(employmentType);
+  }, [employmentType, internshipTypes]);
+
+  // date range modal
+  const [isDateRangeModalOpen, setIsDateRangeModalOpen] = useState(false);
+
+  const dateRangeLabel = useMemo(() => {
+    const label = employmentType === "internship" ? "기간" : "시작";
+
+    if (employmentType === "internship") {
+      return `${label}: ${formatKoreanDate(startDate)} ~ ${formatKoreanDate(
+        endDate ?? addMonths(startDate, 3)
+      )}`;
+    } else {
+      // no end date for fulltime
+      return `${label}: ${formatKoreanDate(startDate)}`;
+    }
+  }, [employmentType, startDate, endDate]);
+
   return (
     <>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
         <CountryDropdown />
         <TagButton
-          label={"인턴"}
+          label={employmentTypeLabel}
           onClick={() => setIsEmploymentTypeModalOpen(true)}
+        />
+        <TagButton
+          label={dateRangeLabel}
+          onClick={() => setIsDateRangeModalOpen(true)}
         />
       </div>
 
       <EmploymentTypeDetailModal
         isOpen={isEmploymentTypeModalOpen}
         onClose={() => setIsEmploymentTypeModalOpen(false)}
+      />
+
+      <DateRangeDetailModal
+        isOpen={isDateRangeModalOpen}
+        onClose={() => setIsDateRangeModalOpen(false)}
       />
     </>
   );

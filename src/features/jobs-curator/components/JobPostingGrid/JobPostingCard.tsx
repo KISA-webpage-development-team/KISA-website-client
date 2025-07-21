@@ -2,7 +2,6 @@ import React from "react";
 import { JobPosting, JobTagBadge } from "../../types/jobs";
 import {
   Card,
-  CardAction,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -14,6 +13,7 @@ import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
+import { format } from "date-fns";
 
 interface JobPostingCardProps {
   jobPosting: JobPosting;
@@ -66,7 +66,7 @@ export default function JobPostingCard({
           className={`flex flex-row items-center justify-between
             text-sm ${sejongHospitalLight.className} px-0 w-full`}
         >
-          <span>마감: {jobPosting.dueDate}</span>
+          <span>마감: {format(jobPosting.dueDate, "yyyy.MM.dd")}</span>
           <button
             onClick={navigateToJobPosting}
             className={`${sejongHospitalBold.className} hidden hover:underline 
