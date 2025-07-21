@@ -13,6 +13,14 @@ export interface Job {
   source: string;
 }
 
+export interface JobPosting {
+  jobID: number;
+  company: string;
+  position: string;
+  dueDate: string;
+  link: string;
+}
+
 // Tag types based on backend documentation
 export type JobTag =
   | "fulltime"
@@ -20,6 +28,8 @@ export type JobTag =
   | "convertible"
   | "experiential"
   | "global";
+
+export type JobTagBadge = "체험형" | "전환형" | "해외대전형";
 
 // Job categories
 // TODO: this is not correct, need to check with backend later

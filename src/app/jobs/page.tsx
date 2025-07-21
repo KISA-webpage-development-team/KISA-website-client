@@ -6,11 +6,11 @@ import { LoadingSpinner } from "@/components/ui/feedback";
 import useJobs from "@/features/jobs-curator/hooks/useJobs";
 import PositionDropdown from "@/features/jobs-curator/components/PositionDropdown";
 import TagList from "@/features/jobs-curator/components/TagList";
+import JobPostingGrid from "@/features/jobs-curator/components/JobPostingGrid";
 
 export default function JobsCuratorPage() {
   const { jobs, status, error } = useJobs();
 
-  console.log(jobs);
   if (status === "loading") {
     return <LoadingSpinner />;
   }
@@ -22,16 +22,19 @@ export default function JobsCuratorPage() {
   return (
     <section>
       {/*  직군 선택 Dropdown (Heading) */}
-      <div>
+      <div className="mt-2 sm:mt-0">
         <PositionDropdown />
       </div>
 
       {/* Tag List */}
-      <div className="mt-2">
+      <div className="sm:mt-2">
         <TagList />
       </div>
 
-      {/* Job Post Cards */}
+      {/* Job Posting Cards */}
+      <div className="sm:mt-2">
+        <JobPostingGrid jobs={jobs} />
+      </div>
     </section>
   );
 }
