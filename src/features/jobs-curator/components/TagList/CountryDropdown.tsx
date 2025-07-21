@@ -10,14 +10,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/shadcn/dropdown-menu";
+import { useJobsCurator } from "../../contexts/JobsCuratorContext";
+import { SupportedCountry } from "../../types/jobs";
 
 const countries = ["한국", "미국"];
 
 export function CountryDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState("한국");
+  const { selectedCountry, setSelectedCountry } = useJobsCurator();
 
-  const handleCountrySelect = (country: string) => {
+  const handleCountrySelect = (country: SupportedCountry) => {
     setSelectedCountry(country);
     setIsOpen(false);
   };
@@ -36,7 +38,7 @@ export function CountryDropdown() {
         {countries.map((country) => (
           <DropdownMenuItem
             key={country}
-            onClick={() => handleCountrySelect(country)}
+            onClick={() => handleCountrySelect(country as SupportedCountry)}
             className={`${selectedCountry === country ? "bg-blue-50" : ""} ${
               sejongHospitalLight.className
             }`}
