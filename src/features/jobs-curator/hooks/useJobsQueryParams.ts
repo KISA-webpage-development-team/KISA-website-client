@@ -20,7 +20,7 @@ export default function useJobsQueryParams() {
     if (employmentType) {
       tags.push(employmentType);
     }
-    if (internshipTypes.length > 0) {
+    if (employmentType === "internship" && internshipTypes.length > 0) {
       tags.push(...internshipTypes);
     }
 
