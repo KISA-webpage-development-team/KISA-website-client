@@ -1,22 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TagDetailModal from "./TagDetailModal";
 import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
 import { EmploymentType, InternshipType } from "../../types/jobs";
-import DateInputField from "./DateInputField";
-
-const levels: { value: EmploymentType; label: string }[] = [
-  { value: "fulltime", label: "신입" },
-  { value: "internship", label: "인턴" },
-];
-
-const internshipTypes: { value: InternshipType; label: string }[] = [
-  { value: "experiential", label: "체험형" },
-  { value: "convertible", label: "전환형" },
-  { value: "global", label: "해외대학형" },
-];
+import { useJobsCurator } from "../../contexts/JobsCuratorContext";
+import { formatTagToLabel } from "../../utils/formatTagToLabel";
+import { employmentTypeLabels } from "../../constant";
+import { internshipTypeLabels } from "../../constant";
 
 export default function EmploymentTypeDetailModal({
   isOpen,
@@ -25,24 +17,31 @@ export default function EmploymentTypeDetailModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [selectedLevel, setSelectedLevel] =
-    useState<EmploymentType>("fulltime");
-  const [selectedTypes, setSelectedTypes] = useState<InternshipType[]>([]);
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [startCalendarOpen, setStartCalendarOpen] = useState(false);
-  const [endCalendarOpen, setEndCalendarOpen] = useState(false);
+  const {
+    employmentType: globalEmploymentType,
+    setEmploymentType: setGlobalEmploymentType,
+    internshipTypes: globalInternshipTypes,
+    setInternshipTypes: setGlobalInternshipTypes,
+  } = useJobsCurator();
 
-  const handleLevelSelect = (level: EmploymentType) => {
-    setSelectedLevel(level);
-    // Clear selected types when switching to fulltime
-    if (level === "fulltime") {
-      setSelectedTypes([]);
+  // Local state for modal interactions
+  const [localEmploymentType, setLocalEmploymentType] = useState<
+    EmploymentType | undefined
+  >(globalEmploymentType);
+  const [localInternshipTypes, setLocalInternshipTypes] = useState<
+    InternshipType[]
+  >(globalInternshipTypes);
+
+  // Sync local state with global state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setLocalEmploymentType(globalEmploymentType);
+      setLocalInternshipTypes(globalInternshipTypes);
     }
-  };
+  }, [isOpen, globalEmploymentType, globalInternshipTypes]);
 
   const handleTypeToggle = (type: InternshipType) => {
-    setSelectedTypes((prev) => {
+    setLocalInternshipTypes((prev) => {
       if (prev.includes(type)) {
         return prev.filter((t) => t !== type);
       } else {
@@ -51,38 +50,27 @@ export default function EmploymentTypeDetailModal({
     });
   };
 
-  const handleStartCalendarOpen = () => {
-    setEndCalendarOpen(false);
+  const handleApply = () => {
+    setGlobalEmploymentType(localEmploymentType);
+    setGlobalInternshipTypes(localInternshipTypes);
+    onClose();
   };
 
-  const handleEndCalendarOpen = () => {
-    setStartCalendarOpen(false);
-  };
-
-  const handleStartOpenChange = (open: boolean) => {
-    setStartCalendarOpen(open);
-    if (open) {
-      setEndCalendarOpen(false);
-    }
-  };
-
-  const handleEndOpenChange = (open: boolean) => {
-    setEndCalendarOpen(open);
-    if (open) {
-      setStartCalendarOpen(false);
-    }
+  const handleReset = () => {
+    setLocalEmploymentType(globalEmploymentType);
+    setLocalInternshipTypes(globalInternshipTypes);
   };
 
   // Form validation logic
   const isApplyDisabled = () => {
     // For 신입 (fulltime): no required fields
-    if (selectedLevel === "fulltime") {
+    if (localEmploymentType === "fulltime") {
       return false;
     }
 
     // For 인턴 (internship): at least one 채용유형 is required
-    if (selectedLevel === "internship") {
-      return selectedTypes.length === 0;
+    if (localEmploymentType === "internship") {
+      return localInternshipTypes.length === 0;
     }
 
     return true; // Default to disabled
@@ -93,110 +81,74 @@ export default function EmploymentTypeDetailModal({
       isOpen={isOpen}
       onClose={onClose}
       title="채용유형"
+      onApply={handleApply}
+      onReset={handleReset}
       isApplyDisabled={isApplyDisabled()}
     >
-      <div className="flex h-full">
-        {/* Left Pane - Employment Level */}
-        <div className="w-1/2 border-r p-4 overflow-y-auto">
-          <div className="mb-4">
-            <label
-              className={`block text-sm font-medium mb-2 ${sejongHospitalLight.className}`}
-            >
-              고용형태
-            </label>
-            <div className="space-y-1">
-              {levels.map((level) => (
+      <div className="flex flex-col w-full p-2 overflow-y-auto">
+        <div>
+          <label
+            className={`block text-sm font-medium mb-2 ${sejongHospitalLight.className}`}
+          >
+            고용형태
+          </label>
+          <div className="space-y-1">
+            {Object.entries(employmentTypeLabels).map(
+              ([key, value]: [EmploymentType, string]) => (
                 <button
-                  key={level.value}
-                  onClick={() => handleLevelSelect(level.value)}
+                  key={key}
+                  onClick={() => setLocalEmploymentType(key as EmploymentType)}
                   className={`w-full text-left p-2 rounded ${
-                    selectedLevel === level.value
+                    localEmploymentType === key
                       ? `bg-gray-100 text-michigan-light-blue ${sejongHospitalBold.className}`
                       : "hover:bg-gray-50"
                   } ${sejongHospitalLight.className}`}
                 >
-                  {level.label}
+                  {value}
                 </button>
-              ))}
-            </div>
+              )
+            )}
           </div>
+        </div>
 
-          {/* Show 채용유형 only when 인턴 is selected */}
-          {selectedLevel === "internship" && (
-            <div>
-              <label
-                className={`block text-sm font-medium mb-2 ${sejongHospitalLight.className}`}
-              >
-                채용유형 (다중 선택 가능)
-              </label>
-              <div className="space-y-1">
-                {internshipTypes.map((type) => (
+        {/* Show 채용유형 only when 인턴 is selected */}
+        {localEmploymentType === "internship" && (
+          <div className="mt-2 md:mt-4">
+            <label
+              className={`block text-sm font-medium mb-2 ${sejongHospitalLight.className}`}
+            >
+              채용유형 (다중 선택 가능)
+            </label>
+            <div className="space-y-1">
+              {Object.entries(internshipTypeLabels).map(
+                ([key, value]: [InternshipType, string]) => (
                   <button
-                    key={type.value}
-                    onClick={() => handleTypeToggle(type.value)}
+                    key={key}
+                    onClick={() => handleTypeToggle(key)}
                     className={`w-full text-left p-2 rounded flex items-center gap-2 ${
-                      selectedTypes.includes(type.value)
+                      localInternshipTypes.includes(key)
                         ? `bg-gray-100 text-michigan-light-blue ${sejongHospitalBold.className}`
                         : "hover:bg-gray-50"
                     } ${sejongHospitalLight.className}`}
                   >
                     <div
                       className={`w-4 h-4 border rounded flex items-center justify-center ${
-                        selectedTypes.includes(type.value)
+                        localInternshipTypes.includes(key)
                           ? "bg-blue-500 border-blue-500"
                           : "border-gray-300"
                       }`}
                     >
-                      {selectedTypes.includes(type.value) && (
+                      {localInternshipTypes.includes(key) && (
                         <div className="w-2 h-2 bg-white rounded-sm"></div>
                       )}
                     </div>
-                    {type.label}
+                    {value}
                   </button>
-                ))}
-              </div>
+                )
+              )}
             </div>
-          )}
-        </div>
-
-        {/* Right Pane - Date Selection */}
-        <div className="w-1/2 p-4 flex flex-col">
-          {selectedLevel === "fulltime" ? (
-            // 신입 - Start date only
-            <DateInputField
-              label="시작일"
-              date={startDate}
-              onDateChange={setStartDate}
-              placeholder="시작일을 선택하세요"
-              onCalendarOpen={handleStartCalendarOpen}
-              isOpen={startCalendarOpen}
-              onOpenChange={handleStartOpenChange}
-            />
-          ) : (
-            // 인턴 - Start and end dates
-            <div className="flex flex-col w-full gap-4">
-              <DateInputField
-                label="시작일"
-                date={startDate}
-                onDateChange={setStartDate}
-                placeholder="시작일을 선택하세요"
-                onCalendarOpen={handleStartCalendarOpen}
-                isOpen={startCalendarOpen}
-                onOpenChange={handleStartOpenChange}
-              />
-              <DateInputField
-                label="종료일"
-                date={endDate}
-                onDateChange={setEndDate}
-                placeholder="종료일을 선택하세요"
-                disabled={!startDate}
-                onCalendarOpen={handleEndCalendarOpen}
-                isOpen={endCalendarOpen}
-                onOpenChange={handleEndOpenChange}
-              />
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </TagDetailModal>
   );

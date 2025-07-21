@@ -1,5 +1,15 @@
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { X } from "lucide-react";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+} from "@/components/ui/shadcn/dialog";
+import { Button } from "@/components/ui/shadcn/button";
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -20,47 +30,37 @@ export default function TagDetailModal({
   onApply,
   isApplyDisabled = false,
 }: FilterModalProps) {
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg min-w-[600px] flex flex-col">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-h-[80vh] min-w-[300px] w-fit flex flex-col bg-white">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2
-            className={`text-lg font-semibold ${sejongHospitalBold.className}`}
-          >
+        <DialogHeader className="flex-shrink-0">
+          <DialogTitle className={`${sejongHospitalBold.className}`}>
             {title}
-          </h2>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+          </DialogTitle>
+        </DialogHeader>
 
         {/* Content */}
         <div className="flex-1 overflow-hidden">{children}</div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-2 p-4 border-t">
-          <button
+        <DialogFooter className="flex-shrink-0 flex flex-row items-center gap-2">
+          <Button
+            variant="outline"
             onClick={onReset || onClose}
-            className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
+            className={`${sejongHospitalBold.className} w-1/2 md:w-auto`}
           >
             초기화
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onApply || onClose}
             disabled={isApplyDisabled}
-            className={`px-4 py-2 rounded ${
-              isApplyDisabled
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-600"
-            }`}
+            className={`${sejongHospitalBold.className} w-1/2 md:w-auto`}
           >
             적용
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
