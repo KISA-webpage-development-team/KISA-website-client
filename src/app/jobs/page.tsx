@@ -3,7 +3,7 @@
 import React from "react";
 
 import { LoadingSpinner } from "@/components/ui/feedback";
-import useJobs from "@/features/jobs-curator/hooks/useJobs";
+import useInfiniteJobs from "@/features/jobs-curator/hooks/useInfiniteJobs";
 import JobCategoryDropdown from "@/features/jobs-curator/components/JobCategoryDropdown";
 import TagList from "@/features/jobs-curator/components/TagList";
 import JobPostingGrid from "@/features/jobs-curator/components/JobPostingGrid";
@@ -20,7 +20,8 @@ export default function JobsCuratorPage() {
 
 function JobsCuratorPageContent() {
   const queryParams = useJobsQueryParams();
-  const { jobs, status, error } = useJobs(queryParams);
+  const { jobs, status, error, hasMore, loadMore, isLoadingMore } =
+    useInfiniteJobs(queryParams);
 
   if (status === "loading") {
     return <LoadingSpinner />;
@@ -42,9 +43,14 @@ function JobsCuratorPageContent() {
         <TagList />
       </div>
 
-      {/* Job Posting Cards */}
+      {/* Job Posting Cards with Infinite Scroll */}
       <div className="sm:mt-2">
-        <JobPostingGrid jobs={jobs} />
+        <JobPostingGrid
+          jobs={jobs}
+          onLoadMore={loadMore}
+          hasMore={hasMore}
+          isLoadingMore={isLoadingMore}
+        />
       </div>
     </section>
   );
