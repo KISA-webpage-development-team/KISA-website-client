@@ -8,14 +8,16 @@ import { useJobsCurator } from "../../contexts/JobsCuratorContext";
 import { formatTagToLabel } from "../../utils/formatTagToLabel";
 import { internshipTypeLabels } from "../../constant";
 import { InternshipType } from "../../types/jobs";
-import DateRangeDetailModal from "./DateRangeDetailModal";
-import { addMonths } from "date-fns";
-import { formatKoreanDate } from "../../utils/date";
+// import DateRangeDetailModal from "./DateRangeDetailModal";
+// import { addMonths } from "date-fns";
+// import { formatKoreanDate } from "../../utils/date";
+
+// NOTE: for MVP, we don't support date range filter
+// because wanted api data doesn't have it
 
 // Main TagList component
 export default function TagList() {
-  const { employmentType, internshipTypes, startDate, endDate } =
-    useJobsCurator();
+  const { employmentType, internshipTypes } = useJobsCurator();
 
   // employment type modal
   const [isEmploymentTypeModalOpen, setIsEmploymentTypeModalOpen] =
@@ -39,20 +41,20 @@ export default function TagList() {
   }, [employmentType, internshipTypes]);
 
   // date range modal
-  const [isDateRangeModalOpen, setIsDateRangeModalOpen] = useState(false);
+  // const [isDateRangeModalOpen, setIsDateRangeModalOpen] = useState(false);
 
-  const dateRangeLabel = useMemo(() => {
-    const label = employmentType === "internship" ? "기간" : "시작";
+  // const dateRangeLabel = useMemo(() => {
+  //   const label = employmentType === "internship" ? "기간" : "시작";
 
-    if (employmentType === "internship") {
-      return `${label}: ${formatKoreanDate(startDate)} ~ ${formatKoreanDate(
-        endDate ?? addMonths(startDate, 3)
-      )}`;
-    } else {
-      // no end date for fulltime
-      return `${label}: ${formatKoreanDate(startDate)}`;
-    }
-  }, [employmentType, startDate, endDate]);
+  //   if (employmentType === "internship") {
+  //     return `${label}: ${formatKoreanDate(startDate)} ~ ${formatKoreanDate(
+  //       endDate ?? addMonths(startDate, 3)
+  //     )}`;
+  //   } else {
+  //     // no end date for fulltime
+  //     return `${label}: ${formatKoreanDate(startDate)}`;
+  //   }
+  // }, [employmentType, startDate, endDate]);
 
   return (
     <>
@@ -62,10 +64,10 @@ export default function TagList() {
           label={employmentTypeLabel}
           onClick={() => setIsEmploymentTypeModalOpen(true)}
         />
-        <TagButton
+        {/* <TagButton
           label={dateRangeLabel}
           onClick={() => setIsDateRangeModalOpen(true)}
-        />
+        /> */}
       </div>
 
       <EmploymentTypeDetailModal
@@ -73,10 +75,10 @@ export default function TagList() {
         onClose={() => setIsEmploymentTypeModalOpen(false)}
       />
 
-      <DateRangeDetailModal
+      {/* <DateRangeDetailModal
         isOpen={isDateRangeModalOpen}
         onClose={() => setIsDateRangeModalOpen(false)}
-      />
+      /> */}
     </>
   );
 }
