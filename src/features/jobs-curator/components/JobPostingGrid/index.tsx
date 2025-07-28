@@ -2,16 +2,26 @@ import React from "react";
 
 import JobPostingCard from "./JobPostingCard";
 import USAFallbackContent from "./USAFallbackContent";
+import InfiniteScroll from "../InfiniteScroll";
 
 import { useJobsCurator } from "../../contexts/JobsCuratorContext";
 import useFormattedJobs from "../../hooks/useFormattedJobs";
 import { Job } from "../../types/jobs";
+import NotificationText from "../NotificationText";
 
 interface JobPostingGridProps {
   jobs: Job[];
+  onLoadMore?: () => void;
+  hasMore?: boolean;
+  isLoadingMore?: boolean;
 }
 
-export default function JobPostingGrid({ jobs }: JobPostingGridProps) {
+export default function JobPostingGrid({
+  jobs,
+  onLoadMore,
+  hasMore = false,
+  isLoadingMore = false,
+}: JobPostingGridProps) {
   const { selectedCountry } = useJobsCurator();
   const isUSAFallback = selectedCountry === "미국";
 
@@ -21,16 +31,16 @@ export default function JobPostingGrid({ jobs }: JobPostingGridProps) {
   }
 
   if (jobs.length === 0) {
-    return <div>No job postings found</div>;
+    return <NotificationText text="조건에 맞는 포지션이 없습니다." />;
   }
 
-  return (
+  const jobCards = (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
       {jobs.map((job) => {
         const { jobPosting, jobBadges } = useFormattedJobs(job);
         return (
           <JobPostingCard
-            key={job.jobID}
+            key={`${job.jobID}-${jobs.indexOf(job)}`}
             jobPosting={jobPosting}
             jobBadges={jobBadges}
           />
@@ -38,4 +48,26 @@ export default function JobPostingGrid({ jobs }: JobPostingGridProps) {
       })}
     </div>
   );
+
+  // If infinite scroll is enabled, wrap with InfiniteScroll component
+  if (onLoadMore && hasMore !== undefined) {
+    return (
+      <InfiniteScroll
+        onLoadMore={onLoadMore}
+        hasMore={hasMore}
+        isLoading={isLoadingMore}
+        endMessage={
+          <NotificationText
+            text="더 이상 포지션이 없습니다."
+            className="text-center text-gray-500"
+          />
+        }
+      >
+        {jobCards}
+      </InfiniteScroll>
+    );
+  }
+
+  // Otherwise, return just the grid
+  return jobCards;
 }

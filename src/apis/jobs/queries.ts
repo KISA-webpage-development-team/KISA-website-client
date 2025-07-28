@@ -5,6 +5,8 @@ import client from "@/lib/axios/client";
 export interface JobsResponse {
   jobs: Job[];
   next: string | null;
+  total?: number;
+  hasMore?: boolean;
 }
 
 // Query parameters for filtering jobs
@@ -50,7 +52,34 @@ export async function getJobsMock(
     if (!response.ok) {
       throw new Error("Failed to fetch mock jobs data");
     }
-    return await response.json();
+
+    const data = await response.json();
+    const allJobs = data.jobs || [];
+
+    // Handle pagination if offset and limit are provided
+    if (queryParams.offset !== undefined && queryParams.limit !== undefined) {
+      const startIndex = queryParams.offset;
+      const endIndex = startIndex + queryParams.limit;
+      const paginatedJobs = allJobs.slice(startIndex, endIndex);
+
+      return {
+        jobs: paginatedJobs,
+        next:
+          endIndex < allJobs.length
+            ? `?offset=${endIndex}&limit=${queryParams.limit}`
+            : null,
+        total: allJobs.length,
+        hasMore: endIndex < allJobs.length,
+      };
+    }
+
+    // Return all jobs if no pagination parameters
+    return {
+      jobs: allJobs,
+      next: null,
+      total: allJobs.length,
+      hasMore: false,
+    };
   } catch (error) {
     throw new Error("Error fetching mock jobs data");
   }
