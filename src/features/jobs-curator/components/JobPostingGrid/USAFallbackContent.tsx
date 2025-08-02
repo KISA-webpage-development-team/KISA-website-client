@@ -13,11 +13,11 @@ import {
 } from "@/utils/fonts/textFonts";
 import LinkedInIcon from "@/components/ui/icon/LinkedInIcon";
 
-const LinkedInLink = "https://www.linkedin.com/jobs/";
+const LINKEDIN_JOBS_URL = "https://www.linkedin.com/jobs/";
 
 export default function USAFallbackContent() {
   const navigateToLinkedIn = () => {
-    window.open(LinkedInLink, "_blank");
+    window.open(LINKEDIN_JOBS_URL, "_blank");
   };
 
   return (
