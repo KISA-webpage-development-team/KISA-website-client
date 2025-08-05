@@ -23,10 +23,6 @@ function JobsCuratorPageContent() {
   const { jobs, status, error, hasMore, loadMore, isLoadingMore } =
     useInfiniteJobs(queryParams);
 
-  if (status === "loading") {
-    return <LoadingSpinner />;
-  }
-
   if (status === "error") {
     throw new Error(error || "Unexpected error occurred");
   }
@@ -45,12 +41,16 @@ function JobsCuratorPageContent() {
 
       {/* Job Posting Cards with Infinite Scroll */}
       <div className="sm:mt-2">
-        <JobPostingGrid
-          jobs={jobs}
-          onLoadMore={loadMore}
-          hasMore={hasMore}
-          isLoadingMore={isLoadingMore}
-        />
+        {status === "loading" ? (
+          <LoadingSpinner fullScreen={false} />
+        ) : (
+          <JobPostingGrid
+            jobs={jobs}
+            onLoadMore={loadMore}
+            hasMore={hasMore}
+            isLoadingMore={isLoadingMore}
+          />
+        )}
       </div>
     </section>
   );

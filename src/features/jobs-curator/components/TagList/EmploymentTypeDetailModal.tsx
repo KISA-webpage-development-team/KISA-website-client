@@ -69,7 +69,7 @@ export default function EmploymentTypeDetailModal({
     }
 
     // For 인턴 (internship): at least one 채용유형 is required
-    if (localEmploymentType === "internship") {
+    if (localEmploymentType === "intern") {
       return localInternshipTypes.length === 0;
     }
 
@@ -112,7 +112,7 @@ export default function EmploymentTypeDetailModal({
         </div>
 
         {/* Show 채용유형 only when 인턴 is selected */}
-        {localEmploymentType === "internship" && (
+        {localEmploymentType === "intern" && (
           <div className="mt-2 md:mt-4">
             <label
               className={`block text-sm font-medium mb-2 ${sejongHospitalLight.className}`}
