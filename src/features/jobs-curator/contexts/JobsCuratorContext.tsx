@@ -49,7 +49,7 @@ export const JobsCuratorProvider = ({
   // because this is the main target of the app
   const [employmentType, setEmploymentType] = useState<
     EmploymentType | undefined
-  >("internship");
+  >("intern");
   const [internshipTypes, setInternshipTypes] = useState<InternshipType[]>([
     "experiential",
   ]);

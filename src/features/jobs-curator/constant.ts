@@ -2,7 +2,7 @@ import { EmploymentType, InternshipType } from "./types/jobs";
 
 export const employmentTypeLabels: Record<EmploymentType, string> = {
   fulltime: "신입",
-  internship: "인턴",
+  intern: "인턴",
 };
 
 export const internshipTypeLabels: Record<InternshipType, string> = {

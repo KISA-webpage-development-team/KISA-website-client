@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { HookStatus } from "@/types/hook";
-import { getJobsMock } from "@/apis/jobs/queries";
 import { Job, JobListQueryParams } from "../types/jobs";
+import { getJobs, getJobsByNextUrl, JobsResponse } from "@/apis/jobs/queries";
 
-const ITEMS_PER_PAGE = 18; // Number of jobs to load per page
+const LIMIT = 500;
 
 interface UseInfiniteJobsReturn {
   jobs: Job[];
@@ -22,24 +22,23 @@ const useInfiniteJobs = (
   const [error, setError] = useState<string>();
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [currentOffset, setCurrentOffset] = useState(0);
+  const [nextUrl, setNextUrl] = useState<string | null>(null);
 
   // Reset pagination when query params change
   useEffect(() => {
     setJobs([]);
-    setCurrentOffset(0);
+    setNextUrl(null);
     setHasMore(true);
     setError(undefined);
     setStatus("loading");
   }, [queryParams]);
 
   const fetchJobs = useCallback(
-    async (offset: number, isLoadMore = false) => {
+    async (isLoadMore = false) => {
       try {
         const paramsWithPagination = {
           ...queryParams,
-          offset,
-          limit: ITEMS_PER_PAGE,
+          limit: LIMIT,
         };
 
         // Simulate loading delay for better UX
@@ -47,7 +46,8 @@ const useInfiniteJobs = (
           await new Promise((resolve) => setTimeout(resolve, 1000));
         }
 
-        const res = await getJobsMock(paramsWithPagination);
+        const res: JobsResponse = await getJobs(paramsWithPagination);
+        // const res: JobsResponse = await getJobsMock(paramsWithPagination);
         const newJobs = res?.jobs || [];
 
         if (isLoadMore) {
@@ -56,8 +56,9 @@ const useInfiniteJobs = (
           setJobs(newJobs);
         }
 
-        // Check if we have more items to load
-        setHasMore(newJobs.length === ITEMS_PER_PAGE);
+        // Use the next field from API response for pagination
+        setNextUrl(res?.next || null);
+        setHasMore(!!res?.next);
         setStatus("success");
       } catch (error) {
         setStatus("error");
@@ -74,21 +75,39 @@ const useInfiniteJobs = (
   // Initial load
   useEffect(() => {
     if (status === "loading") {
-      fetchJobs(0);
+      fetchJobs(false);
     }
   }, [fetchJobs, status]);
 
   const loadMore = useCallback(() => {
-    if (!hasMore || isLoadingMore) return;
+    if (!hasMore || isLoadingMore || !nextUrl) return;
 
     setIsLoadingMore(true);
-    const nextOffset = currentOffset + ITEMS_PER_PAGE;
 
-    fetchJobs(nextOffset, true).finally(() => {
-      setIsLoadingMore(false);
-      setCurrentOffset(nextOffset);
-    });
-  }, [hasMore, isLoadingMore, currentOffset, fetchJobs]);
+    // Use the next URL directly from the API response
+    const fetchNextPage = async () => {
+      try {
+        const res: JobsResponse = await getJobsByNextUrl(nextUrl);
+        // const res: JobsResponse = await getJobsByNextUrlMock(nextUrl);
+        const newJobs = res?.jobs || [];
+
+        setJobs((prev) => [...prev, ...newJobs]);
+        setNextUrl(res?.next || null);
+        setHasMore(!!res?.next);
+      } catch (error) {
+        setStatus("error");
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unexpected error occurred.");
+        }
+      } finally {
+        setIsLoadingMore(false);
+      }
+    };
+
+    fetchNextPage();
+  }, [hasMore, isLoadingMore, nextUrl]);
 
   return {
     jobs,

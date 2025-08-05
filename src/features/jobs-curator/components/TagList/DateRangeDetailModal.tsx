@@ -25,7 +25,7 @@ export default function DateRangeDetailModal({
     endDate: globalEndDate,
     setEndDate: setGlobalEndDate,
   } = useJobsCurator();
-  const isInternship = employmentType === "internship";
+  const isInternship = employmentType === "intern";
 
   // Local state for date range
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
@@ -48,7 +48,7 @@ export default function DateRangeDetailModal({
   // when switch from fulltime to internship, global end date is undefined
   // need to set to + 3 months from global start date
   useEffect(() => {
-    if (employmentType === "internship" && globalEndDate === undefined) {
+    if (employmentType === "intern" && globalEndDate === undefined) {
       setGlobalEndDate(addMonths(globalStartDate, 3));
       setDateRange({
         from: globalStartDate,

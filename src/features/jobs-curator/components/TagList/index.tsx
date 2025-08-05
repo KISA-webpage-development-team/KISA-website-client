@@ -24,7 +24,7 @@ export default function TagList() {
     useState(false);
 
   const employmentTypeLabel = useMemo(() => {
-    if (employmentType === "internship") {
+    if (employmentType === "intern") {
       const allTypes = Object.keys(internshipTypeLabels) as InternshipType[];
 
       // if all types are selected, show "전체"
@@ -44,9 +44,9 @@ export default function TagList() {
   // const [isDateRangeModalOpen, setIsDateRangeModalOpen] = useState(false);
 
   // const dateRangeLabel = useMemo(() => {
-  //   const label = employmentType === "internship" ? "기간" : "시작";
+  //   const label = employmentType === "intern" ? "기간" : "시작";
 
-  //   if (employmentType === "internship") {
+  //   if (employmentType === "intern") {
   //     return `${label}: ${formatKoreanDate(startDate)} ~ ${formatKoreanDate(
   //       endDate ?? addMonths(startDate, 3)
   //     )}`;

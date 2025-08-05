@@ -36,7 +36,7 @@ export type JobTagBadge = "체험형" | "전환형" | "해외대전형";
 export type JobCategory = "developer" | "marketing" | "hr" | "design" | "sales";
 
 // Employment type derived from boolean flags
-export type EmploymentType = "fulltime" | "internship";
+export type EmploymentType = "fulltime" | "intern";
 
 // Internship type
 export type InternshipType = "convertible" | "experiential" | "global";
