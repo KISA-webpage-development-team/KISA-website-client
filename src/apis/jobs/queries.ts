@@ -34,7 +34,7 @@ export async function getJobs(queryParams: JobListQueryParams) {
     const response = await client.get(url);
     return response.data;
   } catch (error) {
-    throw new Error("Error fetching jobs");
+    throw new Error("Error fetching jobs: ", error.message);
   }
 }
 
@@ -45,96 +45,10 @@ export async function getJobs(queryParams: JobListQueryParams) {
 export async function getJobsByNextUrl(nextUrl: string): Promise<JobsResponse> {
   try {
     // Remove "/api/v2" prefix from nextUrl since axios client handles base URL
-    const cleanUrl = nextUrl.replace('/api/v2', '');
+    const cleanUrl = nextUrl.replace("/api/v2", "");
     const response = await client.get(cleanUrl);
     return response.data;
   } catch (error) {
-    throw new Error("Error fetching jobs");
-  }
-}
-
-/**
- * @desc Mock function to fetch jobs using next URL
- * @route GET /mocks/jobs.json?{nextUrl}
- */
-export async function getJobsByNextUrlMock(nextUrl: string): Promise<JobsResponse> {
-  try {
-    const response = await fetch(`/mocks/jobs.json${nextUrl}`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch mock jobs data");
-    }
-
-    const data = await response.json();
-    const allJobs = data.jobs || [];
-
-    // Parse the nextUrl to extract offset and limit
-    const urlParams = new URLSearchParams(nextUrl.substring(1)); // Remove the '?' prefix
-    const offset = parseInt(urlParams.get('offset') || '0');
-    const limit = parseInt(urlParams.get('limit') || '30');
-
-    const startIndex = offset;
-    const endIndex = startIndex + limit;
-    const paginatedJobs = allJobs.slice(startIndex, endIndex);
-
-    return {
-      jobs: paginatedJobs,
-      next:
-        endIndex < allJobs.length
-          ? `?offset=${endIndex}&limit=${limit}`
-          : null,
-      total: allJobs.length,
-      hasMore: endIndex < allJobs.length,
-    };
-  } catch (error) {
-    throw new Error("Error fetching mock jobs data");
-  }
-}
-
-/**
- * @desc Mock function to fetch jobs data from local JSON
- * @route GET /api/v2/jobs/
- */
-export async function getJobsMock(
-  queryParams: JobListQueryParams
-): Promise<JobsResponse> {
-  try {
-    const response = await fetch(
-      `/mocks/jobs.json?${new URLSearchParams(
-        queryParams as Record<string, string>
-      ).toString()}`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch mock jobs data");
-    }
-
-    const data = await response.json();
-    const allJobs = data.jobs || [];
-
-    // Handle pagination if offset and limit are provided
-    if (queryParams.offset !== undefined && queryParams.limit !== undefined) {
-      const startIndex = queryParams.offset;
-      const endIndex = startIndex + queryParams.limit;
-      const paginatedJobs = allJobs.slice(startIndex, endIndex);
-
-      return {
-        jobs: paginatedJobs,
-        next:
-          endIndex < allJobs.length
-            ? `?offset=${endIndex}&limit=${queryParams.limit}`
-            : null,
-        total: allJobs.length,
-        hasMore: endIndex < allJobs.length,
-      };
-    }
-
-    // Return all jobs if no pagination parameters
-    return {
-      jobs: allJobs,
-      next: null,
-      total: allJobs.length,
-      hasMore: false,
-    };
-  } catch (error) {
-    throw new Error("Error fetching mock jobs data");
+    throw new Error("Error fetching jobs: ", error.message);
   }
 }

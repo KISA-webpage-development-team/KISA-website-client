@@ -12,15 +12,30 @@ import { JobCategory } from "../types/jobs";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { useJobsCurator } from "../contexts/JobsCuratorContext";
 
-// TODO: need to sync this map with BE
-// also need to move this to constants file or somewhere else
-// Korean labels for job categories
+// label coming from BE - wanted
+// TODO: in the future with more job sources,
+// we need to find a better way to handle this
 const positionLabels: Record<JobCategory, string> = {
   developer: "개발",
-  marketing: "마케팅",
-  hr: "인사",
+  engineering: "엔지니어링·설계",
+  finance: "금융",
+  business: "경영·비즈니스",
+  marketing: "마케팅·광고",
   design: "디자인",
+  hr: "HR",
+  medical: "의료·제약·바이오",
   sales: "영업",
+  customer_service: "고객서비스·리테일",
+  media: "미디어",
+  manufacturing: "제조·생산",
+  logistics: "물류·무역",
+  game: "게임 제작",
+  security: "정보보호",
+  education: "교육",
+  legal: "법률·법집행기관",
+  food: "식·음료",
+  construction: "건설·시설",
+  public: "공공·복지",
 };
 
 export default function JobCategoryDropdown() {
@@ -43,7 +58,7 @@ export default function JobCategoryDropdown() {
           <ChevronDownIcon className="w-6 h-6" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mt-2 min-w-64">
+      <DropdownMenuContent className="mt-2 min-w-64 max-h-64 overflow-y-auto">
         {Object.entries(positionLabels).map(([key, label]) => (
           <DropdownMenuItem
             key={key}

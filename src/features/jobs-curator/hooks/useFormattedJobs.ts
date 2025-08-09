@@ -15,6 +15,7 @@ const useFormattedJobs = (
     position: job.position,
     dueDate: job.dueDate,
     link: job.link,
+    source: job.source,
   };
 
   let jobBadges: JobTagBadge[] = [];

@@ -68,7 +68,7 @@ export default function Header({ session }) {
       >
         {/* <Link href='/' className="flex flex-col items-start gap-0">
           <Image
-            src='/images/kisa_logo.png'
+            src='/kisa_logo.png'
             alt='KISA Logo'
             width={42}
             height={42}
