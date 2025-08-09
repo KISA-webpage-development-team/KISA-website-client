@@ -1,5 +1,5 @@
 import React from "react";
-import { JobPosting, JobTagBadge } from "../../types/jobs";
+import { JobPosting, JobSource, JobTagBadge } from "../../types/jobs";
 import {
   Card,
   CardDescription,
@@ -14,6 +14,7 @@ import {
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
 import { format } from "date-fns";
+import Image from "next/image";
 
 interface JobPostingCardProps {
   jobPosting: JobPosting;
@@ -26,6 +27,17 @@ export default function JobPostingCard({
 }: JobPostingCardProps) {
   const navigateToJobPosting = () => {
     window.open(jobPosting.link, "_blank");
+  };
+
+  const getSourceLogo = (source: JobSource) => {
+    switch (source) {
+      case "wanted-api":
+        return "/jobs/wanted_logo.png";
+      case "kisa":
+        return "/kisa_logo.png";
+      default:
+        return "/kisa_logo.png";
+    }
   };
 
   return (
@@ -41,7 +53,15 @@ export default function JobPostingCard({
         <CardDescription
           className={`${sejongHospitalLight.className} flex flex-row items-center justify-between`}
         >
-          <span>{jobPosting.company}</span>
+          <div className="flex items-center gap-2">
+            <span>{jobPosting.company}</span>
+            <Image
+              src={getSourceLogo(jobPosting.source)}
+              alt={`${jobPosting.source} logo`}
+              width={25}
+              height={25}
+            />
+          </div>
           <div className="flex flex-row items-center gap-2">
             {jobBadges.map((badge) => (
               <Badge

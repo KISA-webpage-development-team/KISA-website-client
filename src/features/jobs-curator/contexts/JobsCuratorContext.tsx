@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import {
   EmploymentType,
   InternshipType,
+  JobCategory,
   SupportedCountry,
 } from "../types/jobs";
 import { getDefaultInternshipDateRange } from "../utils/getDefaultDateRange";
@@ -15,8 +16,8 @@ type DateRangeState = {
 };
 
 type JobsCuratorState = {
-  category: string | undefined;
-  setCategory: (c: string | undefined) => void;
+  category: JobCategory | undefined;
+  setCategory: (c: JobCategory | undefined) => void;
   selectedCountry: SupportedCountry;
   setSelectedCountry: (c: SupportedCountry) => void;
   employmentType: EmploymentType | undefined;
@@ -42,16 +43,17 @@ export const JobsCuratorProvider = ({
     useState<SupportedCountry>("한국");
 
   // category header
-  const [category, setCategory] = useState<string | undefined>(undefined);
+  const [category, setCategory] = useState<JobCategory | undefined>(undefined);
 
   // tag filters
-  // NOTE: business decision: default to experiential internship
-  // because this is the main target of the app
+  // NOTE: business decision: default to experiential + convertible internship
+  // although main target is experiential, there are not so many jobs right now
   const [employmentType, setEmploymentType] = useState<
     EmploymentType | undefined
   >("intern");
   const [internshipTypes, setInternshipTypes] = useState<InternshipType[]>([
     "experiential",
+    "convertible",
   ]);
 
   // date range global state

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { HookStatus } from "@/types/hook";
 import { Job, JobListQueryParams } from "../types/jobs";
 import { getJobs, getJobsByNextUrl, JobsResponse } from "@/apis/jobs/queries";
+import useKisaJobs from "./useKisaJobs";
 
 const LIMIT = 500;
 
@@ -23,6 +24,9 @@ const useInfiniteJobs = (
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [nextUrl, setNextUrl] = useState<string | null>(null);
+
+  // Get filtered KISA jobs based on query params
+  const { filteredJobs: kisaJobs, hasKisaJobs } = useKisaJobs(queryParams);
 
   // Reset pagination when query params change
   useEffect(() => {
@@ -53,7 +57,9 @@ const useInfiniteJobs = (
         if (isLoadMore) {
           setJobs((prev) => [...prev, ...newJobs]);
         } else {
-          setJobs(newJobs);
+          // For initial load, combine KISA jobs with API jobs
+          const allJobs = hasKisaJobs ? [...kisaJobs, ...newJobs] : newJobs;
+          setJobs(allJobs);
         }
 
         // Use the next field from API response for pagination
@@ -69,7 +75,7 @@ const useInfiniteJobs = (
         }
       }
     },
-    [queryParams]
+    [queryParams, kisaJobs, hasKisaJobs]
   );
 
   // Initial load
