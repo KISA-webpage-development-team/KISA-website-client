@@ -334,3 +334,5 @@ It's a good example of how to keep the codes clean and elegant.
 - Write explanatory comments, but not too much.
 - Use explicit naming for variables, functions, components, etc. Don't be lazy. Don't write something like `item` or `element`. Do it like `postItem` or `commentItem`.
 - When you need to write conditional rendering, avoid using `&&` or `||` directly in JSX. Create a separate const variable to handle this. For example, `const isLoading = commentsStatus === "loading" || sessionStatus === "loading"`, then use `isLoading && <div>Loading...</div>` in JSX. [`CommentItem.tsx`](https://github.com/KISA-webpage-development-team/KISA-website-client/blob/main/src/features/bulletin-board/components/comment/CommentItem.tsx) is a good example.
+
+author: Jioh In (jiohin@umich.edu)
