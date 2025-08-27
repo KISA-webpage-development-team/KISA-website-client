@@ -7,23 +7,7 @@
 // url
 
 const homeCarouselData = [
-  {
-    id: 'f25-26_new_student_pocha',
-    title: '[25-26] 신/편입생 환영회',
-    id: 'f25-26_new_student_pocha',
-    title: '[25-26] 신/편입생 환영회',
-    desc: (
-      <p>
-        앤아버는 처음이라 한편으로는 걱정되신다고요? 그런 걱정 싹 날려버리게
-        신입생 환영회로 오세요!
-        <br />
-        미시간에 대한 궁금증도 해결하고, 꿀팁도 듣고, 친구도 사귀고, 선후배들과
-        만날 수 있는 신환회로 초대합니다 💌
-      </p>
-    ),
-    url: 'https://www.instagram.com/p/DLyzKkXztO-/?img_index=1',
-    url: 'https://www.instagram.com/p/DLyzKkXztO-/?img_index=1',
-  },
+
   {
     id: 'fa24_small_group_recruitment',
     title: '소그룹 신규 모집',
