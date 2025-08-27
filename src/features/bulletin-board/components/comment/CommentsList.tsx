@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import CommentItem from "./CommentItem";
-import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
+import CommentItem from './CommentItem';
+import { useCommentsContext } from '@/features/bulletin-board/contexts/CommentsContext';
 
-import { Comment } from "@/types/comment";
+import { Comment } from '@/types/comment';
 
 type CommentsListProps = {
   comments: Comment[];
@@ -23,7 +23,7 @@ export default function CommentsList({
   const commentAuthorMap = getCommentAuthorMap(comments, session?.user?.email);
 
   return (
-    <ul className="flex flex-col gap-1 mt-2">
+    <ul className='flex flex-col gap-1 mt-2'>
       {comments?.map((comment) => (
         <CommentItem
           key={`comment-${comment.commentid}`}

@@ -33,7 +33,7 @@ export default function PostSubmitButton({
     <CustomButton
       type="primary"
       disabled={disabled || loading}
-      onClick={handleSubmit}
+      onPress={handleSubmit}
       className="w-1/4 h-10 text-sm md:text-base"
       text={loading ? "로딩 중..." : mode === "create" ? "등록" : "수정"}
     />

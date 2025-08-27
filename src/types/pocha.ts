@@ -7,21 +7,25 @@ interface PochaInfo {
   ongoing: boolean;
 }
 
-type PochaTab = "menu" | "orders";
-type PochaDashboardTab = "orders" | "stock" | "history";
+type PochaTab = 'menu' | 'orders';
+type PochaDashboardTab = 'orders' | 'stock' | 'history';
 
 export type { PochaInfo, PochaTab, PochaDashboardTab };
 
 // MENU -----------------------------------------------------------------------
 
-interface MenuItem {
+interface MenuItem extends MenuItemRaw {
   menuID: number;
+}
+
+interface MenuItemRaw {
   nameKor: string;
   nameEng: string;
+  category?: string;
+  description?: string;
   price: number;
   stock: number;
   isImmediatePrep: boolean;
-  parentPochaId: number;
   ageCheckRequired: boolean;
 }
 
@@ -35,7 +39,7 @@ interface MenuByCategory {
   menusList: MenuItem[];
 }
 
-export type { MenuItem, MenuByCategory, MenuItemWithQuantity };
+export type { MenuItem, MenuItemRaw, MenuByCategory, MenuItemWithQuantity };
 
 // CART -----------------------------------------------------------------------
 interface CartItem {
@@ -54,7 +58,7 @@ type Cart = Map<number, CartItem>;
 
 type PayInfo = {
   amount: number;
-  ageCheckRequired: "true" | "false";
+  ageCheckRequired: 'true' | 'false';
 };
 
 export type { Cart, CartItem, AddItemToCartBody, PayInfo };
@@ -62,10 +66,10 @@ export type { Cart, CartItem, AddItemToCartBody, PayInfo };
 // ORDER ----------------------------------------------------------------------
 
 const enum OrderStatus {
-  PENDING = "pending",
-  PREPARING = "preparing",
-  READY = "ready",
-  CLOSED = "closed",
+  PENDING = 'pending',
+  PREPARING = 'preparing',
+  READY = 'ready',
+  CLOSED = 'closed',
 }
 
 interface OrderItem {

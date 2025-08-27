@@ -243,6 +243,7 @@ export default function SignUpPage() {
             termChecked={websiteTermChecked}
             setTermChecked={setWebsiteTermChecked}
           />
+          
         </>
 
         <button
