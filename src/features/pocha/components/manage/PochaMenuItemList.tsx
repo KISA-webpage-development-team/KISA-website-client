@@ -1,9 +1,18 @@
-import React from 'react';
-import { usePochaManage } from '../../contexts/PochaManageContext';
-import CustomDisplay from '@/deprecated-components/shared/CustomDisplay';
-import { CustomButton } from '@/components/ui/button';
+import React, { useState } from "react";
+import { usePochaManage } from "../../contexts/PochaManageContext";
+import { CustomButton, CustomImageButton } from "@/components/ui/button";
+import {
+  sejongHospitalBold,
+  sejongHospitalLight,
+} from "@/utils/fonts/textFonts";
+import { PencilIcon, TrashcanIcon } from "@/components/ui/icon";
+import { MenuItemRaw } from "@/types/pocha";
+import PochaMenuItemForm from "./PochaMenuItemForm";
+
 export default function PochaMenuItemList() {
   const { menus, setMenus } = usePochaManage();
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [editingMenu, setEditingMenu] = useState<MenuItemRaw | null>(null);
 
   const onDelete = (nameEngToDelete: string, nameKor: string) => {
     if (window.confirm(`정말 ${nameKor}을(를) 삭제하시겠습니까?`)) {
@@ -14,49 +23,90 @@ export default function PochaMenuItemList() {
     }
   };
 
+  const onEdit = (menu: MenuItemRaw) => {
+    setEditingMenu(menu);
+    setIsEditFormOpen(true);
+  };
+
+  const handleItemFormClose = () => {
+    setIsEditFormOpen(false);
+    setEditingMenu(null);
+  };
+
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {menus.map((menu) => (
-        <div key={menu.nameEng}>
-          <CustomDisplay
-            type='text'
-            label='메뉴 이름 (한글)'
-            value={menu.nameKor}
-          />
-          <CustomDisplay
-            type='text'
-            label='메뉴 이름 (영어)'
-            value={menu.nameEng}
-          />
-          <CustomDisplay type='text' label='카테고리' value={menu.category} />
-          <CustomDisplay
-            type='number'
-            label='가격'
-            value={menu.price?.toString()}
-          />
-          <CustomDisplay
-            type='number'
-            label='재고'
-            value={menu.stock?.toString()}
-          />
-          <CustomDisplay
-            type='checkbox'
-            label='즉시 준비'
-            value={menu.isImmediatePrep}
-          />
-          <CustomDisplay
-            type='checkbox'
-            label='연령 확인 필요'
-            value={menu.ageCheckRequired}
-          />
-          <div>
-            <CustomButton
-              text='삭제'
-              onClick={() => onDelete(menu.nameEng, menu.nameKor)}
-            />
+        <div
+          key={menu.nameEng}
+          className={`flex flex-col ${sejongHospitalBold.className} gap-2
+          bg-gray-100 p-4 rounded-lg hover:bg-gray-200 transition-colors`}
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg">
+              {menu.nameKor} ({menu.nameEng})
+            </h3>
+            <div className="flex items-center">
+              <CustomImageButton
+                text="수정하기"
+                type="tertiary"
+                onClick={() => onEdit(menu)}
+                icon={<PencilIcon color="gray" />}
+                forSubmit={false}
+              />
+              <CustomImageButton
+                text="삭제하기"
+                type="tertiary"
+                onClick={() => onDelete(menu.nameEng, menu.nameKor)}
+                icon={<TrashcanIcon color="gray" />}
+                forSubmit={false}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 text-base">
+            <span>
+              카테고리:{" "}
+              <span className={`${sejongHospitalLight.className}`}>
+                {menu.category}
+              </span>
+            </span>
+            <span>
+              가격:{" "}
+              <span className={`${sejongHospitalLight.className}`}>
+                ${menu.price?.toLocaleString()}
+              </span>
+            </span>
+            <span>
+              재고:{" "}
+              <span className={`${sejongHospitalLight.className}`}>
+                {menu.stock}개
+              </span>
+            </span>
+            <div className="flex gap-4">
+              <span>
+                즉시 준비:{" "}
+                <span className={`${sejongHospitalLight.className}`}>
+                  {menu.isImmediatePrep ? "예" : "아니오"}
+                </span>
+              </span>
+              <span>
+                연령 확인:{" "}
+                <span className={`${sejongHospitalLight.className}`}>
+                  {menu.ageCheckRequired ? "필요" : "불필요"}
+                </span>
+              </span>
+            </div>
           </div>
         </div>
       ))}
+
+      {isEditFormOpen && (
+        <PochaMenuItemForm
+          closeItemForm={handleItemFormClose}
+          mode="update"
+          initialData={editingMenu}
+        />
+      )}
     </div>
   );
 }

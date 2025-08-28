@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
-export default function UserInfo({ email, image, name }) {
+export default function UserInfo({ email, image, name, textClassName = "" }) {
   // user page is navigated by using email's first part
 
   return (
@@ -19,6 +19,7 @@ export default function UserInfo({ email, image, name }) {
       </div>
       <p
         className={`${sejongHospitalBold.className}
+        ${textClassName}
       hidden lg:block text-lg ml-3 mr-3 
       text-white hover:text-michigan-maize`}
       >

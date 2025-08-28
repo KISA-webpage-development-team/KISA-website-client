@@ -7,8 +7,8 @@ interface PochaInfo {
   ongoing: boolean;
 }
 
-type PochaTab = 'menu' | 'orders';
-type PochaDashboardTab = 'orders' | 'stock' | 'history';
+type PochaTab = "menu" | "orders";
+type PochaDashboardTab = "orders" | "stock" | "history";
 
 export type { PochaInfo, PochaTab, PochaDashboardTab };
 
@@ -27,6 +27,7 @@ interface MenuItemRaw {
   stock: number;
   isImmediatePrep: boolean;
   ageCheckRequired: boolean;
+  imageURL?: string;
 }
 
 interface MenuItemWithQuantity {
@@ -58,7 +59,7 @@ type Cart = Map<number, CartItem>;
 
 type PayInfo = {
   amount: number;
-  ageCheckRequired: 'true' | 'false';
+  ageCheckRequired: "true" | "false";
 };
 
 export type { Cart, CartItem, AddItemToCartBody, PayInfo };
@@ -66,10 +67,10 @@ export type { Cart, CartItem, AddItemToCartBody, PayInfo };
 // ORDER ----------------------------------------------------------------------
 
 const enum OrderStatus {
-  PENDING = 'pending',
-  PREPARING = 'preparing',
-  READY = 'ready',
-  CLOSED = 'closed',
+  PENDING = "pending",
+  PREPARING = "preparing",
+  READY = "ready",
+  CLOSED = "closed",
 }
 
 interface OrderItem {

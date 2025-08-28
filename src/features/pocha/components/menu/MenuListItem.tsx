@@ -60,7 +60,7 @@ export default function MenuListItem({
         {/* Menu Item Image */}
         <figure className="relative h-[6rem] w-[6rem] items-center flex-shrink-0">
           <Image
-            src={getMenuImagePath(menuID)}
+            src={menu.imageURL || getMenuImagePath(menuID)}
             alt={nameEng}
             priority={isPriority}
             fill

@@ -6,7 +6,8 @@ import React from "react";
 import { heebo } from "@/utils/fonts/textFonts";
 
 export default function LoginButton({ session = false, size = "md" }) {
-  const buttonStyle = "bg-white text-black shadow-lg font-bold";
+  const buttonStyle =
+    "bg-white text-black shadow-lg font-bold hover:bg-gray-100";
 
   return session ? (
     <Button
