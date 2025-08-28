@@ -31,6 +31,14 @@ export default function BoardsSummary() {
         console.error(err);
       }
     };
+    const fetchJobPosts = async () => {
+      try {
+        const res = await getBoardPosts("job-announcement", 10, 0);
+        setHotPosts(res.slice(0, 6));
+      } catch (err) {
+        console.error(err);
+      }
+    };
     const fetchCommunityPosts = async () => {
       try {
         const res = await getBoardPosts("community", 10, 0);
@@ -41,7 +49,8 @@ export default function BoardsSummary() {
     };
 
     // fetchAnnouncementPosts();
-    fetchAcademicPosts();
+    // fetchAcademicPosts();
+    fetchJobPosts();
     fetchCommunityPosts();
   }, []);
 
@@ -51,7 +60,7 @@ export default function BoardsSummary() {
   flex flex-col justify-center 
   md:flex-row gap-4"
     >
-      <HomePostView type="academic" posts={hotPosts} />
+      <HomePostView type="job-announcement" posts={hotPosts} />
       <HomePostView type="community" posts={recentPosts} />
     </div>
   );
