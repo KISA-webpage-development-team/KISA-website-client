@@ -176,6 +176,7 @@ export default function PochaForm({
         text={mode === "create" ? "포차 생성하기" : "포차 수정하기"}
         disabled={!isFormValid}
         className={`${sejongHospitalBold.className} w-full`}
+        forSubmit={true}
       />
     </form>
   );
