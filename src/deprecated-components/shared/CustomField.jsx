@@ -10,21 +10,21 @@
 // errorState: "none" (default) | "alert" | "error"
 // errorMsg: error message
 
-import React from "react";
+import React from 'react';
 
-import CustomLabel from "./CustomLabel";
-import CustomInput from "./CustomInput";
-import ErrorDisplay from "./ErrorDisplay";
+import CustomLabel from './CustomLabel';
+import CustomInput from './CustomInput';
+import ErrorDisplay from './ErrorDisplay';
 
 export default function CustomField({
   value,
   setValue,
   label,
-  placeholder = "",
-  type = "text",
+  placeholder = '',
+  type = 'text',
   required = false,
   isError = false,
-  errorState = "none",
+  errorState = 'none',
   errorMsg,
 }) {
   return (
@@ -33,7 +33,13 @@ export default function CustomField({
       <CustomInput
         type={type}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          if (type === 'checkbox') {
+            setValue(e.target.checked);
+            return;
+          }
+          setValue(e.target.value);
+        }}
         placeholder={placeholder}
         required={required}
       />

@@ -10,27 +10,44 @@ import { UserSession } from '@/lib/next-auth/types';
 import { combineDateAndTime } from '@/utils/formats/date';
 import { createPocha } from '@/apis/pocha/mutations';
 import { useRouter } from 'next/navigation';
-
-export default function PochaForm() {
+import { PochaInfo } from '@/types/pocha';
+import { separateDateAndTime } from '@/utils/formats/date';
+interface PochaFormProps {
+  existingPochaInfo?: PochaInfo;
+}
+export default function PochaForm({ existingPochaInfo }: PochaFormProps) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
 
+  
+  const { date: existingStartDate, time: existingStartTime } = separateDateAndTime(existingPochaInfo?.startDate);
+  const { date: existingEndDate, time: existingEndTime } = separateDateAndTime(existingPochaInfo?.endDate);
+
+  console.log("existingStartDate: ", existingStartDate);
+  console.log("existingStartTime: ", existingStartTime);
+  console.log("existingEndDate: ", existingEndDate);
+  console.log("existingEndTime: ", existingEndTime);
+
   const email = session?.user?.email;
   const token = session?.token;
 
   const { menus } = usePochaManage();
-  console.log(menus);
-  const [title, setTitle] = useState<string>(null);
-  const [description, setDescription] = useState<string>(null);
-  const [startDate, setStartDate] = useState<string>(null);
-  const [startTime, setStartTime] = useState<string>(null);
-  const [endDate, setEndDate] = useState<string>(null);
-  const [endTime, setEndTime] = useState<string>(null);
 
-  // const [disabled, setDisabled] = useState(true);
+  const [title, setTitle] = useState<string>(existingPochaInfo?.title || null);
+  const [description, setDescription] = useState<string>(existingPochaInfo?.description || null);
+  const [startDate, setStartDate] = useState<string>(existingStartDate || null);
+  const [startTime, setStartTime] = useState<string>(existingStartTime || null);
+  const [endDate, setEndDate] = useState<string>(existingEndDate || null);
+  const [endTime, setEndTime] = useState<string>(existingEndTime || null);
+
+  console.log("startDate: ", startDate);
+  console.log("startTime: ", startTime);
+  console.log("endDate: ", endDate);
+  console.log("endTime: ", endTime);
+
 
   const pochaInfoFields = useMemo(
     () => [

@@ -119,3 +119,42 @@ export function combineDateAndTime(date, time) {
 
   return `${year_formatted}-${month_formatted}-${day_formatted} ${hours_formatted}:${minutes_formatted}:${seconds_formatted}`;
 }
+
+/**
+ * @desc Date String에서 날짜와 시간을 분리하는 함수
+ * @params ex) Sun, 31 Aug 2025 20:00:00 GMT
+ * @return ex) date: 2025-08-31, time: 20:00
+ */
+export function separateDateAndTime(dateTimeString) {
+   try {
+     // Date 객체로 파싱
+     const date = new Date(dateTimeString);
+
+     // 유효한 날짜인지 확인
+     if (isNaN(date.getTime())) {
+       throw new Error('Invalid date string');
+     }
+
+     // 날짜 포맷팅 (YYYY-MM-DD)
+     const year = date.getUTCFullYear();
+     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+     const day = String(date.getUTCDate()).padStart(2, '0');
+     const formattedDate = `${year}-${month}-${day}`;
+
+     // 시간 포맷팅 (HH:MM) - 24시간 형식
+     const hours = String(date.getUTCHours()).padStart(2, '0');
+     const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+     const formattedTime = `${hours}:${minutes}`;
+
+     return {
+       date: formattedDate,
+       time: formattedTime,
+     };
+   } catch (error) {
+     console.error('Error parsing date:', error.message);
+     return {
+       date: null,
+       time: null,
+     };
+   }
+}

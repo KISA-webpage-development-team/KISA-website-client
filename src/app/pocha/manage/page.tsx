@@ -1,17 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import useAdmin from '@/lib/next-auth/useAdmin';
 import usePocha from '@/features/pocha/hooks/usePocha';
+import useMenu from '@/features/pocha/hooks/useMenu';
+import { useSession } from 'next-auth/react';
+import { UserSession } from '@/lib/next-auth/types';
 
 // ui components
 import PochaInfoForm from '@/features/pocha/components/manage/PochaForm';
 import { LoadingSpinner, NotAuthorized } from '@/components/ui/feedback';
 import { PochaManageProvider } from '@/features/pocha/contexts/PochaManageContext';
 import { CustomButton } from '@/components/ui/button';
-
+import PochaSummary from '@/features/pocha/components/manage/PochaSummary';
 import { sejongHospitalBold } from '@/utils/fonts/textFonts';
+import { usePochaManage } from '@/features/pocha/contexts/PochaManageContext';
+import { MenuItemRaw } from '@/types/pocha';
+import { convertMenuByCategoryToRawList } from '@/features/pocha/utils/convertMenuType';
 
 export default function ManagePage() {
   return (
@@ -27,7 +32,7 @@ export default function ManagePage() {
 
 function PochaManagePageContent() {
   const [isNewPochaFormOpen, setIsNewPochaFormOpen] = useState<boolean>(false);
-
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const { isAdmin, email, token, status: adminStatus } = useAdmin();
   const { pochaInfo, status: pochaStatus, error: pochaFetchError } = usePocha();
 
@@ -47,6 +52,20 @@ function PochaManagePageContent() {
   if (!isAdmin) {
     return <NotAuthorized />;
   }
+  const pochaid = pochaInfo?.pochaID;
+  const { data: session, status: sessionStatus } = useSession() as {
+    data: UserSession | undefined;
+    status: string;
+  };
+
+  const { menuList, status: menuStatus } = useMenu(pochaid, session?.token);
+  const { setMenus } = usePochaManage();
+  useEffect(() => {
+    if (!noPochaAvailable && menuStatus === 'success' && menuList) {
+      setMenus(convertMenuByCategoryToRawList(menuList));
+      //수정이
+    }
+  }, [noPochaAvailable, menuStatus]);
 
   return (
     <>
@@ -59,9 +78,18 @@ function PochaManagePageContent() {
           {isNewPochaFormOpen && <PochaInfoForm />}
         </div>
       )}
+      {!noPochaAvailable && (
+        <div>
+          <PochaSummary pochaInfo={pochaInfo} />
+          <CustomButton
+            text='수정하기'
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          />
+          {isEditing && <PochaInfoForm existingPochaInfo={pochaInfo} />}
+        </div>
+      )}
     </>
   );
 }
-
-// if ongoing/scheduled pocha exists, hide 'add new pocha' button, show pocha summary and edit button
-// if no pocha exists = response: {}, 204, show 'add new pocha' button
