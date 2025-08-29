@@ -6,7 +6,10 @@
 import { MenuItem } from "@/types/pocha";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import React from "react";
-import { getMenuImagePath } from "@/features/pocha/utils/getImagePath";
+import {
+  defaultImageURL,
+  getMenuImagePath,
+} from "@/features/pocha/utils/getImagePath";
 import Image from "next/image";
 
 interface MenuItemCardProps {
@@ -60,7 +63,7 @@ export default function MenuListItem({
         {/* Menu Item Image */}
         <figure className="relative h-[6rem] w-[6rem] items-center flex-shrink-0">
           <Image
-            src={menu.imageURL || getMenuImagePath(menuID)}
+            src={getMenuImagePath(menuID) || defaultImageURL}
             alt={nameEng}
             priority={isPriority}
             fill

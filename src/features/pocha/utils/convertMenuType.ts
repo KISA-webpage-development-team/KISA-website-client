@@ -1,4 +1,4 @@
-import { MenuByCategory, MenuItemRaw } from '@/types/pocha';
+import { MenuByCategory, MenuItemRaw } from "@/types/pocha";
 /**
  * converts list of MenuCategory to list of MenuItemRaw
  */

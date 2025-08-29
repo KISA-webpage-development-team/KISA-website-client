@@ -19,6 +19,7 @@ interface MenuItem extends MenuItemRaw {
 }
 
 interface MenuItemRaw {
+  menuID?: number;
   nameKor: string;
   nameEng: string;
   category?: string;

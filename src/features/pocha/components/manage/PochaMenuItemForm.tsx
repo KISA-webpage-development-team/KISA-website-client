@@ -8,10 +8,10 @@ import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import PochaCloseIcon from "@/components/ui/icon/PochaCloseIcon";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import { postPresignedURL } from "@/apis/images/queries";
-import { putImageToS3 } from "@/apis/images/mutations";
-import { getPresignedURL } from "@/apis/images/queries";
 import { HorizontalDivider } from "@/components/ui/divider";
+import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
+import Image from "next/image";
+import VerticalDivider from "@/components/ui/divider/VerticalDivider";
 
 interface PochaMenuItemFormProps {
   closeItemForm: () => void;
@@ -55,36 +55,83 @@ export default function PochaMenuItemForm({
     status: string;
   };
 
-  // const uploadImage = async (file: File) => {
-  //   try {
-  //     if (!session?.token) {
-  //       alert("로그인이 필요합니다.");
-  //       return;
-  //     }
+  // Add this state variable after the imageURL state
+  const [cloudinaryPublicId, setCloudinaryPublicId] = useState<string>("");
 
-  //     // Make api call to get presigned URL
-  //     let fileKey = `temp/${new Date().toISOString()}-${file.name}`;
-  //     let fileType = file.type;
-  //     const postRes = await postPresignedURL(session.token, {
-  //       fileKey,
-  //       fileType,
-  //     });
+  // Add this function after the uploadImage function
+  const deleteImageFromCloudinary = async (publicId: string) => {
+    try {
+      if (!publicId || !session?.token) return;
 
-  //     // Upload file to S3 using presigned URL
-  //     await putImageToS3(postRes?.presignedURL, file);
-  //     const getRes = await getPresignedURL(session.token, {
-  //       fileKey,
-  //       fileType,
-  //     });
+      const response = await fetch("/api/delete-from-cloudinary", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.token}`,
+        },
+        body: JSON.stringify({ publicId }),
+      });
 
-  //     // Set the image URL
-  //     setImageURL(getRes?.fileURL);
-  //   } catch (error) {
-  //     console.error("Error uploading image:", error);
-  //     alert("이미지 업로드에 실패했습니다.");
-  //   }
-  // };
+      if (!response.ok) {
+        console.error("Failed to delete image from Cloudinary");
+      }
+    } catch (error) {
+      console.error("Error deleting image from Cloudinary:", error);
+    }
+  };
 
+  // Add this state variable after the imageURL state
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  // Replace the empty uploadImage function with this complete implementation
+  const uploadImage = async (file: File) => {
+    try {
+      if (!session?.token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+
+      setIsUploading(true);
+
+      // Create a unique filename for Cloudinary
+      const timestamp = new Date().getTime();
+      const fileName = `pocha-menu-${nameEng || "temp"}-${timestamp}`;
+
+      // format filename for cloudinary
+      const formattedFileName = fileName.replace(/ /g, "-");
+
+      // Create FormData for the upload
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("public_id", `/${formattedFileName}`);
+      formData.append("folder", "temp");
+      formData.append("resource_type", "image");
+
+      // Upload to Cloudinary
+      const response = await fetch("/api/upload-to-cloudinary", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const result = await response.json();
+
+      // Set the image URL from Cloudinary response
+      setImageURL(result.secure_url);
+      setCloudinaryPublicId(result.public_id);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("이미지 업로드에 실패했습니다.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
   const textFields = useMemo(
     () => [
       {
@@ -205,16 +252,13 @@ export default function PochaMenuItemForm({
       imageURL, // Add image URL
     };
 
-    // check if the menu item already exists
-    if (isDuplicate(menus, newMenuItem.nameKor, newMenuItem.nameEng)) {
-      alert("이미 존재하는 메뉴입니다.");
-      return;
-    }
-
     // find the menu item to update
-    const updatedMenus = menus.map((menu) =>
-      menu.nameEng === initialData?.nameEng ? newMenuItem : menu
-    );
+    const updatedMenus = menus.map((menu) => {
+      if (menu.nameEng === initialData?.nameEng) {
+        return newMenuItem;
+      }
+      return menu;
+    });
     setMenus(updatedMenus);
 
     closeItemForm();
@@ -240,6 +284,37 @@ export default function PochaMenuItemForm({
     return true;
   }, [textFields, numberFields]);
 
+  // Add this function to handle image removal
+  const removeImage = () => {
+    if (cloudinaryPublicId) {
+      deleteImageFromCloudinary(cloudinaryPublicId);
+    }
+    setImageURL("");
+    setCloudinaryPublicId("");
+  };
+
+  // Add this function to handle form closure cleanup
+  const handleCloseForm = () => {
+    // Clean up temporary image if modal is closed without submitting
+    if (cloudinaryPublicId && imageURL) {
+      deleteImageFromCloudinary(cloudinaryPublicId);
+    }
+    closeItemForm();
+  };
+
+  const showImageSection = useMemo(() => {
+    if (mode === "create") {
+      return true;
+    }
+    if (
+      mode === "update" &&
+      getMenuImagePath(initialData?.menuID) !== defaultImageURL
+    ) {
+      return true;
+    }
+    return false;
+  }, [mode, initialData]);
+
   return (
     <div className="fixed inset-0 z-[99999] bg-black/30">
       <div className="relative z-[100000] w-full h-full flex items-center justify-center p-4">
@@ -251,7 +326,7 @@ export default function PochaMenuItemForm({
             </h2>
             <button
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              onClick={closeItemForm}
+              onClick={handleCloseForm}
             >
               <PochaCloseIcon size="large" />
             </button>
@@ -286,44 +361,79 @@ export default function PochaMenuItemForm({
                 </div>
               </div>
 
-              {/* TODO:Image Upload Section */}
-              {/* <HorizontalDivider />
-              <div className="flex flex-col gap-2">
-                <label
-                  className={`font-medium ${sejongHospitalBold.className}`}
-                >
-                  메뉴 이미지
-                </label>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        uploadImage(file);
-                      }
-                    }}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                  />
-                </div>
-                {imageURL && (
-                  <div className="mt-2">
-                    <img
-                      src={imageURL}
-                      alt="메뉴 이미지"
-                      className="w-32 h-32 object-cover rounded-lg border"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setImageURL("")}
-                      className="mt-2 text-sm text-red-600 hover:text-red-800"
+              {/* Image Upload Section */}
+              {/* only shows when getMenuImagePath is not defaultImageURL */}
+              {showImageSection && (
+                <>
+                  <HorizontalDivider />
+                  <div className="flex flex-col gap-2">
+                    <label
+                      className={`font-medium ${sejongHospitalBold.className}`}
                     >
-                      이미지 제거
-                    </button>
+                      메뉴 이미지
+                    </label>
+                    <div className="flex flex-row gap-8">
+                      {/* original image */}
+
+                      {mode === "update" && (
+                        <div className="flex flex-col gap-2">
+                          <span className="text-sm text-gray-500">
+                            기존 이미지
+                          </span>
+                          <img
+                            src={getMenuImagePath(initialData?.menuID)}
+                            alt="메뉴 이미지"
+                            className="w-32 h-32 object-cover rounded-lg border"
+                          />
+                        </div>
+                      )}
+
+                      {/* upload image */}
+                      <div className="flex flex-col gap-2">
+                        <span className="text-sm text-gray-500">새 이미지</span>
+                        <div className="flex flex-row gap-2">
+                          {imageURL && (
+                            <div className="mt-2">
+                              <img
+                                src={imageURL}
+                                alt="메뉴 이미지"
+                                className="w-32 h-32 object-cover rounded-lg border"
+                              />
+                              <button
+                                type="button"
+                                onClick={removeImage}
+                                className="mt-2 text-sm text-red-600 hover:text-red-800"
+                              >
+                                이미지 제거
+                              </button>
+                            </div>
+                          )}
+                          <div className="flex flex-col gap-4">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                // only png
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  uploadImage(file);
+                                }
+                              }}
+                              disabled={isUploading}
+                              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            />
+                            {isUploading && (
+                              <div className="text-sm text-blue-600">
+                                이미지 업로드 중...
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div> */}
+                </>
+              )}
 
               <CustomButton
                 text={mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
@@ -332,7 +442,7 @@ export default function PochaMenuItemForm({
                     ? handleSubmitButtonClick
                     : handleUpdateButtonClick
                 }
-                disabled={!isFormValid}
+                disabled={!isFormValid || isUploading}
                 type="secondary"
                 className={`${sejongHospitalBold.className} w-full mt-4`}
               />
