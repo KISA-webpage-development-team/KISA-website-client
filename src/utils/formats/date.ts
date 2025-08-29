@@ -13,7 +13,7 @@ export function formatRelativeTime(value) {
   const betweenTime = Math.floor(
     (today.getTime() - timeValue.getTime()) / 1000 / 60
   );
-  if (betweenTime < 1) return "방금 전";
+  if (betweenTime < 1) return '방금 전';
   if (betweenTime < 60) {
     return `${betweenTime}분 전`;
   }
@@ -49,17 +49,17 @@ export function formatDateOrTime(date) {
     today.getDate() === target.getDate()
   ) {
     return target
-      .toLocaleTimeString("ko-KR", {
-        hour: "2-digit",
-        minute: "2-digit",
+      .toLocaleTimeString('ko-KR', {
+        hour: '2-digit',
+        minute: '2-digit',
         hour12: false,
       })
-      .replace(/^24:/, "00:");
+      .replace(/^24:/, '00:');
   } else {
     let currentYear = new Date().getFullYear();
     let year = target.getFullYear().toString().slice(-2);
-    let month = ("0" + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
-    let day = ("0" + target.getDate()).slice(-2);
+    let month = ('0' + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
+    let day = ('0' + target.getDate()).slice(-2);
 
     return `${year}.${month}.${day}`;
   }
@@ -77,10 +77,10 @@ export function formatDateTimeString(date) {
   const target = new Date(date);
 
   let year = target.getFullYear();
-  let month = ("0" + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
-  let day = ("0" + target.getDate()).slice(-2);
-  let hour = ("0" + target.getHours()).slice(-2);
-  let minute = ("0" + target.getMinutes()).slice(-2);
+  let month = ('0' + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
+  let day = ('0' + target.getDate()).slice(-2);
+  let hour = ('0' + target.getHours()).slice(-2);
+  let minute = ('0' + target.getMinutes()).slice(-2);
 
   return `${year}.${month}.${day} ${hour}:${minute}`;
 }
@@ -89,4 +89,72 @@ export function formatDateTimeString(date) {
 // output: 2024.04.11
 export function birthDateFormatter(year, month, day) {
   return `${year}.${month}.${day}`;
+}
+
+export function combineDateAndTime(date, time) {
+  if (!date || !time) return null;
+
+  const datePart = date.split('-');
+  const timePart = time.split(':');
+
+  if (datePart.length !== 3 || timePart.length !== 2) return null;
+
+  const year = parseInt(datePart[0], 10);
+  const month = parseInt(datePart[1], 10) - 1; // Months are zero-based in JS Date
+  const day = parseInt(datePart[2], 10);
+  const hours = parseInt(timePart[0], 10);
+  const minutes = parseInt(timePart[1], 10);
+
+  const combinedDate = new Date(year, month, day, hours, minutes);
+
+  if (isNaN(combinedDate.getTime())) return null;
+
+  // Format in local timezone instead of UTC
+  const year_formatted = combinedDate.getFullYear();
+  const month_formatted = String(combinedDate.getMonth() + 1).padStart(2, '0');
+  const day_formatted = String(combinedDate.getDate()).padStart(2, '0');
+  const hours_formatted = String(combinedDate.getHours()).padStart(2, '0');
+  const minutes_formatted = String(combinedDate.getMinutes()).padStart(2, '0');
+  const seconds_formatted = String(combinedDate.getSeconds()).padStart(2, '0');
+
+  return `${year_formatted}-${month_formatted}-${day_formatted} ${hours_formatted}:${minutes_formatted}:${seconds_formatted}`;
+}
+
+/**
+ * @desc Date String에서 날짜와 시간을 분리하는 함수
+ * @params ex) Sun, 31 Aug 2025 20:00:00 GMT
+ * @return ex) date: 2025-08-31, time: 20:00
+ */
+export function separateDateAndTime(dateTimeString) {
+   try {
+     // Date 객체로 파싱
+     const date = new Date(dateTimeString);
+
+     // 유효한 날짜인지 확인
+     if (isNaN(date.getTime())) {
+       throw new Error('Invalid date string');
+     }
+
+     // 날짜 포맷팅 (YYYY-MM-DD)
+     const year = date.getUTCFullYear();
+     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+     const day = String(date.getUTCDate()).padStart(2, '0');
+     const formattedDate = `${year}-${month}-${day}`;
+
+     // 시간 포맷팅 (HH:MM) - 24시간 형식
+     const hours = String(date.getUTCHours()).padStart(2, '0');
+     const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+     const formattedTime = `${hours}:${minutes}`;
+
+     return {
+       date: formattedDate,
+       time: formattedTime,
+     };
+   } catch (error) {
+     console.error('Error parsing date:', error.message);
+     return {
+       date: null,
+       time: null,
+     };
+   }
 }

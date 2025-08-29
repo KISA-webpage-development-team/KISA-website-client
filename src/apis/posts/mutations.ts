@@ -36,13 +36,14 @@ export async function updatePost(
   token: Token
 ) {
   const url = `/posts/${postid}/`;
+  console.log('Token being sent:', token);
   try {
     const response = await client.patch(url, data, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response;
   } catch (error) {
-    console.error(error);
+    console.error("error message:", error);
     throw new Error("Failed to update post");
   }
 }

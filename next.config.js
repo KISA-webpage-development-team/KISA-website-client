@@ -14,6 +14,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "kisaweb-cdn-bucket.s3.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
 };
