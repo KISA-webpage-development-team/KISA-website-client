@@ -149,7 +149,8 @@ export default function PochaMenuItemForm({
         setValue: setNameEng,
         label: "메뉴 이름 (영어)",
         type: "text",
-        isError: nameEng?.length === 0,
+        // strictly english only
+        isError: nameEng?.length === 0 || !/^[a-zA-Z]+$/.test(nameEng),
         errorMsg: "메뉴 이름을 입력하세요.",
         errorState: "error",
         required: true,
