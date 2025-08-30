@@ -95,7 +95,7 @@ export default function PochaMenuItemForm({
 
       // Create a unique filename for Cloudinary
       const timestamp = new Date().getTime();
-      const fileName = `pocha-menu-${nameEng || "temp"}-${timestamp}`;
+      const fileName = `pocha-menu-${timestamp}`;
 
       // format filename for cloudinary
       const formattedFileName = fileName.replace(/ /g, "-");
