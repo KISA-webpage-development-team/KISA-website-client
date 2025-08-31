@@ -16,7 +16,7 @@ const authOptions = {
       clientSecret: GOOGLE_SECRET,
       authorization: {
         params: {
-          prompt: "consent", // This can be overridden by the signin page
+          prompt: "select_account", // Always force account selection
           access_type: "offline",
           response_type: "code",
         },
@@ -59,34 +59,19 @@ const authOptions = {
           return "/signup";
         }
 
-        if (error?.status === 404 && !profile.email.endsWith("umich.edu")) {
-          return false;
-        }
-
-        return "/signin?prompt=select_account";
+        // For all other cases (user not found, API errors), reject the sign-in
+        // Since we have prompt="select_account" in provider, user can choose different account
+        return false;
       }
     },
     async redirect({ url, baseUrl }) {
       // [TEST: middleware]
       if (url.includes("/signin")) {
         // /signin페이지로 로그인할시에, callbackUrl을 붙여서 리다이렉트
-        const urlObj = new URL(url);
-        let callbackUrl = urlObj.searchParams.get("callbackUrl");
-        const prompt = urlObj.searchParams.get("prompt");
+        let callbackUrl = url.split("callbackUrl=")[1];
 
         if (callbackUrl === undefined) {
-          // If there's a prompt parameter, preserve it
-          return prompt
-            ? `${baseUrl}/signin?prompt=${prompt}`
-            : `${baseUrl}/signin`;
-        }
-
-        // If there's a prompt parameter, add it to the callback URL
-        if (prompt) {
-          const decodedCallbackUrl = decodeURIComponent(callbackUrl);
-          const callbackUrlObj = new URL(decodedCallbackUrl, baseUrl);
-          callbackUrlObj.searchParams.set("prompt", prompt);
-          return callbackUrlObj.toString();
+          return `${baseUrl}/signin`;
         }
 
         return `${decodeURIComponent(callbackUrl)}`;
