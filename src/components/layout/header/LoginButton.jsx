@@ -10,6 +10,10 @@ export default function LoginButton({
   size = "md",
   handleGoogleSignIn,
 }) {
+  // Default Google sign-in function if not provided
+  const defaultGoogleSignIn = () => {
+    signIn("google", { callbackUrl: "/" });
+  };
   const buttonStyle =
     "bg-white text-black shadow-lg font-bold hover:bg-gray-100";
 
@@ -24,7 +28,7 @@ export default function LoginButton({
   ) : (
     <Button
       className={`${buttonStyle} ${heebo.className}`}
-      onPress={() => handleGoogleSignIn()}
+      onPress={() => (handleGoogleSignIn || defaultGoogleSignIn)()}
       size={size}
     >
       로그인
