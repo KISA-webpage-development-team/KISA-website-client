@@ -59,9 +59,9 @@ const authOptions = {
           return "/signup";
         }
 
-        if (error?.status === 404 && !profile.email.endsWith("umich.edu")) {
-          return false;
-        }
+        // if (error?.status === 404 && !profile.email.endsWith("umich.edu")) {
+        //   return false;
+        // }
 
         // Force account selection for non-umich users
         return "/signin?prompt=select_account";
