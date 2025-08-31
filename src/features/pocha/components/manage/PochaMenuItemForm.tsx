@@ -95,7 +95,7 @@ export default function PochaMenuItemForm({
 
       // Create a unique filename for Cloudinary
       const timestamp = new Date().getTime();
-      const fileName = `pocha-menu-${nameEng || "temp"}-${timestamp}`;
+      const fileName = `pocha-menu-${timestamp}`;
 
       // format filename for cloudinary
       const formattedFileName = fileName.replace(/ /g, "-");
@@ -149,6 +149,7 @@ export default function PochaMenuItemForm({
         setValue: setNameEng,
         label: "메뉴 이름 (영어)",
         type: "text",
+        // strictly english only
         isError: nameEng?.length === 0,
         errorMsg: "메뉴 이름을 입력하세요.",
         errorState: "error",
