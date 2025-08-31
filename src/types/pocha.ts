@@ -93,5 +93,14 @@ interface OrderHistory {
   closed: OrderItem[];
 }
 
+interface MenuOrderSummary {
+  quantity: number;
+  totalRevenue: number;
+  menu: MenuItem; // Keep reference to menu details
+}
+
+// Type for the aggregated map
+type MenuOrderHistoryMap = Map<number, MenuOrderSummary>;
+
 export { OrderStatus };
-export type { OrderItem, Orders, OrderHistory };
+export type { OrderItem, Orders, OrderHistory, MenuOrderSummary, MenuOrderHistoryMap };
