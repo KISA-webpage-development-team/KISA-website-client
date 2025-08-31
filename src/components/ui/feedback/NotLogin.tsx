@@ -1,7 +1,7 @@
 import React from "react";
 import LoginButton from "@/components/layout/header/LoginButton";
 
-export default function NotLogin({ handleGoogleSignIn }) {
+export default function NotLogin({ handleGoogleSignIn = () => {} }) {
   return (
     <div
       className="md:text-lg 
