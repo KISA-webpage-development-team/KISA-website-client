@@ -22,6 +22,7 @@ export default function page({ searchParams }) {
         제한될 수 있습니다.
       </span>
       {/* {(callbackUrl || decodeURIComponent(callbackUrl).endsWith("com/")) && ( */}
+      {/* @ts-ignore */}
       <NotLogin handleGoogleSignIn={handleGoogleSignIn} />
       {/* )} */}
     </section>
