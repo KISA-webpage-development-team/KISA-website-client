@@ -67,10 +67,23 @@ const authOptions = {
       // [TEST: middleware]
       if (url.includes("/signin")) {
         // /signin페이지로 로그인할시에, callbackUrl을 붙여서 리다이렉트
-        let callbackUrl = url.split("callbackUrl=")[1];
+        const urlObj = new URL(url);
+        let callbackUrl = urlObj.searchParams.get("callbackUrl");
+        const prompt = urlObj.searchParams.get("prompt");
 
         if (callbackUrl === undefined) {
-          return `${baseUrl}/signin`;
+          // If there's a prompt parameter, preserve it
+          return prompt
+            ? `${baseUrl}/signin?prompt=${prompt}`
+            : `${baseUrl}/signin`;
+        }
+
+        // If there's a prompt parameter, add it to the callback URL
+        if (prompt) {
+          const decodedCallbackUrl = decodeURIComponent(callbackUrl);
+          const callbackUrlObj = new URL(decodedCallbackUrl, baseUrl);
+          callbackUrlObj.searchParams.set("prompt", prompt);
+          return callbackUrlObj.toString();
         }
 
         return `${decodeURIComponent(callbackUrl)}`;
