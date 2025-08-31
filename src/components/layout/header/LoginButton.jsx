@@ -5,14 +5,18 @@ import { signIn, signOut } from "next-auth/react";
 import React from "react";
 import { heebo } from "@/utils/fonts/textFonts";
 
-export default function LoginButton({ session = false, size = "md" }) {
+export default function LoginButton({
+  session = false,
+  size = "md",
+  handleGoogleSignIn,
+}) {
   const buttonStyle =
     "bg-white text-black shadow-lg font-bold hover:bg-gray-100";
 
   return session ? (
     <Button
       className={`${buttonStyle} ${heebo.className}`}
-      onClick={() => signOut()}
+      onPress={() => signOut()}
       size={size}
     >
       로그아웃
@@ -20,7 +24,7 @@ export default function LoginButton({ session = false, size = "md" }) {
   ) : (
     <Button
       className={`${buttonStyle} ${heebo.className}`}
-      onClick={() => signIn("google")}
+      onPress={() => handleGoogleSignIn()}
       size={size}
     >
       로그인

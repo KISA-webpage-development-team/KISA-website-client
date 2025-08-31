@@ -14,6 +14,13 @@ const authOptions = {
     GoogleProvider({
       clientId: GOOGLE_ID,
       clientSecret: GOOGLE_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent", // This can be overridden by the signin page
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
     // ...add more providers here
   ],
@@ -48,13 +55,12 @@ const authOptions = {
         }
         return false; // if not 200, something went wrong
       } catch (error) {
-        if (profile.email.endsWith("umich.edu")) {
+        if (error?.status === 404 && profile.email.endsWith("umich.edu")) {
           return "/signup";
         }
 
-        // if not, redirect to /signup page to create a new user
-
-        return "/signin";
+        // Force account selection for non-umich users
+        return "/signin?prompt=select_account";
       }
     },
     async redirect({ url, baseUrl }) {
