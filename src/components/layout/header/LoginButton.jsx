@@ -8,7 +8,7 @@ import { heebo } from "@/utils/fonts/textFonts";
 export default function LoginButton({
   session = false,
   size = "md",
-  handleGoogleSignIn,
+  handleGoogleSignIn = () => {},
 }) {
   // Default Google sign-in function if not provided
   const defaultGoogleSignIn = () => {
