@@ -59,7 +59,10 @@ const authOptions = {
           return "/signup";
         }
 
-        // Force account selection for non-umich users
+        if (error?.status === 404 && !profile.email.endsWith("umich.edu")) {
+          return false;
+        }
+
         return "/signin?prompt=select_account";
       }
     },
