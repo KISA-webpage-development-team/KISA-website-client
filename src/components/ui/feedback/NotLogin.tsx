@@ -1,7 +1,10 @@
 import React from "react";
 import LoginButton from "@/components/layout/header/LoginButton";
+import { signIn } from "next-auth/react";
 
-export default function NotLogin({ handleGoogleSignIn = () => {} }) {
+export default function NotLogin({
+  handleGoogleSignIn = () => signIn("google", { callbackUrl: "/" }),
+}) {
   return (
     <div
       className="md:text-lg 

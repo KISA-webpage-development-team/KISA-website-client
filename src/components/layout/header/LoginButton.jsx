@@ -8,12 +8,8 @@ import { heebo } from "@/utils/fonts/textFonts";
 export default function LoginButton({
   session = false,
   size = "md",
-  handleGoogleSignIn = () => {},
+  handleGoogleSignIn = () => signIn("google", { callbackUrl: "/" }),
 }) {
-  // Default Google sign-in function if not provided
-  const defaultGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
-  };
   const buttonStyle =
     "bg-white text-black shadow-lg font-bold hover:bg-gray-100";
 
@@ -28,7 +24,7 @@ export default function LoginButton({
   ) : (
     <Button
       className={`${buttonStyle} ${heebo.className}`}
-      onPress={() => (handleGoogleSignIn || defaultGoogleSignIn)()}
+      onPress={() => handleGoogleSignIn()}
       size={size}
     >
       로그인
