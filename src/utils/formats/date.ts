@@ -67,7 +67,7 @@ export function formatDateOrTime(date) {
 
 /**
  * @desc Date를 YYYY.MM.DD HH:MM 형식으로 반환하는 함수
- * @param date: Date
+ * @param date: Date string or Date object
  * @return string
  * @example
  * Input: Thu, 11 Apr 2024 18:46:43 GMT
@@ -75,13 +75,14 @@ export function formatDateOrTime(date) {
  */
 export function formatDateTimeString(date) {
   const target = new Date(date);
-
-  let year = target.getFullYear();
-  let month = ('0' + (target.getMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
-  let day = ('0' + target.getDate()).slice(-2);
-  let hour = ('0' + target.getHours()).slice(-2);
-  let minute = ('0' + target.getMinutes()).slice(-2);
-
+  
+  // Use UTC methods to preserve the original timezone
+  let year = target.getUTCFullYear();
+  let month = ('0' + (target.getUTCMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
+  let day = ('0' + target.getUTCDate()).slice(-2);
+  let hour = ('0' + target.getUTCHours()).slice(-2);
+  let minute = ('0' + target.getUTCMinutes()).slice(-2);
+  
   return `${year}.${month}.${day} ${hour}:${minute}`;
 }
 
@@ -119,6 +120,7 @@ export function combineDateAndTime(date, time) {
 
   return `${year_formatted}-${month_formatted}-${day_formatted} ${hours_formatted}:${minutes_formatted}:${seconds_formatted}`;
 }
+
 
 /**
  * @desc Date String에서 날짜와 시간을 분리하는 함수
