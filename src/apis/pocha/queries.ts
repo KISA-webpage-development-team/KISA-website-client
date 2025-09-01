@@ -1,4 +1,4 @@
-import client from "@/lib/axios/client";
+import client from '@/lib/axios/client';
 import {
   MenuByCategory,
   PochaInfo,
@@ -6,7 +6,7 @@ import {
   Orders,
   OrderHistory,
   PayInfo,
-} from "@/types/pocha";
+} from '@/types/pocha';
 /**
  * @desc Fetch pocha info, if no upcoming pocha -> empty data, if else -> unempty data
  * @route GET /pocha/status-info/?date=${date}
@@ -21,7 +21,7 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo> {
   let convertedDate;
 
   // Check if the user's time zone is KST
-  if (userTimeZone === "Asia/Seoul") {
+  if (userTimeZone === 'Asia/Seoul') {
     convertedDate = new Date(date.getTime() + KST_OFFSET * 60 * 60 * 1000);
   } else {
     convertedDate = date; // If not in KST, no adjustment
@@ -29,14 +29,14 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo> {
 
   // const url = `/pocha/status-info/?date=${date.toISOString().split(".")[0]}`;
   const url = `/pocha/status-info/?date=${
-    convertedDate.toISOString().split(".")[0]
+    convertedDate.toISOString().split('.')[0]
   }`;
 
   try {
     const response = await client.get(url);
     return response.data;
   } catch (error) {
-    throw new Error("Error fetching pocha information");
+    throw new Error('Error fetching pocha information');
   }
 }
 
@@ -45,9 +45,9 @@ export async function getPochaInfoMock(date: Date) {
     pochaID: 1,
     startDate: new Date(),
     endDate: new Date(new Date().getTime() + 4 * 60 * 60 * 1000),
-    title: "Halloween Pocha",
+    title: 'Halloween Pocha',
     description:
-      "할로윈 포차 입니다. 한잔 포차에서 11월 2일 진행될 예정입니다! ^^",
+      '할로윈 포차 입니다. 한잔 포차에서 11월 2일 진행될 예정입니다! ^^',
     ongoing: true,
   };
   return mockPochaInfo;
@@ -128,7 +128,7 @@ export async function getPochaOrders(
   pochaid: number,
   token: string
 ): Promise<Orders | undefined> {
-  const url = `/pocha/dashboard/${pochaid}/`;
+  const url = `/pocha/dashboard/8/`;
   try {
     const response = await client.get(url, {
       headers: {
