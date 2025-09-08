@@ -30,6 +30,7 @@ export function usePostSubmit({
           window.location.href = `/boards/${formData.type}`;
         }
       } catch (error) {
+     
         window.alert("게시글 작성에 실패했습니다.");
         setLoading(false);
       }
@@ -40,10 +41,12 @@ export function usePostSubmit({
       }
       try {
         setLoading(true);
+
         await updatePost(postid, formData, token);
         setLoading(false);
         window.location.href = `/posts/${postid}`;
       } catch (error) {
+      console.log('여기가 문제2')
         window.alert("게시글 수정에 실패했습니다.");
         setLoading(false);
       }

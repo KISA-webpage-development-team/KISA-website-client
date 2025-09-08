@@ -28,12 +28,25 @@ export default function CustomField({
   errorMsg,
 }) {
   return (
-    <div>
+    <div
+      className={`${
+        type === "checkbox"
+          ? "flex flex-row gap-4 items-center"
+          : "flex flex-col"
+      }`}
+    >
       <CustomLabel htmlFor={type} text={label} required={required} />
       <CustomInput
         type={type}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        checked={type === "checkbox" ? value : false}
+        onChange={(e) => {
+          if (type === "checkbox") {
+            setValue(e.target.checked);
+            return;
+          }
+          setValue(e.target.value);
+        }}
         placeholder={placeholder}
         required={required}
       />

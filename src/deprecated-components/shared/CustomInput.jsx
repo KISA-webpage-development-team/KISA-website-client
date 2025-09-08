@@ -3,6 +3,7 @@ import React from "react";
 export default function CustomInput({
   type,
   value,
+  checked,
   onChange,
   placeholder,
   required,
@@ -11,14 +12,14 @@ export default function CustomInput({
     <input
       type={type}
       value={value}
+      checked={checked}
       onChange={onChange}
       placeholder={placeholder}
       required={required}
-      className=" w-full
+      className={`${type === "checkbox" ? "w-fit" : "w-full mt-2"}
       border border-gray-300 p-3 rounded-lg
-      mt-2 
       focus:outline-michigan-blue text-sm md:text-base
-      "
+      `}
     />
   );
 }

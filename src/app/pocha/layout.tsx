@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import OnlyMobileView from "@/components/ui/feedback/OnlyMobileView";
-import { sejongHospitalLight } from "@/utils/fonts/textFonts";
-import { SessionProvider } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import OnlyMobileView from '@/components/ui/feedback/OnlyMobileView';
+import { sejongHospitalLight } from '@/utils/fonts/textFonts';
+import { SessionProvider } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 
 export default function PochaLayout({ children }) {
-  // except for /pocha/dashboard, only mobile view is allowed
+  // except for /pocha/dashboard && /pocha/manage, only mobile view is allowed
   const pathname = usePathname();
-  const isDashboard = pathname.includes("/dashboard");
+  const isDashboard = pathname.includes('/dashboard');
+  const isManage = pathname.includes('/manage');
 
   return (
     <SessionProvider>
-      {/* ✅ /dashboard is tablet view, others are mobile view restrictions applied */}
-      {isDashboard ? (
-        <div className="w-full">{children}</div>
+      {isDashboard || isManage? (
+        <div className='w-full'>{children}</div>
       ) : (
         <>
           {/* This message only shows on larger screens */}
-          <div className="hidden md:block">
+          <div className='hidden md:block'>
             <OnlyMobileView />
           </div>
           {/* Main content for mobile screens */}
@@ -33,3 +33,4 @@ export default function PochaLayout({ children }) {
     </SessionProvider>
   );
 }
+  

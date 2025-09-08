@@ -14,6 +14,13 @@ const authOptions = {
     GoogleProvider({
       clientId: GOOGLE_ID,
       clientSecret: GOOGLE_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent", // This can be overridden by the signin page
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
     // ...add more providers here
   ],
@@ -48,23 +55,39 @@ const authOptions = {
         }
         return false; // if not 200, something went wrong
       } catch (error) {
-        if (profile.email.endsWith("umich.edu")) {
+        if (error?.status === 404 && profile.email.endsWith("umich.edu")) {
           return "/signup";
         }
 
-        // if not, redirect to /signup page to create a new user
+        // if (error?.status === 404 && !profile.email.endsWith("umich.edu")) {
+        //   return false;
+        // }
 
-        return "/signin";
+        // Force account selection for non-umich users
+        return "/signin?prompt=select_account";
       }
     },
     async redirect({ url, baseUrl }) {
       // [TEST: middleware]
       if (url.includes("/signin")) {
         // /signin페이지로 로그인할시에, callbackUrl을 붙여서 리다이렉트
-        let callbackUrl = url.split("callbackUrl=")[1];
+        const urlObj = new URL(url);
+        let callbackUrl = urlObj.searchParams.get("callbackUrl");
+        const prompt = urlObj.searchParams.get("prompt");
 
         if (callbackUrl === undefined) {
-          return `${baseUrl}/signin`;
+          // If there's a prompt parameter, preserve it
+          return prompt
+            ? `${baseUrl}/signin?prompt=${prompt}`
+            : `${baseUrl}/signin`;
+        }
+
+        // If there's a prompt parameter, add it to the callback URL
+        if (prompt) {
+          const decodedCallbackUrl = decodeURIComponent(callbackUrl);
+          const callbackUrlObj = new URL(decodedCallbackUrl, baseUrl);
+          callbackUrlObj.searchParams.set("prompt", prompt);
+          return callbackUrlObj.toString();
         }
 
         return `${decodeURIComponent(callbackUrl)}`;

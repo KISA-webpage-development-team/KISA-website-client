@@ -1,9 +1,13 @@
-import useSWR from "swr";
-import { fetcherWithToken } from "@/lib/swr/fetchers";
-import { UserSession } from "@/lib/next-auth/types";
+import useSWR from 'swr';
+import { fetcherWithToken } from '@/lib/swr/fetchers';
+import { UserSession } from '@/lib/next-auth/types';
 
 // secret list of allowed underage users
-const UNDERAGE_WHITE_LIST = ["jiohin@umich.edu", "dongeunk@umich.edu"];
+const UNDERAGE_WHITE_LIST = [
+  'jiohin@umich.edu',
+  'dongeunk@umich.edu',
+  'junheeh@umich.edu',
+];
 
 const calculateAge = (birthday: string): number => {
   const birthDate = new Date(birthday);
@@ -36,13 +40,13 @@ const useUserAge = (session: UserSession | null) => {
 
   // Explicit loading state
   if (isLoading) {
-    return { underAge: null, status: "loading", fullname: "" };
+    return { underAge: null, status: 'loading', fullname: '' };
   }
 
   // Error handling
   if (error) {
     console.error("Error fetching user's age:", error);
-    return { underAge: null, status: "error", fullname: "" };
+    return { underAge: null, status: 'error', fullname: '' };
   }
 
   // Success: Calculate age and determine underage
@@ -50,17 +54,17 @@ const useUserAge = (session: UserSession | null) => {
     const { bornDate, bornMonth, bornYear, fullname } = data;
     const formattedBirthday = `${bornYear}-${bornMonth
       .toString()
-      .padStart(2, "0")}-${bornDate.toString().padStart(2, "0")}`;
+      .padStart(2, '0')}-${bornDate.toString().padStart(2, '0')}`;
     const age = calculateAge(formattedBirthday);
     const underAge = UNDERAGE_WHITE_LIST.includes(session?.user?.email)
       ? false
       : age < 21;
 
-    return { underAge, status: "success", fullname };
+    return { underAge, status: 'success', fullname };
   }
 
   // Fallback (edge case)
-  return { underAge: null, status: "loading", fullname: "" };
+  return { underAge: null, status: 'loading', fullname: '' };
 };
 
 export default useUserAge;

@@ -14,15 +14,21 @@ export type { PochaInfo, PochaTab, PochaDashboardTab };
 
 // MENU -----------------------------------------------------------------------
 
-interface MenuItem {
+interface MenuItem extends MenuItemRaw {
   menuID: number;
+}
+
+interface MenuItemRaw {
+  menuID?: number;
   nameKor: string;
   nameEng: string;
+  category?: string;
+  description?: string;
   price: number;
   stock: number;
   isImmediatePrep: boolean;
-  parentPochaId: number;
   ageCheckRequired: boolean;
+  imageURL?: string;
 }
 
 interface MenuItemWithQuantity {
@@ -35,7 +41,7 @@ interface MenuByCategory {
   menusList: MenuItem[];
 }
 
-export type { MenuItem, MenuByCategory, MenuItemWithQuantity };
+export type { MenuItem, MenuItemRaw, MenuByCategory, MenuItemWithQuantity };
 
 // CART -----------------------------------------------------------------------
 interface CartItem {
@@ -87,5 +93,14 @@ interface OrderHistory {
   closed: OrderItem[];
 }
 
+interface MenuOrderSummary {
+  quantity: number;
+  totalRevenue: number;
+  menu: MenuItem; // Keep reference to menu details
+}
+
+// Type for the aggregated map
+type MenuOrderHistoryMap = Map<number, MenuOrderSummary>;
+
 export { OrderStatus };
-export type { OrderItem, Orders, OrderHistory };
+export type { OrderItem, Orders, OrderHistory, MenuOrderSummary, MenuOrderHistoryMap };
