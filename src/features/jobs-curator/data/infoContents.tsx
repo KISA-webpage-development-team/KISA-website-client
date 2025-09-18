@@ -24,7 +24,7 @@ const koreaInfoContents: InfoContent[] = [
 const usInfoContents: InfoContent[] = [
   {
     id: "item-1",
-    title: "인턴십 일정 및 지원 과정",
+    title: "인턴십 일정 및 지원 과정 - CS/DS/Eng",
     content: (
       <div>
         <p>
@@ -95,7 +95,7 @@ const usInfoContents: InfoContent[] = [
   },
   {
     id: "item-2",
-    title: "레쥬메 팁",
+    title: "레쥬메 팁 - CS/DS/Eng",
     content: (
       <div>
         <p>
