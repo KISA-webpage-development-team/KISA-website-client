@@ -39,8 +39,7 @@ export default function Header({ session }) {
 
   const pathname = usePathname();
   const isPocha = pathname.startsWith("/pocha");
-  const isJobsCurator = pathname.startsWith("/jobs");
-  const showMenu = !isPocha && !isJobsCurator;
+  const showMenu = !isPocha;
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -78,7 +77,7 @@ export default function Header({ session }) {
 
         {/* Web Name home link */}
         {/* <WebTitle /> */}
-        {isJobsCurator ? <JobsCuratorHeaderTitle /> : <HeaderTitleBlock />}
+        <HeaderTitleBlock />
         {/* Navigation Menu */}
         {/* !!! in mobile menu, this menu should go down and become hidden */}
         {showMenu && (
@@ -90,14 +89,17 @@ export default function Header({ session }) {
                   setActive={setActive}
                   active={active}
                   item={item.name}
+                  href={item.href}
                 >
-                  <div className="flex flex-col space-y-4 text-sm">
-                    {item.dropdowns.map((dropdown) => (
-                      <HoveredLink key={dropdown.href} href={dropdown.href}>
-                        {dropdown.name}
-                      </HoveredLink>
-                    ))}
-                  </div>
+                  {item.dropdowns && (
+                    <div className="flex flex-col space-y-4 text-sm">
+                      {item.dropdowns.map((dropdown) => (
+                        <HoveredLink key={dropdown.href} href={dropdown.href}>
+                          {dropdown.name}
+                        </HoveredLink>
+                      ))}
+                    </div>
+                  )}
                 </MenuItem>
               ))}
             </Menu>
@@ -117,14 +119,17 @@ export default function Header({ session }) {
                   setActive={setActive}
                   active={active}
                   item={item.name}
+                  href={item.href}
                 >
-                  <div className="flex flex-col space-y-4 text-sm">
-                    {item.dropdowns.map((dropdown) => (
-                      <HoveredLink key={dropdown.href} href={dropdown.href}>
-                        {dropdown.name}
-                      </HoveredLink>
-                    ))}
-                  </div>
+                  {item.dropdowns && (
+                    <div className="flex flex-col space-y-4 text-sm">
+                      {item.dropdowns.map((dropdown) => (
+                        <HoveredLink key={dropdown.href} href={dropdown.href}>
+                          {dropdown.name}
+                        </HoveredLink>
+                      ))}
+                    </div>
+                  )}
                 </MobileMenuItem>
               ))}
             </MobileMenu>

@@ -109,6 +109,11 @@ const menu = [
       },
     ],
   },
+
+  {
+    name: "취업 가이드북",
+    href: "/jobs",
+  },
 ];
 
 export default menu;

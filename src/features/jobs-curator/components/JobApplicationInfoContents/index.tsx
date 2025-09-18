@@ -8,13 +8,14 @@ import InfoAccordion from "./InfoAccordion";
 import AccordionTabs from "./AccordionTabs";
 import { usInfoContents, koreaInfoContents } from "../../data/infoContents";
 
+type Tab = "usa" | "korea";
 const tabs = [
-  { id: "korea", label: "한국" },
   { id: "usa", label: "미국" },
+  { id: "korea", label: "한국" },
 ];
 
 export default function JobApplicationInfoContents() {
-  const [activeTab, setActiveTab] = useState("korea");
+  const [activeTab, setActiveTab] = useState<Tab>("usa");
   return (
     <div className="flex flex-col items-center gap-6">
       <h1 className={`${sejongHospitalBold.className} text-2xl`}>
@@ -31,7 +32,7 @@ export default function JobApplicationInfoContents() {
       <AccordionTabs
         tabs={tabs}
         defaultActiveTab={activeTab}
-        onTabChange={(tabId) => setActiveTab(tabId)}
+        onTabChange={(tabId) => setActiveTab(tabId as Tab)}
       />
 
       <div className="w-full max-w-3xl px-4">

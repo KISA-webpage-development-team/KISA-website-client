@@ -11,7 +11,7 @@ const transition = {
   restSpeed: 0.001,
 };
 
-export const MobileMenuItem = ({ setActive, active, item, children }) => {
+export const MobileMenuItem = ({ setActive, active, item, children, href }) => {
   const mobileMenuItemVariants = {
     open: {
       opacity: 1,
@@ -33,17 +33,22 @@ export const MobileMenuItem = ({ setActive, active, item, children }) => {
     `}
     >
       {/* motion.p: base menu item text */}
-      <motion.p
-        className="cursor-pointer hover:opacity-[0.9] 
+      {children ? (
+        <motion.p
+          className="cursor-pointer hover:opacity-[0.9] 
         hover:text-michigan-maize
         text-sm md:text-base"
-      >
-        {item}
-      </motion.p>
+        >
+          {item}
+        </motion.p>
+      ) : (
+        <HoveredLink href={href}>{item}</HoveredLink>
+      )}
 
       {/* motion.div: dropdown menu items list */}
       {/* `active` handles whether user hovers in the base menu to open the dropdown */}
       {active !== null &&
+        children &&
         //  this is where dropdown menu items are rendered
         //    if current base menu is selected,
         // show dropdown with transition
@@ -147,7 +152,7 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
   );
 };
 
-export const MenuItem = ({ setActive, active, item, children }) => {
+export const MenuItem = ({ setActive, active, item, children, href }) => {
   return (
     <div
       onMouseEnter={() => setActive(item)}
@@ -156,18 +161,22 @@ export const MenuItem = ({ setActive, active, item, children }) => {
     `}
     >
       {/* motion.p: base menu item text */}
-      <motion.p
-        transition={{ duration: 0.3 }}
-        className="cursor-pointer hover:opacity-[0.9] 
+      {children ? (
+        <motion.p
+          transition={{ duration: 0.3 }}
+          className="cursor-pointer hover:opacity-[0.9] 
         hover:text-michigan-maize
         text-sm md:text-base"
-      >
-        {item}
-      </motion.p>
+        >
+          {item}
+        </motion.p>
+      ) : (
+        <HoveredLink href={href}>{item}</HoveredLink>
+      )}
 
       {/* motion.div: dropdown menu items list */}
       {/* `active` handles whether user hovers in the base menu to open the dropdown */}
-      {active !== null && (
+      {active !== null && children && (
         <motion.div
           className={`hidden md:flex`}
           animate={{ opacity: 1, scale: 1, y: 0 }}
