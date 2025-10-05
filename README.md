@@ -10,7 +10,7 @@
 
 ## Getting Started
 
-**If you're responsible for the project, please check out [general_guide.md](docs/general_guide.md) for more detailed information.**
+**If you're responsible for the project or new to the project, please check out [general_guide.md](docs/general_guide.md) to understand the project structure and guidelines.**
 
 ---
 
@@ -20,7 +20,15 @@
 
 2. run following command to start running server in localhost
 
+### Run with production environment
+
 `npm run dev`
+
+### Run with local environment
+
+Make sure local backend server is running (https://github.com/KISA-webpage-development-team/KISA-website-backend)
+
+`npm run dev-local`
 
 3. run following command to build the project and run the server
 
