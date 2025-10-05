@@ -311,7 +311,7 @@ Need further refactoring and cleanup. Features below are not fully refactored. T
 - info-page
 - users: signup
 
-## 4. Additional Notes for future leadership
+## 4. Additional Notes
 
 To keep the codes clean and maintainable throughout the project, please follow the guidelines below.
 
