@@ -10,7 +10,7 @@
 
 ## Getting Started
 
-**If you're responsible for the project, please check out [GUIDE.md](docs/guide.md) for more detailed information.**
+**If you're responsible for the project, please check out [general_guide.md](docs/general_guide.md) for more detailed information.**
 
 ---
 
