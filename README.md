@@ -14,23 +14,21 @@
 
 ---
 
-1. run following command to install necessary packages
+### 1. run following command to install necessary packages
 
 `npm install`
 
-2. run following command to start running server in localhost
-
-### Run with production environment
+### 2-1. Run with production environment
 
 `npm run dev`
 
-### Run with local environment
+### 2-2. Run with local environment
 
 Make sure local backend server is running (https://github.com/KISA-webpage-development-team/KISA-website-backend)
 
 `npm run dev-local`
 
-3. run following command to build the project and run the server
+### 3. run following command to build the project and run the server
 
 `npm run build && npm run start`
 
