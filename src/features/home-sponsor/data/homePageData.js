@@ -8,17 +8,21 @@
 
 const homeCarouselData = [
   {
-    id: 'kim_kwang_jin_concert',
-    title: 'K-ONNECT with 김광진',
+    id: 'f25-kisa-small-group',
+    title: '소그룹 신규 모집',
     desc: (
       <p>
-        '편지’, ‘마법의 성’, ‘동경소녀’ 등 수많은 명곡을 통해 사랑받아온 미시간
-        동문 김광진 선배님을 초청해 그의 음악과 삶의 이야기를 가까이에서 나누는
-        특별한 자리를 마련했습니다. 친구, 가족, 연인과 함께 따뜻한 음악과
-        이야기로 물드는 가을밤을 함께하세요!
+        🎉 25-26학기 KISA 소그룹을 소개합니다!
+
+        골프⛳️, 보드게임🎲, 클라이밍🧗‍♀️, 화투🃏, 노래방🎤, 카공☕️, 마라탕🔥까지!
+        다양한 취미와 관심사로 가득한 소그룹에서
+        새로운 친구들과 즐겁게 어울려보세요 ☀️
+
+        소그룹은 상시 참여 가능하며,
+        소그룹장의 카카오톡 아이디로 연락하면 바로 참여 가능합니다! 💛
       </p>
     ),
-    url: 'https://www.eventbrite.com/e/k-onnect-tickets-1564667445449',
+    url: 'https://www.instagram.com/p/DQJ4awKjqmO/?img_index=1',
   },
 ];
 
