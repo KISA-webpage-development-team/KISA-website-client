@@ -84,10 +84,14 @@ export default function OrderHistoryTable({
           >
             요약하기
           </button>
-          <OrderSummaryModal
-            handleCloseForm={() => setOpenSummaryModal(false)}
-            orderHistory={orderHistory}
-          />
+          {
+            openSummaryModal && (
+              <OrderSummaryModal
+                handleCloseForm={() => setOpenSummaryModal(false)}
+                orderHistory={orderHistory}
+              />
+            )
+          }
         </div>
 
         <table className='min-w-full divide-y divide-gray-200'>

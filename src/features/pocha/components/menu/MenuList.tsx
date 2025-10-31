@@ -38,6 +38,7 @@ function MenuList({ pochaid }: MenuListProps) {
   const { underAge, status: userStatus } = useUserAge(session);
   const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null);
 
+  
   if (menuStatus === "loading" || userStatus === "loading") {
     return <LoadingSpinner fullScreen={false} label="메뉴를 가져오는 중..." />;
   }
