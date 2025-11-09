@@ -10,8 +10,8 @@ interface PochaInfo {
 type PochaInfoWithoutStatus = Omit<PochaInfo, "ongoing">;
 type PochaTab = "menu" | "orders";
 type PochaDashboardTab = "orders" | "stock" | "history";
-
-export type { PochaInfo, PochaInfoWithoutStatus, PochaTab, PochaDashboardTab };
+type PochaHistoryTab = "overview" | 'food' | 'drink' | 'soju'
+export type { PochaInfo, PochaInfoWithoutStatus, PochaTab, PochaDashboardTab, PochaHistoryTab};
 
 // MENU -----------------------------------------------------------------------
 

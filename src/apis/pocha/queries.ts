@@ -45,16 +45,18 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo> {
  * @desc Fetch all previous pocha
  * @route GET /pocha/previous/
  */
-// START HERE!
-
 export async function getPreviousPochaList(
   date: Date
 ): Promise<PochaInfoWithoutStatus[]> {
   const url = `/pocha/previous/?date=${date.toISOString().split(".")[0]}`;
-
   try {
     const response = await client.get(url);
-    return response.data;
+    // Transform the date strings to Date objects
+    return response.data.map((pocha: any) => ({
+      ...pocha,
+      startDate: new Date(pocha.startDate),
+      endDate: new Date(pocha.endDate),
+    }));
   } catch (error) {
     throw new Error("Error fetching previous pocha information");
   }
@@ -66,7 +68,7 @@ export async function getPreviousPochaList(
  */
 export async function getPochaMenu(
   pochaid: number,
-  token: string
+  token?: string
 ): Promise<MenuByCategory[] | undefined> {
   const url = `/pocha/menu/${pochaid}/`;
   try {

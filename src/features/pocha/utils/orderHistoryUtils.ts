@@ -95,4 +95,76 @@ const convertOrderHistoryToMenuMap = (
   return menuMap;
 };
 
+
+/**
+ * 안주 매출 순위 계산
+ */
+export function calculateFoodRankings(orderHistory: OrderItem[]) {
+  const foodOrders = orderHistory.filter(order => !order.menu.isImmediatePrep);
+  const menuMap = convertOrderHistoryToMenuMap(foodOrders);
+  
+  return Array.from(menuMap.values())
+    .map(({ menu, quantity, totalRevenue }) => ({
+      name: menu.nameKor,
+      quantity,
+      revenue: totalRevenue,
+    }))
+    .sort((a, b) => b.revenue - a.revenue); // 매출 기준 정렬
+}
+
+/**
+ * 주류 매출 순위 계산
+ */
+export function calculateDrinkRankings(orderHistory: OrderItem[]) {
+  const drinkOrders = orderHistory.filter(order => order.menu.isImmediatePrep);
+  const menuMap = convertOrderHistoryToMenuMap(drinkOrders);
+  
+  return Array.from(menuMap.values())
+    .map(({ menu, quantity, totalRevenue }) => ({
+      name: menu.nameKor,
+      quantity,
+      revenue: totalRevenue,
+    }))
+    .sort((a, b) => b.revenue - a.revenue);
+}
+
+/**
+ * 소주 타입별 매출 분석 (일반 소주 vs 과일 소주)
+ */
+export function analyzeSojuSales(orderHistory: OrderItem[]) {
+  const sojuOrders = orderHistory.filter(order => 
+    order.menu.isImmediatePrep && 
+    order.menu.nameKor.includes('소주')
+  );
+  
+  const regularSoju = sojuOrders.filter(order => 
+    order.menu.nameKor === '소주' || order.menu.nameKor === '참이슬'
+  );
+  
+  const fruitSoju = sojuOrders.filter(order => 
+    order.menu.nameKor.includes('소주') && 
+    !['소주', '참이슬'].includes(order.menu.nameKor)
+  );
+  
+  return {
+    regularSoju: {
+      count: regularSoju.reduce((sum, order) => sum + order.quantity, 0),
+      revenue: regularSoju.reduce((sum, order) => 
+        sum + (order.menu.price * order.quantity), 0
+      ),
+    },
+    fruitSoju: {
+      count: fruitSoju.reduce((sum, order) => sum + order.quantity, 0),
+      revenue: fruitSoju.reduce((sum, order) => 
+        sum + (order.menu.price * order.quantity), 0
+      ),
+      breakdown: fruitSoju.map(order => ({
+        name: order.menu.nameKor,
+        quantity: order.quantity,
+        revenue: order.menu.price * order.quantity,
+      })),
+    },
+  };
+}
+
 export { calculateTotalSales, calculateSummary, convertOrderHistoryToMenuMap };
