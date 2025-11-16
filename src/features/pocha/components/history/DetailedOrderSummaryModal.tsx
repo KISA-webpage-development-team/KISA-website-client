@@ -23,8 +23,7 @@ export default function DetailedOrderSummaryModal({
 }: DetailedOrderSummaryModalProps) {
   const [activeTab, setActiveTab] = useState<PochaHistoryTab>('overview');
 
-  const { totalSales, anjuRevenue, drinkRevenue } =
-    calculateSummary(orderHistory);
+  const { totalSales, anjuRevenue, drinkRevenue } = calculateSummary(orderHistory);
   const foodRankings = calculateFoodRankings(orderHistory);
   const drinkRankings = calculateDrinkRankings(orderHistory);
   const sojuAnalysis = analyzeSojuSales(orderHistory);
