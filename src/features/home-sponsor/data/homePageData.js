@@ -8,19 +8,16 @@
 
 const homeCarouselData = [
   {
-    id: 'f25-26_halloween_pocha',
-    title: '키사 할로윈 포차 🎃👻',
+    id: 'f25-26_friends_up',
+    title: 'Friends-UP!',
     desc: (
       <p>
-        🥤My Little 할로윈포차👻 
-        매년 돌아오는 키사의 할로윈포차가 더
-        업그레이드되어 여러분을 초대합니다🎃 코스튬을 입고 오신 분들에게는
-        다양한 상품이 기다리고 있는 래플 티켓을 뽑을 기회를 드립니다 🎁
-        놓치지 말고 창의적인 코스튬 꼭!! 입고 오기✅ 단돈 $3에 2장 찍어드리는
-        폴라로이드 이벤트도 준비돼있으니 참여하시고 golden빛 추억 남기세요🌠
+        🎮✨ 어색함은 DOWN ⬇️ Friends는 UP ⬆️ ✨🎉 새로운 동기, 선후배들과 한층
+        더 가까워질 수 있는 Friends UP 이벤트가 새롭게 찾아왔습니다! 💙💛 키사가
+        준비한 이 특별한 밤, 다 같이 웃고 게임하고 친해져요 🫶
       </p>
     ),
-    url: 'https://tr.ee/oVVnjQcaiK',
+    url: 'https://tr.ee/t2xsTYk5oh',
   },
   {
     id: 'f25-kisa-small-group',
