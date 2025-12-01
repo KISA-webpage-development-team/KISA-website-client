@@ -8,16 +8,18 @@
 
 const homeCarouselData = [
   {
-    id: 'f25-26_friends_up',
-    title: 'Friends-UP!',
+    id: 'f25-26_kisa_yearbook',
+    title: 'KISA Yearbook 2025-26',
     desc: (
       <p>
-        🎮✨ 어색함은 DOWN ⬇️ Friends는 UP ⬆️ ✨🎉 새로운 동기, 선후배들과 한층
-        더 가까워질 수 있는 Friends UP 이벤트가 새롭게 찾아왔습니다! 💙💛 키사가
-        준비한 이 특별한 밤, 다 같이 웃고 게임하고 친해져요 🫶
+        안녕하세요 미시간 졸업예정자 여러분, 여러분의 이야기로 채워질 Yearbook의
+        주인공이 되어주세요!🩵 📚KISA Yearbook은 미시간에서 보낸 소중한 추억과
+        경험들을 한 권의 앨범에 담는 프로젝트입니다. 단순한 기록을 넘어,
+        이곳에서 보낸 시간들을 다시 떠올리고 서로의 이야기를 나누는 의미 있는
+        여정을 함께하고자 합니다.
       </p>
     ),
-    url: 'https://tr.ee/t2xsTYk5oh',
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSdUMtf0DisuJtBcjsI8GjVu7NujMTwHC-pODtApDTN-Hg7E4w/viewform',
   },
   {
     id: 'f25-kisa-small-group',
