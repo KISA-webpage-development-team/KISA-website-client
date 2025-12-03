@@ -8,6 +8,21 @@
 
 const homeCarouselData = [
   {
+    id: 'f25-26_last_pocha',
+    title: 'KISA 종강포차',
+    desc: (
+      <p>
+        드디어 연말이 다가오고 있습니다!!!🎄❄️☃️🎁 학기말 시험들, 밀린 과제들,
+        밤새운 날들 - 모두모두 잠깐 내려놓고 우리 즐거운 토요일 다함께 놀고
+        마셔요! 🌟신나는 밤을 위해 준비한 특별 이벤트! 💥 소주 첫 50병을 $15 →
+        $10 ✨ 무려 5불 할인된 가격으로 판매합니다! 지금 RSVP하고 이번 학기
+        마지막 포차를 더 저렴하게 즐겨요! 😆✨ 이번 포차는 total wireless의
+        후원으로 함께합니다📱🎄
+      </p>
+    ),
+    url: 'https://tr.ee/V7i4TJNsot',
+  },
+  {
     id: 'f25-26_kisa_yearbook',
     title: 'KISA Yearbook 2025-26',
     desc: (
@@ -20,19 +35,6 @@ const homeCarouselData = [
       </p>
     ),
     url: 'https://docs.google.com/forms/d/e/1FAIpQLSdUMtf0DisuJtBcjsI8GjVu7NujMTwHC-pODtApDTN-Hg7E4w/viewform',
-  },
-  {
-    id: 'f25-kisa-small-group',
-    title: '소그룹 신규 모집',
-    desc: (
-      <p>
-        🎉 25-26학기 KISA 소그룹을 소개합니다! 골프⛳️, 보드게임🎲, 클라이밍🧗‍♀️,
-        화투🃏, 노래방🎤, 카공☕️, 마라탕🔥까지! 다양한 취미와 관심사로 가득한
-        소그룹에서 새로운 친구들과 즐겁게 어울려보세요 ☀️ 소그룹은 상시 참여
-        가능하며, 소그룹장의 카카오톡 아이디로 연락하면 바로 참여 가능합니다! 💛
-      </p>
-    ),
-    url: 'https://www.instagram.com/p/DQJ4awKjqmO/?img_index=1',
   },
 ];
 
