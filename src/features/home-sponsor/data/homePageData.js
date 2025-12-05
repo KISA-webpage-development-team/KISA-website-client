@@ -8,32 +8,33 @@
 
 const homeCarouselData = [
   {
-    id: 'f25-26_halloween_pocha',
-    title: '키사 할로윈 포차 🎃👻',
+    id: 'f25-26_last_pocha',
+    title: 'KISA 종강포차',
     desc: (
       <p>
-        🥤My Little 할로윈포차👻 
-        매년 돌아오는 키사의 할로윈포차가 더
-        업그레이드되어 여러분을 초대합니다🎃 코스튬을 입고 오신 분들에게는
-        다양한 상품이 기다리고 있는 래플 티켓을 뽑을 기회를 드립니다 🎁
-        놓치지 말고 창의적인 코스튬 꼭!! 입고 오기✅ 단돈 $3에 2장 찍어드리는
-        폴라로이드 이벤트도 준비돼있으니 참여하시고 golden빛 추억 남기세요🌠
+        드디어 연말이 다가오고 있습니다!!!🎄❄️☃️🎁 학기말 시험들, 밀린 과제들,
+        밤새운 날들 - 모두모두 잠깐 내려놓고 우리 즐거운 토요일 다함께 놀고
+        마셔요! 🌟신나는 밤을 위해 준비한 특별 이벤트! 💥 소주 첫 50병을 $15 →
+        $10 ✨ 무려 5불 할인된 가격으로 판매합니다! 지금 RSVP하고 이번 학기
+        마지막 포차를 더 저렴하게 즐겨요! 😆✨ 이번 포차는 total wireless의
+        후원으로 함께합니다📱🎄
       </p>
     ),
-    url: 'https://tr.ee/oVVnjQcaiK',
+    url: 'https://tr.ee/V7i4TJNsot',
   },
   {
-    id: 'f25-kisa-small-group',
-    title: '소그룹 신규 모집',
+    id: 'f25-26_kisa_yearbook',
+    title: 'KISA Yearbook 2025-26',
     desc: (
       <p>
-        🎉 25-26학기 KISA 소그룹을 소개합니다! 골프⛳️, 보드게임🎲, 클라이밍🧗‍♀️,
-        화투🃏, 노래방🎤, 카공☕️, 마라탕🔥까지! 다양한 취미와 관심사로 가득한
-        소그룹에서 새로운 친구들과 즐겁게 어울려보세요 ☀️ 소그룹은 상시 참여
-        가능하며, 소그룹장의 카카오톡 아이디로 연락하면 바로 참여 가능합니다! 💛
+        안녕하세요 미시간 졸업예정자 여러분, 여러분의 이야기로 채워질 Yearbook의
+        주인공이 되어주세요!🩵 📚KISA Yearbook은 미시간에서 보낸 소중한 추억과
+        경험들을 한 권의 앨범에 담는 프로젝트입니다. 단순한 기록을 넘어,
+        이곳에서 보낸 시간들을 다시 떠올리고 서로의 이야기를 나누는 의미 있는
+        여정을 함께하고자 합니다.
       </p>
     ),
-    url: 'https://www.instagram.com/p/DQJ4awKjqmO/?img_index=1',
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSdUMtf0DisuJtBcjsI8GjVu7NujMTwHC-pODtApDTN-Hg7E4w/viewform',
   },
 ];
 
