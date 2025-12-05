@@ -22,6 +22,7 @@ import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { convertMenuByCategoryToRawList } from "@/features/pocha/utils/convertMenuType";
 import LoginButton from "@/components/layout/header/LoginButton";
 import UserInfo from "@/components/layout/header/UserInfo";
+import PreviousPochaList from "@/features/pocha/components/manage/PreviousPochaList";
 
 export default function ManagePage() {
   const { data: session, status: sessionStatus } = useSession() as {
@@ -60,7 +61,6 @@ function PochaManagePageContent() {
   const { isAdmin, token, status: adminStatus } = useAdmin();
   const { pochaInfo, status: pochaStatus, error: pochaFetchError } = usePocha();
 
-
   const { menuList, status: menuStatus } = useMenu(pochaInfo?.pochaID, token);
 
   const { setMenus } = usePochaManage();
@@ -95,6 +95,7 @@ function PochaManagePageContent() {
 
   return (
     <>
+      <PreviousPochaList />
       {noPochaAvailable && (
         <div className="flex flex-col w-full gap-2">
           <CustomButton

@@ -2,6 +2,7 @@ import client from "@/lib/axios/client";
 import {
   MenuByCategory,
   PochaInfo,
+  PochaInfoWithoutStatus,
   Cart,
   Orders,
   OrderHistory,
@@ -40,17 +41,25 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo> {
   }
 }
 
-export async function getPochaInfoMock(date: Date) {
-  const mockPochaInfo: PochaInfo = {
-    pochaID: 1,
-    startDate: new Date(),
-    endDate: new Date(new Date().getTime() + 4 * 60 * 60 * 1000),
-    title: "Halloween Pocha",
-    description:
-      "할로윈 포차 입니다. 한잔 포차에서 11월 2일 진행될 예정입니다! ^^",
-    ongoing: true,
-  };
-  return mockPochaInfo;
+/**
+ * @desc Fetch all previous pocha
+ * @route GET /pocha/previous/
+ */
+export async function getPreviousPochaList(
+  date: Date
+): Promise<PochaInfoWithoutStatus[]> {
+  const url = `/pocha/previous/?date=${date.toISOString().split(".")[0]}`;
+  try {
+    const response = await client.get(url);
+    // Transform the date strings to Date objects
+    return response.data.map((pocha: any) => ({
+      ...pocha,
+      startDate: new Date(pocha.startDate),
+      endDate: new Date(pocha.endDate),
+    }));
+  } catch (error) {
+    throw new Error("Error fetching previous pocha information");
+  }
 }
 
 /**
@@ -59,7 +68,7 @@ export async function getPochaInfoMock(date: Date) {
  */
 export async function getPochaMenu(
   pochaid: number,
-  token: string
+  token?: string
 ): Promise<MenuByCategory[] | undefined> {
   const url = `/pocha/menu/${pochaid}/`;
   try {
