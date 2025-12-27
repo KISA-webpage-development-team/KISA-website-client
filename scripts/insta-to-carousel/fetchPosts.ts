@@ -1,0 +1,149 @@
+import axios from "axios";
+import type { AxiosInstance } from "axios";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.local" });
+dotenv.config();
+
+export interface ImageCandidate {
+  url: string;
+  width?: number;
+  height?: number;
+  filename?: string;
+}
+
+export interface InstagramNode {
+  id: string;
+  pk?: string;
+  code?: string;
+  taken_at?: number;
+  media_type?: number;
+  product_type?: string;
+  caption?: { text?: string; created_at?: number } | null;
+  image_versions2?: { candidates?: ImageCandidate[] } | null;
+  [k: string]: any; // keep other fields available
+}
+
+export interface FetchPostsOptions {
+  maxId?: string;
+  host?: string; // override RapidAPI host
+  timeoutMs?: number;
+  retries?: number;
+}
+console.log("RAPIDAPI_INSTAGRAM_HOST:", process.env.RAPIDAPI_INSTAGRAM_HOST);
+const DEFAULT_HOST = process.env.RAPIDAPI_INSTAGRAM_HOST || "instagram120.p.rapidapi.com";
+const DEFAULT_TIMEOUT = 15_000;
+const DEFAULT_RETRIES = 3;
+
+function buildClient(host = DEFAULT_HOST, timeout = DEFAULT_TIMEOUT): AxiosInstance {
+  const key = process.env.RAPIDAPI_INSTAGRAM_KEY || "";
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (host) headers["x-rapidapi-host"] = host;
+  if (key) headers["x-rapidapi-key"] = key;
+
+  return axios.create({
+    baseURL: `https://${host}`,
+    timeout,
+    headers,
+  });
+}
+
+/**
+ * Fetch recent posts for a given username from RapidAPI Instagram endpoint.
+ *
+ * Notes:
+ * - Uses env vars RAPIDAPI_INSTAGRAM_KEY and RAPIDAPI_HOST by default.
+ * - The endpoint returns { result: { edges: [{ node }] } } in the tested API.
+ */
+export async function fetchPosts(
+  username: string,
+  options: FetchPostsOptions = {}
+): Promise<InstagramNode[]> {
+  if (!username) throw new Error("username is required");
+
+  const host = options.host || DEFAULT_HOST;
+  const timeout = options.timeoutMs ?? DEFAULT_TIMEOUT;
+  const retries = options.retries ?? DEFAULT_RETRIES;
+
+  const client = buildClient(host, timeout);
+
+  const payload = {
+    username,
+    maxId: options.maxId ?? "0",
+  };
+
+  let attempt = 0;
+  let lastErr: any = null;
+
+  while (attempt <= retries) {
+    try {
+      const res = await client.post("/api/instagram/posts", payload);
+
+      if (!res || !res.data) throw new Error("Empty response from API");
+
+      const edges = res.data?.result?.edges;
+      if (!Array.isArray(edges)) {
+        throw new Error("Unexpected response shape: missing result.edges");
+      }
+
+      const nodes: InstagramNode[] = edges.map((e: any) => e.node).filter(Boolean);
+      return nodes;
+    } catch (err: any) {
+      lastErr = err;
+      attempt += 1;
+
+      // Respect 429s with a longer backoff
+      const status = err?.response?.status;
+      const waitMs = Math.min(2000 * 2 ** attempt, 30_000);
+
+      if (attempt > retries) break;
+
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((r) => setTimeout(r, waitMs));
+    }
+  }
+
+  throw new Error(`fetchPosts failed after ${retries} retries: ${lastErr?.message || lastErr}`);
+}
+
+// Helper: pick the best image URL candidate (prefer width >= 720, else largest)
+export function pickImageUrl(node: InstagramNode): string | null {
+  const candidates = node?.image_versions2?.candidates || [];
+  if (!candidates.length) return null;
+
+  // Prefer candidate with width >= 720
+  const prefer = candidates.find((c) => (c.width ?? 0) >= 720);
+  if (prefer) return prefer.url;
+
+  // Otherwise pick largest by width
+  const largest = candidates.reduce((acc, cur) => {
+    if (!acc || (cur.width ?? 0) > (acc.width ?? 0)) return cur;
+    return acc;
+  }, candidates[0]);
+
+  return largest?.url ?? null;
+}
+
+// If run directly, a small CLI for quick manual testing (no secrets logged)
+// Use `import.meta.main` in Node ESM; cast to `any` so TypeScript compiles.
+if ((import.meta as any).main) {
+  (async () => {
+    const username = process.argv[2] || "kisa_michigan";
+    try {
+      const nodes = await fetchPosts(username, { maxId: "0", retries: 2 });
+      console.log(`fetched ${nodes.length} nodes`);
+
+      // Print a compact preview
+      nodes.slice(0, 5).forEach((n, i) => {
+        console.log(i + 1, { id: n.id ?? n.pk, code: n.code, taken_at: n.taken_at ?? n.caption?.created_at });
+      });
+    } catch (err: any) {
+      // Keep the error compact to avoid leaking secrets
+      console.error("fetchPosts failed:", err?.message ?? err);
+      process.exit(2);
+    }
+  })();
+}
