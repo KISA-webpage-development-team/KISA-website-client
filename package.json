@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:insta": "npx ts-node tests/scripts/insta-to-carousel/formatPosts.test.ts",
-    "insta:run": "npx ts-node scripts/insta-to-carousel/cli.ts",
+    "insta:run": "npx tsx scripts/insta-to-carousel/cli.ts",
     "insta:dry-run": "npx ts-node scripts/insta-to-carousel/cli.ts --dry-run"
   },
   "dependencies": {

@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm' # Enable npm caching
 
       - name: Install dependencies
         run: npm ci --silent
@@ -31,7 +32,7 @@ jobs:
           RAPIDAPI_INSTAGRAM_KEY: ${{ secrets.RAPIDAPI_INSTAGRAM_KEY }}
           RAPIDAPI_INSTAGRAM_HOST: ${{ secrets.RAPIDAPI_INSTAGRAM_HOST }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: npm run insta:run
+        run: npm run insta:run # This now calls 'npx tsx' via package.json
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
@@ -40,8 +41,7 @@ jobs:
           branch: instagram-sync
           delete-branch: true
           title: 'chore: update instagram carousel (auto)'
+          commit-message: 'chore: update instagram carousel (auto)'
           body: |
             Automated update of Instagram carousel data.
-
             This PR was automatically created by the Instagram sync workflow.
-          commit-message: 'chore: update instagram carousel (auto)'
