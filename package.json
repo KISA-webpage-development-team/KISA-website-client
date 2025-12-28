@@ -10,9 +10,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:insta": "node -r ts-node/register tests/scripts/insta-to-carousel/formatPosts.test.ts",
-    "insta:run": "node -r ts-node/register scripts/insta-to-carousel/cli",
-    "insta:dry-run": "node -r ts-node/register scripts/insta-to-carousel/cli.ts --dry-run"
+    "test:insta": "npx ts-node tests/scripts/insta-to-carousel/formatPosts.test.ts",
+    "insta:run": "npx ts-node scripts/insta-to-carousel/cli.ts",
+    "insta:dry-run": "npx ts-node scripts/insta-to-carousel/cli.ts --dry-run"
   },
   "dependencies": {
     "@babel/core": "7.26.0",
