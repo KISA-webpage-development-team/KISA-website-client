@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { AxiosInstance } from "axios";
+
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -29,12 +30,20 @@ export interface FetchPostsOptions {
   timeoutMs?: number;
   retries?: number;
 }
-console.log("RAPIDAPI_INSTAGRAM_HOST:", process.env.RAPIDAPI_INSTAGRAM_HOST);
-const DEFAULT_HOST = process.env.RAPIDAPI_INSTAGRAM_HOST || "instagram120.p.rapidapi.com";
+
+const DEFAULT_HOST =
+  process.env.RAPIDAPI_INSTAGRAM_HOST || "instagram120.p.rapidapi.com";
 const DEFAULT_TIMEOUT = 15_000;
 const DEFAULT_RETRIES = 3;
 
-function buildClient(host = DEFAULT_HOST, timeout = DEFAULT_TIMEOUT): AxiosInstance {
+/**
+ * Build an Axios client for RapidAPI Instagram endpoint.
+ * @returns AxiosInstance
+ */
+function buildClient(
+  host = DEFAULT_HOST,
+  timeout = DEFAULT_TIMEOUT
+): AxiosInstance {
   const key = process.env.RAPIDAPI_INSTAGRAM_KEY || "";
 
   const headers: Record<string, string> = {
@@ -57,6 +66,8 @@ function buildClient(host = DEFAULT_HOST, timeout = DEFAULT_TIMEOUT): AxiosInsta
  * Notes:
  * - Uses env vars RAPIDAPI_INSTAGRAM_KEY and RAPIDAPI_HOST by default.
  * - The endpoint returns { result: { edges: [{ node }] } } in the tested API.
+ *
+ * @returns Array of InstagramNode
  */
 export async function fetchPosts(
   username: string,
@@ -68,8 +79,11 @@ export async function fetchPosts(
   const timeout = options.timeoutMs ?? DEFAULT_TIMEOUT;
   const retries = options.retries ?? DEFAULT_RETRIES;
 
+  // instagram API client
   const client = buildClient(host, timeout);
 
+  // NOTE: not sure what is `maxId` here,
+  // using "0" will returns "some" number of recent posts
   const payload = {
     username,
     maxId: options.maxId ?? "0",
@@ -89,7 +103,9 @@ export async function fetchPosts(
         throw new Error("Unexpected response shape: missing result.edges");
       }
 
-      const nodes: InstagramNode[] = edges.map((e: any) => e.node).filter(Boolean);
+      const nodes: InstagramNode[] = edges
+        .map((e: any) => e.node)
+        .filter(Boolean);
       return nodes;
     } catch (err: any) {
       lastErr = err;
@@ -106,7 +122,9 @@ export async function fetchPosts(
     }
   }
 
-  throw new Error(`fetchPosts failed after ${retries} retries: ${lastErr?.message || lastErr}`);
+  throw new Error(
+    `fetchPosts failed after ${retries} retries: ${lastErr?.message || lastErr}`
+  );
 }
 
 // Helper: pick the best image URL candidate (prefer width >= 720, else largest)
@@ -138,7 +156,11 @@ if ((import.meta as any).main) {
 
       // Print a compact preview
       nodes.slice(0, 5).forEach((n, i) => {
-        console.log(i + 1, { id: n.id ?? n.pk, code: n.code, taken_at: n.taken_at ?? n.caption?.created_at });
+        console.log(i + 1, {
+          id: n.id ?? n.pk,
+          code: n.code,
+          taken_at: n.taken_at ?? n.caption?.created_at,
+        });
       });
     } catch (err: any) {
       // Keep the error compact to avoid leaking secrets

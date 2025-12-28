@@ -5,12 +5,13 @@
 // title
 // descr
 // url
+// image_url (optional)
 
 // Hand-authored static carousel items
 const staticHomeCarousel = [
   {
-    id: 'f25-26_last_pocha',
-    title: 'KISA 종강포차',
+    id: "f25-26_last_pocha",
+    title: "KISA 종강포차",
     desc: (
       <p>
         드디어 연말이 다가오고 있습니다!!!🎄❄️☃️🎁 학기말 시험들, 밀린 과제들,
@@ -21,11 +22,11 @@ const staticHomeCarousel = [
         후원으로 함께합니다📱🎄
       </p>
     ),
-    url: 'https://tr.ee/V7i4TJNsot',
+    url: "https://tr.ee/V7i4TJNsot",
   },
   {
-    id: 'f25-26_kisa_yearbook',
-    title: 'KISA Yearbook 2025-26',
+    id: "f25-26_kisa_yearbook",
+    title: "KISA Yearbook 2025-26",
     desc: (
       <p>
         안녕하세요 미시간 졸업예정자 여러분, 여러분의 이야기로 채워질 Yearbook의
@@ -35,7 +36,7 @@ const staticHomeCarousel = [
         여정을 함께하고자 합니다.
       </p>
     ),
-    url: 'https://docs.google.com/forms/d/e/1FAIpQLSdUMtf0DisuJtBcjsI8GjVu7NujMTwHC-pODtApDTN-Hg7E4w/viewform',
+    url: "https://docs.google.com/forms/d/e/1FAIpQLSdUMtf0DisuJtBcjsI8GjVu7NujMTwHC-pODtApDTN-Hg7E4w/viewform",
   },
 ];
 
@@ -43,13 +44,13 @@ const staticHomeCarousel = [
 let instagramGenerated = [];
 try {
   // eslint-disable-next-line global-require,import/no-dynamic-require
-  instagramGenerated = require('./instagramCarousel.generated.json');
+  instagramGenerated = require("./instagramCarousel.generated.json");
 } catch (err) {
   instagramGenerated = [];
 }
 
-// Convert generated items (plain JSON) into the site's expected shape (desc wrapped in <p>)
-const instagramItems = (instagramGenerated || []).map((it) => ({
+// Function to get Instagram items
+const getInstagramItems = () => (instagramGenerated || []).map((it) => ({
   id: it.id,
   title: it.title,
   desc: <p>{it.desc}</p>,
@@ -59,24 +60,29 @@ const instagramItems = (instagramGenerated || []).map((it) => ({
 
 // Merge rules: instagram items first (up to max), then static items; dedupe by id keeping first occurrence
 const MAX_ITEMS = 6;
-const merged = [];
-const seen = new Set();
 
-for (const i of instagramItems.slice(0, MAX_ITEMS)) {
-  if (!seen.has(i.id)) {
-    merged.push(i);
-    seen.add(i.id);
+const mergeCarouselData = (instagramItems, staticItems) => {
+  const merged = [];
+  const seen = new Set();
+
+  for (const i of instagramItems.slice(0, MAX_ITEMS)) {
+    if (!seen.has(i.id)) {
+      merged.push(i);
+      seen.add(i.id);
+    }
   }
-}
 
-for (const s of staticHomeCarousel) {
-  if (!seen.has(s.id)) {
-    merged.push(s);
-    seen.add(s.id);
+  for (const s of staticItems) {
+    if (!seen.has(s.id)) {
+      merged.push(s);
+      seen.add(s.id);
+    }
   }
-}
 
-const homeCarouselData = merged;
+  return merged;
+};
+
+const homeCarouselData = mergeCarouselData(getInstagramItems(), staticHomeCarousel);
 
 // Quick link data
 // <homeQuickLinksData>
@@ -111,4 +117,4 @@ const homeQuickLinksData = [
   },
 ];
 
-export { homeCarouselData, homeQuickLinksData };
+export { staticHomeCarousel, getInstagramItems, mergeCarouselData, homeCarouselData, homeQuickLinksData };

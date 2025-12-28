@@ -2,6 +2,7 @@ import { pickImageUrl } from "./fetchPosts.ts";
 import type { InstagramNode } from "./fetchPosts.ts";
 import fs from "fs";
 import dotenv from "dotenv";
+import OpenAI from "openai";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
@@ -12,7 +13,7 @@ export interface CarouselItem {
   url: string; // Instagram post URL
   imageUrl?: string | null;
   takenAt?: string | null; // ISO (instagram post time)
-  eventTakenAt?: string | null; // ISO (event time extracted from caption)
+  eventEndDate?: string | null; // ISO (event end time extracted from caption)
   type?: string | null;
   meta?: any;
 }
@@ -20,20 +21,25 @@ export interface CarouselItem {
 export interface FormatOptions {
   titleMaxLength?: number;
   summarySentences?: number;
-  useGemini?: boolean; // attempt to call Gemini if GEMINI_API_KEY is present
+  useLLM?: boolean; // attempt to call Gemini if GEMINI_API_KEY is present
   defaultTimezone?: string; // for date normalization (default: UTC)
 }
 
 const DEFAULTS: Required<FormatOptions> = {
   titleMaxLength: 60,
   summarySentences: 2,
-  useGemini: true,
+  useLLM: true,
   defaultTimezone: "UTC",
 };
 
 function sanitizeText(t?: string | null): string {
   if (!t) return "";
   return t.replace(/\s+/g, " ").trim();
+}
+
+export function buildInstagramLink(code?: string | null): string | null {
+  if (!code) return null;
+  return `https://www.instagram.com/p/${code}/`;
 }
 
 export function extractTakenAt(node: InstagramNode): string | null {
@@ -46,11 +52,6 @@ export function extractTakenAt(node: InstagramNode): string | null {
   } catch (err) {
     return null;
   }
-}
-
-export function buildInstagramLink(code?: string | null): string | null {
-  if (!code) return null;
-  return `https://www.instagram.com/p/${code}/`;
 }
 
 // Event extraction: try Gemini (if configured), otherwise fallback to deterministic regex parsing
@@ -89,7 +90,9 @@ export function extractEventDateLocal(text: string): string | null {
   };
 
   // 1) ISO-like: YYYY-MM-DD or YYYY/MM/DD
-  const iso = clean.match(/\b(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/);
+  const iso = clean.match(
+    /\b(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/
+  );
   if (iso) {
     const y = Number(iso[1]);
     const m = Number(iso[2]) - 1;
@@ -119,7 +122,9 @@ export function extractEventDateLocal(text: string): string | null {
   }
 
   // 3) Month name variants: e.g., January 3 or Jan 3rd, optional year
-  const mname = clean.match(/\b(January|Jan|February|Feb|March|Mar|April|Apr|May|June|Jun|July|Jul|August|Aug|September|Sept|Sep|October|Oct|November|Nov|December|Dec)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s*(\d{4}))?\b/i);
+  const mname = clean.match(
+    /\b(January|Jan|February|Feb|March|Mar|April|Apr|May|June|Jun|July|Jul|August|Aug|September|Sept|Sep|October|Oct|November|Nov|December|Dec)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s*(\d{4}))?\b/i
+  );
   if (mname) {
     const monthText = mname[1].toLowerCase();
     const month = monthNames[monthText] ?? 0;
@@ -134,25 +139,19 @@ export function extractEventDateLocal(text: string): string | null {
   return null;
 }
 
-export async function extractEventDate(text: string, useGemini = true): Promise<string | null> {
-  const geminiKey = process.env.GEMINI_API_KEY;
-  if (useGemini && geminiKey) {
-    // TODO: implement actual Gemini call to extract a date/time from caption and return ISO.
-    // For now, we fallback to the local deterministic extractor.
-  }
-
-  return extractEventDateLocal(text);
-}
-
-// Local deterministic fallback summary: split into sentences and pick first N
-export function extractSummaryLocal(text: string, sentences = 2): { title: string; summary: string } {
+// Local deterministic fallback summary: split into sentences and pick first 2.
+export function extractSummaryLocal(text: string): {
+  title: string;
+  summary: string;
+} {
   const clean = sanitizeText(text);
   if (!clean) return { title: "Instagram", summary: "" };
 
   // Split on punctuation that looks like sentence boundaries
   const parts = clean.split(/(?<=[.!?])\s+/);
   const first = parts[0] || clean;
-  const summaryParts = parts.slice(0, sentences);
+  // Pick first 2 sentences for summary
+  const summaryParts = parts.slice(0, 2);
   const summary = summaryParts.join(" ");
 
   // Derive a title from the first sentence, clip
@@ -162,82 +161,127 @@ export function extractSummaryLocal(text: string, sentences = 2): { title: strin
 }
 
 /**
- * Placeholder Gemini summarizer. If GEMINI_API_KEY is set, this function should be
- * implemented to call the model and return { title, summary }.
- *
- * For now: if useGemini is true and no key present, we fall back to local extraction.
+ * Uses LLM to extract event end date, title, and summary in one call.
  */
-export async function summarizeCaption(
-  caption: string,
-  opts: { sentences: number; useGemini: boolean } = { sentences: 2, useGemini: true }
-): Promise<{ title: string; summary: string }> {
-  const { sentences, useGemini } = opts;
+async function llmExtract(
+  takenAt: string,
+  caption: string
+): Promise<{ eventEndDate: string | null; title: string; summary: string }> {
+  const openai = new OpenAI();
+  const prompt = `You are processing Instagram posts from the University of Michigan Korean International Student Association (KISA). These posts are about self-hosted events, which can be one-day events, multi-day events, or semester-long activities. Most posts are in Korean.
 
-  // If the caller asked for Gemini but we don't have a key, fall back gracefully
-  const geminiKey = process.env.GEMINI_API_KEY;
-  if (useGemini && geminiKey) {
-    // TODO: Implement a proper Gemini/OpenAI client request here.
-    // The implementation depends on the SDK / endpoint you choose.
-    // Example (high level): send a prompt like "Summarize the following caption in 2-3 sentences and also give a 6-10 word title." and parse the response.
+Extract the event end date in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ) if mentioned. 
+Here are few tips for date extraction (order of importance):
+1. Be aware that the post is taken at ${takenAt}, so end date is very probably on or after this date (BUT NOT ALWAYS).
+2. If no date is mentioned, YOU MUST infer it based on context (e.g., "next Saturday" or "this Friday"). DON'T LEAVE IT null EVEN IF NO DATE IS EXPLICITLY MENTIONED.
+3. BUT There are few exceptions that the post is not about an event (e.g. PR 팀 소개, OP 팀 소개); in that case, YOU MUST return null for eventEndDate.
+4. Caption may include texts that refers to the semester (e.g. W26). In such cases, infer the event date based on the semester. For example if the event is for W26, assume the event end date is between January 2026 and May 2026.
 
-    // For now, we'll use the local fallback until the key + client are configured.
-    // This keeps behavior deterministic for unit tests and local development.
-  }
+Provide a short title and a summary in 2-3 sentences in Korean.
 
-  return extractSummaryLocal(caption, sentences);
-}
+Examples:
+- Post about a year-end party: {"eventEndDate": "2025-12-20T23:59:59.999Z", "title": "KISA 종강포차", "summary": "드디어 연말이 다가오고 있습니다! 학기말 시험과 과제를 잠시 내려놓고 즐거운 토요일에 함께 놀고 마시자. 소주 첫 50병을 $15에서 $10으로 할인 판매하며, Total Wireless 후원으로 특별한 밤을 보낼 수 있다."}
+- Post about a yearbook project: {"eventEndDate": "2026-04-15T23:59:59.999Z", "title": "KISA Yearbook 2025-26", "summary": "미시간 졸업예정자 여러분, 여러분의 이야기로 채워질 Yearbook의 주인공이 되어주세요. 미시간에서의 소중한 추억과 경험을 담은 앨범 프로젝트로, 서로의 이야기를 나누는 의미 있는 여정을 함께하자."}
 
-export async function formatNodeToCarouselItem(
-  node: InstagramNode,
-  options?: FormatOptions
-): Promise<CarouselItem> {
-  const opts: Required<FormatOptions> = { ...DEFAULTS, ...(options || {}) };
+Return only valid JSON: {"eventEndDate": "ISO string", "title": "short title here", "summary": "summary here"}. Caption: ${caption}`;
 
-  const captionText = sanitizeText(node.caption?.text ?? "");
-
-  const { title, summary } = await summarizeCaption(captionText, {
-    sentences: opts.summarySentences,
-    useGemini: opts.useGemini,
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: prompt }],
   });
 
-  // Clip title to max length
-  const clippedTitle = title.length > opts.titleMaxLength ? title.slice(0, opts.titleMaxLength).trim() + "…" : title;
+  const text = completion.choices[0].message.content?.trim() || "";
+  const parsed = JSON.parse(text);
 
-  const takenAt = extractTakenAt(node);
-  const eventTakenAt = await extractEventDate(captionText, opts.useGemini);
-
-  const imageUrl = pickImageUrl(node);
-  const link = buildInstagramLink(node.code ?? null) ?? "#";
-
-  const item: CarouselItem = {
-    id: node.id ?? node.pk ?? `instagram_${node.code ?? Math.random().toString(36).slice(2, 8)}`,
-    title: clippedTitle || "Instagram",
-    desc: summary || "",
-    url: link,
-    imageUrl,
-    takenAt,
-    eventTakenAt,
-    type: node.product_type ?? (node.media_type ? String(node.media_type) : null),
-    meta: node,
+  return {
+    eventEndDate: parsed.eventEndDate,
+    title: parsed.title,
+    summary: parsed.summary,
   };
-
-  return item;
 }
 
-
-export async function formatPosts(nodes: InstagramNode[], options?: FormatOptions): Promise<CarouselItem[]> {
+export async function formatPosts(
+  nodes: InstagramNode[],
+  options?: FormatOptions
+): Promise<CarouselItem[]> {
   const opts = { ...DEFAULTS, ...(options || {}) };
+  const now = new Date();
+  const items: CarouselItem[] = [];
 
-  // Map to items in sequence (newest -> oldest if nodes are in that order from API)
-  const items = await Promise.all(nodes.map((n) => formatNodeToCarouselItem(n, opts)));
+  for (const n of nodes) {
+    const captionText = sanitizeText(n.caption?.text ?? "");
+
+    // First, check with local extraction if it's a past event
+    const localEventEndDate = extractEventDateLocal(captionText);
+
+    if (localEventEndDate && new Date(localEventEndDate) <= now) {
+      // Past event, skip to minimize API calls
+      continue;
+    }
+    // Future or no date, process
+    let eventEndDate: string | null = localEventEndDate;
+    let title: string = "Instagram";
+    let summary: string = "";
+
+    const takenAt = extractTakenAt(n);
+
+    if (opts.useLLM) {
+      try {
+        const llmResult = await llmExtract(takenAt, captionText);
+        eventEndDate = llmResult.eventEndDate || eventEndDate;
+        title = llmResult.title;
+        summary = llmResult.summary;
+      } catch (error) {
+        console.warn("LLM extraction failed, falling back to local:", error);
+        const local = extractSummaryLocal(captionText);
+        title = local.title;
+        summary = local.summary;
+      }
+    } else {
+      const local = extractSummaryLocal(captionText);
+      title = local.title;
+      summary = local.summary;
+    }
+
+    // Clip title to max length
+    const clippedTitle =
+      title.length > opts.titleMaxLength
+        ? title.slice(0, opts.titleMaxLength).trim() + "…"
+        : title;
+
+    const imageUrl = pickImageUrl(n);
+    const link = buildInstagramLink(n.code ?? null) ?? "#";
+
+    const item: CarouselItem = {
+      id: `llm-collected_instagram_${
+        n.code ?? Math.random().toString(36).slice(2, 8)
+      }`,
+      title: clippedTitle || "Instagram",
+      desc: summary || "",
+      url: link,
+      imageUrl,
+      takenAt,
+      eventEndDate,
+      type: n.product_type ?? (n.media_type ? String(n.media_type) : null),
+      meta: n,
+    };
+
+    items.push(item);
+  }
+
+  // Additional filter in case LLM provided a past date
+  const filteredItems = items.filter(
+    (item) => item.eventEndDate && new Date(item.eventEndDate) > now
+  );
 
   // Ensure deterministic ordering with event date preference:
-  // - items with eventTakenAt come first, sorted by eventTakenAt ascending (soonest first)
-  // - items without eventTakenAt fall back to instagram takenAt desc
-  items.sort((a, b) => {
-    if (a.eventTakenAt && b.eventTakenAt) return a.eventTakenAt.localeCompare(b.eventTakenAt);
-    if (a.eventTakenAt && !b.eventTakenAt) return -1;
-    if (!a.eventTakenAt && b.eventTakenAt) return 1;
+  // - items with eventEndDate come first, sorted by eventEndDate ascending (soonest first)
+  // - items without eventEndDate fall back to instagram takenAt desc
+  filteredItems.sort((a, b) => {
+    if (a.eventEndDate && b.eventEndDate)
+      return a.eventEndDate.localeCompare(b.eventEndDate);
+    if (a.eventEndDate && !b.eventEndDate) return -1;
+    if (!a.eventEndDate && b.eventEndDate) return 1;
 
     if (a.takenAt && b.takenAt) return b.takenAt.localeCompare(a.takenAt);
     if (a.takenAt) return -1;
@@ -246,7 +290,7 @@ export async function formatPosts(nodes: InstagramNode[], options?: FormatOption
     return a.id.localeCompare(b.id);
   });
 
-  return items;
+  return filteredItems;
 }
 
 // If run directly for quick manual formatting demo
@@ -261,8 +305,9 @@ if ((import.meta as any).main) {
 
     const raw = fs.readFileSync(samplePath, "utf-8");
     const sample = JSON.parse(raw);
-    const nodes: InstagramNode[] = sample?.result?.edges?.map((e: any) => e.node) || [];
-    const formatted = await formatPosts(nodes, { useGemini: false });
+    const nodes: InstagramNode[] =
+      sample?.result?.edges?.map((e: any) => e.node) || [];
+    const formatted = await formatPosts(nodes, { useLLM: false });
     console.log(JSON.stringify(formatted.slice(0, 6), null, 2));
   })();
 }

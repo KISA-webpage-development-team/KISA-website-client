@@ -7,7 +7,6 @@ import { formatPosts } from "./formatPosts.ts";
 import type { CarouselItem } from "./formatPosts.ts";
 
 import yargs from "yargs";
-// import { hideBin } from 'yargs/helpers'
 
 const argv = yargs(process.argv)
   .option("username", { type: "string", default: "kisa_michigan" })
@@ -39,16 +38,20 @@ function stableStringify(obj: any) {
   return JSON.stringify(obj, Object.keys(obj).sort(), 2);
 }
 
-function isStale(existing: CarouselItem[], latestItems: CarouselItem[], staleDays: number) {
+function isStale(
+  existing: CarouselItem[],
+  latestItems: CarouselItem[],
+  staleDays: number
+) {
   // If existing is empty, it's stale
   if (!existing || existing.length === 0) return true;
 
   const now = Date.now();
   const cutoff = now - staleDays * 24 * 60 * 60 * 1000;
 
-  // Find newest eventTakenAt or takenAt in existing
+  // Find newest eventEndDate or takenAt in existing
   const newestExistingTs = existing
-    .map((it) => it.eventTakenAt ?? it.takenAt)
+    .map((it) => it.eventEndDate ?? it.takenAt)
     .filter(Boolean)
     .map((s) => new Date(s as string).getTime())
     .reduce((acc, cur) => Math.max(acc, cur), 0);
@@ -60,10 +63,14 @@ function isStale(existing: CarouselItem[], latestItems: CarouselItem[], staleDay
 
 async function run() {
   console.log("Fetching recent posts for", argv.username);
-  const nodes = await fetchPosts(String(argv.username), { maxId: String(argv.maxId) });
+  const nodes = await fetchPosts(String(argv.username), {
+    maxId: String(argv.maxId),
+  });
   console.log(`Fetched ${nodes.length} nodes`);
 
-  const items = await formatPosts(nodes, { useGemini: Boolean(process.env.GEMINI_API_KEY) });
+  const items = await formatPosts(nodes, {
+    useLLM: Boolean(process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY),
+  });
 
   const limited = items.slice(0, Number(argv["max-items"]));
 
@@ -80,7 +87,10 @@ async function run() {
     return 0;
   }
 
-  console.log("Changes detected or stale. Writing generated file to", OUTPUT_PATH);
+  console.log(
+    "Changes detected or stale. Writing generated file to",
+    OUTPUT_PATH
+  );
 
   if (argv["dry-run"]) {
     console.log("Dry-run mode: not writing files.");
@@ -99,7 +109,9 @@ async function run() {
       // Stage and commit changes
       execSync(`git add ${OUTPUT_PATH}`);
       const message = `chore: update instagram carousel (auto)`;
-      const existingStatus = execSync("git status --porcelain").toString().trim();
+      const existingStatus = execSync("git status --porcelain")
+        .toString()
+        .trim();
       execSync(`git commit -m "${message}" || true`);
       execSync("git push");
       console.log("Committed and pushed changes.");
