@@ -3,6 +3,7 @@ import type { InstagramNode } from "./fetchPosts.ts";
 import fs from "fs";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import { fileURLToPath } from "url";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
@@ -292,7 +293,7 @@ export async function formatPosts(
 }
 
 // If run directly for quick manual formatting demo
-if ((import.meta as any).main) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   (async () => {
     // simple demo that reads a local JSON sample (if provided) — for manual testing only
     const samplePath = process.argv[2];

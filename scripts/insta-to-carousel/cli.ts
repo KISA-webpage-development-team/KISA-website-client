@@ -5,6 +5,7 @@ import { execSync } from "child_process";
 import { fetchPosts } from "./fetchPosts.ts";
 import { formatPosts } from "./formatPosts.ts";
 import type { CarouselItem } from "./formatPosts.ts";
+import { fileURLToPath } from 'url';
 
 import yargs from "yargs";
 
@@ -88,8 +89,7 @@ async function run() {
   return 0;
 }
 
-// Use ESM-friendly entrypoint guard
-if ((import.meta as any).main) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   run()
     .then((code) => process.exit(Number(code)))
     .catch((err) => {

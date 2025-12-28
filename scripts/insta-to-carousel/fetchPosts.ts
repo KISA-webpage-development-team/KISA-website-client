@@ -2,6 +2,7 @@ import axios from "axios";
 import type { AxiosInstance } from "axios";
 
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
@@ -182,7 +183,7 @@ export function pickImageUrl(node: InstagramNode): string | null {
 
 // If run directly, a small CLI for quick manual testing (no secrets logged)
 // Use `import.meta.main` in Node ESM; cast to `any` so TypeScript compiles.
-if ((import.meta as any).main) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   (async () => {
     const username = process.argv[2] || "kisa_michigan";
     try {
