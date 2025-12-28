@@ -31,3 +31,10 @@ Make sure local backend server is running (https://github.com/KISA-webpage-devel
 ### 3. run following command to build the project and run the server
 
 `npm run build && npm run start`
+
+---
+
+## Insta2Carousel
+Automated Pipeline for Instagram Posts -> Home Carousel UI
+
+[Docs Link](./docs/insta2carousel.md)
