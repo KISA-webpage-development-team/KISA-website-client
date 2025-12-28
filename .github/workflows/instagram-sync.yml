@@ -31,7 +31,7 @@ jobs:
           RAPIDAPI_INSTAGRAM_KEY: ${{ secrets.RAPIDAPI_INSTAGRAM_KEY }}
           RAPIDAPI_INSTAGRAM_HOST: ${{ secrets.RAPIDAPI_INSTAGRAM_HOST }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: npx ts-node scripts/insta-to-carousel/cli.ts --username kisa_michigan
+        run: npm run insta:run
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
