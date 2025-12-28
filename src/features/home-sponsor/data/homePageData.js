@@ -55,6 +55,7 @@ const getInstagramItems = () => (instagramGenerated || []).map((it) => ({
   title: it.title,
   desc: <p>{it.desc}</p>,
   url: it.url,
+  imageUrl: it.imageUrl,
   _meta: it,
 }));
 

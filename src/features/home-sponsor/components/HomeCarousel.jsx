@@ -81,13 +81,22 @@ export default function HomeCarousel() {
               }
             }}
           >
-            <Image
+            {/* <Image
               className="object-fit"
               src={buildCarouselImageUrl(id, imageUrl)}
               fill
               priority={index === active}
               alt={desc}
               sizes="100vw" // temporary fix for browser bug
+            /> */}
+            {/* 
+              llm generated image url is dynamic external url, so we use img tag for that
+            */}
+            <img
+              className="object-fit w-full h-full rounded-md"
+              src={buildCarouselImageUrl(id, imageUrl)}
+              alt={desc}
+              loading={index === active ? "eager" : "lazy"}
             />
           </motion.div>
         ))}

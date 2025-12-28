@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync:
@@ -25,14 +26,22 @@ jobs:
       - name: Install dependencies
         run: npm ci --silent
 
-      - name: Configure git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Run insta-to-carousel (commit on change)
+      - name: Run insta-to-carousel
         env:
-          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-          RAPIDAPI_HOST: ${{ secrets.RAPIDAPI_HOST }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: npx ts-node scripts/insta-to-carousel/cli.ts --commit --username kisa_michigan --max-items 6 --stale-days 30
+          RAPIDAPI_INSTAGRAM_KEY: ${{ secrets.RAPIDAPI_INSTAGRAM_KEY }}
+          RAPIDAPI_INSTAGRAM_HOST: ${{ secrets.RAPIDAPI_INSTAGRAM_HOST }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: npx ts-node scripts/insta-to-carousel/cli.ts --username kisa_michigan
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: instagram-sync
+          delete-branch: true
+          title: 'chore: update instagram carousel (auto)'
+          body: |
+            Automated update of Instagram carousel data.
+
+            This PR was automatically created by the Instagram sync workflow.
+          commit-message: 'chore: update instagram carousel (auto)'

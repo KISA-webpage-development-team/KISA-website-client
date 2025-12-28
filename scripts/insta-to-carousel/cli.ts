@@ -13,8 +13,6 @@ const argv = yargs(process.argv)
   .option("maxId", { type: "string", default: "0" })
   .option("dry-run", { type: "boolean", default: false })
   .option("commit", { type: "boolean", default: false })
-  .option("max-items", { type: "number", default: 6 })
-  .option("stale-days", { type: "number", default: 30 })
   .option("output", {
     type: "string",
     default: "src/features/home-sponsor/data/instagramCarousel.generated.json",
@@ -34,33 +32,6 @@ function readExisting(): CarouselItem[] {
   }
 }
 
-function stableStringify(obj: any) {
-  return JSON.stringify(obj, Object.keys(obj).sort(), 2);
-}
-
-function isStale(
-  existing: CarouselItem[],
-  latestItems: CarouselItem[],
-  staleDays: number
-) {
-  // If existing is empty, it's stale
-  if (!existing || existing.length === 0) return true;
-
-  const now = Date.now();
-  const cutoff = now - staleDays * 24 * 60 * 60 * 1000;
-
-  // Find newest eventEndDate or takenAt in existing
-  const newestExistingTs = existing
-    .map((it) => it.eventEndDate ?? it.takenAt)
-    .filter(Boolean)
-    .map((s) => new Date(s as string).getTime())
-    .reduce((acc, cur) => Math.max(acc, cur), 0);
-
-  if (!newestExistingTs) return true;
-
-  return newestExistingTs < cutoff;
-}
-
 async function run() {
   console.log("Fetching recent posts for", argv.username);
   const nodes = await fetchPosts(String(argv.username), {
@@ -72,23 +43,20 @@ async function run() {
     useLLM: Boolean(process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY),
   });
 
-  const limited = items.slice(0, Number(argv["max-items"]));
-
   const existing = readExisting();
 
-  const latestJson = JSON.stringify(limited, null, 2);
+  const latestJson = JSON.stringify(items, null, 2);
   const existingJson = JSON.stringify(existing, null, 2);
 
   const contentsChanged = latestJson !== existingJson;
-  const stale = isStale(existing, limited, Number(argv["stale-days"]));
 
-  if (!contentsChanged && !stale) {
-    console.log("No changes detected and not stale. Exiting.");
+  if (!contentsChanged) {
+    console.log("No changes detected. Exiting.");
     return 0;
   }
 
   console.log(
-    "Changes detected or stale. Writing generated file to",
+    "Changes detected. Writing generated file to",
     OUTPUT_PATH
   );
 
@@ -109,9 +77,6 @@ async function run() {
       // Stage and commit changes
       execSync(`git add ${OUTPUT_PATH}`);
       const message = `chore: update instagram carousel (auto)`;
-      const existingStatus = execSync("git status --porcelain")
-        .toString()
-        .trim();
       execSync(`git commit -m "${message}" || true`);
       execSync("git push");
       console.log("Committed and pushed changes.");

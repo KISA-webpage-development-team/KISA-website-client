@@ -127,14 +127,49 @@ export async function fetchPosts(
   );
 }
 
-// Helper: pick the best image URL candidate (prefer width >= 720, else largest)
+// Helper: pick the best image URL candidate (prefer width >= 720 and closest to 2:3 aspect ratio, else closest to 2:3, else largest by width)
 export function pickImageUrl(node: InstagramNode): string | null {
   const candidates = node?.image_versions2?.candidates || [];
   if (!candidates.length) return null;
 
-  // Prefer candidate with width >= 720
-  const prefer = candidates.find((c) => (c.width ?? 0) >= 720);
-  if (prefer) return prefer.url;
+  const targetRatio = 2 / 3;
+
+  function getRatio(c: ImageCandidate): number | null {
+    if (c.width && c.height && c.width > 0) {
+      return c.height / c.width;
+    }
+    return null;
+  }
+
+  function findClosestToRatio(candidates: ImageCandidate[], minWidth?: number): ImageCandidate | null {
+    let filtered = candidates;
+    if (minWidth !== undefined) {
+      filtered = candidates.filter(c => (c.width ?? 0) >= minWidth);
+    }
+    if (!filtered.length) return null;
+
+    let closest: ImageCandidate | null = null;
+    let minDiff = Infinity;
+    for (const c of filtered) {
+      const ratio = getRatio(c);
+      if (ratio !== null) {
+        const diff = Math.abs(ratio - targetRatio);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closest = c;
+        }
+      }
+    }
+    return closest;
+  }
+
+  // Prefer candidate with width >= 720 and closest to 2:3 ratio
+  let selected = findClosestToRatio(candidates, 720);
+  if (selected) return selected.url;
+
+  // Otherwise, among all, closest to 2:3
+  selected = findClosestToRatio(candidates);
+  if (selected) return selected.url;
 
   // Otherwise pick largest by width
   const largest = candidates.reduce((acc, cur) => {

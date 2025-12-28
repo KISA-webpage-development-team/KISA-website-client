@@ -20,14 +20,12 @@ export interface CarouselItem {
 
 export interface FormatOptions {
   titleMaxLength?: number;
-  summarySentences?: number;
   useLLM?: boolean; // attempt to call Gemini if GEMINI_API_KEY is present
   defaultTimezone?: string; // for date normalization (default: UTC)
 }
 
 const DEFAULTS: Required<FormatOptions> = {
   titleMaxLength: 60,
-  summarySentences: 2,
   useLLM: true,
   defaultTimezone: "UTC",
 };
