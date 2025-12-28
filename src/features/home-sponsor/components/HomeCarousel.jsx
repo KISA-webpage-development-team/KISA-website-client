@@ -1,21 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useMemo } from "react";
-import { staticHomeCarousel, getInstagramItems, mergeCarouselData } from "@/features/home-sponsor/data/homePageData";
+import React, { useEffect, useRef, useState } from "react";
+import { homeCarouselData as items } from "@/features/home-sponsor/data/homePageData";
 import Image from "next/image";
 import {
   sejongHospitalBold,
   sejongHospitalLight,
 } from "@/utils/fonts/textFonts";
 import { motion } from "framer-motion";
-import { defaultImageURL } from "@/features/pocha/utils/getImagePath";
-
-function buildCarouselImageUrl(id, imageUrl) {
-  if (id.startsWith("llm-collected")) {
-    return imageUrl ?? defaultImageURL;
-  }
-  return `/carousel/${id}.png`;
-}
 
 export default function HomeCarousel() {
   const duration = 10000; // 10 seconds
@@ -23,8 +15,6 @@ export default function HomeCarousel() {
   const firstFrameTime = useRef(performance.now());
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
-
-  const items = useMemo(() => mergeCarouselData(getInstagramItems(), staticHomeCarousel), []);
 
   // animation + progress
   useEffect(() => {
@@ -60,7 +50,7 @@ export default function HomeCarousel() {
       transition-all duration-150 delay-300 ease-in-out
       "
       >
-        {items.map(({ id, desc, imageUrl }, index) => (
+        {items.map(({ id, desc }, index) => (
           <motion.div
             key={`carousel-${id}`}
             initial={{
@@ -81,22 +71,13 @@ export default function HomeCarousel() {
               }
             }}
           >
-            {/* <Image
+            <Image
               className="object-fit"
-              src={buildCarouselImageUrl(id, imageUrl)}
+              src={`/carousel/${id}.png`}
               fill
               priority={index === active}
               alt={desc}
               sizes="100vw" // temporary fix for browser bug
-            /> */}
-            {/* 
-              llm generated image url is dynamic external url, so we use img tag for that
-            */}
-            <img
-              className="object-fit w-full h-full rounded-md"
-              src={buildCarouselImageUrl(id, imageUrl)}
-              alt={desc}
-              loading={index === active ? "eager" : "lazy"}
             />
           </motion.div>
         ))}
