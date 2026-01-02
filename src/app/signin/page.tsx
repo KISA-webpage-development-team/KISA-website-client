@@ -1,10 +1,19 @@
+"use client";
+
 // [TEST] for Next-Auth Middleware functionality
 
 import React from "react";
 import { NotLogin } from "@/components/ui/feedback";
+import { signIn } from "next-auth/react";
 
 export default function page({ searchParams }) {
   const { callbackUrl } = searchParams;
+
+  const handleGoogleSignIn = () => {
+    signIn("google", {
+      callbackUrl: callbackUrl || "/",
+    });
+  };
 
   return (
     <section>
@@ -13,7 +22,8 @@ export default function page({ searchParams }) {
         제한될 수 있습니다.
       </span>
       {/* {(callbackUrl || decodeURIComponent(callbackUrl).endsWith("com/")) && ( */}
-      <NotLogin />
+      {/* @ts-ignore */}
+      <NotLogin handleGoogleSignIn={handleGoogleSignIn} />
       {/* )} */}
     </section>
   );
