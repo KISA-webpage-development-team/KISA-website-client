@@ -34,7 +34,7 @@ export default function Header({ session }) {
   const headerContentWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const [isJobsCurator, setIsJobsCurator] = useState(false);
   const [active, setActive] = useState(null);
 
   const pathname = usePathname();

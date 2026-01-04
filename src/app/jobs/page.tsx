@@ -39,17 +39,17 @@ function JobsCuratorPageContent() {
       </div>
 
       {/* Job Category Dropdown - Heading */}
-      {/* <div className="mt-2 sm:mt-0">
+      <div className="mt-2 sm:mt-0">
         <JobCategoryDropdown />
-      </div> */}
+      </div>
 
       {/* Tag List */}
-      {/* <div className="sm:mt-2">
+      <div className="sm:mt-2">
         <TagList />
-      </div> */}
+      </div>
 
       {/* Job Posting Cards with Infinite Scroll */}
-      {/* <div className="sm:mt-2">
+      <div className="sm:mt-2">
         {status === "loading" ? (
           <LoadingSpinner fullScreen={false} />
         ) : (
@@ -60,7 +60,7 @@ function JobsCuratorPageContent() {
             isLoadingMore={isLoadingMore}
           />
         )}
-      </div> */}
+      </div>
     </section>
   );
 }
