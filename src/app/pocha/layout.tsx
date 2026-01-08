@@ -10,10 +10,10 @@ export default function PochaLayout({ children }) {
   const pathname = usePathname();
   const isDashboard = pathname.includes('/dashboard');
   const isManage = pathname.includes('/manage');
-
+  const isHistory = pathname.includes('/history');
   return (
     <SessionProvider>
-      {isDashboard || isManage? (
+      {isDashboard || isManage || isHistory? (
         <div className='w-full'>{children}</div>
       ) : (
         <>

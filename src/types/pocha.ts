@@ -7,10 +7,11 @@ interface PochaInfo {
   ongoing: boolean;
 }
 
+type PochaInfoWithoutStatus = Omit<PochaInfo, "ongoing">;
 type PochaTab = "menu" | "orders";
 type PochaDashboardTab = "orders" | "stock" | "history";
-
-export type { PochaInfo, PochaTab, PochaDashboardTab };
+type PochaHistoryTab = "overview" | 'food' | 'drink' | 'soju'
+export type { PochaInfo, PochaInfoWithoutStatus, PochaTab, PochaDashboardTab, PochaHistoryTab};
 
 // MENU -----------------------------------------------------------------------
 
@@ -103,4 +104,10 @@ interface MenuOrderSummary {
 type MenuOrderHistoryMap = Map<number, MenuOrderSummary>;
 
 export { OrderStatus };
-export type { OrderItem, Orders, OrderHistory, MenuOrderSummary, MenuOrderHistoryMap };
+export type {
+  OrderItem,
+  Orders,
+  OrderHistory,
+  MenuOrderSummary,
+  MenuOrderHistoryMap,
+};

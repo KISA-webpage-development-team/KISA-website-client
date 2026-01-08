@@ -4,29 +4,34 @@
 // url: link
 const sponsorData = [
   {
-    id: "hello_med",
-    title: "Hello Med",
-    url: "https://www.hello-med.com/",
+    id: 'total_wireless',
+    title: 'Total Wireless',
+    url: 'https://www.totalwireless.com/stores/mi/ann-arbor/4659-washtenaw-ave',
   },
   {
-    id: "meta_code",
-    title: "Meta Code",
-    url: "https://www.metacodes.co.kr/",
+    id: 'hello_med',
+    title: 'Hello Med',
+    url: 'https://www.hello-med.com/',
   },
   {
-    id: "fast_campus",
-    title: "Fast Campus",
-    url: "https://fastcampus.co.kr/",
+    id: 'meta_code',
+    title: 'Meta Code',
+    url: 'https://www.metacodes.co.kr/',
   },
   {
-    id: "rezi",
-    title: "Rezi",
-    url: "https://www.rezi.ai/",
+    id: 'fast_campus',
+    title: 'Fast Campus',
+    url: 'https://fastcampus.co.kr/',
   },
   {
-    id: "potobox",
-    title: "Potobox",
-    url: "https://www.potobox.com/",
+    id: 'rezi',
+    title: 'Rezi',
+    url: 'https://www.rezi.ai/',
+  },
+  {
+    id: 'potobox',
+    title: 'Potobox',
+    url: 'https://www.potobox.com/',
   },
 ];
 

@@ -54,7 +54,7 @@ export default function OrderSummaryModal({
                   <li key={`menu-revenue-summary-${menu.menuID}`}>
                     <span>{menu.nameEng}</span>
                     <span>{`수량: ${quantity}`}</span>
-                    <span>{`매출: $${totalRevenue}`}</span>
+                    <span>{` 매출: $${totalRevenue}`}</span>
                   </li>
                 )
               )}

@@ -8,8 +8,8 @@ import {
   calculateSummary,
   convertOrderHistoryToMenuMap,
 } from '@/features/pocha/utils/orderHistoryUtils';
-import OrderSummaryModal from './OrderSummaryModal';
-
+import OrderSummaryModal from '../dashboard/OrderSummaryModal';
+import DetailedOrderSummaryModal from './DetailedOrderSummaryModal';
 interface OrderHistoryTableProps {
   token: string;
   pochaID: number;
@@ -17,7 +17,7 @@ interface OrderHistoryTableProps {
 
 type FilterOption = 'all' | 'food' | 'drink';
 
-export default function OrderHistoryTable({
+export default function PochaHistoryTable({
   token,
   pochaID,
 }: OrderHistoryTableProps) {
@@ -84,14 +84,13 @@ export default function OrderHistoryTable({
           >
             요약하기
           </button>
-          {
-            openSummaryModal && (
-              <OrderSummaryModal
-                handleCloseForm={() => setOpenSummaryModal(false)}
-                orderHistory={orderHistory}
-              />
-            )
-          }
+                  {openSummaryModal && (
+            //   이 부분을 DetailedOrderSummaryModal로 교체
+            <OrderSummaryModal
+              handleCloseForm={() => setOpenSummaryModal(false)}
+              orderHistory={orderHistory}
+            />
+          )}
         </div>
 
         <table className='min-w-full divide-y divide-gray-200'>
