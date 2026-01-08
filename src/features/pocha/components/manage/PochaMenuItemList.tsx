@@ -40,6 +40,7 @@ export default function PochaMenuItemList() {
     <div className="flex flex-col gap-4">
       {menus.map((menu) => (
         <div
+          key={menu.nameEng}
           className="flex flex-row gap-6
          bg-gray-100 p-4 rounded-lg hover:bg-gray-200 transition-colors"
         >
@@ -52,7 +53,6 @@ export default function PochaMenuItemList() {
             />
           </figure> */}
           <div
-            key={menu.nameEng}
             className={`flex flex-col ${sejongHospitalBold.className} gap-2 w-full
           `}
           >

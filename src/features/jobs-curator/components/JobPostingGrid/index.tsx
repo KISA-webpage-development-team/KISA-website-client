@@ -9,6 +9,12 @@ import useFormattedJobs from "../../hooks/useFormattedJobs";
 import { Job } from "../../types/jobs";
 import NotificationText from "../NotificationText";
 
+// Wrapper component to call hook at component level (required by rules-of-hooks)
+function JobCardWrapper({ job }: { job: Job }) {
+  const { jobPosting, jobBadges } = useFormattedJobs(job);
+  return <JobPostingCard jobPosting={jobPosting} jobBadges={jobBadges} />;
+}
+
 interface JobPostingGridProps {
   jobs: Job[];
   onLoadMore?: () => void;
@@ -36,16 +42,9 @@ export default function JobPostingGrid({
 
   const jobCards = (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-      {jobs.map((job) => {
-        const { jobPosting, jobBadges } = useFormattedJobs(job);
-        return (
-          <JobPostingCard
-            key={`${job.jobID}-${jobs.indexOf(job)}`}
-            jobPosting={jobPosting}
-            jobBadges={jobBadges}
-          />
-        );
-      })}
+      {jobs.map((job, index) => (
+        <JobCardWrapper key={`${job.jobID}-${index}`} job={job} />
+      ))}
     </div>
   );
 

@@ -224,7 +224,7 @@ const usInfoContents: InfoContent[] = [
           </strong>
         </p>
         <p>
-          제가 해드릴 수 있는 유일한 조언은 '최대한 많이 지원하라'입니다. 적어도
+          제가 해드릴 수 있는 유일한 조언은 &apos;최대한 많이 지원하라&apos;입니다. 적어도
           몇백 개는 지원해야하고, 많으면 천 개가 넘어가는 사람도 봤습니다.
           그렇게 지원해야 간신히 열 손가락으로 셀 수 있는 개수의 인터뷰가
           잡힙니다. 인터뷰가 한 번만이라도 걸리면 무조건 붙는다는 마인드로 수백
@@ -390,7 +390,7 @@ const usInfoContents: InfoContent[] = [
         </p>
         <br />
         <p>
-          Please let me know if there's any other information I can provide.
+          Please let me know if there&apos;s any other information I can provide.
           Thank you for your time and consideration.
         </p>
       </div>
