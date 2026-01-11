@@ -10,21 +10,6 @@
 // Hand-authored static carousel items
 const staticHomeCarousel = [
   {
-    id: "f25-26_last_pocha",
-    title: "KISA 종강포차",
-    desc: (
-      <p>
-        드디어 연말이 다가오고 있습니다!!!🎄❄️☃️🎁 학기말 시험들, 밀린 과제들,
-        밤새운 날들 - 모두모두 잠깐 내려놓고 우리 즐거운 토요일 다함께 놀고
-        마셔요! 🌟신나는 밤을 위해 준비한 특별 이벤트! 💥 소주 첫 50병을 $15 →
-        $10 ✨ 무려 5불 할인된 가격으로 판매합니다! 지금 RSVP하고 이번 학기
-        마지막 포차를 더 저렴하게 즐겨요! 😆✨ 이번 포차는 total wireless의
-        후원으로 함께합니다📱🎄
-      </p>
-    ),
-    url: "https://tr.ee/V7i4TJNsot",
-  },
-  {
     id: "f25-26_kisa_yearbook",
     title: "KISA Yearbook 2025-26",
     desc: (
