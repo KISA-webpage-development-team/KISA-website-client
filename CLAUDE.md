@@ -2,6 +2,27 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Context Hygiene
+
+At the start of every response, output `[Context: ~X% used]` and estimate based on conversation length.
+
+Thresholds  
+* 0 to 30% Fresh context
+* 30 to 60% Normal
+* 60 to 80% Caution
+* 80% plus Danger
+
+Never auto compact. When context exceeds 70%, ask:
+
+> Context at ~70%. Want me to compact now, or continue? If we compact, I will preserve the current task state.
+
+Before any compaction, state
+1. What will be preserved
+2. What will be lost
+3. Ask for confirmation
+
+If the conversation goes sideways, use `Esc Esc` to roll back to a known good checkpoint.
+
 ## Commands
 
 ```bash
