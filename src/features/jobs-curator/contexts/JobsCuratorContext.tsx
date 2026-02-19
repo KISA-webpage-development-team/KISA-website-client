@@ -49,12 +49,11 @@ export const JobsCuratorProvider = ({
   ]);
 
   // date range global state
-  const defaultDateRange = getDefaultInternshipDateRange();
   const [startDate, setStartDate] = useState<Date | undefined>(
-    defaultDateRange.start
+    () => getDefaultInternshipDateRange().start
   );
   const [endDate, setEndDate] = useState<Date | undefined>(
-    defaultDateRange.end
+    () => getDefaultInternshipDateRange().end
   );
 
   return (
