@@ -7,14 +7,6 @@ import {
 } from "../types/jobs";
 import { getDefaultInternshipDateRange } from "../utils/getDefaultDateRange";
 
-// Date range type
-type DateRangeState = {
-  startDate: Date | undefined;
-  setStartDate: (d: Date | undefined) => void;
-  endDate: Date | undefined;
-  setEndDate: (d: Date | undefined) => void;
-};
-
 type JobsCuratorState = {
   category: JobCategory | undefined;
   setCategory: (c: JobCategory | undefined) => void;
