@@ -9,16 +9,6 @@ export interface JobsResponse {
   hasMore?: boolean;
 }
 
-// Query parameters for filtering jobs
-export interface JobsQueryParams {
-  category?: string;
-  tags?: string[];
-  startDate?: string;
-  endDate?: string;
-  offset?: number;
-  limit?: number;
-}
-
 /**
  * @desc Fetch jobs internship data
  * @route GET /jobs/?category=developer
@@ -34,7 +24,8 @@ export async function getJobs(queryParams: JobListQueryParams) {
     const response = await client.get(url);
     return response.data;
   } catch (error) {
-    throw new Error("Error fetching jobs: ", error.message);
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Error fetching jobs: ${message}`);
   }
 }
 
@@ -49,6 +40,7 @@ export async function getJobsByNextUrl(nextUrl: string): Promise<JobsResponse> {
     const response = await client.get(cleanUrl);
     return response.data;
   } catch (error) {
-    throw new Error("Error fetching jobs: ", error.message);
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Error fetching jobs by next URL: ${message}`);
   }
 }

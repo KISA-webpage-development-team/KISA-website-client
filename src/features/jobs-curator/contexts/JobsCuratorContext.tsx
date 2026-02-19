@@ -7,14 +7,6 @@ import {
 } from "../types/jobs";
 import { getDefaultInternshipDateRange } from "../utils/getDefaultDateRange";
 
-// Date range type
-type DateRangeState = {
-  startDate: Date | undefined;
-  setStartDate: (d: Date | undefined) => void;
-  endDate: Date | undefined;
-  setEndDate: (d: Date | undefined) => void;
-};
-
 type JobsCuratorState = {
   category: JobCategory | undefined;
   setCategory: (c: JobCategory | undefined) => void;
@@ -57,12 +49,11 @@ export const JobsCuratorProvider = ({
   ]);
 
   // date range global state
-  const defaultDateRange = getDefaultInternshipDateRange();
   const [startDate, setStartDate] = useState<Date | undefined>(
-    defaultDateRange.start
+    () => getDefaultInternshipDateRange().start
   );
   const [endDate, setEndDate] = useState<Date | undefined>(
-    defaultDateRange.end
+    () => getDefaultInternshipDateRange().end
   );
 
   return (
