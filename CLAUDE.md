@@ -30,6 +30,9 @@ Never use emojis in any markdown documents (`.md` files), comments, or code. The
 ### Never Push Without Explicit Permission
 **Never run `git push` under any circumstances unless the user explicitly says to push.** This includes `git push`, `git push --force`, or any remote-modifying git operation. Committing locally is fine when asked; pushing is not.
 
+### Use Relevant Skills Proactively
+When working on UI/UX changes, component design, or layout work, invoke the `/ui-ux-pro-max` skill before starting implementation. When writing, reviewing, or refactoring React or Next.js code (components, data fetching, bundle optimization, performance), invoke the `/vercel-react-best-practices` skill before starting implementation. Do not wait for the user to ask — use these skills on your own initiative whenever the task warrants them.
+
 ### Verify Every Code Change
 After every edit to a `.ts` or `.tsx` or `.js` file, run a type check and lint before considering the task done:
 
