@@ -2,8 +2,8 @@ import "./globals.css";
 import { globalFont } from "@/utils/fonts/global";
 import Footer from "@/components/layout/footer/Footer";
 import { ReactNode } from "react";
-// import { Analytics } from "@vercel/analytics/react";
-// import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: {
@@ -32,8 +32,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <footer className="mt-auto w-full">
           <Footer />
         </footer>
-        {/* <Analytics />
-        <SpeedInsights /> */}
+        <Analytics />
+        <SpeedInsights />
       </body>
       {/* </SessionProvider> */}
     </html>
