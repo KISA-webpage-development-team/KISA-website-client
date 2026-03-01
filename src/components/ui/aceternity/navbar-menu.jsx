@@ -213,7 +213,10 @@ export const MenuItem = ({ setActive, active, item, children, href }) => {
 
 export const HoveredLink = ({ children, ...rest }) => {
   return (
-    <Link {...rest} className="hover:text-michigan-maize ">
+    <Link {...rest} className="
+    cursor-pointer hover:opacity-[0.9] 
+        hover:text-michigan-maize
+        text-sm md:text-base">
       {children}
     </Link>
   );

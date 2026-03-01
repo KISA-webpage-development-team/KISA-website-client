@@ -162,8 +162,9 @@ const koreaInfoContents: InfoContent[] = [
     ),
 
     author: {
-      name: 'John Doe',
-      classOf: '2025',
+      name: 'Dongeun Kim',
+      classOf: '2028',
+      email: 'dongeunk@umich.edu',
     },
   },
 ];
@@ -235,7 +236,7 @@ const usInfoContents: InfoContent[] = [
       </div>
     ),
     author: {
-      name: '인지오',
+      name: 'Jioh In',
       classOf: '2027',
       email: 'jiohin@umich.edu',
     },
@@ -277,7 +278,7 @@ const usInfoContents: InfoContent[] = [
       </div>
     ),
     author: {
-      name: '인지오',
+      name: 'Jioh In',
       classOf: '2027',
       email: 'jiohin@umich.edu',
     },
@@ -312,8 +313,9 @@ const usInfoContents: InfoContent[] = [
       </div>
     ),
     author: {
-      name: 'John Doe',
-      classOf: '2025',
+      name: 'Yunseong Na',
+      classOf: '2026',
+      email: 'ysna@umich.edu'
     },
   },
   {
@@ -398,6 +400,7 @@ const usInfoContents: InfoContent[] = [
     author: {
       name: 'Jacob Um',
       classOf: '2026',
+      email: 'jisangum@umich.edu'
     },
   },
   {
@@ -451,6 +454,7 @@ const usInfoContents: InfoContent[] = [
     author: {
       name: 'Junhee Han',
       classOf: '2028',
+      email: 'junheeh@umich.edu'
     },
   },
   {
@@ -473,7 +477,7 @@ const usInfoContents: InfoContent[] = [
         <p>
           <strong>CPT (Curricular Practical Training):</strong> 전공 필수
           과목으로 인턴십이 요구되는 Required CPT와 전공 선택 과목으로 인턴십을
-          하는 Optional CPT가 있습니다.
+          하는 Optional CPT가 있습니다. 소속 College에 따라 신청하는 방법에 차이가 있으니 확인해야 합니다. International Center에서도 신청을 해야하니 넉넉하게 시간을 잡고 CPT를 신청해야 합니다.
         </p>
         <br />
         <p>
@@ -484,8 +488,9 @@ const usInfoContents: InfoContent[] = [
       </div>
     ),
     author: {
-      name: 'John Doe',
-      classOf: '2025',
+      name: 'Junho Lee',
+      classOf: '2028',
+      email: 'jnho@umich.edu'
     },
   },
 ];
