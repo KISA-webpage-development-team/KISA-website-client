@@ -2,7 +2,6 @@
 
 .cursor/*
 .agents
-.claude/skills
 
 # dependencies
 /node_modules
