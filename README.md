@@ -34,6 +34,21 @@ Make sure local backend server is running (https://github.com/KISA-webpage-devel
 
 ---
 
+## Getting Started with Claude Code
+
+Prepare with Claude Account
+After running Claude Code session under this rep,
+run following commands to install necessary skills/plugins
+
+```bash
+npx skills add https://github.com/anthropics/skills --skill frontend-design
+npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max
+npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+# make sure you install it locally only for claude code using Symlinks
+```
+
 ## Insta2Carousel
 Automated Pipeline for Instagram Posts -> Home Carousel UI
 

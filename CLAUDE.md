@@ -49,7 +49,7 @@ Fix any errors before finishing. Do not leave the codebase in a broken state.
 ## Critical Rules
 
 ### Code Style
-Follow the rules in @.cursor/rules/toss-frontend.mdc (always applied).
+Follow the rules in @docs/general_guide.md's ## 4. Additional Notes section.
 
 ### No Emojis in Markdown
 Never use emojis in any markdown documents (`.md` files), comments, or code. They waste tokens and add no value.
