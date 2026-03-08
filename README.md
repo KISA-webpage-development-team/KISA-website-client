@@ -36,8 +36,10 @@ Make sure local backend server is running (https://github.com/KISA-webpage-devel
 
 ## Getting Started with Claude Code
 
-Prepare with Claude Account
-After running Claude Code session under this rep,
+Prepare Claude account and Claude Code installed.
+
+After running Claude Code session under this repo,
+
 run following commands to install necessary skills/plugins
 
 ```bash
