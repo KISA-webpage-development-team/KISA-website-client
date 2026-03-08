@@ -42,9 +42,29 @@ Tokens follow a three-tier model:
 - **Tier 2 — Semantic tokens:** Named by role (`--color-brand-primary`, `--color-text-muted`). These are what components reference.
 - **Tier 3 — Component tokens:** Optional per-component overrides (`--button-primary-bg`).
 
-Tokens are defined as **CSS custom properties**, bundled into the package's compiled CSS output. The client imports one CSS file in the root layout — no token configuration required on the consumer side.
+Tokens are defined as **CSS custom properties** inside Tailwind v4's `@theme {}` block — no `tailwind.config.js` needed. Colors use **OKLCH** for perceptual uniformity and future dark mode readiness.
 
-Tailwind config in the DS package maps semantic token variables to Tailwind utility classes.
+The DS compiles its own CSS bundle. The client imports one CSS file in the root layout — no token configuration required on the consumer side.
+
+### Tailwind versions
+
+- DS package: **Tailwind v4** (CSS-first `@theme {}` config)
+- Client: stays on **Tailwind v3** (no migration needed)
+
+No conflict — the DS ships pre-compiled CSS. The client does not run Tailwind against DS source files.
+
+### Component variant pattern
+
+Components use **CVA (class-variance-authority)** for type-safe variant APIs:
+
+```ts
+const buttonVariants = cva(baseStyles, {
+  variants: {
+    type: { primary: "...", secondary: "...", tertiary: "..." },
+    size: { sm: "...", md: "...", lg: "..." },
+  }
+})
+```
 
 ---
 
