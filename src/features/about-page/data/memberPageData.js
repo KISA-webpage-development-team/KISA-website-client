@@ -22,7 +22,7 @@ const members_2025 = {
       name: "Jessica Moon",
       major: "Information Analysis",
       year: "2027",
-      role: ["Event Planning Lead"],
+      role: ["Event Planning Lead/Finance"],
     },
     {
       name: "Seungmin Shin",
@@ -66,6 +66,12 @@ const members_2025 = {
       year: "2027",
       role: ["Event Planning"],
     },
+    {
+      name: "Miran Kim",
+      major: "Movement Science",
+      year: "2029",
+      role: ["Event Planning"],
+    },
 
     // Finance
     {
@@ -88,12 +94,18 @@ const members_2025 = {
       name: "Rachel Lee",
       major: "Data Science",
       year: "2028",
-      role: ["Outreach"],
+      role: ["Outreach/Website"],
     },
     {
       name: "Jiwoo Kim",
       major: "Chemical Engineering",
       year: "2026",
+      role: ["Outreach"],
+    },
+    {
+      name: "Sejong Kim",
+      major: "Data Science",
+      year: "2029",
       role: ["Outreach"],
     },
 
@@ -113,7 +125,7 @@ const members_2025 = {
     },
     {
       name: "Doohee Nam",
-      major: "Computer Science",
+      major: "Computer Science, Statistics",
       year: "2028",
       role: ["Web Development"],
     },
@@ -121,7 +133,7 @@ const members_2025 = {
       name: "Jaeyi Kang",
       major: "Computer Engineering",
       year: "2028",
-      role: ["Web Development"],
+      role: ["Web Development/Outreach"],
     },
     {
       name: "Soobin Ihm",
@@ -168,6 +180,18 @@ const members_2025 = {
       name: "Eva Choi",
       major: "Biology",
       year: "2029",
+      role: ["Social Media/Marketing"],
+    },
+    {
+      name: "Sangyong Park",
+      major: "Electrical Engineering",
+      year: "2027",
+      role: ["Social Media/Marketing"],
+    },
+    {
+      name: "Dayoung Kang",
+      major: "Neuroscience",
+      year: "2027",
       role: ["Social Media/Marketing"],
     },
 
