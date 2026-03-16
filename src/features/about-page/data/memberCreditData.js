@@ -37,7 +37,7 @@ const credits_2025 = [
     role: "Developer",
     description: "Implemented the credit page, ....",
     github: "",
-    linkedin: "",
+    linkedin: "www.linkedin.com/in/soobinihm",
   },
   {
     name: "Rachel Lee",
