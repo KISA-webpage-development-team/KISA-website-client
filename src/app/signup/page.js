@@ -156,7 +156,7 @@ export default function SignUpPage() {
     };
 
     const userConfirmed = window.confirm(
-      "한 번 생성된 로그인 정보 수정은 어렵습니다. 진행하시겠습니까?"
+      "한 번 생성된 로그인 정보 수정은 어렵습니다. 진행하시겠습니까?\n\Once created, your login information cannot be easily changed. Would you like to proceed?"
     );
 
     if (!userConfirmed) {
@@ -195,7 +195,7 @@ export default function SignUpPage() {
   return (
     <div
       className="flex flex-col items-center justify-center gap-10
-    max-w-sm h-full mx-auto mb-20"
+    max-w-4xl h-full mx-auto mb-20"
     >
       <div className="flex flex-col text-center gap-1 items-center">
         <h1 className={`${sejongHospitalBold.className} text-2xl`}>
