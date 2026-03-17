@@ -8,7 +8,7 @@ export default function KisaAll() {
       <Image
         priority={true}
         className={`${styles.testImg} object-cover flex`}
-        src="/kisa_all.png"
+        src="/kisa_all_2025-2026.png"
         alt="23-24 KISA 단체사진"
         width={1252}
         height={450}

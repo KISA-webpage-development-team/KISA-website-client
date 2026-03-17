@@ -6,6 +6,7 @@ import { Select, SelectItem } from "@nextui-org/react";
 
 import MemberCard from "@/features/about-page/components/MemberCard";
 import {
+  members_2025,
   members_2024,
   members_2023,
 } from "@/features/about-page/data/memberPageData";
@@ -14,6 +15,7 @@ import { sejongHospitalLight } from "@/utils/fonts/textFonts";
 
 export default function MemberPage() {
   const membersData = {
+    "25-26": members_2025,
     "24-25": members_2024,
     "23-24": members_2023,
   };
