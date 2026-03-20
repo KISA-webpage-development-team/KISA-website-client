@@ -15,7 +15,7 @@ export default function MemberCard({ role, name, major, year }) {
         <Image
           alt="Profile Images"
           className="w-24 h-24 md:w-60 md:h-60 rounded-full object-cover"
-          src="/kisa_logo.png"
+          src="/kisa_logo_2026.png"
           width={200}
           height={200}
         />

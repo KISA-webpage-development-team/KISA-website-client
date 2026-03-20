@@ -1,4 +1,228 @@
 // president, operations, public_relations are destructured from members object
+const members_2025 = {
+  presidents: [
+    {
+      name: "Jin Wook Shin",
+      major: "Computer Engineering",
+      year: "2027",
+      role: ["President Lead"],
+    },
+    {
+      name: "Jisang Um",
+      major: "IOE",
+      year: "2026",
+      role: ["Vice President Lead"],
+    },
+  ],
+
+  operations: [
+    // Event Planning
+    {
+      isLead: true,
+      name: "Jessica Moon",
+      major: "Information Analysis",
+      year: "2027",
+      role: ["Event Planning Lead/Finance"],
+    },
+    {
+      name: "Seungmin Shin",
+      major: "Statistics",
+      year: "2025",
+      role: ["Event Planning"],
+    },
+    {
+      name: "Joowon Kang",
+      major: "Psychology",
+      year: "2026",
+      role: ["Event Planning"],
+    },
+    {
+      name: "Haeun Lee",
+      major: "BHS",
+      year: "2028",
+      role: ["Event Planning"],
+    },
+    {
+      name: "Jiwon Byeon",
+      major: "International Studies",
+      year: "2027",
+      role: ["Event Planning"],
+    },
+    {
+      name: "Nayeon Bang",
+      major: "Biochemistry",
+      year: "2029",
+      role: ["Event Planning"],
+    },
+    {
+      name: "Kaycee Kim",
+      major: "Psychology",
+      year: "2029",
+      role: ["Event Planning"],
+    },
+    {
+      name: "Hyunjun Seo",
+      major: "Chemistry",
+      year: "2027",
+      role: ["Event Planning"],
+    },
+    {
+      name: "Miran Kim",
+      major: "Movement Science",
+      year: "2029",
+      role: ["Event Planning"],
+    },
+
+    // Finance
+    {
+      isLead: true,
+      name: "Junhee Han",
+      major: "Mechanical Engineering / Chemical Engineering",
+      year: "2028",
+      role: ["Finance"],
+    },
+
+    // Outreach
+    {
+      isLead: true,
+      name: "Junho Lee",
+      major: "Education",
+      year: "2028",
+      role: ["Outreach Lead"],
+    },
+    {
+      name: "Rachel Lee",
+      major: "Data Science",
+      year: "2028",
+      role: ["Outreach/Website"],
+    },
+    {
+      name: "Jiwoo Kim",
+      major: "Chemical Engineering",
+      year: "2026",
+      role: ["Outreach"],
+    },
+    {
+      name: "Sejong Kim",
+      major: "Data Science",
+      year: "2029",
+      role: ["Outreach"],
+    },
+
+    // Web Development
+    {
+      isLead: true,
+      name: "Yunseong Na",
+      major: "Computer Science",
+      year: "2026",
+      role: ["Web Development Lead"],
+    },
+    {
+      name: "Hannah Lee",
+      major: "Data Science",
+      year: "2027",
+      role: ["Web Development"],
+    },
+    {
+      name: "Doohee Nam",
+      major: "Computer Science, Statistics",
+      year: "2028",
+      role: ["Web Development"],
+    },
+    {
+      name: "Jaeyi Kang",
+      major: "Computer Engineering",
+      year: "2028",
+      role: ["Web Development/Outreach"],
+    },
+    {
+      name: "Soobin Ihm",
+      major: "Chemistry",
+      year: "2028",
+      role: ["Web Development"],
+    },
+  ],
+
+  public_relations: [
+    // Social Media / Marketing
+    {
+      isLead: true,
+      name: "Hyo Won Ko",
+      major: "Statistics",
+      year: "2026",
+      role: ["Social Media/Marketing Lead"],
+    },
+    {
+      name: "Hyeri Lee",
+      major: "Electrical Engineering",
+      year: "2026",
+      role: ["Social Media/Marketing"],
+    },
+    {
+      name: "Younghyun Choi",
+      major: "Psychology",
+      year: "2026",
+      role: ["Social Media/Marketing"],
+    },
+    {
+      name: "Sarah Kim",
+      major: "Neuroscience",
+      year: "2026",
+      role: ["Social Media/Marketing"],
+    },
+    {
+      name: "Emma Choi",
+      major: "Economics",
+      year: "2029",
+      role: ["Social Media/Marketing"],
+    },
+    {
+      name: "Eva Choi",
+      major: "Biology",
+      year: "2029",
+      role: ["Social Media/Marketing"],
+    },
+    {
+      name: "Sangyong Park",
+      major: "Electrical Engineering",
+      year: "2027",
+      role: ["Social Media/Marketing"],
+    },
+    {
+      name: "Dayoung Kang",
+      major: "Neuroscience",
+      year: "2027",
+      role: ["Social Media/Marketing"],
+    },
+
+    // Design
+    {
+      isLead: true,
+      name: "Soomin Kang",
+      major: "Pharmaceutical Science",
+      year: "2028",
+      role: ["Design Lead"],
+    },
+    {
+      name: "Kelly Koo",
+      major: "BHS & Art and Design",
+      year: "2027",
+      role: ["Design"],
+    },
+    {
+      name: "Jimin Oh",
+      major: "Fine Arts",
+      year: "2028",
+      role: ["Design"],
+    },
+    {
+      name: "Esther Kim",
+      major: "Art & Design",
+      year: "2029",
+      role: ["Design"],
+    },
+  ],
+};
 
 const members_2024 = {
   // Presidents
@@ -376,4 +600,4 @@ const members_2023 = {
   ],
 };
 
-export { members_2024, members_2023 };
+export { members_2024, members_2023, members_2025 };
