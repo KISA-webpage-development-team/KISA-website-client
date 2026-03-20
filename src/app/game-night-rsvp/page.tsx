@@ -76,7 +76,7 @@ export default function GameNightRSVPPage() {
 
         <div className="mt-4">
           <CustomButton
-            type="submit"
+            forSubmit
             text="Submit RSVP"
             className="w-full py-3 text-lg"
           />

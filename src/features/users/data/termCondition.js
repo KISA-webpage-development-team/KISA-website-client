@@ -59,7 +59,7 @@ export const personalInfoTerm = {
         KISA collects and uses personal information based on the consent of UMich
         KISA website users. This Privacy Policy transparently provides information
         regarding what data KISA collects, how the collected data is used, with
-        whom it is shared ("consigned or provided") when necessary, and when and
+        whom it is shared (&quot;consigned or provided&quot;) when necessary, and when and
         how the information is destroyed once its purpose is fulfilled.
       </div>
 
@@ -128,8 +128,8 @@ export const personalInfoTerm = {
       <div style={{ wordBreak: "keep-all" }}>
         <b>Purposes of Using User Information</b>
         <br />
-        - KISA will post the user's real name to prevent malicious use of the
-        website's message boards.
+        - KISA will post the user&apos;s real name to prevent malicious use of the
+        website&apos;s message boards.
         <br />
         - Because KISA limits membership strictly to current students and alumni
         of the University of Michigan, we collect UMich emails as proof of
@@ -194,8 +194,8 @@ export const personalInfoTerm = {
         - KISA stores and uses the collected personal information until the user
         deletes their account or the purpose of use is fulfilled. Withdrawal of
         consent for personal information collection can be done through the
-        "Account Deletion" function on the user profile page after logging in, and
-        KISA will proceed to destroy the relevant user's personal information.
+        &quot;Account Deletion&quot; function on the user profile page after logging in, and
+        KISA will proceed to destroy the relevant user&apos;s personal information.
         <br />
         - Posts written by users on the message boards do not disappear until the
         user deletes them, and they remain publicly visible to other website
@@ -234,7 +234,7 @@ export const personalInfoTerm = {
         account and their information has been superficially erased.
         <br />
         - If posts containing advertisements, spam, pornography, profanity, or
-        content that violates the website's terms of use are registered, the posts
+        content that violates the website&apos;s terms of use are registered, the posts
         may be deleted without prior notice.
       </div>
 
@@ -288,7 +288,7 @@ export const personalInfoTerm = {
         Because logins are processed via Google Authentication, the responsibility
         for this lies with the University of Michigan Information and Technology
         Services and Google Authentication. Excluding account passwords, the
-        user's activity history (posts, comments, etc.) and personal information
+        user&apos;s activity history (posts, comments, etc.) and personal information
         are stored in an encrypted database.
       </div>
 
@@ -329,7 +329,7 @@ export const personalInfoTerm = {
         database are interconnected to function, the Client (the website itself)
         only exposes information to the public that the operator has configured to
         be viewable. The second IP that can access the database is the server
-        administrator's personal IP. This allows the server administrator to
+        administrator&apos;s personal IP. This allows the server administrator to
         access and modify the entire database and erase all or part of the
         information as needed.
       </div>
@@ -394,7 +394,7 @@ export const personalInfoTerm = {
         <br />
         - This website contains links to services provided by third parties and
         other websites. Services provided by other websites accessible through
-        these links are not governed by this website's Privacy Policy and Terms of
+        these links are not governed by this website&apos;s Privacy Policy and Terms of
         Use.
       </div>
 
@@ -437,7 +437,7 @@ export const personalInfoTerm = {
         information at any time by deleting their account.
         <br />
         - Users can view, modify, or delete their personal information at any time
-        through "My Page" and may request access to their personal information.
+        through &quot;My Page&quot; and may request access to their personal information.
         <br />
         - Users can withdraw and modify only the posts and comments they have
         written themselves, and such posts and comments will be destroyed upon
@@ -519,7 +519,7 @@ export const websiteTerm = {
         <br />
         ① Those who wish to become a member apply for registration by filling out
         their information according to the form set by the Student Council and
-        clicking the "Agree" or "Confirm" button.
+        clicking the &quot;Agree&quot; or &quot;Confirm&quot; button.
       </div>
 
       {/* --- Article 4 --- */}
@@ -603,20 +603,20 @@ export const websiteTerm = {
         deleted.
         <br />
         ③ If a member falls under any of the following reasons, the Student
-        Council may restrict, suspend, or revoke the member's qualifications in an
+        Council may restrict, suspend, or revoke the member&apos;s qualifications in an
         appropriate manner:
         <div style={{ paddingLeft: "24px", marginTop: "4px", marginBottom: "4px" }}>
           1. Registering false information at the time of application.
           <br />
           2. Threatening the order of electronic transactions, such as interfering
-          with others' use of the service or stealing their information.
+          with others&apos; use of the service or stealing their information.
           <br />
           3. Engaging in acts prohibited by laws and these Terms or contrary to
           public order and morals using the service.
           <br />
           4. Violating usage rules set by KISA in addition to these Terms.
         </div>
-        ④ If the Student Council decides to revoke a member's qualifications, the
+        ④ If the Student Council decides to revoke a member&apos;s qualifications, the
         membership registration will be canceled.
       </div>
 
@@ -629,7 +629,7 @@ export const websiteTerm = {
         개인정보처리방침에서 고지)
       </div>
       <div style={{ wordBreak: "keep-all" }}>
-        <b>Article 7 (Member's Personal Information)</b>
+        <b>Article 7 (Member&apos;s Personal Information)</b>
         <br />
         The Student Council collects the necessary personal information from
         members in accordance with relevant laws and regulations to provide
@@ -681,7 +681,7 @@ export const websiteTerm = {
         학생회에 통보하고 학생회의 안내가 있는 경우에는 그에 따라야 합니다.
       </div>
       <div style={{ wordBreak: "keep-all" }}>
-        <b>Article 9 (Obligations Regarding Member's Account)</b>
+        <b>Article 9 (Obligations Regarding Member&apos;s Account)</b>
         <br />
         ① In principle, this website proceeds with membership registration and
         login using Google accounts, and general registration is only possible
@@ -693,7 +693,7 @@ export const websiteTerm = {
         <br />
         ③ If a member recognizes that their account is being used by a third
         party, they must immediately notify the Student Council and follow the
-        Student Council's instructions, if any.
+        Student Council&apos;s instructions, if any.
       </div>
 
       {/* --- Article 10 --- */}
@@ -741,13 +741,13 @@ export const websiteTerm = {
           third party, or interfering with the rights, tasks, and activities of the
           Student Council or a third party.
           <br />
-          3. Stealing another member's account.
+          3. Stealing another member&apos;s account.
           <br />
           4. Posting or transmitting information (computer programs, etc.) that is
           prohibited from transmission or posting by relevant laws.
           <br />
-          5. Impersonating an administrator of the Student Council's service or
-          posting/transmitting information by stealing someone else's identity.
+          5. Impersonating an administrator of the Student Council&apos;s service or
+          posting/transmitting information by stealing someone else&apos;s identity.
           <br />
           6. Posting or transmitting data containing software viruses or any other
           computer codes, files, or programs designed to disrupt or destroy the
@@ -762,7 +762,7 @@ export const websiteTerm = {
           9. Posting advertisements, promotions, or obscene material aimed at
           unspecified individuals.
           <br />
-          10. Violating the regulations regarding the Student Council's
+          10. Violating the regulations regarding the Student Council&apos;s
           announcements.
         </div>
       </div>
@@ -800,10 +800,10 @@ export const websiteTerm = {
       <div style={{ wordBreak: "keep-all" }}>
         <b>Article 11 (Deletion of Public Posts or Restriction of Use)</b>
         <br />
-        ① If the content of a member's public post falls under any of the
+        ① If the content of a member&apos;s public post falls under any of the
         following items, the Student Council may take measures to temporarily
         block access to the public post, and if the same instance is repeated two
-        or more times, the post may be deleted or the member's qualifications may
+        or more times, the post may be deleted or the member&apos;s qualifications may
         be restricted, suspended, or revoked:
         <div style={{ paddingLeft: "24px", marginTop: "4px" }}>
           1. Content that slanders or damages the reputation of other members or a
