@@ -7,6 +7,7 @@ import { LoadingSpinner } from "@/components/ui/feedback";
 import HomeHeading from "@/features/pocha/components/home/HomeHeading";
 import HomeTabs from "@/features/pocha/components/home/HomeTabs";
 import HomeTabContent from "@/features/pocha/components/home/HomeTabContent";
+import { CherryBlossomPetals } from "@/features/pocha/components/manage/CherryBlossomPetals_optimized";
 
 // hooks
 import { useSearchParams } from "next/navigation";
@@ -69,6 +70,7 @@ export default function PochaPage() {
     >
       {/* PochaHeading (at the top, disappear when scrolling) */}
       <div className="relative z-10 flex-shrink-0">
+        <CherryBlossomPetals petalCount={4} scrollOpacity={1} />
         <HomeHeading pochaInfo={pochaInfo} />
       </div>
 
