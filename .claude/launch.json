@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "dev-local",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev-local"],
+      "port": 3000
+    },
+    {
+      "name": "dev:stripe",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev:stripe"],
+      "port": 80
+    },
+    {
+      "name": "dev-local:stripe",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev-local:stripe"],
+      "port": 80
+    }
+  ]
+}

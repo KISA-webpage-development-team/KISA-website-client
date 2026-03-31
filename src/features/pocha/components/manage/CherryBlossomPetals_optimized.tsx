@@ -57,7 +57,7 @@ function makePetal(): Petal {
     speed: 0.15 + Math.random() * 0.25,
     wobble: Math.random() * Math.PI * 2,
     wobbleSpeed: 0.02 + Math.random() * 0.02,
-    size: 10 + Math.random() * 8,
+    size: 30 + Math.random() * 8,
     blur: Math.random() > 0.5 ? 0.5 : 0,
     opacity: 0.6 + Math.random() * 0.3,
     shapeIndex: Math.floor(Math.random() * SHAPE_COUNT),
@@ -65,7 +65,7 @@ function makePetal(): Petal {
 }
 
 export function CherryBlossomPetals({
-  petalCount = 6,
+  petalCount = 10,
   scrollOpacity = 1,
 }: CherryBlossomPetalsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -103,19 +103,18 @@ export function CherryBlossomPetals({
       container.querySelectorAll<HTMLDivElement>("[data-petal]")
     );
 
-    const cw = container.offsetWidth;
-    const ch = container.offsetHeight;
-
     let lastTime = performance.now();
 
     const animate = (now: number) => {
+      const cw = container.offsetWidth;
+      const ch = container.offsetHeight;
       const dt = Math.min(now - lastTime, 32);
       lastTime = now;
 
       petalsRef.current.forEach((petal, i) => {
         petal.y += petal.speed * (dt / 16);
         petal.wobble += petal.wobbleSpeed;
-        petal.x += Math.sin(petal.wobble) * 2 * 0.05;
+        petal.x += Math.sin(petal.wobble) * 0.1;
         petal.rotation += 0.5;
 
         if (petal.y > 120) {
