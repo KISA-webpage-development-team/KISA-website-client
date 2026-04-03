@@ -2,10 +2,16 @@ import PochaBackIcon from "@/components/ui/icon/PochaBackIcon";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { POCHA_THEME } from "@/features/pocha/featureFlag";
 
 interface PochaBackHeadingProps {
   title: string;
 }
+
+const headingColor =
+  POCHA_THEME === "spring"
+    ? "text-[#E8829B]"
+    : "text-michigan-blue";
 
 export default function PochaBackHeading({ title }: PochaBackHeadingProps) {
   const router = useRouter();
@@ -21,7 +27,7 @@ export default function PochaBackHeading({ title }: PochaBackHeadingProps) {
       </button>
       <h1
         className={`w-full
-            ${sejongHospitalBold.className} text-xl text-center text-michigan-blue`}
+            ${sejongHospitalBold.className} text-xl text-center ${headingColor}`}
       >
         {title}
       </h1>
