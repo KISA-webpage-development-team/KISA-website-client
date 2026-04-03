@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 
 // ui components
 import { LoadingSpinner } from "@/components/ui/feedback";
@@ -8,7 +9,14 @@ import HomeHeading from "@/features/pocha/components/home/HomeHeading";
 import HomeTabs from "@/features/pocha/components/home/HomeTabs";
 import HomeTabContent from "@/features/pocha/components/home/HomeTabContent";
 import { CherryBlossomPetals } from "@/features/pocha/components/manage/CherryBlossomPetals_optimized";
-import { CherryBlossomBranch } from "@/features/pocha/components/manage/CherryBlossomBranch";
+
+const CherryBlossomBranch = dynamic(
+  () =>
+    import("@/features/pocha/components/manage/CherryBlossomBranch").then(
+      (mod) => mod.CherryBlossomBranch
+    ),
+  { ssr: false }
+);
 
 // hooks
 import { useSearchParams } from "next/navigation";
