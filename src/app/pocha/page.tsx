@@ -71,7 +71,7 @@ export default function PochaPage() {
         relative !gap-0`}
     >
       {/* Branch sits in section's stacking context, above sticky tabs */}
-      <div className="absolute top-0 left-0 z-[50] w-full">
+      <div className="absolute top-0 left-0 z-[40] w-full">
         <CherryBlossomBranch triggerSway={swayTrigger} />
       </div>
 
@@ -82,7 +82,7 @@ export default function PochaPage() {
       </div>
 
       {/* Sticky Tabs (fixed at the top) */}
-      <div className="sticky top-0 z-45 bg-white">
+      <div className="sticky top-0 z-[45] bg-white">
         <HomeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
