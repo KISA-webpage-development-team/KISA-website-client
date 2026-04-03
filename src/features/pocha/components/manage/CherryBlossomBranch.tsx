@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface CherryBlossomBranchProps {
   triggerSway: number;
@@ -41,15 +41,21 @@ const branches = [
 
 export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
   const [isSwaying, setIsSwaying] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  const playSway = () => {
+  const playSway = useCallback(() => {
     setIsSwaying(true);
-    setTimeout(() => setIsSwaying(false), 1000);
-  };
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setIsSwaying(false), 1000);
+  }, []);
 
   useEffect(() => {
     if (triggerSway > 0) playSway();
-  }, [triggerSway]);
+  }, [triggerSway, playSway]);
+
+  useEffect(() => {
+    return () => clearTimeout(timerRef.current);
+  }, []);
 
   return (
     <>
