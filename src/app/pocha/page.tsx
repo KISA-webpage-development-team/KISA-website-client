@@ -8,11 +8,11 @@ import { LoadingSpinner } from "@/components/ui/feedback";
 import HomeHeading from "@/features/pocha/components/home/HomeHeading";
 import HomeTabs from "@/features/pocha/components/home/HomeTabs";
 import HomeTabContent from "@/features/pocha/components/home/HomeTabContent";
-import { CherryBlossomPetals } from "@/features/pocha/components/manage/CherryBlossomPetals_optimized";
+import { CherryBlossomPetals } from "@/features/pocha/components/theme/CherryBlossomPetals_optimized";
 
 const CherryBlossomBranch = dynamic(
   () =>
-    import("@/features/pocha/components/manage/CherryBlossomBranch").then(
+    import("@/features/pocha/components/theme/CherryBlossomBranch").then(
       (mod) => mod.CherryBlossomBranch
     ),
   { ssr: false }
