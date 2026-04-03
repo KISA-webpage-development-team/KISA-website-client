@@ -1,12 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-const CHERRY_BLOSSOM_COLORS = {
-  petalPink: "#F6C6D1",
-  branchBrown: "#8B6F47",
-  blossomCenter: "#FFB347",
-} as const;
+import { CHERRY_BLOSSOM_COLORS } from './colors';
 
 interface CherryBlossomBranchProps {
   triggerSway: number;

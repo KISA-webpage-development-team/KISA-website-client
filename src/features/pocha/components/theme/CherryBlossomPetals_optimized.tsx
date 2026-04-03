@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-
-const CHERRY_BLOSSOM_COLORS = {
-  petalPink: "#F6C6D1",
-} as const;
+import { CHERRY_BLOSSOM_COLORS } from "./colors";
 
 interface Petal {
   x: number;
