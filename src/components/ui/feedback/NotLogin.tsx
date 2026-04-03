@@ -10,7 +10,7 @@ export default function NotLogin({
       className="md:text-lg 
     w-full h-full flex flex-col items-center "
     >
-      <p className="mb-2">로그인이 필요합니다!</p>
+      <p className="mb-2">Please sign in to continue.</p>
       <LoginButton handleGoogleSignIn={handleGoogleSignIn} />
     </div>
   );
