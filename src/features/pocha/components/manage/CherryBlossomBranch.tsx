@@ -2,6 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+const CHERRY_BLOSSOM_COLORS = {
+  petalPink: "#F6C6D1",
+  branchBrown: "#8B6F47",
+  blossomCenter: "#FFB347",
+} as const;
+
 interface CherryBlossomBranchProps {
   triggerSway: number;
 }
@@ -94,7 +100,7 @@ export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
               {/* Main branch */}
               <path
                 d="M 30 30 Q 35 55, 42 80 Q 48 105, 54 130 Q 58 155, 62 175"
-                stroke="#8B6F47"
+                stroke={CHERRY_BLOSSOM_COLORS.branchBrown}
                 strokeWidth="3.5"
                 fill="none"
                 strokeLinecap="round"
@@ -103,21 +109,21 @@ export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
               {/* Side branches */}
               <path
                 d="M 42 80 Q 55 87, 68 92"
-                stroke="#8B6F47"
+                stroke={CHERRY_BLOSSOM_COLORS.branchBrown}
                 strokeWidth="2.5"
                 fill="none"
                 strokeLinecap="round"
               />
               <path
                 d="M 48 105 Q 60 110, 72 113"
-                stroke="#8B6F47"
+                stroke={CHERRY_BLOSSOM_COLORS.branchBrown}
                 strokeWidth="2.5"
                 fill="none"
                 strokeLinecap="round"
               />
               <path
                 d="M 54 130 Q 65 135, 78 140"
-                stroke="#8B6F47"
+                stroke={CHERRY_BLOSSOM_COLORS.branchBrown}
                 strokeWidth="2.5"
                 fill="none"
                 strokeLinecap="round"
@@ -132,11 +138,11 @@ export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
                     cy="-7"
                     rx="5"
                     ry="7"
-                    fill="#F6C6D1"
+                    fill={CHERRY_BLOSSOM_COLORS.petalPink}
                     transform={`rotate(${angle})`}
                   />
                 ))}
-                <circle cx="0" cy="0" r="2.5" fill="#FFB347" />
+                <circle cx="0" cy="0" r="2.5" fill={CHERRY_BLOSSOM_COLORS.blossomCenter} />
               </g>
 
               {/* Blossom 2 */}
@@ -148,11 +154,11 @@ export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
                     cy="-6"
                     rx="4.5"
                     ry="6.5"
-                    fill="#F6C6D1"
+                    fill={CHERRY_BLOSSOM_COLORS.petalPink}
                     transform={`rotate(${angle})`}
                   />
                 ))}
-                <circle cx="0" cy="0" r="2" fill="#FFB347" />
+                <circle cx="0" cy="0" r="2" fill={CHERRY_BLOSSOM_COLORS.blossomCenter} />
               </g>
 
               {/* Blossom 3 */}
@@ -164,11 +170,11 @@ export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
                     cy="-7"
                     rx="5"
                     ry="7"
-                    fill="#F6C6D1"
+                    fill={CHERRY_BLOSSOM_COLORS.petalPink}
                     transform={`rotate(${angle})`}
                   />
                 ))}
-                <circle cx="0" cy="0" r="2.5" fill="#FFB347" />
+                <circle cx="0" cy="0" r="2.5" fill={CHERRY_BLOSSOM_COLORS.blossomCenter} />
               </g>
 
               {/* Blossom 4 - smaller bud */}
@@ -180,12 +186,12 @@ export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
                     cy="-5"
                     rx="3.5"
                     ry="5"
-                    fill="#F6C6D1"
+                    fill={CHERRY_BLOSSOM_COLORS.petalPink}
                     opacity="0.8"
                     transform={`rotate(${angle})`}
                   />
                 ))}
-                <circle cx="0" cy="0" r="1.8" fill="#FFB347" />
+                <circle cx="0" cy="0" r="1.8" fill={CHERRY_BLOSSOM_COLORS.blossomCenter} />
               </g>
 
               {/* Blossom 5 - smaller bud */}
@@ -197,12 +203,12 @@ export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
                     cy="-5"
                     rx="3.5"
                     ry="5"
-                    fill="#F6C6D1"
+                    fill={CHERRY_BLOSSOM_COLORS.petalPink}
                     opacity="0.8"
                     transform={`rotate(${angle})`}
                   />
                 ))}
-                <circle cx="0" cy="0" r="1.8" fill="#FFB347" />
+                <circle cx="0" cy="0" r="1.8" fill={CHERRY_BLOSSOM_COLORS.blossomCenter} />
               </g>
 
               {/* Blossom 6 - small bud at top */}
@@ -214,12 +220,12 @@ export function CherryBlossomBranch({ triggerSway }: CherryBlossomBranchProps) {
                     cy="-4"
                     rx="3"
                     ry="4"
-                    fill="#F6C6D1"
+                    fill={CHERRY_BLOSSOM_COLORS.petalPink}
                     opacity="0.7"
                     transform={`rotate(${angle})`}
                   />
                 ))}
-                <circle cx="0" cy="0" r="1.5" fill="#FFB347" />
+                <circle cx="0" cy="0" r="1.5" fill={CHERRY_BLOSSOM_COLORS.blossomCenter} />
               </g>
             </svg>
           </div>

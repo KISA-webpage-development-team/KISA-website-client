@@ -2,6 +2,10 @@
 
 import { useEffect, useRef } from "react";
 
+const CHERRY_BLOSSOM_COLORS = {
+  petalPink: "#F6C6D1",
+} as const;
+
 interface Petal {
   x: number;
   y: number;
@@ -165,7 +169,7 @@ export function CherryBlossomPetals({
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path d={shape.path} fill="#F6C6D1" opacity="0.95" />
+              <path d={shape.path} fill={CHERRY_BLOSSOM_COLORS.petalPink} opacity="0.95" />
             </svg>
           </div>
         );
