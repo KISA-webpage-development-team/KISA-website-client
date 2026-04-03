@@ -57,7 +57,7 @@ export default function SignUpPage() {
         placeholder: "ex) Jioh In",
         isError: true,
         errorMsg:
-          "This is the name that will be used on the bulletin board.Please use your real name.",
+          "This is the name that will be used on the bulletin board. Please use your real name.",
         errorState: "alert",
       },
       {

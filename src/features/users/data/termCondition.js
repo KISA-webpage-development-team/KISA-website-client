@@ -2,18 +2,15 @@ export const personalInfoTerm = {
   label: "Personal Information Collection Agreement (개인정보 수집 동의)",
   text: (
     <div
+      className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-10 md:gap-y-6 w-full relative"
       style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr", // 정확히 5:5 비율로 2열 배치
-        gap: "24px 40px", // 세로 간격 24px, 가로 간격(가운데 여백) 40px
-        width: "100%",
-        position: "relative", // 가운데 구분선을 넣기 위한 기준점
         lineHeight: "1.6",
         fontSize: "14px",
       }}
     >
       {/* 가운데: 구분선 (Absolute 위치로 그리드 가운데에 고정) */}
       <div
+        className="hidden md:block"
         style={{
           position: "absolute",
           top: 0,
@@ -452,18 +449,15 @@ export const websiteTerm = {
   label: "Website Terms of Use (웹사이트 이용약관)",
   text: (
     <div
+      className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-10 md:gap-y-6 w-full relative"
       style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr", // 정확히 5:5 비율로 2열 배치
-        gap: "24px 40px", // 세로 간격 24px, 가로 간격(가운데 여백) 40px
-        width: "100%",
-        position: "relative", // 가운데 구분선을 넣기 위한 기준점
         lineHeight: "1.6",
         fontSize: "14px",
       }}
     >
       {/* 가운데: 구분선 (Absolute 위치로 그리드 가운데에 고정) */}
       <div
+        className="hidden md:block"
         style={{
           position: "absolute",
           top: 0,
