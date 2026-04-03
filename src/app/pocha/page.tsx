@@ -76,7 +76,7 @@ export default function PochaPage() {
       </div>
 
       {/* PochaHeading (at the top, disappear when scrolling) */}
-      <div className="relative z-10 flex-shrink-0">
+      <div className="relative z-[41] flex-shrink-0">
         <CherryBlossomPetals petalCount={4} scrollOpacity={1} />
         <HomeHeading pochaInfo={pochaInfo} />
       </div>
