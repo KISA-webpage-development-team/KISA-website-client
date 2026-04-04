@@ -77,7 +77,7 @@ const useStripePayment = (
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            amount: totalPrice * 100, // cents 단위로 변환
+            amount: Math.round(totalPrice * 100), // cents 단위로 변환
             customerID: customerID, // ✅ 고객 ID 포함
           }),
         }
