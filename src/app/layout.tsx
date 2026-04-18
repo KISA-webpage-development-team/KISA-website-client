@@ -1,5 +1,4 @@
 import "./globals.css";
-import Footer from "@/components/layout/footer/Footer";
 import { MSWProvider } from "@/mocks/MSWProvider";
 import { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
@@ -28,9 +27,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="flex flex-col">
         <MSWProvider>
           <div className="flex-1 flex flex-col w-full">{children}</div>
-          <footer className="mt-auto w-full">
-            <Footer />
-          </footer>
         </MSWProvider>
         <Analytics />
         <SpeedInsights />

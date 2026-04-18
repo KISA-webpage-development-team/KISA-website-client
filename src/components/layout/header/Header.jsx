@@ -38,16 +38,10 @@ export default function Header({ session }) {
   const [active, setActive] = useState(null);
 
   const pathname = usePathname();
-  const isPocha = pathname.startsWith("/pocha");
-  const showMenu = !isPocha;
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
-
-  if (isPocha) {
-    return null;
-  }
 
   return (
     <div
@@ -80,61 +74,57 @@ export default function Header({ session }) {
         {isJobsCurator ? <JobsCuratorHeaderTitle /> : <HeaderTitleBlock />}
         {/* Navigation Menu */}
         {/* !!! in mobile menu, this menu should go down and become hidden */}
-        {showMenu && (
-          <div className="hidden md:flex">
-            <Menu setActive={setActive}>
-              {menu?.map((item, index) => (
-                <MenuItem
-                  key={item.href}
-                  setActive={setActive}
-                  active={active}
-                  item={item.name}
-                  href={item.href}
-                >
-                  {item.dropdowns && (
-                    <div className="flex flex-col space-y-4 text-sm">
-                      {item.dropdowns.map((dropdown) => (
-                        <HoveredLink key={dropdown.href} href={dropdown.href}>
-                          {dropdown.name}
-                        </HoveredLink>
-                      ))}
-                    </div>
-                  )}
-                </MenuItem>
-              ))}
-            </Menu>
-          </div>
-        )}
+        <div className="hidden md:flex">
+          <Menu setActive={setActive}>
+            {menu?.map((item, index) => (
+              <MenuItem
+                key={item.href}
+                setActive={setActive}
+                active={active}
+                item={item.name}
+                href={item.href}
+              >
+                {item.dropdowns && (
+                  <div className="flex flex-col space-y-4 text-sm">
+                    {item.dropdowns.map((dropdown) => (
+                      <HoveredLink key={dropdown.href} href={dropdown.href}>
+                        {dropdown.name}
+                      </HoveredLink>
+                    ))}
+                  </div>
+                )}
+              </MenuItem>
+            ))}
+          </Menu>
+        </div>
 
-        {showMenu && (
-          <div className="flex md:hidden">
-            <MobileMenu
-              active={active}
-              setActive={setActive}
-              isMobileMenuOpen={isMobileMenuOpen}
-            >
-              {menu?.map((item, index) => (
-                <MobileMenuItem
-                  key={item.href}
-                  setActive={setActive}
-                  active={active}
-                  item={item.name}
-                  href={item.href}
-                >
-                  {item.dropdowns && (
-                    <div className="flex flex-col space-y-4 text-sm">
-                      {item.dropdowns.map((dropdown) => (
-                        <HoveredLink key={dropdown.href} href={dropdown.href}>
-                          {dropdown.name}
-                        </HoveredLink>
-                      ))}
-                    </div>
-                  )}
-                </MobileMenuItem>
-              ))}
-            </MobileMenu>
-          </div>
-        )}
+        <div className="flex md:hidden">
+          <MobileMenu
+            active={active}
+            setActive={setActive}
+            isMobileMenuOpen={isMobileMenuOpen}
+          >
+            {menu?.map((item, index) => (
+              <MobileMenuItem
+                key={item.href}
+                setActive={setActive}
+                active={active}
+                item={item.name}
+                href={item.href}
+              >
+                {item.dropdowns && (
+                  <div className="flex flex-col space-y-4 text-sm">
+                    {item.dropdowns.map((dropdown) => (
+                      <HoveredLink key={dropdown.href} href={dropdown.href}>
+                        {dropdown.name}
+                      </HoveredLink>
+                    ))}
+                  </div>
+                )}
+              </MobileMenuItem>
+            ))}
+          </MobileMenu>
+        </div>
       </div>
 
       {/* RIGHT SIDE */}
