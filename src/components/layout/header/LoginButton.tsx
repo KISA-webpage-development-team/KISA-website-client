@@ -8,9 +8,14 @@ import { useMockAuth } from "@/mocks/authContext";
 type LoginButtonProps = {
   isAuthenticated: boolean;
   size?: "sm" | "md";
+  callbackUrl?: string;
 };
 
-function LoginButton({ isAuthenticated, size = "md" }: LoginButtonProps) {
+function LoginButton({
+  isAuthenticated,
+  size = "md",
+  callbackUrl = "/",
+}: LoginButtonProps) {
   const { isMockMode, toggle } = useMockAuth();
 
   const handleClick = () => {
@@ -21,7 +26,7 @@ function LoginButton({ isAuthenticated, size = "md" }: LoginButtonProps) {
     if (isAuthenticated) {
       signOut();
     } else {
-      signIn("google", { callbackUrl: "/" });
+      signIn("google", { callbackUrl });
     }
   };
 

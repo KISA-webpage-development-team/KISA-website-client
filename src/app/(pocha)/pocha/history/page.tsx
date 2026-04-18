@@ -42,7 +42,7 @@ export default function HistoryPage() {
             name={session?.user?.name}
             textClassName='hidden lg:hidden'
           />
-          <LoginButton session={Boolean(session)} />
+          <LoginButton isAuthenticated={Boolean(session)} />
         </div>
       </div>
 
