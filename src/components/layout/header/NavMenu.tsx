@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, Transition, Variants } from "framer-motion";
 import Link from "next/link";
-const transition = {
+const transition: Transition = {
   type: "spring",
   mass: 0.5,
   damping: 11.5,
@@ -60,7 +60,7 @@ export const MobileMenuItem = ({ setActive, active, item, children, href }) => {
             variants={{
               open: { opacity: 1, height: "auto", duration: 0.5 },
               collapsed: { opacity: 0, height: 0 },
-            }}
+            } as Variants}
             transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
           >
             <motion.div
@@ -81,7 +81,7 @@ export const MobileMenu = ({
   isMobileMenuOpen,
   children,
 }) => {
-  const menuVariants = {
+  const menuVariants: Variants = {
     open: {
       opacity: 1,
       height: "auto",
@@ -97,8 +97,8 @@ export const MobileMenu = ({
   return (
     <motion.nav
       className={`
-        flex 
-        items-start 
+        flex
+        items-start
         flex-col md:flex-row
         relative border border-transparent
         shadow-input 
@@ -211,10 +211,10 @@ export const MenuItem = ({ setActive, active, item, children, href }) => {
 
 // --------------------------------------------
 
-export const HoveredLink = ({ children, ...rest }) => {
+export const HoveredLink = ({ children, href, ...rest }: any) => {
   return (
-    <Link {...rest} className="
-    cursor-pointer hover:opacity-[0.9] 
+    <Link href={href} {...rest} className="
+    cursor-pointer hover:opacity-[0.9]
         hover:text-michigan-maize
         text-sm md:text-base">
       {children}

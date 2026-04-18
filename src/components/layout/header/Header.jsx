@@ -18,14 +18,12 @@ import {
   MenuItem,
   MobileMenu,
   MobileMenuItem,
-} from "@/components/ui/aceternity/navbar-menu";
-import JobsCuratorHeaderTitle from "@/features/jobs-curator/layout/HeaderTitle";
+} from "./NavMenu";
 
 import menu from "@/components/layout/header/navigationMenu";
 
 // sub-ui components
-import HeaderTitleBlock from "./HeaderTitleBlock";
-//import WebTitle from "./WebTitle";
+import HeaderTitle from "./HeaderTitle";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -34,7 +32,6 @@ export default function Header({ session }) {
   const headerContentWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isJobsCurator, setIsJobsCurator] = useState(false);
   const [active, setActive] = useState(null);
 
   const pathname = usePathname();
@@ -70,8 +67,7 @@ export default function Header({ session }) {
         </Link> */}
 
         {/* Web Name home link */}
-        {/* <WebTitle /> */}
-        {isJobsCurator ? <JobsCuratorHeaderTitle /> : <HeaderTitleBlock />}
+        <HeaderTitle />
         {/* Navigation Menu */}
         {/* !!! in mobile menu, this menu should go down and become hidden */}
         <div className="hidden md:flex">
