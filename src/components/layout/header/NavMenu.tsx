@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion, Transition, Variants } from "framer-motion";
+import { AnimatePresence, motion, Transition, Variants } from "framer-motion";
 import Link from "next/link";
 const transition: Transition = {
   type: "spring",
@@ -140,9 +140,9 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
         flex-col md:flex-row
         relative border border-transparent
         shadow-input 
-        space-x-0 md:space-x-8
+        space-x-0 md:space-x-6
         space-y-4 md:space-y-0
-        
+
       `}
       // variants={menuVariants}
       // animate={isMobileMenuOpen ? "closed" : "open"}
@@ -176,22 +176,21 @@ export const MenuItem = ({ setActive, active, item, children, href }) => {
 
       {/* motion.div: dropdown menu items list */}
       {/* `active` handles whether user hovers in the base menu to open the dropdown */}
-      {active !== null && children && (
-        <motion.div
-          className={`hidden md:flex`}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          initial={{ opacity: 0, scale: 0.85, y: 10 }}
-          transition={transition}
-        >
-          {/* if current base menu is selected,
-          show dropdown with transition */}
-          {active === item && (
+      <AnimatePresence>
+        {active !== null && children && active === item && (
+          <motion.div
+            className={`hidden md:flex`}
+            initial={{ opacity: 0, scale: 0.85, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: 10 }}
+            transition={transition}
+          >
             <div className="absolute pt-[calc(2.4rem)] left-1/2 transform -translate-x-1/2">
               <motion.div
                 transition={transition}
                 layoutId="active" // layoutId ensures smooth animation
                 className="
-                bg-michigan-blue/90 backdrop-blur-sm rounded-2xl overflow-hidden 
+                bg-michigan-blue/90 backdrop-blur-sm rounded-2xl overflow-hidden
                 border border-michigan-maize shadow-inner"
               >
                 <motion.div
@@ -202,9 +201,9 @@ export const MenuItem = ({ setActive, active, item, children, href }) => {
                 </motion.div>
               </motion.div>
             </div>
-          )}
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
