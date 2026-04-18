@@ -4,7 +4,7 @@ import QuickLinks from "@/features/home-sponsor/components/QuickLinks";
 import BoardsSummary from "@/features/home-sponsor/components/BoardsSummary";
 import SchoolCalendar from "@/features/home-sponsor/components/SchoolCalendar";
 import SponsorCarousel from "@/features/home-sponsor/components/SponsorCarousel";
-import "./home.css";
+import "../home.css";
 
 export default function Home() {
   return (
