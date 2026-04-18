@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion, Transition } from "framer-motion";
+import { AnimatePresence, motion, Transition } from "framer-motion";
 import Link from "next/link";
 
 const submenuTransition: Transition = {
@@ -104,7 +104,7 @@ export const Menu = ({ setActive, children }: MenuProps) => {
         items-start
         flex-col md:flex-row
         relative border border-transparent
-        space-x-0 md:space-x-8
+        space-x-0 md:space-x-4
         space-y-4 md:space-y-0
       "
     >
@@ -143,14 +143,15 @@ export const MenuItem = ({
         <HoveredLink href={href}>{item}</HoveredLink>
       )}
 
-      {active !== null && children && (
-        <motion.div
-          className="hidden md:flex"
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          initial={{ opacity: 0, scale: 0.85, y: 10 }}
-          transition={submenuTransition}
-        >
-          {isOpen && (
+      <AnimatePresence>
+        {active !== null && children && isOpen && (
+          <motion.div
+            className="hidden md:flex"
+            initial={{ opacity: 0, scale: 0.85, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: 10 }}
+            transition={submenuTransition}
+          >
             <div className="absolute pt-10 left-1/2 transform -translate-x-1/2">
               <motion.div
                 transition={submenuTransition}
@@ -165,9 +166,9 @@ export const MenuItem = ({
                 </motion.div>
               </motion.div>
             </div>
-          )}
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
