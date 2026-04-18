@@ -21,12 +21,13 @@ export default function PochaManagePageHeader() {
         포차 관리
       </h1>
       <div className="relative z-10 flex items-center gap-4">
-        <UserInfo
-          email={session?.user?.email}
-          image={session?.user?.image}
-          name={session?.user?.name}
-          textClassName="hidden lg:hidden"
-        />
+        {session?.user?.email && session.user.name && session.user.image && (
+          <UserInfo
+            email={session.user.email}
+            image={session.user.image}
+            name={session.user.name}
+          />
+        )}
         <LoginButton isAuthenticated={Boolean(session)} />
       </div>
     </div>
