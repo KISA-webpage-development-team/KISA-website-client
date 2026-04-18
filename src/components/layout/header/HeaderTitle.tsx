@@ -17,8 +17,8 @@ export default function HeaderTitle() {
         className="object-contain"
       />
       <span className="flex flex-col items-start gap-0">
-        <span className="text-white type-label !font-sejong-bold">University of Michigan</span>
-        <span className="text-white type-h2 !font-sejong-bold">한인 학생회</span>
+        <span className="text-white type-label font-sejong-bold!">University of Michigan</span>
+        <span className="text-white type-h2 font-sejong-bold!">한인 학생회</span>
       </span>
     </Link>
   );
