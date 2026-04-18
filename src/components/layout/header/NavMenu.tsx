@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { AnimatePresence, motion, Transition } from "framer-motion";
+import { motion, Transition, Variants } from "framer-motion";
 import Link from "next/link";
 
 const submenuTransition: Transition = {
@@ -29,31 +29,32 @@ export const MobileMenuItem = ({
   children,
   href,
 }: MobileMenuItemProps) => {
-  const isOpen = active === item;
-
   return (
     <div
-      onClick={() => setActive(isOpen ? null : item)}
+      onClick={() => setActive(active === item ? null : item)}
       className="relative mt-4 md:mt-0"
     >
       {children ? (
-        <p className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body">
+        <motion.p className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body">
           {item}
-        </p>
+        </motion.p>
       ) : (
         <HoveredLink href={href}>{item}</HoveredLink>
       )}
 
-      {children && (
-        <div
-          className={`
-            overflow-hidden
-            transition-all duration-300 ease-out
-            ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
-          `}
+      {active !== null && children && active === item && (
+        <motion.div
+          initial="collapsed"
+          animate="open"
+          exit="collapsed"
+          variants={{
+            open: { opacity: 1, height: "auto" },
+            collapsed: { opacity: 0, height: 0 },
+          }}
+          transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
         >
-          <div className="w-max h-full py-4 pl-5">{children}</div>
-        </div>
+          <motion.div className="w-max h-full py-4 pl-5">{children}</motion.div>
+        </motion.div>
       )}
     </div>
   );
@@ -67,8 +68,21 @@ type MobileMenuProps = {
 };
 
 export const MobileMenu = ({ isMobileMenuOpen, children }: MobileMenuProps) => {
+  const menuVariants: Variants = {
+    open: {
+      opacity: 1,
+      height: "auto",
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+    closed: {
+      opacity: 0,
+      height: 0,
+      transition: { duration: 0.3, ease: "easeIn" },
+    },
+  };
+
   return (
-    <nav
+    <motion.nav
       className={`
         flex
         items-start
@@ -76,13 +90,13 @@ export const MobileMenu = ({ isMobileMenuOpen, children }: MobileMenuProps) => {
         relative border border-transparent
         space-x-0 md:space-x-4
         space-y-2 md:space-y-0
-        overflow-hidden
-        transition-all duration-300 ease-out
-        ${isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}
+        ${isMobileMenuOpen ? "" : "h-0 overflow-y-hidden"}
       `}
+      variants={menuVariants}
+      animate={isMobileMenuOpen ? "open" : "closed"}
     >
       {children}
-    </nav>
+    </motion.nav>
   );
 };
 
@@ -96,7 +110,7 @@ type MenuProps = {
 
 export const Menu = ({ setActive, children }: MenuProps) => {
   return (
-    <nav
+    <motion.nav
       onMouseLeave={() => setActive(null)}
       className="
         md:mt-0
@@ -109,7 +123,7 @@ export const Menu = ({ setActive, children }: MenuProps) => {
       "
     >
       {children}
-    </nav>
+    </motion.nav>
   );
 };
 
@@ -128,30 +142,30 @@ export const MenuItem = ({
   children,
   href,
 }: MenuItemProps) => {
-  const isOpen = active === item;
-
   return (
     <div
       onMouseEnter={() => setActive(item)}
       className="relative mt-2 md:mt-0"
     >
       {children ? (
-        <p className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body">
+        <motion.p
+          transition={{ duration: 0.3 }}
+          className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body"
+        >
           {item}
-        </p>
+        </motion.p>
       ) : (
         <HoveredLink href={href}>{item}</HoveredLink>
       )}
 
-      <AnimatePresence>
-        {active !== null && children && isOpen && (
-          <motion.div
-            className="hidden md:flex"
-            initial={{ opacity: 0, scale: 0.85, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85, y: 10 }}
-            transition={submenuTransition}
-          >
+      {active !== null && children && (
+        <motion.div
+          className="hidden md:flex"
+          initial={{ opacity: 0, scale: 0.85, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={submenuTransition}
+        >
+          {active === item && (
             <div className="absolute pt-10 left-1/2 transform -translate-x-1/2">
               <motion.div
                 transition={submenuTransition}
@@ -166,9 +180,9 @@ export const MenuItem = ({
                 </motion.div>
               </motion.div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </motion.div>
+      )}
     </div>
   );
 };
