@@ -28,7 +28,7 @@ export default function PochaManagePageHeader() {
             name={session.user.name}
           />
         )}
-        <LoginButton session={Boolean(session)} />
+        <LoginButton isAuthenticated={Boolean(session)} />
       </div>
     </div>
   );

@@ -143,7 +143,7 @@ export default function Header({ session }) {
           </div>
         )}
         <div className="block ml-2 lg:ml-3">
-          <LoginButton session={session} />
+          <LoginButton isAuthenticated={Boolean(session)} />
         </div>
       </div>
 
@@ -175,7 +175,7 @@ export default function Header({ session }) {
             />
           )}
 
-          <LoginButton session={session} size="sm" />
+          <LoginButton isAuthenticated={Boolean(session)} size="sm" />
         </motion.div>
       )}
     </div>
