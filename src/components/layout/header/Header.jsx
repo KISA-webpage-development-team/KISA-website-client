@@ -169,9 +169,9 @@ export default function Header({ session }) {
         >
           {session && (
             <UserInfo
-              email={session?.user.email}
-              image={session?.user.image}
-              name={session?.user.name}
+              email={session.user.email}
+              image={session.user.image}
+              name={session.user.name}
             />
           )}
 
