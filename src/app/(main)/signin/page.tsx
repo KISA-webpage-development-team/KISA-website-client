@@ -4,16 +4,9 @@
 
 import React from "react";
 import { NotLogin } from "@/components/ui/feedback";
-import { signIn } from "next-auth/react";
 
 export default function page({ searchParams }) {
   const { callbackUrl } = searchParams;
-
-  const handleGoogleSignIn = () => {
-    signIn("google", {
-      callbackUrl: callbackUrl || "/",
-    });
-  };
 
   return (
     <section>
@@ -21,10 +14,7 @@ export default function page({ searchParams }) {
         Please sign in with your UMich Google email. Using an external email
         may restrict access to our services.
       </span>
-      {/* {(callbackUrl || decodeURIComponent(callbackUrl).endsWith("com/")) && ( */}
-      {/* @ts-ignore */}
-      <NotLogin handleGoogleSignIn={handleGoogleSignIn} />
-      {/* )} */}
+      <NotLogin callbackUrl={callbackUrl || "/"} />
     </section>
   );
 }

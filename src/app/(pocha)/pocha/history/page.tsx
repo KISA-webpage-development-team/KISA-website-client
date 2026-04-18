@@ -36,13 +36,14 @@ export default function HistoryPage() {
           포차 주문 기록
         </h1>
         <div className='flex items-center gap-4'>
-          <UserInfo
-            email={session?.user?.email}
-            image={session?.user?.image}
-            name={session?.user?.name}
-            textClassName='hidden lg:hidden'
-          />
-          <LoginButton session={Boolean(session)} />
+          {session?.user?.email && session.user.name && session.user.image && (
+            <UserInfo
+              email={session.user.email}
+              image={session.user.image}
+              name={session.user.name}
+            />
+          )}
+          <LoginButton isAuthenticated={Boolean(session)} />
         </div>
       </div>
 
