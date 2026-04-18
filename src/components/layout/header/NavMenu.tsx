@@ -1,6 +1,16 @@
 "use client";
 import React from "react";
+import { motion, Transition } from "framer-motion";
 import Link from "next/link";
+
+const submenuTransition: Transition = {
+  type: "spring",
+  mass: 0.5,
+  damping: 11.5,
+  stiffness: 100,
+  restDelta: 0.001,
+  restSpeed: 0.001,
+};
 
 type Setter<T> = (value: T) => void;
 
@@ -133,29 +143,30 @@ export const MenuItem = ({
         <HoveredLink href={href}>{item}</HoveredLink>
       )}
 
-      {children && (
-        <div className="hidden md:flex">
-          <div
-            className={`
-              absolute pt-10 left-1/2 -translate-x-1/2
-              transition-all duration-200 ease-out
-              ${
-                isOpen
-                  ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                  : "opacity-0 scale-95 translate-y-1 pointer-events-none"
-              }
-            `}
-          >
-            <div
-              className="
-                bg-brand-primary/90 backdrop-blur-sm rounded-2xl overflow-hidden
-                border border-brand-accent
-              "
-            >
-              <div className="w-max h-full p-4">{children}</div>
+      {active !== null && children && (
+        <motion.div
+          className="hidden md:flex"
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.85, y: 10 }}
+          transition={submenuTransition}
+        >
+          {isOpen && (
+            <div className="absolute pt-10 left-1/2 transform -translate-x-1/2">
+              <motion.div
+                transition={submenuTransition}
+                layoutId="active"
+                className="
+                  bg-brand-primary/90 backdrop-blur-sm rounded-2xl overflow-hidden
+                  border border-brand-accent
+                "
+              >
+                <motion.div layout className="w-max h-full p-4">
+                  {children}
+                </motion.div>
+              </motion.div>
             </div>
-          </div>
-        </div>
+          )}
+        </motion.div>
       )}
     </div>
   );
