@@ -74,8 +74,8 @@ export const MobileMenu = ({ isMobileMenuOpen, children }: MobileMenuProps) => {
         items-start
         flex-col md:flex-row
         relative border border-transparent
-        space-x-0 md:space-x-10
-        space-y-4 md:space-y-0
+        space-x-0 md:space-x-4
+        space-y-2 md:space-y-0
         overflow-hidden
         transition-all duration-300 ease-out
         ${isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}
@@ -104,7 +104,7 @@ export const Menu = ({ setActive, children }: MenuProps) => {
         items-start
         flex-col md:flex-row
         relative border border-transparent
-        space-x-0 md:space-x-4
+        space-x-0 md:space-x-8
         space-y-4 md:space-y-0
       "
     >
