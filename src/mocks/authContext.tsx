@@ -92,18 +92,23 @@ export function MockAuthToggle() {
     <div
       role="group"
       aria-label="Mock authentication toggle"
-      className="fixed bottom-4 right-4 z-50 min-w-72 rounded-full border border-border-strong bg-surface px-4 py-2 shadow-md"
+      className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-border-strong bg-surface px-4 py-2 shadow-md"
     >
       <Switch
         checked={isAuthenticated}
         onChange={toggle}
-        text={
-          isAuthenticated
-            ? `Mock: ${MOCK_SESSION.user!.email}`
-            : "Mock: logged out"
-        }
         aria-label="Toggle mock authentication"
       />
+      <span className="relative type-body-sm text-foreground">
+        <span aria-hidden="true" className="invisible">
+          Mock: {MOCK_SESSION.user!.email}
+        </span>
+        <span className="absolute inset-0">
+          {isAuthenticated
+            ? `Mock: ${MOCK_SESSION.user!.email}`
+            : "Mock: logged out"}
+        </span>
+      </span>
     </div>
   );
 }
