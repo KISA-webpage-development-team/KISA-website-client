@@ -140,7 +140,7 @@ export const Menu = ({ setActive, isMobileMenuOpen, children }) => {
         flex-col md:flex-row
         relative border border-transparent
         shadow-input 
-        space-x-0 md:space-x-6
+        space-x-0 md:space-x-4
         space-y-4 md:space-y-0
 
       `}
