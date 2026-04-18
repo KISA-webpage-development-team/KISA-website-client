@@ -133,14 +133,23 @@ export const MenuItem = ({
         <HoveredLink href={href}>{item}</HoveredLink>
       )}
 
-      {active !== null && children && isOpen && (
+      {children && (
         <div className="hidden md:flex">
-          <div className="absolute pt-10 left-1/2 transform -translate-x-1/2">
+          <div
+            className={`
+              absolute pt-10 left-1/2 -translate-x-1/2
+              transition-all duration-200 ease-out
+              ${
+                isOpen
+                  ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                  : "opacity-0 scale-95 translate-y-1 pointer-events-none"
+              }
+            `}
+          >
             <div
               className="
                 bg-brand-primary/90 backdrop-blur-sm rounded-2xl overflow-hidden
                 border border-brand-accent
-                animate-in fade-in-0 zoom-in-95 duration-200
               "
             >
               <div className="w-max h-full p-4">{children}</div>
