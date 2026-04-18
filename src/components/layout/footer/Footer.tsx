@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import InstagramLinkIcon from "@/deprecated-components/shared/InstagramLinkIcon";
 import { Icon } from "@umichkisa-ds/web";
 
 export default function Footer() {
@@ -11,8 +10,15 @@ export default function Footer() {
       mt-6 py-[30px]"
     >
       <div className="flex items-center gap-3">
-        {/* TODO(lane-0.5.5): swap to <Icon name="instagram-brand" /> once DS version bump ships (lane 0.5.6). See PR for bailout context. */}
-        <InstagramLinkIcon color="black" />
+        <a
+          href="https://www.instagram.com/kisa_michigan/"
+          target="_blank"
+          rel="nofollow noreferrer"
+          aria-label="UMich KISA on Instagram"
+          className="inline-flex items-center justify-center"
+        >
+          <Icon name="instagram-brand" size="md" />
+        </a>
         <a
           href="mailto:umichkisa@gmail.com"
           rel="nofollow noreferrer"
