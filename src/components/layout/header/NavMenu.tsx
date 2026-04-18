@@ -27,7 +27,7 @@ export const MobileMenuItem = ({
       className="relative mt-4 md:mt-0"
     >
       {children ? (
-        <p className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body-sm md:type-body">
+        <p className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body">
           {item}
         </p>
       ) : (
@@ -126,7 +126,7 @@ export const MenuItem = ({
       className="relative mt-2 md:mt-0"
     >
       {children ? (
-        <p className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body-sm md:type-body">
+        <p className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body">
           {item}
         </p>
       ) : (
@@ -163,7 +163,7 @@ export const HoveredLink = ({ children, href, ...rest }: HoveredLinkProps) => {
     <Link
       href={href}
       {...rest}
-      className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body-sm md:type-body"
+      className="cursor-pointer hover:opacity-90 text-white hover:text-brand-accent type-body"
     >
       {children}
     </Link>
