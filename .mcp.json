@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--headless",
+        "--isolated",
+        "--executablePath",
+        "/root/.cache/puppeteer/chrome/linux-147.0.7727.56/chrome-linux64/chrome",
+        "--chromeArg=--no-sandbox",
+        "--chromeArg=--disable-dev-shm-usage"
+      ]
+    }
+  }
+}
