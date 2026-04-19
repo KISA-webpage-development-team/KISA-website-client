@@ -25,7 +25,7 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
           <Header />
         </header>
 
-        <Container as="main" size="lg" className="relative h-full pt-3 md:pt-6 flex-1">
+        <Container as="main" size="xl" className="relative h-full pt-3 md:pt-6 flex-1">
           {children}
         </Container>
 

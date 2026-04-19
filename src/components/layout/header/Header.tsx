@@ -40,7 +40,7 @@ export default function Header() {
   const userName = session?.user?.name ?? "User";
 
   return (
-    <Container size="lg" className="relative inset-x-0 z-50 flex justify-between items-center py-3 md:py-4">
+    <Container size="xl" className="relative inset-x-0 z-50 flex justify-between items-center py-3 md:py-4">
       {/* LEFT SIDE */}
       <div
         className="flex flex-col md:flex-row
