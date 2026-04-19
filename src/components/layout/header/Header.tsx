@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Divider, Icon, cn } from "@umichkisa-ds/web";
+import { Container, Divider, Icon, cn } from "@umichkisa-ds/web";
 
 import LoginButton from "./LoginButton";
 import UserInfo from "./UserInfo";
@@ -24,8 +24,6 @@ import { useMockAuth } from "@/mocks/authContext";
 const INSTAGRAM_URL = "https://www.instagram.com/kisa_michigan/";
 
 export default function Header() {
-  const headerContentWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
-
   const { session, isAuthenticated } = useMockAuth();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -42,15 +40,7 @@ export default function Header() {
   const userName = session?.user?.name ?? "User";
 
   return (
-    <div
-      className={cn(
-        "mx-auto",
-        headerContentWidth,
-        "relative inset-x-0 w-full z-50",
-        "flex justify-between items-center",
-        "py-3 md:py-4"
-      )}
-    >
+    <Container size="xl" className="relative inset-x-0 z-50 flex justify-between items-center py-3 md:py-4">
       {/* LEFT SIDE */}
       <div
         className="flex flex-col md:flex-row
@@ -158,6 +148,6 @@ export default function Header() {
         )}
         <LoginButton isAuthenticated={isAuthenticated} size="sm" />
       </div>
-    </div>
+    </Container>
   );
 }

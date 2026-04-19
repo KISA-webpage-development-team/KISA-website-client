@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import { getServerSession } from "next-auth";
-import { cn } from "@umichkisa-ds/web";
+import { Container } from "@umichkisa-ds/web";
 import authOptions from "@/lib/next-auth/authOptions";
 import {
   AuthContextProvider,
@@ -13,8 +13,6 @@ import {
 
 export default async function MainLayout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions);
-
-  const mainContentsWidth = "max-w-screen-2xl px-4 md:px-24 lg:px-32";
 
   return (
     <AuthContextProvider initialSession={session as AppSession | null}>
@@ -27,15 +25,9 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
           <Header />
         </header>
 
-        <main
-          className={cn(
-            "relative w-full h-full mx-auto",
-            mainContentsWidth,
-            "pt-3 md:pt-6 flex-1"
-          )}
-        >
+        <Container as="main" size="xl" className="relative h-full pt-3 md:pt-6 flex-1">
           {children}
-        </main>
+        </Container>
 
         <footer className="mt-auto w-full">
           <Footer />
