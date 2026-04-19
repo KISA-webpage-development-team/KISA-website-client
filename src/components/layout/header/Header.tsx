@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Divider, Icon } from "@umichkisa-ds/web";
+import { Divider, Icon, cn } from "@umichkisa-ds/web";
 
 import LoginButton from "./LoginButton";
 import UserInfo from "./UserInfo";
@@ -43,17 +43,19 @@ export default function Header() {
 
   return (
     <div
-      className={`mx-auto ${headerContentWidth}
-        relative inset-x-0 w-full z-50
-        flex justify-between items-center
-        py-3 md:py-4
-      `}
+      className={cn(
+        "mx-auto",
+        headerContentWidth,
+        "relative inset-x-0 w-full z-50",
+        "flex justify-between items-center",
+        "py-3 md:py-4"
+      )}
     >
       {/* LEFT SIDE */}
       <div
         className="flex flex-col md:flex-row
           items-start md:items-center
-          md:gap-8"
+          md:gap-6"
       >
         <HeaderTitle />
 
@@ -111,7 +113,7 @@ export default function Header() {
       </div>
 
       {/* RIGHT SIDE (desktop) */}
-      <div className="hidden md:flex justify-center items-center gap-3 lg:gap-4">
+      <div className="hidden md:flex justify-center items-center gap-4">
         <Link
           href={INSTAGRAM_URL}
           rel="nofollow noreferrer noopener"
@@ -143,10 +145,12 @@ export default function Header() {
           Always-mounted so opacity change triggers a real transition.
           Exit animation intentionally dropped per locked decision #5. */}
       <div
-        className={`absolute top-0 mt-16 right-0 mr-4
-          flex items-center gap-2 md:hidden
-          transition-opacity duration-300
-          ${isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={cn(
+          "absolute top-0 mt-16 right-0 mr-4",
+          "flex items-center gap-2 md:hidden",
+          "transition-opacity duration-300",
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
         aria-hidden={!isMobileMenuOpen}
       >
         {isAuthenticated && (

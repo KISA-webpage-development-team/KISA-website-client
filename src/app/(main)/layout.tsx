@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import { getServerSession } from "next-auth";
+import { cn } from "@umichkisa-ds/web";
 import authOptions from "@/lib/next-auth/authOptions";
 import {
   AuthContextProvider,
@@ -27,9 +28,11 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
         </header>
 
         <main
-          className={`relative w-full h-full
-          mx-auto ${mainContentsWidth}
-          pt-3 md:pt-6 flex-1`}
+          className={cn(
+            "relative w-full h-full mx-auto",
+            mainContentsWidth,
+            "pt-3 md:pt-6 flex-1"
+          )}
         >
           {children}
         </main>
