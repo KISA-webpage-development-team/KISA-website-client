@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { HookStatus } from "@/types/hook";
 import { Job, JobListQueryParams } from "../types/jobs";
 import { getJobs, getJobsByNextUrl, JobsResponse } from "@/apis/jobs/queries";
@@ -25,6 +25,11 @@ const useInfiniteJobs = (
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [nextUrl, setNextUrl] = useState<string | null>(null);
 
+  // Monotonic request id — only the latest in-flight fetch gets to write
+  // state. Prevents superseded responses (e.g. from filter churn or a
+  // StrictMode double-mount) from clobbering fresh results.
+  const requestIdRef = useRef(0);
+
   // Get filtered KISA jobs based on query params
   const { filteredJobs: kisaJobs, hasKisaJobs } = useKisaJobs(queryParams);
 
@@ -39,6 +44,7 @@ const useInfiniteJobs = (
 
   const fetchJobs = useCallback(
     async (isLoadMore = false) => {
+      const myRequestId = ++requestIdRef.current;
       try {
         const paramsWithPagination = {
           ...queryParams,
@@ -51,7 +57,7 @@ const useInfiniteJobs = (
         }
 
         const res: JobsResponse = await getJobs(paramsWithPagination);
-        // const res: JobsResponse = await getJobsMock(paramsWithPagination);
+        if (myRequestId !== requestIdRef.current) return;
         const newJobs = res?.jobs || [];
 
         if (isLoadMore) {
@@ -67,6 +73,7 @@ const useInfiniteJobs = (
         setHasMore(!!res?.next);
         setStatus("success");
       } catch (error) {
+        if (myRequestId !== requestIdRef.current) return;
         setStatus("error");
         if (error instanceof Error) {
           setError(error.message);
@@ -90,17 +97,19 @@ const useInfiniteJobs = (
 
     setIsLoadingMore(true);
 
+    const myRequestId = ++requestIdRef.current;
     // Use the next URL directly from the API response
     const fetchNextPage = async () => {
       try {
         const res: JobsResponse = await getJobsByNextUrl(nextUrl);
-        // const res: JobsResponse = await getJobsByNextUrlMock(nextUrl);
+        if (myRequestId !== requestIdRef.current) return;
         const newJobs = res?.jobs || [];
 
         setJobs((prev) => [...prev, ...newJobs]);
         setNextUrl(res?.next || null);
         setHasMore(!!res?.next);
       } catch (error) {
+        if (myRequestId !== requestIdRef.current) return;
         setStatus("error");
         if (error instanceof Error) {
           setError(error.message);
@@ -108,7 +117,9 @@ const useInfiniteJobs = (
           setError("An unexpected error occurred.");
         }
       } finally {
-        setIsLoadingMore(false);
+        if (myRequestId === requestIdRef.current) {
+          setIsLoadingMore(false);
+        }
       }
     };
 
