@@ -33,64 +33,48 @@ const useInfiniteJobs = (
   // Get filtered KISA jobs based on query params
   const { filteredJobs: kisaJobs, hasKisaJobs } = useKisaJobs(queryParams);
 
-  // Reset pagination when query params change
+  // Unified fetch-on-queryParams effect. Keeps previous `jobs` + `status`
+  // visible during refetch so the grid doesn't flicker to a spinner on
+  // every filter click; results swap in atomically when the new response
+  // lands. The initial mount still shows a spinner because `status` inits
+  // to "loading" and `jobs` inits to [].
   useEffect(() => {
-    setJobs([]);
-    setNextUrl(null);
-    setHasMore(true);
-    setError(undefined);
-    setStatus("loading");
-  }, [queryParams]);
+    let cancelled = false;
+    const myRequestId = ++requestIdRef.current;
 
-  const fetchJobs = useCallback(
-    async (isLoadMore = false) => {
-      const myRequestId = ++requestIdRef.current;
+    const run = async () => {
       try {
-        const paramsWithPagination = {
+        const res: JobsResponse = await getJobs({
           ...queryParams,
           limit: LIMIT,
-        };
+        });
+        if (cancelled || myRequestId !== requestIdRef.current) return;
 
-        // Simulate loading delay for better UX
-        if (isLoadMore) {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-        }
+        const newJobs = res?.jobs ?? [];
+        const allJobs = hasKisaJobs ? [...kisaJobs, ...newJobs] : newJobs;
 
-        const res: JobsResponse = await getJobs(paramsWithPagination);
-        if (myRequestId !== requestIdRef.current) return;
-        const newJobs = res?.jobs || [];
-
-        if (isLoadMore) {
-          setJobs((prev) => [...prev, ...newJobs]);
-        } else {
-          // For initial load, combine KISA jobs with API jobs
-          const allJobs = hasKisaJobs ? [...kisaJobs, ...newJobs] : newJobs;
-          setJobs(allJobs);
-        }
-
-        // Use the next field from API response for pagination
-        setNextUrl(res?.next || null);
+        setJobs(allJobs);
+        setNextUrl(res?.next ?? null);
         setHasMore(!!res?.next);
+        setError(undefined);
         setStatus("success");
       } catch (error) {
-        if (myRequestId !== requestIdRef.current) return;
+        if (cancelled || myRequestId !== requestIdRef.current) return;
         setStatus("error");
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("An unexpected error occurred.");
-        }
+        setError(
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred."
+        );
       }
-    },
-    [queryParams, kisaJobs, hasKisaJobs]
-  );
+    };
 
-  // Initial load
-  useEffect(() => {
-    if (status === "loading") {
-      fetchJobs(false);
-    }
-  }, [fetchJobs, status]);
+    run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [queryParams, kisaJobs, hasKisaJobs]);
 
   const loadMore = useCallback(() => {
     if (!hasMore || isLoadingMore || !nextUrl) return;
