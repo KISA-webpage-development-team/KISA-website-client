@@ -1,6 +1,5 @@
 import React from "react";
-import { cn } from "@/utils/styles/cn";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+import { cn } from "@umichkisa-ds/web";
 
 interface NotificationTextProps {
   text: string;
@@ -12,8 +11,6 @@ export default function NotificationText({
   className,
 }: NotificationTextProps) {
   return (
-    <span className={cn(className, `${sejongHospitalBold.className}`)}>
-      {text}
-    </span>
+    <span className={cn("type-body text-foreground", className)}>{text}</span>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { LoadingSpinner } from "@/components/ui/feedback";
+import { LoadingSpinner } from "@umichkisa-ds/web";
 import NotificationText from "./NotificationText";
 
 interface InfiniteScrollProps {
@@ -57,12 +57,12 @@ export default function InfiniteScroll({
       <div ref={observerRef} className="flex justify-center items-center py-8">
         {isLoading && (
           <div className="flex flex-col items-center gap-2">
-            <LoadingSpinner fullScreen={false} />
+            <LoadingSpinner size="md" />
           </div>
         )}
         {!hasMore && !isLoading && (
-          <div className="text-gray-500 text-center py-4">
-            <div className="text-sm">{endMessage}</div>
+          <div className="type-body-sm text-muted-foreground text-center py-4">
+            {endMessage}
           </div>
         )}
       </div>
