@@ -19,7 +19,7 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
       <div className="h-full flex flex-col">
         <header
           className="top-0 z-40
-          bg-gradient-to-r from-brand-primary/90 via-brand-primary to-brand-primary/85
+          bg-linear-to-r from-brand-primary/90 via-brand-primary to-brand-primary/85
           text-white"
         >
           <Header />
