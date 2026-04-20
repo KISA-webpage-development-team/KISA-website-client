@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion, Transition, Variants } from "framer-motion";
+import { AnimatePresence, motion, Transition, Variants } from "framer-motion";
 import Link from "next/link";
 
 const submenuTransition: Transition = {
@@ -42,20 +42,24 @@ export const MobileMenuItem = ({
         <HoveredLink href={href}>{item}</HoveredLink>
       )}
 
-      {active !== null && children && active === item && (
-        <motion.div
-          initial="collapsed"
-          animate="open"
-          exit="collapsed"
-          variants={{
-            open: { opacity: 1, height: "auto" },
-            collapsed: { opacity: 0, height: 0 },
-          }}
-          transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
-        >
-          <motion.div className="w-max h-full py-4 pl-5">{children}</motion.div>
-        </motion.div>
-      )}
+      <AnimatePresence initial={false}>
+        {children && active === item && (
+          <motion.div
+            key="submenu"
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
+            variants={{
+              open: { opacity: 1, height: "auto" },
+              collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+            style={{ overflow: "hidden" }}
+          >
+            <motion.div className="w-max h-full py-4 pl-5">{children}</motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
