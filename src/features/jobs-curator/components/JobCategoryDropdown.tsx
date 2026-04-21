@@ -47,10 +47,21 @@ export default function JobCategoryDropdown() {
       <DropdownTrigger asChild>
         <button
           type="button"
-          className="flex flex-row items-center gap-2 type-h2 text-foreground focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+          className={cn(
+            "flex flex-row items-center gap-2 type-h2 text-foreground cursor-pointer",
+            "underline decoration-transparent decoration-2 underline-offset-4 transition-[text-decoration-color,color] duration-150",
+            "hover:decoration-brand-accent",
+            "data-[state=open]:text-brand-primary",
+            "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
+            "[&[data-state=open]>svg]:rotate-180"
+          )}
         >
           <span>{category ? positionLabels[category] : "전체"}</span>
-          <Icon name="chevron-down" size="md" />
+          <Icon
+            name="chevron-down"
+            size="md"
+            className="transition-transform duration-200"
+          />
         </button>
       </DropdownTrigger>
       <DropdownContent className="min-w-64">
