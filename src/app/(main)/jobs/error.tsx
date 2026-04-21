@@ -1,7 +1,7 @@
 "use client";
 
-import { CustomButton } from "@/components/ui/button";
-import { NotFound, NotLogin, UnexpectedError } from "@/components/ui/feedback";
+import { Button, StatusView } from "@umichkisa-ds/web";
+import { NotFound, NotLogin } from "@/components/ui/feedback";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -16,9 +16,9 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
   }
 
   return (
-    <div className="h-full flex flex-col items-center justify-center">
-      <UnexpectedError />
-      <CustomButton onClick={reset} text="다시 시도하기" />
-    </div>
+    <StatusView
+      variant="error"
+      action={<Button onClick={reset}>다시 시도하기</Button>}
+    />
   );
 }
