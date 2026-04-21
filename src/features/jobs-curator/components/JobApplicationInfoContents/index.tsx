@@ -5,12 +5,13 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@umichkisa-ds/web";
 
 import InfoAccordion from "./InfoAccordion";
 import { usInfoContents, koreaInfoContents } from "../../data/infoContents";
-import { useJobsCurator } from "../../contexts/JobsCuratorContext";
-import type { SupportedCountry } from "../../types/jobs";
 
+// Info contents and jobs-list country filter are intentionally decoupled.
+// Business decision: US has rich static guide content but no live job data;
+// KR has jobs but different info depth. A user may read US info while still
+// browsing KR jobs (or vice-versa), so this tab keeps its own local state —
+// do NOT wire it to JobsCuratorContext.country.
 export default function JobApplicationInfoContents() {
-  const { country, setCountry } = useJobsCurator();
-
   return (
     <div className="flex flex-col items-center gap-6">
       <h1 className="type-h1 text-foreground">미국·한국 취업 가이드북</h1>
@@ -20,23 +21,18 @@ export default function JobApplicationInfoContents() {
         알아야 할 OPT·SSN 정보까지 담았습니다.
       </p>
 
-      <Tabs
-        value={country}
-        onValueChange={(v) => setCountry(v as SupportedCountry)}
-        variant="pill"
-        className="w-full max-w-3xl"
-      >
+      <Tabs defaultValue="usa" variant="pill" className="w-full max-w-3xl">
         <div className="flex justify-center">
           <TabsList>
-            <TabsTrigger value="US">미국</TabsTrigger>
-            <TabsTrigger value="KR">한국</TabsTrigger>
+            <TabsTrigger value="usa">미국</TabsTrigger>
+            <TabsTrigger value="korea">한국</TabsTrigger>
           </TabsList>
         </div>
 
-        <TabsContent value="US" className="px-4">
+        <TabsContent value="usa" className="px-4">
           <InfoAccordion infoContents={usInfoContents} />
         </TabsContent>
-        <TabsContent value="KR" className="px-4">
+        <TabsContent value="korea" className="px-4">
           <InfoAccordion infoContents={koreaInfoContents} />
         </TabsContent>
       </Tabs>

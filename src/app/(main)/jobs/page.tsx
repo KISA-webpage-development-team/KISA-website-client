@@ -23,14 +23,14 @@ import {
 export default function JobsCuratorPage() {
   return (
     <section>
-      <JobsCuratorProvider>
-        {/* Info contents share the `country` state with the dynamic section below
-            via JobsCuratorContext — info tabs and TagList's 지역 axis stay in sync. */}
-        <div className="mt-12 mb-12">
-          <JobApplicationInfoContents />
-        </div>
+      {/* Info contents (static guide) — keeps its own local Tabs state; decoupled
+          from the jobs-list country filter by business decision. */}
+      <div className="mt-12 mb-12">
+        <JobApplicationInfoContents />
+      </div>
 
-        {/* Dynamic job section — errors isolated here and do not affect info contents. */}
+      {/* Dynamic job section — errors isolated here; context scope is local. */}
+      <JobsCuratorProvider>
         <ErrorBoundary
           fallback={({ reset }) => <JobGridErrorFallback reset={reset} />}
         >
