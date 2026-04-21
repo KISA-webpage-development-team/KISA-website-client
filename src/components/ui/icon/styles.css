@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@reference "../../../app/globals.css";
 
 .extra_large_icon {
   @apply text-3xl md:text-4xl;

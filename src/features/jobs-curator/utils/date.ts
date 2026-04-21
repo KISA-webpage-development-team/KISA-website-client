@@ -16,3 +16,18 @@ export function isPastLocal(date: Date) {
       date.getDate() < now.getDate())
   );
 }
+
+// Format a Date as a YYYY-MM-DD string suitable for the jobs API.
+// Uses `sv-SE` + `UTC` so year boundaries don't drift by TZ offset.
+export function toApiDateString(date: Date | undefined) {
+  return date
+    ? date.toLocaleDateString("sv-SE", { timeZone: "UTC" })
+    : undefined;
+}
+
+// Inverse of toApiDateString — parses a YYYY-MM-DD string into a Date anchored
+// at UTC midnight so round-trips are stable across year boundaries.
+export function parseFromApi(s: string): Date {
+  const [y, m, d] = s.split("-").map((n) => Number(n));
+  return new Date(Date.UTC(y, m - 1, d));
+}

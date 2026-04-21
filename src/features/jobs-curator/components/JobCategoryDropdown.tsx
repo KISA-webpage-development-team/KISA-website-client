@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import { ChevronDownIcon } from "lucide-react";
+import React from "react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/shadcn/dropdown-menu";
-import { JobCategory } from "../types/jobs";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+  Dropdown,
+  DropdownTrigger,
+  DropdownContent,
+  DropdownItem,
+  Icon,
+  cn,
+} from "@umichkisa-ds/web";
+
 import { useJobsCurator } from "../contexts/JobsCuratorContext";
+import { JobCategory } from "../types/jobs";
 
 // label coming from BE - wanted
 // TODO: in the future with more job sources,
@@ -39,37 +40,56 @@ const positionLabels: Record<JobCategory, string> = {
 };
 
 export default function JobCategoryDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
-  // NOTE: I think we need to store this in useContext globally
   const { category, setCategory } = useJobsCurator();
 
-  const handlePositionSelect = (position: JobCategory) => {
-    setCategory(position);
-    setIsOpen(false);
-  };
-
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
-        <button className="flex flex-row items-center gap-2">
-          <h2 className={`${sejongHospitalBold.className} text-2xl`}>
-            {category ? positionLabels[category] : "전체"}
-          </h2>
-          <ChevronDownIcon className="w-6 h-6" />
+    <Dropdown>
+      <DropdownTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "flex flex-row items-center gap-2 type-h2 text-foreground cursor-pointer",
+            "underline decoration-transparent decoration-2 underline-offset-4 transition-[text-decoration-color,color] duration-150",
+            "hover:decoration-brand-accent",
+            "data-[state=open]:text-brand-primary",
+            "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
+            "[&[data-state=open]>svg]:rotate-180"
+          )}
+        >
+          <span>{category ? positionLabels[category] : "전체"}</span>
+          <Icon
+            name="chevron-down"
+            size="md"
+            className="transition-transform duration-200"
+          />
         </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="mt-2 min-w-64 max-h-64 overflow-y-auto">
-        {Object.entries(positionLabels).map(([key, label]) => (
-          <DropdownMenuItem
-            key={key}
-            onClick={() => handlePositionSelect(key as JobCategory)}
-            selected={category === key}
-            className="text-1xl"
-          >
-            {label}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownTrigger>
+      <DropdownContent className="min-w-64">
+        {(Object.entries(positionLabels) as [JobCategory, string][]).map(
+          ([key, label]) => {
+            const isSelected = category === key;
+            return (
+              <DropdownItem
+                key={key}
+                onSelect={() => setCategory(key)}
+                className={cn(
+                  "flex items-center justify-between gap-2",
+                  isSelected && "!font-bold text-brand-primary"
+                )}
+              >
+                <span>{label}</span>
+                {isSelected && (
+                  <Icon
+                    name="check"
+                    size="sm"
+                    className="text-brand-primary"
+                  />
+                )}
+              </DropdownItem>
+            );
+          }
+        )}
+      </DropdownContent>
+    </Dropdown>
   );
 }

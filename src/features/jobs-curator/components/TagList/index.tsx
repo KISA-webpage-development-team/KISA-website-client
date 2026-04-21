@@ -1,84 +1,128 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import { CountryDropdown } from "./CountryDropdown";
-import TagButton from "./TagButton";
-import EmploymentTypeDetailModal from "./EmploymentTypeDetailModal";
+// NOTE: DateRangePicker is intentionally commented out for MVP — the wanted
+// jobs API does not expose a date-range filter yet. Keep the context wiring
+// (startDate/endDate) in JobsCuratorContext so this block can be restored in
+// one edit when the API ships the filter. See plan Lane 1.4 §Q3.
+
+import { ToggleGroup, Label } from "@umichkisa-ds/web";
 import { useJobsCurator } from "../../contexts/JobsCuratorContext";
-import { formatTagToLabel } from "../../utils/formatTagToLabel";
 import { internshipTypeLabels } from "../../constant";
-import { InternshipType } from "../../types/jobs";
-// import DateRangeDetailModal from "./DateRangeDetailModal";
-// import { addMonths } from "date-fns";
-// import { formatKoreanDate } from "../../utils/date";
+import type { InternshipType, SupportedCountry } from "../../types/jobs";
 
-// NOTE: for MVP, we don't support date range filter
-// because wanted api data doesn't have it
+const countryItems = [
+  { value: "KR", label: "한국" },
+  { value: "US", label: "미국" },
+];
 
-// Main TagList component
+const employmentItems = [
+  { value: "intern", label: "인턴" },
+  { value: "fulltime", label: "정규직" },
+];
+
+const internshipItems = [
+  { value: "experiential", label: internshipTypeLabels.experiential },
+  { value: "convertible", label: internshipTypeLabels.convertible },
+  { value: "global", label: internshipTypeLabels.global },
+];
+
 export default function TagList() {
-  const { employmentType, internshipTypes } = useJobsCurator();
+  const {
+    country,
+    setCountry,
+    employmentType,
+    setEmploymentType,
+    internshipTypes,
+    setInternshipTypes,
+  } = useJobsCurator();
 
-  // employment type modal
-  const [isEmploymentTypeModalOpen, setIsEmploymentTypeModalOpen] =
-    useState(false);
+  const isKorea = country === "KR";
+  const employmentValue = employmentType === "fulltime" ? "fulltime" : "intern";
 
-  const employmentTypeLabel = useMemo(() => {
-    if (employmentType === "intern") {
-      const allTypes = Object.keys(internshipTypeLabels) as InternshipType[];
-
-      // if all types are selected, show "전체"
-      const allSelected =
-        internshipTypes.length === allTypes.length &&
-        allTypes.every((type) => internshipTypes.includes(type));
-      return `인턴 (${
-        allSelected
-          ? "전체"
-          : internshipTypes.map((type) => formatTagToLabel(type)).join(", ")
-      })`;
+  const handleEmploymentChange = (value: string) => {
+    if (value === "intern") {
+      setEmploymentType("intern");
+    } else if (value === "fulltime") {
+      setEmploymentType("fulltime");
+      setInternshipTypes([]);
     }
-    return formatTagToLabel(employmentType);
-  }, [employmentType, internshipTypes]);
+  };
 
-  // date range modal
-  // const [isDateRangeModalOpen, setIsDateRangeModalOpen] = useState(false);
-
-  // const dateRangeLabel = useMemo(() => {
-  //   const label = employmentType === "intern" ? "기간" : "시작";
-
-  //   if (employmentType === "intern") {
-  //     return `${label}: ${formatKoreanDate(startDate)} ~ ${formatKoreanDate(
-  //       endDate ?? addMonths(startDate, 3)
-  //     )}`;
-  //   } else {
-  //     // no end date for fulltime
-  //     return `${label}: ${formatKoreanDate(startDate)}`;
-  //   }
-  // }, [employmentType, startDate, endDate]);
+  const handleInternshipChange = (values: string[]) => {
+    setInternshipTypes(values as InternshipType[]);
+  };
 
   return (
-    <>
-      <div className="flex flex-row gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
-        <CountryDropdown />
-        <TagButton
-          label={employmentTypeLabel}
-          onClick={() => setIsEmploymentTypeModalOpen(true)}
+    <div className="rounded-md border border-border bg-surface p-4 flex flex-col gap-4 md:flex-row md:items-end md:gap-4">
+      <div className="flex flex-col gap-2">
+        <Label id="country-label" htmlFor="country-group">
+          지역
+        </Label>
+        <ToggleGroup
+          id="country-group"
+          aria-labelledby="country-label"
+          items={countryItems}
+          value={country}
+          onValueChange={(v) => setCountry(v as SupportedCountry)}
         />
-        {/* <TagButton
-          label={dateRangeLabel}
-          onClick={() => setIsDateRangeModalOpen(true)}
-        /> */}
       </div>
 
-      <EmploymentTypeDetailModal
-        isOpen={isEmploymentTypeModalOpen}
-        onClose={() => setIsEmploymentTypeModalOpen(false)}
-      />
+      {isKorea && (
+        <div className="flex flex-col gap-2 md:pl-4 md:border-l md:border-border">
+          <Label id="employment-label" htmlFor="employment-group">
+            고용 형태
+          </Label>
+          <ToggleGroup
+            id="employment-group"
+            aria-labelledby="employment-label"
+            items={employmentItems}
+            value={employmentValue}
+            onValueChange={handleEmploymentChange}
+          />
+        </div>
+      )}
 
-      {/* <DateRangeDetailModal
-        isOpen={isDateRangeModalOpen}
-        onClose={() => setIsDateRangeModalOpen(false)}
-      /> */}
-    </>
+      {isKorea && employmentType === "intern" && (
+        <div className="flex flex-col gap-2 md:pl-4 md:border-l md:border-border">
+          <div className="flex items-baseline gap-2">
+            <Label id="intern-track-label" htmlFor="intern-track-group">
+              인턴십 유형
+            </Label>
+            <span className="type-caption text-muted-foreground">
+              복수 선택
+            </span>
+          </div>
+          <ToggleGroup
+            id="intern-track-group"
+            type="multiple"
+            aria-labelledby="intern-track-label"
+            items={internshipItems}
+            value={internshipTypes}
+            onValueChange={handleInternshipChange}
+          />
+        </div>
+      )}
+
+      {/*
+        MVP: date-range filter deferred — API does not filter by range yet.
+        To re-enable: restore DateRangePicker + DateRange imports, re-add
+        startDate/endDate/setStartDate/setEndDate to the useJobsCurator
+        destructure above, and reinstate the block below.
+
+        <div className="flex flex-col gap-2 md:ml-auto md:pl-4 md:border-l md:border-border">
+          <Label id="date-range-label" htmlFor="date-range-picker">기간</Label>
+          <DateRangePicker
+            aria-labelledby="date-range-label"
+            value={{ from: startDate, to: endDate }}
+            onChange={(range) => {
+              if (range?.from && range?.to) {
+                setStartDate(range.from);
+                setEndDate(range.to);
+              }
+            }}
+          />
+        </div>
+      */}
+    </div>
   );
 }

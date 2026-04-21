@@ -1,4 +1,3 @@
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { InfoContent } from "../types/infoContents";
 
 const koreaInfoContents: InfoContent[] = [
@@ -7,7 +6,7 @@ const koreaInfoContents: InfoContent[] = [
     title: '여름 인턴 일정 및 지원과정 - CS/DS/Eng',
     content: (
       <div>
-        <strong className={`${sejongHospitalBold.className}`}>
+        <strong className="font-semibold">
           지원 일정 개요
         </strong>
 
@@ -58,7 +57,7 @@ const koreaInfoContents: InfoContent[] = [
             수 있도록 준비 하시는게 좋습니다.
           </p>
           <br />
-          <strong className={`${sejongHospitalBold.className}`}>
+          <strong className="font-semibold">
             지원 방법 (ex. 채용 공고 사이트, 인맥 etc..)
           </strong>
           <br />
@@ -111,7 +110,7 @@ const koreaInfoContents: InfoContent[] = [
             대안인 것 같습니다!
           </p>
           <br />
-          <strong className={`${sejongHospitalBold.className}`}>
+          <strong className="font-semibold">
             기타 조언
           </strong>
           <br />
@@ -176,7 +175,7 @@ const usInfoContents: InfoContent[] = [
     content: (
       <div>
         <p>
-          <strong className={`${sejongHospitalBold.className}`}>
+          <strong className="font-semibold">
             지원 일정 개요 (ex. 기업 지원서 오픈/마감 시기)
           </strong>
         </p>
@@ -190,7 +189,7 @@ const usInfoContents: InfoContent[] = [
         </p>
         <br />
         <p>
-          <strong className={`${sejongHospitalBold.className}`}>
+          <strong className="font-semibold">
             지원 방법 (ex. Linkedin, Career Fair ..etc)
           </strong>
         </p>
@@ -220,7 +219,7 @@ const usInfoContents: InfoContent[] = [
         </p>
         <br />
         <p>
-          <strong className={`${sejongHospitalBold.className}`}>
+          <strong className="font-semibold">
             기타 조언
           </strong>
         </p>
@@ -355,7 +354,7 @@ const usInfoContents: InfoContent[] = [
           것을 추천드리며, 합격률도 상당히 높은 것으로 알려져 있습니다.
         </p>
         <br />
-        <strong className={`${sejongHospitalBold.className}`}>
+        <strong className="font-semibold">
           Sample Email
         </strong>
         <p>Hi Dr. [교수님 이름]</p>

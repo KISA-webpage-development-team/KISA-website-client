@@ -1,3 +1,5 @@
+@reference "./globals.css";
+
 .section_title {
   @apply text-lg sm:text-xl lg:text-2xl;
 }
