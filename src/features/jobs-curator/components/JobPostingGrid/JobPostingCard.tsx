@@ -70,7 +70,7 @@ export default function JobPostingCard({
           ) : (
             <span />
           )}
-          <span className="flex flex-row items-center gap-2 type-body-sm text-brand-accent opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <span className="flex flex-row items-center gap-2 type-body-sm text-brand-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100">
             <Icon name="external-link" size="sm" aria-hidden="true" />
             지원하기
           </span>
