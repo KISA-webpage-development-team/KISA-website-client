@@ -65,15 +65,8 @@
 /* ── Global resets ── */
 html,
 body {
-  width: 100vw;
   height: 100%;
   overflow-x: hidden;
-}
-
-/* Reserve scrollbar track so Radix body-scroll-lock (opens Dropdown/Dialog/Popover)
-   doesn't shift layout when it applies overflow: hidden to <body>. */
-html {
-  scrollbar-gutter: stable;
 }
 
 /* ── Custom utility classes ── */
