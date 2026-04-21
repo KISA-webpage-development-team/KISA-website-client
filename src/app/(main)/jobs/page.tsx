@@ -8,7 +8,6 @@ import { CustomButton } from "@/components/ui/button";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import JobApplicationInfoContents from "@/features/jobs-curator/components/JobApplicationInfoContents";
 import JobCategoryDropdown from "@/features/jobs-curator/components/JobCategoryDropdown";
-import CountryToggle from "@/features/jobs-curator/components/CountryToggle";
 import TagList from "@/features/jobs-curator/components/TagList";
 import JobPostingGrid from "@/features/jobs-curator/components/JobPostingGrid";
 import USAFallbackContent from "@/features/jobs-curator/components/USAFallbackContent";
@@ -24,13 +23,14 @@ import {
 export default function JobsCuratorPage() {
   return (
     <section>
-      {/* Job Application Info Contents (비성수기 콘텐츠) — static, always visible even on API error */}
-      <div className="mt-12 mb-12">
-        <JobApplicationInfoContents />
-      </div>
-
-      {/* Dynamic job section — errors are isolated here and do not affect the info content above */}
       <JobsCuratorProvider>
+        {/* Info contents share the `country` state with the dynamic section below
+            via JobsCuratorContext — info tabs and TagList's 지역 axis stay in sync. */}
+        <div className="mt-12 mb-12">
+          <JobApplicationInfoContents />
+        </div>
+
+        {/* Dynamic job section — errors isolated here and do not affect info contents. */}
         <ErrorBoundary
           fallback={({ reset }) => <JobGridErrorFallback reset={reset} />}
         >
@@ -55,23 +55,15 @@ function JobsCuratorDynamicContent() {
 
   return (
     <>
-      {/* Category heading — gets its own row */}
+      {/* Category heading */}
       <div className="mt-2 sm:mt-0">
         <JobCategoryDropdown />
       </div>
 
-      {/* Country scope — labeled row above TagList */}
-      <div className="mt-3 flex flex-row items-center gap-3">
-        <span className="type-body-sm text-muted-foreground">지역</span>
-        <CountryToggle />
+      {/* Tag List — owns country (지역), 고용 형태, 인턴십 유형 axes */}
+      <div className="sm:mt-2">
+        <TagList />
       </div>
-
-      {/* Tag List (KR-only; US shows a fallback card) */}
-      {isKorea && (
-        <div className="sm:mt-2">
-          <TagList />
-        </div>
-      )}
 
       {/* Job Posting Cards with Infinite Scroll / US Fallback */}
       <div className="sm:mt-2">
