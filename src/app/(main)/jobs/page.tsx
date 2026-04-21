@@ -8,13 +8,18 @@ import { CustomButton } from "@/components/ui/button";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import JobApplicationInfoContents from "@/features/jobs-curator/components/JobApplicationInfoContents";
 import JobCategoryDropdown from "@/features/jobs-curator/components/JobCategoryDropdown";
+import CountryToggle from "@/features/jobs-curator/components/CountryToggle";
 import TagList from "@/features/jobs-curator/components/TagList";
 import JobPostingGrid from "@/features/jobs-curator/components/JobPostingGrid";
+import USAFallbackContent from "@/features/jobs-curator/components/USAFallbackContent";
 
 // hooks
 import useInfiniteJobs from "@/features/jobs-curator/hooks/useInfiniteJobs";
 import useJobsQueryParams from "@/features/jobs-curator/hooks/useJobsQueryParams";
-import { JobsCuratorProvider } from "@/features/jobs-curator/contexts/JobsCuratorContext";
+import {
+  JobsCuratorProvider,
+  useJobsCurator,
+} from "@/features/jobs-curator/contexts/JobsCuratorContext";
 
 export default function JobsCuratorPage() {
   return (
@@ -37,6 +42,7 @@ export default function JobsCuratorPage() {
 }
 
 function JobsCuratorDynamicContent() {
+  const { country } = useJobsCurator();
   const queryParams = useJobsQueryParams();
   const { jobs, status, error, hasMore, loadMore, isLoadingMore } =
     useInfiniteJobs(queryParams);
@@ -45,21 +51,28 @@ function JobsCuratorDynamicContent() {
     throw new Error(error || "Unexpected error occurred");
   }
 
+  const isKorea = country === "KR";
+
   return (
     <>
-      {/* Job Category Dropdown - Heading */}
-      <div className="mt-2 sm:mt-0">
+      {/* Header row: category on the left, country scope on the right */}
+      <div className="mt-2 sm:mt-0 flex flex-row items-center justify-between gap-4">
         <JobCategoryDropdown />
+        <CountryToggle />
       </div>
 
-      {/* Tag List */}
-      <div className="sm:mt-2">
-        <TagList />
-      </div>
+      {/* Tag List (KR-only; US shows a fallback card) */}
+      {isKorea && (
+        <div className="sm:mt-2">
+          <TagList />
+        </div>
+      )}
 
-      {/* Job Posting Cards with Infinite Scroll */}
+      {/* Job Posting Cards with Infinite Scroll / US Fallback */}
       <div className="sm:mt-2">
-        {status === "loading" ? (
+        {!isKorea ? (
+          <USAFallbackContent />
+        ) : status === "loading" ? (
           <LoadingSpinner fullScreen={false} />
         ) : (
           <JobPostingGrid
