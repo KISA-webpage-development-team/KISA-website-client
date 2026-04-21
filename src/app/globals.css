@@ -66,6 +66,18 @@
 html,
 body {
   height: 100%;
+}
+
+/* <html> is the vertical scroller. Reserve the scrollbar gutter so
+   Radix body-scroll-lock (Dropdown/Dialog/Popover open) can't remove
+   it and shift centered content horizontally. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Horizontal-overflow safety lives on <body> only — putting it on
+   <html> would fight scrollbar-gutter and leave a dead gutter strip. */
+body {
   overflow-x: hidden;
 }
 
