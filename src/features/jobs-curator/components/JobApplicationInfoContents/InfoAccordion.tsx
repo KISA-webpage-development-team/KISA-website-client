@@ -4,13 +4,10 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/shadcn/accordion";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
-import { ContentAuthor, InfoContent } from "../../types/infoContents";
+} from "@umichkisa-ds/web";
 import Link from "next/link";
+
+import { ContentAuthor, InfoContent } from "../../types/infoContents";
 
 function InfoAccordionItem({
   title,
@@ -24,22 +21,15 @@ function InfoAccordionItem({
   author: ContentAuthor;
 }) {
   const { name, email, classOf } = author;
-
   const formattedAuthor = `${name} Class of ${classOf}`;
 
   return (
     <AccordionItem value={value}>
-      <AccordionTrigger
-        className={`${sejongHospitalBold.className} text-left text-xl`}
-      >
-        {title}
-      </AccordionTrigger>
-      <AccordionContent
-        className={`${sejongHospitalLight.className} text-base`}
-      >
+      <AccordionTrigger className="text-left">{title}</AccordionTrigger>
+      <AccordionContent>
         {content}
 
-        <div className={`${sejongHospitalLight.className} text-right w-full`}>
+        <div className="type-body-sm text-muted-foreground text-right w-full mt-4">
           {email ? (
             <Link href={`/users/${email}`} className="hover:underline">
               {formattedAuthor}
