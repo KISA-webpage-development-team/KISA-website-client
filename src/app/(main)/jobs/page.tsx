@@ -55,9 +55,14 @@ function JobsCuratorDynamicContent() {
 
   return (
     <>
-      {/* Header row: category on the left, country scope on the right */}
-      <div className="mt-2 sm:mt-0 flex flex-row items-center justify-between gap-4">
+      {/* Category heading — gets its own row */}
+      <div className="mt-2 sm:mt-0">
         <JobCategoryDropdown />
+      </div>
+
+      {/* Country scope — labeled row above TagList */}
+      <div className="mt-3 flex flex-row items-center gap-3">
+        <span className="type-body-sm text-muted-foreground">지역</span>
         <CountryToggle />
       </div>
 

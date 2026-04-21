@@ -33,7 +33,7 @@ export default function USAFallbackContent() {
             <span className="type-body-sm text-muted-foreground">
               LinkedIn Jobs에서 확인
             </span>
-            <span className="flex flex-row items-center gap-2 type-body-sm text-brand-accent opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            <span className="flex flex-row items-center gap-2 type-body-sm text-brand-primary underline decoration-transparent decoration-2 underline-offset-4 transition-[text-decoration-color] duration-150 group-hover:decoration-brand-primary">
               <Icon name="external-link" size="sm" aria-hidden="true" />
               탐색하기
             </span>
