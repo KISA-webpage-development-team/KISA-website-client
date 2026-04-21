@@ -67,8 +67,8 @@ export type EmploymentType = "fulltime" | "intern";
 // Internship type
 export type InternshipType = "convertible" | "experiential" | "global";
 
-// Country
-export type SupportedCountry = "한국" | "미국";
+// Country — ISO-like keys. Display strings ("한국" / "미국") live in UI.
+export type SupportedCountry = "KR" | "US";
 
 // Query parameters for the job list API
 type Tag = "fulltime" | "intern" | "convertible" | "experiential" | "global";

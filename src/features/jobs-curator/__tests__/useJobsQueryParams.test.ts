@@ -26,8 +26,10 @@ vi.mock("../contexts/JobsCuratorContext", () => ({
   useJobsCurator: () => ({
     category: ctxState.category,
     setCategory: vi.fn(),
-    selectedCountry: "한국",
+    selectedCountry: "KR",
     setSelectedCountry: vi.fn(),
+    country: "KR",
+    setCountry: vi.fn(),
     employmentType: ctxState.employmentType,
     setEmploymentType: vi.fn(),
     internshipTypes: ctxState.internshipTypes,

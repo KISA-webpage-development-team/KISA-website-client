@@ -12,6 +12,11 @@ type JobsCuratorState = {
   setCategory: (c: JobCategory | undefined) => void;
   selectedCountry: SupportedCountry;
   setSelectedCountry: (c: SupportedCountry) => void;
+  // Page-level KR/US switcher added for lane 1.7 (CountryToggle) and lane 1.10
+  // (page shell conditional). Separate from `selectedCountry` — which remains
+  // for existing consumers — so the two can be reconciled in a later lane.
+  country: SupportedCountry;
+  setCountry: (c: SupportedCountry) => void;
   employmentType: EmploymentType | undefined;
   setEmploymentType: (e: EmploymentType | undefined) => void;
   internshipTypes: InternshipType[];
@@ -32,7 +37,8 @@ export const JobsCuratorProvider = ({
   children: React.ReactNode;
 }) => {
   const [selectedCountry, setSelectedCountry] =
-    useState<SupportedCountry>("한국");
+    useState<SupportedCountry>("KR");
+  const [country, setCountry] = useState<SupportedCountry>("KR");
 
   // category header
   const [category, setCategory] = useState<JobCategory | undefined>(undefined);
@@ -63,6 +69,8 @@ export const JobsCuratorProvider = ({
         setCategory,
         selectedCountry,
         setSelectedCountry,
+        country,
+        setCountry,
         employmentType,
         setEmploymentType,
         internshipTypes,

@@ -28,7 +28,8 @@ import type {
 // ---- hoisted spies / mutable state for the context mock ----
 const ctxState = vi.hoisted(() => ({
   category: undefined as unknown,
-  selectedCountry: "한국" as unknown,
+  selectedCountry: "KR" as unknown,
+  country: "KR" as unknown,
   employmentType: undefined as EmploymentType | undefined,
   internshipTypes: [] as InternshipType[],
   startDate: undefined as Date | undefined,
@@ -42,12 +43,16 @@ const setInternshipTypesSpy = vi.hoisted(() => vi.fn());
 const setStartDateSpy = vi.hoisted(() => vi.fn());
 const setEndDateSpy = vi.hoisted(() => vi.fn());
 
+const setCountrySpy = vi.hoisted(() => vi.fn());
+
 vi.mock("../../../contexts/JobsCuratorContext", () => ({
   useJobsCurator: () => ({
     category: ctxState.category,
     setCategory: setCategorySpy,
     selectedCountry: ctxState.selectedCountry,
     setSelectedCountry: setSelectedCountrySpy,
+    country: ctxState.country,
+    setCountry: setCountrySpy,
     employmentType: ctxState.employmentType,
     setEmploymentType: setEmploymentTypeSpy,
     internshipTypes: ctxState.internshipTypes,
@@ -88,7 +93,8 @@ vi.mock("@umichkisa-ds/web", async (importOriginal) => {
 
 function resetCtx() {
   ctxState.category = undefined;
-  ctxState.selectedCountry = "한국";
+  ctxState.selectedCountry = "KR";
+  ctxState.country = "KR";
   ctxState.employmentType = undefined;
   ctxState.internshipTypes = [];
   ctxState.startDate = undefined;
