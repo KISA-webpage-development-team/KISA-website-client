@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  Button,
   Dropdown,
   DropdownTrigger,
   DropdownContent,
@@ -45,13 +46,10 @@ export default function JobCategoryDropdown() {
   return (
     <Dropdown>
       <DropdownTrigger asChild>
-        <button
-          type="button"
-          className="flex flex-row items-center gap-2 type-h2 text-foreground"
-        >
+        <Button variant="tertiary" size="lg">
           <span>{category ? positionLabels[category] : "전체"}</span>
           <Icon name="chevron-down" size="md" />
-        </button>
+        </Button>
       </DropdownTrigger>
       <DropdownContent className="min-w-64">
         {(Object.entries(positionLabels) as [JobCategory, string][]).map(
