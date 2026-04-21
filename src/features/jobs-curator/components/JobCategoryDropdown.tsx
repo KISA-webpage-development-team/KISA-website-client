@@ -47,7 +47,7 @@ export default function JobCategoryDropdown() {
       <DropdownTrigger asChild>
         <button
           type="button"
-          className="flex flex-row items-center gap-2 type-h2 text-foreground"
+          className="flex flex-row items-center gap-2 type-h2 text-foreground focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
         >
           <span>{category ? positionLabels[category] : "전체"}</span>
           <Icon name="chevron-down" size="md" />
