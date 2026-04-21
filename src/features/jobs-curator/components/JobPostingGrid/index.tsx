@@ -1,4 +1,5 @@
 import React from "react";
+import { Grid } from "@umichkisa-ds/web";
 
 import JobPostingCard from "./JobPostingCard";
 import InfiniteScroll from "../InfiniteScroll";
@@ -31,11 +32,11 @@ export default function JobPostingGrid({
   }
 
   const jobCards = (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <Grid columns={{ base: 1, md: 2, lg: 3 }} gap="component">
       {jobs.map((job, index) => (
         <JobCardWrapper key={`${job.jobID}-${index}`} job={job} />
       ))}
-    </div>
+    </Grid>
   );
 
   if (onLoadMore && hasMore !== undefined) {
