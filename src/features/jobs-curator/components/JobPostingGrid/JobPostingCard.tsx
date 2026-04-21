@@ -1,112 +1,81 @@
 import React from "react";
-import { JobPosting, JobSource, JobTagBadge } from "../../types/jobs";
+import Image from "next/image";
+import { format } from "date-fns";
 import {
+  Badge,
   Card,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/shadcn/card";
-import { Badge } from "@/components/ui/shadcn/badge";
-import { FiExternalLink } from "react-icons/fi";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
-import { format } from "date-fns";
-import Image from "next/image";
+  CardFooter,
+  Icon,
+} from "@umichkisa-ds/web";
+
+import { JobPosting, JobSource, JobTagBadge } from "../../types/jobs";
 
 interface JobPostingCardProps {
   jobPosting: JobPosting;
   jobBadges: JobTagBadge[];
 }
 
+function getSourceLogo(source: JobSource) {
+  switch (source) {
+    case "wanted-api":
+      return "/jobs/wanted_logo.png";
+    case "kisa":
+      return "/kisa_logo.png";
+    default:
+      return "/kisa_logo.png";
+  }
+}
+
 export default function JobPostingCard({
   jobPosting,
   jobBadges,
 }: JobPostingCardProps) {
-  const navigateToJobPosting = () => {
-    window.open(jobPosting.link, "_blank");
-  };
-
-  const getSourceLogo = (source: JobSource) => {
-    switch (source) {
-      case "wanted-api":
-        return "/jobs/wanted_logo.png";
-      case "kisa":
-        return "/kisa_logo.png";
-      default:
-        return "/kisa_logo.png";
-    }
-  };
-
   return (
-    <Card
-      className={`@container/card group ${sejongHospitalBold.className} cursor-pointer
-      transition-all duration-300 ease-in-out
-      outline-none 
-      hover:bg-michigan-light-blue/10 
-      hover:text-michigan-blue
-      `}
+    <a
+      href={jobPosting.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`apply to ${jobPosting.position} at ${jobPosting.company}`}
+      className="block group no-underline h-full"
     >
-      <CardHeader className="h-full">
-        <CardDescription
-          className={`${sejongHospitalLight.className} flex flex-row items-center justify-between`}
-        >
-          <div className="flex items-center gap-2">
-            <span>{jobPosting.company}</span>
-            <Image
-              src={getSourceLogo(jobPosting.source)}
-              alt={`${jobPosting.source} logo`}
-              width={25}
-              height={25}
-            />
+      <Card hoverable className="h-full">
+        <CardHeader>
+          <div className="flex flex-row items-center justify-between gap-2">
+            <div className="flex items-center gap-2 type-body-sm text-muted-foreground">
+              <span>{jobPosting.company}</span>
+              <Image
+                src={getSourceLogo(jobPosting.source)}
+                alt={`${jobPosting.source} logo`}
+                width={25}
+                height={25}
+              />
+            </div>
+            <div className="flex flex-row items-center gap-2">
+              {jobBadges.map((badge) => (
+                <Badge key={badge} variant="outline">
+                  {badge}
+                </Badge>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-row items-center gap-2">
-            {jobBadges.map((badge) => (
-              <Badge
-                key={badge}
-                variant="outline"
-                className={`${sejongHospitalLight.className}
-            border-gray-400 
-              group-hover:border-michigan-blue transition-all duration-300 ease-in-out`}
-              >
-                {badge}
-              </Badge>
-            ))}
-          </div>
-        </CardDescription>
-        <CardTitle
-          className={`text-lg transition-all duration-300 ease-in-out`}
-        >
-          {jobPosting.position}
-        </CardTitle>
-
-        <CardFooter
-          className={`flex flex-row items-center justify-end w-full
-            text-sm ${sejongHospitalLight.className} px-0 w-full`}
-        >
-          {jobPosting.dueDate && (
-            <span className="flex-1">
+          <CardTitle>{jobPosting.position}</CardTitle>
+        </CardHeader>
+        <CardFooter className="flex flex-row items-center justify-between">
+          {jobPosting.dueDate ? (
+            <span className="type-body-sm text-muted-foreground">
               마감: {format(jobPosting.dueDate, "yyyy.MM.dd")}
             </span>
+          ) : (
+            <span />
           )}
-          <button
-            onClick={navigateToJobPosting}
-            className={`${sejongHospitalBold.className} 
-            hover:underline 
-             transition-all duration-300 ease-in-out
-              flex flex-row items-center gap-2
-              text-gray-400
-            group-hover:text-michigan-darker-maize
-             `}
-            aria-label="apply to job"
-          >
-            <FiExternalLink className="w-4 h-4" />
-            <span>지원하기</span>
-          </button>
+          <span className="flex flex-row items-center gap-2 type-body-sm text-brand-primary underline decoration-transparent decoration-2 underline-offset-4 transition-[text-decoration-color] duration-150 group-hover:decoration-brand-primary">
+            <Icon name="external-link" size="sm" aria-hidden="true" />
+            지원하기
+          </span>
         </CardFooter>
-      </CardHeader>
-    </Card>
+      </Card>
+    </a>
   );
 }
