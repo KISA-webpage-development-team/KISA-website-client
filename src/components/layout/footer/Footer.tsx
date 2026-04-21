@@ -29,7 +29,7 @@ export default function Footer() {
         </a>
       </div>
 
-      <p className="type-caption">
+      <p className="type-caption text-center text-balance px-4">
         © 2026 University of Michigan Korean International Students Association
       </p>
     </div>
