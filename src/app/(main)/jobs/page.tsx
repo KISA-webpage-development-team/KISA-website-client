@@ -3,8 +3,7 @@
 import React from "react";
 
 // ui components
-import { LoadingSpinner, UnexpectedError } from "@/components/ui/feedback";
-import { CustomButton } from "@/components/ui/button";
+import { Button, LoadingSpinner, StatusView } from "@umichkisa-ds/web";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import JobApplicationInfoContents from "@/features/jobs-curator/components/JobApplicationInfoContents";
 import JobCategoryDropdown from "@/features/jobs-curator/components/JobCategoryDropdown";
@@ -56,21 +55,21 @@ function JobsCuratorDynamicContent() {
   return (
     <>
       {/* Category heading */}
-      <div className="mt-2 sm:mt-0">
+      <div className="mt-2 md:mt-0">
         <JobCategoryDropdown />
       </div>
 
       {/* Tag List — owns country (지역), 고용 형태, 인턴십 유형 axes */}
-      <div className="sm:mt-2">
+      <div className="md:mt-2">
         <TagList />
       </div>
 
       {/* Job Posting Cards with Infinite Scroll / US Fallback */}
-      <div className="sm:mt-2">
+      <div className="md:mt-2">
         {!isKorea ? (
           <USAFallbackContent />
         ) : status === "loading" ? (
-          <LoadingSpinner fullScreen={false} />
+          <LoadingSpinner size="md" />
         ) : (
           <JobPostingGrid
             jobs={jobs}
@@ -86,9 +85,10 @@ function JobsCuratorDynamicContent() {
 
 function JobGridErrorFallback({ reset }: { reset: () => void }) {
   return (
-    <div className="h-full flex flex-col items-center justify-center mt-4">
-      <UnexpectedError />
-      <CustomButton onClick={reset} text="다시 시도하기" />
-    </div>
+    <StatusView
+      variant="error"
+      className="mt-4"
+      action={<Button onClick={reset}>다시 시도하기</Button>}
+    />
   );
 }
