@@ -10,21 +10,26 @@ import JobApplicationInfoContents from "@/features/jobs-curator/components/JobAp
 import JobCategoryDropdown from "@/features/jobs-curator/components/JobCategoryDropdown";
 import TagList from "@/features/jobs-curator/components/TagList";
 import JobPostingGrid from "@/features/jobs-curator/components/JobPostingGrid";
+import USAFallbackContent from "@/features/jobs-curator/components/USAFallbackContent";
 
 // hooks
 import useInfiniteJobs from "@/features/jobs-curator/hooks/useInfiniteJobs";
 import useJobsQueryParams from "@/features/jobs-curator/hooks/useJobsQueryParams";
-import { JobsCuratorProvider } from "@/features/jobs-curator/contexts/JobsCuratorContext";
+import {
+  JobsCuratorProvider,
+  useJobsCurator,
+} from "@/features/jobs-curator/contexts/JobsCuratorContext";
 
 export default function JobsCuratorPage() {
   return (
     <section>
-      {/* Job Application Info Contents (비성수기 콘텐츠) — static, always visible even on API error */}
+      {/* Info contents (static guide) — keeps its own local Tabs state; decoupled
+          from the jobs-list country filter by business decision. */}
       <div className="mt-12 mb-12">
         <JobApplicationInfoContents />
       </div>
 
-      {/* Dynamic job section — errors are isolated here and do not affect the info content above */}
+      {/* Dynamic job section — errors isolated here; context scope is local. */}
       <JobsCuratorProvider>
         <ErrorBoundary
           fallback={({ reset }) => <JobGridErrorFallback reset={reset} />}
@@ -37,6 +42,7 @@ export default function JobsCuratorPage() {
 }
 
 function JobsCuratorDynamicContent() {
+  const { country } = useJobsCurator();
   const queryParams = useJobsQueryParams();
   const { jobs, status, error, hasMore, loadMore, isLoadingMore } =
     useInfiniteJobs(queryParams);
@@ -45,21 +51,25 @@ function JobsCuratorDynamicContent() {
     throw new Error(error || "Unexpected error occurred");
   }
 
+  const isKorea = country === "KR";
+
   return (
     <>
-      {/* Job Category Dropdown - Heading */}
+      {/* Category heading */}
       <div className="mt-2 sm:mt-0">
         <JobCategoryDropdown />
       </div>
 
-      {/* Tag List */}
+      {/* Tag List — owns country (지역), 고용 형태, 인턴십 유형 axes */}
       <div className="sm:mt-2">
         <TagList />
       </div>
 
-      {/* Job Posting Cards with Infinite Scroll */}
+      {/* Job Posting Cards with Infinite Scroll / US Fallback */}
       <div className="sm:mt-2">
-        {status === "loading" ? (
+        {!isKorea ? (
+          <USAFallbackContent />
+        ) : status === "loading" ? (
           <LoadingSpinner fullScreen={false} />
         ) : (
           <JobPostingGrid

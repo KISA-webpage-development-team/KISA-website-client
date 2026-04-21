@@ -6,6 +6,11 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@umichkisa-ds/web";
 import InfoAccordion from "./InfoAccordion";
 import { usInfoContents, koreaInfoContents } from "../../data/infoContents";
 
+// Info contents and jobs-list country filter are intentionally decoupled.
+// Business decision: US has rich static guide content but no live job data;
+// KR has jobs but different info depth. A user may read US info while still
+// browsing KR jobs (or vice-versa), so this tab keeps its own local state —
+// do NOT wire it to JobsCuratorContext.country.
 export default function JobApplicationInfoContents() {
   return (
     <div className="flex flex-col items-center gap-6">
