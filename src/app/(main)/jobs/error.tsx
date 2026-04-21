@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, StatusView } from "@umichkisa-ds/web";
-import { NotFound, NotLogin } from "@/components/ui/feedback";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -10,9 +9,9 @@ interface ErrorProps {
 
 export default function ErrorPage({ error, reset }: ErrorProps) {
   if (error.message.includes("Unauthorized")) {
-    return <NotLogin />;
+    return <StatusView variant="not-logged-in" />;
   } else if (error.message.includes("Not Found")) {
-    return <NotFound />;
+    return <StatusView variant="not-found" />;
   }
 
   return (
