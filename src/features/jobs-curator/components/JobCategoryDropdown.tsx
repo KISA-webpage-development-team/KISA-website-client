@@ -43,7 +43,7 @@ export default function JobCategoryDropdown() {
   const { category, setCategory } = useJobsCurator();
 
   return (
-    <Dropdown>
+    <Dropdown modal={false}>
       <DropdownTrigger asChild>
         <button
           type="button"
