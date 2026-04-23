@@ -22,13 +22,17 @@ const MOCK_SESSION: AppSession = {
   expires: new Date(Date.now() + 86_400_000).toISOString(),
 };
 
-const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
-const STORAGE_KEY = "kisa-mock-auth-authenticated";
+const AUTH_KEY = "kisa-mock-auth-authenticated";
+const ADMIN_KEY = "kisa-mock-auth-isadmin";
+
+const isMockMode = () => process.env.NEXT_PUBLIC_MOCK_API === "1";
 
 type AuthContextValue = {
   session: AppSession | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   toggle: () => void;
+  toggleIsAdmin: () => void;
   isMockMode: boolean;
 };
 
@@ -41,34 +45,51 @@ export function AuthContextProvider({
   initialSession: AppSession | null;
   children: ReactNode;
 }) {
+  const IS_MOCK_MODE = isMockMode();
   const [mockAuthed, setMockAuthed] = useState(false);
+  const [mockIsAdmin, setMockIsAdmin] = useState(false);
 
   useEffect(() => {
     if (IS_MOCK_MODE) {
-      const stored = sessionStorage.getItem(STORAGE_KEY);
-      if (stored === "1") {
-        setMockAuthed(true);
-      }
+      if (sessionStorage.getItem(AUTH_KEY) === "1") setMockAuthed(true);
+      if (sessionStorage.getItem(ADMIN_KEY) === "1") setMockIsAdmin(true);
     }
-  }, []);
+  }, [IS_MOCK_MODE]);
 
   useEffect(() => {
     if (IS_MOCK_MODE) {
-      sessionStorage.setItem(STORAGE_KEY, mockAuthed ? "1" : "0");
+      sessionStorage.setItem(AUTH_KEY, mockAuthed ? "1" : "0");
     }
-  }, [mockAuthed]);
+  }, [mockAuthed, IS_MOCK_MODE]);
+
+  useEffect(() => {
+    if (IS_MOCK_MODE) {
+      sessionStorage.setItem(ADMIN_KEY, mockIsAdmin ? "1" : "0");
+    }
+  }, [mockIsAdmin, IS_MOCK_MODE]);
+
+  // Logging out clears admin state.
+  useEffect(() => {
+    if (IS_MOCK_MODE && !mockAuthed && mockIsAdmin) {
+      setMockIsAdmin(false);
+    }
+  }, [mockAuthed, mockIsAdmin, IS_MOCK_MODE]);
 
   const value: AuthContextValue = IS_MOCK_MODE
     ? {
         session: mockAuthed ? MOCK_SESSION : null,
         isAuthenticated: mockAuthed,
+        isAdmin: mockAuthed && mockIsAdmin,
         toggle: () => setMockAuthed((p) => !p),
+        toggleIsAdmin: () => setMockIsAdmin((p) => !p),
         isMockMode: true,
       }
     : {
         session: initialSession,
         isAuthenticated: initialSession !== null,
+        isAdmin: false,
         toggle: () => {},
+        toggleIsAdmin: () => {},
         isMockMode: false,
       };
 
@@ -84,7 +105,8 @@ export function useMockAuth(): AuthContextValue {
 }
 
 export function MockAuthToggle() {
-  const { isMockMode, isAuthenticated, toggle } = useMockAuth();
+  const { isMockMode, isAuthenticated, isAdmin, toggle, toggleIsAdmin } =
+    useMockAuth();
 
   if (!isMockMode) return null;
 
@@ -92,23 +114,34 @@ export function MockAuthToggle() {
     <div
       role="group"
       aria-label="Mock authentication toggle"
-      className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-border-strong bg-surface px-4 py-2 shadow-md"
+      className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 rounded-lg border border-border-strong bg-surface px-3 py-2 shadow-md"
     >
-      <Switch
-        checked={isAuthenticated}
-        onChange={toggle}
-        aria-label="Toggle mock authentication"
-      />
-      <span className="relative type-body-sm text-foreground">
-        <span aria-hidden="true" className="invisible">
-          Mock: {MOCK_SESSION.user!.email}
+      <div className="flex items-center gap-2">
+        <Switch
+          checked={isAuthenticated}
+          onChange={toggle}
+          aria-label="Toggle mock authentication"
+        />
+        <span className="relative type-body-sm text-foreground">
+          <span aria-hidden="true" className="invisible">
+            Mock: {MOCK_SESSION.user!.email}
+          </span>
+          <span className="absolute inset-0">
+            {isAuthenticated
+              ? `Mock: ${MOCK_SESSION.user!.email}`
+              : "Mock: logged out"}
+          </span>
         </span>
-        <span className="absolute inset-0">
-          {isAuthenticated
-            ? `Mock: ${MOCK_SESSION.user!.email}`
-            : "Mock: logged out"}
-        </span>
-      </span>
+      </div>
+      <div className="flex items-center gap-2">
+        <Switch
+          checked={isAdmin}
+          onChange={toggleIsAdmin}
+          disabled={!isAuthenticated}
+          aria-label="Toggle mock admin"
+        />
+        <span className="type-body-sm text-foreground">Mock: admin</span>
+      </div>
     </div>
   );
 }
