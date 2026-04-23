@@ -66,9 +66,9 @@ function PochaManagePageContent() {
   }
 
   // only admin can view this page
-  // if (!isAdmin) {
-  //   return <NotAuthorized />;
-  // }
+  if (!isAdmin) {
+    return <NotAuthorized />;
+  }
 
   return (
     <>
