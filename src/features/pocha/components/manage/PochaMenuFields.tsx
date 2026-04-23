@@ -1,14 +1,10 @@
-import React from "react";
-import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
-import { useState } from "react";
-import PochaMenuItemForm from "./PochaMenuItemForm";
+import React, { useState } from "react";
+import { Alert, Button } from "@umichkisa-ds/web";
+
 import { usePochaManage } from "../../contexts/PochaManageContext";
+import PochaMenuItemForm from "./PochaMenuItemForm";
 import PochaMenuItemList from "./PochaMenuItemList";
-import { CustomButton } from "@/components/ui/button";
-import ErrorDisplay from "@/deprecated-components/shared/ErrorDisplay";
+
 export default function PochaMenuFields() {
   const [isItemFormOpen, setIsItemFormOpen] = useState<boolean>(false);
   const { menus } = usePochaManage();
@@ -20,26 +16,20 @@ export default function PochaMenuFields() {
   const handleItemFormClose = () => {
     setIsItemFormOpen(false);
   };
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <h2
-          className={`flex items-start gap-1
-      ${sejongHospitalBold.className} text-xl`}
-        >
-          메뉴
-        </h2>
-        <CustomButton
-          text="추가하기"
-          onClick={handleItemAddButtonClick}
-          className={`${sejongHospitalBold.className}`}
-        />
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="type-h3 !font-semibold">메뉴</h2>
+        <Button variant="secondary" onClick={handleItemAddButtonClick}>
+          추가하기
+        </Button>
       </div>
 
       {menus.length > 0 ? (
         <PochaMenuItemList />
       ) : (
-        <ErrorDisplay text="최소 1개의 메뉴를 추가해주세요." state="error" />
+        <Alert variant="warning">최소 1개의 메뉴를 추가해주세요.</Alert>
       )}
       {isItemFormOpen && (
         <PochaMenuItemForm closeItemForm={handleItemFormClose} mode="create" />
