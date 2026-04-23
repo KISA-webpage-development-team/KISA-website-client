@@ -1,5 +1,9 @@
 import { http, HttpResponse } from "msw";
-import { mockPochas, type PochaRecord } from "../fixtures/pocha";
+import {
+  mockPochaMenus,
+  mockPochas,
+  type PochaRecord,
+} from "../fixtures/pocha";
 
 /**
  * Module-level in-memory store. Mutated by POST/PUT handlers and reset
@@ -70,6 +74,17 @@ export const pochaHandlers = [
       pochaID: created.pochaID,
       message: "Pocha created",
     });
+  }),
+
+  http.get(/\/pocha\/menu\/(\d+)\/?$/, ({ request }) => {
+    const auth = request.headers.get("Authorization");
+    if (!auth) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const url = new URL(request.url);
+    const match = url.pathname.match(/\/pocha\/menu\/(\d+)\/?$/);
+    const id = match ? Number(match[1]) : NaN;
+    return HttpResponse.json(mockPochaMenus[id] ?? []);
   }),
 
   http.put(/\/pocha\/(\d+)\/?$/, async ({ request }) => {
