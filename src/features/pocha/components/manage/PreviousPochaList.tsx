@@ -1,10 +1,10 @@
 // PreviousPochaList.tsx
 import { HorizontalDivider } from '@/components/ui/divider';
 import { sejongHospitalBold } from '@/utils/fonts/textFonts';
-import { useEffect, useState } from 'react';
-import { getPreviousPochaList } from '@/apis/pocha/queries';
+import { useMemo } from 'react';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/swr/fetchers';
 import React from 'react';
-import { HookStatus } from '@/types/hook';
 import { PochaInfoWithoutStatus } from '@/types/pocha';
 import PreviousPochaSummary from './PreviosPochaSummary';
 
@@ -17,40 +17,45 @@ function PreviousPochaList({
   onSelectPocha,
   selectedPochaId,
 }: PreviousPochaListProps) {
-  const [status, setStatus] = useState<HookStatus>('loading');
-  const [previousPochaList, setPreviousPochaList] =
-    useState<PochaInfoWithoutStatus[]>();
-  const [error, setError] = useState<string>();
+  const dateIso = useMemo(
+    () => new Date().toISOString().split('.')[0],
+    []
+  );
 
-  useEffect(() => {
-    const fetchPreviousPochaList = async () => {
-      try {
-        const res = await getPreviousPochaList(new Date());
-        setPreviousPochaList(res);
-        setStatus('success');
-      } catch (error) {
-        setStatus('error');
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unexpected error occurred.');
-        }
-      }
-    };
-    fetchPreviousPochaList();
-  }, []);
+  const {
+    data: rawList,
+    error,
+    isLoading,
+  } = useSWR<PochaInfoWithoutStatus[]>(
+    `/pocha/previous/?date=${dateIso}`,
+    fetcher
+  );
 
-  if (status === 'loading') {
+  const previousPochaList = useMemo(
+    () =>
+      rawList?.map((pocha) => ({
+        ...pocha,
+        startDate: new Date(pocha.startDate),
+        endDate: new Date(pocha.endDate),
+      })),
+    [rawList]
+  );
+
+  if (isLoading) {
     return <></>;
   }
 
-  if (status === 'error') {
+  if (error) {
     return (
       <div className='flex flex-col w-full gap-6 items-center justify-center p-8'>
         <p className='text-red-500'>
           이전 포차 정보를 불러오는데 실패했습니다.
         </p>
-        <p className='text-sm text-gray-500'>{error}</p>
+        <p className='text-sm text-gray-500'>
+          {error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred.'}
+        </p>
       </div>
     );
   }
