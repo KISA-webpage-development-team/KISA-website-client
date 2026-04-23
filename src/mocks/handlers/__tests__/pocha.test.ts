@@ -133,4 +133,56 @@ describe("MSW pocha handlers", () => {
       expect(res.status).toBe(404);
     });
   });
+
+  describe("GET /pocha/menu/:pochaID/", () => {
+    it("returns 200 with MenuByCategory[] for a pocha that has a menu fixture (pochaID=1)", async () => {
+      const res = await fetch("http://localhost/pocha/menu/1/", {
+        headers: AUTH_HEADER,
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(Array.isArray(body)).toBe(true);
+      expect(body.length).toBeGreaterThan(0);
+
+      for (const group of body) {
+        expect(typeof group.category).toBe("string");
+        expect(group.category.length).toBeGreaterThan(0);
+        expect(Array.isArray(group.menusList)).toBe(true);
+        expect(group.menusList.length).toBeGreaterThan(0);
+        for (const item of group.menusList) {
+          expect(typeof item.menuID).toBe("number");
+          expect(typeof item.nameKor).toBe("string");
+          expect(typeof item.nameEng).toBe("string");
+          expect(typeof item.price).toBe("number");
+          expect(typeof item.stock).toBe("number");
+          expect(typeof item.isImmediatePrep).toBe("boolean");
+          expect(typeof item.ageCheckRequired).toBe("boolean");
+        }
+      }
+    });
+
+    it("returns at least 2 categories and every item category matches its group", async () => {
+      const res = await fetch("http://localhost/pocha/menu/1/", {
+        headers: AUTH_HEADER,
+      });
+      const body = await res.json();
+      expect(body.length).toBeGreaterThanOrEqual(2);
+      const categories = new Set(body.map((g: { category: string }) => g.category));
+      expect(categories.size).toBe(body.length); // no duplicate category groups
+    });
+
+    it("returns 200 with [] for a pochaID that has no menu fixture", async () => {
+      const res = await fetch("http://localhost/pocha/menu/99999/", {
+        headers: AUTH_HEADER,
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body).toEqual([]);
+    });
+
+    it("returns 401 when Authorization header is missing", async () => {
+      const res = await fetch("http://localhost/pocha/menu/1/");
+      expect(res.status).toBe(401);
+    });
+  });
 });
