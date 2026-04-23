@@ -74,7 +74,7 @@ export default function JobCategoryDropdown() {
                 onSelect={() => setCategory(key)}
                 className={cn(
                   "flex items-center justify-between gap-2",
-                  isSelected && "!font-bold text-brand-primary"
+                  isSelected && "font-bold! text-brand-primary"
                 )}
               >
                 <span>{label}</span>
