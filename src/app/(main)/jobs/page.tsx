@@ -72,7 +72,7 @@ function JobsCuratorDynamicContent() {
           <div className="flex justify-center py-12">
             <LoadingSpinner
               size="lg"
-              label="Loading Job Posting..."
+              label="새로운 공고를 가져오는 중..."
               showLabel
             />
           </div>
