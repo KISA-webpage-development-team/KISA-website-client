@@ -69,7 +69,13 @@ function JobsCuratorDynamicContent() {
         {!isKorea ? (
           <USAFallbackContent />
         ) : status === "loading" ? (
-          <LoadingSpinner size="md" />
+          <div className="flex justify-center py-12">
+            <LoadingSpinner
+              size="lg"
+              label="Loading Job Posting..."
+              showLabel
+            />
+          </div>
         ) : (
           <JobPostingGrid
             jobs={jobs}
