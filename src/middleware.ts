@@ -9,7 +9,14 @@
 // if the user is not authenticated, redirect to the signin page
 // (autoOptions.ts - redirect function will be executed)
 import { withAuth } from "next-auth/middleware";
-export default withAuth;
+import { NextResponse } from "next/server";
+
+// Mock-mode bypass: MSW + MockAuthToggle replace real next-auth, so withAuth
+// (which checks for a real JWT cookie) would redirect every gated route to
+// /signin. Env flag is build-time inlined by Next, so the branch is static.
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
+
+export default IS_MOCK_MODE ? () => NextResponse.next() : withAuth;
 
 export const config = {
   matcher: [
