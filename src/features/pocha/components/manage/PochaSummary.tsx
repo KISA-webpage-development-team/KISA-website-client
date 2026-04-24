@@ -31,14 +31,14 @@ export default function PochaSummary({
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <CardTitle as="h3" className="type-h3 !font-semibold">
               {pochaInfo.title}
             </CardTitle>
             <Badge variant={statusVariant}>{statusLabel}</Badge>
           </div>
           <Button
-            variant="tertiary"
+            variant="secondary"
             size="sm"
             onClick={() => setIsEditPochaFormOpen(!isEditPochaFormOpen)}
           >
