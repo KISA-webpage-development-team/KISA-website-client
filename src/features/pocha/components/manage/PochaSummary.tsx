@@ -34,6 +34,9 @@ export default function PochaSummary({
   const statusLabel = pochaInfo.ongoing ? "진행 중" : "진행 예정";
   const statusVariant = pochaInfo.ongoing ? "success" : "info";
 
+  const immediatePrepMenus = menuList.filter((m) => m.isImmediatePrep);
+  const cookingMenus = menuList.filter((m) => !m.isImmediatePrep);
+
   return (
     <Card>
       <CardHeader>
@@ -93,23 +96,42 @@ export default function PochaSummary({
       <Divider />
 
       <CardContent>
-        <div className="flex flex-col gap-3">
-          <p className="type-body-sm text-muted-foreground">
-            메뉴 · {menuList.length}
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {menuList.map((menu) => (
-              <Badge
-                key={menu.menuID ?? menu.nameKor}
-                variant="outline"
-                size="md"
-              >
-                {menu.nameKor}
-              </Badge>
-            ))}
-          </div>
+        <div className="flex flex-col gap-4">
+          {immediatePrepMenus.length > 0 && (
+            <MenuGroup label="즉시 제공" items={immediatePrepMenus} />
+          )}
+          {cookingMenus.length > 0 && (
+            <MenuGroup label="조리 필요" items={cookingMenus} />
+          )}
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+function MenuGroup({
+  label,
+  items,
+}: {
+  label: string;
+  items: MenuItemRaw[];
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <p className="type-body-sm text-muted-foreground">
+        {label} · {items.length}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {items.map((menu) => (
+          <Badge
+            key={menu.menuID ?? menu.nameKor}
+            variant="outline"
+            size="md"
+          >
+            {menu.nameKor}
+          </Badge>
+        ))}
+      </div>
+    </div>
   );
 }
