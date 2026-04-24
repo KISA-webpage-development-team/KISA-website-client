@@ -63,46 +63,46 @@ export default function PochaSummary({
       <Divider />
 
       <CardContent>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Icon name="calendar" size="sm" />
-              <span className="type-body-sm">시작</span>
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Icon name="calendar" size="sm" />
+                <span className="type-body-sm">시작</span>
+              </div>
+              <p className="type-h4 !font-semibold text-foreground">
+                {formatDateInTz(pochaInfo.startDate)}
+              </p>
+              <p className="type-body-sm text-muted-foreground">
+                {formatTimeInTz(pochaInfo.startDate)} (
+                {tzAbbreviation(pochaInfo.startDate)})
+              </p>
             </div>
-            <p className="type-h4 !font-semibold text-foreground">
-              {formatDateInTz(pochaInfo.startDate)}
-            </p>
-            <p className="type-body-sm text-muted-foreground">
-              {formatTimeInTz(pochaInfo.startDate)} (
-              {tzAbbreviation(pochaInfo.startDate)})
-            </p>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Icon name="calendar" size="sm" />
-              <span className="type-body-sm">종료</span>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Icon name="calendar" size="sm" />
+                <span className="type-body-sm">종료</span>
+              </div>
+              <p className="type-h4 !font-semibold text-foreground">
+                {formatDateInTz(pochaInfo.endDate)}
+              </p>
+              <p className="type-body-sm text-muted-foreground">
+                {formatTimeInTz(pochaInfo.endDate)} (
+                {tzAbbreviation(pochaInfo.endDate)})
+              </p>
             </div>
-            <p className="type-h4 !font-semibold text-foreground">
-              {formatDateInTz(pochaInfo.endDate)}
-            </p>
-            <p className="type-body-sm text-muted-foreground">
-              {formatTimeInTz(pochaInfo.endDate)} (
-              {tzAbbreviation(pochaInfo.endDate)})
-            </p>
           </div>
-        </div>
-      </CardContent>
 
-      <Divider />
+          <Divider />
 
-      <CardContent>
-        <div className="flex flex-col gap-4">
-          {immediatePrepMenus.length > 0 && (
-            <MenuGroup label="즉시 제공" items={immediatePrepMenus} />
-          )}
-          {cookingMenus.length > 0 && (
-            <MenuGroup label="조리 필요" items={cookingMenus} />
-          )}
+          <div className="flex flex-col gap-4">
+            {immediatePrepMenus.length > 0 && (
+              <MenuGroup label="즉시 제공" items={immediatePrepMenus} />
+            )}
+            {cookingMenus.length > 0 && (
+              <MenuGroup label="조리 필요" items={cookingMenus} />
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>
