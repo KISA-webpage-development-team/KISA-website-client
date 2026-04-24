@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@umichkisa-ds/web";
 import { signIn, signOut } from "next-auth/react";
-import { useMockAuth } from "@/mocks/authContext";
+import { useAuth } from "@/lib/auth/authContext";
 
 type LoginButtonProps = {
   isAuthenticated: boolean;
@@ -16,7 +16,7 @@ function LoginButton({
   size = "md",
   callbackUrl = "/",
 }: LoginButtonProps) {
-  const { isMockMode, toggle } = useMockAuth();
+  const { isMockMode, toggle } = useAuth();
 
   const handleClick = () => {
     if (isMockMode) {

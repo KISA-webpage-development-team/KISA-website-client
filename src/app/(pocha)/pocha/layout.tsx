@@ -4,10 +4,8 @@ import OnlyMobileView from '@/components/ui/feedback/OnlyMobileView';
 import { sejongHospitalLight } from '@/utils/fonts/textFonts';
 import { SessionProvider } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import {
-  AuthContextProvider,
-  MockAuthToggle,
-} from '@/mocks/authContext';
+import { AuthContextProvider } from '@/lib/auth/authContext';
+import { MockAuthToggle } from '@/mocks/MockAuthToggle';
 
 export default function PochaLayout({ children }) {
   // except for /pocha/dashboard && /pocha/manage, only mobile view is allowed

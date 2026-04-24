@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { SessionProvider } from "next-auth/react";
-import { AuthContextProvider, useMockAuth } from "../authContext";
+import { AuthContextProvider, useAuth } from "@/lib/auth/authContext";
 import useAdmin from "@/lib/next-auth/useAdmin";
 import type { ReactNode } from "react";
 
@@ -17,12 +17,12 @@ function Wrapper({ children }: { children: ReactNode }) {
 }
 
 /**
- * Combined hook so each test can drive the mock toggles (via useMockAuth)
+ * Combined hook so each test can drive the mock toggles (via useAuth)
  * and observe useAdmin's return in the same render tree.
  */
 function useBoth() {
   const admin = useAdmin();
-  const mock = useMockAuth();
+  const mock = useAuth();
   return { admin, mock };
 }
 

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, act } from "@testing-library/react";
-import { AuthContextProvider, MockAuthToggle } from "../authContext";
+import { AuthContextProvider } from "@/lib/auth/authContext";
+import { MockAuthToggle } from "../MockAuthToggle";
 
 const AUTH_KEY = "kisa-mock-auth-authenticated";
 const ADMIN_KEY = "kisa-mock-auth-isadmin";
