@@ -25,35 +25,36 @@ export const mockPochas: PochaRecord[] = [
     startDate: day(-2),
     endDate: day(2),
     title: "KISA Spring Pocha 2026",
-    description: "Active pocha window covers 2026-04-23.",
+    description:
+      "미시간 한인 학생회 2026년 봄 정기 포차입니다. 많은 관심과 참여 부탁드립니다!",
   },
   {
     pochaID: 2,
     startDate: day(-200),
     endDate: day(-195),
     title: "KISA Fall Pocha 2025",
-    description: "Historical pocha from fall 2025.",
+    description: "2025년 가을 정기 포차 기록입니다.",
   },
   {
     pochaID: 3,
     startDate: day(-320),
     endDate: day(-315),
     title: "KISA Spring Pocha 2025",
-    description: "Historical pocha from spring 2025.",
+    description: "2025년 봄 정기 포차 기록입니다.",
   },
   {
     pochaID: 4,
     startDate: day(-500),
     endDate: day(-495),
     title: "KISA Fall Pocha 2024",
-    description: "Historical pocha from fall 2024.",
+    description: "2024년 가을 정기 포차 기록입니다.",
   },
   {
     pochaID: 5,
     startDate: day(-680),
     endDate: day(-675),
     title: "KISA Spring Pocha 2024",
-    description: "Historical pocha from spring 2024.",
+    description: "2024년 봄 정기 포차 기록입니다.",
   },
 ];
 
