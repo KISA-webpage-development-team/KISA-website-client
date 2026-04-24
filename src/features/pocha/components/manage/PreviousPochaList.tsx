@@ -1,12 +1,12 @@
 // PreviousPochaList.tsx
-import { HorizontalDivider } from '@/components/ui/divider';
-import { sejongHospitalBold } from '@/utils/fonts/textFonts';
-import { useMemo } from 'react';
-import useSWR from 'swr';
-import { fetcher } from '@/lib/swr/fetchers';
-import React from 'react';
-import { PochaInfoWithoutStatus } from '@/types/pocha';
-import PreviousPochaSummary from './PreviosPochaSummary';
+import { useMemo, useState } from "react";
+import useSWR from "swr";
+import { Alert, Card, Skeleton } from "@umichkisa-ds/web";
+
+import { fetcher } from "@/lib/swr/fetchers";
+import { PochaInfoWithoutStatus } from "@/types/pocha";
+import PreviousPochaSummary from "./PreviosPochaSummary";
+import PreviousPochaDetailDialog from "./PreviousPochaDetailDialog";
 
 interface PreviousPochaListProps {
   onSelectPocha?: (pocha: PochaInfoWithoutStatus) => void;
@@ -18,9 +18,12 @@ function PreviousPochaList({
   selectedPochaId,
 }: PreviousPochaListProps) {
   const dateIso = useMemo(
-    () => new Date().toISOString().split('.')[0],
+    () => new Date().toISOString().split(".")[0],
     []
   );
+
+  const [detailPocha, setDetailPocha] =
+    useState<PochaInfoWithoutStatus | null>(null);
 
   const {
     data: rawList,
@@ -41,46 +44,63 @@ function PreviousPochaList({
     [rawList]
   );
 
-  if (isLoading) {
-    return <></>;
-  }
-
-  if (error) {
-    return (
-      <div className='flex flex-col w-full gap-6 items-center justify-center p-8'>
-        <p className='text-red-500'>
-          이전 포차 정보를 불러오는데 실패했습니다.
-        </p>
-        <p className='text-sm text-gray-500'>
-          {error instanceof Error
-            ? error.message
-            : 'An unexpected error occurred.'}
-        </p>
-      </div>
-    );
-  }
+  const count = previousPochaList?.length ?? 0;
+  const showDialog = !onSelectPocha;
 
   return (
-    <div className='flex flex-col w-full gap-6'>
-      <h2 className={`${sejongHospitalBold.className} text-2xl`}>
-        이전 포차 목록
-      </h2>
+    <section className="flex flex-col w-full gap-4">
+      <div className="flex items-center gap-2">
+        <h2 className="type-h2 !font-semibold text-foreground">
+          이전 포차 목록
+        </h2>
+        {!isLoading && !error && previousPochaList && (
+          <span className="type-caption text-muted-foreground">{count}개</span>
+        )}
+      </div>
 
-      {previousPochaList && previousPochaList.length > 0 ? (
-        previousPochaList.map((pocha) => (
-          <PreviousPochaSummary
-            key={pocha.pochaID}
-            pochaInfo={pocha}
-            onClick={onSelectPocha ? () => onSelectPocha(pocha) : undefined}
-            isSelected={selectedPochaId === pocha.pochaID}
-          />
-        ))
+      {isLoading ? (
+        <div className="flex flex-col gap-3">
+          {[0, 1, 2].map((i) => (
+            <Card key={i} hoverable={false}>
+              <Skeleton className="h-5 w-2/3" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-1/2 mt-1" />
+            </Card>
+          ))}
+        </div>
+      ) : error ? (
+        <Alert variant="error" title="이전 포차 정보를 불러오지 못했습니다.">
+          {error instanceof Error
+            ? error.message
+            : "잠시 후 다시 시도해주세요."}
+        </Alert>
+      ) : previousPochaList && previousPochaList.length > 0 ? (
+        <div className="flex flex-col gap-3">
+          {previousPochaList.map((pocha) => (
+            <PreviousPochaSummary
+              key={pocha.pochaID}
+              pochaInfo={pocha}
+              onClick={
+                onSelectPocha
+                  ? () => onSelectPocha(pocha)
+                  : () => setDetailPocha(pocha)
+              }
+              isSelected={selectedPochaId === pocha.pochaID}
+            />
+          ))}
+        </div>
       ) : (
-        <p className='text-gray-500'>이전 포차가 없습니다.</p>
+        <Alert variant="info">아직 진행된 포차가 없습니다.</Alert>
       )}
 
-      <HorizontalDivider />
-    </div>
+      {showDialog && (
+        <PreviousPochaDetailDialog
+          pocha={detailPocha}
+          onClose={() => setDetailPocha(null)}
+        />
+      )}
+    </section>
   );
 }
 
