@@ -21,9 +21,12 @@ export interface PochaRecord extends PochaInfoWithoutStatus {}
 
 export const mockPochas: PochaRecord[] = [
   {
+    // Active pocha runs 18:00 ET on day -2 through 23:00 ET on day +2.
+    // UTC offsets hard-coded for EDT (April → UTC-4); if TODAY ever moves
+    // into EST months, recompute these.
     pochaID: 1,
-    startDate: day(-2),
-    endDate: day(2),
+    startDate: new Date("2026-04-21T22:00:00.000Z"), // 18:00 EDT
+    endDate: new Date("2026-04-26T03:00:00.000Z"), // 23:00 EDT on 04-25
     title: "KISA Spring Pocha 2026",
     description:
       "미시간 한인 학생회 2026년 봄 정기 포차입니다. 많은 관심과 참여 부탁드립니다!",

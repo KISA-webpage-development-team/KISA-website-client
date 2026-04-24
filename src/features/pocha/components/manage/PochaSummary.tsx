@@ -12,7 +12,7 @@ import {
 } from "@umichkisa-ds/web";
 
 import { MenuItemRaw, PochaInfo } from "@/types/pocha";
-import { formatDateOnly, formatTimeOnly } from "@/utils/formats/date";
+import { formatDateInTz, formatTimeInTz } from "@/utils/formats/timezone";
 
 interface PochaSummaryProps {
   pochaInfo: PochaInfo;
@@ -63,10 +63,10 @@ export default function PochaSummary({
               <span className="type-body-sm">시작</span>
             </div>
             <p className="type-h4 !font-semibold text-foreground">
-              {formatDateOnly(pochaInfo.startDate)}
+              {formatDateInTz(pochaInfo.startDate)}
             </p>
             <p className="type-body-sm text-muted-foreground">
-              {formatTimeOnly(pochaInfo.startDate)}
+              {formatTimeInTz(pochaInfo.startDate)}
             </p>
           </div>
           <div className="flex flex-col gap-1">
@@ -75,10 +75,10 @@ export default function PochaSummary({
               <span className="type-body-sm">종료</span>
             </div>
             <p className="type-h4 !font-semibold text-foreground">
-              {formatDateOnly(pochaInfo.endDate)}
+              {formatDateInTz(pochaInfo.endDate)}
             </p>
             <p className="type-body-sm text-muted-foreground">
-              {formatTimeOnly(pochaInfo.endDate)}
+              {formatTimeInTz(pochaInfo.endDate)}
             </p>
           </div>
         </div>
