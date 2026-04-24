@@ -5,13 +5,17 @@ import CustomField from "@/deprecated-components/shared/CustomField";
 import { MenuItemRaw } from "@/types/pocha";
 import { CustomButton } from "@/components/ui/button";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import PochaCloseIcon from "@/components/ui/icon/PochaCloseIcon";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { HorizontalDivider } from "@/components/ui/divider";
 import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
 import Image from "next/image";
 import VerticalDivider from "@/components/ui/divider/VerticalDivider";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@umichkisa-ds/web";
 
 interface PochaMenuItemFormProps {
   closeItemForm: () => void;
@@ -317,140 +321,138 @@ export default function PochaMenuItemForm({
   }, [mode, initialData]);
 
   return (
-    <div className="fixed inset-0 z-[99999] bg-black/30">
-      <div className="relative z-[100000] w-full h-full flex items-center justify-center p-4">
-        <div className="relative bg-white rounded-lg shadow-md text-black border-2 border-[#71717A] w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-2 border-b border-gray-200">
-            <h2 className={`text-xl ${sejongHospitalBold.className}`}>
-              메뉴 추가하기
-            </h2>
-            <button
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              onClick={handleCloseForm}
-            >
-              <PochaCloseIcon size="large" />
-            </button>
+    <Dialog
+      open
+      onOpenChange={(open) => {
+        if (!open) handleCloseForm();
+      }}
+    >
+      {/* overflow-y-auto override: DS Dialog has no built-in bounded-scroll
+          variant; form can exceed viewport on small screens. Outer portal
+          already applies `p-4` so max-h-screen leaves adequate breathing room.
+          Collect for DS fix (needs a scrollable Dialog variant). */}
+      <DialogContent
+        size="lg"
+        className="max-h-screen overflow-y-auto"
+      >
+        <DialogTitle>
+          {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
+        </DialogTitle>
+
+        <form className="flex flex-col gap-4 w-full mt-4">
+          <div className="flex flex-col gap-4 w-full">
+            {textFields?.map((field, index) => (
+              <CustomField
+                key={`pocha-menu-item-textfield-${index}`}
+                {...field}
+              />
+            ))}
           </div>
 
-          {/* Form Content */}
-          <div className="p-6">
-            <form className="flex flex-col gap-4 w-full">
-              <div className="flex flex-col gap-4 w-full">
-                {textFields?.map((field, index) => (
-                  <CustomField
-                    key={`pocha-menu-item-textfield-${index}`}
-                    {...field}
-                  />
-                ))}
-              </div>
+          <div className="flex flex-col gap-4">
+            {numberFields?.map((field, index) => (
+              <CustomField
+                key={`pocha-menu-item-numberfield-${index}`}
+                {...field}
+              />
+            ))}
+            <div className="flex flex-row items-center gap-4">
+              {checkboxFields?.map((field, index) => (
+                <CustomField
+                  key={`pocha-menu-item-checkboxfield-${index}`}
+                  {...field}
+                />
+              ))}
+            </div>
+          </div>
 
-              <div className="flex flex-col gap-4">
-                {numberFields?.map((field, index) => (
-                  <CustomField
-                    key={`pocha-menu-item-numberfield-${index}`}
-                    {...field}
-                  />
-                ))}
-                <div className="flex flex-row items-center gap-4">
-                  {checkboxFields?.map((field, index) => (
-                    <CustomField
-                      key={`pocha-menu-item-checkboxfield-${index}`}
-                      {...field}
-                    />
-                  ))}
-                </div>
-              </div>
+          {/* Image Upload Section */}
+          {/* only shows when getMenuImagePath is not defaultImageURL */}
+          {showImageSection && (
+            <>
+              <HorizontalDivider />
+              <div className="flex flex-col gap-2">
+                <label
+                  className={`font-medium ${sejongHospitalBold.className}`}
+                >
+                  메뉴 이미지
+                </label>
+                <div className="flex flex-row gap-8">
+                  {/* original image */}
 
-              {/* Image Upload Section */}
-              {/* only shows when getMenuImagePath is not defaultImageURL */}
-              {showImageSection && (
-                <>
-                  <HorizontalDivider />
+                  {mode === "update" && (
+                    <div className="flex flex-col gap-2">
+                      <span className="text-sm text-gray-500">
+                        기존 이미지
+                      </span>
+                      <img
+                        src={getMenuImagePath(initialData?.menuID)}
+                        alt="메뉴 이미지"
+                        className="w-32 h-32 object-cover rounded-lg border"
+                      />
+                    </div>
+                  )}
+
+                  {/* upload image */}
                   <div className="flex flex-col gap-2">
-                    <label
-                      className={`font-medium ${sejongHospitalBold.className}`}
-                    >
-                      메뉴 이미지
-                    </label>
-                    <div className="flex flex-row gap-8">
-                      {/* original image */}
-
-                      {mode === "update" && (
-                        <div className="flex flex-col gap-2">
-                          <span className="text-sm text-gray-500">
-                            기존 이미지
-                          </span>
+                    <span className="text-sm text-gray-500">새 이미지</span>
+                    <div className="flex flex-row gap-2">
+                      {imageURL && (
+                        <div className="mt-2">
                           <img
-                            src={getMenuImagePath(initialData?.menuID)}
+                            src={imageURL}
                             alt="메뉴 이미지"
                             className="w-32 h-32 object-cover rounded-lg border"
                           />
+                          <button
+                            type="button"
+                            onClick={removeImage}
+                            className="mt-2 text-sm text-red-600 hover:text-red-800"
+                          >
+                            이미지 제거
+                          </button>
                         </div>
                       )}
-
-                      {/* upload image */}
-                      <div className="flex flex-col gap-2">
-                        <span className="text-sm text-gray-500">새 이미지</span>
-                        <div className="flex flex-row gap-2">
-                          {imageURL && (
-                            <div className="mt-2">
-                              <img
-                                src={imageURL}
-                                alt="메뉴 이미지"
-                                className="w-32 h-32 object-cover rounded-lg border"
-                              />
-                              <button
-                                type="button"
-                                onClick={removeImage}
-                                className="mt-2 text-sm text-red-600 hover:text-red-800"
-                              >
-                                이미지 제거
-                              </button>
-                            </div>
-                          )}
-                          <div className="flex flex-col gap-4">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => {
-                                // only png
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  uploadImage(file);
-                                }
-                              }}
-                              disabled={isUploading}
-                              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                            />
-                            {isUploading && (
-                              <div className="text-sm text-blue-600">
-                                이미지 업로드 중...
-                              </div>
-                            )}
+                      <div className="flex flex-col gap-4">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            // only png
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              uploadImage(file);
+                            }
+                          }}
+                          disabled={isUploading}
+                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                        />
+                        {isUploading && (
+                          <div className="text-sm text-blue-600">
+                            이미지 업로드 중...
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                </>
-              )}
+                </div>
+              </div>
+            </>
+          )}
 
-              <CustomButton
-                text={mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
-                onClick={
-                  mode === "create"
-                    ? handleSubmitButtonClick
-                    : handleUpdateButtonClick
-                }
-                disabled={!isFormValid || isUploading}
-                type="secondary"
-                className={`${sejongHospitalBold.className} w-full mt-4`}
-              />
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+          <CustomButton
+            text={mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
+            onClick={
+              mode === "create"
+                ? handleSubmitButtonClick
+                : handleUpdateButtonClick
+            }
+            disabled={!isFormValid || isUploading}
+            type="secondary"
+            className={`${sejongHospitalBold.className} w-full mt-4`}
+          />
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
