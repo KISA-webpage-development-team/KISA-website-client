@@ -25,7 +25,7 @@ export default function PochaSummary({
   menuList,
 }: PochaSummaryProps) {
   const statusLabel = pochaInfo.ongoing ? "진행 중" : "진행 예정";
-  const statusVariant = pochaInfo.ongoing ? "success" : "default";
+  const statusVariant = pochaInfo.ongoing ? "success" : "info";
 
   return (
     <Card>
@@ -38,7 +38,7 @@ export default function PochaSummary({
             <Badge variant={statusVariant}>{statusLabel}</Badge>
           </div>
           <Button
-            variant="secondary"
+            variant="tertiary"
             size="sm"
             onClick={() => setIsEditPochaFormOpen(!isEditPochaFormOpen)}
           >
@@ -51,27 +51,19 @@ export default function PochaSummary({
         <div className="flex flex-col gap-2">
           <p className="type-body">
             <span>설명: </span>
-            <span className="text-muted-foreground">
-              {pochaInfo.description}
-            </span>
+            <span>{pochaInfo.description}</span>
           </p>
           <p className="type-body">
             <span>시작 날짜: </span>
-            <span className="text-muted-foreground">
-              {formatDateTimeString(pochaInfo.startDate)}
-            </span>
+            <span>{formatDateTimeString(pochaInfo.startDate)}</span>
           </p>
           <p className="type-body">
             <span>종료 날짜: </span>
-            <span className="text-muted-foreground">
-              {formatDateTimeString(pochaInfo.endDate)}
-            </span>
+            <span>{formatDateTimeString(pochaInfo.endDate)}</span>
           </p>
           <p className="type-body">
             <span>메뉴: </span>
-            <span className="text-muted-foreground">
-              {menuList.map((menu) => menu.nameKor).join(", ")}
-            </span>
+            <span>{menuList.map((menu) => menu.nameKor).join(", ")}</span>
           </p>
         </div>
       </CardContent>
