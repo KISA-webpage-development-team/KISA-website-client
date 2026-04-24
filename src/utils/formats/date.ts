@@ -75,15 +75,30 @@ export function formatDateOrTime(date) {
  */
 export function formatDateTimeString(date) {
   const target = new Date(date);
-  
+
   // Use UTC methods to preserve the original timezone
   let year = target.getUTCFullYear();
   let month = ('0' + (target.getUTCMonth() + 1)).slice(-2); // Months are 0-based in JavaScript
   let day = ('0' + target.getUTCDate()).slice(-2);
   let hour = ('0' + target.getUTCHours()).slice(-2);
   let minute = ('0' + target.getUTCMinutes()).slice(-2);
-  
+
   return `${year}.${month}.${day} ${hour}:${minute}`;
+}
+
+export function formatDateOnly(date) {
+  const target = new Date(date);
+  const year = target.getUTCFullYear();
+  const month = ('0' + (target.getUTCMonth() + 1)).slice(-2);
+  const day = ('0' + target.getUTCDate()).slice(-2);
+  return `${year}.${month}.${day}`;
+}
+
+export function formatTimeOnly(date) {
+  const target = new Date(date);
+  const hour = ('0' + target.getUTCHours()).slice(-2);
+  const minute = ('0' + target.getUTCMinutes()).slice(-2);
+  return `${hour}:${minute}`;
 }
 
 // input year, month, day

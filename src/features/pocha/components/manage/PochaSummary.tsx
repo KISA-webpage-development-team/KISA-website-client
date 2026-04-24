@@ -4,12 +4,15 @@ import {
   Button,
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
+  Divider,
+  Icon,
 } from "@umichkisa-ds/web";
 
 import { MenuItemRaw, PochaInfo } from "@/types/pocha";
-import { formatDateTimeString } from "@/utils/formats/date";
+import { formatDateOnly, formatTimeOnly } from "@/utils/formats/date";
 
 interface PochaSummaryProps {
   pochaInfo: PochaInfo;
@@ -30,12 +33,15 @@ export default function PochaSummary({
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <CardTitle as="h3" className="type-h3 !font-semibold">
-              {pochaInfo.title}
-            </CardTitle>
-            <Badge variant={statusVariant}>{statusLabel}</Badge>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-4">
+              <CardTitle as="h3" className="type-h3 !font-semibold">
+                {pochaInfo.title}
+              </CardTitle>
+              <Badge variant={statusVariant}>{statusLabel}</Badge>
+            </div>
+            <CardDescription>{pochaInfo.description}</CardDescription>
           </div>
           <Button
             variant="secondary"
@@ -47,24 +53,55 @@ export default function PochaSummary({
         </div>
       </CardHeader>
 
+      <Divider />
+
       <CardContent>
-        <div className="flex flex-col gap-2">
-          <p className="type-body">
-            <span>설명: </span>
-            <span>{pochaInfo.description}</span>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Icon name="calendar" size="sm" />
+              <span className="type-body-sm">시작</span>
+            </div>
+            <p className="type-h4 !font-semibold text-foreground">
+              {formatDateOnly(pochaInfo.startDate)}
+            </p>
+            <p className="type-body-sm text-muted-foreground">
+              {formatTimeOnly(pochaInfo.startDate)}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Icon name="calendar" size="sm" />
+              <span className="type-body-sm">종료</span>
+            </div>
+            <p className="type-h4 !font-semibold text-foreground">
+              {formatDateOnly(pochaInfo.endDate)}
+            </p>
+            <p className="type-body-sm text-muted-foreground">
+              {formatTimeOnly(pochaInfo.endDate)}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+
+      <Divider />
+
+      <CardContent>
+        <div className="flex flex-col gap-3">
+          <p className="type-body-sm text-muted-foreground">
+            메뉴 · {menuList.length}
           </p>
-          <p className="type-body">
-            <span>시작 날짜: </span>
-            <span>{formatDateTimeString(pochaInfo.startDate)}</span>
-          </p>
-          <p className="type-body">
-            <span>종료 날짜: </span>
-            <span>{formatDateTimeString(pochaInfo.endDate)}</span>
-          </p>
-          <p className="type-body">
-            <span>메뉴: </span>
-            <span>{menuList.map((menu) => menu.nameKor).join(", ")}</span>
-          </p>
+          <div className="flex flex-wrap gap-2">
+            {menuList.map((menu) => (
+              <Badge
+                key={menu.menuID ?? menu.nameKor}
+                variant="outline"
+                size="md"
+              >
+                {menu.nameKor}
+              </Badge>
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
