@@ -72,7 +72,6 @@ function PochaManagePageContent() {
 
   return (
     <>
-      <PreviousPochaList />
       {noPochaAvailable && (
         <div className="flex flex-col w-full gap-2">
           <CustomButton
@@ -96,6 +95,9 @@ function PochaManagePageContent() {
           )}
         </div>
       )}
+      <div className="mt-10">
+        <PreviousPochaList />
+      </div>
     </>
   );
 }
