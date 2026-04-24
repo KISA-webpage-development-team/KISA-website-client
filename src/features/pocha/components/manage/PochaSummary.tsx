@@ -12,7 +12,11 @@ import {
 } from "@umichkisa-ds/web";
 
 import { MenuItemRaw, PochaInfo } from "@/types/pocha";
-import { formatDateInTz, formatTimeInTz } from "@/utils/formats/timezone";
+import {
+  formatDateInTz,
+  formatTimeInTz,
+  tzAbbreviation,
+} from "@/utils/formats/timezone";
 
 interface PochaSummaryProps {
   pochaInfo: PochaInfo;
@@ -66,7 +70,8 @@ export default function PochaSummary({
               {formatDateInTz(pochaInfo.startDate)}
             </p>
             <p className="type-body-sm text-muted-foreground">
-              {formatTimeInTz(pochaInfo.startDate)}
+              {formatTimeInTz(pochaInfo.startDate)} (
+              {tzAbbreviation(pochaInfo.startDate)})
             </p>
           </div>
           <div className="flex flex-col gap-1">
@@ -78,7 +83,8 @@ export default function PochaSummary({
               {formatDateInTz(pochaInfo.endDate)}
             </p>
             <p className="type-body-sm text-muted-foreground">
-              {formatTimeInTz(pochaInfo.endDate)}
+              {formatTimeInTz(pochaInfo.endDate)} (
+              {tzAbbreviation(pochaInfo.endDate)})
             </p>
           </div>
         </div>

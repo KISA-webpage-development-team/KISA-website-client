@@ -53,6 +53,22 @@ export function formatTimeInTz(
 }
 
 /**
+ * Return the short timezone abbreviation for the given moment
+ * (e.g. "EDT" in April, "EST" in January). Safe across DST transitions.
+ */
+export function tzAbbreviation(
+  date: Date | string,
+  tz: string = APP_TIMEZONE,
+): string {
+  const d = typeof date === "string" ? new Date(date) : date;
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: tz,
+    timeZoneName: "short",
+  }).formatToParts(d);
+  return parts.find((p) => p.type === "timeZoneName")?.value ?? "";
+}
+
+/**
  * Convert an ET wall-clock string (from `<input type="datetime-local">`, e.g.
  * `"2026-04-21T18:00"`) into a UTC Date suitable for `toISOString()` before
  * POSTing to the backend.
