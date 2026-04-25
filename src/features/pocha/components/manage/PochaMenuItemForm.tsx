@@ -12,6 +12,10 @@ import {
   toast,
 } from "@umichkisa-ds/web";
 import { useForm, Form } from "@umichkisa-ds/form";
+import {
+  uploadMenuImage,
+  deleteMenuImage,
+} from "@/apis/cloudinary/menuImage";
 
 interface PochaMenuItemFormProps {
   closeItemForm: () => void;
@@ -60,62 +64,17 @@ export default function PochaMenuItemForm({
   const [fileUploadValue, setFileUploadValue] =
     useState<FileUploadValue | null>(initialFileUploadValue);
 
-  const deleteImageFromCloudinary = async (publicId: string) => {
-    try {
-      if (!publicId || !session?.token) return;
-
-      const response = await fetch("/api/delete-from-cloudinary", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.token}`,
-        },
-        body: JSON.stringify({ publicId }),
-      });
-
-      if (!response.ok) {
-        console.error("Failed to delete image from Cloudinary");
-      }
-    } catch (error) {
-      console.error("Error deleting image from Cloudinary:", error);
-    }
-  };
-
   const handleUpload = async (file: File): Promise<FileUploadValue> => {
     if (!session?.token) {
       toast.error("로그인이 필요합니다.");
       throw new Error("Not logged in");
     }
-
-    const timestamp = new Date().getTime();
-    const fileName = `pocha-menu-${timestamp}`;
-    const formattedFileName = fileName.replace(/ /g, "-");
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("public_id", `/${formattedFileName}`);
-    formData.append("folder", "temp");
-    formData.append("resource_type", "image");
-
-    const response = await fetch("/api/upload-to-cloudinary", {
-      method: "POST",
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Upload failed");
-    }
-
-    const result = await response.json();
-    return { url: result.secure_url, publicId: result.public_id };
+    return uploadMenuImage(file, session.token);
   };
 
   const handleRemove = async (publicId: string): Promise<void> => {
-    if (publicId) {
-      await deleteImageFromCloudinary(publicId);
+    if (publicId && session?.token) {
+      await deleteMenuImage(publicId, session.token);
     }
   };
 
@@ -165,12 +124,9 @@ export default function PochaMenuItemForm({
     closeItemForm();
   };
 
-  // Add this function to handle form closure cleanup
   const handleCloseForm = () => {
-    // Cleanup: only delete if WE uploaded (publicId is set;
-    // pre-existing images carry empty publicId)
-    if (fileUploadValue?.publicId) {
-      deleteImageFromCloudinary(fileUploadValue.publicId);
+    if (fileUploadValue?.publicId && session?.token) {
+      deleteMenuImage(fileUploadValue.publicId, session.token);
     }
     closeItemForm();
   };
