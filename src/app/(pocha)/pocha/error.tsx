@@ -1,6 +1,6 @@
 "use client";
-import PochaButton from "@/features/pocha/components/shared/PochaButton";
-import { NotFound, NotLogin, UnexpectedError } from "@/components/ui/feedback";
+
+import { Button, StatusView } from "@umichkisa-ds/web";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -9,15 +9,16 @@ interface ErrorProps {
 
 export default function ErrorPage({ error, reset }: ErrorProps) {
   if (error.message.includes("Unauthorized")) {
-    return <NotLogin />;
+    return <StatusView fullScreen variant="not-logged-in" />;
   } else if (error.message.includes("Not Found")) {
-    return <NotFound />;
+    return <StatusView fullScreen variant="not-found" />;
   }
 
   return (
-    <div className="h-full flex flex-col items-center justify-center">
-      <UnexpectedError />
-      <PochaButton onClick={reset} label="다시 시도하기" />
-    </div>
+    <StatusView
+      fullScreen
+      variant="error"
+      action={<Button onClick={reset}>다시 시도하기</Button>}
+    />
   );
 }
