@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import { getPochaInfo } from '@/apis/pocha/queries';
 
 // types
@@ -7,37 +7,34 @@ import { PochaInfo } from '@/types/pocha';
 import { HookStatus } from './types';
 
 /**
- * @desc hook to fetch pocha information (getPochaInfo)
+ * @desc hook to fetch pocha information (getPochaInfo) for "today"
+ *
+ * Uses a stable SWR key so other parts of the app can revalidate via
+ * `mutate('/pocha/status-info/today')` after a create/update.
  */
 const usePocha = () => {
-  const [status, setStatus] = useState<HookStatus>('loading');
-  const [pochaInfo, setPochaInfo] = useState<PochaInfo>();
-  const [error, setError] = useState<string>();
+  const { data, error, isLoading } = useSWR<PochaInfo>(
+    '/pocha/status-info/today',
+    () => getPochaInfo(new Date())
+  );
 
-  useEffect(() => {
-    const fetchPochaInfo = async () => {
-      try {
-        const res = await getPochaInfo(new Date());
-        setPochaInfo(res);
-        setStatus('success');
-      } catch (error) {
-        // ✅ Error message directly from the error object
-        setStatus('error');
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unexpected error occurred.');
-        }
-      }
-    };
+  let status: HookStatus = 'loading';
+  if (error) {
+    status = 'error';
+  } else if (!isLoading && data !== undefined) {
+    status = 'success';
+  }
 
-    fetchPochaInfo();
-  }, []);
+  const errorMessage = error
+    ? error instanceof Error
+      ? error.message
+      : 'An unexpected error occurred.'
+    : undefined;
 
   return {
-    pochaInfo,
+    pochaInfo: data,
     status,
-    error,
+    error: errorMessage,
   };
 };
 
