@@ -4,6 +4,15 @@
 /* NextUI compat: keep NextUI content path scannable for class generation */
 @source "../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}";
 
+/* DS source scan — ensure Tailwind v4 emits utilities used only inside DS
+   component source (e.g. data-[state=active]:border-brand-accent on Tabs).
+   The @source in @umichkisa-ds/web/theme.css should cover this in theory,
+   but in practice some bracketed-attribute selectors don't propagate
+   through the imported-CSS @source. TODO: investigate DS theme.css resolution
+   and remove these duplicates once root cause is fixed upstream. */
+@source "../../node_modules/@umichkisa-ds/web/src/components/**/*.{ts,tsx}";
+@source "../../node_modules/@umichkisa-ds/form/src/**/*.{ts,tsx}";
+
 @theme inline {
   /* ── Bridge: old shadcn names → DS tokens (remove as features migrate) ── */
   --color-background: var(--color-surface);

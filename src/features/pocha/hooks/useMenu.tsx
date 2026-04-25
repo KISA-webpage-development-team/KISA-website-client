@@ -9,12 +9,17 @@ import { MenuByCategory } from "@/types/pocha";
 
 /**
  * @desc hook to fetch menu of pocha with SWR and existing fetcher
+ *
+ * Returns `{ menuList, status, error, refetch }` to match the surface of
+ * `usePocha`. `refetch` is a thin wrapper over SWR's `mutate` for the
+ * current key; callers can invoke it without knowing SWR cache keys.
  */
 const useMenu = (pochaID: number, token: string) => {
   const {
     data: menuList,
     error,
     isLoading,
+    mutate,
   } = useSWR(
     pochaID && token ? [`/pocha/menu/${pochaID}/`, token] : null,
     fetcherWithToken,
@@ -28,6 +33,8 @@ const useMenu = (pochaID: number, token: string) => {
   return {
     menuList: menuList as MenuByCategory[],
     status: error ? "error" : isLoading ? "loading" : "success",
+    error: error as Error | undefined,
+    refetch: () => mutate(),
   };
 };
 

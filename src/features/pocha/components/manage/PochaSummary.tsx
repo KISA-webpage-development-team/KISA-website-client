@@ -1,74 +1,77 @@
 import React from "react";
-import { MenuItemRaw, PochaInfo } from "@/types/pocha";
 import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
-import { formatDateTimeString } from "@/utils/formats/date";
-import CustomButton from "@/components/ui/button/CustomButton";
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Divider,
+} from "@umichkisa-ds/web";
+
+import { MenuItemRaw, PochaInfo } from "@/types/pocha";
+
+import PochaDateBlock from "./_shared/PochaDateBlock";
+import PochaMenuGroup from "./_shared/PochaMenuGroup";
 
 interface PochaSummaryProps {
   pochaInfo: PochaInfo;
-  isEditPochaFormOpen: boolean;
-  setIsEditPochaFormOpen: (isOpen: boolean) => void;
+  onEditClick: () => void;
   menuList: MenuItemRaw[];
 }
+
 export default function PochaSummary({
   pochaInfo,
-  isEditPochaFormOpen,
-  setIsEditPochaFormOpen,
+  onEditClick,
   menuList,
 }: PochaSummaryProps) {
+  const statusLabel = pochaInfo.ongoing ? "진행 중" : "진행 예정";
+  const statusVariant = pochaInfo.ongoing ? "success" : "info";
 
+  const immediatePrepMenus = menuList.filter((m) => m.isImmediatePrep);
+  const cookingMenus = menuList.filter((m) => !m.isImmediatePrep);
 
   return (
-    <div
-      className={`flex flex-col ${sejongHospitalBold.className} gap-2
-      bg-gray-100 p-4 rounded-lg hover:bg-gray-200 transition-colors
-    `}
-    >
-      <div className='flex justify-between items-center'>
-        <h2 className='text-xl'>
-          {pochaInfo.title}
-          {pochaInfo.ongoing ? ' (진행 중)' : ' (진행 예정)'}
-        </h2>
-        <CustomButton
-          text={isEditPochaFormOpen ? '수정 취소' : '수정하기'}
-          onClick={() => {
-            setIsEditPochaFormOpen(!isEditPochaFormOpen);
-          }}
-        />
-      </div>
+    <Card>
+      <CardHeader>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-4">
+              <CardTitle as="h3" className="type-h3 font-semibold">
+                {pochaInfo.title}
+              </CardTitle>
+              <Badge variant={statusVariant}>{statusLabel}</Badge>
+            </div>
+            <CardDescription>{pochaInfo.description}</CardDescription>
+          </div>
+          <Button variant="secondary" size="sm" onClick={onEditClick}>
+            수정하기
+          </Button>
+        </div>
+      </CardHeader>
 
-      <div className='flex flex-col gap-2 text-lg'>
-        <span>
-          설명:{' '}
-          <span className={`${sejongHospitalLight.className}`}>
-            {pochaInfo.description}
-          </span>
-        </span>
-        <span>
-          시작 날짜:{' '}
-          <span className={`${sejongHospitalLight.className}`}>
-            {formatDateTimeString(pochaInfo.startDate)}
-          </span>
-        </span>
-        <span>
-          종료 날짜:{' '}
-          <span className={`${sejongHospitalLight.className}`}>
-            {formatDateTimeString(pochaInfo.endDate)}
-          </span>
-        </span>
-      </div>
+      <Divider />
 
-      <div className='flex flex-col gap-2 text-lg'>
-        <span>
-          메뉴:{' '}
-          <span className={`${sejongHospitalLight.className}`}>
-            {menuList.map((menu) => menu.nameKor).join(', ')}
-          </span>
-        </span>
-      </div>
-    </div>
+      <CardContent>
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-2 gap-4">
+            <PochaDateBlock label="시작" date={pochaInfo.startDate} />
+            <PochaDateBlock label="종료" date={pochaInfo.endDate} />
+          </div>
+
+          <Divider />
+
+          <div className="flex flex-col gap-4">
+            {immediatePrepMenus.length > 0 && (
+              <PochaMenuGroup label="즉시 제공" items={immediatePrepMenus} />
+            )}
+            {cookingMenus.length > 0 && (
+              <PochaMenuGroup label="조리 필요" items={cookingMenus} />
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

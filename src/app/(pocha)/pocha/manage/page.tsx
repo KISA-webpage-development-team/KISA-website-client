@@ -1,11 +1,18 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { mutate } from "swr";
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  LoadingSpinner,
+  StatusView,
+} from "@umichkisa-ds/web";
 
 // ui components
-import PochaForm from "@/features/pocha/components/manage/PochaForm";
-import { LoadingSpinner, NotAuthorized } from "@/components/ui/feedback";
-import { CustomButton } from "@/components/ui/button";
+import PochaFormDialog from "@/features/pocha/components/manage/PochaFormDialog";
 import PochaSummary from "@/features/pocha/components/manage/PochaSummary";
 import { PochaManageProvider } from "@/features/pocha/contexts/PochaManageContext";
 
@@ -21,22 +28,26 @@ import PreviousPochaList from "@/features/pocha/components/manage/PreviousPochaL
 
 export default function ManagePage() {
   return (
-    <section className="px-2 max-w-screen-md mx-auto mb-10">
+    <Container as="section" size="md" className="my-4 md:my-6 lg:my-10">
       <PochaManagePageHeader />
       <PochaManageProvider>
         <PochaManagePageContent />
       </PochaManageProvider>
-    </section>
+    </Container>
   );
 }
 
 function PochaManagePageContent() {
-  const [isNewPochaFormOpen, setIsNewPochaFormOpen] = useState<boolean>(false);
-  const [isEditPochaFormOpen, setIsEditPochaFormOpen] =
-    useState<boolean>(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [dialogMode, setDialogMode] = useState<"create" | "update">("create");
 
   const { isAdmin, token, status: adminStatus } = useAdmin();
-  const { pochaInfo, status: pochaStatus, error: pochaFetchError } = usePocha();
+  const {
+    pochaInfo,
+    status: pochaStatus,
+    error: pochaFetchError,
+    refetch: refetchPocha,
+  } = usePocha();
 
   const { menuList, status: menuStatus } = useMenu(pochaInfo?.pochaID, token);
 
@@ -50,12 +61,29 @@ function PochaManagePageContent() {
   const noPochaAvailable =
     pochaStatus === "success" && Object.keys(pochaInfo).length === 0;
 
-  // pre-fill pocha menu list if available (edit mode)
+  // Sync the latest menu fetch into the manage context — runs on initial
+  // load AND on every SWR revalidation (e.g. after PUT /pocha/{id}/ mutates
+  // the menusStore in MSW). Without `menuListRaw` in deps, the context kept
+  // showing the original fetch and the summary card never reflected edits.
   useEffect(() => {
     if (!noPochaAvailable && menuStatus === "success" && menuList) {
       setMenus(menuListRaw);
     }
-  }, [noPochaAvailable, menuStatus]);
+  }, [noPochaAvailable, menuStatus, menuListRaw]);
+
+  // Centralized post-submit refresh. The dialog calls this after a successful
+  // create/update; we own the SWR revalidation here so cache keys stay
+  // co-located with the hooks that read them.
+  const handleSubmitSuccess = useCallback(async () => {
+    refetchPocha();
+    await mutate(
+      (key) =>
+        (typeof key === "string" && key.startsWith("/pocha/previous/")) ||
+        (Array.isArray(key) &&
+          typeof key[0] === "string" &&
+          key[0].startsWith("/pocha/menu/"))
+    );
+  }, [refetchPocha]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -66,36 +94,58 @@ function PochaManagePageContent() {
   }
 
   // only admin can view this page
-  // if (!isAdmin) {
-  //   return <NotAuthorized />;
-  // }
+  if (!isAdmin) {
+    return <StatusView fullScreen variant="not-authorized" />;
+  }
 
   return (
     <>
-      <PreviousPochaList />
       {noPochaAvailable && (
-        <div className="flex flex-col w-full gap-2">
-          <CustomButton
-            text="새로운 포차 추가하기"
-            onClick={() => setIsNewPochaFormOpen(true)}
-          />
-          {isNewPochaFormOpen && <PochaForm />}
-        </div>
+        <Card>
+          <CardContent>
+            <div className="flex flex-col items-center gap-4 py-8 text-center">
+              <h3 className="type-h3 font-semibold text-foreground">
+                진행 중인 포차가 없습니다
+              </h3>
+              <p className="type-body text-muted-foreground">
+                새로운 포차를 만들어 메뉴를 등록하세요.
+              </p>
+              <Button
+                onClick={() => {
+                  setDialogMode("create");
+                  setDialogOpen(true);
+                }}
+              >
+                새로운 포차 추가하기
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       )}
       {!noPochaAvailable && (
         <div className="flex flex-col gap-6">
           <PochaSummary
             pochaInfo={pochaInfo}
             menuList={menuListRaw}
-            isEditPochaFormOpen={isEditPochaFormOpen}
-            setIsEditPochaFormOpen={setIsEditPochaFormOpen}
+            onEditClick={() => {
+              setDialogMode("update");
+              setDialogOpen(true);
+            }}
           />
-
-          {isEditPochaFormOpen && (
-            <PochaForm mode="update" existingPochaInfo={pochaInfo} />
-          )}
         </div>
       )}
+      {dialogOpen && (
+        <PochaFormDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          mode={dialogMode}
+          existingPochaInfo={dialogMode === "update" ? pochaInfo : undefined}
+          onSubmitSuccess={handleSubmitSuccess}
+        />
+      )}
+      <div className="mt-10">
+        <PreviousPochaList />
+      </div>
     </>
   );
 }

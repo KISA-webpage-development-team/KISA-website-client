@@ -4,21 +4,17 @@ import { Grid } from "@umichkisa-ds/web";
 import JobPostingCard from "./JobPostingCard";
 import InfiniteScroll from "../InfiniteScroll";
 
-import useFormattedJobs from "../../hooks/useFormattedJobs";
+import { formatJob } from "../../utils/formatJob";
 import { Job } from "../../types/jobs";
 import NotificationText from "../NotificationText";
-
-// Wrapper component to call hook at component level (required by rules-of-hooks)
-function JobCardWrapper({ job }: { job: Job }) {
-  const { jobPosting, jobBadges } = useFormattedJobs(job);
-  return <JobPostingCard jobPosting={jobPosting} jobBadges={jobBadges} />;
-}
 
 interface JobPostingGridProps {
   jobs: Job[];
   onLoadMore?: () => void;
   hasMore?: boolean;
   isLoadingMore?: boolean;
+  loadMoreError?: string;
+  onRetry?: () => void;
 }
 
 export default function JobPostingGrid({
@@ -26,6 +22,8 @@ export default function JobPostingGrid({
   onLoadMore,
   hasMore = false,
   isLoadingMore = false,
+  loadMoreError,
+  onRetry,
 }: JobPostingGridProps) {
   if (jobs.length === 0) {
     return <NotificationText text="조건에 맞는 포지션이 없습니다." />;
@@ -33,9 +31,16 @@ export default function JobPostingGrid({
 
   const jobCards = (
     <Grid columns={{ base: 1, md: 2, lg: 3 }} gap="component">
-      {jobs.map((job, index) => (
-        <JobCardWrapper key={`${job.jobID}-${index}`} job={job} />
-      ))}
+      {jobs.map((job, index) => {
+        const { jobPosting, jobBadges } = formatJob(job);
+        return (
+          <JobPostingCard
+            key={`${job.jobID}-${index}`}
+            jobPosting={jobPosting}
+            jobBadges={jobBadges}
+          />
+        );
+      })}
     </Grid>
   );
 
@@ -45,6 +50,8 @@ export default function JobPostingGrid({
         onLoadMore={onLoadMore}
         hasMore={hasMore}
         isLoading={isLoadingMore}
+        loadMoreError={loadMoreError}
+        onRetry={onRetry}
         endMessage={<NotificationText text="더 이상 포지션이 없습니다." />}
       >
         {jobCards}

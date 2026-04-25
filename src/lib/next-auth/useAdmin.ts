@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import { UserSession } from "./types";
 import { useEffect, useState } from "react";
 import { getIsAdmin } from "@/apis/auth/queries";
+import { useAuth } from "@/lib/auth/authContext";
 
 // [NOTE]: I think this hook should be moved to shared folder or something
 
@@ -10,6 +11,11 @@ import { getIsAdmin } from "@/apis/auth/queries";
  * @returns isAdmin: boolean, email: string, token: string, status: string
  */
 const useAdmin = () => {
+  // Mock-mode short-circuit: admin state is driven by MockAuthToggle, not
+  // next-auth. Hooks are called unconditionally to satisfy rules-of-hooks;
+  // the branch lives in the return.
+  const mock = useAuth();
+
   const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;
     status: string;
@@ -41,6 +47,15 @@ const useAdmin = () => {
       fetchIsAdmin();
     }
   }, [session]);
+
+  if (mock.isMockMode) {
+    return {
+      isAdmin: mock.isAdmin,
+      email: mock.session?.user?.email,
+      token: mock.session?.token,
+      status: "success",
+    };
+  }
 
   return {
     isAdmin,

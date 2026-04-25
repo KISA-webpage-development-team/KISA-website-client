@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { ko } from "date-fns/locale";
 
 export const formatKoreanDate = (date: Date) =>
@@ -6,15 +6,7 @@ export const formatKoreanDate = (date: Date) =>
 
 // Helper to check if a date is in the past (local date only)
 export function isPastLocal(date: Date) {
-  const now = new Date();
-  return (
-    date.getFullYear() < now.getFullYear() ||
-    (date.getFullYear() === now.getFullYear() &&
-      date.getMonth() < now.getMonth()) ||
-    (date.getFullYear() === now.getFullYear() &&
-      date.getMonth() === now.getMonth() &&
-      date.getDate() < now.getDate())
-  );
+  return startOfDay(date) < startOfDay(new Date());
 }
 
 // Format a Date as a YYYY-MM-DD string suitable for the jobs API.

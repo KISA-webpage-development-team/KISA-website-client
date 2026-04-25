@@ -8,7 +8,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Switch } from "@umichkisa-ds/web";
 
 type AppSession = Session & { token: string };
 
@@ -22,13 +21,17 @@ const MOCK_SESSION: AppSession = {
   expires: new Date(Date.now() + 86_400_000).toISOString(),
 };
 
-const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
-const STORAGE_KEY = "kisa-mock-auth-authenticated";
+const AUTH_KEY = "kisa-mock-auth-authenticated";
+const ADMIN_KEY = "kisa-mock-auth-isadmin";
+
+const isMockMode = () => process.env.NEXT_PUBLIC_MOCK_API === "1";
 
 type AuthContextValue = {
   session: AppSession | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   toggle: () => void;
+  toggleIsAdmin: () => void;
   isMockMode: boolean;
 };
 
@@ -41,76 +44,63 @@ export function AuthContextProvider({
   initialSession: AppSession | null;
   children: ReactNode;
 }) {
+  const IS_MOCK_MODE = isMockMode();
   const [mockAuthed, setMockAuthed] = useState(false);
+  const [mockIsAdmin, setMockIsAdmin] = useState(false);
 
   useEffect(() => {
     if (IS_MOCK_MODE) {
-      const stored = sessionStorage.getItem(STORAGE_KEY);
-      if (stored === "1") {
-        setMockAuthed(true);
-      }
+      if (sessionStorage.getItem(AUTH_KEY) === "1") setMockAuthed(true);
+      if (sessionStorage.getItem(ADMIN_KEY) === "1") setMockIsAdmin(true);
     }
-  }, []);
+  }, [IS_MOCK_MODE]);
 
   useEffect(() => {
     if (IS_MOCK_MODE) {
-      sessionStorage.setItem(STORAGE_KEY, mockAuthed ? "1" : "0");
+      sessionStorage.setItem(AUTH_KEY, mockAuthed ? "1" : "0");
     }
-  }, [mockAuthed]);
+  }, [mockAuthed, IS_MOCK_MODE]);
+
+  useEffect(() => {
+    if (IS_MOCK_MODE) {
+      sessionStorage.setItem(ADMIN_KEY, mockIsAdmin ? "1" : "0");
+    }
+  }, [mockIsAdmin, IS_MOCK_MODE]);
+
+  useEffect(() => {
+    if (IS_MOCK_MODE && !mockAuthed && mockIsAdmin) {
+      setMockIsAdmin(false);
+    }
+  }, [mockAuthed, mockIsAdmin, IS_MOCK_MODE]);
 
   const value: AuthContextValue = IS_MOCK_MODE
     ? {
         session: mockAuthed ? MOCK_SESSION : null,
         isAuthenticated: mockAuthed,
+        isAdmin: mockAuthed && mockIsAdmin,
         toggle: () => setMockAuthed((p) => !p),
+        toggleIsAdmin: () => setMockIsAdmin((p) => !p),
         isMockMode: true,
       }
     : {
         session: initialSession,
         isAuthenticated: initialSession !== null,
+        isAdmin: false,
         toggle: () => {},
+        toggleIsAdmin: () => {},
         isMockMode: false,
       };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useMockAuth(): AuthContextValue {
+export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    throw new Error("useMockAuth must be used within <AuthContextProvider>");
+    throw new Error("useAuth must be used within <AuthContextProvider>");
   }
   return ctx;
 }
 
-export function MockAuthToggle() {
-  const { isMockMode, isAuthenticated, toggle } = useMockAuth();
-
-  if (!isMockMode) return null;
-
-  return (
-    <div
-      role="group"
-      aria-label="Mock authentication toggle"
-      className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-border-strong bg-surface px-4 py-2 shadow-md"
-    >
-      <Switch
-        checked={isAuthenticated}
-        onChange={toggle}
-        aria-label="Toggle mock authentication"
-      />
-      <span className="relative type-body-sm text-foreground">
-        <span aria-hidden="true" className="invisible">
-          Mock: {MOCK_SESSION.user!.email}
-        </span>
-        <span className="absolute inset-0">
-          {isAuthenticated
-            ? `Mock: ${MOCK_SESSION.user!.email}`
-            : "Mock: logged out"}
-        </span>
-      </span>
-    </div>
-  );
-}
-
-export type { AppSession };
+export { MOCK_SESSION };
+export type { AppSession, AuthContextValue };

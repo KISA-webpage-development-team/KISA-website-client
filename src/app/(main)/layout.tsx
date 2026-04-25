@@ -5,11 +5,8 @@ import Footer from "@/components/layout/footer/Footer";
 import { getServerSession } from "next-auth";
 import { Container } from "@umichkisa-ds/web";
 import authOptions from "@/lib/next-auth/authOptions";
-import {
-  AuthContextProvider,
-  MockAuthToggle,
-  type AppSession,
-} from "@/mocks/authContext";
+import { AuthContextProvider, type AppSession } from "@/lib/auth/authContext";
+import { MockAuthToggle } from "@/mocks/MockAuthToggle";
 
 export default async function MainLayout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions);

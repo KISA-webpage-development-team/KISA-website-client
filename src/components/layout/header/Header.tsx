@@ -19,12 +19,12 @@ import {
   MobileMenuItem,
 } from "./NavMenu";
 import menu from "@/components/layout/header/navigationMenu";
-import { useMockAuth } from "@/mocks/authContext";
+import { useAuth } from "@/lib/auth/authContext";
 
 const INSTAGRAM_URL = "https://www.instagram.com/kisa_michigan/";
 
 export default function Header() {
-  const { session, isAuthenticated } = useMockAuth();
+  const { session, isAuthenticated } = useAuth();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [active, setActive] = useState<string | null>(null);

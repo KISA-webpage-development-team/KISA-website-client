@@ -16,8 +16,8 @@ const toggleSpy = vi.hoisted(() => vi.fn());
 const signInSpy = vi.hoisted(() => vi.fn());
 const signOutSpy = vi.hoisted(() => vi.fn());
 
-vi.mock("@/mocks/authContext", () => ({
-  useMockAuth: () => ({
+vi.mock("@/lib/auth/authContext", () => ({
+  useAuth: () => ({
     session: null,
     isAuthenticated: false,
     toggle: toggleSpy,
