@@ -1,4 +1,7 @@
-import { Form } from "@umichkisa-ds/form";
+"use client";
+
+import { useEffect } from "react";
+import { Form, useFormContext } from "@umichkisa-ds/form";
 
 interface PochaInfoFieldsProps {}
 
@@ -7,6 +10,19 @@ function startOfDay(d: Date): number {
 }
 
 export default function PochaInfoFields(_props: PochaInfoFieldsProps) {
+  // Cross-field validation: re-trigger end-field rules whenever start fields
+  // change. Colocated here so the rules and the re-validation glue live in
+  // one file (Toss `cohesion-form-structure`). `useFormContext` is imported
+  // from `@umichkisa-ds/form` (not `react-hook-form`) so it reads from the
+  // same RHF instance the DS `<FormProvider>` writes to.
+  const { watch, trigger } = useFormContext();
+  const watchedStartDate = watch("startDate");
+  const watchedStartTime = watch("startTime");
+
+  useEffect(() => {
+    trigger(["endDate", "endTime"]);
+  }, [watchedStartDate, watchedStartTime, trigger]);
+
   return (
     <div className="flex w-full flex-col gap-6">
       <Form.Input
