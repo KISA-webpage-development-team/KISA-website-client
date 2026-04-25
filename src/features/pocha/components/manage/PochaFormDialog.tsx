@@ -182,8 +182,7 @@ export default function PochaFormDialog({
   };
 
   const hasFieldErrors = Object.keys(errors).length > 0;
-  const submitDisabled =
-    menus.length === 0 || !isValid || isSubmitting || hasFieldErrors;
+  const submitDisabled = !isValid || isSubmitting || hasFieldErrors;
 
   const handleFormSubmit = (values: PochaFormValues) => {
     if (
@@ -197,6 +196,7 @@ export default function PochaFormDialog({
     }
     if (menus.length === 0) {
       setActiveTab("menu");
+      toast.error("메뉴를 1개 이상 추가해주세요.");
       return;
     }
     return onSubmit(values);
