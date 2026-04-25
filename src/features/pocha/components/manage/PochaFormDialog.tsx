@@ -196,7 +196,6 @@ export default function PochaFormDialog({
     }
     if (menus.length === 0) {
       setActiveTab("menu");
-      toast.error("메뉴를 1개 이상 추가해주세요.");
       return;
     }
     return onSubmit(values);
