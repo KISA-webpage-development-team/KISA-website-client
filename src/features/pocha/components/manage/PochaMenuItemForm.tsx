@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { usePochaManage } from "../../contexts/PochaManageContext";
 import { MenuItemRaw } from "@/types/pocha";
-import { useSession } from "next-auth/react";
-import { UserSession } from "@/lib/next-auth/types";
+import { useTypedSession } from "@/lib/next-auth/useTypedSession";
 import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
 import {
   Button,
@@ -46,10 +45,7 @@ export default function PochaMenuItemForm({
 }: PochaMenuItemFormProps) {
   const { menus, setMenus } = usePochaManage();
 
-  const { data: session } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  const { data: session } = useTypedSession();
 
   const initialFileUploadValue: FileUploadValue | null = useMemo(() => {
     if (mode === "update") {

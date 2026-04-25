@@ -14,13 +14,12 @@ import {
   TabsTrigger,
   toast,
 } from "@umichkisa-ds/web";
-import { useSession } from "next-auth/react";
+import { useTypedSession } from "@/lib/next-auth/useTypedSession";
 
 import PochaInfoFields from "./PochaInfoFields";
 import PochaMenuItemForm from "./PochaMenuItemForm";
 import PochaMenuItemList from "./PochaMenuItemList";
 import { usePochaManage } from "../../contexts/PochaManageContext";
-import { UserSession } from "@/lib/next-auth/types";
 import { combineDateAndTime, separateDateAndTime } from "@/utils/formats/date";
 import { createPocha, updatePocha } from "@/apis/pocha/mutations";
 import { PochaInfo, MenuItemRaw } from "@/types/pocha";
@@ -82,10 +81,7 @@ export default function PochaFormDialog({
   existingPochaInfo,
   onSubmitSuccess,
 }: PochaFormDialogProps) {
-  const { data: session } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  const { data: session } = useTypedSession();
 
   const email = session?.user?.email;
   const token = session?.token;
