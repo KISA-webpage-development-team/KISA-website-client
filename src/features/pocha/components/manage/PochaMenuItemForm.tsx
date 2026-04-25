@@ -5,12 +5,10 @@ import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Button,
   FileUpload,
   FileUploadValue,
+  IconButton,
   toast,
 } from "@umichkisa-ds/web";
 import { useForm, Form } from "@umichkisa-ds/form";
@@ -19,6 +17,11 @@ interface PochaMenuItemFormProps {
   closeItemForm: () => void;
   mode?: "create" | "update";
   initialData?: MenuItemRaw;
+  /**
+   * Pre-fill `isImmediatePrep` when entering create mode from a specific
+   * section (즉시 제공 vs 조리 필요). Ignored in update mode.
+   */
+  presetImmediatePrep?: boolean;
 }
 
 interface MenuItemFormValues {
@@ -34,6 +37,7 @@ interface MenuItemFormValues {
 export default function PochaMenuItemForm({
   mode = "create",
   initialData,
+  presetImmediatePrep,
   closeItemForm,
 }: PochaMenuItemFormProps) {
   const { menus, setMenus } = usePochaManage();
@@ -123,7 +127,10 @@ export default function PochaMenuItemForm({
       category: initialData?.category ?? "",
       price: initialData?.price ?? 0,
       stock: initialData?.stock ?? 0,
-      isImmediatePrep: Boolean(initialData?.isImmediatePrep),
+      isImmediatePrep:
+        mode === "update"
+          ? Boolean(initialData?.isImmediatePrep)
+          : Boolean(presetImmediatePrep),
       ageCheckRequired: Boolean(initialData?.ageCheckRequired),
     },
   });
@@ -169,29 +176,25 @@ export default function PochaMenuItemForm({
   };
 
   return (
-    <Dialog
-      open
-      onOpenChange={(open) => {
-        if (!open) handleCloseForm();
-      }}
-    >
-      {/* overflow-y-auto override: DS Dialog has no built-in bounded-scroll
-          variant; form can exceed viewport on small screens. Outer portal
-          already applies `p-4` so max-h-screen leaves adequate breathing room.
-          Collect for DS fix (needs a scrollable Dialog variant). */}
-      <DialogContent
-        size="lg"
-        className="max-h-screen overflow-y-auto"
-      >
-        <DialogTitle>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <IconButton
+          icon="arrow-left"
+          variant="tertiary"
+          size="sm"
+          aria-label="뒤로"
+          onClick={handleCloseForm}
+        />
+        <h3 className="type-body !font-semibold text-foreground">
           {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
-        </DialogTitle>
+        </h3>
+      </div>
 
-        <Form
-          form={methods}
-          onSubmit={onSubmit}
-          className="flex flex-col gap-4 w-full mt-4"
-        >
+      <Form
+        form={methods}
+        onSubmit={onSubmit}
+        className="flex flex-col gap-4 w-full"
+      >
           <div className="flex flex-col gap-4 w-full">
             <Form.Input
               name="nameKor"
@@ -280,15 +283,19 @@ export default function PochaMenuItemForm({
             onRemove={handleRemove}
           />
 
-          <Button
-            type="submit"
-            disabled={!isValid || isSubmitting}
-            className="w-full mt-4"
-          >
-            {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
-          </Button>
+          <div className="flex justify-end gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleCloseForm}
+            >
+              취소
+            </Button>
+            <Button type="submit" disabled={!isValid || isSubmitting}>
+              {mode === "create" ? "추가" : "수정"}
+            </Button>
+          </div>
         </Form>
-      </DialogContent>
-    </Dialog>
+    </div>
   );
 }

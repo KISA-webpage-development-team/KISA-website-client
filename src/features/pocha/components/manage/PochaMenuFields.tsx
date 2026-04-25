@@ -1,38 +1,41 @@
 import React, { useState } from "react";
-import { Alert, Button } from "@umichkisa-ds/web";
 
-import { usePochaManage } from "../../contexts/PochaManageContext";
+import { MenuItemRaw } from "@/types/pocha";
+
 import PochaMenuItemForm from "./PochaMenuItemForm";
 import PochaMenuItemList from "./PochaMenuItemList";
 
+type FormState =
+  | null
+  | { mode: "create"; presetImmediatePrep: boolean }
+  | { mode: "update"; initialData: MenuItemRaw };
+
 export default function PochaMenuFields() {
-  const [isItemFormOpen, setIsItemFormOpen] = useState<boolean>(false);
-  const { menus } = usePochaManage();
+  const [formState, setFormState] = useState<FormState>(null);
 
-  const handleItemAddButtonClick = () => {
-    setIsItemFormOpen(true);
-  };
+  const closeForm = () => setFormState(null);
 
-  const handleItemFormClose = () => {
-    setIsItemFormOpen(false);
-  };
+  if (formState) {
+    return (
+      <PochaMenuItemForm
+        mode={formState.mode}
+        initialData={
+          formState.mode === "update" ? formState.initialData : undefined
+        }
+        presetImmediatePrep={
+          formState.mode === "create" ? formState.presetImmediatePrep : undefined
+        }
+        closeItemForm={closeForm}
+      />
+    );
+  }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-end">
-        <Button variant="secondary" onClick={handleItemAddButtonClick}>
-          추가하기
-        </Button>
-      </div>
-
-      {menus.length > 0 ? (
-        <PochaMenuItemList />
-      ) : (
-        <Alert variant="warning">최소 1개의 메뉴를 추가해주세요.</Alert>
-      )}
-      {isItemFormOpen && (
-        <PochaMenuItemForm closeItemForm={handleItemFormClose} mode="create" />
-      )}
-    </div>
+    <PochaMenuItemList
+      onAdd={(presetImmediatePrep) =>
+        setFormState({ mode: "create", presetImmediatePrep })
+      }
+      onEdit={(menu) => setFormState({ mode: "update", initialData: menu })}
+    />
   );
 }
