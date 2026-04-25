@@ -263,7 +263,7 @@ export default function PochaMenuItemForm({
             onRemove={handleRemove}
           />
 
-          <div className="flex justify-end gap-2">
+          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border bg-surface pt-4">
             <Button
               type="button"
               variant="secondary"
