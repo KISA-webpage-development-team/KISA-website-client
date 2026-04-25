@@ -86,7 +86,21 @@ export default function PochaFormDialog({
   const email = session?.user?.email;
   const token = session?.token;
 
-  const { menus } = usePochaManage();
+  const { menus, setMenus } = usePochaManage();
+
+  // In create mode, reset the shared menus context on mount so the menu tab
+  // starts empty. Without this, if the user just transitioned from "had a
+  // pocha" → "noPochaAvailable" (e.g. updated dates to past) the menus from
+  // the old pocha linger in context and bleed into the new pocha's menu tab.
+  useEffect(() => {
+    if (mode === "create") {
+      setMenus([]);
+    }
+    // mount-only: each dialog open creates a fresh component instance, so the
+    // effect runs exactly once per open. setMenus identity is stable from the
+    // context, so excluding it is intentional.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [activeTab, setActiveTab] = useState<"info" | "menu">("info");
   const [menuFormState, setMenuFormState] = useState<MenuFormState>(null);
