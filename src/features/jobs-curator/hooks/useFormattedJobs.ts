@@ -1,4 +1,9 @@
 import { Job, JobPosting, JobTagBadge } from "../types/jobs";
+import {
+  isConvertibleIntern,
+  isExperientialIntern,
+  isGlobalOnly,
+} from "../utils/jobPredicates";
 
 // hook to format raw job data into favorable format on the posting card
 // return job posting with necessary fields and intern type badges if applicable
@@ -18,20 +23,12 @@ const useFormattedJobs = (
     source: job.source,
   };
 
-  let jobBadges: JobTagBadge[] = [];
+  const jobBadges: JobTagBadge[] = [];
 
-  // if intern, add badge
-  if (!job.isFulltimePosition) {
-    if (job.isFulltimeConvertible) {
-      jobBadges.push("전환형");
-    } else {
-      jobBadges.push("체험형");
-    }
-  }
+  if (isConvertibleIntern(job)) jobBadges.push("전환형");
+  else if (isExperientialIntern(job)) jobBadges.push("체험형");
 
-  if (job.isOnlyForInternationalUniversity) {
-    jobBadges.push("해외대전형");
-  }
+  if (isGlobalOnly(job)) jobBadges.push("해외대전형");
 
   return {
     jobPosting,
