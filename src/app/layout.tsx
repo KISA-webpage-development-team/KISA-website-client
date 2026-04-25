@@ -3,6 +3,7 @@ import { MSWProvider } from "@/mocks/MSWProvider";
 import { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Toaster } from "@umichkisa-ds/web";
 
 export const metadata = {
   title: {
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <MSWProvider>
           <div className="flex-1 flex flex-col w-full">{children}</div>
         </MSWProvider>
+        <Toaster />
         <Analytics />
         <SpeedInsights />
       </body>

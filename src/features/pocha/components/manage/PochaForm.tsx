@@ -1,29 +1,68 @@
-import React from "react";
-import { useState, useMemo } from "react";
+"use client";
+import React, { useEffect } from "react";
+import { mutate } from "swr";
+import { useForm, Form } from "@umichkisa-ds/form";
+import { Alert, Button, Divider, toast } from "@umichkisa-ds/web";
 import PochaInfoFields from "./PochaInfoFields";
 import PochaMenuFields from "./PochaMenuFields";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { HorizontalDivider } from "@/components/ui/divider";
 import { usePochaManage } from "../../contexts/PochaManageContext";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import { combineDateAndTime } from "@/utils/formats/date";
+import { combineDateAndTime, separateDateAndTime } from "@/utils/formats/date";
 import { createPocha, updatePocha } from "@/apis/pocha/mutations";
 import { PochaInfo } from "@/types/pocha";
-import { separateDateAndTime } from "@/utils/formats/date";
-import CustomButton from "@/components/ui/button/CustomButton";
+
 interface PochaFormProps {
   mode?: "create" | "update";
   existingPochaInfo?: PochaInfo;
+  /**
+   * Called after a successful create/update. The page wires this to
+   * `usePocha`'s `refetch` so the active-pocha summary re-renders without a
+   * full reload.
+   */
+  onSubmitSuccess?: () => void;
 }
+
+interface PochaFormValues {
+  title: string;
+  description: string;
+  // DS Form.DatePicker stores Date | undefined in form state.
+  // We convert to/from "YYYY-MM-DD" strings only at the API boundary.
+  startDate: Date | undefined;
+  startTime: string;
+  endDate: Date | undefined;
+  endTime: string;
+}
+
+function formatDateToYmd(date: Date | undefined): string {
+  if (!date) return "";
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function parseYmdToDate(ymd: string | null | undefined): Date | undefined {
+  if (!ymd) return undefined;
+  const [y, m, d] = ymd.split("-").map(Number);
+  if (!y || !m || !d) return undefined;
+  return new Date(y, m - 1, d);
+}
+
 export default function PochaForm({
   mode = "create",
   existingPochaInfo,
+  onSubmitSuccess,
 }: PochaFormProps) {
-  const { data: session, status: sessionStatus } = useSession() as {
+  const { data: session } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
+
+  const email = session?.user?.email;
+  const token = session?.token;
+
+  const { menus } = usePochaManage();
 
   const { date: existingStartDate, time: existingStartTime } =
     separateDateAndTime(existingPochaInfo?.startDate);
@@ -31,153 +70,152 @@ export default function PochaForm({
     existingPochaInfo?.endDate
   );
 
-  const email = session?.user?.email;
-  const token = session?.token;
+  const methods = useForm<PochaFormValues>({
+    mode: "onTouched",
+    defaultValues: {
+      title: existingPochaInfo?.title ?? "",
+      description: existingPochaInfo?.description ?? "",
+      startDate: parseYmdToDate(existingStartDate),
+      startTime: existingStartTime ?? "",
+      endDate: parseYmdToDate(existingEndDate),
+      endTime: existingEndTime ?? "",
+    },
+  });
 
-  const { menus } = usePochaManage();
+  const {
+    formState: { isValid, isSubmitting, errors },
+    reset,
+    watch,
+    setError,
+    clearErrors,
+  } = methods;
 
-  const [title, setTitle] = useState<string>(existingPochaInfo?.title || null);
-  const [description, setDescription] = useState<string>(
-    existingPochaInfo?.description || null
-  );
-  const [startDate, setStartDate] = useState<string>(existingStartDate || null);
-  const [startTime, setStartTime] = useState<string>(existingStartTime || null);
-  const [endDate, setEndDate] = useState<string>(existingEndDate || null);
-  const [endTime, setEndTime] = useState<string>(existingEndTime || null);
+  // Cross-field validation: end > start. We watch the four datetime fields and
+  // manage a synthetic error on `endDate` (which is also surfaced inline below
+  // the submit button via formState.errors.endDate). PochaInfoFields registers
+  // these names via Form.* compounds (lane 2.10), so we don't re-register here
+  // — we just observe and decorate.
+  const watchedStartDate = watch("startDate");
+  const watchedStartTime = watch("startTime");
+  const watchedEndDate = watch("endDate");
+  const watchedEndTime = watch("endTime");
 
-  const pochaInfoFields = useMemo(
-    () => [
-      {
-        value: title,
-        setValue: setTitle,
-        label: "포차 이름",
-        type: "text",
-        isError: title?.length === 0,
-        errorMsg: "포차 제목을 입력해주세요.",
-        errorState: "error",
-      },
-      {
-        value: description,
-        setValue: setDescription,
-        label: "포차 설명",
-        type: "text",
-        isError: description?.length === 0,
-        errorMsg: "포차 설명을 입력해주세요.",
-        errorState: "error",
-      },
-      {
-        value: startDate,
-        setValue: setStartDate,
-        label: "시작 날짜",
-        type: "date",
-        isError: startDate !== null && startDate?.length !== 10,
-        errorMsg: "유효한 시작 날짜를 입력해주세요.",
-        errorState: "error",
-      },
-      {
-        value: startTime,
-        setValue: setStartTime,
-        label: "시작 시간",
-        type: "time",
-        isError: startTime !== null && startTime?.length !== 5,
-        errorMsg: "유효한 시작 시간을 입력해주세요.",
-        errorState: "error",
-      },
-      {
-        value: endDate,
-        setValue: setEndDate,
-        label: "종료 날짜",
-        type: "date",
-        isError: endDate !== null && endDate?.length !== 10,
-        errorMsg: "유효한 종료 날짜를 입력해주세요.",
-        errorState: "error",
-      },
-      {
-        value: endTime,
-        setValue: setEndTime,
-        label: "종료 시간",
-        type: "time",
-        isError: endTime !== null && endTime?.length !== 5,
-        errorMsg: "유효한 종료 시간을 입력해주세요.",
-        errorState: "error",
-      },
-    ],
-    [title, description, startDate, startTime, endDate, endTime]
-  );
-
-  // form validation
-  const isFormValid = useMemo(() => {
-    for (const field of pochaInfoFields) {
-      if (field.value === "" || field.isError) {
-        return false;
+  useEffect(() => {
+    if (
+      !watchedStartDate ||
+      !watchedStartTime ||
+      !watchedEndDate ||
+      !watchedEndTime
+    ) {
+      // Don't surface cross-field error until all four fields have values;
+      // field-level required errors handle the empty case.
+      if (errors.endDate?.type === "crossField") {
+        clearErrors("endDate");
       }
-    }
-
-    // if menus are empty, return false
-    if (menus.length === 0) {
-      return false;
-    }
-
-    // if menus are not empty, return true
-    return true;
-  }, [pochaInfoFields, menus]);
-
-  const handleSubmit = async () => {
-    if (!isFormValid) {
       return;
     }
 
-    const newStartDateTime = combineDateAndTime(startDate, startTime);
-    const newEndDateTime = combineDateAndTime(endDate, endTime);
+    const start = combineDateAndTime(
+      formatDateToYmd(watchedStartDate),
+      watchedStartTime
+    );
+    const end = combineDateAndTime(
+      formatDateToYmd(watchedEndDate),
+      watchedEndTime
+    );
+
+    if (start && end && new Date(end) <= new Date(start)) {
+      setError("endDate", {
+        type: "crossField",
+        message: "종료 시간은 시작 시간보다 늦어야 합니다.",
+      });
+    } else if (errors.endDate?.type === "crossField") {
+      clearErrors("endDate");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedStartDate, watchedStartTime, watchedEndDate, watchedEndTime]);
+
+  const onSubmit = async (values: PochaFormValues) => {
+    const newStartDateTime = combineDateAndTime(
+      formatDateToYmd(values.startDate),
+      values.startTime
+    );
+    const newEndDateTime = combineDateAndTime(
+      formatDateToYmd(values.endDate),
+      values.endTime
+    );
 
     const input = {
-      email: email,
+      email,
       startDate: newStartDateTime,
       endDate: newEndDateTime,
-      title: title,
-      description: description,
-      menus: menus,
+      title: values.title,
+      description: values.description,
+      menus,
     };
 
-    //3. API call
     try {
       if (mode === "create") {
         await createPocha(input, token);
-        window.alert(`${title} 포차 생성이 완료되었습니다.`);
+        toast.success(`${values.title} 포차 생성이 완료되었습니다.`);
       } else {
         await updatePocha(existingPochaInfo.pochaID, input, token);
-        window.alert(`${title} 포차 수정이 완료되었습니다.`);
+        toast.success(`${values.title} 포차 수정이 완료되었습니다.`);
       }
-      window.location.reload();
+
+      // Refresh today's pocha summary via the page-supplied callback
+      // (usePocha is not SWR — it exposes a refetch instead).
+      onSubmitSuccess?.();
+      // Refresh any previous-pocha lists (date-keyed SWR consumers).
+      await mutate(
+        (key) =>
+          typeof key === "string" && key.startsWith("/pocha/previous/")
+      );
+      // For update mode, refresh that pocha's menu cache (SWR).
+      if (mode === "update" && existingPochaInfo?.pochaID) {
+        await mutate([`/pocha/menu/${existingPochaInfo.pochaID}/`, token]);
+      }
+
+      // Reset form on create so the next pocha starts clean
+      if (mode === "create") {
+        reset();
+      }
     } catch (error) {
       console.error("Error creating pocha:", error);
-      window.alert("포차 생성/수정에 실패했습니다.");
+      const message =
+        error instanceof Error
+          ? error.message
+          : "포차 생성/수정에 실패했습니다.";
+      toast.error(message);
     }
-
-    //3-1. success -> reloading
-    //3-2. fail -> show error message
   };
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-      className="flex flex-col gap-6"
-    >
-      <PochaInfoFields fields={pochaInfoFields} />
 
-      <HorizontalDivider />
+  const crossFieldError =
+    errors.endDate?.message ?? errors.endTime?.message;
+
+  const submitDisabled = menus.length === 0 || !isValid || isSubmitting;
+
+  return (
+    <Form form={methods} onSubmit={onSubmit} className="flex flex-col gap-6">
+      <PochaInfoFields />
+
+      <Divider />
 
       <PochaMenuFields />
 
-      <HorizontalDivider />
-      <CustomButton
-        text={mode === "create" ? "포차 생성하기" : "포차 수정하기"}
-        disabled={!isFormValid}
-        className={`${sejongHospitalBold.className} w-full`}
-        forSubmit={true}
-      />
-    </form>
+      <Divider />
+
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={submitDisabled}
+      >
+        {mode === "create" ? "포차 생성하기" : "포차 수정하기"}
+      </Button>
+
+      {crossFieldError && (
+        <Alert variant="error">{crossFieldError}</Alert>
+      )}
+    </Form>
   );
 }
