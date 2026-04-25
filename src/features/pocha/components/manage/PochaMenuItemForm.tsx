@@ -4,7 +4,13 @@ import { MenuItemRaw } from "@/types/pocha";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
-import { Button, FileUpload, FileUploadValue, toast } from "@umichkisa-ds/web";
+import {
+  Button,
+  DialogFooter,
+  FileUpload,
+  FileUploadValue,
+  toast,
+} from "@umichkisa-ds/web";
 import { useForm, Form } from "@umichkisa-ds/form";
 
 interface PochaMenuItemFormProps {
@@ -173,8 +179,9 @@ export default function PochaMenuItemForm({
     <Form
       form={methods}
       onSubmit={onSubmit}
-      className="flex flex-col gap-4 w-full"
+      className="flex flex-col gap-4 w-full overflow-hidden"
     >
+      <div className="flex max-h-[60vh] flex-col gap-4 overflow-y-auto">
           <div className="flex flex-col gap-4 w-full">
             <Form.Input
               name="nameKor"
@@ -262,19 +269,20 @@ export default function PochaMenuItemForm({
             onUpload={handleUpload}
             onRemove={handleRemove}
           />
+      </div>
 
-          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border bg-surface pt-4">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleCloseForm}
-            >
-              취소
-            </Button>
-            <Button type="submit" disabled={!isValid || isSubmitting}>
-              {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
-            </Button>
-          </div>
-        </Form>
+      <DialogFooter>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleCloseForm}
+        >
+          취소
+        </Button>
+        <Button type="submit" disabled={!isValid || isSubmitting}>
+          {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
+        </Button>
+      </DialogFooter>
+    </Form>
   );
 }

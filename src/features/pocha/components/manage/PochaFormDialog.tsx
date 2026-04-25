@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { mutate } from "swr";
 import { useForm, Form } from "@umichkisa-ds/form";
 import {
@@ -19,12 +19,18 @@ import {
 import { useSession } from "next-auth/react";
 
 import PochaInfoFields from "./PochaInfoFields";
-import PochaMenuFields, { MenuFormViewState } from "./PochaMenuFields";
+import PochaMenuItemForm from "./PochaMenuItemForm";
+import PochaMenuItemList from "./PochaMenuItemList";
 import { usePochaManage } from "../../contexts/PochaManageContext";
 import { UserSession } from "@/lib/next-auth/types";
 import { combineDateAndTime, separateDateAndTime } from "@/utils/formats/date";
 import { createPocha, updatePocha } from "@/apis/pocha/mutations";
-import { PochaInfo } from "@/types/pocha";
+import { PochaInfo, MenuItemRaw } from "@/types/pocha";
+
+type MenuFormState =
+  | null
+  | { mode: "create"; presetImmediatePrep: boolean }
+  | { mode: "update"; initialData: MenuItemRaw };
 
 interface PochaFormDialogProps {
   open: boolean;
@@ -78,17 +84,11 @@ export default function PochaFormDialog({
   const { menus } = usePochaManage();
 
   const [activeTab, setActiveTab] = useState<"info" | "menu">("info");
-  const [menuFormView, setMenuFormView] = useState<MenuFormViewState>({
-    active: false,
-  });
+  const [menuFormState, setMenuFormState] = useState<MenuFormState>(null);
 
-  const handleMenuFormStateChange = useCallback((state: MenuFormViewState) => {
-    setMenuFormView(state);
-  }, []);
-
-  const isMenuForm = menuFormView.active;
+  const isMenuForm = !!menuFormState;
   const dialogTitle = isMenuForm
-    ? menuFormView.mode === "create"
+    ? menuFormState.mode === "create"
       ? "메뉴 추가하기"
       : "메뉴 수정하기"
     : mode === "create"
@@ -232,45 +232,66 @@ export default function PochaFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="lg">
         <DialogTitle>{dialogTitle}</DialogTitle>
-        <Form
-          form={methods}
-          onSubmit={(values) => {
-            if (errors.endDate || errors.endTime) {
-              setActiveTab("info");
-              return;
+
+        {isMenuForm ? (
+          <PochaMenuItemForm
+            mode={menuFormState.mode}
+            initialData={
+              menuFormState.mode === "update"
+                ? menuFormState.initialData
+                : undefined
             }
-            if (menus.length === 0) {
-              setActiveTab("menu");
-              return;
+            presetImmediatePrep={
+              menuFormState.mode === "create"
+                ? menuFormState.presetImmediatePrep
+                : undefined
             }
-            return onSubmit(values);
-          }}
-          className="flex flex-col gap-4"
-        >
-          <Tabs
-            value={activeTab}
-            onValueChange={(v) => setActiveTab(v as "info" | "menu")}
+            closeItemForm={() => setMenuFormState(null)}
+          />
+        ) : (
+          <Form
+            form={methods}
+            onSubmit={(values) => {
+              if (errors.endDate || errors.endTime) {
+                setActiveTab("info");
+                return;
+              }
+              if (menus.length === 0) {
+                setActiveTab("menu");
+                return;
+              }
+              return onSubmit(values);
+            }}
+            className="flex flex-col gap-4"
           >
-            {!isMenuForm && (
+            <Tabs
+              value={activeTab}
+              onValueChange={(v) => setActiveTab(v as "info" | "menu")}
+            >
               <TabsList>
                 <TabsTrigger value="info">기본 정보</TabsTrigger>
                 <TabsTrigger value="menu">메뉴 ({menus.length})</TabsTrigger>
               </TabsList>
-            )}
-            <TabsContent
-              value="info"
-              className="max-h-[60vh] overflow-y-auto"
-            >
-              <PochaInfoFields />
-            </TabsContent>
-            <TabsContent
-              value="menu"
-              className="max-h-[60vh] overflow-y-auto"
-            >
-              <PochaMenuFields onFormStateChange={handleMenuFormStateChange} />
-            </TabsContent>
-          </Tabs>
-          {!isMenuForm && (
+              <TabsContent
+                value="info"
+                className="max-h-[60vh] overflow-y-auto"
+              >
+                <PochaInfoFields />
+              </TabsContent>
+              <TabsContent
+                value="menu"
+                className="max-h-[60vh] overflow-y-auto"
+              >
+                <PochaMenuItemList
+                  onAdd={(presetImmediatePrep) =>
+                    setMenuFormState({ mode: "create", presetImmediatePrep })
+                  }
+                  onEdit={(menu) =>
+                    setMenuFormState({ mode: "update", initialData: menu })
+                  }
+                />
+              </TabsContent>
+            </Tabs>
             <DialogFooter>
               {crossFieldError && (
                 <Alert variant="error" className="w-full">
@@ -288,8 +309,8 @@ export default function PochaFormDialog({
                 {mode === "create" ? "포차 생성하기" : "포차 수정하기"}
               </Button>
             </DialogFooter>
-          )}
-        </Form>
+          </Form>
+        )}
       </DialogContent>
     </Dialog>
   );
