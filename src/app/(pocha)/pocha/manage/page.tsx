@@ -104,7 +104,7 @@ function PochaManagePageContent() {
         <Card>
           <CardContent>
             <div className="flex flex-col items-center gap-4 py-8 text-center">
-              <h3 className="type-h3 !font-semibold text-foreground">
+              <h3 className="type-h3 font-semibold text-foreground">
                 진행 중인 포차가 없습니다
               </h3>
               <p className="type-body text-muted-foreground">

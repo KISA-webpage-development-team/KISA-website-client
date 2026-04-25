@@ -41,7 +41,7 @@ export default function PochaSummary({
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-4">
-              <CardTitle as="h3" className="type-h3 !font-semibold">
+              <CardTitle as="h3" className="type-h3 font-semibold">
                 {pochaInfo.title}
               </CardTitle>
               <Badge variant={statusVariant}>{statusLabel}</Badge>
@@ -64,7 +64,7 @@ export default function PochaSummary({
                 <Icon name="calendar" size="sm" />
                 <span className="type-body-sm">시작</span>
               </div>
-              <p className="type-h4 !font-semibold text-foreground">
+              <p className="type-h4 font-semibold text-foreground">
                 {formatDateInTz(pochaInfo.startDate)}
               </p>
               <p className="type-body-sm text-muted-foreground">
@@ -77,7 +77,7 @@ export default function PochaSummary({
                 <Icon name="calendar" size="sm" />
                 <span className="type-body-sm">종료</span>
               </div>
-              <p className="type-h4 !font-semibold text-foreground">
+              <p className="type-h4 font-semibold text-foreground">
                 {formatDateInTz(pochaInfo.endDate)}
               </p>
               <p className="type-body-sm text-muted-foreground">

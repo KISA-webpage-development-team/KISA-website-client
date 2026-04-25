@@ -109,9 +109,9 @@ function MenuSection({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h3 className="type-body !font-semibold text-foreground">
+        <h3 className="type-body font-semibold text-foreground">
           {label}
-          <span className="type-body !font-normal text-muted-foreground">
+          <span className="type-body font-normal text-muted-foreground">
             {" · "}
             {items.length}
           </span>
@@ -154,9 +154,9 @@ function MenuRow({
           <MenuThumbnail menu={menu} />
           <div className="flex w-full flex-col gap-2">
             <div className="flex items-center justify-between">
-              <h4 className="type-body !font-semibold text-foreground">
+              <h4 className="type-body font-semibold text-foreground">
                 {menu.nameKor}
-                <span className="type-body !font-normal text-muted-foreground">
+                <span className="type-body font-normal text-muted-foreground">
                   {" "}
                   ({menu.nameEng})
                 </span>

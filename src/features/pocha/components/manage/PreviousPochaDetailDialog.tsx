@@ -45,7 +45,7 @@ export default function PreviousPochaDetailDialog({
       <DialogContent size="md">
         {pocha && (
           <>
-            <DialogTitle className="!font-semibold">
+            <DialogTitle className="font-semibold">
               {pocha.title}
             </DialogTitle>
             {pocha.description && (
@@ -85,7 +85,7 @@ function DateBlock({
         <Icon name="calendar" size="sm" />
         <span className="type-body-sm">{label}</span>
       </div>
-      <p className="type-h4 !font-semibold text-foreground">
+      <p className="type-h4 font-semibold text-foreground">
         {formatDateInTz(date)}
       </p>
       <p className="type-body-sm text-muted-foreground">

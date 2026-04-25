@@ -50,7 +50,7 @@ function PreviousPochaList({
   return (
     <section className="flex flex-col w-full gap-4">
       <div className="flex items-center gap-2">
-        <h2 className="type-h2 !font-semibold text-foreground">
+        <h2 className="type-h2 font-semibold text-foreground">
           이전 포차 목록
         </h2>
         {!isLoading && !error && previousPochaList && (
