@@ -188,6 +188,18 @@ export default function PochaFormDialog({
   const submitDisabled =
     menus.length === 0 || !isValid || isSubmitting || hasFieldErrors;
 
+  const handleFormSubmit = (values: PochaFormValues) => {
+    if (errors.endDate || errors.endTime) {
+      setActiveTab("info");
+      return;
+    }
+    if (menus.length === 0) {
+      setActiveTab("menu");
+      return;
+    }
+    return onSubmit(values);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="lg">
@@ -211,17 +223,7 @@ export default function PochaFormDialog({
         ) : (
           <Form
             form={methods}
-            onSubmit={(values) => {
-              if (errors.endDate || errors.endTime) {
-                setActiveTab("info");
-                return;
-              }
-              if (menus.length === 0) {
-                setActiveTab("menu");
-                return;
-              }
-              return onSubmit(values);
-            }}
+            onSubmit={handleFormSubmit}
             className="flex flex-col gap-4"
           >
             <Tabs
