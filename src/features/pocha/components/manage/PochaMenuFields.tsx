@@ -19,10 +19,7 @@ export default function PochaMenuFields() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <p className="type-body-sm text-muted-foreground">
-          메뉴 {menus.length}개
-        </p>
+      <div className="flex items-center justify-end">
         <Button variant="secondary" onClick={handleItemAddButtonClick}>
           추가하기
         </Button>

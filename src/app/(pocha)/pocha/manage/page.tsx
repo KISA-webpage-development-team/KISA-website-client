@@ -110,13 +110,15 @@ function PochaManagePageContent() {
           />
         </div>
       )}
-      <PochaFormDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        mode={dialogMode}
-        existingPochaInfo={dialogMode === "update" ? pochaInfo : undefined}
-        onSubmitSuccess={refetchPocha}
-      />
+      {dialogOpen && (
+        <PochaFormDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          mode={dialogMode}
+          existingPochaInfo={dialogMode === "update" ? pochaInfo : undefined}
+          onSubmitSuccess={refetchPocha}
+        />
+      )}
       <div className="mt-10">
         <PreviousPochaList />
       </div>
