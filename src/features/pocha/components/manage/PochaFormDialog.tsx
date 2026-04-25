@@ -231,23 +231,26 @@ export default function PochaFormDialog({
             }
             return onSubmit(values);
           }}
-          className="flex flex-1 flex-col gap-4 overflow-hidden"
+          className="flex flex-col gap-4"
         >
           <Tabs
             value={activeTab}
             onValueChange={(v) => setActiveTab(v as "info" | "menu")}
-            variant="underline"
-            size="md"
-            className="flex flex-1 flex-col overflow-hidden"
           >
             <TabsList>
               <TabsTrigger value="info">기본 정보</TabsTrigger>
               <TabsTrigger value="menu">메뉴 ({menus.length})</TabsTrigger>
             </TabsList>
-            <TabsContent value="info" className="flex-1 overflow-y-auto">
+            <TabsContent
+              value="info"
+              className="max-h-[60vh] overflow-y-auto"
+            >
               <PochaInfoFields />
             </TabsContent>
-            <TabsContent value="menu" className="flex-1 overflow-y-auto">
+            <TabsContent
+              value="menu"
+              className="max-h-[60vh] overflow-y-auto"
+            >
               <PochaMenuFields />
             </TabsContent>
           </Tabs>
