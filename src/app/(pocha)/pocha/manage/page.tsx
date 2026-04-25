@@ -2,11 +2,17 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { mutate } from "swr";
-import { Button, Card, CardContent } from "@umichkisa-ds/web";
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  LoadingSpinner,
+  StatusView,
+} from "@umichkisa-ds/web";
 
 // ui components
 import PochaFormDialog from "@/features/pocha/components/manage/PochaFormDialog";
-import { LoadingSpinner, NotAuthorized } from "@/components/ui/feedback";
 import PochaSummary from "@/features/pocha/components/manage/PochaSummary";
 import { PochaManageProvider } from "@/features/pocha/contexts/PochaManageContext";
 
@@ -22,12 +28,12 @@ import PreviousPochaList from "@/features/pocha/components/manage/PreviousPochaL
 
 export default function ManagePage() {
   return (
-    <section className="px-2 max-w-screen-md mx-auto mb-10">
+    <Container as="section" size="md" className="my-10">
       <PochaManagePageHeader />
       <PochaManageProvider>
         <PochaManagePageContent />
       </PochaManageProvider>
-    </section>
+    </Container>
   );
 }
 
@@ -89,7 +95,7 @@ function PochaManagePageContent() {
 
   // only admin can view this page
   if (!isAdmin) {
-    return <NotAuthorized />;
+    return <StatusView fullScreen variant="not-authorized" />;
   }
 
   return (
