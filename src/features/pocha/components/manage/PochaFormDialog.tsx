@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { mutate } from "swr";
 import { useForm, Form } from "@umichkisa-ds/form";
 import {
@@ -10,7 +10,10 @@ import {
   DialogContent,
   DialogFooter,
   DialogTitle,
-  Divider,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   toast,
 } from "@umichkisa-ds/web";
 import { useSession } from "next-auth/react";
@@ -73,6 +76,8 @@ export default function PochaFormDialog({
   const token = session?.token;
 
   const { menus } = usePochaManage();
+
+  const [activeTab, setActiveTab] = useState<"info" | "menu">("info");
 
   const { date: existingStartDate, time: existingStartTime } =
     separateDateAndTime(existingPochaInfo?.startDate);
@@ -215,14 +220,37 @@ export default function PochaFormDialog({
         </DialogTitle>
         <Form
           form={methods}
-          onSubmit={onSubmit}
+          onSubmit={(values) => {
+            if (errors.endDate || errors.endTime) {
+              setActiveTab("info");
+              return;
+            }
+            if (menus.length === 0) {
+              setActiveTab("menu");
+              return;
+            }
+            return onSubmit(values);
+          }}
           className="flex flex-1 flex-col gap-4 overflow-hidden"
         >
-          <div className="flex flex-1 flex-col gap-6 overflow-y-auto">
-            <PochaInfoFields />
-            <Divider />
-            <PochaMenuFields />
-          </div>
+          <Tabs
+            value={activeTab}
+            onValueChange={(v) => setActiveTab(v as "info" | "menu")}
+            variant="underline"
+            size="md"
+            className="flex flex-1 flex-col overflow-hidden"
+          >
+            <TabsList>
+              <TabsTrigger value="info">기본 정보</TabsTrigger>
+              <TabsTrigger value="menu">메뉴 ({menus.length})</TabsTrigger>
+            </TabsList>
+            <TabsContent value="info" className="flex-1 overflow-y-auto">
+              <PochaInfoFields />
+            </TabsContent>
+            <TabsContent value="menu" className="flex-1 overflow-y-auto">
+              <PochaMenuFields />
+            </TabsContent>
+          </Tabs>
           <DialogFooter>
             {crossFieldError && (
               <Alert variant="error" className="w-full">
