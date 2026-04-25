@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Form, useFormContext } from "@umichkisa-ds/form";
 
 interface PochaInfoFieldsProps {}
@@ -9,21 +9,37 @@ function startOfDay(d: Date): number {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
 }
 
-// All rule objects hoisted to module scope so every field has a stable
-// `rules` reference across renders. DS `Form.*` fields wire `rules` into
-// `useController({ rules })`; if the prop changes identity each render,
-// useController re-registers the field and surfaces validation errors
-// before `mode: "onTouched"` would otherwise gate them. Start fields
-// happened to "work" only because `{ required: "<string>" }` is shallowly
-// equal across renders; end fields had inline `validate` functions whose
-// refs differed each render, breaking that equality. Hoisting fixes the
-// asymmetry — every field is now stable.
-
 const titleRules = { required: "포차 제목을 입력해주세요." };
 const descriptionRules = { required: "포차 설명을 입력해주세요." };
 
-const startDateRules = { required: "유효한 시작 날짜를 입력해주세요." };
-const startTimeRules = { required: "유효한 시작 시간을 입력해주세요." };
+// Symmetric cross-field rules: both start and end check the same ordering
+// invariant. Hoisted to module scope so each `rules` object has a stable
+// reference across renders (prevents useController re-registration loops).
+
+const startDateRules = {
+  required: "유효한 시작 날짜를 입력해주세요.",
+  validate: (value: Date | undefined, values: Record<string, unknown>) => {
+    const end = values.endDate as Date | undefined;
+    if (!value || !end) return true;
+    return startOfDay(value) > startOfDay(end)
+      ? "시작 날짜는 종료 날짜보다 늦을 수 없습니다."
+      : true;
+  },
+};
+
+const startTimeRules = {
+  required: "유효한 시작 시간을 입력해주세요.",
+  validate: (value: string, values: Record<string, unknown>) => {
+    const startDate = values.startDate as Date | undefined;
+    const endDate = values.endDate as Date | undefined;
+    const endTime = values.endTime as string | undefined;
+    if (!value || !endTime || !startDate || !endDate) return true;
+    if (startOfDay(endDate) > startOfDay(startDate)) return true;
+    return value >= endTime
+      ? "시작 시간은 종료 시간보다 빠르야 합니다."
+      : true;
+  },
+};
 
 const endDateRules = {
   required: "유효한 종료 날짜를 입력해주세요.",
@@ -43,8 +59,6 @@ const endTimeRules = {
     const endDate = values.endDate as Date | undefined;
     const startTime = values.startTime as string | undefined;
     if (!value || !startTime || !startDate || !endDate) return true;
-    // Only enforce time ordering when start and end fall on the same day;
-    // when end is on a later day, any time is fine.
     if (startOfDay(endDate) > startOfDay(startDate)) return true;
     return value <= startTime
       ? "종료 시간은 시작 시간보다 늦어야 합니다."
@@ -53,20 +67,36 @@ const endTimeRules = {
 };
 
 export default function PochaInfoFields(_props: PochaInfoFieldsProps) {
-  const { watch, trigger } = useFormContext();
+  const { watch, trigger, clearErrors } = useFormContext();
   const watchedStartDate = watch("startDate");
   const watchedStartTime = watch("startTime");
+  const watchedEndDate = watch("endDate");
+  const watchedEndTime = watch("endTime");
 
-  // Re-validate end fields when start fields change (cross-field ordering).
-  // Skip the mount run so untouched end fields don't flash "required".
-  const didMount = useRef(false);
+  // Skip trigger as long as ALL date/time fields are still empty (initial
+  // state of create-mode dialog). Strict-mode-safe: doesn't rely on a
+  // mount-only ref that gets bypassed on the double-invoke. Once the user
+  // populates any field, trigger fires symmetrically across all four for
+  // the cross-field ordering check.
   useEffect(() => {
-    if (!didMount.current) {
-      didMount.current = true;
+    const allEmpty =
+      !watchedStartDate &&
+      !watchedStartTime &&
+      !watchedEndDate &&
+      !watchedEndTime;
+    if (allEmpty) {
+      clearErrors(["startDate", "startTime", "endDate", "endTime"]);
       return;
     }
-    trigger(["endDate", "endTime"]);
-  }, [watchedStartDate, watchedStartTime, trigger]);
+    trigger(["startDate", "startTime", "endDate", "endTime"]);
+  }, [
+    watchedStartDate,
+    watchedStartTime,
+    watchedEndDate,
+    watchedEndTime,
+    trigger,
+    clearErrors,
+  ]);
 
   return (
     <div className="flex w-full flex-col gap-6">
