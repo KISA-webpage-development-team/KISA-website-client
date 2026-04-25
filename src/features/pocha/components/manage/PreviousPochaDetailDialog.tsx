@@ -52,14 +52,14 @@ export default function PreviousPochaDetailDialog({
               <DialogDescription>{pocha.description}</DialogDescription>
             )}
 
-            <Divider className="my-4" />
+            <Divider />
 
             <div className="grid grid-cols-2 gap-4">
               <DateBlock label="시작" date={pocha.startDate} />
               <DateBlock label="종료" date={pocha.endDate} />
             </div>
 
-            <Divider className="my-4" />
+            <Divider />
 
             <div className="flex flex-col gap-3">
               <p className="type-body-sm text-muted-foreground">메뉴</p>
