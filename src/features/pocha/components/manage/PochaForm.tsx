@@ -15,6 +15,12 @@ import { PochaInfo } from "@/types/pocha";
 interface PochaFormProps {
   mode?: "create" | "update";
   existingPochaInfo?: PochaInfo;
+  /**
+   * Called after a successful create/update. The page wires this to
+   * `usePocha`'s `refetch` so the active-pocha summary re-renders without a
+   * full reload.
+   */
+  onSubmitSuccess?: () => void;
 }
 
 interface PochaFormValues {
@@ -29,6 +35,7 @@ interface PochaFormValues {
 export default function PochaForm({
   mode = "create",
   existingPochaInfo,
+  onSubmitSuccess,
 }: PochaFormProps) {
   const { data: session } = useSession() as {
     data: UserSession | undefined;
@@ -130,14 +137,15 @@ export default function PochaForm({
         toast.success(`${values.title} 포차 수정이 완료되었습니다.`);
       }
 
-      // Refresh today's pocha summary
-      await mutate("/pocha/status-info/today");
-      // Refresh any previous-pocha lists (date-keyed)
+      // Refresh today's pocha summary via the page-supplied callback
+      // (usePocha is not SWR — it exposes a refetch instead).
+      onSubmitSuccess?.();
+      // Refresh any previous-pocha lists (date-keyed SWR consumers).
       await mutate(
         (key) =>
           typeof key === "string" && key.startsWith("/pocha/previous/")
       );
-      // For update mode, refresh that pocha's menu cache
+      // For update mode, refresh that pocha's menu cache (SWR).
       if (mode === "update" && existingPochaInfo?.pochaID) {
         await mutate([`/pocha/menu/${existingPochaInfo.pochaID}/`, token]);
       }

@@ -36,7 +36,12 @@ function PochaManagePageContent() {
     useState<boolean>(false);
 
   const { isAdmin, token, status: adminStatus } = useAdmin();
-  const { pochaInfo, status: pochaStatus, error: pochaFetchError } = usePocha();
+  const {
+    pochaInfo,
+    status: pochaStatus,
+    error: pochaFetchError,
+    refetch: refetchPocha,
+  } = usePocha();
 
   const { menuList, status: menuStatus } = useMenu(pochaInfo?.pochaID, token);
 
@@ -78,7 +83,7 @@ function PochaManagePageContent() {
             text="새로운 포차 추가하기"
             onClick={() => setIsNewPochaFormOpen(true)}
           />
-          {isNewPochaFormOpen && <PochaForm />}
+          {isNewPochaFormOpen && <PochaForm onSubmitSuccess={refetchPocha} />}
         </div>
       )}
       {!noPochaAvailable && (
@@ -91,7 +96,11 @@ function PochaManagePageContent() {
           />
 
           {isEditPochaFormOpen && (
-            <PochaForm mode="update" existingPochaInfo={pochaInfo} />
+            <PochaForm
+              mode="update"
+              existingPochaInfo={pochaInfo}
+              onSubmitSuccess={refetchPocha}
+            />
           )}
         </div>
       )}
