@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Badge,
   Button,
   Card,
   CardContent,
@@ -62,8 +63,9 @@ export default function PochaMenuItemList() {
               </figure> */}
               <div className="flex w-full flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="type-h3 !font-semibold">
-                    {menu.nameKor} ({menu.nameEng})
+                  <h3 className="type-body !font-semibold text-foreground">
+                    {menu.nameKor}
+                    <span className="type-body !font-normal text-muted-foreground"> ({menu.nameEng})</span>
                   </h3>
                   <div className="flex items-center gap-1">
                     <IconButton
@@ -83,39 +85,18 @@ export default function PochaMenuItemList() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2 type-body">
-                  <p>
-                    <span>카테고리: </span>
-                    <span className="text-muted-foreground">
-                      {menu.category}
-                    </span>
-                  </p>
-                  <p>
-                    <span>가격: </span>
-                    <span className="text-muted-foreground">
-                      ${menu.price?.toLocaleString()}
-                    </span>
-                  </p>
-                  <p>
-                    <span>재고: </span>
-                    <span className="text-muted-foreground">
-                      {menu.stock}개
-                    </span>
-                  </p>
-                  <div className="flex gap-4">
-                    <p>
-                      <span>즉시 준비: </span>
-                      <span className="text-muted-foreground">
-                        {menu.isImmediatePrep ? "예" : "아니오"}
-                      </span>
-                    </p>
-                    <p>
-                      <span>연령 확인: </span>
-                      <span className="text-muted-foreground">
-                        {menu.ageCheckRequired ? "필요" : "불필요"}
-                      </span>
-                    </p>
-                  </div>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 type-body-sm text-muted-foreground">
+                  <span>{menu.category}</span>
+                  <span aria-hidden>·</span>
+                  <span>${menu.price?.toLocaleString()}</span>
+                  <span aria-hidden>·</span>
+                  <span>재고 {menu.stock}개</span>
+                  {menu.isImmediatePrep && (
+                    <Badge variant="outline" size="sm">즉시 제공</Badge>
+                  )}
+                  {menu.ageCheckRequired && (
+                    <Badge variant="outline" size="sm">연령 확인</Badge>
+                  )}
                 </div>
               </div>
             </div>
