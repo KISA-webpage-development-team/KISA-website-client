@@ -5,7 +5,7 @@ import { Alert, Card, Skeleton } from "@umichkisa-ds/web";
 
 import { fetcher } from "@/lib/swr/fetchers";
 import { PochaInfoWithoutStatus } from "@/types/pocha";
-import PreviousPochaSummary from "./PreviosPochaSummary";
+import PreviousPochaSummary from "./PreviousPochaSummary";
 import PreviousPochaDetailDialog from "./PreviousPochaDetailDialog";
 
 interface PreviousPochaListProps {
