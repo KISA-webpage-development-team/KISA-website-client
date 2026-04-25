@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { usePochaManage } from "../../contexts/PochaManageContext";
 import { MenuItemRaw } from "@/types/pocha";
-import { useSession } from "next-auth/react";
-import { UserSession } from "@/lib/next-auth/types";
+import { useTypedSession } from "@/lib/next-auth/useTypedSession";
 import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
 import {
   Button,
@@ -12,6 +11,15 @@ import {
   toast,
 } from "@umichkisa-ds/web";
 import { useForm, Form } from "@umichkisa-ds/form";
+import {
+  uploadMenuImage,
+  deleteMenuImage,
+} from "@/apis/cloudinary/menuImage";
+import {
+  isSameMenu,
+  hasMenuWithNameKor,
+  hasMenuWithNameEng,
+} from "../../utils/menuIdentity";
 
 interface PochaMenuItemFormProps {
   closeItemForm: () => void;
@@ -42,10 +50,7 @@ export default function PochaMenuItemForm({
 }: PochaMenuItemFormProps) {
   const { menus, setMenus } = usePochaManage();
 
-  const { data: session } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  const { data: session } = useTypedSession();
 
   const initialFileUploadValue: FileUploadValue | null = useMemo(() => {
     if (mode === "update") {
@@ -60,62 +65,17 @@ export default function PochaMenuItemForm({
   const [fileUploadValue, setFileUploadValue] =
     useState<FileUploadValue | null>(initialFileUploadValue);
 
-  const deleteImageFromCloudinary = async (publicId: string) => {
-    try {
-      if (!publicId || !session?.token) return;
-
-      const response = await fetch("/api/delete-from-cloudinary", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.token}`,
-        },
-        body: JSON.stringify({ publicId }),
-      });
-
-      if (!response.ok) {
-        console.error("Failed to delete image from Cloudinary");
-      }
-    } catch (error) {
-      console.error("Error deleting image from Cloudinary:", error);
-    }
-  };
-
   const handleUpload = async (file: File): Promise<FileUploadValue> => {
     if (!session?.token) {
       toast.error("로그인이 필요합니다.");
       throw new Error("Not logged in");
     }
-
-    const timestamp = new Date().getTime();
-    const fileName = `pocha-menu-${timestamp}`;
-    const formattedFileName = fileName.replace(/ /g, "-");
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("public_id", `/${formattedFileName}`);
-    formData.append("folder", "temp");
-    formData.append("resource_type", "image");
-
-    const response = await fetch("/api/upload-to-cloudinary", {
-      method: "POST",
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Upload failed");
-    }
-
-    const result = await response.json();
-    return { url: result.secure_url, publicId: result.public_id };
+    return uploadMenuImage(file, session.token);
   };
 
   const handleRemove = async (publicId: string): Promise<void> => {
-    if (publicId) {
-      await deleteImageFromCloudinary(publicId);
+    if (publicId && session?.token) {
+      await deleteMenuImage(publicId, session.token);
     }
   };
 
@@ -156,7 +116,7 @@ export default function PochaMenuItemForm({
       toast.success("메뉴가 추가되었습니다.");
     } else {
       const updatedMenus = menus.map((menu) =>
-        menu.nameEng === initialData?.nameEng ? newMenuItem : menu
+        initialData && isSameMenu(menu, initialData) ? newMenuItem : menu
       );
       setMenus(updatedMenus);
       toast.success("수정되었습니다.");
@@ -165,12 +125,9 @@ export default function PochaMenuItemForm({
     closeItemForm();
   };
 
-  // Add this function to handle form closure cleanup
   const handleCloseForm = () => {
-    // Cleanup: only delete if WE uploaded (publicId is set;
-    // pre-existing images carry empty publicId)
-    if (fileUploadValue?.publicId) {
-      deleteImageFromCloudinary(fileUploadValue.publicId);
+    if (fileUploadValue?.publicId && session?.token) {
+      deleteMenuImage(fileUploadValue.publicId, session.token);
     }
     closeItemForm();
   };
@@ -189,16 +146,13 @@ export default function PochaMenuItemForm({
               rules={{
                 required: "메뉴 이름을 입력하세요.",
                 validate: (value: string) => {
-                  if (
-                    mode === "create" &&
-                    menus.some((m) => m.nameKor === value)
-                  ) {
+                  if (mode === "create" && hasMenuWithNameKor(menus, value)) {
                     return "이미 존재하는 메뉴입니다.";
                   }
                   if (
                     mode === "update" &&
                     value !== initialData?.nameKor &&
-                    menus.some((m) => m.nameKor === value)
+                    hasMenuWithNameKor(menus, value)
                   ) {
                     return "이미 존재하는 메뉴입니다.";
                   }
@@ -212,16 +166,13 @@ export default function PochaMenuItemForm({
               rules={{
                 required: "메뉴 이름을 입력하세요.",
                 validate: (value: string) => {
-                  if (
-                    mode === "create" &&
-                    menus.some((m) => m.nameEng === value)
-                  ) {
+                  if (mode === "create" && hasMenuWithNameEng(menus, value)) {
                     return "이미 존재하는 메뉴입니다.";
                   }
                   if (
                     mode === "update" &&
                     value !== initialData?.nameEng &&
-                    menus.some((m) => m.nameEng === value)
+                    hasMenuWithNameEng(menus, value)
                   ) {
                     return "이미 존재하는 메뉴입니다.";
                   }

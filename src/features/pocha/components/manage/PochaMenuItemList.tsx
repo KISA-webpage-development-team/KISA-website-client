@@ -19,8 +19,10 @@ import {
   defaultImageURL,
   getMenuImagePath,
 } from "@/features/pocha/utils/getImagePath";
+import { formatPrice } from "@/utils/formats/currency";
 
 import { usePochaManage } from "../../contexts/PochaManageContext";
+import { isSameMenu } from "../../utils/menuIdentity";
 
 interface PochaMenuItemListProps {
   onAdd: (presetImmediatePrep: boolean) => void;
@@ -40,7 +42,7 @@ export default function PochaMenuItemList({
 
   const onConfirmDelete = () => {
     if (!deletingMenu) return;
-    setMenus(menus.filter((menu) => menu.nameEng !== deletingMenu.nameEng));
+    setMenus(menus.filter((menu) => !isSameMenu(menu, deletingMenu)));
     setDeletingMenu(null);
   };
 
@@ -109,9 +111,9 @@ function MenuSection({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h3 className="type-body !font-semibold text-foreground">
+        <h3 className="type-body font-semibold text-foreground">
           {label}
-          <span className="type-body !font-normal text-muted-foreground">
+          <span className="type-body font-normal text-muted-foreground">
             {" · "}
             {items.length}
           </span>
@@ -154,9 +156,9 @@ function MenuRow({
           <MenuThumbnail menu={menu} />
           <div className="flex w-full flex-col gap-2">
             <div className="flex items-center justify-between">
-              <h4 className="type-body !font-semibold text-foreground">
+              <h4 className="type-body font-semibold text-foreground">
                 {menu.nameKor}
-                <span className="type-body !font-normal text-muted-foreground">
+                <span className="type-body font-normal text-muted-foreground">
                   {" "}
                   ({menu.nameEng})
                 </span>
@@ -182,7 +184,7 @@ function MenuRow({
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 type-body-sm text-muted-foreground">
               <span>{menu.category}</span>
               <span aria-hidden>·</span>
-              <span>${menu.price?.toLocaleString()}</span>
+              <span>{formatPrice(menu.price)}</span>
               <span aria-hidden>·</span>
               <span>재고 {menu.stock}개</span>
               {menu.ageCheckRequired && (

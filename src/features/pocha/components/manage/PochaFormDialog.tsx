@@ -14,13 +14,12 @@ import {
   TabsTrigger,
   toast,
 } from "@umichkisa-ds/web";
-import { useSession } from "next-auth/react";
+import { useTypedSession } from "@/lib/next-auth/useTypedSession";
 
 import PochaInfoFields from "./PochaInfoFields";
 import PochaMenuItemForm from "./PochaMenuItemForm";
 import PochaMenuItemList from "./PochaMenuItemList";
 import { usePochaManage } from "../../contexts/PochaManageContext";
-import { UserSession } from "@/lib/next-auth/types";
 import { combineDateAndTime, separateDateAndTime } from "@/utils/formats/date";
 import { createPocha, updatePocha } from "@/apis/pocha/mutations";
 import { PochaInfo, MenuItemRaw } from "@/types/pocha";
@@ -64,6 +63,17 @@ function parseYmdToDate(ymd: string | null | undefined): Date | undefined {
   return new Date(y, m - 1, d);
 }
 
+function getDialogTitle(
+  isMenuForm: boolean,
+  mode: "create" | "update",
+  menuFormState: MenuFormState
+): string {
+  if (isMenuForm && menuFormState) {
+    return menuFormState.mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기";
+  }
+  return mode === "create" ? "포차 생성하기" : "포차 수정하기";
+}
+
 export default function PochaFormDialog({
   open,
   onOpenChange,
@@ -71,27 +81,32 @@ export default function PochaFormDialog({
   existingPochaInfo,
   onSubmitSuccess,
 }: PochaFormDialogProps) {
-  const { data: session } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  const { data: session } = useTypedSession();
 
   const email = session?.user?.email;
   const token = session?.token;
 
-  const { menus } = usePochaManage();
+  const { menus, setMenus } = usePochaManage();
+
+  // In create mode, reset the shared menus context on mount so the menu tab
+  // starts empty. Without this, if the user just transitioned from "had a
+  // pocha" → "noPochaAvailable" (e.g. updated dates to past) the menus from
+  // the old pocha linger in context and bleed into the new pocha's menu tab.
+  useEffect(() => {
+    if (mode === "create") {
+      setMenus([]);
+    }
+    // mount-only: each dialog open creates a fresh component instance, so the
+    // effect runs exactly once per open. setMenus identity is stable from the
+    // context, so excluding it is intentional.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [activeTab, setActiveTab] = useState<"info" | "menu">("info");
   const [menuFormState, setMenuFormState] = useState<MenuFormState>(null);
 
   const isMenuForm = !!menuFormState;
-  const dialogTitle = isMenuForm
-    ? menuFormState.mode === "create"
-      ? "메뉴 추가하기"
-      : "메뉴 수정하기"
-    : mode === "create"
-      ? "포차 생성하기"
-      : "포차 수정하기";
+  const dialogTitle = getDialogTitle(isMenuForm, mode, menuFormState);
 
   const { date: existingStartDate, time: existingStartTime } =
     separateDateAndTime(existingPochaInfo?.startDate);
@@ -114,20 +129,7 @@ export default function PochaFormDialog({
   const {
     formState: { isValid, isSubmitting, errors },
     reset,
-    watch,
-    trigger,
   } = methods;
-
-  // Cross-field validation lives in the `validate` rules on endDate / endTime
-  // inside PochaInfoFields. RHF only re-runs a field's rules when *that* field
-  // changes, so when the user tweaks startDate / startTime we manually trigger
-  // re-validation on the end fields.
-  const watchedStartDate = watch("startDate");
-  const watchedStartTime = watch("startTime");
-
-  useEffect(() => {
-    trigger(["endDate", "endTime"]);
-  }, [watchedStartDate, watchedStartTime, trigger]);
 
   const onSubmit = async (values: PochaFormValues) => {
     const newStartDateTime = combineDateAndTime(
@@ -183,6 +185,18 @@ export default function PochaFormDialog({
   const submitDisabled =
     menus.length === 0 || !isValid || isSubmitting || hasFieldErrors;
 
+  const handleFormSubmit = (values: PochaFormValues) => {
+    if (errors.endDate || errors.endTime) {
+      setActiveTab("info");
+      return;
+    }
+    if (menus.length === 0) {
+      setActiveTab("menu");
+      return;
+    }
+    return onSubmit(values);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="lg">
@@ -206,17 +220,7 @@ export default function PochaFormDialog({
         ) : (
           <Form
             form={methods}
-            onSubmit={(values) => {
-              if (errors.endDate || errors.endTime) {
-                setActiveTab("info");
-                return;
-              }
-              if (menus.length === 0) {
-                setActiveTab("menu");
-                return;
-              }
-              return onSubmit(values);
-            }}
+            onSubmit={handleFormSubmit}
             className="flex flex-col gap-4"
           >
             <Tabs
