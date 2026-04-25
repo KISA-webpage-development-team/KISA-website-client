@@ -64,6 +64,17 @@ function parseYmdToDate(ymd: string | null | undefined): Date | undefined {
   return new Date(y, m - 1, d);
 }
 
+function getDialogTitle(
+  isMenuForm: boolean,
+  mode: "create" | "update",
+  menuFormState: MenuFormState
+): string {
+  if (isMenuForm && menuFormState) {
+    return menuFormState.mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기";
+  }
+  return mode === "create" ? "포차 생성하기" : "포차 수정하기";
+}
+
 export default function PochaFormDialog({
   open,
   onOpenChange,
@@ -85,13 +96,7 @@ export default function PochaFormDialog({
   const [menuFormState, setMenuFormState] = useState<MenuFormState>(null);
 
   const isMenuForm = !!menuFormState;
-  const dialogTitle = isMenuForm
-    ? menuFormState.mode === "create"
-      ? "메뉴 추가하기"
-      : "메뉴 수정하기"
-    : mode === "create"
-      ? "포차 생성하기"
-      : "포차 수정하기";
+  const dialogTitle = getDialogTitle(isMenuForm, mode, menuFormState);
 
   const { date: existingStartDate, time: existingStartTime } =
     separateDateAndTime(existingPochaInfo?.startDate);
