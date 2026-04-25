@@ -19,6 +19,7 @@ import {
   defaultImageURL,
   getMenuImagePath,
 } from "@/features/pocha/utils/getImagePath";
+import { formatPrice } from "@/utils/formats/currency";
 
 import { usePochaManage } from "../../contexts/PochaManageContext";
 import { isSameMenu } from "../../utils/menuIdentity";
@@ -183,7 +184,7 @@ function MenuRow({
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 type-body-sm text-muted-foreground">
               <span>{menu.category}</span>
               <span aria-hidden>·</span>
-              <span>${menu.price?.toLocaleString()}</span>
+              <span>{formatPrice(menu.price)}</span>
               <span aria-hidden>·</span>
               <span>재고 {menu.stock}개</span>
               {menu.ageCheckRequired && (
