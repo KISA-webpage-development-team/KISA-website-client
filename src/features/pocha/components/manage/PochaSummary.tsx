@@ -8,15 +8,12 @@ import {
   CardHeader,
   CardTitle,
   Divider,
-  Icon,
 } from "@umichkisa-ds/web";
 
 import { MenuItemRaw, PochaInfo } from "@/types/pocha";
-import {
-  formatDateInTz,
-  formatTimeInTz,
-  tzAbbreviation,
-} from "@/utils/formats/timezone";
+
+import PochaDateBlock from "./_shared/PochaDateBlock";
+import PochaMenuGroup from "./_shared/PochaMenuGroup";
 
 interface PochaSummaryProps {
   pochaInfo: PochaInfo;
@@ -59,73 +56,22 @@ export default function PochaSummary({
       <CardContent>
         <div className="flex flex-col gap-6">
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Icon name="calendar" size="sm" />
-                <span className="type-body-sm">시작</span>
-              </div>
-              <p className="type-h4 font-semibold text-foreground">
-                {formatDateInTz(pochaInfo.startDate)}
-              </p>
-              <p className="type-body-sm text-muted-foreground">
-                {formatTimeInTz(pochaInfo.startDate)} (
-                {tzAbbreviation(pochaInfo.startDate)})
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Icon name="calendar" size="sm" />
-                <span className="type-body-sm">종료</span>
-              </div>
-              <p className="type-h4 font-semibold text-foreground">
-                {formatDateInTz(pochaInfo.endDate)}
-              </p>
-              <p className="type-body-sm text-muted-foreground">
-                {formatTimeInTz(pochaInfo.endDate)} (
-                {tzAbbreviation(pochaInfo.endDate)})
-              </p>
-            </div>
+            <PochaDateBlock label="시작" date={pochaInfo.startDate} />
+            <PochaDateBlock label="종료" date={pochaInfo.endDate} />
           </div>
 
           <Divider />
 
           <div className="flex flex-col gap-4">
             {immediatePrepMenus.length > 0 && (
-              <MenuGroup label="즉시 제공" items={immediatePrepMenus} />
+              <PochaMenuGroup label="즉시 제공" items={immediatePrepMenus} />
             )}
             {cookingMenus.length > 0 && (
-              <MenuGroup label="조리 필요" items={cookingMenus} />
+              <PochaMenuGroup label="조리 필요" items={cookingMenus} />
             )}
           </div>
         </div>
       </CardContent>
     </Card>
-  );
-}
-
-function MenuGroup({
-  label,
-  items,
-}: {
-  label: string;
-  items: MenuItemRaw[];
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <p className="type-body-sm text-muted-foreground">
-        {label} · {items.length}
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {items.map((menu) => (
-          <Badge
-            key={menu.menuID ?? menu.nameKor}
-            variant="outline"
-            size="md"
-          >
-            {menu.nameKor}
-          </Badge>
-        ))}
-      </div>
-    </div>
   );
 }

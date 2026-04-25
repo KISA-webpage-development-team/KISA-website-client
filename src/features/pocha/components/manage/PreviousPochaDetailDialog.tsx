@@ -1,12 +1,10 @@
 import {
   Alert,
-  Badge,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   Divider,
-  Icon,
   LoadingSpinner,
 } from "@umichkisa-ds/web";
 
@@ -15,14 +13,11 @@ import useMenu from "@/features/pocha/hooks/useMenu";
 import { convertMenuByCategoryToRawList } from "@/features/pocha/utils/convertMenuType";
 import {
   MenuByCategory,
-  MenuItemRaw,
   PochaInfoWithoutStatus,
 } from "@/types/pocha";
-import {
-  formatDateInTz,
-  formatTimeInTz,
-  tzAbbreviation,
-} from "@/utils/formats/timezone";
+
+import PochaDateBlock from "./_shared/PochaDateBlock";
+import PochaMenuGroup from "./_shared/PochaMenuGroup";
 
 interface PreviousPochaDetailDialogProps {
   pocha: PochaInfoWithoutStatus | null;
@@ -55,8 +50,8 @@ export default function PreviousPochaDetailDialog({
             <Divider />
 
             <div className="grid grid-cols-2 gap-4">
-              <DateBlock label="시작" date={pocha.startDate} />
-              <DateBlock label="종료" date={pocha.endDate} />
+              <PochaDateBlock label="시작" date={pocha.startDate} />
+              <PochaDateBlock label="종료" date={pocha.endDate} />
             </div>
 
             <Divider />
@@ -69,29 +64,6 @@ export default function PreviousPochaDetailDialog({
         )}
       </DialogContent>
     </Dialog>
-  );
-}
-
-function DateBlock({
-  label,
-  date,
-}: {
-  label: string;
-  date: Date | string;
-}) {
-  return (
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-2 text-muted-foreground">
-        <Icon name="calendar" size="sm" />
-        <span className="type-body-sm">{label}</span>
-      </div>
-      <p className="type-h4 font-semibold text-foreground">
-        {formatDateInTz(date)}
-      </p>
-      <p className="type-body-sm text-muted-foreground">
-        {formatTimeInTz(date)} ({tzAbbreviation(date)})
-      </p>
-    </div>
   );
 }
 
@@ -125,38 +97,11 @@ function MenuSection({
   return (
     <div className="flex flex-col gap-4">
       {immediatePrepMenus.length > 0 && (
-        <MenuGroup label="즉시 제공" items={immediatePrepMenus} />
+        <PochaMenuGroup label="즉시 제공" items={immediatePrepMenus} />
       )}
       {cookingMenus.length > 0 && (
-        <MenuGroup label="조리 필요" items={cookingMenus} />
+        <PochaMenuGroup label="조리 필요" items={cookingMenus} />
       )}
-    </div>
-  );
-}
-
-function MenuGroup({
-  label,
-  items,
-}: {
-  label: string;
-  items: MenuItemRaw[];
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <p className="type-body-sm text-muted-foreground">
-        {label} · {items.length}
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {items.map((menu) => (
-          <Badge
-            key={menu.menuID ?? menu.nameKor}
-            variant="outline"
-            size="md"
-          >
-            {menu.nameKor}
-          </Badge>
-        ))}
-      </div>
     </div>
   );
 }
