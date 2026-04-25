@@ -6,7 +6,7 @@
 // future TZ-sensitive refactor can't silently drift.
 
 import { describe, it, expect } from "vitest";
-import { toApiDateString, parseFromApi } from "../utils/date";
+import { toApiDateString, parseFromApi, isPastLocal } from "../utils/date";
 import { getDefaultInternshipDateRange } from "../utils/getDefaultDateRange";
 
 describe("utils/date — toApiDateString / parseFromApi round-trip", () => {
@@ -29,6 +29,37 @@ describe("utils/date — toApiDateString / parseFromApi round-trip", () => {
 
   it("toApiDateString returns undefined for undefined input", () => {
     expect(toApiDateString(undefined)).toBeUndefined();
+  });
+});
+
+describe("utils/date — isPastLocal", () => {
+  it("returns false for today", () => {
+    const today = new Date();
+    expect(isPastLocal(today)).toBe(false);
+  });
+  it("returns true for yesterday", () => {
+    const y = new Date();
+    y.setDate(y.getDate() - 1);
+    expect(isPastLocal(y)).toBe(true);
+  });
+  it("returns false for tomorrow", () => {
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+    expect(isPastLocal(t)).toBe(false);
+  });
+  it("returns true across year boundary (Dec 31 prev year vs Jan 1 current)", () => {
+    // Dec 31 of last year is always before today (today is in current year or later).
+    const lastDec31 = new Date(new Date().getFullYear() - 1, 11, 31);
+    expect(isPastLocal(lastDec31)).toBe(true);
+  });
+  it("future date in next year is not past (year-boundary)", () => {
+    // Guards against buggy impls that compare month/date without year, e.g.
+    // `date.getMonth() < now.getMonth() && date.getDate() < now.getDate()` —
+    // such an impl would wrongly say "Jan 1 next year" is in the past when
+    // today is in Dec.
+    const now = new Date();
+    const nextYearJan1 = new Date(now.getFullYear() + 1, 0, 1);
+    expect(isPastLocal(nextYearJan1)).toBe(false);
   });
 });
 
