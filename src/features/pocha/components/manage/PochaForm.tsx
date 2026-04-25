@@ -26,10 +26,27 @@ interface PochaFormProps {
 interface PochaFormValues {
   title: string;
   description: string;
-  startDate: string;
+  // DS Form.DatePicker stores Date | undefined in form state.
+  // We convert to/from "YYYY-MM-DD" strings only at the API boundary.
+  startDate: Date | undefined;
   startTime: string;
-  endDate: string;
+  endDate: Date | undefined;
   endTime: string;
+}
+
+function formatDateToYmd(date: Date | undefined): string {
+  if (!date) return "";
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function parseYmdToDate(ymd: string | null | undefined): Date | undefined {
+  if (!ymd) return undefined;
+  const [y, m, d] = ymd.split("-").map(Number);
+  if (!y || !m || !d) return undefined;
+  return new Date(y, m - 1, d);
 }
 
 export default function PochaForm({
@@ -58,9 +75,9 @@ export default function PochaForm({
     defaultValues: {
       title: existingPochaInfo?.title ?? "",
       description: existingPochaInfo?.description ?? "",
-      startDate: existingStartDate ?? "",
+      startDate: parseYmdToDate(existingStartDate),
       startTime: existingStartTime ?? "",
-      endDate: existingEndDate ?? "",
+      endDate: parseYmdToDate(existingEndDate),
       endTime: existingEndTime ?? "",
     },
   });
@@ -98,8 +115,14 @@ export default function PochaForm({
       return;
     }
 
-    const start = combineDateAndTime(watchedStartDate, watchedStartTime);
-    const end = combineDateAndTime(watchedEndDate, watchedEndTime);
+    const start = combineDateAndTime(
+      formatDateToYmd(watchedStartDate),
+      watchedStartTime
+    );
+    const end = combineDateAndTime(
+      formatDateToYmd(watchedEndDate),
+      watchedEndTime
+    );
 
     if (start && end && new Date(end) <= new Date(start)) {
       setError("endDate", {
@@ -114,10 +137,13 @@ export default function PochaForm({
 
   const onSubmit = async (values: PochaFormValues) => {
     const newStartDateTime = combineDateAndTime(
-      values.startDate,
+      formatDateToYmd(values.startDate),
       values.startTime
     );
-    const newEndDateTime = combineDateAndTime(values.endDate, values.endTime);
+    const newEndDateTime = combineDateAndTime(
+      formatDateToYmd(values.endDate),
+      values.endTime
+    );
 
     const input = {
       email,
