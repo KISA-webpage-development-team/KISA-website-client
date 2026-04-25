@@ -15,6 +15,11 @@ import {
   uploadMenuImage,
   deleteMenuImage,
 } from "@/apis/cloudinary/menuImage";
+import {
+  isSameMenu,
+  hasMenuWithNameKor,
+  hasMenuWithNameEng,
+} from "../../utils/menuIdentity";
 
 interface PochaMenuItemFormProps {
   closeItemForm: () => void;
@@ -111,7 +116,7 @@ export default function PochaMenuItemForm({
       toast.success("메뉴가 추가되었습니다.");
     } else {
       const updatedMenus = menus.map((menu) =>
-        menu.nameEng === initialData?.nameEng ? newMenuItem : menu
+        initialData && isSameMenu(menu, initialData) ? newMenuItem : menu
       );
       setMenus(updatedMenus);
       toast.success("수정되었습니다.");
@@ -141,16 +146,13 @@ export default function PochaMenuItemForm({
               rules={{
                 required: "메뉴 이름을 입력하세요.",
                 validate: (value: string) => {
-                  if (
-                    mode === "create" &&
-                    menus.some((m) => m.nameKor === value)
-                  ) {
+                  if (mode === "create" && hasMenuWithNameKor(menus, value)) {
                     return "이미 존재하는 메뉴입니다.";
                   }
                   if (
                     mode === "update" &&
                     value !== initialData?.nameKor &&
-                    menus.some((m) => m.nameKor === value)
+                    hasMenuWithNameKor(menus, value)
                   ) {
                     return "이미 존재하는 메뉴입니다.";
                   }
@@ -164,16 +166,13 @@ export default function PochaMenuItemForm({
               rules={{
                 required: "메뉴 이름을 입력하세요.",
                 validate: (value: string) => {
-                  if (
-                    mode === "create" &&
-                    menus.some((m) => m.nameEng === value)
-                  ) {
+                  if (mode === "create" && hasMenuWithNameEng(menus, value)) {
                     return "이미 존재하는 메뉴입니다.";
                   }
                   if (
                     mode === "update" &&
                     value !== initialData?.nameEng &&
-                    menus.some((m) => m.nameEng === value)
+                    hasMenuWithNameEng(menus, value)
                   ) {
                     return "이미 존재하는 메뉴입니다.";
                   }

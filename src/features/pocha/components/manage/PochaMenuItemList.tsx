@@ -21,6 +21,7 @@ import {
 } from "@/features/pocha/utils/getImagePath";
 
 import { usePochaManage } from "../../contexts/PochaManageContext";
+import { isSameMenu } from "../../utils/menuIdentity";
 
 interface PochaMenuItemListProps {
   onAdd: (presetImmediatePrep: boolean) => void;
@@ -40,7 +41,7 @@ export default function PochaMenuItemList({
 
   const onConfirmDelete = () => {
     if (!deletingMenu) return;
-    setMenus(menus.filter((menu) => menu.nameEng !== deletingMenu.nameEng));
+    setMenus(menus.filter((menu) => !isSameMenu(menu, deletingMenu)));
     setDeletingMenu(null);
   };
 
