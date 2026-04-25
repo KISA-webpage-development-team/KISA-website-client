@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import {
   Badge,
   Button,
@@ -13,6 +14,10 @@ import {
 } from "@umichkisa-ds/web";
 
 import { MenuItemRaw } from "@/types/pocha";
+import {
+  defaultImageURL,
+  getMenuImagePath,
+} from "@/features/pocha/utils/getImagePath";
 
 import { usePochaManage } from "../../contexts/PochaManageContext";
 import PochaMenuItemForm from "./PochaMenuItemForm";
@@ -52,15 +57,8 @@ export default function PochaMenuItemList() {
       {menus.map((menu) => (
         <Card key={menu.nameEng}>
           <CardContent>
-            <div className="flex flex-row gap-6">
-              {/* <figure className="relative h-[6rem] w-[6rem] items-center flex-shrink-0">
-                <Image
-                  src={getMenuImagePath(menu?.menuID)}
-                  alt={menu.nameEng}
-                  fill
-                  className="rounded-[15px] border-gray-300 shadow-md object-cover"
-                />
-              </figure> */}
+            <div className="flex flex-row gap-4">
+              <MenuThumbnail menu={menu} />
               <div className="flex w-full flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <h3 className="type-body !font-semibold text-foreground">
@@ -85,17 +83,17 @@ export default function PochaMenuItemList() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 type-body-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 type-body-sm text-muted-foreground">
                   <span>{menu.category}</span>
                   <span aria-hidden>·</span>
                   <span>${menu.price?.toLocaleString()}</span>
                   <span aria-hidden>·</span>
                   <span>재고 {menu.stock}개</span>
                   {menu.isImmediatePrep && (
-                    <Badge variant="outline" size="sm">즉시 제공</Badge>
+                    <Badge variant="success" size="sm">즉시 제공</Badge>
                   )}
                   {menu.ageCheckRequired && (
-                    <Badge variant="outline" size="sm">연령 확인</Badge>
+                    <Badge variant="warning" size="sm">연령 확인</Badge>
                   )}
                 </div>
               </div>
@@ -136,6 +134,25 @@ export default function PochaMenuItemList() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function MenuThumbnail({ menu }: { menu: MenuItemRaw }) {
+  const [src, setSrc] = useState<string>(
+    menu.menuID ? getMenuImagePath(menu.menuID) : defaultImageURL
+  );
+
+  return (
+    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border border-border bg-surface-subtle">
+      <Image
+        src={src}
+        alt={menu.nameEng}
+        fill
+        sizes="64px"
+        className="object-cover"
+        onError={() => setSrc(defaultImageURL)}
+      />
     </div>
   );
 }
