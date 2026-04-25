@@ -1,21 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { usePochaManage } from "../../contexts/PochaManageContext";
-import { useMemo } from "react";
-import CustomField from "@/deprecated-components/shared/CustomField";
 import { MenuItemRaw } from "@/types/pocha";
-import { CustomButton } from "@/components/ui/button";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { HorizontalDivider } from "@/components/ui/divider";
 import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
-import Image from "next/image";
-import VerticalDivider from "@/components/ui/divider/VerticalDivider";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Button,
+  toast,
 } from "@umichkisa-ds/web";
+import { useForm, Form } from "@umichkisa-ds/form";
 
 interface PochaMenuItemFormProps {
   closeItemForm: () => void;
@@ -23,15 +20,15 @@ interface PochaMenuItemFormProps {
   initialData?: MenuItemRaw;
 }
 
-const isDuplicate = (
-  menus: MenuItemRaw[],
-  nameKor: string,
-  nameEng: string
-) => {
-  return menus.some(
-    (menu) => menu.nameKor === nameKor || menu.nameEng === nameEng
-  );
-};
+interface MenuItemFormValues {
+  nameKor: string;
+  nameEng: string;
+  category: string;
+  price: number;
+  stock: number;
+  isImmediatePrep: boolean;
+  ageCheckRequired: boolean;
+}
 
 export default function PochaMenuItemForm({
   mode = "create",
@@ -40,29 +37,14 @@ export default function PochaMenuItemForm({
 }: PochaMenuItemFormProps) {
   const { menus, setMenus } = usePochaManage();
 
-  const [nameKor, setNameKor] = useState<string>(initialData?.nameKor || null);
-  const [nameEng, setNameEng] = useState<string>(initialData?.nameEng || null);
-  const [category, setCategory] = useState<string>(
-    initialData?.category || null
-  );
-  const [price, setPrice] = useState<number>(initialData?.price || null);
-  const [stock, setStock] = useState<number>(initialData?.stock || null);
-  const [isImmediatePrep, setIsImmediatePrep] = useState<boolean>(
-    Boolean(initialData?.isImmediatePrep) || null
-  );
-  const [ageCheckRequired, setAgeCheckRequired] = useState<boolean>(
-    Boolean(initialData?.ageCheckRequired) || null
-  );
   const [imageURL, setImageURL] = useState<string>("");
-  const { data: session, status: sessionStatus } = useSession() as {
+  const { data: session } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
 
-  // Add this state variable after the imageURL state
   const [cloudinaryPublicId, setCloudinaryPublicId] = useState<string>("");
 
-  // Add this function after the uploadImage function
   const deleteImageFromCloudinary = async (publicId: string) => {
     try {
       if (!publicId || !session?.token) return;
@@ -84,14 +66,12 @@ export default function PochaMenuItemForm({
     }
   };
 
-  // Add this state variable after the imageURL state
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  // Replace the empty uploadImage function with this complete implementation
   const uploadImage = async (file: File) => {
     try {
       if (!session?.token) {
-        alert("로그인이 필요합니다.");
+        toast.error("로그인이 필요합니다.");
         return;
       }
 
@@ -131,163 +111,54 @@ export default function PochaMenuItemForm({
       setCloudinaryPublicId(result.public_id);
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("이미지 업로드에 실패했습니다.");
+      toast.error("이미지 업로드에 실패했습니다.");
     } finally {
       setIsUploading(false);
     }
   };
-  const textFields = useMemo(
-    () => [
-      {
-        value: nameKor,
-        setValue: setNameKor,
-        label: "메뉴 이름 (한글)",
-        type: "text",
-        isError: nameKor?.length === 0,
-        errorMsg: "메뉴 이름을 입력하세요.",
-        errorState: "error",
-        required: true,
-      },
-      {
-        value: nameEng,
-        setValue: setNameEng,
-        label: "메뉴 이름 (영어)",
-        type: "text",
-        // strictly english only
-        isError: nameEng?.length === 0,
-        errorMsg: "메뉴 이름을 입력하세요.",
-        errorState: "error",
-        required: true,
-      },
-      {
-        value: category,
-        setValue: setCategory,
-        label: "카테고리",
-        type: "text",
-        isError: category?.length === 0,
-        errorMsg: "카테고리를 선택하세요.",
-        errorState: "error",
-        required: true,
-      },
-    ],
-    [nameKor, nameEng, category]
-  );
 
-  const numberFields = useMemo(
-    () => [
-      {
-        value: price,
-        setValue: setPrice,
-        label: "가격 ($)",
-        type: "number",
-        isError: price < 0,
-        errorMsg: "가격 >= 0",
-        errorState: "error",
-        required: true,
-      },
-      {
-        value: stock,
-        setValue: setStock,
-        label: "재고",
-        type: "number",
-        isError: stock < 0,
-        errorMsg: "재고 >= 0",
-        errorState: "error",
-        required: true,
-      },
-    ],
-    [price, stock]
-  );
+  const methods = useForm<MenuItemFormValues>({
+    mode: "onTouched",
+    defaultValues: {
+      nameKor: initialData?.nameKor ?? "",
+      nameEng: initialData?.nameEng ?? "",
+      category: initialData?.category ?? "",
+      price: initialData?.price ?? 0,
+      stock: initialData?.stock ?? 0,
+      isImmediatePrep: Boolean(initialData?.isImmediatePrep),
+      ageCheckRequired: Boolean(initialData?.ageCheckRequired),
+    },
+  });
 
-  const checkboxFields = useMemo(
-    () => [
-      {
-        value: isImmediatePrep,
-        setValue: setIsImmediatePrep,
-        label: "즉시 준비 가능",
-        type: "checkbox",
-        isError: false,
-        errorMsg: "",
-        errorState: "error",
-      },
-      {
-        value: ageCheckRequired,
-        setValue: setAgeCheckRequired,
-        label: "나이 확인 필수",
-        type: "checkbox",
-        isError: false,
-        errorMsg: "",
-        errorState: "error",
-      },
-    ],
-    [isImmediatePrep, ageCheckRequired]
-  );
+  const {
+    formState: { isValid, isSubmitting },
+  } = methods;
 
-  const handleSubmitButtonClick = () => {
+  const onSubmit = async (values: MenuItemFormValues) => {
     const newMenuItem: MenuItemRaw = {
-      nameKor,
-      nameEng,
-      category,
-      price: parseFloat(price.toString()),
-      stock: parseInt(stock.toString()),
-      isImmediatePrep: isImmediatePrep === true ? true : false,
-      ageCheckRequired: ageCheckRequired === true ? true : false,
-      imageURL, // Add image URL
+      nameKor: values.nameKor,
+      nameEng: values.nameEng,
+      category: values.category,
+      price: Number(values.price),
+      stock: Number(values.stock),
+      isImmediatePrep: values.isImmediatePrep === true,
+      ageCheckRequired: values.ageCheckRequired === true,
+      imageURL,
     };
 
-    // check if the menu item already exists
-    if (isDuplicate(menus, newMenuItem.nameKor, newMenuItem.nameEng)) {
-      alert("이미 존재하는 메뉴입니다.");
-      return;
+    if (mode === "create") {
+      setMenus([...menus, newMenuItem]);
+      toast.success("메뉴가 추가되었습니다.");
+    } else {
+      const updatedMenus = menus.map((menu) =>
+        menu.nameEng === initialData?.nameEng ? newMenuItem : menu
+      );
+      setMenus(updatedMenus);
+      toast.success("수정되었습니다.");
     }
-
-    setMenus([...menus, newMenuItem]);
-    closeItemForm();
-  };
-
-  const handleUpdateButtonClick = () => {
-    const newMenuItem: MenuItemRaw = {
-      nameKor,
-      nameEng,
-      category,
-      price: parseFloat(price.toString()),
-      stock: parseInt(stock.toString()),
-      isImmediatePrep: isImmediatePrep === true ? true : false,
-      ageCheckRequired: ageCheckRequired === true ? true : false,
-      imageURL, // Add image URL
-    };
-
-    // find the menu item to update
-    const updatedMenus = menus.map((menu) => {
-      if (menu.nameEng === initialData?.nameEng) {
-        return newMenuItem;
-      }
-      return menu;
-    });
-    setMenus(updatedMenus);
 
     closeItemForm();
   };
-
-  // form validity check
-  const isFormValid = useMemo(() => {
-    for (const field of textFields) {
-      if (field.value === null || field.value === "" || field.isError) {
-        return false;
-      }
-    }
-    for (const field of numberFields) {
-      if (
-        field.value === null ||
-        field.value?.toString() === "" ||
-        field.isError
-      ) {
-        return false;
-      }
-    }
-
-    return true;
-  }, [textFields, numberFields]);
 
   // Add this function to handle image removal
   const removeImage = () => {
@@ -339,30 +210,89 @@ export default function PochaMenuItemForm({
           {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
         </DialogTitle>
 
-        <form className="flex flex-col gap-4 w-full mt-4">
+        <Form
+          form={methods}
+          onSubmit={onSubmit}
+          className="flex flex-col gap-4 w-full mt-4"
+        >
           <div className="flex flex-col gap-4 w-full">
-            {textFields?.map((field, index) => (
-              <CustomField
-                key={`pocha-menu-item-textfield-${index}`}
-                {...field}
-              />
-            ))}
+            <Form.Input
+              name="nameKor"
+              label="메뉴 이름 (한글)"
+              rules={{
+                required: "메뉴 이름을 입력하세요.",
+                validate: (value: string) => {
+                  if (
+                    mode === "create" &&
+                    menus.some((m) => m.nameKor === value)
+                  ) {
+                    return "이미 존재하는 메뉴입니다.";
+                  }
+                  if (
+                    mode === "update" &&
+                    value !== initialData?.nameKor &&
+                    menus.some((m) => m.nameKor === value)
+                  ) {
+                    return "이미 존재하는 메뉴입니다.";
+                  }
+                  return true;
+                },
+              }}
+            />
+            <Form.Input
+              name="nameEng"
+              label="메뉴 이름 (영어)"
+              rules={{
+                required: "메뉴 이름을 입력하세요.",
+                validate: (value: string) => {
+                  if (
+                    mode === "create" &&
+                    menus.some((m) => m.nameEng === value)
+                  ) {
+                    return "이미 존재하는 메뉴입니다.";
+                  }
+                  if (
+                    mode === "update" &&
+                    value !== initialData?.nameEng &&
+                    menus.some((m) => m.nameEng === value)
+                  ) {
+                    return "이미 존재하는 메뉴입니다.";
+                  }
+                  return true;
+                },
+              }}
+            />
+            <Form.Input
+              name="category"
+              label="카테고리"
+              rules={{ required: "카테고리를 선택하세요." }}
+            />
           </div>
 
           <div className="flex flex-col gap-4">
-            {numberFields?.map((field, index) => (
-              <CustomField
-                key={`pocha-menu-item-numberfield-${index}`}
-                {...field}
-              />
-            ))}
+            <Form.Input
+              name="price"
+              type="number"
+              label="가격 ($)"
+              rules={{
+                required: "가격을 입력하세요.",
+                min: { value: 0, message: "가격 >= 0" },
+                valueAsNumber: true,
+              }}
+            />
+            <Form.Input
+              name="stock"
+              type="number"
+              label="재고"
+              rules={{
+                required: "재고를 입력하세요.",
+                min: { value: 0, message: "재고 >= 0" },
+                valueAsNumber: true,
+              }}
+            />
             <div className="flex flex-row items-center gap-4">
-              {checkboxFields?.map((field, index) => (
-                <CustomField
-                  key={`pocha-menu-item-checkboxfield-${index}`}
-                  {...field}
-                />
-              ))}
+              <Form.Checkbox name="isImmediatePrep" label="즉시 준비 가능" />
+              <Form.Checkbox name="ageCheckRequired" label="나이 확인 필수" />
             </div>
           </div>
 
@@ -372,9 +302,7 @@ export default function PochaMenuItemForm({
             <>
               <HorizontalDivider />
               <div className="flex flex-col gap-2">
-                <label
-                  className={`font-medium ${sejongHospitalBold.className}`}
-                >
+                <label className="type-label !font-semibold text-foreground">
                   메뉴 이미지
                 </label>
                 <div className="flex flex-row gap-8">
@@ -440,18 +368,14 @@ export default function PochaMenuItemForm({
             </>
           )}
 
-          <CustomButton
-            text={mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
-            onClick={
-              mode === "create"
-                ? handleSubmitButtonClick
-                : handleUpdateButtonClick
-            }
-            disabled={!isFormValid || isUploading}
-            type="secondary"
-            className={`${sejongHospitalBold.className} w-full mt-4`}
-          />
-        </form>
+          <Button
+            type="submit"
+            disabled={!isValid || isSubmitting || isUploading}
+            className="w-full mt-4"
+          >
+            {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
+          </Button>
+        </Form>
       </DialogContent>
     </Dialog>
   );
