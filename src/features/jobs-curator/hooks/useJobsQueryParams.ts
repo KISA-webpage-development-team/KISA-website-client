@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useJobsCurator } from "../contexts/JobsCuratorContext";
-import { JobListQueryParams } from "../types/jobs";
+import { JobListQueryParams, JobTag } from "../types/jobs";
 import { toApiDateString } from "../utils/date";
 
 export default function useJobsQueryParams() {
@@ -8,7 +8,7 @@ export default function useJobsQueryParams() {
     useJobsCurator();
 
   const queryParams: JobListQueryParams = useMemo(() => {
-    let tags = [];
+    const tags: JobTag[] = [];
 
     // add tags if they exist
     if (employmentType) {

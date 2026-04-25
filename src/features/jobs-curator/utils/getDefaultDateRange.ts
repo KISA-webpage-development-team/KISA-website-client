@@ -1,34 +1,39 @@
+import { addMonths } from "date-fns";
+
+const MAY = 4;
+const AUGUST = 7;
+const SEPTEMBER = 8;
+const FEBRUARY = 1;
+const SUMMER_INTERNSHIP_LENGTH_MONTHS = 3;
+
 export function getDefaultInternshipDateRange(today: Date = new Date()) {
   const year = today.getFullYear();
+  const summerStart   = new Date(year, MAY, 1);
+  const summerEnd     = new Date(year, AUGUST, 31);
+  const fallStart     = new Date(year, SEPTEMBER, 1);
+  const nextSpringEnd = new Date(year + 1, FEBRUARY, 1);
 
-  // Define key dates
-  const summerStart = new Date(year, 4, 1); // May 1
-  const summerEnd = new Date(year, 7, 31); // August 31
-  const septStart = new Date(year, 8, 1); // September 1
-  const nextFebStart = new Date(year + 1, 1, 1); // Feb 1 next year
+  const isDuringSummer  = today >= summerStart && today <= summerEnd;
+  const isFallSemester  = today >= fallStart   && today <  nextSpringEnd;
+  // NOTE: `isAfterFebruary` is unreachable as written. `year` is derived from
+  // `today.getFullYear()`, so `today >= Feb 1 of (year + 1)` can never hold —
+  // the branch was likely intended to handle Jan/Feb of the following year and
+  // should be revisited. Pre-summer (Jan–Apr) currently falls through to the
+  // final `else` returning this year's summer window, which matches intent.
+  const isAfterFebruary = today >= nextSpringEnd;
 
-  let start: Date, end: Date;
-
-  if (today >= summerStart && today <= summerEnd) {
-    // During summer: today ~ today + 3 months
-    start = today;
-    end = new Date(today);
-    end.setMonth(end.getMonth() + 3);
-  } else if (today >= septStart && today < nextFebStart) {
-    // After summer, before next Feb: next month ~ next month + 3 months
-    start = new Date(today);
-    start.setMonth(start.getMonth() + 1);
-    end = new Date(start);
-    end.setMonth(end.getMonth() + 3);
-  } else if (today >= nextFebStart) {
-    // After summer and after Feb: next summer
-    start = new Date(year + 1, 4, 1); // May 1 next year
-    end = new Date(year + 1, 7, 31); // August 31 next year
-  } else {
-    // Before summer: this summer
-    start = summerStart;
-    end = summerEnd;
+  if (isDuringSummer) {
+    return { start: today, end: addMonths(today, SUMMER_INTERNSHIP_LENGTH_MONTHS) };
   }
-
-  return { start, end };
+  if (isFallSemester) {
+    const start = addMonths(today, 1);
+    return { start, end: addMonths(start, SUMMER_INTERNSHIP_LENGTH_MONTHS) };
+  }
+  if (isAfterFebruary) {
+    return {
+      start: new Date(year + 1, MAY, 1),
+      end:   new Date(year + 1, AUGUST, 31),
+    };
+  }
+  return { start: summerStart, end: summerEnd };
 }

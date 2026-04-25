@@ -1,6 +1,13 @@
 import { useMemo } from "react";
 import { Job, JobListQueryParams } from "../types/jobs";
 import kisaJobs from "../data/kisaJobs";
+import {
+  isFulltime,
+  isIntern,
+  isConvertibleIntern,
+  isExperientialIntern,
+  isGlobalOnly,
+} from "../utils/jobPredicates";
 
 interface UseKisaJobsReturn {
   filteredJobs: Job[];
@@ -24,16 +31,15 @@ const useKisaJobs = (queryParams: JobListQueryParams): UseKisaJobsReturn => {
         return queryParams.tags!.some((tag) => {
           switch (tag) {
             case "fulltime":
-              return job.isFulltimePosition;
+              return isFulltime(job);
             case "intern":
-              return !job.isFulltimePosition;
+              return isIntern(job);
             case "convertible":
-              return job.isFulltimeConvertible;
+              return isConvertibleIntern(job);
             case "experiential":
-              // Experiential internships are typically non-convertible
-              return !job.isFulltimePosition && !job.isFulltimeConvertible;
+              return isExperientialIntern(job);
             case "global":
-              return job.isOnlyForInternationalUniversity;
+              return isGlobalOnly(job);
             default:
               return true;
           }
