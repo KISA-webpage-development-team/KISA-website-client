@@ -20,7 +20,7 @@ export interface JobPosting {
   jobID: number;
   company: string;
   position: string;
-  dueDate: string;
+  dueDate?: string;
   link: string;
   source: JobSource;
 }

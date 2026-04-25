@@ -4,15 +4,9 @@ import { Grid } from "@umichkisa-ds/web";
 import JobPostingCard from "./JobPostingCard";
 import InfiniteScroll from "../InfiniteScroll";
 
-import useFormattedJobs from "../../hooks/useFormattedJobs";
+import { formatJob } from "../../utils/formatJob";
 import { Job } from "../../types/jobs";
 import NotificationText from "../NotificationText";
-
-// Wrapper component to call hook at component level (required by rules-of-hooks)
-function JobCardWrapper({ job }: { job: Job }) {
-  const { jobPosting, jobBadges } = useFormattedJobs(job);
-  return <JobPostingCard jobPosting={jobPosting} jobBadges={jobBadges} />;
-}
 
 interface JobPostingGridProps {
   jobs: Job[];
@@ -33,9 +27,16 @@ export default function JobPostingGrid({
 
   const jobCards = (
     <Grid columns={{ base: 1, md: 2, lg: 3 }} gap="component">
-      {jobs.map((job, index) => (
-        <JobCardWrapper key={`${job.jobID}-${index}`} job={job} />
-      ))}
+      {jobs.map((job, index) => {
+        const { jobPosting, jobBadges } = formatJob(job);
+        return (
+          <JobPostingCard
+            key={`${job.jobID}-${index}`}
+            jobPosting={jobPosting}
+            jobBadges={jobBadges}
+          />
+        );
+      })}
     </Grid>
   );
 
