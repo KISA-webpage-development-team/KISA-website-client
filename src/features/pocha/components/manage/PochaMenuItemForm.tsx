@@ -4,13 +4,7 @@ import { MenuItemRaw } from "@/types/pocha";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
-import {
-  Button,
-  FileUpload,
-  FileUploadValue,
-  IconButton,
-  toast,
-} from "@umichkisa-ds/web";
+import { Button, FileUpload, FileUploadValue, toast } from "@umichkisa-ds/web";
 import { useForm, Form } from "@umichkisa-ds/form";
 
 interface PochaMenuItemFormProps {
@@ -176,25 +170,11 @@ export default function PochaMenuItemForm({
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2">
-        <IconButton
-          icon="arrow-left"
-          variant="tertiary"
-          size="sm"
-          aria-label="뒤로"
-          onClick={handleCloseForm}
-        />
-        <h3 className="type-body !font-semibold text-foreground">
-          {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
-        </h3>
-      </div>
-
-      <Form
-        form={methods}
-        onSubmit={onSubmit}
-        className="flex flex-col gap-4 w-full"
-      >
+    <Form
+      form={methods}
+      onSubmit={onSubmit}
+      className="flex flex-col gap-4 w-full"
+    >
           <div className="flex flex-col gap-4 w-full">
             <Form.Input
               name="nameKor"
@@ -292,10 +272,9 @@ export default function PochaMenuItemForm({
               취소
             </Button>
             <Button type="submit" disabled={!isValid || isSubmitting}>
-              {mode === "create" ? "추가" : "수정"}
+              {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
             </Button>
           </div>
         </Form>
-    </div>
   );
 }

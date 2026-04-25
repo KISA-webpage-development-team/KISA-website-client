@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { mutate } from "swr";
 import { useForm, Form } from "@umichkisa-ds/form";
 import {
@@ -19,7 +19,7 @@ import {
 import { useSession } from "next-auth/react";
 
 import PochaInfoFields from "./PochaInfoFields";
-import PochaMenuFields from "./PochaMenuFields";
+import PochaMenuFields, { MenuFormViewState } from "./PochaMenuFields";
 import { usePochaManage } from "../../contexts/PochaManageContext";
 import { UserSession } from "@/lib/next-auth/types";
 import { combineDateAndTime, separateDateAndTime } from "@/utils/formats/date";
@@ -78,6 +78,22 @@ export default function PochaFormDialog({
   const { menus } = usePochaManage();
 
   const [activeTab, setActiveTab] = useState<"info" | "menu">("info");
+  const [menuFormView, setMenuFormView] = useState<MenuFormViewState>({
+    active: false,
+  });
+
+  const handleMenuFormStateChange = useCallback((state: MenuFormViewState) => {
+    setMenuFormView(state);
+  }, []);
+
+  const isMenuForm = menuFormView.active;
+  const dialogTitle = isMenuForm
+    ? menuFormView.mode === "create"
+      ? "메뉴 추가하기"
+      : "메뉴 수정하기"
+    : mode === "create"
+      ? "포차 생성하기"
+      : "포차 수정하기";
 
   const { date: existingStartDate, time: existingStartTime } =
     separateDateAndTime(existingPochaInfo?.startDate);
@@ -215,9 +231,7 @@ export default function PochaFormDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="lg">
-        <DialogTitle>
-          {mode === "create" ? "포차 생성하기" : "포차 수정하기"}
-        </DialogTitle>
+        <DialogTitle>{dialogTitle}</DialogTitle>
         <Form
           form={methods}
           onSubmit={(values) => {
@@ -237,10 +251,12 @@ export default function PochaFormDialog({
             value={activeTab}
             onValueChange={(v) => setActiveTab(v as "info" | "menu")}
           >
-            <TabsList>
-              <TabsTrigger value="info">기본 정보</TabsTrigger>
-              <TabsTrigger value="menu">메뉴 ({menus.length})</TabsTrigger>
-            </TabsList>
+            {!isMenuForm && (
+              <TabsList>
+                <TabsTrigger value="info">기본 정보</TabsTrigger>
+                <TabsTrigger value="menu">메뉴 ({menus.length})</TabsTrigger>
+              </TabsList>
+            )}
             <TabsContent
               value="info"
               className="max-h-[60vh] overflow-y-auto"
@@ -251,26 +267,28 @@ export default function PochaFormDialog({
               value="menu"
               className="max-h-[60vh] overflow-y-auto"
             >
-              <PochaMenuFields />
+              <PochaMenuFields onFormStateChange={handleMenuFormStateChange} />
             </TabsContent>
           </Tabs>
-          <DialogFooter>
-            {crossFieldError && (
-              <Alert variant="error" className="w-full">
-                {crossFieldError}
-              </Alert>
-            )}
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => onOpenChange(false)}
-            >
-              취소
-            </Button>
-            <Button type="submit" disabled={submitDisabled}>
-              {mode === "create" ? "포차 생성하기" : "포차 수정하기"}
-            </Button>
-          </DialogFooter>
+          {!isMenuForm && (
+            <DialogFooter>
+              {crossFieldError && (
+                <Alert variant="error" className="w-full">
+                  {crossFieldError}
+                </Alert>
+              )}
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => onOpenChange(false)}
+              >
+                취소
+              </Button>
+              <Button type="submit" disabled={submitDisabled}>
+                {mode === "create" ? "포차 생성하기" : "포차 수정하기"}
+              </Button>
+            </DialogFooter>
+          )}
         </Form>
       </DialogContent>
     </Dialog>

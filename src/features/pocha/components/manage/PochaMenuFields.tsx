@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { MenuItemRaw } from "@/types/pocha";
 
@@ -10,8 +10,34 @@ type FormState =
   | { mode: "create"; presetImmediatePrep: boolean }
   | { mode: "update"; initialData: MenuItemRaw };
 
-export default function PochaMenuFields() {
+export interface MenuFormViewState {
+  active: boolean;
+  mode?: "create" | "update";
+}
+
+interface PochaMenuFieldsProps {
+  /**
+   * Fired whenever the inline menu-item form opens or closes. The parent
+   * (PochaFormDialog) uses this to swap the dialog title, hide the TabsList,
+   * and hide the outer DialogFooter — turning the dialog into a focused
+   * menu-form view.
+   */
+  onFormStateChange?: (state: MenuFormViewState) => void;
+}
+
+export default function PochaMenuFields({
+  onFormStateChange,
+}: PochaMenuFieldsProps) {
   const [formState, setFormState] = useState<FormState>(null);
+
+  useEffect(() => {
+    if (!onFormStateChange) return;
+    if (formState) {
+      onFormStateChange({ active: true, mode: formState.mode });
+    } else {
+      onFormStateChange({ active: false });
+    }
+  }, [formState, onFormStateChange]);
 
   const closeForm = () => setFormState(null);
 
