@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm, Form } from "@umichkisa-ds/form";
 import {
   Button,
@@ -115,20 +115,7 @@ export default function PochaFormDialog({
   const {
     formState: { isValid, isSubmitting, errors },
     reset,
-    watch,
-    trigger,
   } = methods;
-
-  // Cross-field validation lives in the `validate` rules on endDate / endTime
-  // inside PochaInfoFields. RHF only re-runs a field's rules when *that* field
-  // changes, so when the user tweaks startDate / startTime we manually trigger
-  // re-validation on the end fields.
-  const watchedStartDate = watch("startDate");
-  const watchedStartTime = watch("startTime");
-
-  useEffect(() => {
-    trigger(["endDate", "endTime"]);
-  }, [watchedStartDate, watchedStartTime, trigger]);
 
   const onSubmit = async (values: PochaFormValues) => {
     const newStartDateTime = combineDateAndTime(

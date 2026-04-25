@@ -1,4 +1,8 @@
+"use client";
+
+import { useEffect } from "react";
 import { Form } from "@umichkisa-ds/form";
+import { useFormContext } from "react-hook-form";
 
 interface PochaInfoFieldsProps {}
 
@@ -7,6 +11,17 @@ function startOfDay(d: Date): number {
 }
 
 export default function PochaInfoFields(_props: PochaInfoFieldsProps) {
+  // Cross-field validation: re-trigger end-field rules whenever start fields
+  // change. Colocated here so the rules and the re-validation glue live in
+  // one file (per Toss `cohesion-form-structure`).
+  const { watch, trigger } = useFormContext();
+  const watchedStartDate = watch("startDate");
+  const watchedStartTime = watch("startTime");
+
+  useEffect(() => {
+    trigger(["endDate", "endTime"]);
+  }, [watchedStartDate, watchedStartTime, trigger]);
+
   return (
     <div className="flex w-full flex-col gap-6">
       <Form.Input
