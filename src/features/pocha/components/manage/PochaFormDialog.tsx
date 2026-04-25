@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Form } from "@umichkisa-ds/form";
 import {
-  Alert,
   Button,
   Dialog,
   DialogContent,
@@ -214,10 +213,9 @@ export default function PochaFormDialog({
     }
   };
 
-  const crossFieldError =
-    errors.endDate?.message ?? errors.endTime?.message;
-
-  const submitDisabled = menus.length === 0 || !isValid || isSubmitting;
+  const hasFieldErrors = Object.keys(errors).length > 0;
+  const submitDisabled =
+    menus.length === 0 || !isValid || isSubmitting || hasFieldErrors;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -284,11 +282,6 @@ export default function PochaFormDialog({
               </TabsContent>
             </Tabs>
             <DialogFooter>
-              {crossFieldError && (
-                <Alert variant="error" className="w-full">
-                  {crossFieldError}
-                </Alert>
-              )}
               <Button
                 type="button"
                 variant="secondary"
