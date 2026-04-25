@@ -1,25 +1,36 @@
 "use client";
-import React, { useEffect } from "react";
+
+import React, { useEffect, useState } from "react";
 import { mutate } from "swr";
 import { useForm, Form } from "@umichkisa-ds/form";
-import { Alert, Button, Divider, toast } from "@umichkisa-ds/web";
+import {
+  Alert,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  toast,
+} from "@umichkisa-ds/web";
+import { useSession } from "next-auth/react";
+
 import PochaInfoFields from "./PochaInfoFields";
 import PochaMenuFields from "./PochaMenuFields";
 import { usePochaManage } from "../../contexts/PochaManageContext";
-import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
 import { combineDateAndTime, separateDateAndTime } from "@/utils/formats/date";
 import { createPocha, updatePocha } from "@/apis/pocha/mutations";
 import { PochaInfo } from "@/types/pocha";
 
-interface PochaFormProps {
-  mode?: "create" | "update";
+interface PochaFormDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  mode: "create" | "update";
   existingPochaInfo?: PochaInfo;
-  /**
-   * Called after a successful create/update. The page wires this to
-   * `usePocha`'s `refetch` so the active-pocha summary re-renders without a
-   * full reload.
-   */
   onSubmitSuccess?: () => void;
 }
 
@@ -49,11 +60,13 @@ function parseYmdToDate(ymd: string | null | undefined): Date | undefined {
   return new Date(y, m - 1, d);
 }
 
-export default function PochaForm({
-  mode = "create",
+export default function PochaFormDialog({
+  open,
+  onOpenChange,
+  mode,
   existingPochaInfo,
   onSubmitSuccess,
-}: PochaFormProps) {
+}: PochaFormDialogProps) {
   const { data: session } = useSession() as {
     data: UserSession | undefined;
     status: string;
@@ -63,6 +76,8 @@ export default function PochaForm({
   const token = session?.token;
 
   const { menus } = usePochaManage();
+
+  const [activeTab, setActiveTab] = useState<"info" | "menu">("info");
 
   const { date: existingStartDate, time: existingStartTime } =
     separateDateAndTime(existingPochaInfo?.startDate);
@@ -91,10 +106,9 @@ export default function PochaForm({
   } = methods;
 
   // Cross-field validation: end > start. We watch the four datetime fields and
-  // manage a synthetic error on `endDate` (which is also surfaced inline below
-  // the submit button via formState.errors.endDate). PochaInfoFields registers
-  // these names via Form.* compounds (lane 2.10), so we don't re-register here
-  // — we just observe and decorate.
+  // manage a synthetic error on `endDate` (surfaced in the dialog footer).
+  // PochaInfoFields registers these names via Form.* compounds (lane 2.10),
+  // so we don't re-register here — we just observe and decorate.
   const watchedStartDate = watch("startDate");
   const watchedStartTime = watch("startTime");
   const watchedEndDate = watch("endDate");
@@ -176,7 +190,10 @@ export default function PochaForm({
         await mutate([`/pocha/menu/${existingPochaInfo.pochaID}/`, token]);
       }
 
-      // Reset form on create so the next pocha starts clean
+      // Close the dialog after refetches complete.
+      onOpenChange(false);
+
+      // Reset form on create so the next open starts clean.
       if (mode === "create") {
         reset();
       }
@@ -196,26 +213,63 @@ export default function PochaForm({
   const submitDisabled = menus.length === 0 || !isValid || isSubmitting;
 
   return (
-    <Form form={methods} onSubmit={onSubmit} className="flex flex-col gap-6">
-      <PochaInfoFields />
-
-      <Divider />
-
-      <PochaMenuFields />
-
-      <Divider />
-
-      <Button
-        type="submit"
-        className="w-full"
-        disabled={submitDisabled}
-      >
-        {mode === "create" ? "포차 생성하기" : "포차 수정하기"}
-      </Button>
-
-      {crossFieldError && (
-        <Alert variant="error">{crossFieldError}</Alert>
-      )}
-    </Form>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="lg">
+        <DialogTitle>
+          {mode === "create" ? "포차 생성하기" : "포차 수정하기"}
+        </DialogTitle>
+        <Form
+          form={methods}
+          onSubmit={(values) => {
+            if (errors.endDate || errors.endTime) {
+              setActiveTab("info");
+              return;
+            }
+            if (menus.length === 0) {
+              setActiveTab("menu");
+              return;
+            }
+            return onSubmit(values);
+          }}
+          className="flex flex-1 flex-col gap-4 overflow-hidden"
+        >
+          <Tabs
+            value={activeTab}
+            onValueChange={(v) => setActiveTab(v as "info" | "menu")}
+            variant="underline"
+            size="md"
+            className="flex flex-1 flex-col overflow-hidden"
+          >
+            <TabsList>
+              <TabsTrigger value="info">기본 정보</TabsTrigger>
+              <TabsTrigger value="menu">메뉴 ({menus.length})</TabsTrigger>
+            </TabsList>
+            <TabsContent value="info" className="flex-1 overflow-y-auto">
+              <PochaInfoFields />
+            </TabsContent>
+            <TabsContent value="menu" className="flex-1 overflow-y-auto">
+              <PochaMenuFields />
+            </TabsContent>
+          </Tabs>
+          <DialogFooter>
+            {crossFieldError && (
+              <Alert variant="error" className="w-full">
+                {crossFieldError}
+              </Alert>
+            )}
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => onOpenChange(false)}
+            >
+              취소
+            </Button>
+            <Button type="submit" disabled={submitDisabled}>
+              {mode === "create" ? "포차 생성하기" : "포차 수정하기"}
+            </Button>
+          </DialogFooter>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

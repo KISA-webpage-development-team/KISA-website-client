@@ -20,15 +20,13 @@ import {
 
 interface PochaSummaryProps {
   pochaInfo: PochaInfo;
-  isEditPochaFormOpen: boolean;
-  setIsEditPochaFormOpen: (isOpen: boolean) => void;
+  onEditClick: () => void;
   menuList: MenuItemRaw[];
 }
 
 export default function PochaSummary({
   pochaInfo,
-  isEditPochaFormOpen,
-  setIsEditPochaFormOpen,
+  onEditClick,
   menuList,
 }: PochaSummaryProps) {
   const statusLabel = pochaInfo.ongoing ? "진행 중" : "진행 예정";
@@ -50,12 +48,8 @@ export default function PochaSummary({
             </div>
             <CardDescription>{pochaInfo.description}</CardDescription>
           </div>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => setIsEditPochaFormOpen(!isEditPochaFormOpen)}
-          >
-            {isEditPochaFormOpen ? "수정 취소" : "수정하기"}
+          <Button variant="secondary" size="sm" onClick={onEditClick}>
+            수정하기
           </Button>
         </div>
       </CardHeader>
@@ -117,7 +111,7 @@ function MenuGroup({
   items: MenuItemRaw[];
 }) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       <p className="type-body-sm text-muted-foreground">
         {label} · {items.length}
       </p>
