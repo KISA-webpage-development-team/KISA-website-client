@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Form, useFormContext } from "@umichkisa-ds/form";
 
 interface PochaInfoFieldsProps {}
@@ -19,7 +19,16 @@ export default function PochaInfoFields(_props: PochaInfoFieldsProps) {
   const watchedStartDate = watch("startDate");
   const watchedStartTime = watch("startTime");
 
+  // Skip the mount run: with `mode: "onTouched"`, programmatic `trigger()`
+  // still surfaces "required" errors on untouched fields, so re-validating
+  // empty end fields on initial render flashes errors before the user has
+  // typed anything. Only re-trigger when start fields actually change.
+  const didMount = useRef(false);
   useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
     trigger(["endDate", "endTime"]);
   }, [watchedStartDate, watchedStartTime, trigger]);
 

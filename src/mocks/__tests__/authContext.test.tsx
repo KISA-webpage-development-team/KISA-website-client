@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, act } from "@testing-library/react";
+import { SessionProvider } from "next-auth/react";
 import { AuthContextProvider } from "@/lib/auth/authContext";
 import { MockAuthToggle } from "../MockAuthToggle";
 
@@ -8,9 +9,11 @@ const ADMIN_KEY = "kisa-mock-auth-isadmin";
 
 function renderToggle() {
   return render(
-    <AuthContextProvider initialSession={null}>
-      <MockAuthToggle />
-    </AuthContextProvider>
+    <SessionProvider session={null}>
+      <AuthContextProvider initialSession={null}>
+        <MockAuthToggle />
+      </AuthContextProvider>
+    </SessionProvider>
   );
 }
 
