@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 
 // ui components
 import { Button, LoadingSpinner, StatusView } from "@umichkisa-ds/web";
@@ -13,6 +13,7 @@ import USAFallbackContent from "@/features/jobs-curator/components/USAFallbackCo
 
 // hooks
 import useInfiniteJobs from "@/features/jobs-curator/hooks/useInfiniteJobs";
+import useKisaJobs from "@/features/jobs-curator/hooks/useKisaJobs";
 import useJobsQueryParams from "@/features/jobs-curator/hooks/useJobsQueryParams";
 import {
   JobsCuratorProvider,
@@ -43,8 +44,21 @@ export default function JobsCuratorPage() {
 function JobsCuratorDynamicContent() {
   const { country } = useJobsCurator();
   const queryParams = useJobsQueryParams();
-  const { jobs, status, error, hasMore, loadMore, isLoadingMore } =
-    useInfiniteJobs(queryParams);
+  const {
+    jobs: apiJobs,
+    status,
+    error,
+    hasMore,
+    loadMore,
+    isLoadingMore,
+    loadMoreError,
+    retryLoadMore,
+  } = useInfiniteJobs(queryParams);
+  const { filteredJobs: kisaJobs, hasKisaJobs } = useKisaJobs(queryParams);
+  const jobs = useMemo(
+    () => (hasKisaJobs ? [...kisaJobs, ...apiJobs] : apiJobs),
+    [kisaJobs, hasKisaJobs, apiJobs]
+  );
 
   if (status === "error") {
     throw new Error(error || "Unexpected error occurred");
@@ -82,6 +96,8 @@ function JobsCuratorDynamicContent() {
             onLoadMore={loadMore}
             hasMore={hasMore}
             isLoadingMore={isLoadingMore}
+            loadMoreError={loadMoreError}
+            onRetry={retryLoadMore}
           />
         )}
       </div>
