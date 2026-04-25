@@ -5,16 +5,14 @@ import Footer from "@/components/layout/footer/Footer";
 import { getServerSession } from "next-auth";
 import { Container } from "@umichkisa-ds/web";
 import authOptions from "@/lib/next-auth/authOptions";
-import { AuthContextProvider, type AppSession } from "@/lib/auth/authContext";
 import { MockAuthToggle } from "@/mocks/MockAuthToggle";
-import { SessionProvider } from "next-auth/react";
+import Providers from "./Providers";
 
 export default async function MainLayout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions);
 
   return (
-    <SessionProvider session={session}>
-      <AuthContextProvider initialSession={session as AppSession | null}>
+    <Providers session={session}>
       <div className="h-full flex flex-col">
         <header
           className="top-0 z-40
@@ -34,7 +32,6 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
 
         <MockAuthToggle />
       </div>
-      </AuthContextProvider>
-    </SessionProvider>
+    </Providers>
   );
 }
