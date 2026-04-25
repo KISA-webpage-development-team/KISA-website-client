@@ -28,7 +28,7 @@ import PreviousPochaList from "@/features/pocha/components/manage/PreviousPochaL
 
 export default function ManagePage() {
   return (
-    <Container as="section" size="md" className="my-4 md:my-6 lg:my-10">
+    <Container as="section" size="md">
       <PochaManagePageHeader />
       <PochaManageProvider>
         <PochaManagePageContent />
