@@ -71,10 +71,9 @@ export type InternshipType = "convertible" | "experiential" | "global";
 export type SupportedCountry = "KR" | "US";
 
 // Query parameters for the job list API
-type Tag = "fulltime" | "intern" | "convertible" | "experiential" | "global";
 export interface JobListQueryParams {
   category?: string;
-  tags?: Tag[];
+  tags?: JobTag[];
   startDate?: string;
   endDate?: string;
   offset?: number;
