@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { Button, Card, CardContent } from "@umichkisa-ds/web";
 
 // ui components
-import PochaForm from "@/features/pocha/components/manage/PochaForm";
+import PochaFormDialog from "@/features/pocha/components/manage/PochaFormDialog";
 import { LoadingSpinner, NotAuthorized } from "@/components/ui/feedback";
-import { CustomButton } from "@/components/ui/button";
 import PochaSummary from "@/features/pocha/components/manage/PochaSummary";
 import { PochaManageProvider } from "@/features/pocha/contexts/PochaManageContext";
 
@@ -31,9 +31,8 @@ export default function ManagePage() {
 }
 
 function PochaManagePageContent() {
-  const [isNewPochaFormOpen, setIsNewPochaFormOpen] = useState<boolean>(false);
-  const [isEditPochaFormOpen, setIsEditPochaFormOpen] =
-    useState<boolean>(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [dialogMode, setDialogMode] = useState<"create" | "update">("create");
 
   const { isAdmin, token, status: adminStatus } = useAdmin();
   const {
@@ -78,32 +77,46 @@ function PochaManagePageContent() {
   return (
     <>
       {noPochaAvailable && (
-        <div className="flex flex-col w-full gap-2">
-          <CustomButton
-            text="새로운 포차 추가하기"
-            onClick={() => setIsNewPochaFormOpen(true)}
-          />
-          {isNewPochaFormOpen && <PochaForm onSubmitSuccess={refetchPocha} />}
-        </div>
+        <Card>
+          <CardContent>
+            <div className="flex flex-col items-center gap-4 py-8 text-center">
+              <h3 className="type-h3 !font-semibold text-foreground">
+                진행 중인 포차가 없습니다
+              </h3>
+              <p className="type-body text-muted-foreground">
+                새로운 포차를 만들어 메뉴를 등록하세요.
+              </p>
+              <Button
+                onClick={() => {
+                  setDialogMode("create");
+                  setDialogOpen(true);
+                }}
+              >
+                새로운 포차 추가하기
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       )}
       {!noPochaAvailable && (
         <div className="flex flex-col gap-6">
           <PochaSummary
             pochaInfo={pochaInfo}
             menuList={menuListRaw}
-            isEditPochaFormOpen={isEditPochaFormOpen}
-            setIsEditPochaFormOpen={setIsEditPochaFormOpen}
+            onEditClick={() => {
+              setDialogMode("update");
+              setDialogOpen(true);
+            }}
           />
-
-          {isEditPochaFormOpen && (
-            <PochaForm
-              mode="update"
-              existingPochaInfo={pochaInfo}
-              onSubmitSuccess={refetchPocha}
-            />
-          )}
         </div>
       )}
+      <PochaFormDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        mode={dialogMode}
+        existingPochaInfo={dialogMode === "update" ? pochaInfo : undefined}
+        onSubmitSuccess={refetchPocha}
+      />
       <div className="mt-10">
         <PreviousPochaList />
       </div>
