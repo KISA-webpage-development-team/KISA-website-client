@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { mutate } from "swr";
 import { useForm, Form } from "@umichkisa-ds/form";
 import {
   Alert,
@@ -193,18 +192,10 @@ export default function PochaFormDialog({
         toast.success(`${values.title} 포차 수정이 완료되었습니다.`);
       }
 
-      // Refresh today's pocha summary via the page-supplied callback
-      // (usePocha is not SWR — it exposes a refetch instead).
-      onSubmitSuccess?.();
-      // Refresh any previous-pocha lists (date-keyed SWR consumers).
-      await mutate(
-        (key) =>
-          typeof key === "string" && key.startsWith("/pocha/previous/")
-      );
-      // For update mode, refresh that pocha's menu cache (SWR).
-      if (mode === "update" && existingPochaInfo?.pochaID) {
-        await mutate([`/pocha/menu/${existingPochaInfo.pochaID}/`, token]);
-      }
+      // Page owns post-submit refresh: pocha info refetch + SWR mutates for
+      // /pocha/menu/* and /pocha/previous/*. We just await it so the dialog
+      // doesn't close until the summary card has the new data.
+      await onSubmitSuccess?.();
 
       // Close the dialog after refetches complete.
       onOpenChange(false);

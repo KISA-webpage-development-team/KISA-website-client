@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { mutate } from "swr";
 import { Button, Card, CardContent } from "@umichkisa-ds/web";
 
 // ui components
@@ -54,12 +55,29 @@ function PochaManagePageContent() {
   const noPochaAvailable =
     pochaStatus === "success" && Object.keys(pochaInfo).length === 0;
 
-  // pre-fill pocha menu list if available (edit mode)
+  // Sync the latest menu fetch into the manage context — runs on initial
+  // load AND on every SWR revalidation (e.g. after PUT /pocha/{id}/ mutates
+  // the menusStore in MSW). Without `menuListRaw` in deps, the context kept
+  // showing the original fetch and the summary card never reflected edits.
   useEffect(() => {
     if (!noPochaAvailable && menuStatus === "success" && menuList) {
       setMenus(menuListRaw);
     }
-  }, [noPochaAvailable, menuStatus]);
+  }, [noPochaAvailable, menuStatus, menuListRaw]);
+
+  // Centralized post-submit refresh. The dialog calls this after a successful
+  // create/update; we own the SWR revalidation here so cache keys stay
+  // co-located with the hooks that read them.
+  const handleSubmitSuccess = useCallback(async () => {
+    refetchPocha();
+    await mutate(
+      (key) =>
+        (typeof key === "string" && key.startsWith("/pocha/previous/")) ||
+        (Array.isArray(key) &&
+          typeof key[0] === "string" &&
+          key[0].startsWith("/pocha/menu/"))
+    );
+  }, [refetchPocha]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -116,7 +134,7 @@ function PochaManagePageContent() {
           onOpenChange={setDialogOpen}
           mode={dialogMode}
           existingPochaInfo={dialogMode === "update" ? pochaInfo : undefined}
-          onSubmitSuccess={refetchPocha}
+          onSubmitSuccess={handleSubmitSuccess}
         />
       )}
       <div className="mt-10">
