@@ -1,18 +1,9 @@
 import { Form } from "@umichkisa-ds/form";
 
-interface PochaInfoField {
-  value: string;
-  setValue: (value: string) => void;
-  label: string;
-  type: string;
-  placeholder?: string;
-  isError: boolean;
-  errorMsg: string;
-  errorState: string;
-}
+interface PochaInfoFieldsProps {}
 
-interface PochaInfoFieldsProps {
-  fields?: PochaInfoField[];
+function startOfDay(d: Date): number {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
 }
 
 export default function PochaInfoFields(_props: PochaInfoFieldsProps) {
@@ -44,13 +35,36 @@ export default function PochaInfoFields(_props: PochaInfoFieldsProps) {
       <Form.DatePicker
         name="endDate"
         label="종료 날짜"
-        rules={{ required: "유효한 종료 날짜를 입력해주세요." }}
+        rules={{
+          required: "유효한 종료 날짜를 입력해주세요.",
+          validate: (value: Date | undefined, values: Record<string, unknown>) => {
+            const start = values.startDate as Date | undefined;
+            if (!value || !start) return true;
+            return startOfDay(value) < startOfDay(start)
+              ? "종료 날짜는 시작 날짜보다 빠를 수 없습니다."
+              : true;
+          },
+        }}
       />
       <Form.Input
         name="endTime"
         label="종료 시간"
         type="time"
-        rules={{ required: "유효한 종료 시간을 입력해주세요." }}
+        rules={{
+          required: "유효한 종료 시간을 입력해주세요.",
+          validate: (value: string, values: Record<string, unknown>) => {
+            const startDate = values.startDate as Date | undefined;
+            const endDate = values.endDate as Date | undefined;
+            const startTime = values.startTime as string | undefined;
+            if (!value || !startTime || !startDate || !endDate) return true;
+            // Only enforce time ordering when start and end fall on the same day;
+            // when end is on a later day, any time is fine.
+            if (startOfDay(endDate) > startOfDay(startDate)) return true;
+            return value <= startTime
+              ? "종료 시간은 시작 시간보다 늦어야 합니다."
+              : true;
+          },
+        }}
       />
     </div>
   );

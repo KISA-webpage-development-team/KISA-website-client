@@ -115,53 +115,19 @@ export default function PochaFormDialog({
     formState: { isValid, isSubmitting, errors },
     reset,
     watch,
-    setError,
-    clearErrors,
+    trigger,
   } = methods;
 
-  // Cross-field validation: end > start. We watch the four datetime fields and
-  // manage a synthetic error on `endDate` (surfaced in the dialog footer).
-  // PochaInfoFields registers these names via Form.* compounds (lane 2.10),
-  // so we don't re-register here — we just observe and decorate.
+  // Cross-field validation lives in the `validate` rules on endDate / endTime
+  // inside PochaInfoFields. RHF only re-runs a field's rules when *that* field
+  // changes, so when the user tweaks startDate / startTime we manually trigger
+  // re-validation on the end fields.
   const watchedStartDate = watch("startDate");
   const watchedStartTime = watch("startTime");
-  const watchedEndDate = watch("endDate");
-  const watchedEndTime = watch("endTime");
 
   useEffect(() => {
-    if (
-      !watchedStartDate ||
-      !watchedStartTime ||
-      !watchedEndDate ||
-      !watchedEndTime
-    ) {
-      // Don't surface cross-field error until all four fields have values;
-      // field-level required errors handle the empty case.
-      if (errors.endDate?.type === "crossField") {
-        clearErrors("endDate");
-      }
-      return;
-    }
-
-    const start = combineDateAndTime(
-      formatDateToYmd(watchedStartDate),
-      watchedStartTime
-    );
-    const end = combineDateAndTime(
-      formatDateToYmd(watchedEndDate),
-      watchedEndTime
-    );
-
-    if (start && end && new Date(end) <= new Date(start)) {
-      setError("endDate", {
-        type: "crossField",
-        message: "종료 시간은 시작 시간보다 늦어야 합니다.",
-      });
-    } else if (errors.endDate?.type === "crossField") {
-      clearErrors("endDate");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchedStartDate, watchedStartTime, watchedEndDate, watchedEndTime]);
+    trigger(["endDate", "endTime"]);
+  }, [watchedStartDate, watchedStartTime, trigger]);
 
   const onSubmit = async (values: PochaFormValues) => {
     const newStartDateTime = combineDateAndTime(
