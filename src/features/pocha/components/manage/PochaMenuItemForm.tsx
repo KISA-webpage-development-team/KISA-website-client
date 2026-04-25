@@ -3,13 +3,14 @@ import { usePochaManage } from "../../contexts/PochaManageContext";
 import { MenuItemRaw } from "@/types/pocha";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/lib/next-auth/types";
-import { HorizontalDivider } from "@/components/ui/divider";
 import { defaultImageURL, getMenuImagePath } from "../../utils/getImagePath";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   Button,
+  FileUpload,
+  FileUploadValue,
   toast,
 } from "@umichkisa-ds/web";
 import { useForm, Form } from "@umichkisa-ds/form";
@@ -37,13 +38,23 @@ export default function PochaMenuItemForm({
 }: PochaMenuItemFormProps) {
   const { menus, setMenus } = usePochaManage();
 
-  const [imageURL, setImageURL] = useState<string>("");
   const { data: session } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
 
-  const [cloudinaryPublicId, setCloudinaryPublicId] = useState<string>("");
+  const initialFileUploadValue: FileUploadValue | null = useMemo(() => {
+    if (mode === "update") {
+      const existing = getMenuImagePath(initialData?.menuID);
+      if (existing && existing !== defaultImageURL) {
+        return { url: existing, publicId: "" };
+      }
+    }
+    return null;
+  }, [mode, initialData]);
+
+  const [fileUploadValue, setFileUploadValue] =
+    useState<FileUploadValue | null>(initialFileUploadValue);
 
   const deleteImageFromCloudinary = async (publicId: string) => {
     try {
@@ -66,54 +77,41 @@ export default function PochaMenuItemForm({
     }
   };
 
-  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const handleUpload = async (file: File): Promise<FileUploadValue> => {
+    if (!session?.token) {
+      toast.error("로그인이 필요합니다.");
+      throw new Error("Not logged in");
+    }
 
-  const uploadImage = async (file: File) => {
-    try {
-      if (!session?.token) {
-        toast.error("로그인이 필요합니다.");
-        return;
-      }
+    const timestamp = new Date().getTime();
+    const fileName = `pocha-menu-${timestamp}`;
+    const formattedFileName = fileName.replace(/ /g, "-");
 
-      setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("public_id", `/${formattedFileName}`);
+    formData.append("folder", "temp");
+    formData.append("resource_type", "image");
 
-      // Create a unique filename for Cloudinary
-      const timestamp = new Date().getTime();
-      const fileName = `pocha-menu-${timestamp}`;
+    const response = await fetch("/api/upload-to-cloudinary", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
+    });
 
-      // format filename for cloudinary
-      const formattedFileName = fileName.replace(/ /g, "-");
+    if (!response.ok) {
+      throw new Error("Upload failed");
+    }
 
-      // Create FormData for the upload
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("public_id", `/${formattedFileName}`);
-      formData.append("folder", "temp");
-      formData.append("resource_type", "image");
+    const result = await response.json();
+    return { url: result.secure_url, publicId: result.public_id };
+  };
 
-      // Upload to Cloudinary
-      const response = await fetch("/api/upload-to-cloudinary", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Upload failed");
-      }
-
-      const result = await response.json();
-
-      // Set the image URL from Cloudinary response
-      setImageURL(result.secure_url);
-      setCloudinaryPublicId(result.public_id);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      toast.error("이미지 업로드에 실패했습니다.");
-    } finally {
-      setIsUploading(false);
+  const handleRemove = async (publicId: string): Promise<void> => {
+    if (publicId) {
+      await deleteImageFromCloudinary(publicId);
     }
   };
 
@@ -143,7 +141,7 @@ export default function PochaMenuItemForm({
       stock: Number(values.stock),
       isImmediatePrep: values.isImmediatePrep === true,
       ageCheckRequired: values.ageCheckRequired === true,
-      imageURL,
+      imageURL: fileUploadValue?.url ?? "",
     };
 
     if (mode === "create") {
@@ -160,36 +158,15 @@ export default function PochaMenuItemForm({
     closeItemForm();
   };
 
-  // Add this function to handle image removal
-  const removeImage = () => {
-    if (cloudinaryPublicId) {
-      deleteImageFromCloudinary(cloudinaryPublicId);
-    }
-    setImageURL("");
-    setCloudinaryPublicId("");
-  };
-
   // Add this function to handle form closure cleanup
   const handleCloseForm = () => {
-    // Clean up temporary image if modal is closed without submitting
-    if (cloudinaryPublicId && imageURL) {
-      deleteImageFromCloudinary(cloudinaryPublicId);
+    // Cleanup: only delete if WE uploaded (publicId is set;
+    // pre-existing images carry empty publicId)
+    if (fileUploadValue?.publicId) {
+      deleteImageFromCloudinary(fileUploadValue.publicId);
     }
     closeItemForm();
   };
-
-  const showImageSection = useMemo(() => {
-    if (mode === "create") {
-      return true;
-    }
-    if (
-      mode === "update" &&
-      getMenuImagePath(initialData?.menuID) !== defaultImageURL
-    ) {
-      return true;
-    }
-    return false;
-  }, [mode, initialData]);
 
   return (
     <Dialog
@@ -296,81 +273,16 @@ export default function PochaMenuItemForm({
             </div>
           </div>
 
-          {/* Image Upload Section */}
-          {/* only shows when getMenuImagePath is not defaultImageURL */}
-          {showImageSection && (
-            <>
-              <HorizontalDivider />
-              <div className="flex flex-col gap-2">
-                <label className="type-label !font-semibold text-foreground">
-                  메뉴 이미지
-                </label>
-                <div className="flex flex-row gap-8">
-                  {/* original image */}
-
-                  {mode === "update" && (
-                    <div className="flex flex-col gap-2">
-                      <span className="text-sm text-gray-500">
-                        기존 이미지
-                      </span>
-                      <img
-                        src={getMenuImagePath(initialData?.menuID)}
-                        alt="메뉴 이미지"
-                        className="w-32 h-32 object-cover rounded-lg border"
-                      />
-                    </div>
-                  )}
-
-                  {/* upload image */}
-                  <div className="flex flex-col gap-2">
-                    <span className="text-sm text-gray-500">새 이미지</span>
-                    <div className="flex flex-row gap-2">
-                      {imageURL && (
-                        <div className="mt-2">
-                          <img
-                            src={imageURL}
-                            alt="메뉴 이미지"
-                            className="w-32 h-32 object-cover rounded-lg border"
-                          />
-                          <button
-                            type="button"
-                            onClick={removeImage}
-                            className="mt-2 text-sm text-red-600 hover:text-red-800"
-                          >
-                            이미지 제거
-                          </button>
-                        </div>
-                      )}
-                      <div className="flex flex-col gap-4">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            // only png
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              uploadImage(file);
-                            }
-                          }}
-                          disabled={isUploading}
-                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                        />
-                        {isUploading && (
-                          <div className="text-sm text-blue-600">
-                            이미지 업로드 중...
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
+          <FileUpload
+            value={fileUploadValue}
+            onChange={setFileUploadValue}
+            onUpload={handleUpload}
+            onRemove={handleRemove}
+          />
 
           <Button
             type="submit"
-            disabled={!isValid || isSubmitting || isUploading}
+            disabled={!isValid || isSubmitting}
             className="w-full mt-4"
           >
             {mode === "create" ? "메뉴 추가하기" : "메뉴 수정하기"}
