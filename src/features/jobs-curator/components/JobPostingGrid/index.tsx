@@ -13,6 +13,8 @@ interface JobPostingGridProps {
   onLoadMore?: () => void;
   hasMore?: boolean;
   isLoadingMore?: boolean;
+  loadMoreError?: string;
+  onRetry?: () => void;
 }
 
 export default function JobPostingGrid({
@@ -20,6 +22,8 @@ export default function JobPostingGrid({
   onLoadMore,
   hasMore = false,
   isLoadingMore = false,
+  loadMoreError,
+  onRetry,
 }: JobPostingGridProps) {
   if (jobs.length === 0) {
     return <NotificationText text="조건에 맞는 포지션이 없습니다." />;
@@ -46,6 +50,8 @@ export default function JobPostingGrid({
         onLoadMore={onLoadMore}
         hasMore={hasMore}
         isLoading={isLoadingMore}
+        loadMoreError={loadMoreError}
+        onRetry={onRetry}
         endMessage={<NotificationText text="더 이상 포지션이 없습니다." />}
       >
         {jobCards}
