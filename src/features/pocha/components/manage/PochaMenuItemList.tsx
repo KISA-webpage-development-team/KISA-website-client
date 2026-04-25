@@ -52,55 +52,29 @@ export default function PochaMenuItemList() {
     setEditingMenu(null);
   };
 
-  return (
-    <div className="flex flex-col gap-4">
-      {menus.map((menu) => (
-        <Card key={menu.nameEng}>
-          <CardContent>
-            <div className="flex flex-row gap-4">
-              <MenuThumbnail menu={menu} />
-              <div className="flex w-full flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="type-body !font-semibold text-foreground">
-                    {menu.nameKor}
-                    <span className="type-body !font-normal text-muted-foreground"> ({menu.nameEng})</span>
-                  </h3>
-                  <div className="flex items-center gap-1">
-                    <IconButton
-                      icon="pencil"
-                      variant="tertiary"
-                      size="sm"
-                      aria-label="수정하기"
-                      onClick={() => onEdit(menu)}
-                    />
-                    <IconButton
-                      icon="trash-2"
-                      variant="tertiary"
-                      size="sm"
-                      aria-label="삭제하기"
-                      onClick={() => onRequestDelete(menu)}
-                    />
-                  </div>
-                </div>
+  const immediatePrepMenus = menus.filter((m) => m.isImmediatePrep);
+  const cookingMenus = menus.filter((m) => !m.isImmediatePrep);
 
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 type-body-sm text-muted-foreground">
-                  <span>{menu.category}</span>
-                  <span aria-hidden>·</span>
-                  <span>${menu.price?.toLocaleString()}</span>
-                  <span aria-hidden>·</span>
-                  <span>재고 {menu.stock}개</span>
-                  {menu.isImmediatePrep && (
-                    <Badge variant="success" size="sm">즉시 제공</Badge>
-                  )}
-                  {menu.ageCheckRequired && (
-                    <Badge variant="warning" size="sm">연령 확인</Badge>
-                  )}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+  return (
+    <div className="flex flex-col gap-6">
+      {immediatePrepMenus.length > 0 && (
+        <MenuSection
+          label="즉시 제공"
+          count={immediatePrepMenus.length}
+          items={immediatePrepMenus}
+          onEdit={onEdit}
+          onRequestDelete={onRequestDelete}
+        />
+      )}
+      {cookingMenus.length > 0 && (
+        <MenuSection
+          label="조리 필요"
+          count={cookingMenus.length}
+          items={cookingMenus}
+          onEdit={onEdit}
+          onRequestDelete={onRequestDelete}
+        />
+      )}
 
       {isEditFormOpen && (
         <PochaMenuItemForm
@@ -135,6 +109,98 @@ export default function PochaMenuItemList() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+function MenuSection({
+  label,
+  count,
+  items,
+  onEdit,
+  onRequestDelete,
+}: {
+  label: string;
+  count: number;
+  items: MenuItemRaw[];
+  onEdit: (menu: MenuItemRaw) => void;
+  onRequestDelete: (menu: MenuItemRaw) => void;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="type-body-sm text-muted-foreground">
+        {label} · {count}
+      </p>
+      <div className="flex flex-col gap-4">
+        {items.map((menu) => (
+          <MenuRow
+            key={menu.nameEng}
+            menu={menu}
+            onEdit={onEdit}
+            onRequestDelete={onRequestDelete}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MenuRow({
+  menu,
+  onEdit,
+  onRequestDelete,
+}: {
+  menu: MenuItemRaw;
+  onEdit: (menu: MenuItemRaw) => void;
+  onRequestDelete: (menu: MenuItemRaw) => void;
+}) {
+  return (
+    <Card>
+      <CardContent>
+        <div className="flex flex-row gap-4">
+          <MenuThumbnail menu={menu} />
+          <div className="flex w-full flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <h3 className="type-body !font-semibold text-foreground">
+                {menu.nameKor}
+                <span className="type-body !font-normal text-muted-foreground">
+                  {" "}
+                  ({menu.nameEng})
+                </span>
+              </h3>
+              <div className="flex items-center gap-1">
+                <IconButton
+                  icon="pencil"
+                  variant="tertiary"
+                  size="sm"
+                  aria-label="수정하기"
+                  onClick={() => onEdit(menu)}
+                />
+                <IconButton
+                  icon="trash-2"
+                  variant="tertiary"
+                  size="sm"
+                  aria-label="삭제하기"
+                  onClick={() => onRequestDelete(menu)}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 type-body-sm text-muted-foreground">
+              <span>{menu.category}</span>
+              <span aria-hidden>·</span>
+              <span>${menu.price?.toLocaleString()}</span>
+              <span aria-hidden>·</span>
+              <span>재고 {menu.stock}개</span>
+              {menu.ageCheckRequired && (
+                <Badge variant="warning" size="sm">
+                  연령 확인
+                </Badge>
+              )}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
