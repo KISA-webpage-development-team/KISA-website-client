@@ -75,7 +75,7 @@ export default function SchoolCalendar() {
       className={`${sejongHospitalBold.className} w-full flex flex-col 
       gap-2 md:gap-6`}
     >
-      <h2 className="section_title">Calendar</h2>
+      <h2 className="type-h3">Calendar</h2>
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-full text-xs lg:text-sm hidden md:block">
           <FullCalendar
