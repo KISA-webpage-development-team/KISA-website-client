@@ -42,7 +42,7 @@ export default function SponsorCarousel() {
     flex flex-col gap-4 ${sejongHospitalBold.className}`}
     >
       <div className="flex flex-col gap-1">
-        <span className="section_title">Sponsors</span>
+        <span className="type-h3">Sponsors</span>
         <p className={`${sejongHospitalLight.className} text-base md:text-lg`}>
           Proudly supported by leading organizations.
         </p>
