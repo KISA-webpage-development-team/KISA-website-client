@@ -74,19 +74,32 @@ const usePochaOrdersMap = (pochaID: number, token: string) => {
     "loading"
   );
 
+
   useEffect(() => {
+    // Skip when callers pass placeholder inputs (e.g. dashboard page calls
+    // this hook before pochaID/token have resolved). Without this, an early
+    // fetch against /pocha/dashboard/null/ races the real one and its late
+    // rejection clobbers a "success" status with "error".
+    if (!pochaID || !token) return;
+
+    let cancelled = false;
     const fetchPochaOrders = async () => {
       try {
         const res: Orders = await getPochaOrders(pochaID, token);
+        if (cancelled) return;
         setOrdersMap(convertOrdersToMap(res));
         setStatus("success");
       } catch (error) {
+        if (cancelled) return;
         console.error("Error fetching orders:", error);
         setStatus("error");
       }
     };
 
     fetchPochaOrders();
+    return () => {
+      cancelled = true;
+    };
   }, [pochaID, token]);
 
   return { ordersMap, status, setOrdersMap, setStatus };

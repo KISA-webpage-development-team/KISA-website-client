@@ -13,15 +13,13 @@ export function MockAuthToggle() {
   const { isMockMode, isAuthenticated, isAdmin, toggle, toggleIsAdmin } =
     useAuth();
   const pathname = usePathname();
-  const { pochaID, status: pochaIDStatus } = usePochaID();
+  const { pochaID } = usePochaID();
   const [isSimulating, setIsSimulating] = useState(false);
 
   if (!isMockMode) return null;
 
   const onDashboard = pathname === DASHBOARD_PATH;
   const showSimulateButton = isAuthenticated && isAdmin && onDashboard;
-  const simulateDisabled =
-    isSimulating || pochaIDStatus !== "success" || pochaID == null;
 
   const handleSimulate = async () => {
     if (pochaID == null) {
@@ -89,7 +87,7 @@ export function MockAuthToggle() {
           variant="outline"
           size="sm"
           onClick={handleSimulate}
-          disabled={simulateDisabled}
+          disabled={isSimulating}
         >
           <Icon name="plus" size="sm" />
           Simulate order

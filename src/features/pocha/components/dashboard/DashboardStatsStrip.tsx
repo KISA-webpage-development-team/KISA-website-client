@@ -50,17 +50,18 @@ export default function DashboardStatsStrip({
   ordersMap,
   ordersStatus,
 }: DashboardStatsStripProps) {
-  const { menuList, status: menuStatus } = useMenu(pochaID, token);
+  const { menuList } = useMenu(pochaID, token);
 
-  const stats = useMemo(() => {
-    if (!menuList) return null;
-    return computeStats(Array.from(ordersMap.values()), menuList);
-  }, [ordersMap, menuList]);
+  // Orders gate the strip — if orders haven't resolved, we can't show
+  // active/pending. Menus are best-effort: an undefined menuList just means
+  // low-stock/sold-out fall back to 0 until the menu fetch lands. Treating a
+  // pending menu as "error" here would hide the whole strip on first paint.
+  const stats = useMemo(
+    () => computeStats(Array.from(ordersMap.values()), menuList ?? []),
+    [ordersMap, menuList]
+  );
 
-  const isLoading = ordersStatus === "loading" || menuStatus === "loading";
-  const isError = ordersStatus === "error" || menuStatus === "error";
-
-  if (isLoading) {
+  if (ordersStatus === "loading") {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <StatSkeleton />
@@ -71,7 +72,7 @@ export default function DashboardStatsStrip({
     );
   }
 
-  if (isError || !stats) {
+  if (ordersStatus === "error") {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <StatCard label="Active" value="—" />

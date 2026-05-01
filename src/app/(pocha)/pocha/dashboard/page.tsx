@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@umichkisa-ds/web";
+import { Tabs, TabsList, TabsTrigger, TabsContent, Container } from "@umichkisa-ds/web";
 
 import useAdmin from "@/lib/next-auth/useAdmin";
 
@@ -48,6 +48,8 @@ export default function DashboardPage() {
     return m;
   }, [ordersHook.immediatePrepOrders, ordersHook.notImmediatePrepOrders]);
 
+  console.log("ordersMap: ", ordersMap);
+
   if (adminStatus === "loading" || pochaIDStatus === "loading") {
     return <LoadingSpinner />;
   }
@@ -61,8 +63,10 @@ export default function DashboardPage() {
     return <NotAuthorized />;
   }
 
+  console.log("ordersHook.status: ", ordersHook.status);
+
   return (
-    <section className="full-width-container px-2 py-4 md:py-6">
+    <Container size="full">
       <div className="flex flex-col gap-6">
         <DashboardStatsStrip
           pochaID={pochaID}
@@ -103,6 +107,6 @@ export default function DashboardPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </section>
+    </Container>
   );
 }
