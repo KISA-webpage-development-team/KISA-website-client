@@ -1,13 +1,54 @@
 "use client";
 
-import { Switch } from "@umichkisa-ds/web";
+import { useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Button, Icon, Switch, toast } from "@umichkisa-ds/web";
 import { useAuth, MOCK_SESSION } from "@/lib/auth/authContext";
+import type { OrderItem } from "@/types/pocha";
+
+const DASHBOARD_PATH = "/pocha/dashboard";
 
 export function MockAuthToggle() {
   const { isMockMode, isAuthenticated, isAdmin, toggle, toggleIsAdmin } =
     useAuth();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isSimulating, setIsSimulating] = useState(false);
 
   if (!isMockMode) return null;
+
+  const showSimulateButton =
+    isAuthenticated && isAdmin && pathname === DASHBOARD_PATH;
+
+  const handleSimulate = async () => {
+    const pochaIDParam = searchParams?.get("pochaid");
+    if (!pochaIDParam) {
+      toast.error("pochaID를 URL에서 찾을 수 없습니다");
+      return;
+    }
+
+    setIsSimulating(true);
+    try {
+      const res = await fetch(
+        `/api/v2/pocha/_mock/spawn-order/${pochaIDParam}`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${MOCK_SESSION.token}` },
+        }
+      );
+      if (!res.ok) throw new Error(`spawn-order failed: ${res.status}`);
+      const orderItem = (await res.json()) as OrderItem;
+      window.dispatchEvent(
+        new CustomEvent<OrderItem>("mock:new-order", { detail: orderItem })
+      );
+      toast.success("주문이 추가되었습니다");
+    } catch (error) {
+      console.error("Simulate order error:", error);
+      toast.error("주문 추가에 실패했습니다");
+    } finally {
+      setIsSimulating(false);
+    }
+  };
 
   return (
     <div
@@ -41,6 +82,17 @@ export function MockAuthToggle() {
         />
         <span className="type-body-sm text-foreground">Mock: admin</span>
       </div>
+      {showSimulateButton && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleSimulate}
+          disabled={isSimulating}
+        >
+          <Icon name="plus" size="sm" />
+          Simulate order
+        </Button>
+      )}
     </div>
   );
 }
