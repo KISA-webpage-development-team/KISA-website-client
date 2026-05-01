@@ -38,8 +38,8 @@ export function requiresDialogGate(
 export function formatBreakdown(b: PromoteBreakdown): string {
   const total = b.toPreparing + b.toReady + b.toClosed;
   const parts: string[] = [];
-  if (b.toPreparing > 0) parts.push(`${b.toPreparing}→준비중`);
-  if (b.toReady > 0) parts.push(`${b.toReady}→완료`);
-  if (b.toClosed > 0) parts.push(`${b.toClosed}→마감`);
-  return `${total}개 (${parts.join(", ")})`;
+  if (b.toPreparing > 0) parts.push(`${b.toPreparing} → Preparing`);
+  if (b.toReady > 0) parts.push(`${b.toReady} → Ready`);
+  if (b.toClosed > 0) parts.push(`${b.toClosed} → Closed`);
+  return `${total} items (${parts.join(", ")})`;
 }

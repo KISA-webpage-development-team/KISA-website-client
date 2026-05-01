@@ -99,24 +99,24 @@ describe("formatBreakdown", () => {
   it("formats mixed buckets, skipping zero", () => {
     expect(
       formatBreakdown({ toPreparing: 2, toReady: 1, toClosed: 0 })
-    ).toBe("3개 (2→준비중, 1→완료)");
+    ).toBe("3 items (2 → Preparing, 1 → Ready)");
   });
 
   it("formats all-closed bucket", () => {
     expect(
       formatBreakdown({ toPreparing: 0, toReady: 0, toClosed: 5 })
-    ).toBe("5개 (5→마감)");
+    ).toBe("5 items (5 → Closed)");
   });
 
   it("formats single bucket", () => {
     expect(
       formatBreakdown({ toPreparing: 4, toReady: 0, toClosed: 0 })
-    ).toBe("4개 (4→준비중)");
+    ).toBe("4 items (4 → Preparing)");
   });
 
   it("formats all three buckets", () => {
     expect(
       formatBreakdown({ toPreparing: 1, toReady: 2, toClosed: 3 })
-    ).toBe("6개 (1→준비중, 2→완료, 3→마감)");
+    ).toBe("6 items (1 → Preparing, 2 → Ready, 3 → Closed)");
   });
 });
