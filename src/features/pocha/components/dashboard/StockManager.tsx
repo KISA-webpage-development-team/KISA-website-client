@@ -299,14 +299,13 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
         onValueChange={(v) => setFilter(v as StockFilter)}
         aria-label="Filter stock"
       />
-      {/* pastiche-unresolved-doubt: lane spec calls for a refresh IconButton in the toolbar, but the DS Icon registry has no refresh-cw / rotate-cw / refresh / arrow-circle entry; falling back to a tertiary text Button so we don't ship an IconButton with a wrong-meaning icon. */}
-      <Button
+      <IconButton
+        icon="refresh-cw"
+        aria-label="Refresh stock"
+        size="sm"
         variant="tertiary"
         onClick={() => refetch()}
-        aria-label="Refresh stock"
-      >
-        Refresh
-      </Button>
+      />
     </div>
   );
 
