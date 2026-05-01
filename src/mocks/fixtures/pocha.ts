@@ -1,4 +1,16 @@
-import type { MenuByCategory, PochaInfoWithoutStatus } from "@/types/pocha";
+import type {
+  MenuByCategory,
+  MenuItem,
+  OrderItem,
+  PochaInfoWithoutStatus,
+} from "@/types/pocha";
+// `OrderStatus` is a const enum; under `isolatedModules` we can't import its
+// values cross-module, so the literal strings below are typed via
+// `OrderItem['status']` instead.
+// `OrderItem["status"]` is the const enum `OrderStatus` — its members can't be
+// imported as values under `isolatedModules`. The string literals below are
+// the underlying enum values; cast in `_make` keeps the assignments terse.
+type OrderStatusLiteral = "pending" | "preparing" | "ready" | "closed";
 
 /**
  * Pocha fixtures — seed data for MSW pocha handlers.
@@ -253,3 +265,102 @@ export const mockPochaMenus: Record<number, MenuByCategory[]> = {
     },
   ],
 };
+
+// ORDERS ---------------------------------------------------------------------
+
+/**
+ * Order fixtures for the active pocha (pochaID=1) — used by dashboard handlers.
+ * `nextOrderItemID` (in handler module) is initialized just past
+ * `mockOrderItemIDStart + mockOrderItems.length` so spawn-order ids stay
+ * monotonic. Stock numbers in the embedded `menu` are snapshots at seed time;
+ * subsequent stock mutations affect `menusStore` but not in-flight orders.
+ */
+const _menuByID: Record<number, MenuItem> = (() => {
+  const out: Record<number, MenuItem> = {};
+  for (const group of mockPochaMenus[1]!) {
+    for (const m of group.menusList) out[m.menuID] = { ...m };
+  }
+  return out;
+})();
+
+const _orderers: Array<{ name: string; email: string }> = [
+  { name: "민수", email: "minsoo@umich.edu" },
+  { name: "지영", email: "jiyoung@umich.edu" },
+  { name: "현우", email: "hyunwoo@umich.edu" },
+  { name: "수진", email: "sujin@umich.edu" },
+  { name: "도윤", email: "doyoon@umich.edu" },
+];
+
+export const mockOrderItemIDStart = 1000;
+
+const _make = (
+  i: number,
+  status: OrderStatusLiteral,
+  menuID: number,
+  quantity: number
+): OrderItem => {
+  const orderer = _orderers[i % _orderers.length]!;
+  return {
+    orderItemID: mockOrderItemIDStart + i,
+    status: status as unknown as OrderItem["status"],
+    menu: { ..._menuByID[menuID]! },
+    quantity,
+    ordererName: orderer.name,
+    ordererEmail: orderer.email,
+  };
+};
+
+/**
+ * 25 active (pending/preparing/ready) + 15 closed = 40 fixture orders.
+ * Mix of food + drink + snack across all status buckets so the dashboard
+ * has realistic data for every column on first paint.
+ */
+export const mockOrderItems: OrderItem[] = [
+  // pending — 9 (food + drink + snack)
+  _make(0, "pending", 201, 2), // 떡볶이
+  _make(1, "pending", 101, 1), // 소주
+  _make(2, "pending", 203, 1), // 라면
+  _make(3, "pending", 102, 2), // 맥주
+  _make(4, "pending", 204, 1), // 파전
+  _make(5, "pending", 301, 1), // 새우깡
+  _make(6, "pending", 206, 1), // 김치찌개
+  _make(7, "pending", 103, 3), // 콜라
+  _make(8, "pending", 205, 1), // 계란말이
+
+  // preparing — 8 (food only — drinks skip preparing)
+  _make(9, "preparing", 201, 1),
+  _make(10, "preparing", 202, 2),
+  _make(11, "preparing", 203, 1),
+  _make(12, "preparing", 204, 1),
+  _make(13, "preparing", 205, 2),
+  _make(14, "preparing", 206, 1),
+  _make(15, "preparing", 207, 1),
+  _make(16, "preparing", 201, 1),
+
+  // ready — 8 (food + drinks)
+  _make(17, "ready", 101, 1),
+  _make(18, "ready", 202, 1),
+  _make(19, "ready", 102, 2),
+  _make(20, "ready", 203, 1),
+  _make(21, "ready", 302, 1),
+  _make(22, "ready", 207, 1),
+  _make(23, "ready", 103, 1),
+  _make(24, "ready", 204, 1),
+
+  // closed — 15 (history)
+  _make(25, "closed", 201, 2),
+  _make(26, "closed", 101, 1),
+  _make(27, "closed", 202, 1),
+  _make(28, "closed", 203, 2),
+  _make(29, "closed", 102, 1),
+  _make(30, "closed", 204, 1),
+  _make(31, "closed", 205, 1),
+  _make(32, "closed", 103, 2),
+  _make(33, "closed", 206, 1),
+  _make(34, "closed", 301, 1),
+  _make(35, "closed", 207, 1),
+  _make(36, "closed", 101, 2),
+  _make(37, "closed", 202, 1),
+  _make(38, "closed", 302, 1),
+  _make(39, "closed", 201, 1),
+];

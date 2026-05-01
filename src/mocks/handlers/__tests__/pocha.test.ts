@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { setupServer } from "msw/node";
-import { pochaHandlers, resetPochaStore } from "../pocha";
+import { pochaHandlers, resetOrderStore, resetPochaStore } from "../pocha";
 
 const server = setupServer(...pochaHandlers);
 
@@ -30,6 +30,7 @@ beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => {
   server.resetHandlers();
   resetPochaStore();
+  resetOrderStore();
 });
 afterAll(() => server.close());
 
@@ -183,6 +184,279 @@ describe("MSW pocha handlers", () => {
     it("returns 401 when Authorization header is missing", async () => {
       const res = await fetch("http://localhost/pocha/menu/1/");
       expect(res.status).toBe(401);
+    });
+  });
+});
+
+describe("MSW pocha dashboard handlers", () => {
+  // Active fixture pocha used for all dashboard endpoints.
+  const POCHA_ID = 1;
+
+  describe("GET /pocha/dashboard/:pochaID/ (active orders)", () => {
+    it("returns 200 with { pending, preparing, ready } populated from non-closed fixtures", async () => {
+      const res = await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`, {
+        headers: AUTH_HEADER,
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(Array.isArray(body.pending)).toBe(true);
+      expect(Array.isArray(body.preparing)).toBe(true);
+      expect(Array.isArray(body.ready)).toBe(true);
+      // None of the active buckets contain a `closed` item.
+      const all = [...body.pending, ...body.preparing, ...body.ready];
+      expect(all.length).toBeGreaterThan(0);
+      for (const item of all) {
+        expect(item.status).not.toBe("closed");
+        expect(typeof item.orderItemID).toBe("number");
+        expect(typeof item.menu).toBe("object");
+        expect(typeof item.ordererName).toBe("string");
+        expect(typeof item.ordererEmail).toBe("string");
+        expect(typeof item.quantity).toBe("number");
+      }
+    });
+
+    it("returns 401 when Authorization header is missing", async () => {
+      const res = await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`);
+      expect(res.status).toBe(401);
+    });
+  });
+
+  describe("GET /pocha/dashboard/:pochaID/closed/ (closed orders)", () => {
+    it("returns 200 with { closed } populated from closed fixtures", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/dashboard/${POCHA_ID}/closed/`,
+        { headers: AUTH_HEADER }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(Array.isArray(body.closed)).toBe(true);
+      expect(body.closed.length).toBeGreaterThan(0);
+      for (const item of body.closed) {
+        expect(item.status).toBe("closed");
+      }
+    });
+  });
+
+  describe("PUT /pocha/dashboard/:orderItemID/change-status/", () => {
+    it("food (isImmediatePrep=false) advances pending → preparing → ready → closed", async () => {
+      // Find a food item in pending status from the active fixture.
+      const orders = await (
+        await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      const food = orders.pending.find(
+        (o: { menu: { isImmediatePrep: boolean } }) => o.menu.isImmediatePrep === false
+      );
+      expect(food).toBeDefined();
+      const id = food.orderItemID;
+
+      const step = async () => {
+        const res = await fetch(
+          `http://localhost/pocha/dashboard/${id}/change-status/`,
+          { method: "PUT", headers: AUTH_HEADER }
+        );
+        expect(res.status).toBe(200);
+        return (await res.json()).newStatus;
+      };
+
+      expect(await step()).toBe("preparing");
+      expect(await step()).toBe("ready");
+      expect(await step()).toBe("closed");
+    });
+
+    it("drink (isImmediatePrep=true) advances pending → ready → closed (skips preparing)", async () => {
+      const orders = await (
+        await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      const drink = orders.pending.find(
+        (o: { menu: { isImmediatePrep: boolean } }) => o.menu.isImmediatePrep === true
+      );
+      expect(drink).toBeDefined();
+      const id = drink.orderItemID;
+
+      const r1 = await fetch(
+        `http://localhost/pocha/dashboard/${id}/change-status/`,
+        { method: "PUT", headers: AUTH_HEADER }
+      );
+      expect(r1.status).toBe(200);
+      expect((await r1.json()).newStatus).toBe("ready");
+
+      const r2 = await fetch(
+        `http://localhost/pocha/dashboard/${id}/change-status/`,
+        { method: "PUT", headers: AUTH_HEADER }
+      );
+      expect(r2.status).toBe(200);
+      expect((await r2.json()).newStatus).toBe("closed");
+    });
+
+    it("returns 400 for an item already at closed", async () => {
+      // Closed-orders endpoint gives us a known-closed id.
+      const closed = await (
+        await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/closed/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      const id = closed.closed[0].orderItemID;
+      const res = await fetch(
+        `http://localhost/pocha/dashboard/${id}/change-status/`,
+        { method: "PUT", headers: AUTH_HEADER }
+      );
+      expect(res.status).toBe(400);
+    });
+
+    it("returns 404 for an unknown orderItemID", async () => {
+      const res = await fetch(
+        "http://localhost/pocha/dashboard/9999999/change-status/",
+        { method: "PUT", headers: AUTH_HEADER }
+      );
+      expect(res.status).toBe(404);
+    });
+  });
+
+  describe("PUT /pocha/dashboard/change-stock/ (menu stock update)", () => {
+    it("updates menusStore for the matched menu and returns { ok, menuID, quantity }", async () => {
+      const res = await fetch("http://localhost/pocha/dashboard/change-stock/", {
+        method: "PUT",
+        headers: { ...AUTH_HEADER, "Content-Type": "application/json" },
+        body: JSON.stringify({ menuID: 101, quantity: 7 }),
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.ok).toBe(true);
+      expect(body.menuID).toBe(101);
+      expect(body.quantity).toBe(7);
+
+      // Verify by reading menus through the existing GET endpoint.
+      const menusRes = await fetch(`http://localhost/pocha/menu/${POCHA_ID}/`, {
+        headers: AUTH_HEADER,
+      });
+      const groups = await menusRes.json();
+      const drinks = groups.find(
+        (g: { category: string }) => g.category === "drink"
+      );
+      const soju = drinks.menusList.find(
+        (m: { menuID: number }) => m.menuID === 101
+      );
+      expect(soju.stock).toBe(7);
+    });
+
+    it("returns 400 for negative quantity", async () => {
+      const res = await fetch("http://localhost/pocha/dashboard/change-stock/", {
+        method: "PUT",
+        headers: { ...AUTH_HEADER, "Content-Type": "application/json" },
+        body: JSON.stringify({ menuID: 101, quantity: -3 }),
+      });
+      expect(res.status).toBe(400);
+    });
+  });
+
+  describe("POST /pocha/_mock/spawn-order/:pochaID/", () => {
+    it("creates a new pending OrderItem from a stocked menu, decrements that menu's stock, returns enriched shape", async () => {
+      // Read menus before spawn.
+      const before = await (
+        await fetch(`http://localhost/pocha/menu/${POCHA_ID}/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      const stockMap = new Map<number, number>();
+      for (const g of before) for (const m of g.menusList) stockMap.set(m.menuID, m.stock);
+
+      const res = await fetch(
+        `http://localhost/pocha/_mock/spawn-order/${POCHA_ID}/`,
+        { method: "POST", headers: AUTH_HEADER }
+      );
+      expect(res.status).toBe(200);
+      const item = await res.json();
+      expect(typeof item.orderItemID).toBe("number");
+      expect(item.status).toBe("pending");
+      expect(typeof item.menu).toBe("object");
+      expect(typeof item.menu.menuID).toBe("number");
+      expect(typeof item.ordererName).toBe("string");
+      expect(typeof item.ordererEmail).toBe("string");
+      expect(item.quantity).toBeGreaterThanOrEqual(1);
+      expect(item.quantity).toBeLessThanOrEqual(3);
+
+      // Stock for the picked menu decreased.
+      const after = await (
+        await fetch(`http://localhost/pocha/menu/${POCHA_ID}/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      const newStock = after
+        .flatMap((g: { menusList: { menuID: number; stock: number }[] }) => g.menusList)
+        .find((m: { menuID: number }) => m.menuID === item.menu.menuID).stock;
+      expect(newStock).toBe(stockMap.get(item.menu.menuID)! - item.quantity);
+
+      // The new item shows up in the active orders pending bucket.
+      const orders = await (
+        await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      expect(
+        orders.pending.some(
+          (o: { orderItemID: number }) => o.orderItemID === item.orderItemID
+        )
+      ).toBe(true);
+    });
+
+    it("returns 409 when every menu item has stock === 0", async () => {
+      // Drain every menu's stock first via change-stock.
+      const groups = await (
+        await fetch(`http://localhost/pocha/menu/${POCHA_ID}/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      for (const g of groups) {
+        for (const m of g.menusList) {
+          await fetch("http://localhost/pocha/dashboard/change-stock/", {
+            method: "PUT",
+            headers: { ...AUTH_HEADER, "Content-Type": "application/json" },
+            body: JSON.stringify({ menuID: m.menuID, quantity: 0 }),
+          });
+        }
+      }
+      const res = await fetch(
+        `http://localhost/pocha/_mock/spawn-order/${POCHA_ID}/`,
+        { method: "POST", headers: AUTH_HEADER }
+      );
+      expect(res.status).toBe(409);
+    });
+  });
+
+  describe("resetOrderStore()", () => {
+    it("re-seeds the order store from fixtures (mutate, reset, read)", async () => {
+      // Mutate: close a pending item.
+      const orders = await (
+        await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      const id = orders.pending[0].orderItemID;
+      // food: pending → preparing → ready → closed (3 calls)
+      // drink: pending → ready → closed (2 calls)
+      // Brute-force advance until 400.
+      for (let i = 0; i < 4; i++) {
+        const r = await fetch(
+          `http://localhost/pocha/dashboard/${id}/change-status/`,
+          { method: "PUT", headers: AUTH_HEADER }
+        );
+        if (r.status === 400) break;
+      }
+
+      resetOrderStore();
+
+      const after = await (
+        await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`, {
+          headers: AUTH_HEADER,
+        })
+      ).json();
+      // The previously-mutated id is back to its original (non-closed) bucket.
+      const all = [...after.pending, ...after.preparing, ...after.ready];
+      expect(all.some((o: { orderItemID: number }) => o.orderItemID === id)).toBe(true);
     });
   });
 });
