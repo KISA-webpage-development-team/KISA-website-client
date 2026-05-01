@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Button, Icon, Switch, toast } from "@umichkisa-ds/web";
 import { useAuth, MOCK_SESSION } from "@/lib/auth/authContext";
+import usePochaID from "@/features/pocha/hooks/usePochaID";
 import type { OrderItem } from "@/types/pocha";
 
 const DASHBOARD_PATH = "/pocha/dashboard";
@@ -12,25 +13,26 @@ export function MockAuthToggle() {
   const { isMockMode, isAuthenticated, isAdmin, toggle, toggleIsAdmin } =
     useAuth();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const { pochaID, status: pochaIDStatus } = usePochaID();
   const [isSimulating, setIsSimulating] = useState(false);
 
   if (!isMockMode) return null;
 
-  const showSimulateButton =
-    isAuthenticated && isAdmin && pathname === DASHBOARD_PATH;
+  const onDashboard = pathname === DASHBOARD_PATH;
+  const showSimulateButton = isAuthenticated && isAdmin && onDashboard;
+  const simulateDisabled =
+    isSimulating || pochaIDStatus !== "success" || pochaID == null;
 
   const handleSimulate = async () => {
-    const pochaIDParam = searchParams?.get("pochaid");
-    if (!pochaIDParam) {
-      toast.error("pochaID를 URL에서 찾을 수 없습니다");
+    if (pochaID == null) {
+      toast.error("활성 포차를 찾을 수 없습니다");
       return;
     }
 
     setIsSimulating(true);
     try {
       const res = await fetch(
-        `/api/v2/pocha/_mock/spawn-order/${pochaIDParam}`,
+        `/api/v2/pocha/_mock/spawn-order/${pochaID}`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${MOCK_SESSION.token}` },
@@ -87,7 +89,7 @@ export function MockAuthToggle() {
           variant="outline"
           size="sm"
           onClick={handleSimulate}
-          disabled={isSimulating}
+          disabled={simulateDisabled}
         >
           <Icon name="plus" size="sm" />
           Simulate order
