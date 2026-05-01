@@ -11,10 +11,11 @@
 
 import React, { useCallback, useRef } from "react";
 import {
-  Badge,
   Button,
   Card,
-  Checkbox,
+  CardContent,
+  CardFooter,
+  Icon,
   LoadingSpinner,
   toast,
 } from "@umichkisa-ds/web";
@@ -176,7 +177,7 @@ function OrderItemCardImpl({
   return (
     <li className="flex-1">
       <Card
-        className="flex h-full w-full flex-col items-start gap-2 p-4"
+        className="h-full w-full"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
@@ -185,27 +186,26 @@ function OrderItemCardImpl({
         onClick={handleCardClick}
         {...a11yProps}
       >
-        <div className="flex w-full items-center justify-between gap-4">
-          <span className="type-h2">#{orderItemID}</span>
-          <div className="flex items-center gap-2">
-            <span className="type-h3">{nameKor}</span>
-            <Badge variant="default" size="md">
-              ×{quantity}
-            </Badge>
+        {/* #ID · customer name on one line, then menu × quantity */}
+        <CardContent className="flex flex-col gap-2">
+          <div className="type-h2 truncate">
+            <span>#{orderItemID}</span>
+            <span className="text-muted-foreground mx-2">·</span>
+            <span>{ordererName}</span>
           </div>
-        </div>
+          <div className="type-h3 truncate">
+            <span>{nameKor}</span>
+            <span className="text-muted-foreground"> × {quantity}</span>
+          </div>
+        </CardContent>
 
-        <Badge variant="outline" size="sm">
-          {ordererName}
-        </Badge>
-
-        <div className="flex w-full items-center justify-end">
+        {/* Primary action — bottom-right */}
+        <CardFooter className="justify-end">
           {isSelectMode ? (
-            <Checkbox
-              checked={isSelected}
-              readOnly
-              tabIndex={-1}
-              aria-hidden="true"
+            <Icon
+              name="check"
+              size="md"
+              aria-hidden
             />
           ) : (
             <Button
@@ -218,7 +218,7 @@ function OrderItemCardImpl({
               {loading ? <LoadingSpinner size="sm" /> : "Promote"}
             </Button>
           )}
-        </div>
+        </CardFooter>
       </Card>
     </li>
   );
