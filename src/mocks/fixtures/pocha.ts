@@ -71,6 +71,17 @@ export const mockPochas: PochaRecord[] = [
     title: "KISA Spring Pocha 2024",
     description: "2024년 봄 정기 포차 기록입니다.",
   },
+  {
+    // Always-ongoing dev fixture — covers any realistic "today" so the
+    // status-info endpoint reliably returns an active pocha during local
+    // development (regardless of system date drift). Narrow enough that
+    // the "far-future returns empty" test (2099) still holds.
+    pochaID: 6,
+    startDate: new Date("2024-01-01T00:00:00.000Z"),
+    endDate: new Date("2030-12-31T23:59:59.000Z"),
+    title: "KISA Dev Pocha (always ongoing)",
+    description: "Dev fixture — always returned as active by status-info.",
+  },
 ];
 
 /**
