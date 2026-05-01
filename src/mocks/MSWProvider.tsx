@@ -12,7 +12,18 @@ export function MSWProvider({ children }: { children: React.ReactNode }) {
     }
 
     import("./browser").then(({ worker }) =>
-      worker.start({ onUnhandledRequest: "warn" }).then(() => setReady(true))
+      worker.start({ onUnhandledRequest: "warn" }).then(() => {
+        // On first SW install, `start()` resolves once the worker is activated,
+        // but this page is not yet a controlled client — `clients.claim()`
+        // hasn't propagated. Subsequent fetches from this page would bypass
+        // MSW and hit the network (404 against /_mock-api). Force a one-time
+        // reload so the page comes up under SW control.
+        if (!navigator.serviceWorker.controller) {
+          window.location.reload();
+          return;
+        }
+        setReady(true);
+      })
     );
   }, []);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { getPochaInfo } from "@/apis/pocha/queries";
@@ -8,21 +8,13 @@ import { BACKEND_URL } from "@/constants/env";
 import { PochaInfo } from "@/types/pocha";
 import { HookStatus } from "./types";
 
-const MAX_RETRIES = 2;
-const RETRY_INTERVAL_MS = 800;
-
 /**
  * @desc Hook for fetching Pocha ID defensively.
  * 1. Tries to get pochaID from URL searchParams.
  * 2. If unavailable, fetches from the API as fallback.
  *
- * Backed by SWR so all callsites share one cache entry — no duplicate fetches
- * and no per-component "permanent error stick" if a request transiently fails
- * (e.g. MSW worker not yet controlling the page on the very first SW install).
- *
- * `status` stays `"loading"` while SWR retries are still in flight; it only
- * flips to `"error"` once retries are exhausted. This prevents transient
- * first-load failures from triggering the route-segment error boundary.
+ * Backed by SWR with a daily-stable cache key so all callsites share one
+ * fetch (dashboard page + MockAuthToggle, etc.).
  */
 const usePochaID = () => {
   const searchParams = useSearchParams();
@@ -42,24 +34,10 @@ const usePochaID = () => {
     ? null
     : (["pocha-info", BACKEND_URL, dayKey] as const);
 
-  const [exhausted, setExhausted] = useState(false);
-
   const { data, error } = useSWR<PochaInfo>(
     swrKey,
     () => getPochaInfo(new Date()),
-    {
-      revalidateOnFocus: false,
-      onErrorRetry: (_err, _key, _config, revalidate, { retryCount }) => {
-        if (retryCount >= MAX_RETRIES) {
-          setExhausted(true);
-          return;
-        }
-        setTimeout(() => revalidate({ retryCount }), RETRY_INTERVAL_MS);
-      },
-      onSuccess: () => {
-        setExhausted(false);
-      },
-    }
+    { revalidateOnFocus: false }
   );
 
   if (urlPochaID) {
@@ -70,11 +48,7 @@ const usePochaID = () => {
     };
   }
 
-  const status: HookStatus = data
-    ? "success"
-    : error && exhausted
-      ? "error"
-      : "loading";
+  const status: HookStatus = data ? "success" : error ? "error" : "loading";
 
   return {
     pochaID: data?.pochaID ?? null,
