@@ -37,7 +37,7 @@ export default function QuickLinks() {
       className={`w-full
     flex flex-col gap-4 ${sejongHospitalBold.className}`}
     >
-      <h2 className="section_title">Quick Links</h2>
+      <h2 className="type-h2 !font-sejong-bold">Quick Links</h2>
 
       <Carousel
         responsive={responsive}
