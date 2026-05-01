@@ -19,9 +19,19 @@ export const GOOGLE_CALENDAR_API_KEY = process.env
 
 // Backend
 const useLocalBackend = process.env.NEXT_PUBLIC_USE_LOCAL_BACKEND === "true";
-export const BACKEND_URL = useLocalBackend
-  ? process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL
-  : process.env.NEXT_PUBLIC_BACKEND_URL;
+const useMockApi = process.env.NEXT_PUBLIC_MOCK_API === "1";
+// In mock mode, point axios at a same-origin synthetic prefix so requests
+// never leak to the real API (no CORS surface). The prefix is intentionally
+// not the prod `/api/v2` path — MSW handlers match on URL path suffix
+// (e.g. `/pocha/...`), so the prefix is opaque, and decoupling it from the
+// real API version means a future v3 backend bump won't silently change
+// dev-mock behavior. If MSW misses, the request 404s against the dev server
+// instead of CORS-failing against prod.
+export const BACKEND_URL = useMockApi
+  ? "/_mock-api"
+  : useLocalBackend
+    ? process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
 
 // Stripe
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;

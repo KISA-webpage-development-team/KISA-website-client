@@ -12,7 +12,7 @@ export function MSWProvider({ children }: { children: React.ReactNode }) {
     }
 
     import("./browser").then(({ worker }) =>
-      worker.start({ onUnhandledRequest: "bypass" }).then(() => setReady(true))
+      worker.start({ onUnhandledRequest: "warn" }).then(() => setReady(true))
     );
   }, []);
 
