@@ -277,6 +277,13 @@ export const mockPochaMenus: Record<number, MenuByCategory[]> = {
   ],
 };
 
+// Always-ongoing dev pocha (pochaID=6) reuses pochaID=1's menu shape with
+// fresh deep clones so stock mutations from spawn-order don't bleed across.
+mockPochaMenus[6] = mockPochaMenus[1]!.map((cat) => ({
+  category: cat.category,
+  menusList: cat.menusList.map((m) => ({ ...m })),
+}));
+
 // ORDERS ---------------------------------------------------------------------
 
 /**
@@ -322,56 +329,28 @@ const _make = (
 };
 
 /**
- * 25 active (pending/preparing/ready) + 15 closed = 40 fixture orders.
- * Mix of food + drink + snack across all status buckets so the dashboard
- * has realistic data for every column on first paint.
+ * 7 active (pending/preparing/ready) + 5 closed = 12 fixture orders.
+ * Smaller seed for a calmer dev dashboard; mix of food + drink + snack
+ * across status buckets so every column still has at least one row.
  */
 export const mockOrderItems: OrderItem[] = [
-  // pending — 9 (food + drink + snack)
+  // pending — 3
   _make(0, "pending", 201, 2), // 떡볶이
   _make(1, "pending", 101, 1), // 소주
-  _make(2, "pending", 203, 1), // 라면
-  _make(3, "pending", 102, 2), // 맥주
-  _make(4, "pending", 204, 1), // 파전
-  _make(5, "pending", 301, 1), // 새우깡
-  _make(6, "pending", 206, 1), // 김치찌개
-  _make(7, "pending", 103, 3), // 콜라
-  _make(8, "pending", 205, 1), // 계란말이
+  _make(2, "pending", 301, 1), // 새우깡
 
-  // preparing — 8 (food only — drinks skip preparing)
-  _make(9, "preparing", 201, 1),
-  _make(10, "preparing", 202, 2),
-  _make(11, "preparing", 203, 1),
-  _make(12, "preparing", 204, 1),
-  _make(13, "preparing", 205, 2),
-  _make(14, "preparing", 206, 1),
-  _make(15, "preparing", 207, 1),
-  _make(16, "preparing", 201, 1),
+  // preparing — 2 (food only — drinks skip preparing)
+  _make(3, "preparing", 203, 1), // 라면
+  _make(4, "preparing", 206, 1), // 김치찌개
 
-  // ready — 8 (food + drinks)
-  _make(17, "ready", 101, 1),
-  _make(18, "ready", 202, 1),
-  _make(19, "ready", 102, 2),
-  _make(20, "ready", 203, 1),
-  _make(21, "ready", 302, 1),
-  _make(22, "ready", 207, 1),
-  _make(23, "ready", 103, 1),
-  _make(24, "ready", 204, 1),
+  // ready — 2 (one drink, one food)
+  _make(5, "ready", 102, 2), // 맥주
+  _make(6, "ready", 204, 1), // 파전
 
-  // closed — 15 (history)
-  _make(25, "closed", 201, 2),
-  _make(26, "closed", 101, 1),
-  _make(27, "closed", 202, 1),
-  _make(28, "closed", 203, 2),
-  _make(29, "closed", 102, 1),
-  _make(30, "closed", 204, 1),
-  _make(31, "closed", 205, 1),
-  _make(32, "closed", 103, 2),
-  _make(33, "closed", 206, 1),
-  _make(34, "closed", 301, 1),
-  _make(35, "closed", 207, 1),
-  _make(36, "closed", 101, 2),
-  _make(37, "closed", 202, 1),
-  _make(38, "closed", 302, 1),
-  _make(39, "closed", 201, 1),
+  // closed — 5 (history)
+  _make(7, "closed", 201, 2),
+  _make(8, "closed", 101, 1),
+  _make(9, "closed", 202, 1),
+  _make(10, "closed", 302, 1),
+  _make(11, "closed", 207, 1),
 ];
