@@ -26,8 +26,8 @@ export default function SectionImage({
 
       {/* Cover */}
       <div
-        className="absolute flex flex-col gap-2 justify-center items-center w-full h-full 
-          bg-[#2F2F2F] bg-opacity-40 hover:bg-opacity-10 px-4 transition-all duration-300 ease-in-out cursor-pointer"
+        className="absolute flex flex-col gap-2 justify-center items-center w-full h-full
+          bg-[#2F2F2F]/40 hover:bg-[#2F2F2F]/10 px-4 transition-all duration-300 ease-in-out cursor-pointer"
       >
         {name.split("\n").map((line, index) => (
           <span

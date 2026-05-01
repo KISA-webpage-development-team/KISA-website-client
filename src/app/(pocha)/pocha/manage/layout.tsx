@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "취업 공고",
-  description: "New-grad and internship job postings for international students",
+  title: "포차 관리",
+  description: "Admin page for KISA pocha — manage pocha info and menus",
 };
 
-export default function JobsLayout({
+export default function PochaManageLayout({
   children,
 }: {
   children: React.ReactNode;

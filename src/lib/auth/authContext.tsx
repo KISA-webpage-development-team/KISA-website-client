@@ -1,6 +1,7 @@
 "use client";
 
 import type { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import {
   createContext,
   useContext,
@@ -48,6 +49,12 @@ export function AuthContextProvider({
   const [mockAuthed, setMockAuthed] = useState(false);
   const [mockIsAdmin, setMockIsAdmin] = useState(false);
 
+  // Real next-auth session (live, reflects sign-in/out without reload).
+  // Falls back to `initialSession` (server-rendered via getServerSession)
+  // when no <SessionProvider> is in the tree.
+  const { data: nextAuthSession } = useSession();
+  const liveSession = (nextAuthSession ?? initialSession) as AppSession | null;
+
   useEffect(() => {
     if (IS_MOCK_MODE) {
       if (sessionStorage.getItem(AUTH_KEY) === "1") setMockAuthed(true);
@@ -83,8 +90,8 @@ export function AuthContextProvider({
         isMockMode: true,
       }
     : {
-        session: initialSession,
-        isAuthenticated: initialSession !== null,
+        session: liveSession,
+        isAuthenticated: liveSession !== null,
         isAdmin: false,
         toggle: () => {},
         toggleIsAdmin: () => {},

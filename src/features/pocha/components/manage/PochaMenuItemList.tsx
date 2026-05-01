@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import {
+  Alert,
   Badge,
   Button,
   Card,
@@ -55,6 +56,11 @@ export default function PochaMenuItemList({
 
   return (
     <div className="flex flex-col gap-6">
+      {menus.length === 0 && (
+        <Alert variant="warning" title="메뉴를 추가해주세요">
+          포차를 생성하려면 메뉴를 1개 이상 추가해야 합니다.
+        </Alert>
+      )}
       <MenuSection
         label="즉시 제공"
         items={immediatePrepMenus}

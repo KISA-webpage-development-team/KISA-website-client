@@ -182,11 +182,15 @@ export default function PochaFormDialog({
   };
 
   const hasFieldErrors = Object.keys(errors).length > 0;
-  const submitDisabled =
-    menus.length === 0 || !isValid || isSubmitting || hasFieldErrors;
+  const submitDisabled = !isValid || isSubmitting || hasFieldErrors;
 
   const handleFormSubmit = (values: PochaFormValues) => {
-    if (errors.endDate || errors.endTime) {
+    if (
+      errors.startDate ||
+      errors.startTime ||
+      errors.endDate ||
+      errors.endTime
+    ) {
       setActiveTab("info");
       return;
     }
