@@ -2,6 +2,8 @@ import { getPochaOrders } from "@/apis/pocha/queries";
 import { OrderItem, Orders, OrderStatus } from "@/types/pocha";
 import { useCallback, useEffect, useState, useMemo } from "react";
 
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
+
 // utility functions ----------------------------------------
 /*
   @desc get the next status of the order item
@@ -102,17 +104,34 @@ const useDashboardOrders = (pochaID: number, token: string) => {
     token
   );
 
-  const addNewOrderItem = (orderItem: OrderItem) => {
-    setOrdersMap((prevOrdersMap) => {
-      if (prevOrdersMap.has(orderItem.orderItemID)) {
-        console.warn("Order item already exists:", orderItem.orderItemID);
-        return prevOrdersMap;
-      }
-      const updatedMap = new Map(prevOrdersMap);
-      updatedMap.set(orderItem.orderItemID, orderItem);
-      return updatedMap;
-    });
-  };
+  const addNewOrderItem = useCallback(
+    (orderItem: OrderItem) => {
+      setOrdersMap((prevOrdersMap) => {
+        if (prevOrdersMap.has(orderItem.orderItemID)) {
+          console.warn("Order item already exists:", orderItem.orderItemID);
+          return prevOrdersMap;
+        }
+        const updatedMap = new Map(prevOrdersMap);
+        updatedMap.set(orderItem.orderItemID, orderItem);
+        return updatedMap;
+      });
+    },
+    [setOrdersMap]
+  );
+
+  // Mock-mode bridge: MockAuthToggle's "Simulate order" button POSTs to the
+  // mock spawn endpoint and dispatches `mock:new-order` with the spawned
+  // OrderItem in `event.detail`. The socket hook is short-circuited in mock,
+  // so this CustomEvent is the dashboard's only ingest path during dev.
+  useEffect(() => {
+    if (!IS_MOCK_MODE) return;
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<OrderItem>).detail;
+      if (detail) addNewOrderItem(detail);
+    };
+    window.addEventListener("mock:new-order", handler);
+    return () => window.removeEventListener("mock:new-order", handler);
+  }, [addNewOrderItem]);
 
   // More efficient order item status update using Map
   const updateOrderItemStatusUI = useCallback(
