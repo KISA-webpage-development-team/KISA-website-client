@@ -48,8 +48,6 @@ export default function DashboardPage() {
     return m;
   }, [ordersHook.immediatePrepOrders, ordersHook.notImmediatePrepOrders]);
 
-  console.log("ordersMap: ", ordersMap);
-
   if (adminStatus === "loading" || pochaIDStatus === "loading") {
     return <LoadingSpinner />;
   }
@@ -62,8 +60,6 @@ export default function DashboardPage() {
   if (!isAdmin) {
     return <NotAuthorized />;
   }
-
-  console.log("ordersHook.status: ", ordersHook.status);
 
   return (
     <Container size="full">
