@@ -11,8 +11,8 @@ export function MSWProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    import("./browser").then(({ worker }) =>
-      worker.start({ onUnhandledRequest: "warn" }).then(() => {
+    import("./browser").then(({ startWorkerOnce }) =>
+      startWorkerOnce().then(() => {
         // On first SW install, `start()` resolves once the worker is activated,
         // but this page is not yet a controlled client — `clients.claim()`
         // hasn't propagated. Subsequent fetches from this page would bypass
