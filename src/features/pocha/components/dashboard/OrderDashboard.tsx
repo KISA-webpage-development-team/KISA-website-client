@@ -1,21 +1,31 @@
 "use client";
 
 import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
-import useDashboard from "@/features/pocha/hooks/useDashboardOrders";
 import useDashboardOrderSocket from "@/features/pocha/hooks/useDashboardOrderSocket";
 import FoodOrderGrid from "@/features/pocha/components/dashboard/FoodOrderGrid";
 import DrinkOrderGrid from "@/features/pocha/components/dashboard/DrinkOrderGrid";
+import type { OrderItem, OrderStatus, Orders } from "@/types/pocha";
+
+interface OrdersHook {
+  immediatePrepOrders: Orders;
+  notImmediatePrepOrders: Orders;
+  addNewOrderItem: (orderItem: OrderItem) => void;
+  updateOrderItemStatusUI: (orderItemID: number, newStatus: OrderStatus) => void;
+  status: "loading" | "success" | "error";
+}
 
 interface OrderDashboardProps {
   email: string;
   token: string;
   pochaID: number;
+  ordersHook: OrdersHook;
 }
 
 export default function OrderDashboard({
   email,
   token,
   pochaID,
+  ordersHook,
 }: OrderDashboardProps) {
   const {
     immediatePrepOrders: drinkOrders,
@@ -23,7 +33,7 @@ export default function OrderDashboard({
     addNewOrderItem,
     updateOrderItemStatusUI,
     status,
-  } = useDashboard(pochaID, token);
+  } = ordersHook;
 
   useDashboardOrderSocket({
     token,
