@@ -1,35 +1,40 @@
 /*
   ViewCartButton
-  - Button to view cart
-  - Navigates to cart page with pochaID
+  - Always-visible footer CTA on the menu tab.
+  - Full-width, edge-to-edge, with safe-area-inset-bottom padding.
+  - Label-only "View Cart" — no count, no total.
 */
 
 import React from "react";
-import PochaButton from "../shared/PochaButton";
-import PochaCartIcon from "@/components/ui/icon/PochaCartIcon";
+import { useRouter } from "next/navigation";
+import { Button } from "@umichkisa-ds/web";
 
 interface ViewCartButtonProps {
-  pochaID: number;
+  pochaID: number | undefined;
 }
 
 export default function ViewCartButton({ pochaID }: ViewCartButtonProps) {
+  const router = useRouter();
+
   const handleViewCart = () => {
-    // navigate to cart page with pochaID
-    const queryParams = `pochaid=${pochaID}`;
-    window.location.href = `/pocha/cart?${queryParams}`;
+    if (pochaID === undefined) return;
+    router.push(`/pocha/cart?pochaid=${pochaID}`);
   };
 
   return (
     <div
-      className="fixed bottom-0 left-0 w-full flex justify-center bg-transparent
-     pb-5 z-30"
+      className="fixed bottom-0 left-0 right-0 z-30 bg-surface px-4 pt-3 border-t border-border"
+      style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
     >
-      <PochaButton
-        label="View Cart"
-        icon={<PochaCartIcon />}
+      <Button
+        variant="primary"
+        size="lg"
         onClick={handleViewCart}
-        widthPercentage={75}
-      />
+        disabled={pochaID === undefined}
+        className="w-full"
+      >
+        View Cart
+      </Button>
     </div>
   );
 }

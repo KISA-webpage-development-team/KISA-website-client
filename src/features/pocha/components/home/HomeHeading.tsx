@@ -1,5 +1,4 @@
 import React from "react";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import { PochaInfo } from "@/types/pocha";
 
 interface HomeHeadingProps {
@@ -13,12 +12,12 @@ export default function HomeHeading({ pochaInfo }: HomeHeadingProps) {
       id="pocha-heading"
     >
       {/* Title - pocha name */}
-      <h1 className={`${sejongHospitalBold.className} text-xl`}>
-        {pochaInfo?.title}
-      </h1>
+      <h1 className="type-h2 text-foreground">{pochaInfo?.title}</h1>
 
       {/* Description - pocha description */}
-      <p className="text-center text-sm">{pochaInfo?.description}</p>
+      <p className="type-body-sm text-center text-muted-foreground">
+        {pochaInfo?.description}
+      </p>
     </div>
   );
 }
