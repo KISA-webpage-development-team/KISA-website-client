@@ -58,8 +58,11 @@ function PochaManagePageContent() {
   );
 
   const isLoading = adminStatus === "loading" || pochaStatus === "loading";
+  // pochaInfo can now be null (204 from /pocha/status-info) in addition to
+  // the legacy `{}` shape. Treat both as "no ongoing pocha".
   const noPochaAvailable =
-    pochaStatus === "success" && Object.keys(pochaInfo).length === 0;
+    pochaStatus === "success" &&
+    (pochaInfo == null || Object.keys(pochaInfo).length === 0);
 
   // Sync the latest menu fetch into the manage context — runs on initial
   // load AND on every SWR revalidation (e.g. after PUT /pocha/{id}/ mutates
