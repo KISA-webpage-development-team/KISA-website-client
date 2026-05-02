@@ -1,35 +1,30 @@
 /**
  * HomeTabContent
- * - Displays the menu or order list depending on the active tab
- * - Displays the cart button if the active tab is menu
+ * - Renders TabsContent panels for the Pocha Home page.
+ * - Menu tab also renders the always-visible View Cart button.
  */
 
-import { MenuItem, PochaTab } from "@/types/pocha";
+import { TabsContent } from "@umichkisa-ds/web";
 import MenuList from "@/features/pocha/components/menu/MenuList";
 import OrderList from "@/features/pocha/components/order/OrderList";
-import ViewCartButton from "../menu/ViewCartButton";
+import ViewCartButton from "@/features/pocha/components/menu/ViewCartButton";
 import { memo } from "react";
 
 interface HomeTabContentProps {
-  activeTab: PochaTab;
   pochaID: number | undefined;
 }
 
-function HomeTabContent({ activeTab, pochaID }: HomeTabContentProps) {
+function HomeTabContent({ pochaID }: HomeTabContentProps) {
   return (
-    <div className="flex flex-col justify-between w-full relative">
-      {/* Content Area with Scrollable Section */}
-      {activeTab === "menu" ? (
-        <>
-          <MenuList pochaid={pochaID} />
-          <ViewCartButton pochaID={pochaID} />
-        </>
-      ) : activeTab === "orders" ? (
+    <>
+      <TabsContent value="menu" className="flex flex-col">
+        <MenuList pochaid={pochaID} />
+        <ViewCartButton pochaID={pochaID} />
+      </TabsContent>
+      <TabsContent value="orders">
         <OrderList pochaID={pochaID} />
-      ) : (
-        <></>
-      )}
-    </div>
+      </TabsContent>
+    </>
   );
 }
 

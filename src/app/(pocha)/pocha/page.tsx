@@ -4,20 +4,18 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 
 // ui components
-import { LoadingSpinner } from "@/components/ui/feedback";
-import { StatusView } from "@umichkisa-ds/web";
+import { StatusView, Tabs, Skeleton } from "@umichkisa-ds/web";
 import HomeHeading from "@/features/pocha/components/home/HomeHeading";
 import HomeTabs from "@/features/pocha/components/home/HomeTabs";
 import HomeTabContent from "@/features/pocha/components/home/HomeTabContent";
 import { POCHA_THEME } from "@/features/pocha/featureFlag";
 
 // hooks
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import usePocha from "@/features/pocha/hooks/usePocha";
 
 // types
 import { PochaTab } from "@/types/pocha";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 
 // Spring theme components -- only loaded when theme is spring
 const CherryBlossomBranch =
@@ -42,17 +40,59 @@ const CherryBlossomPetals =
       )
     : null;
 
+function HomeShellSkeleton() {
+  return (
+    <section className="md:hidden flex flex-col min-h-screen">
+      {/* Heading skeleton */}
+      <div className="flex flex-col items-center px-4 pt-2 gap-2">
+        <Skeleton className="h-7 w-40" />
+        <Skeleton className="h-4 w-64" />
+      </div>
+
+      {/* Tab strip skeleton */}
+      <div className="flex gap-4 px-4 py-3">
+        <Skeleton className="h-8 flex-1" />
+        <Skeleton className="h-8 flex-1" />
+      </div>
+
+      {/* Menu row skeletons */}
+      <div className="flex flex-col gap-4 px-4 py-2">
+        {Array.from({ length: 5 }).map((_, idx) => (
+          <div key={idx} className="flex flex-row items-center gap-4 py-2">
+            <Skeleton variant="rectangular" className="h-24 w-24 rounded-md" />
+            <div className="flex flex-col gap-2 flex-1">
+              <Skeleton className="h-5 w-3/4" />
+              <Skeleton className="h-4 w-1/3" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function PochaPage() {
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<PochaTab>(
-    (searchParams.get("tab") as PochaTab) || "menu"
-  );
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // URL-as-source-of-truth for active tab.
+  const tabParam = searchParams.get("tab");
+  const activeTab: PochaTab =
+    tabParam === "orders" ? "orders" : "menu";
+
+  const handleTabChange = (next: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", next);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   const [swayTrigger, setSwayTrigger] = useState(0);
 
   const { pochaInfo, status, error } = usePocha();
 
   if (status === "loading") {
-    return <LoadingSpinner />;
+    return <HomeShellSkeleton />;
   }
 
   if (status === "error") {
@@ -67,7 +107,7 @@ export default function PochaPage() {
         fullScreen
         variant="not-found"
         icon="calendar"
-        title="진행 중인 포차가 없습니다"
+        title="No pocha in progress"
         description="다음 포차가 시작되면 이 곳에서 메뉴와 주문을 확인할 수 있습니다."
       />
     );
@@ -75,57 +115,60 @@ export default function PochaPage() {
 
   if (pochaInfo?.ongoing === false) {
     return (
-      <section className="flex justify-center items-center h-full">
-        <p className={`text-3xl ${sejongHospitalBold.className}`}>
-          Upcoming pocha
-        </p>
-        <HomeHeading pochaInfo={pochaInfo} />
-      </section>
+      <StatusView
+        fullScreen
+        variant="not-found"
+        icon="calendar"
+        title={pochaInfo.title ?? "Upcoming pocha"}
+        description={pochaInfo.description ?? "다음 포차를 기다려 주세요."}
+      />
     );
   }
 
   return (
-    <section
-      className={`
-        md:hidden flex flex-col min-h-screen
-        relative !gap-0`}
+    <Tabs
+      value={activeTab}
+      onValueChange={handleTabChange}
+      className="md:hidden flex flex-col min-h-screen relative !gap-0"
     >
-      {/* Cherry blossom branch -- spring theme only */}
-      {CherryBlossomBranch && (
-        <div className="absolute top-0 left-0 z-[40] w-full">
-          <CherryBlossomBranch triggerSway={swayTrigger} />
-        </div>
-      )}
-
-      {/* PochaHeading (at the top, disappear when scrolling) */}
-      <div className="relative z-[41] flex-shrink-0">
-        {CherryBlossomPetals && (
-          <CherryBlossomPetals petalCount={4} scrollOpacity={1} />
+      <section className="flex flex-col min-h-screen relative !gap-0">
+        {/* Cherry blossom branch -- spring theme only */}
+        {CherryBlossomBranch && (
+          <div className="absolute top-0 left-0 z-[40] w-full">
+            <CherryBlossomBranch triggerSway={swayTrigger} />
+          </div>
         )}
-        <HomeHeading pochaInfo={pochaInfo} />
-      </div>
 
-      {/* Sticky Tabs (fixed at the top) */}
-      <div className="sticky top-0 z-[45] bg-white">
-        <HomeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-      </div>
+        {/* PochaHeading scrolls away with content */}
+        <div className="relative z-[41] flex-shrink-0">
+          {CherryBlossomPetals && (
+            <CherryBlossomPetals petalCount={4} scrollOpacity={1} />
+          )}
+          <HomeHeading pochaInfo={pochaInfo} />
+        </div>
 
-      {/* Main Content Area (scrollable) */}
-      <div
-        className="flex-1"
-        onClick={
-          POCHA_THEME === "spring"
-            ? (e) => {
-                const btn = (e.target as HTMLElement).closest("button");
-                if (btn?.textContent?.includes("View Cart")) {
-                  setSwayTrigger((prev) => prev + 1);
+        {/* Sticky tabs */}
+        <div className="sticky top-0 z-[45] bg-surface">
+          <HomeTabs />
+        </div>
+
+        {/* Main content area (scrollable) */}
+        <div
+          className="flex-1"
+          onClick={
+            POCHA_THEME === "spring"
+              ? (e) => {
+                  const btn = (e.target as HTMLElement).closest("button");
+                  if (btn?.textContent?.includes("View Cart")) {
+                    setSwayTrigger((prev) => prev + 1);
+                  }
                 }
-              }
-            : undefined
-        }
-      >
-        <HomeTabContent activeTab={activeTab} pochaID={pochaInfo?.pochaID} />
-      </div>
-    </section>
+              : undefined
+          }
+        >
+          <HomeTabContent pochaID={pochaInfo?.pochaID} />
+        </div>
+      </section>
+    </Tabs>
   );
 }
