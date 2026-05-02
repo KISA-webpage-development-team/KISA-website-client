@@ -124,7 +124,7 @@ export default function DashboardPage() {
             </TabsList>
             {currentTab === "orders" && (
               <div className="flex items-center gap-2">
-                <span className="type-caption text-muted-foreground hidden sm:inline">
+                <span className="type-body-sm text-muted-foreground hidden sm:inline">
                   {selectMode
                     ? "Tap cards to select"
                     : "Promote multiple at once"}

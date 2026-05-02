@@ -207,7 +207,7 @@ function OrderItemCardImpl({
       <Card
         className={`h-full w-full ${statusTone} ${
           isSelectMode && isSelected
-            ? "ring-2 ring-primary ring-offset-1 cursor-pointer"
+            ? "!border-primary border-2 cursor-pointer"
             : isSelectMode
               ? "cursor-pointer"
               : ""
