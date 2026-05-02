@@ -123,7 +123,7 @@ export default function DashboardPage() {
               <TabsTrigger value="history">History</TabsTrigger>
             </TabsList>
             {currentTab === "orders" && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 <span className="type-body-sm text-muted-foreground hidden sm:inline">
                   {selectMode
                     ? "Tap cards to select"
