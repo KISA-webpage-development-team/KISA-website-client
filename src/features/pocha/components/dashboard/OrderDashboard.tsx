@@ -71,27 +71,8 @@ export default function OrderDashboard({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Top row: bulk-promote toggle + caption explaining the mode. */}
-      <div className="flex items-center justify-between gap-3 px-1">
-        <p className="type-caption text-muted-foreground">
-          {selectMode
-            ? "Tap cards to select · Promote multiple at once"
-            : "Promote multiple orders at once with bulk select"}
-        </p>
-        <Button
-          variant={selectMode ? "primary" : "secondary"}
-          size="md"
-          onClick={handleToggleSelectMode}
-          disabled={isPromoting}
-          aria-pressed={selectMode}
-        >
-          <Icon name={selectMode ? "check" : "circle-check"} size="sm" aria-hidden />
-          {selectMode ? "Done" : "Bulk promote"}
-        </Button>
-      </div>
-
       <div className="flex flex-col gap-4 md:flex-row">
-        {/* 1. Food Orders */}
+        {/* 1. Food Orders — hosts the page-level Bulk-promote toggle in its header slot. */}
         <div className="md:basis-3/5">
           <FoodOrderGrid
             orders={foodOrders}
@@ -99,6 +80,29 @@ export default function OrderDashboard({
             selectMode={selectMode}
             onEnterSelectMode={handleEnterSelectMode}
             onPromotingChange={setIsPromotingFood}
+            headerActions={
+              <div className="flex items-center gap-2">
+                <span className="type-caption text-muted-foreground hidden sm:inline">
+                  {selectMode
+                    ? "Tap cards to select"
+                    : "Promote multiple at once"}
+                </span>
+                <Button
+                  variant={selectMode ? "primary" : "secondary"}
+                  size="md"
+                  onClick={handleToggleSelectMode}
+                  disabled={isPromoting}
+                  aria-pressed={selectMode}
+                >
+                  <Icon
+                    name={selectMode ? "check" : "circle-check"}
+                    size="sm"
+                    aria-hidden
+                  />
+                  {selectMode ? "Done" : "Bulk promote"}
+                </Button>
+              </div>
+            }
           />
         </div>
         {/* 2. Drink Orders */}

@@ -33,6 +33,10 @@ interface FoodOrderGridProps {
    * can flip selectMode to true (gesture-driven discovery). */
   onEnterSelectMode?: () => void;
   onPromotingChange?: (isPromoting: boolean) => void;
+  /** Right-side slot in the grid header. Used by the dashboard to mount the
+   * page-level Bulk-promote / Done toggle adjacent to its caption, on the
+   * same row as the section title. */
+  headerActions?: React.ReactNode;
 }
 
 type ColumnStatus = "pending" | "preparing" | "ready";
@@ -64,6 +68,7 @@ export default function FoodOrderGrid({
   selectMode,
   onEnterSelectMode,
   onPromotingChange,
+  headerActions,
 }: FoodOrderGridProps) {
   const { pending, preparing, ready } = orders;
 
@@ -243,9 +248,12 @@ export default function FoodOrderGrid({
         selectMode ? "ring-2 ring-info ring-offset-2" : ""
       }`}
     >
-      <header className="flex items-baseline gap-2 px-1">
-        <h2 className="type-h3">Food</h2>
-        <span className="type-caption text-muted-foreground">음식 주문</span>
+      <header className="flex items-baseline justify-between gap-3 px-1">
+        <div className="flex items-baseline gap-2">
+          <h2 className="type-h3">Food</h2>
+          <span className="type-caption text-muted-foreground">음식 주문</span>
+        </div>
+        {headerActions}
       </header>
 
       <Grid columns={{ base: 1, md: 3 }} gap="element">
