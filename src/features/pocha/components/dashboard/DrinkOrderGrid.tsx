@@ -1,7 +1,7 @@
 import { OrderStatus, Orders } from "@/types/pocha";
 import React from "react";
 import OrderItemCard from "@/features/pocha/components/dashboard/OrderItemCard";
-import { Badge, Grid, Icon } from "@umichkisa-ds/web";
+import { Grid, Icon } from "@umichkisa-ds/web";
 
 interface DrinkOrderGridProps {
   orders: Orders;
@@ -18,12 +18,11 @@ const STATUS_LABEL: Record<ColumnStatus, string> = {
   ready: "전달 대기",
 };
 
-// Mirror FoodOrderGrid column treatment so the two boards read as one
-// dashboard: pending pulls the eye, ready recedes. Drinks have no
-// preparing stage (pour-and-serve).
+// Mirror FoodOrderGrid status palette: warning (pending) / success (ready).
+// Drinks have no preparing stage (pour-and-serve).
 const HEADER_TONE: Record<ColumnStatus, string> = {
-  pending: "bg-brand-accent-subtle border-brand-primary",
-  ready: "bg-surface-subtle border-border",
+  pending: "bg-warning-subtle border-warning text-warning",
+  ready: "bg-success-subtle border-success text-success",
 };
 
 const EMPTY_COPY: Record<ColumnStatus, string> = {
@@ -65,13 +64,12 @@ export default function DrinkOrderGrid({
               className={`flex items-baseline justify-between gap-2 px-3 py-2 rounded-md border ${HEADER_TONE[status]}`}
             >
               <h3 className="type-label">{STATUS_LABEL[status]}</h3>
-              <Badge
-                size="sm"
-                variant="outline"
+              <span
+                className="type-label tabular-nums"
                 aria-label={`${items.length} items`}
               >
                 {items.length}
-              </Badge>
+              </span>
             </div>
 
             {items.length === 0 ? (
