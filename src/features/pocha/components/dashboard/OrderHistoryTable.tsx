@@ -117,7 +117,7 @@ export default function OrderHistoryTable({
 
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <ToggleGroup
             items={filterItems}
