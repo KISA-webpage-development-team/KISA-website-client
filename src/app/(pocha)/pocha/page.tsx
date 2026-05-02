@@ -4,10 +4,18 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 
 // ui components
-import { StatusView, Tabs, Skeleton } from "@umichkisa-ds/web";
+import {
+  StatusView,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  Skeleton,
+} from "@umichkisa-ds/web";
 import HomeHeading from "@/features/pocha/components/home/HomeHeading";
-import HomeTabs from "@/features/pocha/components/home/HomeTabs";
-import HomeTabContent from "@/features/pocha/components/home/HomeTabContent";
+import MenuList from "@/features/pocha/components/menu/MenuList";
+import OrderList from "@/features/pocha/components/order/OrderList";
+import ViewCartButton from "@/features/pocha/components/menu/ViewCartButton";
 import { POCHA_THEME } from "@/features/pocha/featureFlag";
 
 // hooks
@@ -149,7 +157,14 @@ export default function PochaPage() {
 
         {/* Sticky tabs */}
         <div className="sticky top-0 z-[45] bg-surface">
-          <HomeTabs />
+          <TabsList variant="underline" fullWidth>
+            <TabsTrigger value="menu" variant="underline">
+              Menu
+            </TabsTrigger>
+            <TabsTrigger value="orders" variant="underline">
+              Orders
+            </TabsTrigger>
+          </TabsList>
         </div>
 
         {/* Main content area (scrollable) */}
@@ -166,7 +181,13 @@ export default function PochaPage() {
               : undefined
           }
         >
-          <HomeTabContent pochaID={pochaInfo?.pochaID} />
+          <TabsContent value="menu" className="flex flex-col">
+            <MenuList pochaid={pochaInfo?.pochaID} />
+            <ViewCartButton pochaID={pochaInfo?.pochaID} />
+          </TabsContent>
+          <TabsContent value="orders">
+            <OrderList pochaID={pochaInfo?.pochaID} />
+          </TabsContent>
         </div>
       </section>
     </Tabs>
