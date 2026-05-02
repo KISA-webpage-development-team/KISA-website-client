@@ -1,9 +1,8 @@
 import React from "react";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import useUserOrders from "../../hooks/useUserOrders";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/lib/auth/authContext";
 
-import { UserSession } from "@/lib/next-auth/types";
 import PochaOrderItem from "./PochaOrderItem";
 import { Tabs, Tab } from "@nextui-org/react"; // Using Tabs
 import useUserOrderSocket from "../../hooks/useUserOrderSocket";
@@ -14,10 +13,7 @@ interface OrderListProps {
 }
 
 export default function OrderList({ pochaID }: OrderListProps) {
-  const { data: session, status: sessionStatus } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  const { session } = useAuth();
 
   const {
     updateOrder,
@@ -38,7 +34,7 @@ export default function OrderList({ pochaID }: OrderListProps) {
   });
 
   // UI Rendering ----------------------------------------------
-  if (sessionStatus === "loading" || ordersStatus === "loading") {
+  if (ordersStatus === "loading") {
     return (
       <LoadingSpinner fullScreen={false} label="주문 목록 가져오는중..." />
     );

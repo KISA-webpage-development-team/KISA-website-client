@@ -11,12 +11,11 @@ import MenuListItem from "./MenuListItem";
 import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
 
 // Hooks
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/lib/auth/authContext";
 import useMenu from "../../hooks/useMenu";
 import useUserAge from "../../hooks/useUserAge";
 
 // Types
-import { UserSession } from "@/lib/next-auth/types";
 import { MenuItem } from "@/types/pocha";
 import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import MenuItemDetail from "./MenuItemDetail";
@@ -26,10 +25,7 @@ interface MenuListProps {
 }
 
 function MenuList({ pochaid }: MenuListProps) {
-  const { data: session } = useSession() as {
-    data: UserSession | null;
-    status: string;
-  };
+  const { session } = useAuth();
 
   // fetch menu and user age (for under age check)
   // [NOTE] useMenu and useUserAge uses SWR for better UX
@@ -55,7 +51,7 @@ function MenuList({ pochaid }: MenuListProps) {
   if (selectedMenu) {
     return (
       <MenuItemDetail
-        session={session}
+        session={session ?? undefined}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
         pochaid={pochaid}

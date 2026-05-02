@@ -38,18 +38,22 @@ const useUserAge = (session: UserSession | null) => {
     }
   );
 
-  // Explicit loading state
+  // Without a session SWR is disabled (key=null), so isLoading stays false
+  // and `data`/`error` never resolve. Treat this as a benign "no user" state
+  // rather than an indefinite loading state.
+  if (!session) {
+    return { underAge: null, status: 'success', fullname: '' };
+  }
+
   if (isLoading) {
     return { underAge: null, status: 'loading', fullname: '' };
   }
 
-  // Error handling
   if (error) {
     console.error("Error fetching user's age:", error);
     return { underAge: null, status: 'error', fullname: '' };
   }
 
-  // Success: Calculate age and determine underage
   if (data) {
     const { bornDate, bornMonth, bornYear, fullname } = data;
     const formattedBirthday = `${bornYear}-${bornMonth
@@ -63,7 +67,6 @@ const useUserAge = (session: UserSession | null) => {
     return { underAge, status: 'success', fullname };
   }
 
-  // Fallback (edge case)
   return { underAge: null, status: 'loading', fullname: '' };
 };
 

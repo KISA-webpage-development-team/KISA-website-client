@@ -13,16 +13,10 @@ import { StatusView } from "@umichkisa-ds/web";
 // hooks
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import useCart from "@/features/pocha/hooks/useCart";
-import { useSession } from "next-auth/react";
-
-// types
-import { UserSession } from "@/lib/next-auth/types";
+import { useAuth } from "@/lib/auth/authContext";
 
 export default function PochaCartPage() {
-  const { data: session, status: sessionStatus } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  const { session } = useAuth();
 
   // get pochaID from URL or API to use in cart
   const {
@@ -55,11 +49,7 @@ export default function PochaCartPage() {
     );
   }
 
-  if (
-    sessionStatus === "loading" ||
-    pochaIDStatus === "loading" ||
-    cartStatus === "loading"
-  ) {
+  if (pochaIDStatus === "loading" || cartStatus === "loading") {
     return <LoadingSpinner />;
   }
 

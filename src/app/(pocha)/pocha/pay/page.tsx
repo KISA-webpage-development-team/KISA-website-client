@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { useSession } from "next-auth/react";
-import { UserSession } from "@/lib/next-auth/types";
+import { useAuth } from "@/lib/auth/authContext";
 import PaymentSubmitForm from "@/features/pocha/components/pay/PaymentSubmitForm";
 
 // Stripe
@@ -20,10 +19,7 @@ import PochaHorizontalDivider from "@/features/pocha/components/shared/PochaHori
 import useUserAge from "@/features/pocha/hooks/useUserAge";
 
 export default function PayPage() {
-  const { data: session, status: sessionStatus } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  const { session } = useAuth();
 
   const router = useRouter();
 
@@ -45,7 +41,6 @@ export default function PayPage() {
   const { underAge, status: userAgeStatus, fullname } = useUserAge(session);
 
   const isLoading =
-    sessionStatus === "loading" ||
     pochaIDStatus === "loading" ||
     payReadyStatus === "loading" ||
     userAgeStatus === "loading";

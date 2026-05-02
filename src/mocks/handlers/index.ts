@@ -1,6 +1,7 @@
 import { type RequestHandler } from "msw";
 import { jobsHandlers } from "./jobs";
 import { authHandlers } from "./auth";
+import { usersHandlers } from "./users";
 import { pochaHandlers } from "./pocha";
 
 /**
@@ -11,5 +12,6 @@ import { pochaHandlers } from "./pocha";
 export const handlers: RequestHandler[] = [
   ...jobsHandlers,
   ...authHandlers,
+  ...usersHandlers,
   ...pochaHandlers,
 ];
