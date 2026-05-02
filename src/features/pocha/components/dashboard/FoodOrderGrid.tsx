@@ -29,9 +29,9 @@ const HEADER_TONE: Record<ColumnStatus, string> = {
 };
 
 const EMPTY_COPY: Record<ColumnStatus, string> = {
-  pending: "새 주문 없음",
-  preparing: "조리중인 항목 없음",
-  ready: "모두 전달 완료",
+  pending: "No new orders",
+  preparing: "Nothing in prep",
+  ready: "All delivered",
 };
 
 export default function FoodOrderGrid({
