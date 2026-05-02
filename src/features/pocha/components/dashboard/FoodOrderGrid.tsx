@@ -64,7 +64,7 @@ export default function FoodOrderGrid({
             aria-label={`${STATUS_LABEL[status]} column`}
           >
             <div
-              className={`flex items-baseline justify-between gap-2 px-3 py-2 rounded-md border ${HEADER_TONE[status]}`}
+              className={`flex items-baseline justify-between gap-2 px-4 py-2 rounded-md border ${HEADER_TONE[status]}`}
             >
               <h3 className="type-label">{STATUS_LABEL[status]}</h3>
               <span
