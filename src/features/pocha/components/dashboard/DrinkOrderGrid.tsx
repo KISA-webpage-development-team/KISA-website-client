@@ -14,8 +14,8 @@ interface DrinkOrderGridProps {
 type ColumnStatus = "pending" | "ready";
 
 const STATUS_LABEL: Record<ColumnStatus, string> = {
-  pending: "대기",
-  ready: "전달 대기",
+  pending: "Pending",
+  ready: "Ready",
 };
 
 // Mirror FoodOrderGrid status palette: warning (pending) / success (ready).

@@ -14,9 +14,9 @@ interface FoodOrderGridProps {
 type ColumnStatus = "pending" | "preparing" | "ready";
 
 const STATUS_LABEL: Record<ColumnStatus, string> = {
-  pending: "대기",
-  preparing: "조리중",
-  ready: "전달 대기",
+  pending: "Pending",
+  preparing: "Preparing",
+  ready: "Ready",
 };
 
 // Column treatment uses semantic status palette (matches STATUS_COLORS intent
