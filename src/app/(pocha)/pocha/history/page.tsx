@@ -11,7 +11,6 @@ import PreviousPochaList from '@/features/pocha/components/manage/PreviousPochaL
 import OrderHistoryTable from '@/features/pocha/components/dashboard/OrderHistoryTable';
 import OrderDashboard from '@/features/pocha/components/dashboard/OrderDashboard';
 import { PochaInfoWithoutStatus } from '@/types/pocha';
-import PochaHistoryTable from '@/features/pocha/components/history/PochaHistoryTable';
 export default function HistoryPage() {
   const { data: session, status: sessionStatus } = useSession() as {
     data: UserSession | undefined;

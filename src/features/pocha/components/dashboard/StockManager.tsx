@@ -50,6 +50,11 @@ type FlatRow = MenuItem & { category: string };
 const ERROR_TOAST = "Failed to update stock";
 const SOLD_OUT_TOAST = "Marked sold out";
 
+function bilingualName(row: { nameKor?: string; nameEng?: string }) {
+  if (row.nameKor && row.nameEng) return `${row.nameKor} / ${row.nameEng}`;
+  return row.nameKor || row.nameEng || "";
+}
+
 function isLow(stock: number) {
   return stock >= 1 && stock <= 3;
 }
@@ -116,7 +121,7 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
     () => [
       { value: "all", label: `All (${counts.all})` },
       { value: "in", label: `In stock (${counts.inStock})` },
-      { value: "low", label: `Low (${counts.low})` },
+      { value: "low", label: `Low ≤3 (${counts.low})` },
       { value: "sold-out", label: `Sold out (${counts.soldOut})` },
     ],
     [counts]
@@ -160,8 +165,9 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
 
       if (!ok) {
         toast.error(ERROR_TOAST);
+        return;
       }
-      // Inline-edit success is silent; the cell's new value is the confirmation.
+      toast.success(`Stock updated to ${parsed}`);
     },
     [draftValue, cancelEdit, updateMenuStock]
   );
@@ -324,7 +330,7 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
           onFocus={(e) => e.currentTarget.select()}
           onKeyDown={(e) => handleKeyDown(e, row)}
           onBlur={(e) => handleBlur(e, row)}
-          aria-label={`Stock for ${row.nameEng || row.nameKor}`}
+          aria-label={`Stock for ${bilingualName(row)}`}
           className="w-24"
         />
       );
@@ -333,8 +339,8 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
       <button
         type="button"
         onClick={() => beginEdit(row)}
-        aria-label={`Edit stock for ${row.nameEng || row.nameKor}`}
-        className="rounded-md px-2 py-1 text-left type-body text-foreground hover:bg-brand-accent-subtle focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2"
+        aria-label={`Edit stock for ${bilingualName(row)}`}
+        className="w-24 rounded-md border border-input bg-background px-3 py-1.5 text-left type-body text-foreground hover:bg-brand-accent-subtle focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2"
       >
         {row.stock}
       </button>
@@ -364,7 +370,7 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
               <TableRow key={row.menuID}>
                 <TableCell>
                   <span className="type-body text-foreground">
-                    {row.nameEng || row.nameKor}
+                    {bilingualName(row)}
                   </span>
                 </TableCell>
                 <TableCell>
@@ -409,7 +415,7 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex flex-col gap-1 min-w-0">
                     <span className="type-label text-foreground truncate">
-                      {row.nameEng || row.nameKor}
+                      {bilingualName(row)}
                     </span>
                     <span className="type-caption text-muted-foreground">
                       {row.category}
