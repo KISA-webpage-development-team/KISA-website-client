@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 
 // ui components
 import { LoadingSpinner } from "@/components/ui/feedback";
+import { StatusView } from "@umichkisa-ds/web";
 import HomeHeading from "@/features/pocha/components/home/HomeHeading";
 import HomeTabs from "@/features/pocha/components/home/HomeTabs";
 import HomeTabContent from "@/features/pocha/components/home/HomeTabContent";
@@ -58,13 +59,17 @@ export default function PochaPage() {
     throw new Error(error || "Unexpected error occurred");
   }
 
-  if (Object.keys(pochaInfo).length === 0) {
+  // pochaInfo is null when /pocha/status-info responded 204; legacy
+  // backend variant returns `{}`. Treat both as "no ongoing pocha".
+  if (!pochaInfo || Object.keys(pochaInfo).length === 0) {
     return (
-      <section className="flex justify-center items-center h-full">
-        <p className={`text-3xl ${sejongHospitalBold.className}`}>
-          No scheduled pocha
-        </p>
-      </section>
+      <StatusView
+        fullScreen
+        variant="not-found"
+        icon="calendar"
+        title="진행 중인 포차가 없습니다"
+        description="다음 포차가 시작되면 이 곳에서 메뉴와 주문을 확인할 수 있습니다."
+      />
     );
   }
 

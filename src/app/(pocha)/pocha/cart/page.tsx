@@ -8,6 +8,7 @@ import CartList from "@/features/pocha/components/cart/CartList";
 import CartTotalSummary from "@/features/pocha/components/cart/CartTotalSummary";
 import { LoadingSpinner } from "@/components/ui/feedback";
 import ProceedToPaymentButton from "@/features/pocha/components/cart/ProceedToPaymentButton";
+import { StatusView } from "@umichkisa-ds/web";
 
 // hooks
 import usePochaID from "@/features/pocha/hooks/usePochaID";
@@ -24,7 +25,12 @@ export default function PochaCartPage() {
   };
 
   // get pochaID from URL or API to use in cart
-  const { pochaID, status: pochaIDStatus, error: pochaIDError } = usePochaID();
+  const {
+    pochaID,
+    status: pochaIDStatus,
+    error: pochaIDError,
+    noPocha,
+  } = usePochaID();
 
   // get cart items and total amount
   const {
@@ -34,6 +40,20 @@ export default function PochaCartPage() {
     totalAmount,
     handleQuantityChange,
   } = useCart(session?.user?.email, pochaID);
+
+  // Short-circuit before the loading check — useCart stalls on null pochaID,
+  // so the page would otherwise spin forever when there is no ongoing pocha.
+  if (noPocha) {
+    return (
+      <StatusView
+        fullScreen
+        variant="not-found"
+        icon="calendar"
+        title="진행 중인 포차가 없습니다"
+        description="다음 포차가 시작되면 장바구니를 사용할 수 있습니다."
+      />
+    );
+  }
 
   if (
     sessionStatus === "loading" ||

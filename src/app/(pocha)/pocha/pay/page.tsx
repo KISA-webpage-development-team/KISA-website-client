@@ -13,6 +13,7 @@ import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 import { useRouter } from "next/navigation";
 import usePay from "@/features/pocha/hooks/usePay";
 import { LoadingSpinner } from "@/components/ui/feedback";
+import { StatusView } from "@umichkisa-ds/web";
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import PochaBackHeading from "@/features/pocha/components/shared/PochaBackHeading";
 import PochaHorizontalDivider from "@/features/pocha/components/shared/PochaHorizontalDivider";
@@ -26,7 +27,12 @@ export default function PayPage() {
 
   const router = useRouter();
 
-  const { pochaID, status: pochaIDStatus, error: pochaIDError } = usePochaID();
+  const {
+    pochaID,
+    status: pochaIDStatus,
+    error: pochaIDError,
+    noPocha,
+  } = usePochaID();
 
   const {
     amount,
@@ -48,6 +54,20 @@ export default function PayPage() {
     payReadyStatus === "error" ||
     userAgeStatus === "error" ||
     !totalPrice;
+
+  // Short-circuit before the loading check — usePay stalls on null pochaID,
+  // so the page would otherwise spin forever when there is no ongoing pocha.
+  if (noPocha) {
+    return (
+      <StatusView
+        fullScreen
+        variant="not-found"
+        icon="calendar"
+        title="진행 중인 포차가 없습니다"
+        description="다음 포차가 시작되면 결제를 진행할 수 있습니다."
+      />
+    );
+  }
 
   if (isLoading) return <LoadingSpinner />;
   if (hasError) {
