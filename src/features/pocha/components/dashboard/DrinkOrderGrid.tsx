@@ -229,6 +229,11 @@ export default function DrinkOrderGrid({
       <header className="flex items-baseline gap-2 px-1">
         <h2 className="type-h3">Drinks</h2>
         <span className="type-caption text-muted-foreground">음료 주문</span>
+        {selectMode && (
+          <span className="type-caption text-info ml-auto">
+            Tap a card to add it to your batch
+          </span>
+        )}
       </header>
 
       <Grid columns={{ base: 1, md: 2 }} gap="element">
