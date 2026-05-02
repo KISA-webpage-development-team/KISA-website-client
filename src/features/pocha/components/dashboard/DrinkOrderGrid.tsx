@@ -1,7 +1,5 @@
 import { OrderStatus, Orders } from "@/types/pocha";
-import React from "react";
-import OrderItemCard from "@/features/pocha/components/dashboard/OrderItemCard";
-import { STATUS_COLORS } from "@/features/pocha/utils/statusToColor";
+import OrderBoard from "./OrderBoard";
 
 interface DrinkOrderGridProps {
   orders: Orders;
@@ -9,59 +7,22 @@ interface DrinkOrderGridProps {
     orderItemID: number,
     newStatus: OrderStatus
   ) => void;
+  selectMode: boolean;
+  onEnterSelectMode?: () => void;
+  onPromotingChange?: (isPromoting: boolean) => void;
 }
 
-export default function DrinkOrderGrid({
-  orders = { pending: [], preparing: [], ready: [] },
-  updateOrderItemStatusUI,
-}: DrinkOrderGridProps) {
-  const { pending, preparing, ready } = orders;
-
-  const itemStatusHeaderStyle = (status: string) => {
-    const style = `text-lg font-semibold
-     flex items-center justify-center p-1 rounded-md`;
-
-    if (status === "pending") return `${style} ${STATUS_COLORS.pending} `;
-    if (status === "preparing") return `${style} ${STATUS_COLORS.preparing} `;
-    if (status === "ready") return `${style} ${STATUS_COLORS.ready}`;
-  };
-
+// Drinks are pour-and-serve — no `preparing` stage.
+export default function DrinkOrderGrid(props: DrinkOrderGridProps) {
   return (
-    <div className="flex flex-col self-stretch gap-2 bg-slate-100 p-2 rounded-lg">
-      <h2 className="text-2xl font-bold">Drink Orders</h2>
-      <div className="flex gap-2">
-        <div className="flex-1">
-          <div className={itemStatusHeaderStyle("pending")}>
-            <h3>Pending</h3>
-          </div>
-          <ul className="flex flex-col gap-2 mt-2">
-            {pending?.map((order) => (
-              <OrderItemCard
-                isDrink={true}
-                key={order.orderItemID}
-                order={order}
-                updateOrderItemStatusUI={updateOrderItemStatusUI}
-              />
-            ))}
-          </ul>
-        </div>
-
-        <div className="flex-1">
-          <div className={itemStatusHeaderStyle("ready")}>
-            <h3>Ready</h3>
-          </div>
-          <ul className="flex flex-col gap-2 mt-2">
-            {ready?.map((order) => (
-              <OrderItemCard
-                isDrink={true}
-                key={order.orderItemID}
-                order={order}
-                updateOrderItemStatusUI={updateOrderItemStatusUI}
-              />
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
+    <OrderBoard
+      kind="drink"
+      titleEn="Drinks"
+      titleKo="음료 주문"
+      columns={["pending", "ready"]}
+      gridColumnsMd={2}
+      headerPaddingX="px-3"
+      {...props}
+    />
   );
 }

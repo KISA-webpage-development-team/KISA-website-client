@@ -1,74 +1,65 @@
-// hook to summarize closed orders
-
 import {
   OrderItem,
   MenuOrderHistoryMap,
   MenuOrderSummary,
-} from '@/types/pocha';
+} from "@/types/pocha";
 
-const calculateTotalSales = (orderHistory: OrderItem[]) => {
-  return orderHistory
-    ?.reduce((acc, { menu, quantity }) => acc + menu.price * quantity, 0)
-    .toFixed(2);
-};
+const SOJU_TOKEN = "소주";
+const FRUIT_SOJU_TOKENS = [
+  "과일",
+  "딸기",
+  "복숭아",
+  "포도",
+  "자몽",
+  "청포도",
+  "사과",
+];
 
-const calculateSummary = (orderHistory: OrderItem[]) => {
+export function calculateTotalSales(orderHistory: OrderItem[]): number {
+  return (
+    orderHistory?.reduce(
+      (acc, { menu, quantity }) => acc + menu.price * quantity,
+      0
+    ) ?? 0
+  );
+}
+
+export interface OrderHistorySummary {
+  totalSales: number;
+  anjuRevenue: number;
+  drinkRevenue: number;
+}
+
+export function calculateSummary(
+  orderHistory: OrderItem[]
+): OrderHistorySummary {
   const anjuOrders =
     orderHistory?.filter(({ menu }) => !menu.isImmediatePrep) || [];
   const drinkOrders =
     orderHistory?.filter(({ menu }) => menu.isImmediatePrep) || [];
 
-  const anjuRevenue = anjuOrders
-    .reduce((acc, { menu, quantity }) => acc + menu.price * quantity, 0)
-    .toFixed(2);
-  const drinkRevenue = drinkOrders
-    .reduce((acc, { menu, quantity }) => acc + menu.price * quantity, 0)
-    .toFixed(2);
-
-  const mostSoldAnju = Object.entries(
-    anjuOrders.reduce((acc, { menu, quantity }) => {
-      acc[menu.nameKor] = (acc[menu.nameKor] || 0) + quantity;
-      return acc;
-    }, {} as Record<string, number>)
-  )
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([menu, quantity]) => `${menu} (${quantity}개)`)
-    .join(', ');
-
-  const mostProfitableAnju = Object.entries(
-    anjuOrders.reduce((acc, { menu, quantity }) => {
-      acc[menu.nameKor] = (acc[menu.nameKor] || 0) + menu.price * quantity;
-      return acc;
-    }, {} as Record<string, number>)
-  )
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([menu, revenue]) => `${menu} ($${revenue.toFixed(2)})`)
-    .join(', ');
+  const anjuRevenue = anjuOrders.reduce(
+    (acc, { menu, quantity }) => acc + menu.price * quantity,
+    0
+  );
+  const drinkRevenue = drinkOrders.reduce(
+    (acc, { menu, quantity }) => acc + menu.price * quantity,
+    0
+  );
 
   return {
     totalSales: calculateTotalSales(orderHistory),
     anjuRevenue,
     drinkRevenue,
-  }
-
-  // alert(`총 금액: $${calculateTotalSales(orderHistory)}
-  //     안주 수익: $${anjuRevenue}
-  //     주류 수익: $${drinkRevenue}
-
-  //     (참고: 실제로 음식이 나간 주문들을 기반으로 한 "요약" 기능입니다. 실제 정산과는 차이가 있을 수 있습니다.)
-  //     `);
-};
+  };
+}
 
 /**
  * Converts order history list into a map aggregated by menuID
- * @param orderHistory - Array of OrderItem from order history
- * @returns Map with menuID as key and aggregated quantity/revenue as value
  */
-const convertOrderHistoryToMenuMap = (
+export function convertOrderHistoryToMenuMap(
   orderHistory: OrderItem[]
-): MenuOrderHistoryMap => {
+): MenuOrderHistoryMap {
   const menuMap = new Map<number, MenuOrderSummary>();
 
   orderHistory?.forEach((orderItem) => {
@@ -81,90 +72,69 @@ const convertOrderHistoryToMenuMap = (
       menuMap.set(menuID, {
         quantity: existing.quantity + quantity,
         totalRevenue: existing.totalRevenue + revenue,
-        menu: existing.menu, // Keep the menu reference
+        menu: existing.menu,
       });
     } else {
-      menuMap.set(menuID, {
-        quantity,
-        totalRevenue: revenue,
-        menu,
-      });
+      menuMap.set(menuID, { quantity, totalRevenue: revenue, menu });
     }
   });
 
   return menuMap;
-};
+}
 
+export interface MenuRanking {
+  nameKor: string;
+  quantity: number;
+  revenue: number;
+}
 
-/**
- * 안주 매출 순위 계산
- */
-export function calculateFoodRankings(orderHistory: OrderItem[]) {
-  const foodOrders = orderHistory.filter(order => !order.menu.isImmediatePrep);
-  const menuMap = convertOrderHistoryToMenuMap(foodOrders);
-  
-  return Array.from(menuMap.values())
+function rankByQuantity(orders: OrderItem[]): MenuRanking[] {
+  const map = convertOrderHistoryToMenuMap(orders);
+  return Array.from(map.values())
     .map(({ menu, quantity, totalRevenue }) => ({
-      name: menu.nameKor,
+      nameKor: menu.nameKor,
       quantity,
       revenue: totalRevenue,
     }))
-    .sort((a, b) => b.revenue - a.revenue); // 매출 기준 정렬
+    .sort((a, b) => b.quantity - a.quantity)
+    .slice(0, 3);
+}
+
+/** Top-3 안주 (food / non-immediate-prep) by quantity sold. */
+export function calculateFoodRankings(
+  orderHistory: OrderItem[]
+): MenuRanking[] {
+  return rankByQuantity(orderHistory.filter((o) => !o.menu.isImmediatePrep));
+}
+
+/** Top-3 주류 (drink / immediate-prep) by quantity sold. */
+export function calculateDrinkRankings(
+  orderHistory: OrderItem[]
+): MenuRanking[] {
+  return rankByQuantity(orderHistory.filter((o) => o.menu.isImmediatePrep));
+}
+
+export interface SojuAnalysis {
+  regular: number;
+  fruit: number;
+  total: number;
 }
 
 /**
- * 주류 매출 순위 계산
+ * 소주 매출 수량 분석.
+ * regular = 소주 라인 중 fruit 토큰을 포함하지 않는 항목 수량 합
+ * fruit   = 소주 라인 중 fruit 토큰 하나라도 포함하는 항목 수량 합
  */
-export function calculateDrinkRankings(orderHistory: OrderItem[]) {
-  const drinkOrders = orderHistory.filter(order => order.menu.isImmediatePrep);
-  const menuMap = convertOrderHistoryToMenuMap(drinkOrders);
-  
-  return Array.from(menuMap.values())
-    .map(({ menu, quantity, totalRevenue }) => ({
-      name: menu.nameKor,
-      quantity,
-      revenue: totalRevenue,
-    }))
-    .sort((a, b) => b.revenue - a.revenue);
-}
+export function analyzeSojuSales(orderHistory: OrderItem[]): SojuAnalysis {
+  let regular = 0;
+  let fruit = 0;
 
-/**
- * 소주 타입별 매출 분석 (일반 소주 vs 과일 소주)
- */
-export function analyzeSojuSales(orderHistory: OrderItem[]) {
-  const sojuOrders = orderHistory.filter(order => 
-    order.menu.isImmediatePrep && 
-    order.menu.nameKor.includes('소주')
-  );
-  
-  const regularSoju = sojuOrders.filter(order => 
-    order.menu.nameKor === '소주' || order.menu.nameKor === '참이슬'
-  );
-  
-  const fruitSoju = sojuOrders.filter(order => 
-    order.menu.nameKor.includes('소주') && 
-    !['소주', '참이슬'].includes(order.menu.nameKor)
-  );
-  
-  return {
-    regularSoju: {
-      count: regularSoju.reduce((sum, order) => sum + order.quantity, 0),
-      revenue: regularSoju.reduce((sum, order) => 
-        sum + (order.menu.price * order.quantity), 0
-      ),
-    },
-    fruitSoju: {
-      count: fruitSoju.reduce((sum, order) => sum + order.quantity, 0),
-      revenue: fruitSoju.reduce((sum, order) => 
-        sum + (order.menu.price * order.quantity), 0
-      ),
-      breakdown: fruitSoju.map(order => ({
-        name: order.menu.nameKor,
-        quantity: order.quantity,
-        revenue: order.menu.price * order.quantity,
-      })),
-    },
-  };
-}
+  for (const { menu, quantity } of orderHistory) {
+    if (!menu.nameKor.includes(SOJU_TOKEN)) continue;
+    const isFruit = FRUIT_SOJU_TOKENS.some((t) => menu.nameKor.includes(t));
+    if (isFruit) fruit += quantity;
+    else regular += quantity;
+  }
 
-export { calculateTotalSales, calculateSummary, convertOrderHistoryToMenuMap };
+  return { regular, fruit, total: regular + fruit };
+}

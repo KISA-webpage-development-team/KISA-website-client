@@ -2,13 +2,15 @@ import { getPochaOrders } from "@/apis/pocha/queries";
 import { OrderItem, Orders, OrderStatus } from "@/types/pocha";
 import { useCallback, useEffect, useState, useMemo } from "react";
 
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
+
 // utility functions ----------------------------------------
 /*
   @desc get the next status of the order item
   @param status: OrderStatus
   @return OrderStatus | null
 */
-const getNextStatus = (status: OrderStatus): OrderStatus | null => {
+export const getNextStatus = (status: OrderStatus): OrderStatus | null => {
   const statusFlow = {
     [OrderStatus.PENDING]: OrderStatus.PREPARING,
     [OrderStatus.PREPARING]: OrderStatus.READY,
@@ -71,23 +73,49 @@ const usePochaOrdersMap = (pochaID: number, token: string) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
+  const [error, setError] = useState<Error | undefined>(undefined);
 
-  useEffect(() => {
-    const fetchPochaOrders = async () => {
-      try {
-        const res: Orders = await getPochaOrders(pochaID, token);
-        setOrdersMap(convertOrdersToMap(res));
-        setStatus("success");
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-        setStatus("error");
-      }
-    };
-
-    fetchPochaOrders();
+  const fetchPochaOrders = useCallback(async () => {
+    // Skip when callers pass placeholder inputs (e.g. dashboard page calls
+    // this hook before pochaID/token have resolved). Without this, an early
+    // fetch against /pocha/dashboard/null/ races the real one and its late
+    // rejection clobbers a "success" status with "error".
+    if (!pochaID || !token) return;
+    setStatus("loading");
+    setError(undefined);
+    try {
+      const res: Orders = await getPochaOrders(pochaID, token);
+      setOrdersMap(convertOrdersToMap(res));
+      setStatus("success");
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      setError(err instanceof Error ? err : new Error(String(err)));
+      setStatus("error");
+    }
   }, [pochaID, token]);
 
-  return { ordersMap, status, setOrdersMap, setStatus };
+  useEffect(() => {
+    if (!pochaID || !token) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res: Orders = await getPochaOrders(pochaID, token);
+        if (cancelled) return;
+        setOrdersMap(convertOrdersToMap(res));
+        setStatus("success");
+      } catch (err) {
+        if (cancelled) return;
+        console.error("Error fetching orders:", err);
+        setError(err instanceof Error ? err : new Error(String(err)));
+        setStatus("error");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [pochaID, token]);
+
+  return { ordersMap, status, error, setOrdersMap, setStatus, refetch: fetchPochaOrders };
 };
 
 /*
@@ -97,22 +125,37 @@ const usePochaOrdersMap = (pochaID: number, token: string) => {
   @return { immediatePrepOrders, notImmediatePrepOrders, addNewOrderItem, updateOrderItemStatusUI, status }
 */
 const useDashboardOrders = (pochaID: number, token: string) => {
-  const { ordersMap, status, setOrdersMap, setStatus } = usePochaOrdersMap(
-    pochaID,
-    token
+  const { ordersMap, status, error, setOrdersMap, refetch } =
+    usePochaOrdersMap(pochaID, token);
+
+  const addNewOrderItem = useCallback(
+    (orderItem: OrderItem) => {
+      setOrdersMap((prevOrdersMap) => {
+        if (prevOrdersMap.has(orderItem.orderItemID)) {
+          console.warn("Order item already exists:", orderItem.orderItemID);
+          return prevOrdersMap;
+        }
+        const updatedMap = new Map(prevOrdersMap);
+        updatedMap.set(orderItem.orderItemID, orderItem);
+        return updatedMap;
+      });
+    },
+    [setOrdersMap]
   );
 
-  const addNewOrderItem = (orderItem: OrderItem) => {
-    setOrdersMap((prevOrdersMap) => {
-      if (prevOrdersMap.has(orderItem.orderItemID)) {
-        console.warn("Order item already exists:", orderItem.orderItemID);
-        return prevOrdersMap;
-      }
-      const updatedMap = new Map(prevOrdersMap);
-      updatedMap.set(orderItem.orderItemID, orderItem);
-      return updatedMap;
-    });
-  };
+  // Mock-mode bridge: MockAuthToggle's "Simulate order" button POSTs to the
+  // mock spawn endpoint and dispatches `mock:new-order` with the spawned
+  // OrderItem in `event.detail`. The socket hook is short-circuited in mock,
+  // so this CustomEvent is the dashboard's only ingest path during dev.
+  useEffect(() => {
+    if (!IS_MOCK_MODE) return;
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<OrderItem>).detail;
+      if (detail) addNewOrderItem(detail);
+    };
+    window.addEventListener("mock:new-order", handler);
+    return () => window.removeEventListener("mock:new-order", handler);
+  }, [addNewOrderItem]);
 
   // More efficient order item status update using Map
   const updateOrderItemStatusUI = useCallback(
@@ -147,11 +190,14 @@ const useDashboardOrders = (pochaID: number, token: string) => {
   }, [ordersMap]);
 
   return {
+    ordersMap,
     immediatePrepOrders,
     notImmediatePrepOrders,
     addNewOrderItem,
     updateOrderItemStatusUI,
     status,
+    error,
+    refetch,
   };
 };
 

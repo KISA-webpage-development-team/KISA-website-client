@@ -5,7 +5,8 @@ import { PochaTab } from "@/types/pocha";
  * @example "/pocha?tab=menu" <-> "/pocha?tab=orders"
  */
 export const updateURLWithTab = (selectedTab: string) => {
-  const searchParams = new URLSearchParams({ tab: selectedTab });
+  const searchParams = new URLSearchParams(window.location.search);
+  searchParams.set("tab", selectedTab);
   window.history.pushState(
     {},
     "",

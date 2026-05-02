@@ -1,97 +1,175 @@
+// [REDESIGN][NO-TDD] Lane 3.5 — OrderItemCard redesign.
+// Memoization contract: this component is wrapped in React.memo with default
+// shallow compare. Parents MUST memoize callback props (onToggleSelect,
+// onLongPress, updateOrderItemStatusUI) and keep the `order` reference stable
+// across WS messages / polls for the memo to be effective.
+
+import React, { useCallback } from "react";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardFooter,
+  Icon,
+  LoadingSpinner,
+} from "@umichkisa-ds/web";
 import { OrderItem, OrderStatus } from "@/types/pocha";
-import React, { useState } from "react";
-import { STATUS_COLORS } from "@/features/pocha/utils/statusToColor";
-import { changeOrderItemStatus } from "@/apis/pocha/mutations";
-import { Spinner } from "@nextui-org/react";
+import { useLongPress } from "@/features/pocha/hooks/useLongPress";
+import { usePromoteOrderItem } from "@/features/pocha/hooks/usePromoteOrderItem";
+import { getCardTone } from "./_shared/statusTone";
 
 interface OrderItemCardProps {
-  isDrink?: boolean;
   order: OrderItem;
   updateOrderItemStatusUI: (
     orderItemID: number,
     newStatus: OrderStatus
   ) => void;
+  /** When true, card is in select-mode: Promote hidden, Checkbox shown, card-root toggles selection. */
+  isSelectMode?: boolean;
+  isSelected?: boolean;
+  onToggleSelect?: (orderItemID: number) => void;
+  onLongPress?: (orderItemID: number) => void;
 }
 
-// orderItemID: number;
-// status: OrderStatus;
-// menu: MenuItem;
-// quantity: number;
-// ordererName: string;
-// ordererEmail: string;
-
-export default function OrderItemCard({
-  isDrink = false, // this is a temporary solution, need to refactor later
+function OrderItemCardImpl({
   order,
   updateOrderItemStatusUI,
+  isSelectMode = false,
+  isSelected = false,
+  onToggleSelect,
+  onLongPress,
 }: OrderItemCardProps) {
-  const { orderItemID, status, quantity, menu, ordererName } = order;
+  const { orderItemID, quantity, menu, ordererName, status } = order;
   const { nameKor } = menu;
 
-  const [loading, setLoading] = useState(false);
-  const [selected, setSelected] = useState(false);
+  const statusTone = getCardTone(status);
 
-  const handleSelectCard = () => {
-    setSelected(!selected);
-  };
+  const { promote, loading } = usePromoteOrderItem(
+    orderItemID,
+    updateOrderItemStatusUI
+  );
 
-  const handleUpdateOrderStatusChange = async () => {
-    // if isDrink, change status from "pending" to "ready"
-    // how? just call api and updateOrderItemStatusUI twice
+  const handleLongPress = useCallback(() => {
+    onLongPress?.(orderItemID);
+  }, [onLongPress, orderItemID]);
 
-    setLoading(true);
+  const longPress = useLongPress({ onLongPress: handleLongPress });
 
-    const res = await changeOrderItemStatus(orderItemID);
-    if (res) {
-      updateOrderItemStatusUI(orderItemID, res?.newStatus);
+  // Right-click parity with long-press in non-select mode; suppress native menu in both modes.
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if (isSelectMode) return;
+      if (!onLongPress) return;
+      longPress.fireSynthetic();
+    },
+    [isSelectMode, onLongPress, longPress]
+  );
+
+  const handleCardClick = useCallback(() => {
+    // Long-press already fired? Swallow + reset (prevents accidental promote/toggle).
+    if (longPress.firedRef.current) {
+      longPress.firedRef.current = false;
+      return;
     }
+    if (!isSelectMode) return;
+    onToggleSelect?.(orderItemID);
+  }, [isSelectMode, onToggleSelect, orderItemID, longPress]);
 
-    setLoading(false);
-  };
+  const handleCardKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!isSelectMode) return;
+      if (e.key === " " || e.code === "Space") {
+        e.preventDefault();
+        onToggleSelect?.(orderItemID);
+      }
+    },
+    [isSelectMode, onToggleSelect, orderItemID]
+  );
+
+  const handlePromotePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+    },
+    []
+  );
+
+  const handlePromoteClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      promote();
+    },
+    [promote]
+  );
+
+  // a11y attrs only in select-mode (default mode keeps Promote <button> as the sole interactive surface).
+  const a11yProps = isSelectMode
+    ? {
+        role: "checkbox" as const,
+        "aria-checked": isSelected,
+        tabIndex: 0,
+        "aria-label": `Select order #${orderItemID}`,
+        onKeyDown: handleCardKeyDown,
+      }
+    : {};
+
+  const selectClass = !isSelectMode
+    ? ""
+    : isSelected
+      ? "!border-primary cursor-pointer"
+      : "cursor-pointer";
 
   return (
     <li className="flex-1">
-      <div
-        className={`p-4 flex flex-col items-start gap-2 bg-white rounded-lg shadow-md 
-    transition-all border-4 duration-300 ease-in-out 
-    hover:shadow-lg w-full h-full cursor-pointer 
-    ${selected ? "border-blue-500" : "border-transparent"}
-    `}
-        role="button"
-        tabIndex={0}
-        onClick={handleSelectCard}
+      <Card
+        className={`h-full w-full ${statusTone} ${selectClass}`}
+        {...longPress.pointerProps}
+        onContextMenu={handleContextMenu}
+        onClick={handleCardClick}
+        {...a11yProps}
       >
-        <div className="flex justify-between items-center w-full">
-          <span className="text-3xl font-semibold">#{orderItemID}</span>
-          <span className="text-xl font-semibold">
-            {nameKor} x {quantity}
-          </span>
-        </div>
-        <span className="text-lg">
-          Customer: <strong>{ordererName}</strong>
-        </span>
-        <div className="flex justify-between w-full">
-          <div
-            className={`flex items-center gap-2
-               px-2 py-1 rounded-md ${STATUS_COLORS[status]} bg-opacity-40`}
-          >
-            <span className="text-lg">{status}</span>
+        {/* #ID · customer name on one line, then menu × quantity */}
+        <CardContent className="flex flex-col gap-2">
+          <div className="type-h2 truncate">
+            <span>#{orderItemID}</span>
+            <span className="text-muted-foreground mx-2">·</span>
+            <span>{ordererName}</span>
           </div>
-          <button
-            className="bg-blue-500 text-white px-2 py-1 rounded-md
-              disabled:bg-gray-500 disabled:text-gray-300 disabled:cursor-not-allowed
-            "
-            disabled={!selected || loading}
-            onClick={handleUpdateOrderStatusChange}
-          >
-            {loading ? (
-              <Spinner size="sm" color="secondary" labelColor="primary" />
-            ) : (
-              "Promote"
-            )}
-          </button>
-        </div>
-      </div>
+          <div className="type-h4 truncate">
+            <span>{nameKor}</span>
+            <span className="text-muted-foreground"> × {quantity}</span>
+          </div>
+        </CardContent>
+
+        {/* Primary action — bottom-right */}
+        <CardFooter className="justify-end min-h-[2.5rem]">
+          {isSelectMode ? (
+            isSelected ? (
+              <Icon
+                name="circle-check"
+                size="md"
+                className="text-primary"
+                aria-hidden
+              />
+            ) : null
+          ) : (
+            <Button
+              variant="primary"
+              size="md"
+              disabled={loading}
+              onPointerDown={handlePromotePointerDown}
+              onClick={handlePromoteClick}
+            >
+              {loading ? <LoadingSpinner size="sm" /> : "Promote"}
+            </Button>
+          )}
+        </CardFooter>
+      </Card>
     </li>
   );
 }
+
+const OrderItemCard = React.memo(OrderItemCardImpl);
+OrderItemCard.displayName = "OrderItemCard";
+
+export default OrderItemCard;

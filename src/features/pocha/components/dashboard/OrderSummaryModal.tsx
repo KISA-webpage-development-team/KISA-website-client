@@ -1,67 +1,189 @@
-import React from 'react';
+"use client";
 
-import { sejongHospitalBold } from '@/utils/fonts/textFonts';
-import PochaCloseIcon from '@/components/ui/icon/PochaCloseIcon';
 import {
-  convertOrderHistoryToMenuMap,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@umichkisa-ds/web";
+
+import { OrderItem } from "@/types/pocha";
+import {
+  analyzeSojuSales,
+  calculateDrinkRankings,
+  calculateFoodRankings,
   calculateSummary,
   calculateTotalSales,
-} from '../../utils/orderHistoryUtils';
-import { HorizontalDivider } from '@/components/ui/divider';
-
-import { OrderItem } from '@/types/pocha';
+} from "../../utils/orderHistoryUtils";
 
 interface OrderSummaryModalProps {
-  handleCloseForm: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  pochaID: number;
   orderHistory: OrderItem[];
 }
-export default function OrderSummaryModal({
-  handleCloseForm,
-  orderHistory,
-}: OrderSummaryModalProps) {
-  const menuMap = convertOrderHistoryToMenuMap(orderHistory);
-  const { totalSales, anjuRevenue, drinkRevenue } =
-    calculateSummary(orderHistory);
 
-    console.log('menuMap', menuMap);
+interface KpiCardProps {
+  label: string;
+  value: string;
+}
+
+function KpiCard({ label, value }: KpiCardProps) {
   return (
-    <div className='fixed inset-0 z-[99999] bg-black/30'>
-      <div className='relative z-[100000] w-full h-full flex items-center justify-center p-4'>
-        <div className='relative bg-white rounded-lg shadow-md text-black border-2 border-[#71717A] w-full max-w-2xl max-h-[90vh] overflow-y-auto'>
-          {/* Header */}
-          <div className='flex items-center justify-between px-6 py-2 border-b border-gray-200'>
-            <h2 className={`text-xl ${sejongHospitalBold.className}`}>
-              주문 요약
-            </h2>
-            <button
-              className='p-2 hover:bg-gray-100 rounded-full transition-colors'
-              onClick={handleCloseForm}
-            >
-              <PochaCloseIcon size='large' />
-            </button>
-          </div>
+    <Card>
+      <CardContent className="flex flex-col gap-2">
+        <span className="type-caption text-muted-foreground">{label}</span>
+        <span className="type-h3 text-foreground">{value}</span>
+      </CardContent>
+    </Card>
+  );
+}
 
-          {/* Form Content */}
-          <div className='flex flex-col p-6 gap-4'>
-            <span>{`총 금액: $${totalSales}`}</span>
-            <span>{`안주 매출: $${anjuRevenue} | 주류 매출: $${drinkRevenue}`}</span>
-            <HorizontalDivider />
+interface RankingRowProps {
+  rank: number;
+  nameKor: string;
+  quantity: number;
+  revenue: number;
+}
 
-            {/* 메뉴 별 매출 */}
-            <ul className='flex flex-col gap-2'>
-              {Array.from(menuMap.values()).map(
-                ({ menu, quantity, totalRevenue }) => (
-                  <li key={`menu-revenue-summary-${menu.menuID}`}>
-                    <span>{menu.nameEng}</span>
-                    <span>{`수량: ${quantity}`}</span>
-                    <span>{` 매출: $${totalRevenue}`}</span>
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-        </div>
+function RankingRow({ rank, nameKor, quantity, revenue }: RankingRowProps) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center gap-2">
+        <span className="type-label text-muted-foreground">{rank}</span>
+        <span className="type-body text-foreground">{nameKor}</span>
+      </div>
+      <div className="flex items-center gap-4">
+        <span className="type-body-sm text-muted-foreground">{`×${quantity}`}</span>
+        <span className="type-body text-foreground">{`$${revenue.toFixed(2)}`}</span>
       </div>
     </div>
+  );
+}
+
+function formatPercent(count: number, total: number): string {
+  return total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
+}
+
+function SummaryBody({ orderHistory }: { orderHistory: OrderItem[] }) {
+  const totalSales = calculateTotalSales(orderHistory);
+  const { anjuRevenue, drinkRevenue } = calculateSummary(orderHistory);
+  const foodRankings = calculateFoodRankings(orderHistory);
+  const drinkRankings = calculateDrinkRankings(orderHistory);
+  const sojuAnalysis = analyzeSojuSales(orderHistory);
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* KPI row */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <KpiCard label="Total revenue" value={`$${totalSales.toFixed(2)}`} />
+        <KpiCard label="Food revenue" value={`$${anjuRevenue.toFixed(2)}`} />
+        <KpiCard
+          label="Drinks revenue"
+          value={`$${drinkRevenue.toFixed(2)}`}
+        />
+      </div>
+
+      {/* Top 3 food */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Top 3 food</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2">
+          {foodRankings.length === 0 ? (
+            <span className="type-body-sm text-muted-foreground">
+              No food sales.
+            </span>
+          ) : (
+            foodRankings.map((item, idx) => (
+              <RankingRow
+                key={`food-${idx}`}
+                rank={idx + 1}
+                nameKor={item.nameKor}
+                quantity={item.quantity}
+                revenue={item.revenue}
+              />
+            ))
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Top 3 drinks */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Top 3 drinks</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2">
+          {drinkRankings.length === 0 ? (
+            <span className="type-body-sm text-muted-foreground">
+              No drink sales.
+            </span>
+          ) : (
+            drinkRankings.map((item, idx) => (
+              <RankingRow
+                key={`drink-${idx}`}
+                rank={idx + 1}
+                nameKor={item.nameKor}
+                quantity={item.quantity}
+                revenue={item.revenue}
+              />
+            ))
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Soju breakdown */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Soju breakdown</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="type-body text-foreground">Regular</span>
+            <span className="type-body text-foreground">
+              {`${sojuAnalysis.regular} (${formatPercent(
+                sojuAnalysis.regular,
+                sojuAnalysis.total
+              )}%)`}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="type-body text-foreground">Fruit</span>
+            <span className="type-body text-foreground">
+              {`${sojuAnalysis.fruit} (${formatPercent(
+                sojuAnalysis.fruit,
+                sojuAnalysis.total
+              )}%)`}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export default function OrderSummaryModal({
+  open,
+  onOpenChange,
+  orderHistory,
+}: OrderSummaryModalProps) {
+  const hasHistory = orderHistory && orderHistory.length > 0;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="lg" className="max-h-[90vh] overflow-y-auto">
+        <DialogTitle>Order summary</DialogTitle>
+        {hasHistory ? (
+          <SummaryBody orderHistory={orderHistory} />
+        ) : (
+          <p className="type-body text-muted-foreground">
+            No order history for this pocha.
+          </p>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }

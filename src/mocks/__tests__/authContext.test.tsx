@@ -4,6 +4,11 @@ import { SessionProvider } from "next-auth/react";
 import { AuthContextProvider } from "@/lib/auth/authContext";
 import { MockAuthToggle } from "../MockAuthToggle";
 
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+  useSearchParams: () => new URLSearchParams("pochaid=1"),
+}));
+
 const AUTH_KEY = "kisa-mock-auth-authenticated";
 const ADMIN_KEY = "kisa-mock-auth-isadmin";
 

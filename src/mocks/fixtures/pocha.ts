@@ -1,4 +1,16 @@
-import type { MenuByCategory, PochaInfoWithoutStatus } from "@/types/pocha";
+import type {
+  MenuByCategory,
+  MenuItem,
+  OrderItem,
+  PochaInfoWithoutStatus,
+} from "@/types/pocha";
+// `OrderStatus` is a const enum; under `isolatedModules` we can't import its
+// values cross-module, so the literal strings below are typed via
+// `OrderItem['status']` instead.
+// `OrderItem["status"]` is the const enum `OrderStatus` — its members can't be
+// imported as values under `isolatedModules`. The string literals below are
+// the underlying enum values; cast in `_make` keeps the assignments terse.
+type OrderStatusLiteral = "pending" | "preparing" | "ready" | "closed";
 
 /**
  * Pocha fixtures — seed data for MSW pocha handlers.
@@ -58,6 +70,17 @@ export const mockPochas: PochaRecord[] = [
     endDate: day(-675),
     title: "KISA Spring Pocha 2024",
     description: "2024년 봄 정기 포차 기록입니다.",
+  },
+  {
+    // Always-ongoing dev fixture — covers any realistic "today" so the
+    // status-info endpoint reliably returns an active pocha during local
+    // development (regardless of system date drift). Narrow enough that
+    // the "far-future returns empty" test (2099) still holds.
+    pochaID: 6,
+    startDate: new Date("2024-01-01T00:00:00.000Z"),
+    endDate: new Date("2030-12-31T23:59:59.000Z"),
+    title: "KISA Dev Pocha (always ongoing)",
+    description: "Dev fixture — always returned as active by status-info.",
   },
 ];
 
@@ -253,3 +276,81 @@ export const mockPochaMenus: Record<number, MenuByCategory[]> = {
     },
   ],
 };
+
+// Always-ongoing dev pocha (pochaID=6) reuses pochaID=1's menu shape with
+// fresh deep clones so stock mutations from spawn-order don't bleed across.
+mockPochaMenus[6] = mockPochaMenus[1]!.map((cat) => ({
+  category: cat.category,
+  menusList: cat.menusList.map((m) => ({ ...m })),
+}));
+
+// ORDERS ---------------------------------------------------------------------
+
+/**
+ * Order fixtures for the active pocha (pochaID=1) — used by dashboard handlers.
+ * `nextOrderItemID` (in handler module) is initialized just past
+ * `mockOrderItemIDStart + mockOrderItems.length` so spawn-order ids stay
+ * monotonic. Stock numbers in the embedded `menu` are snapshots at seed time;
+ * subsequent stock mutations affect `menusStore` but not in-flight orders.
+ */
+const _menuByID: Record<number, MenuItem> = (() => {
+  const out: Record<number, MenuItem> = {};
+  for (const group of mockPochaMenus[1]!) {
+    for (const m of group.menusList) out[m.menuID] = { ...m };
+  }
+  return out;
+})();
+
+const _orderers: Array<{ name: string; email: string }> = [
+  { name: "민수", email: "minsoo@umich.edu" },
+  { name: "지영", email: "jiyoung@umich.edu" },
+  { name: "현우", email: "hyunwoo@umich.edu" },
+  { name: "수진", email: "sujin@umich.edu" },
+  { name: "도윤", email: "doyoon@umich.edu" },
+];
+
+export const mockOrderItemIDStart = 1000;
+
+const _make = (
+  i: number,
+  status: OrderStatusLiteral,
+  menuID: number,
+  quantity: number
+): OrderItem => {
+  const orderer = _orderers[i % _orderers.length]!;
+  return {
+    orderItemID: mockOrderItemIDStart + i,
+    status: status as unknown as OrderItem["status"],
+    menu: { ..._menuByID[menuID]! },
+    quantity,
+    ordererName: orderer.name,
+    ordererEmail: orderer.email,
+  };
+};
+
+/**
+ * 7 active (pending/preparing/ready) + 5 closed = 12 fixture orders.
+ * Smaller seed for a calmer dev dashboard; mix of food + drink + snack
+ * across status buckets so every column still has at least one row.
+ */
+export const mockOrderItems: OrderItem[] = [
+  // pending — 3
+  _make(0, "pending", 201, 2), // 떡볶이
+  _make(1, "pending", 101, 1), // 소주
+  _make(2, "pending", 301, 1), // 새우깡
+
+  // preparing — 2 (food only — drinks skip preparing)
+  _make(3, "preparing", 203, 1), // 라면
+  _make(4, "preparing", 206, 1), // 김치찌개
+
+  // ready — 2 (one drink, one food)
+  _make(5, "ready", 102, 2), // 맥주
+  _make(6, "ready", 204, 1), // 파전
+
+  // closed — 5 (history)
+  _make(7, "closed", 201, 2),
+  _make(8, "closed", 101, 1),
+  _make(9, "closed", 202, 1),
+  _make(10, "closed", 302, 1),
+  _make(11, "closed", 207, 1),
+];

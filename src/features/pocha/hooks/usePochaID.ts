@@ -1,48 +1,60 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import useSWR from "swr";
 import { getPochaInfo } from "@/apis/pocha/queries";
+import { BACKEND_URL } from "@/constants/env";
+import { PochaInfo } from "@/types/pocha";
 import { HookStatus } from "./types";
 
 /**
  * @desc Hook for fetching Pocha ID defensively.
  * 1. Tries to get pochaID from URL searchParams.
  * 2. If unavailable, fetches from the API as fallback.
+ *
+ * Backed by SWR with a daily-stable cache key so all callsites share one
+ * fetch (dashboard page + MockAuthToggle, etc.).
  */
 const usePochaID = () => {
   const searchParams = useSearchParams();
-  const [pochaID, setPochaID] = useState<number | null>(null);
-  const [status, setStatus] = useState<HookStatus>("loading");
-  const [error, setError] = useState<string | null>(null);
+  const urlPochaID = searchParams.get("pochaid");
 
-  useEffect(() => {
-    const fetchPochaID = async () => {
-      // Try to fetch from search params
-      const urlPochaID = searchParams.get("pochaid");
+  // Daily-stable cache key. Using a fresh `new Date()` per render would defeat
+  // SWR de-dup; bucket by day instead — the status-info endpoint is coarse
+  // enough that this is fine for both dev mocks and prod.
+  const dayKey = useMemo(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  }, []);
 
-      if (urlPochaID) {
-        setPochaID(Number(urlPochaID));
-        setStatus("success");
-        return;
-      }
+  // Include BACKEND_URL so a mock-mode toggle (or env switch) cannot serve a
+  // stale cache entry from the previous backend.
+  const swrKey = urlPochaID
+    ? null
+    : (["pocha-info", BACKEND_URL, dayKey] as const);
 
-      // Fallback to API call if not found in URL
-      try {
-        const pochaInfo = await getPochaInfo(new Date());
-        setPochaID(pochaInfo.pochaID);
-        setStatus("success");
-      } catch (error) {
-        console.error("Failed to fetch Pocha ID:", error);
-        setError("Failed to retrieve Pocha ID");
-        setStatus("error");
-      }
+  const { data, error } = useSWR<PochaInfo>(
+    swrKey,
+    () => getPochaInfo(new Date()),
+    { revalidateOnFocus: false }
+  );
+
+  if (urlPochaID) {
+    return {
+      pochaID: Number(urlPochaID),
+      status: "success" as HookStatus,
+      error: null as string | null,
     };
+  }
 
-    fetchPochaID();
-  }, [searchParams]);
+  const status: HookStatus = data ? "success" : error ? "error" : "loading";
 
-  return { pochaID, status, error };
+  return {
+    pochaID: data?.pochaID ?? null,
+    status,
+    error: status === "error" ? "Failed to retrieve Pocha ID" : null,
+  };
 };
 
 export default usePochaID;

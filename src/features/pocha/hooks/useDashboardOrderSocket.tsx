@@ -3,6 +3,8 @@ import { io, Socket } from "socket.io-client";
 import { OrderItem } from "@/types/pocha";
 import { WEBSOCKET_URL } from "@/constants/env";
 
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
+
 interface useDashboardOrderSocketProps {
   token: string;
   email: string;
@@ -19,6 +21,7 @@ const useDashboardOrderSocket = ({
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
+    if (IS_MOCK_MODE) return;
     if (!token || !pochaID) return;
 
     // Initialize socket connection
