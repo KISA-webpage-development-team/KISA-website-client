@@ -10,7 +10,6 @@ import {
   Container,
   Button,
   Icon,
-  LoadingSpinner,
   StatusView,
 } from "@umichkisa-ds/web";
 
@@ -31,7 +30,12 @@ export default function DashboardPage() {
   // fetch necessary information for the dashboard
   // each hook fetches with GET request
   const { isAdmin, email, token, status: adminStatus } = useAdmin();
-  const { pochaID, status: pochaIDStatus, error: pochaIDError } = usePochaID();
+  const {
+    pochaID,
+    status: pochaIDStatus,
+    error: pochaIDError,
+    noPocha,
+  } = usePochaID();
 
   const searchParams = useSearchParams();
   const initialTab: PochaDashboardTab =
@@ -44,8 +48,11 @@ export default function DashboardPage() {
 
   // Hoisted dashboard-orders hook so DashboardStatsStrip and OrderDashboard
   // share a single fetch. (useDashboardOrders is plain useEffect+useState,
-  // not SWR-deduped — wiring it twice would double-fetch.)
-  const ordersHook = useDashboardOrders(pochaID, token ?? "");
+  // not SWR-deduped — wiring it twice would double-fetch.) Coerce a null
+  // pochaID to 0 so the hook stays in its `loading` branch (it gates on
+  // falsy) while admin/pochaID are still resolving — the page itself now
+  // renders the shell with skeletons instead of a full-screen spinner.
+  const ordersHook = useDashboardOrders(pochaID ?? 0, token ?? "");
 
   // Page-level select mode (lifted from OrderDashboard so the Bulk-promote
   // toggle can live on the same row as Tabs instead of inside the food grid).
@@ -72,24 +79,37 @@ export default function DashboardPage() {
     }
   }, [currentTab, selectMode]);
 
-  if (adminStatus === "loading" || pochaIDStatus === "loading") {
-    return <LoadingSpinner label="대시보드를 불러오는 중..." showLabel />;
-  }
-
   if (pochaIDStatus === "error") {
     throw new Error(pochaIDError);
   }
 
-  // only admin can view this page
-  if (!isAdmin) {
+  // Auth resolved + not admin → block. Gated on adminStatus === "success" so
+  // we don't flash NotAuthorized while the session is still loading.
+  if (adminStatus === "success" && !isAdmin) {
     return <StatusView fullScreen variant="not-authorized" />;
   }
+
+  // 204 from /pocha/status-info — backend signals there is no ongoing pocha
+  // right now. Not an error, not loading; render a dedicated empty state.
+  if (noPocha) {
+    return (
+      <StatusView
+        fullScreen
+        variant="not-found"
+        icon="calendar"
+        title="진행 중인 포차가 없습니다"
+        description="다음 포차가 시작되면 이 곳에서 주문을 확인할 수 있습니다."
+      />
+    );
+  }
+
+  const safePochaID = pochaID ?? 0;
 
   return (
     <Container size="full">
       <div className="flex flex-col gap-6">
         <DashboardStatsStrip
-          pochaID={pochaID}
+          pochaID={safePochaID}
           token={token ?? ""}
           ordersMap={ordersHook.ordersMap}
           ordersStatus={ordersHook.status}
@@ -135,7 +155,7 @@ export default function DashboardPage() {
 
           <TabsContent value="orders">
             <OrderDashboard
-              pochaID={pochaID}
+              pochaID={safePochaID}
               email={email ?? ""}
               token={token ?? ""}
               ordersHook={ordersHook}
@@ -146,10 +166,10 @@ export default function DashboardPage() {
             />
           </TabsContent>
           <TabsContent value="stock">
-            <StockManager pochaID={pochaID} token={token ?? ""} />
+            <StockManager pochaID={safePochaID} token={token ?? ""} />
           </TabsContent>
           <TabsContent value="history">
-            <OrderHistoryTable token={token ?? ""} pochaID={pochaID} />
+            <OrderHistoryTable token={token ?? ""} pochaID={safePochaID} />
           </TabsContent>
         </Tabs>
       </div>

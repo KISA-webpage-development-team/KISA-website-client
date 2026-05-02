@@ -18,7 +18,7 @@ import { HookStatus } from './types';
  */
 const usePocha = () => {
   const [status, setStatus] = useState<HookStatus>('loading');
-  const [pochaInfo, setPochaInfo] = useState<PochaInfo>();
+  const [pochaInfo, setPochaInfo] = useState<PochaInfo | null>();
   const [error, setError] = useState<string>();
 
   const fetchPochaInfo = useCallback(async () => {

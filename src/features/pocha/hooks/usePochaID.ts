@@ -34,7 +34,7 @@ const usePochaID = () => {
     ? null
     : (["pocha-info", BACKEND_URL, dayKey] as const);
 
-  const { data, error } = useSWR<PochaInfo>(
+  const { data, error } = useSWR<PochaInfo | null>(
     swrKey,
     () => getPochaInfo(new Date()),
     { revalidateOnFocus: false }
@@ -45,15 +45,22 @@ const usePochaID = () => {
       pochaID: Number(urlPochaID),
       status: "success" as HookStatus,
       error: null as string | null,
+      noPocha: false,
     };
   }
 
-  const status: HookStatus = data ? "success" : error ? "error" : "loading";
+  // SWR: `data === null` is a real success value (204 — no ongoing pocha),
+  // distinct from `data === undefined` (still loading). Treat null as success
+  // and surface it via `noPocha` so callers can render an empty-state UI.
+  const isNoPocha = data === null;
+  const hasData = data !== undefined && data !== null;
+  const status: HookStatus = hasData || isNoPocha ? "success" : error ? "error" : "loading";
 
   return {
     pochaID: data?.pochaID ?? null,
     status,
     error: status === "error" ? "Failed to retrieve Pocha ID" : null,
+    noPocha: isNoPocha,
   };
 };
 

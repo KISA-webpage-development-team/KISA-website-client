@@ -9,10 +9,11 @@ import {
   PayInfo,
 } from "@/types/pocha";
 /**
- * @desc Fetch pocha info, if no upcoming pocha -> empty data, if else -> unempty data
+ * @desc Fetch pocha info. Returns null when the backend signals "no ongoing
+ * pocha" via 204 No Content.
  * @route GET /pocha/status-info/?date=${date}
  */
-export async function getPochaInfo(date: Date): Promise<PochaInfo> {
+export async function getPochaInfo(date: Date): Promise<PochaInfo | null> {
   // [TODO] change fakeDateEST to date for productions
   // const fakeDateEST = new Date("2025-04-11T23:00:00");
 
@@ -35,6 +36,7 @@ export async function getPochaInfo(date: Date): Promise<PochaInfo> {
 
   try {
     const response = await client.get(url);
+    if (response.status === 204) return null;
     return response.data;
   } catch (error) {
     throw new Error("Error fetching pocha information");

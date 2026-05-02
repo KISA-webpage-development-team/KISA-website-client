@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, LoadingSpinner, StatusView } from "@umichkisa-ds/web";
+import { Button, Skeleton, StatusView } from "@umichkisa-ds/web";
 import useDashboardOrderSocket from "@/features/pocha/hooks/useDashboardOrderSocket";
 import FoodOrderGrid from "@/features/pocha/components/dashboard/FoodOrderGrid";
 import DrinkOrderGrid from "@/features/pocha/components/dashboard/DrinkOrderGrid";
@@ -57,7 +57,26 @@ export default function OrderDashboard({
   });
 
   if (status === "loading") {
-    return <LoadingSpinner label="주문 정보를 가져오는중..." showLabel />;
+    return (
+      <div className="flex flex-col gap-4 md:flex-row">
+        <div className="md:basis-3/5">
+          <Skeleton className="h-7 w-32 mb-3" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-28" />
+            ))}
+          </div>
+        </div>
+        <div className="md:basis-2/5">
+          <Skeleton className="h-7 w-32 mb-3" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-28" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (status === "error") {
