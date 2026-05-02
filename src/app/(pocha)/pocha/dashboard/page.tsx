@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Tabs,
@@ -72,20 +72,6 @@ export default function DashboardPage() {
     }
   }, [currentTab, selectMode]);
 
-  // Rebuild a flat ordersMap for the stats strip from the bucketed return.
-  const ordersMap = useMemo(() => {
-    const m = new Map<number, (typeof ordersHook.immediatePrepOrders.pending)[number]>();
-    [
-      ...ordersHook.immediatePrepOrders.pending,
-      ...ordersHook.immediatePrepOrders.preparing,
-      ...ordersHook.immediatePrepOrders.ready,
-      ...ordersHook.notImmediatePrepOrders.pending,
-      ...ordersHook.notImmediatePrepOrders.preparing,
-      ...ordersHook.notImmediatePrepOrders.ready,
-    ].forEach((o) => m.set(o.orderItemID, o));
-    return m;
-  }, [ordersHook.immediatePrepOrders, ordersHook.notImmediatePrepOrders]);
-
   if (adminStatus === "loading" || pochaIDStatus === "loading") {
     return <LoadingSpinner label="대시보드를 불러오는 중..." showLabel />;
   }
@@ -105,7 +91,7 @@ export default function DashboardPage() {
         <DashboardStatsStrip
           pochaID={pochaID}
           token={token ?? ""}
-          ordersMap={ordersMap}
+          ordersMap={ordersHook.ordersMap}
           ordersStatus={ordersHook.status}
         />
 

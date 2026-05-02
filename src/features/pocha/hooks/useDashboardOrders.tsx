@@ -73,36 +73,49 @@ const usePochaOrdersMap = (pochaID: number, token: string) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
+  const [error, setError] = useState<Error | undefined>(undefined);
 
-
-  useEffect(() => {
+  const fetchPochaOrders = useCallback(async () => {
     // Skip when callers pass placeholder inputs (e.g. dashboard page calls
     // this hook before pochaID/token have resolved). Without this, an early
     // fetch against /pocha/dashboard/null/ races the real one and its late
     // rejection clobbers a "success" status with "error".
     if (!pochaID || !token) return;
+    setStatus("loading");
+    setError(undefined);
+    try {
+      const res: Orders = await getPochaOrders(pochaID, token);
+      setOrdersMap(convertOrdersToMap(res));
+      setStatus("success");
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      setError(err instanceof Error ? err : new Error(String(err)));
+      setStatus("error");
+    }
+  }, [pochaID, token]);
 
+  useEffect(() => {
+    if (!pochaID || !token) return;
     let cancelled = false;
-    const fetchPochaOrders = async () => {
+    (async () => {
       try {
         const res: Orders = await getPochaOrders(pochaID, token);
         if (cancelled) return;
         setOrdersMap(convertOrdersToMap(res));
         setStatus("success");
-      } catch (error) {
+      } catch (err) {
         if (cancelled) return;
-        console.error("Error fetching orders:", error);
+        console.error("Error fetching orders:", err);
+        setError(err instanceof Error ? err : new Error(String(err)));
         setStatus("error");
       }
-    };
-
-    fetchPochaOrders();
+    })();
     return () => {
       cancelled = true;
     };
   }, [pochaID, token]);
 
-  return { ordersMap, status, setOrdersMap, setStatus };
+  return { ordersMap, status, error, setOrdersMap, setStatus, refetch: fetchPochaOrders };
 };
 
 /*
@@ -112,10 +125,8 @@ const usePochaOrdersMap = (pochaID: number, token: string) => {
   @return { immediatePrepOrders, notImmediatePrepOrders, addNewOrderItem, updateOrderItemStatusUI, status }
 */
 const useDashboardOrders = (pochaID: number, token: string) => {
-  const { ordersMap, status, setOrdersMap, setStatus } = usePochaOrdersMap(
-    pochaID,
-    token
-  );
+  const { ordersMap, status, error, setOrdersMap, refetch } =
+    usePochaOrdersMap(pochaID, token);
 
   const addNewOrderItem = useCallback(
     (orderItem: OrderItem) => {
@@ -179,11 +190,14 @@ const useDashboardOrders = (pochaID: number, token: string) => {
   }, [ordersMap]);
 
   return {
+    ordersMap,
     immediatePrepOrders,
     notImmediatePrepOrders,
     addNewOrderItem,
     updateOrderItemStatusUI,
     status,
+    error,
+    refetch,
   };
 };
 

@@ -1,17 +1,20 @@
 "use client";
 
-import { LoadingSpinner } from "@umichkisa-ds/web";
+import { Button, LoadingSpinner, StatusView } from "@umichkisa-ds/web";
 import useDashboardOrderSocket from "@/features/pocha/hooks/useDashboardOrderSocket";
 import FoodOrderGrid from "@/features/pocha/components/dashboard/FoodOrderGrid";
 import DrinkOrderGrid from "@/features/pocha/components/dashboard/DrinkOrderGrid";
 import type { OrderItem, OrderStatus, Orders } from "@/types/pocha";
 
 interface OrdersHook {
+  ordersMap: Map<number, OrderItem>;
   immediatePrepOrders: Orders;
   notImmediatePrepOrders: Orders;
   addNewOrderItem: (orderItem: OrderItem) => void;
   updateOrderItemStatusUI: (orderItemID: number, newStatus: OrderStatus) => void;
   status: "loading" | "success" | "error";
+  error: Error | undefined;
+  refetch: () => Promise<void>;
 }
 
 interface OrderDashboardProps {
@@ -43,6 +46,7 @@ export default function OrderDashboard({
     addNewOrderItem,
     updateOrderItemStatusUI,
     status,
+    refetch,
   } = ordersHook;
 
   useDashboardOrderSocket({
@@ -54,6 +58,20 @@ export default function OrderDashboard({
 
   if (status === "loading") {
     return <LoadingSpinner label="주문 정보를 가져오는중..." showLabel />;
+  }
+
+  if (status === "error") {
+    return (
+      <StatusView
+        variant="error"
+        title="주문 정보를 불러오지 못했습니다."
+        action={
+          <Button variant="primary" size="md" onClick={() => refetch()}>
+            Try again
+          </Button>
+        }
+      />
+    );
   }
 
   return (
