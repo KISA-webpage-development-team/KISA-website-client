@@ -21,8 +21,8 @@ const STATUS_LABEL: Record<ColumnStatus, string> = {
 // Mirror FoodOrderGrid status palette: warning (pending) / success (ready).
 // Drinks have no preparing stage (pour-and-serve).
 const HEADER_TONE: Record<ColumnStatus, string> = {
-  pending: "bg-warning-subtle border-warning text-warning",
-  ready: "bg-success-subtle border-success text-success",
+  pending: "bg-warning-subtle border-warning",
+  ready: "bg-success-subtle border-success",
 };
 
 const EMPTY_COPY: Record<ColumnStatus, string> = {
@@ -46,11 +46,9 @@ export default function DrinkOrderGrid({
       aria-label="Drink orders board"
       className="flex flex-col gap-4 self-stretch"
     >
-      <header className="flex items-baseline justify-between px-1">
+      <header className="flex items-baseline gap-2 px-1">
         <h2 className="type-h3">Drinks</h2>
-        <span className="type-caption text-muted-foreground">
-          음료 주문
-        </span>
+        <span className="type-caption text-muted-foreground">음료 주문</span>
       </header>
 
       <Grid columns={{ base: 1, md: 2 }} gap="element">

@@ -23,9 +23,9 @@ const STATUS_LABEL: Record<ColumnStatus, string> = {
 // from the legacy map: pending=yellow→warning, preparing=orange→info,
 // ready=green→success). Subtle bg + same-hue border + same-hue title text.
 const HEADER_TONE: Record<ColumnStatus, string> = {
-  pending: "bg-warning-subtle border-warning text-warning",
-  preparing: "bg-info-subtle border-info text-info",
-  ready: "bg-success-subtle border-success text-success",
+  pending: "bg-warning-subtle border-warning",
+  preparing: "bg-info-subtle border-info",
+  ready: "bg-success-subtle border-success",
 };
 
 const EMPTY_COPY: Record<ColumnStatus, string> = {
@@ -51,11 +51,9 @@ export default function FoodOrderGrid({
       aria-label="Food orders board"
       className="flex flex-col gap-4 self-stretch"
     >
-      <header className="flex items-baseline justify-between px-1">
+      <header className="flex items-baseline gap-2 px-1">
         <h2 className="type-h3">Food</h2>
-        <span className="type-caption text-muted-foreground">
-          음식 주문
-        </span>
+        <span className="type-caption text-muted-foreground">음식 주문</span>
       </header>
 
       <Grid columns={{ base: 1, md: 3 }} gap="element">
