@@ -12,7 +12,7 @@ export default function HomeHeading({ pochaInfo }: HomeHeadingProps) {
       id="pocha-heading"
     >
       {/* Title - pocha name */}
-      <h1 className="type-h2 text-foreground">{pochaInfo?.title}</h1>
+      <h1 className="type-h2 font-sejong-bold! text-foreground text-center">{pochaInfo?.title}</h1>
 
       {/* Description - pocha description */}
       <p className="type-body-sm text-center text-muted-foreground">

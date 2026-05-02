@@ -83,7 +83,7 @@ function MenuList({ pochaid }: MenuListProps) {
 
   return (
     <>
-      <div className="w-full flex flex-col items-center py-5 mb-20 gap-6">
+      <div className="w-full flex flex-col items-center mb-20 gap-6">
         {menuList.map(({ category, menusList }, categoryIdx) => (
           <div
             key={`${category}-${categoryIdx}`}

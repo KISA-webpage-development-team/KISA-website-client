@@ -63,7 +63,7 @@ export default function MenuListItem({
         {/* Menu Info */}
         <div className="flex flex-col items-start justify-center text-left gap-1">
           <span
-            className={`type-body ${
+            className={`type-body font-semibold! ${
               outOfStock
                 ? "text-muted-foreground line-through"
                 : "text-foreground"

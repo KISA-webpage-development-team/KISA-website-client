@@ -51,7 +51,11 @@ const CherryBlossomPetals =
 
 function HomeShellSkeleton() {
   return (
-    <section className="md:hidden flex flex-col min-h-screen">
+    <Container
+        as="section"
+        size="sm"
+        className="flex flex-col min-h-screen relative !gap-0"
+      >
       {/* Heading skeleton */}
       <div className="flex flex-col items-center px-4 pt-2 gap-2">
         <Skeleton className="h-7 w-40" />
@@ -76,7 +80,7 @@ function HomeShellSkeleton() {
           </div>
         ))}
       </div>
-    </section>
+    </Container>
   );
 }
 
