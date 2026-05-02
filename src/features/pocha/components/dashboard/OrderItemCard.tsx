@@ -193,7 +193,7 @@ function OrderItemCardImpl({
             <span className="text-muted-foreground mx-2">·</span>
             <span>{ordererName}</span>
           </div>
-          <div className="type-h3 truncate">
+          <div className="type-h4 truncate">
             <span>{nameKor}</span>
             <span className="text-muted-foreground"> × {quantity}</span>
           </div>

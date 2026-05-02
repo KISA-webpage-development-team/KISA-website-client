@@ -1,7 +1,7 @@
 import { OrderStatus, Orders } from "@/types/pocha";
 import React from "react";
 import OrderItemCard from "@/features/pocha/components/dashboard/OrderItemCard";
-import { Badge, Grid, Icon } from "@umichkisa-ds/web";
+import { Grid, Icon } from "@umichkisa-ds/web";
 
 interface FoodOrderGridProps {
   orders: Orders;
@@ -19,15 +19,13 @@ const STATUS_LABEL: Record<ColumnStatus, string> = {
   ready: "전달 대기",
 };
 
-// Column treatment by lifecycle stage:
-//   pending   → brand-accent-subtle surface + brand-primary border (pulls the eye)
-//   preparing → default surface + strong border (active work, stable visual weight)
-//   ready     → muted surface + default border (recedes — empty here is good news)
-// Borders are full rings (not left accents) per KNOWLEDGE "Brand emphasis surface".
+// Column treatment uses semantic status palette (matches STATUS_COLORS intent
+// from the legacy map: pending=yellow→warning, preparing=orange→info,
+// ready=green→success). Subtle bg + same-hue border + same-hue title text.
 const HEADER_TONE: Record<ColumnStatus, string> = {
-  pending: "bg-brand-accent-subtle border-brand-primary",
-  preparing: "bg-surface border-border-strong",
-  ready: "bg-surface-subtle border-border",
+  pending: "bg-warning-subtle border-warning text-warning",
+  preparing: "bg-info-subtle border-info text-info",
+  ready: "bg-success-subtle border-success text-success",
 };
 
 const EMPTY_COPY: Record<ColumnStatus, string> = {
@@ -71,13 +69,12 @@ export default function FoodOrderGrid({
               className={`flex items-baseline justify-between gap-2 px-3 py-2 rounded-md border ${HEADER_TONE[status]}`}
             >
               <h3 className="type-label">{STATUS_LABEL[status]}</h3>
-              <Badge
-                size="sm"
-                variant="outline"
+              <span
+                className="type-label tabular-nums"
                 aria-label={`${items.length} items`}
               >
                 {items.length}
-              </Badge>
+              </span>
             </div>
 
             {items.length === 0 ? (
