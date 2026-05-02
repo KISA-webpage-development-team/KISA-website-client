@@ -54,14 +54,14 @@ function OrderItemCardImpl({
   const { orderItemID, quantity, menu, ordererName, status } = order;
   const { nameKor } = menu;
 
-  // Status-toned border matches column ring palette so a tile reads its stage
-  // even at a glance / off-axis (pending=warning, preparing=info, ready=success).
-  const STATUS_BORDER: Record<string, string> = {
-    pending: "border-warning",
-    preparing: "border-info",
-    ready: "border-success",
+  // Status-toned tile chrome matches column ring palette
+  // (pending=warning, preparing=info, ready=success).
+  const STATUS_TONE: Record<string, string> = {
+    pending: "border-warning bg-warning-subtle",
+    preparing: "border-info bg-info-subtle",
+    ready: "border-success bg-success-subtle",
   };
-  const statusBorder = STATUS_BORDER[status] ?? "";
+  const statusTone = STATUS_TONE[status] ?? "";
 
   const [loading, setLoading] = React.useState(false);
 
@@ -186,7 +186,7 @@ function OrderItemCardImpl({
   return (
     <li className="flex-1">
       <Card
-        className={`h-full w-full ${statusBorder}`}
+        className={`h-full w-full ${statusTone}`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
