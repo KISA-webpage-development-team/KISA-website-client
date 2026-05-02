@@ -1,8 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Tabs, TabsList, TabsTrigger, TabsContent, Container } from "@umichkisa-ds/web";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  Container,
+  Button,
+  Icon,
+} from "@umichkisa-ds/web";
 
 import useAdmin from "@/lib/next-auth/useAdmin";
 
@@ -29,10 +37,40 @@ export default function DashboardPage() {
   const initialTab: PochaDashboardTab =
     (searchParams.get("tab") as PochaDashboardTab) || "orders";
 
+  // Controlled tab state — drives whether the Bulk-promote toggle renders
+  // (only meaningful on Orders tab) and lets us auto-exit select mode on
+  // tab switch.
+  const [currentTab, setCurrentTab] = useState<PochaDashboardTab>(initialTab);
+
   // Hoisted dashboard-orders hook so DashboardStatsStrip and OrderDashboard
   // share a single fetch. (useDashboardOrders is plain useEffect+useState,
   // not SWR-deduped — wiring it twice would double-fetch.)
   const ordersHook = useDashboardOrders(pochaID, token ?? "");
+
+  // Page-level select mode (lifted from OrderDashboard so the Bulk-promote
+  // toggle can live on the same row as Tabs instead of inside the food grid).
+  const [selectMode, setSelectMode] = useState(false);
+  const [isPromotingFood, setIsPromotingFood] = useState(false);
+  const [isPromotingDrink, setIsPromotingDrink] = useState(false);
+  const isPromoting = isPromotingFood || isPromotingDrink;
+
+  const handleToggleSelectMode = useCallback(() => {
+    if (isPromoting) return;
+    setSelectMode((prev) => !prev);
+  }, [isPromoting]);
+
+  const handleEnterSelectMode = useCallback(() => {
+    if (isPromoting) return;
+    setSelectMode(true);
+  }, [isPromoting]);
+
+  // Switching away from Orders tab → exit select mode (the grids' existing
+  // selectMode-false effect clears their selectedIds).
+  useEffect(() => {
+    if (currentTab !== "orders" && selectMode) {
+      setSelectMode(false);
+    }
+  }, [currentTab, selectMode]);
 
   // Rebuild a flat ordersMap for the stats strip from the bucketed return.
   const ordersMap = useMemo(() => {
@@ -72,8 +110,11 @@ export default function DashboardPage() {
         />
 
         <Tabs
-          defaultValue={initialTab}
-          onValueChange={(v) => updateURLWithTab(v)}
+          value={currentTab}
+          onValueChange={(v) => {
+            setCurrentTab(v as PochaDashboardTab);
+            updateURLWithTab(v);
+          }}
         >
           <div className="flex w-full justify-between items-center gap-4 flex-wrap">
             <TabsList>
@@ -81,10 +122,29 @@ export default function DashboardPage() {
               <TabsTrigger value="stock">Stock</TabsTrigger>
               <TabsTrigger value="history">History</TabsTrigger>
             </TabsList>
-            <p className="type-body-sm text-muted-foreground">
-              To promote Order Item to next status, 1. select the order item, 2.
-              click the Promote button
-            </p>
+            {currentTab === "orders" && (
+              <div className="flex items-center gap-2">
+                <span className="type-caption text-muted-foreground hidden sm:inline">
+                  {selectMode
+                    ? "Tap cards to select"
+                    : "Promote multiple at once"}
+                </span>
+                <Button
+                  variant={selectMode ? "primary" : "secondary"}
+                  size="md"
+                  onClick={handleToggleSelectMode}
+                  disabled={isPromoting}
+                  aria-pressed={selectMode}
+                >
+                  <Icon
+                    name={selectMode ? "check" : "circle-check"}
+                    size="sm"
+                    aria-hidden
+                  />
+                  {selectMode ? "Done" : "Bulk promote"}
+                </Button>
+              </div>
+            )}
           </div>
 
           <TabsContent value="orders">
@@ -93,6 +153,10 @@ export default function DashboardPage() {
               email={email ?? ""}
               token={token ?? ""}
               ordersHook={ordersHook}
+              selectMode={selectMode}
+              onEnterSelectMode={handleEnterSelectMode}
+              onPromotingFoodChange={setIsPromotingFood}
+              onPromotingDrinkChange={setIsPromotingDrink}
             />
           </TabsContent>
           <TabsContent value="stock">
