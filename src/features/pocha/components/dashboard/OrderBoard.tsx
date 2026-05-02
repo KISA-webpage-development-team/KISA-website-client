@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardContent,
+  CardFooter,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -140,17 +141,26 @@ export default function OrderBoard({
             </div>
 
             {items.length === 0 ? (
-              <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border p-4 text-center">
-                <Icon
-                  name="check"
-                  size="md"
-                  className="text-muted-foreground"
-                  aria-hidden
-                />
-                <p className="type-caption text-muted-foreground">
-                  {EMPTY_COPY[status]}
-                </p>
-              </div>
+              // Mirror OrderItemCard's atom structure (Card + CardContent +
+              // CardFooter min-h-[2.5rem]) so the empty slot's height matches
+              // a real card naturally — no magic min-h on the column.
+              <Card
+                className="h-full w-full !border-dashed bg-transparent"
+                aria-label={`${STATUS_LABEL[status]} column empty`}
+              >
+                <CardContent className="flex flex-col items-center justify-center gap-2 text-center">
+                  <Icon
+                    name="check"
+                    size="md"
+                    className="text-muted-foreground"
+                    aria-hidden
+                  />
+                  <p className="type-caption text-muted-foreground">
+                    {EMPTY_COPY[status]}
+                  </p>
+                </CardContent>
+                <CardFooter className="min-h-[2.5rem]" />
+              </Card>
             ) : (
               <ul className="flex flex-col gap-2">
                 {items.map((order) => (
