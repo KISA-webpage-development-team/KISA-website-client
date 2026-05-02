@@ -10,7 +10,7 @@ const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
   @param status: OrderStatus
   @return OrderStatus | null
 */
-const getNextStatus = (status: OrderStatus): OrderStatus | null => {
+export const getNextStatus = (status: OrderStatus): OrderStatus | null => {
   const statusFlow = {
     [OrderStatus.PENDING]: OrderStatus.PREPARING,
     [OrderStatus.PREPARING]: OrderStatus.READY,

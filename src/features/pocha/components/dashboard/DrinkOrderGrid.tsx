@@ -1,7 +1,26 @@
-import { OrderStatus, Orders } from "@/types/pocha";
-import React from "react";
+import { OrderItem, OrderStatus, Orders } from "@/types/pocha";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import OrderItemCard from "@/features/pocha/components/dashboard/OrderItemCard";
-import { Grid, Icon } from "@umichkisa-ds/web";
+import {
+  Button,
+  Card,
+  CardContent,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  Grid,
+  Icon,
+  toast,
+} from "@umichkisa-ds/web";
+import {
+  computeBreakdown,
+  formatBreakdown,
+  requiresDialogGate,
+} from "@/features/pocha/utils/batchPromote";
+import { changeOrderItemStatus } from "@/apis/pocha/mutations";
+import { getNextStatus } from "@/features/pocha/hooks/useDashboardOrders";
 
 interface DrinkOrderGridProps {
   orders: Orders;
@@ -9,6 +28,8 @@ interface DrinkOrderGridProps {
     orderItemID: number,
     newStatus: OrderStatus
   ) => void;
+  selectMode: boolean;
+  onPromotingChange?: (isPromoting: boolean) => void;
 }
 
 type ColumnStatus = "pending" | "ready";
@@ -33,6 +54,8 @@ const EMPTY_COPY: Record<ColumnStatus, string> = {
 export default function DrinkOrderGrid({
   orders = { pending: [], preparing: [], ready: [] },
   updateOrderItemStatusUI,
+  selectMode,
+  onPromotingChange,
 }: DrinkOrderGridProps) {
   const { pending, ready } = orders;
 
@@ -40,6 +63,156 @@ export default function DrinkOrderGrid({
     { status: "pending", items: pending ?? [] },
     { status: "ready", items: ready ?? [] },
   ];
+
+  // Per-grid selection ownership (decision #7).
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [isPromoting, setIsPromoting] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  // Snapshot of selection at the moment the Dialog gate opens — prevents
+  // socket/poll updates between open and confirm from desyncing the Dialog
+  // body's breakdown copy from the items actually fanned out.
+  const [dialogSnapshot, setDialogSnapshot] = useState<OrderItem[]>([]);
+
+  useEffect(() => {
+    if (!selectMode) {
+      setSelectedIds(new Set());
+    }
+  }, [selectMode]);
+
+  const allItems = useMemo(
+    () => [...(pending ?? []), ...(ready ?? [])],
+    [pending, ready]
+  );
+
+  const selectedItems = useMemo<OrderItem[]>(
+    () => allItems.filter((o) => selectedIds.has(o.orderItemID)),
+    [allItems, selectedIds]
+  );
+
+  useEffect(() => {
+    setSelectedIds((prev) => {
+      if (prev.size === 0) return prev;
+      const live = new Set(allItems.map((o) => o.orderItemID));
+      let changed = false;
+      const next = new Set<number>();
+      prev.forEach((id) => {
+        if (live.has(id)) next.add(id);
+        else changed = true;
+      });
+      return changed ? next : prev;
+    });
+  }, [allItems]);
+
+  const handleToggleSelect = useCallback(
+    (orderItemID: number) => {
+      if (isPromoting) return;
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(orderItemID)) next.delete(orderItemID);
+        else next.add(orderItemID);
+        return next;
+      });
+    },
+    [isPromoting]
+  );
+
+  const handleLongPress = useCallback(
+    (orderItemID: number) => {
+      if (isPromoting) return;
+      setSelectedIds((prev) => {
+        if (prev.has(orderItemID)) return prev;
+        const next = new Set(prev);
+        next.add(orderItemID);
+        return next;
+      });
+    },
+    [isPromoting]
+  );
+
+  const handleCancel = useCallback(() => {
+    if (isPromoting) return;
+    setSelectedIds(new Set());
+  }, [isPromoting]);
+
+  const runFanOut = useCallback(
+    async (snapshot: OrderItem[]) => {
+      if (snapshot.length === 0) return;
+      setIsPromoting(true);
+      onPromotingChange?.(true);
+      const originals = snapshot.map((o) => ({
+        id: o.orderItemID,
+        status: o.status,
+      }));
+
+      for (const o of snapshot) {
+        const next = getNextStatus(o.status);
+        if (next) updateOrderItemStatusUI(o.orderItemID, next);
+      }
+
+      const results = await Promise.allSettled(
+        snapshot.map((o) => changeOrderItemStatus(o.orderItemID))
+      );
+
+      let failed = 0;
+      results.forEach((r, i) => {
+        const ok = r.status === "fulfilled" && r.value;
+        if (!ok) {
+          failed += 1;
+          const orig = originals[i];
+          updateOrderItemStatusUI(orig.id, orig.status);
+        }
+      });
+
+      const total = snapshot.length;
+      const promoted = total - failed;
+      if (failed === 0) {
+        toast.success(`${promoted} promoted`);
+      } else if (promoted === 0) {
+        toast.error(`0 promoted, ${failed} failed`);
+      } else {
+        toast.error(`${promoted} promoted, ${failed} failed`);
+      }
+
+      setSelectedIds(new Set());
+      setIsPromoting(false);
+      onPromotingChange?.(false);
+    },
+    [updateOrderItemStatusUI, onPromotingChange]
+  );
+
+  const handlePromoteClick = useCallback(() => {
+    if (isPromoting) return;
+    if (selectedItems.length === 0) return;
+    if (requiresDialogGate(selectedItems)) {
+      setDialogSnapshot(selectedItems);
+      setDialogOpen(true);
+      return;
+    }
+    runFanOut(selectedItems);
+  }, [isPromoting, selectedItems, runFanOut]);
+
+  const handleDialogConfirm = useCallback(() => {
+    setDialogOpen(false);
+    runFanOut(dialogSnapshot);
+  }, [runFanOut, dialogSnapshot]);
+
+  const breakdownLabel = useMemo(
+    () =>
+      selectedItems.length > 0
+        ? formatBreakdown(computeBreakdown(selectedItems))
+        : "",
+    [selectedItems]
+  );
+
+  const dialogBreakdownLabel = useMemo(
+    () =>
+      dialogSnapshot.length > 0
+        ? formatBreakdown(computeBreakdown(dialogSnapshot))
+        : "",
+    [dialogSnapshot]
+  );
+
+  const showActionBar = selectMode && selectedIds.size > 0;
 
   return (
     <section
@@ -89,6 +262,10 @@ export default function DrinkOrderGrid({
                     key={order.orderItemID}
                     order={order}
                     updateOrderItemStatusUI={updateOrderItemStatusUI}
+                    isSelectMode={selectMode}
+                    isSelected={selectedIds.has(order.orderItemID)}
+                    onToggleSelect={handleToggleSelect}
+                    onLongPress={handleLongPress}
                   />
                 ))}
               </ul>
@@ -96,6 +273,62 @@ export default function DrinkOrderGrid({
           </div>
         ))}
       </Grid>
+
+      {showActionBar && (
+        <Card
+          role="region"
+          aria-label="Batch promote action bar"
+          className="sticky bottom-4 z-10"
+        >
+          <CardContent className="flex flex-wrap items-center justify-between gap-4">
+            <span className="type-label text-foreground">{breakdownLabel}</span>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={handleCancel}
+                disabled={isPromoting}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                onClick={handlePromoteClick}
+                disabled={isPromoting}
+              >
+                Promote
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent size="sm">
+          <DialogTitle>Close these orders?</DialogTitle>
+          <DialogDescription>{dialogBreakdownLabel}</DialogDescription>
+          <p className="type-body-sm text-muted-foreground">
+            Closed orders cannot be reverted.
+          </p>
+          <DialogFooter>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => setDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              size="md"
+              onClick={handleDialogConfirm}
+            >
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
