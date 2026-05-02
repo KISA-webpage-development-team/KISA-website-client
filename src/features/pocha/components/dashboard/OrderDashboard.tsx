@@ -49,16 +49,16 @@ export default function OrderDashboard({
   }
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col gap-4 md:flex-row">
       {/* 1. Food Orders */}
-      <div className="basis-3/5">
+      <div className="md:basis-3/5">
         <FoodOrderGrid
           orders={foodOrders}
           updateOrderItemStatusUI={updateOrderItemStatusUI}
         />
       </div>
       {/* 2. Drink Orders */}
-      <div className="basis-2/5">
+      <div className="md:basis-2/5">
         <DrinkOrderGrid
           orders={drinkOrders}
           updateOrderItemStatusUI={updateOrderItemStatusUI}
