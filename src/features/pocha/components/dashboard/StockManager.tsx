@@ -55,6 +55,55 @@ function bilingualName(row: { nameKor?: string; nameEng?: string }) {
   return row.nameKor || row.nameEng || "";
 }
 
+interface StockCellProps {
+  row: FlatRow;
+  isEditing: boolean;
+  draftValue: string;
+  onDraftChange: (value: string) => void;
+  onBeginEdit: (row: FlatRow) => void;
+  onKeyDown: (e: KeyboardEvent<HTMLInputElement>, row: FlatRow) => void;
+  onBlur: (e: FocusEvent<HTMLInputElement>, row: FlatRow) => void;
+}
+
+function StockCell({
+  row,
+  isEditing,
+  draftValue,
+  onDraftChange,
+  onBeginEdit,
+  onKeyDown,
+  onBlur,
+}: StockCellProps) {
+  if (isEditing) {
+    return (
+      <Input
+        autoFocus
+        type="number"
+        min={0}
+        inputMode="numeric"
+        data-stock-input="true"
+        value={draftValue}
+        onChange={(e) => onDraftChange(e.target.value)}
+        onFocus={(e) => e.currentTarget.select()}
+        onKeyDown={(e) => onKeyDown(e, row)}
+        onBlur={(e) => onBlur(e, row)}
+        aria-label={`Stock for ${bilingualName(row)}`}
+        className="w-24"
+      />
+    );
+  }
+  return (
+    <button
+      type="button"
+      onClick={() => onBeginEdit(row)}
+      aria-label={`Edit stock for ${bilingualName(row)}`}
+      className="w-24 rounded-md border border-input bg-background px-3 py-1.5 text-left type-body text-foreground hover:bg-brand-accent-subtle focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2"
+    >
+      {row.stock}
+    </button>
+  );
+}
+
 function isLow(stock: number) {
   return stock >= 1 && stock <= 3;
 }
@@ -315,38 +364,6 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
     </div>
   );
 
-  // ── Render row helpers ─────────────────────────────────
-  const renderStockCell = (row: FlatRow) => {
-    if (editingId === row.menuID) {
-      return (
-        <Input
-          autoFocus
-          type="number"
-          min={0}
-          inputMode="numeric"
-          data-stock-input="true"
-          value={draftValue}
-          onChange={(e) => setDraftValue(e.target.value)}
-          onFocus={(e) => e.currentTarget.select()}
-          onKeyDown={(e) => handleKeyDown(e, row)}
-          onBlur={(e) => handleBlur(e, row)}
-          aria-label={`Stock for ${bilingualName(row)}`}
-          className="w-24"
-        />
-      );
-    }
-    return (
-      <button
-        type="button"
-        onClick={() => beginEdit(row)}
-        aria-label={`Edit stock for ${bilingualName(row)}`}
-        className="w-24 rounded-md border border-input bg-background px-3 py-1.5 text-left type-body text-foreground hover:bg-brand-accent-subtle focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2"
-      >
-        {row.stock}
-      </button>
-    );
-  };
-
   // ── Empty / table / mobile ────────────────────────────
   return (
     <div className="w-full">
@@ -378,7 +395,17 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
                     {row.category}
                   </span>
                 </TableCell>
-                <TableCell>{renderStockCell(row)}</TableCell>
+                <TableCell>
+                  <StockCell
+                    row={row}
+                    isEditing={editingId === row.menuID}
+                    draftValue={draftValue}
+                    onDraftChange={setDraftValue}
+                    onBeginEdit={beginEdit}
+                    onKeyDown={handleKeyDown}
+                    onBlur={handleBlur}
+                  />
+                </TableCell>
                 <TableCell className="text-right">
                   <IconButton
                     icon="circle-minus"
@@ -426,7 +453,15 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
                       <span className="type-caption text-muted-foreground">
                         Stock
                       </span>
-                      {renderStockCell(row)}
+                      <StockCell
+                        row={row}
+                        isEditing={editingId === row.menuID}
+                        draftValue={draftValue}
+                        onDraftChange={setDraftValue}
+                        onBeginEdit={beginEdit}
+                        onKeyDown={handleKeyDown}
+                        onBlur={handleBlur}
+                      />
                     </div>
                     <IconButton
                       icon="circle-minus"
