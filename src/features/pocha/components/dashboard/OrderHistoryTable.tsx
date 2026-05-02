@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+"use client";
 
-import useOrderHistory from '@/features/pocha/hooks/useOrderHistory';
-import LoadingSpinner from '@/components/ui/feedback/LoadingSpinner';
-import { calculateStripeTotalPrice } from '@/features/pocha/utils/calculateStripeFee';
+import { useMemo, useState } from "react";
 import {
-  calculateTotalSales,
-  calculateSummary,
-  convertOrderHistoryToMenuMap,
-} from '@/features/pocha/utils/orderHistoryUtils';
-import OrderSummaryModal from './OrderSummaryModal';
+  Button,
+  Skeleton,
+  StatusView,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableMobileItem,
+  TableMobileList,
+  TableRow,
+  ToggleGroup,
+} from "@umichkisa-ds/web";
+
+import useOrderHistory from "@/features/pocha/hooks/useOrderHistory";
+import OrderSummaryModal from "./OrderSummaryModal";
 
 interface OrderHistoryTableProps {
   token: string;
   pochaID: number;
 }
 
-type FilterOption = 'all' | 'food' | 'drink';
+type FilterOption = "all" | "food" | "drink";
+
+const SKELETON_ROW_COUNT = 5;
+const COLUMN_COUNT = 7;
 
 export default function OrderHistoryTable({
   token,
@@ -23,137 +36,194 @@ export default function OrderHistoryTable({
 }: OrderHistoryTableProps) {
   const { orderHistory, status } = useOrderHistory(token, pochaID);
 
-  const [filter, setFilter] = useState<FilterOption>('all');
-
+  const [filter, setFilter] = useState<FilterOption>("all");
   const [openSummaryModal, setOpenSummaryModal] = useState<boolean>(false);
 
-  const menuMap = convertOrderHistoryToMenuMap(orderHistory);
+  const counts = useMemo(() => {
+    const list = orderHistory ?? [];
+    const food = list.filter(({ menu }) => !menu.isImmediatePrep).length;
+    const drink = list.filter(({ menu }) => menu.isImmediatePrep).length;
+    return { all: list.length, food, drink };
+  }, [orderHistory]);
 
-  const filteredOrderHistory = orderHistory?.filter(({ menu }) => {
-    if (filter === 'all') return true;
-    return filter === 'food' ? !menu.isImmediatePrep : menu.isImmediatePrep;
-  });
+  const filteredOrderHistory = useMemo(() => {
+    const list = orderHistory ?? [];
+    if (filter === "all") return list;
+    if (filter === "food") return list.filter(({ menu }) => !menu.isImmediatePrep);
+    return list.filter(({ menu }) => menu.isImmediatePrep);
+  }, [orderHistory, filter]);
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
-      <LoadingSpinner fullScreen={false} label='주문 기록을 가져오는중...' />
+      <div className="w-full p-4">
+        <div className="hidden md:block">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>#</TableHead>
+                <TableHead>Menu</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Qty</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>Orderer email</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Array.from({ length: SKELETON_ROW_COUNT }).map((_, rowIdx) => (
+                <TableRow key={`skeleton-row-${rowIdx}`}>
+                  {Array.from({ length: COLUMN_COUNT }).map((__, colIdx) => (
+                    <TableCell key={`skeleton-cell-${rowIdx}-${colIdx}`}>
+                      <Skeleton className="h-4 w-full" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        <div className="block md:hidden">
+          <TableMobileList>
+            {Array.from({ length: SKELETON_ROW_COUNT }).map((_, rowIdx) => (
+              <TableMobileItem key={`skeleton-mobile-${rowIdx}`}>
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-1/2" />
+              </TableMobileItem>
+            ))}
+          </TableMobileList>
+        </div>
+      </div>
     );
   }
 
-  if (status === 'error') {
-    throw new Error('Error fetching order history');
+  if (status === "error") {
+    return (
+      <StatusView variant="error" title="Failed to load order history." />
+    );
   }
 
-  if (!filteredOrderHistory) {
-    return <div>No order history found</div>;
+  if (!orderHistory || orderHistory.length === 0) {
+    return (
+      <StatusView variant="not-found" title="No order history." />
+    );
   }
+
+  const filterItems = [
+    { value: "all", label: `All (${counts.all})` },
+    { value: "food", label: `Food (${counts.food})` },
+    { value: "drink", label: `Drinks (${counts.drink})` },
+  ];
 
   return (
-    <div className='w-full'>
-      <div className='p-4 space-y-4'>
-        <div className='flex justify-between items-center mb-4'>
-          <div className='flex space-x-4'>
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 ${
-                filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-              }`}
-            >
-              전체
-            </button>
-            <button
-              onClick={() => setFilter('food')}
-              className={`px-4 py-2 ${
-                filter === 'food' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-              }`}
-            >
-              안주
-            </button>
-            <button
-              onClick={() => setFilter('drink')}
-              className={`px-4 py-2 ${
-                filter === 'drink' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-              }`}
-            >
-              주류
-            </button>
-          </div>
-          <button
+    <div className="w-full">
+      <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <ToggleGroup
+            items={filterItems}
+            value={filter}
+            onValueChange={(v) => setFilter(v as FilterOption)}
+            aria-label="Filter order history"
+          />
+          <Button
+            variant="primary"
             onClick={() => setOpenSummaryModal(true)}
-            className='px-4 py-2 bg-green-500 text-white'
           >
-            요약하기
-          </button>
-          {
-            openSummaryModal && (
-              <OrderSummaryModal
-                handleCloseForm={() => setOpenSummaryModal(false)}
-                orderHistory={orderHistory}
-              />
-            )
-          }
+            View summary
+          </Button>
         </div>
 
-        <table className='min-w-full divide-y divide-gray-200'>
-          <thead className='bg-gray-50'>
-            <tr className='text-sm text-black text-center'>
-              <th className='px-6 py-3 font-medium uppercase tracking-wider'>
-                Order #
-              </th>
-              <th className='px-6 py-3 font-medium uppercase tracking-wider'>
-                Item
-              </th>
-              <th className='px-6 py-3 font-medium uppercase tracking-wider'>
-                Quantity
-              </th>
-              <th className='px-6 py-3 font-medium uppercase tracking-wider'>
-                Price
-              </th>
-              <th className='px-6 py-3 font-medium uppercase tracking-wider'>
-                Price + Fee
-              </th>
-              <th className='px-6 py-3 font-medium uppercase tracking-wider'>
-                Customer
-              </th>
-              <th className='px-6 py-3 font-medium uppercase tracking-wider'>
-                Email
-              </th>
-            </tr>
-          </thead>
-          <tbody className='bg-white divide-y divide-gray-200'>
-            {filteredOrderHistory?.map(
-              (
-                { orderItemID, menu, quantity, ordererName, ordererEmail },
-                index
-              ) => (
-                <tr key={`${orderItemID}-${index}`} className='text-center'>
-                  <td className='px-6 py-4 whitespace-nowrap font-medium text-gray-900'>
-                    #{orderItemID}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap text-gray-500'>
-                    {menu.nameKor}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap text-gray-500'>
-                    {quantity}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap text-gray-500'>
-                    ${menu.price.toFixed(2)}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap text-gray-500'>
-                    ${calculateStripeTotalPrice(menu.price).toFixed(2)}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap text-gray-500'>
-                    {ordererName}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap text-gray-500'>
-                    {ordererEmail}
-                  </td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
+        <div className="hidden md:block">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>#</TableHead>
+                <TableHead>Menu</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Qty</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>Orderer email</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredOrderHistory.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={COLUMN_COUNT}
+                    className="text-center text-muted-foreground"
+                  >
+                    No items match this filter
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredOrderHistory.map(
+                  ({ orderItemID, menu, quantity, ordererEmail }, index) => (
+                    <TableRow key={`${orderItemID}-${index}`}>
+                      <TableCell>{orderItemID}</TableCell>
+                      <TableCell>{menu.nameKor}</TableCell>
+                      <TableCell>{menu.category ?? "—"}</TableCell>
+                      <TableCell>{quantity}</TableCell>
+                      <TableCell>{`$${menu.price.toFixed(2)}`}</TableCell>
+                      <TableCell>{`$${(menu.price * quantity).toFixed(2)}`}</TableCell>
+                      <TableCell>{ordererEmail}</TableCell>
+                    </TableRow>
+                  )
+                )
+              )}
+            </TableBody>
+            <TableCaption className="sr-only">
+              Order history for the selected pocha
+            </TableCaption>
+          </Table>
+        </div>
+
+        <div className="block md:hidden">
+          {filteredOrderHistory.length === 0 ? (
+            <p className="type-body-sm text-muted-foreground text-center py-4">
+              No items match this filter
+            </p>
+          ) : (
+            <TableMobileList>
+              {filteredOrderHistory.map(
+                ({ orderItemID, menu, quantity, ordererEmail }, index) => (
+                  <TableMobileItem key={`mobile-${orderItemID}-${index}`}>
+                    <div className="flex items-center justify-between">
+                      <span className="type-label text-muted-foreground">
+                        {`#${orderItemID}`}
+                      </span>
+                      <span className="type-body-sm text-muted-foreground">
+                        {menu.category ?? "—"}
+                      </span>
+                    </div>
+                    <span className="type-body text-foreground">
+                      {menu.nameKor}
+                    </span>
+                    <div className="flex items-center justify-between">
+                      <span className="type-body-sm text-muted-foreground">
+                        {`Qty ${quantity} · $${menu.price.toFixed(2)}`}
+                      </span>
+                      <span className="type-body text-foreground">
+                        {`$${(menu.price * quantity).toFixed(2)}`}
+                      </span>
+                    </div>
+                    <span className="type-caption text-muted-foreground">
+                      {ordererEmail}
+                    </span>
+                  </TableMobileItem>
+                )
+              )}
+            </TableMobileList>
+          )}
+        </div>
       </div>
+
+      <OrderSummaryModal
+        open={openSummaryModal}
+        onOpenChange={setOpenSummaryModal}
+        pochaID={pochaID}
+        orderHistory={orderHistory}
+      />
     </div>
   );
 }
