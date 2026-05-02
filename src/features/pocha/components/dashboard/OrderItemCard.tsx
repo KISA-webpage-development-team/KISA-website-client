@@ -51,8 +51,17 @@ function OrderItemCardImpl({
   onToggleSelect,
   onLongPress,
 }: OrderItemCardProps) {
-  const { orderItemID, quantity, menu, ordererName } = order;
+  const { orderItemID, quantity, menu, ordererName, status } = order;
   const { nameKor } = menu;
+
+  // Status-toned border matches column ring palette so a tile reads its stage
+  // even at a glance / off-axis (pending=warning, preparing=info, ready=success).
+  const STATUS_BORDER: Record<string, string> = {
+    pending: "border-warning",
+    preparing: "border-info",
+    ready: "border-success",
+  };
+  const statusBorder = STATUS_BORDER[status] ?? "";
 
   const [loading, setLoading] = React.useState(false);
 
@@ -177,7 +186,7 @@ function OrderItemCardImpl({
   return (
     <li className="flex-1">
       <Card
-        className="h-full w-full"
+        className={`h-full w-full ${statusBorder}`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
