@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardFooter,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -121,7 +120,11 @@ export default function OrderBoard({
         )}
       </header>
 
-      <Grid columns={{ base: 1, md: gridColumnsMd }} gap="element">
+      <Grid
+        columns={{ base: 1, md: gridColumnsMd }}
+        gap="element"
+        className="flex-1"
+      >
         {renderedColumns.map(({ status, items }) => (
           <div
             key={status}
@@ -141,12 +144,8 @@ export default function OrderBoard({
             </div>
 
             {items.length === 0 ? (
-              // Empty slot mirrors OrderItemCard's structure (Card +
-              // CardContent + CardFooter with a Promote-shaped Button) so the
-              // height matches a real card by composition. CardContent grows
-              // (flex-1) to absorb any extra grid-cell height so the icon +
-              // caption stay vertically centered; the invisible Button sizes
-              // the footer to a real Button's height — no magic min-h.
+              // Stretches to the column's full height (driven by the
+              // sibling section's tallest card via the parent flex row).
               <Card
                 className="flex h-full w-full flex-col !border-dashed bg-transparent"
                 aria-label={`${STATUS_LABEL[status]} column empty`}
@@ -162,17 +161,6 @@ export default function OrderBoard({
                     {EMPTY_COPY[status]}
                   </p>
                 </CardContent>
-                <CardFooter className="justify-end">
-                  <Button
-                    variant="primary"
-                    size="md"
-                    className="invisible"
-                    tabIndex={-1}
-                    aria-hidden
-                  >
-                    Promote
-                  </Button>
-                </CardFooter>
               </Card>
             ) : (
               <ul className="flex flex-col gap-2">
