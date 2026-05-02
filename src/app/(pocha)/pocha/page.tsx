@@ -166,7 +166,7 @@ export default function PochaPage() {
 
         {/* Sticky tabs */}
         <div className="sticky top-0 z-[45] bg-surface">
-          <TabsList variant="underline" size="lg" fullWidth>
+          <TabsList variant="underline" size="md" fullWidth>
             <TabsTrigger value="menu" variant="underline">
               Menu
             </TabsTrigger>
