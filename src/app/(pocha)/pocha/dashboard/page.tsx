@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   Tabs,
@@ -11,6 +12,7 @@ import {
   Button,
   Icon,
   StatusView,
+  buttonVariants,
 } from "@umichkisa-ds/web";
 
 import useAdmin from "@/lib/next-auth/useAdmin";
@@ -90,7 +92,8 @@ export default function DashboardPage() {
   }
 
   // 204 from /pocha/status-info — backend signals there is no ongoing pocha
-  // right now. Not an error, not loading; render a dedicated empty state.
+  // right now. Not an error, not loading; render a dedicated empty state
+  // with a CTA into /pocha/manage so admins can create/schedule one.
   if (noPocha) {
     return (
       <StatusView
@@ -99,6 +102,14 @@ export default function DashboardPage() {
         icon="calendar"
         title="진행 중인 포차가 없습니다"
         description="다음 포차가 시작되면 이 곳에서 주문을 확인할 수 있습니다."
+        action={
+          <Link
+            href="/pocha/manage"
+            className={buttonVariants({ variant: "primary", size: "md" })}
+          >
+            포차 관리로 이동
+          </Link>
+        }
       />
     );
   }
