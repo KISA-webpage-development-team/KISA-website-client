@@ -5,7 +5,7 @@ import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
 import useDashboardOrderSocket from "@/features/pocha/hooks/useDashboardOrderSocket";
 import FoodOrderGrid from "@/features/pocha/components/dashboard/FoodOrderGrid";
 import DrinkOrderGrid from "@/features/pocha/components/dashboard/DrinkOrderGrid";
-import { Button } from "@umichkisa-ds/web";
+import { Button, Icon } from "@umichkisa-ds/web";
 import type { OrderItem, OrderStatus, Orders } from "@/types/pocha";
 
 interface OrdersHook {
@@ -55,6 +55,14 @@ export default function OrderDashboard({
     setSelectMode((prev) => !prev);
   }, [isPromoting]);
 
+  // Long-press / right-click on a card from outside select mode flips us in
+  // (the card's onLongPress fires here, then the grid adds it to its own
+  // selection set).
+  const handleEnterSelectMode = useCallback(() => {
+    if (isPromoting) return;
+    setSelectMode(true);
+  }, [isPromoting]);
+
   if (status === "loading") {
     return (
       <LoadingSpinner fullScreen={false} label="주문 정보를 가져오는중..." />
@@ -63,16 +71,22 @@ export default function OrderDashboard({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Top row: page-level Select/Done toggle, right-aligned. */}
-      <div className="flex justify-end">
+      {/* Top row: bulk-promote toggle + caption explaining the mode. */}
+      <div className="flex items-center justify-between gap-3 px-1">
+        <p className="type-caption text-muted-foreground">
+          {selectMode
+            ? "Tap cards to select · Promote multiple at once"
+            : "Promote multiple orders at once with bulk select"}
+        </p>
         <Button
-          variant="secondary"
+          variant={selectMode ? "primary" : "secondary"}
           size="md"
           onClick={handleToggleSelectMode}
           disabled={isPromoting}
           aria-pressed={selectMode}
         >
-          {selectMode ? "Done" : "Select"}
+          <Icon name={selectMode ? "check" : "circle-check"} size="sm" aria-hidden />
+          {selectMode ? "Done" : "Bulk promote"}
         </Button>
       </div>
 
@@ -83,6 +97,7 @@ export default function OrderDashboard({
             orders={foodOrders}
             updateOrderItemStatusUI={updateOrderItemStatusUI}
             selectMode={selectMode}
+            onEnterSelectMode={handleEnterSelectMode}
             onPromotingChange={setIsPromotingFood}
           />
         </div>
@@ -92,6 +107,7 @@ export default function OrderDashboard({
             orders={drinkOrders}
             updateOrderItemStatusUI={updateOrderItemStatusUI}
             selectMode={selectMode}
+            onEnterSelectMode={handleEnterSelectMode}
             onPromotingChange={setIsPromotingDrink}
           />
         </div>

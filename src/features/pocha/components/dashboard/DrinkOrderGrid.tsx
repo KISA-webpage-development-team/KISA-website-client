@@ -29,6 +29,9 @@ interface DrinkOrderGridProps {
     newStatus: OrderStatus
   ) => void;
   selectMode: boolean;
+  /** Long-press / right-click outside select mode calls this so the dashboard
+   * can flip selectMode to true (gesture-driven discovery). */
+  onEnterSelectMode?: () => void;
   onPromotingChange?: (isPromoting: boolean) => void;
 }
 
@@ -55,6 +58,7 @@ export default function DrinkOrderGrid({
   orders = { pending: [], preparing: [], ready: [] },
   updateOrderItemStatusUI,
   selectMode,
+  onEnterSelectMode,
   onPromotingChange,
 }: DrinkOrderGridProps) {
   const { pending, ready } = orders;
@@ -119,6 +123,7 @@ export default function DrinkOrderGrid({
   const handleLongPress = useCallback(
     (orderItemID: number) => {
       if (isPromoting) return;
+      if (!selectMode) onEnterSelectMode?.();
       setSelectedIds((prev) => {
         if (prev.has(orderItemID)) return prev;
         const next = new Set(prev);
@@ -126,7 +131,7 @@ export default function DrinkOrderGrid({
         return next;
       });
     },
-    [isPromoting]
+    [isPromoting, selectMode, onEnterSelectMode]
   );
 
   const handleCancel = useCallback(() => {
@@ -217,7 +222,9 @@ export default function DrinkOrderGrid({
   return (
     <section
       aria-label="Drink orders board"
-      className="flex flex-col gap-4 self-stretch"
+      className={`flex flex-col gap-4 self-stretch rounded-md p-2 transition-shadow ${
+        selectMode ? "ring-2 ring-info ring-offset-2" : ""
+      }`}
     >
       <header className="flex items-baseline gap-2 px-1">
         <h2 className="type-h3">Drinks</h2>

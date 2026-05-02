@@ -29,6 +29,9 @@ interface FoodOrderGridProps {
     newStatus: OrderStatus
   ) => void;
   selectMode: boolean;
+  /** Long-press / right-click outside select mode calls this so the dashboard
+   * can flip selectMode to true (gesture-driven discovery). */
+  onEnterSelectMode?: () => void;
   onPromotingChange?: (isPromoting: boolean) => void;
 }
 
@@ -59,6 +62,7 @@ export default function FoodOrderGrid({
   orders = { pending: [], preparing: [], ready: [] },
   updateOrderItemStatusUI,
   selectMode,
+  onEnterSelectMode,
   onPromotingChange,
 }: FoodOrderGridProps) {
   const { pending, preparing, ready } = orders;
@@ -133,6 +137,8 @@ export default function FoodOrderGrid({
   const handleLongPress = useCallback(
     (orderItemID: number) => {
       if (isPromoting) return;
+      // Gesture entered from outside select mode → tell parent to flip in.
+      if (!selectMode) onEnterSelectMode?.();
       setSelectedIds((prev) => {
         if (prev.has(orderItemID)) return prev;
         const next = new Set(prev);
@@ -140,7 +146,7 @@ export default function FoodOrderGrid({
         return next;
       });
     },
-    [isPromoting]
+    [isPromoting, selectMode, onEnterSelectMode]
   );
 
   const handleCancel = useCallback(() => {
@@ -233,7 +239,9 @@ export default function FoodOrderGrid({
   return (
     <section
       aria-label="Food orders board"
-      className="flex flex-col gap-4 self-stretch"
+      className={`flex flex-col gap-4 self-stretch rounded-md p-2 transition-shadow ${
+        selectMode ? "ring-2 ring-info ring-offset-2" : ""
+      }`}
     >
       <header className="flex items-baseline gap-2 px-1">
         <h2 className="type-h3">Food</h2>

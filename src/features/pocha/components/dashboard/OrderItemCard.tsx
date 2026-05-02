@@ -205,7 +205,13 @@ function OrderItemCardImpl({
   return (
     <li className="flex-1">
       <Card
-        className={`h-full w-full ${statusTone}`}
+        className={`h-full w-full ${statusTone} ${
+          isSelectMode && isSelected
+            ? "ring-2 ring-primary ring-offset-1 cursor-pointer"
+            : isSelectMode
+              ? "cursor-pointer"
+              : ""
+        }`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
@@ -229,13 +235,16 @@ function OrderItemCardImpl({
         </CardContent>
 
         {/* Primary action — bottom-right */}
-        <CardFooter className="justify-end">
+        <CardFooter className="justify-end min-h-[2.5rem]">
           {isSelectMode ? (
-            <Icon
-              name="check"
-              size="md"
-              aria-hidden
-            />
+            isSelected ? (
+              <Icon
+                name="circle-check"
+                size="md"
+                className="text-primary"
+                aria-hidden
+              />
+            ) : null
           ) : (
             <Button
               variant="primary"
