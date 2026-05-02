@@ -127,6 +127,7 @@ export default function OrderHistoryTable({
           />
           <Button
             variant="primary"
+            size="sm"
             onClick={() => setOpenSummaryModal(true)}
           >
             View summary
