@@ -205,14 +205,14 @@ describe("existing exports remain", () => {
   ];
 
   it("calculateTotalSales sums all line items", () => {
-    expect(calculateTotalSales(history)).toBe("35.00");
+    expect(calculateTotalSales(history)).toBe(35);
   });
 
   it("calculateSummary returns totalSales/anjuRevenue/drinkRevenue", () => {
     const s = calculateSummary(history);
-    expect(s.totalSales).toBe("35.00");
-    expect(s.anjuRevenue).toBe("20.00");
-    expect(s.drinkRevenue).toBe("15.00");
+    expect(s.totalSales).toBe(35);
+    expect(s.anjuRevenue).toBe(20);
+    expect(s.drinkRevenue).toBe(15);
   });
 
   it("convertOrderHistoryToMenuMap aggregates by menuID", () => {

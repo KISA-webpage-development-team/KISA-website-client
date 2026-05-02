@@ -2,51 +2,64 @@ import {
   OrderItem,
   MenuOrderHistoryMap,
   MenuOrderSummary,
-} from '@/types/pocha';
+} from "@/types/pocha";
 
-const SOJU_TOKEN = '소주';
+const SOJU_TOKEN = "소주";
 const FRUIT_SOJU_TOKENS = [
-  '과일',
-  '딸기',
-  '복숭아',
-  '포도',
-  '자몽',
-  '청포도',
-  '사과',
+  "과일",
+  "딸기",
+  "복숭아",
+  "포도",
+  "자몽",
+  "청포도",
+  "사과",
 ];
 
-const calculateTotalSales = (orderHistory: OrderItem[]) => {
-  return orderHistory
-    ?.reduce((acc, { menu, quantity }) => acc + menu.price * quantity, 0)
-    .toFixed(2);
-};
+export function calculateTotalSales(orderHistory: OrderItem[]): number {
+  return (
+    orderHistory?.reduce(
+      (acc, { menu, quantity }) => acc + menu.price * quantity,
+      0
+    ) ?? 0
+  );
+}
 
-const calculateSummary = (orderHistory: OrderItem[]) => {
+export interface OrderHistorySummary {
+  totalSales: number;
+  anjuRevenue: number;
+  drinkRevenue: number;
+}
+
+export function calculateSummary(
+  orderHistory: OrderItem[]
+): OrderHistorySummary {
   const anjuOrders =
     orderHistory?.filter(({ menu }) => !menu.isImmediatePrep) || [];
   const drinkOrders =
     orderHistory?.filter(({ menu }) => menu.isImmediatePrep) || [];
 
-  const anjuRevenue = anjuOrders
-    .reduce((acc, { menu, quantity }) => acc + menu.price * quantity, 0)
-    .toFixed(2);
-  const drinkRevenue = drinkOrders
-    .reduce((acc, { menu, quantity }) => acc + menu.price * quantity, 0)
-    .toFixed(2);
+  const anjuRevenue = anjuOrders.reduce(
+    (acc, { menu, quantity }) => acc + menu.price * quantity,
+    0
+  );
+  const drinkRevenue = drinkOrders.reduce(
+    (acc, { menu, quantity }) => acc + menu.price * quantity,
+    0
+  );
 
   return {
     totalSales: calculateTotalSales(orderHistory),
     anjuRevenue,
     drinkRevenue,
   };
-};
+}
 
 /**
  * Converts order history list into a map aggregated by menuID
  */
-const convertOrderHistoryToMenuMap = (
+export function convertOrderHistoryToMenuMap(
   orderHistory: OrderItem[]
-): MenuOrderHistoryMap => {
+): MenuOrderHistoryMap {
   const menuMap = new Map<number, MenuOrderSummary>();
 
   orderHistory?.forEach((orderItem) => {
@@ -67,7 +80,7 @@ const convertOrderHistoryToMenuMap = (
   });
 
   return menuMap;
-};
+}
 
 export interface MenuRanking {
   nameKor: string;
@@ -75,7 +88,7 @@ export interface MenuRanking {
   revenue: number;
 }
 
-const rankByQuantity = (orders: OrderItem[]): MenuRanking[] => {
+function rankByQuantity(orders: OrderItem[]): MenuRanking[] {
   const map = convertOrderHistoryToMenuMap(orders);
   return Array.from(map.values())
     .map(({ menu, quantity, totalRevenue }) => ({
@@ -85,20 +98,20 @@ const rankByQuantity = (orders: OrderItem[]): MenuRanking[] => {
     }))
     .sort((a, b) => b.quantity - a.quantity)
     .slice(0, 3);
-};
+}
 
 /** Top-3 안주 (food / non-immediate-prep) by quantity sold. */
-export function calculateFoodRankings(orderHistory: OrderItem[]): MenuRanking[] {
-  return rankByQuantity(
-    orderHistory.filter((o) => !o.menu.isImmediatePrep)
-  );
+export function calculateFoodRankings(
+  orderHistory: OrderItem[]
+): MenuRanking[] {
+  return rankByQuantity(orderHistory.filter((o) => !o.menu.isImmediatePrep));
 }
 
 /** Top-3 주류 (drink / immediate-prep) by quantity sold. */
-export function calculateDrinkRankings(orderHistory: OrderItem[]): MenuRanking[] {
-  return rankByQuantity(
-    orderHistory.filter((o) => o.menu.isImmediatePrep)
-  );
+export function calculateDrinkRankings(
+  orderHistory: OrderItem[]
+): MenuRanking[] {
+  return rankByQuantity(orderHistory.filter((o) => o.menu.isImmediatePrep));
 }
 
 export interface SojuAnalysis {
@@ -125,5 +138,3 @@ export function analyzeSojuSales(orderHistory: OrderItem[]): SojuAnalysis {
 
   return { regular, fruit, total: regular + fruit };
 }
-
-export { calculateTotalSales, calculateSummary, convertOrderHistoryToMenuMap };

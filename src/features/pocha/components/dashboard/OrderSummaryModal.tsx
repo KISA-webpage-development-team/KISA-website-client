@@ -64,6 +64,107 @@ function RankingRow({ rank, nameKor, quantity, revenue }: RankingRowProps) {
   );
 }
 
+function formatPercent(count: number, total: number): string {
+  return total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
+}
+
+function SummaryBody({ orderHistory }: { orderHistory: OrderItem[] }) {
+  const totalSales = calculateTotalSales(orderHistory);
+  const { anjuRevenue, drinkRevenue } = calculateSummary(orderHistory);
+  const foodRankings = calculateFoodRankings(orderHistory);
+  const drinkRankings = calculateDrinkRankings(orderHistory);
+  const sojuAnalysis = analyzeSojuSales(orderHistory);
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* KPI row */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <KpiCard label="Total revenue" value={`$${totalSales.toFixed(2)}`} />
+        <KpiCard label="Food revenue" value={`$${anjuRevenue.toFixed(2)}`} />
+        <KpiCard
+          label="Drinks revenue"
+          value={`$${drinkRevenue.toFixed(2)}`}
+        />
+      </div>
+
+      {/* Top 3 food */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Top 3 food</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2">
+          {foodRankings.length === 0 ? (
+            <span className="type-body-sm text-muted-foreground">
+              No food sales.
+            </span>
+          ) : (
+            foodRankings.map((item, idx) => (
+              <RankingRow
+                key={`food-${idx}`}
+                rank={idx + 1}
+                nameKor={item.nameKor}
+                quantity={item.quantity}
+                revenue={item.revenue}
+              />
+            ))
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Top 3 drinks */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Top 3 drinks</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2">
+          {drinkRankings.length === 0 ? (
+            <span className="type-body-sm text-muted-foreground">
+              No drink sales.
+            </span>
+          ) : (
+            drinkRankings.map((item, idx) => (
+              <RankingRow
+                key={`drink-${idx}`}
+                rank={idx + 1}
+                nameKor={item.nameKor}
+                quantity={item.quantity}
+                revenue={item.revenue}
+              />
+            ))
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Soju breakdown */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Soju breakdown</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="type-body text-foreground">Regular</span>
+            <span className="type-body text-foreground">
+              {`${sojuAnalysis.regular} (${formatPercent(
+                sojuAnalysis.regular,
+                sojuAnalysis.total
+              )}%)`}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="type-body text-foreground">Fruit</span>
+            <span className="type-body text-foreground">
+              {`${sojuAnalysis.fruit} (${formatPercent(
+                sojuAnalysis.fruit,
+                sojuAnalysis.total
+              )}%)`}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function OrderSummaryModal({
   open,
   onOpenChange,
@@ -71,113 +172,16 @@ export default function OrderSummaryModal({
 }: OrderSummaryModalProps) {
   const hasHistory = orderHistory && orderHistory.length > 0;
 
-  const totalSales = hasHistory ? calculateTotalSales(orderHistory) : "0.00";
-  const { anjuRevenue, drinkRevenue } = hasHistory
-    ? calculateSummary(orderHistory)
-    : { anjuRevenue: "0.00", drinkRevenue: "0.00" };
-
-  const foodRankings = hasHistory ? calculateFoodRankings(orderHistory) : [];
-  const drinkRankings = hasHistory ? calculateDrinkRankings(orderHistory) : [];
-  const sojuAnalysis = hasHistory
-    ? analyzeSojuSales(orderHistory)
-    : { regular: 0, fruit: 0, total: 0 };
-
-  const formatPercent = (count: number, total: number): string =>
-    total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="lg" className="max-h-[90vh] overflow-y-auto">
         <DialogTitle>Order summary</DialogTitle>
-
-        {!hasHistory ? (
+        {hasHistory ? (
+          <SummaryBody orderHistory={orderHistory} />
+        ) : (
           <p className="type-body text-muted-foreground">
             No order history for this pocha.
           </p>
-        ) : (
-          <div className="flex flex-col gap-6">
-            {/* KPI row */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <KpiCard label="Total revenue" value={`$${totalSales}`} />
-              <KpiCard label="Food revenue" value={`$${anjuRevenue}`} />
-              <KpiCard label="Drinks revenue" value={`$${drinkRevenue}`} />
-            </div>
-
-            {/* Top 3 food */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Top 3 food</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-2">
-                {foodRankings.length === 0 ? (
-                  <span className="type-body-sm text-muted-foreground">
-                    No food sales.
-                  </span>
-                ) : (
-                  foodRankings.map((item, idx) => (
-                    <RankingRow
-                      key={`food-${idx}`}
-                      rank={idx + 1}
-                      nameKor={item.nameKor}
-                      quantity={item.quantity}
-                      revenue={item.revenue}
-                    />
-                  ))
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Top 3 drinks */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Top 3 drinks</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-2">
-                {drinkRankings.length === 0 ? (
-                  <span className="type-body-sm text-muted-foreground">
-                    No drink sales.
-                  </span>
-                ) : (
-                  drinkRankings.map((item, idx) => (
-                    <RankingRow
-                      key={`drink-${idx}`}
-                      rank={idx + 1}
-                      nameKor={item.nameKor}
-                      quantity={item.quantity}
-                      revenue={item.revenue}
-                    />
-                  ))
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Soju breakdown */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Soju breakdown</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="type-body text-foreground">Regular</span>
-                  <span className="type-body text-foreground">
-                    {`${sojuAnalysis.regular} (${formatPercent(
-                      sojuAnalysis.regular,
-                      sojuAnalysis.total
-                    )}%)`}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="type-body text-foreground">Fruit</span>
-                  <span className="type-body text-foreground">
-                    {`${sojuAnalysis.fruit} (${formatPercent(
-                      sojuAnalysis.fruit,
-                      sojuAnalysis.total
-                    )}%)`}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         )}
       </DialogContent>
     </Dialog>
