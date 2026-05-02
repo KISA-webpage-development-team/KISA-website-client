@@ -124,7 +124,7 @@ export default function OrderBoard({
         {renderedColumns.map(({ status, items }) => (
           <div
             key={status}
-            className="flex flex-col gap-2 min-h-64"
+            className="flex flex-col gap-2"
             aria-label={`${STATUS_LABEL[status]} column`}
           >
             <div
@@ -140,7 +140,7 @@ export default function OrderBoard({
             </div>
 
             {items.length === 0 ? (
-              <div className="flex flex-1 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border p-4 text-center">
+              <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border p-4 text-center">
                 <Icon
                   name="check"
                   size="md"
