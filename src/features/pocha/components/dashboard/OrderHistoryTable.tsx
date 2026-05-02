@@ -19,6 +19,7 @@ import {
 
 import useOrderHistory from "@/features/pocha/hooks/useOrderHistory";
 import OrderSummaryModal from "./OrderSummaryModal";
+import type { OrderItem } from "@/types/pocha";
 
 interface OrderHistoryTableProps {
   token: string;
@@ -28,7 +29,122 @@ interface OrderHistoryTableProps {
 type FilterOption = "all" | "food" | "drink";
 
 const SKELETON_ROW_COUNT = 5;
-const COLUMN_COUNT = 7;
+const HEADERS = [
+  "#",
+  "Menu",
+  "Category",
+  "Qty",
+  "Price",
+  "Total",
+  "Orderer email",
+] as const;
+
+interface ScaffoldProps {
+  rows: OrderItem[];
+  isLoading: boolean;
+}
+
+function DesktopTable({ rows, isLoading }: ScaffoldProps) {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          {HEADERS.map((h) => (
+            <TableHead key={h}>{h}</TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {isLoading ? (
+          Array.from({ length: SKELETON_ROW_COUNT }).map((_, rowIdx) => (
+            <TableRow key={`skeleton-row-${rowIdx}`}>
+              {HEADERS.map((_, colIdx) => (
+                <TableCell key={`skeleton-cell-${rowIdx}-${colIdx}`}>
+                  <Skeleton className="h-4 w-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+          ))
+        ) : rows.length === 0 ? (
+          <TableRow>
+            <TableCell
+              colSpan={HEADERS.length}
+              className="text-center text-muted-foreground"
+            >
+              No items match this filter
+            </TableCell>
+          </TableRow>
+        ) : (
+          rows.map(({ orderItemID, menu, quantity, ordererEmail }, index) => (
+            <TableRow key={`${orderItemID}-${index}`}>
+              <TableCell>{orderItemID}</TableCell>
+              <TableCell>{menu.nameKor}</TableCell>
+              <TableCell>{menu.category ?? "—"}</TableCell>
+              <TableCell>{quantity}</TableCell>
+              <TableCell>{`$${menu.price.toFixed(2)}`}</TableCell>
+              <TableCell>{`$${(menu.price * quantity).toFixed(2)}`}</TableCell>
+              <TableCell>{ordererEmail}</TableCell>
+            </TableRow>
+          ))
+        )}
+      </TableBody>
+      <TableCaption className="sr-only">
+        Order history for the selected pocha
+      </TableCaption>
+    </Table>
+  );
+}
+
+function MobileList({ rows, isLoading }: ScaffoldProps) {
+  if (isLoading) {
+    return (
+      <TableMobileList>
+        {Array.from({ length: SKELETON_ROW_COUNT }).map((_, rowIdx) => (
+          <TableMobileItem key={`skeleton-mobile-${rowIdx}`}>
+            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-1/2" />
+          </TableMobileItem>
+        ))}
+      </TableMobileList>
+    );
+  }
+  if (rows.length === 0) {
+    return (
+      <p className="type-body-sm text-muted-foreground text-center py-4">
+        No items match this filter
+      </p>
+    );
+  }
+  return (
+    <TableMobileList>
+      {rows.map(({ orderItemID, menu, quantity, ordererEmail }, index) => (
+        <TableMobileItem key={`mobile-${orderItemID}-${index}`}>
+          <div className="flex items-center justify-between">
+            <span className="type-label text-muted-foreground">
+              {`#${orderItemID}`}
+            </span>
+            <span className="type-body-sm text-muted-foreground">
+              {menu.category ?? "—"}
+            </span>
+          </div>
+          <span className="type-body text-foreground">{menu.nameKor}</span>
+          <div className="flex items-center justify-between">
+            <span className="type-body-sm text-muted-foreground">
+              {`Qty ${quantity} · $${menu.price.toFixed(2)}`}
+            </span>
+            <span className="type-body text-foreground">
+              {`$${(menu.price * quantity).toFixed(2)}`}
+            </span>
+          </div>
+          <span className="type-caption text-muted-foreground">
+            {ordererEmail}
+          </span>
+        </TableMobileItem>
+      ))}
+    </TableMobileList>
+  );
+}
 
 export default function OrderHistoryTable({
   token,
@@ -49,7 +165,8 @@ export default function OrderHistoryTable({
   const filteredOrderHistory = useMemo(() => {
     const list = orderHistory ?? [];
     if (filter === "all") return list;
-    if (filter === "food") return list.filter(({ menu }) => !menu.isImmediatePrep);
+    if (filter === "food")
+      return list.filter(({ menu }) => !menu.isImmediatePrep);
     return list.filter(({ menu }) => menu.isImmediatePrep);
   }, [orderHistory, filter]);
 
@@ -57,41 +174,10 @@ export default function OrderHistoryTable({
     return (
       <div className="w-full p-4">
         <div className="hidden md:block">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>#</TableHead>
-                <TableHead>Menu</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Qty</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Orderer email</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.from({ length: SKELETON_ROW_COUNT }).map((_, rowIdx) => (
-                <TableRow key={`skeleton-row-${rowIdx}`}>
-                  {Array.from({ length: COLUMN_COUNT }).map((__, colIdx) => (
-                    <TableCell key={`skeleton-cell-${rowIdx}-${colIdx}`}>
-                      <Skeleton className="h-4 w-full" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <DesktopTable rows={[]} isLoading />
         </div>
         <div className="block md:hidden">
-          <TableMobileList>
-            {Array.from({ length: SKELETON_ROW_COUNT }).map((_, rowIdx) => (
-              <TableMobileItem key={`skeleton-mobile-${rowIdx}`}>
-                <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-1/2" />
-              </TableMobileItem>
-            ))}
-          </TableMobileList>
+          <MobileList rows={[]} isLoading />
         </div>
       </div>
     );
@@ -104,9 +190,7 @@ export default function OrderHistoryTable({
   }
 
   if (!orderHistory || orderHistory.length === 0) {
-    return (
-      <StatusView variant="not-found" title="No order history." />
-    );
+    return <StatusView variant="not-found" title="No order history." />;
   }
 
   const filterItems = [
@@ -135,87 +219,11 @@ export default function OrderHistoryTable({
         </div>
 
         <div className="hidden md:block">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>#</TableHead>
-                <TableHead>Menu</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Qty</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Orderer email</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOrderHistory.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={COLUMN_COUNT}
-                    className="text-center text-muted-foreground"
-                  >
-                    No items match this filter
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredOrderHistory.map(
-                  ({ orderItemID, menu, quantity, ordererEmail }, index) => (
-                    <TableRow key={`${orderItemID}-${index}`}>
-                      <TableCell>{orderItemID}</TableCell>
-                      <TableCell>{menu.nameKor}</TableCell>
-                      <TableCell>{menu.category ?? "—"}</TableCell>
-                      <TableCell>{quantity}</TableCell>
-                      <TableCell>{`$${menu.price.toFixed(2)}`}</TableCell>
-                      <TableCell>{`$${(menu.price * quantity).toFixed(2)}`}</TableCell>
-                      <TableCell>{ordererEmail}</TableCell>
-                    </TableRow>
-                  )
-                )
-              )}
-            </TableBody>
-            <TableCaption className="sr-only">
-              Order history for the selected pocha
-            </TableCaption>
-          </Table>
+          <DesktopTable rows={filteredOrderHistory} isLoading={false} />
         </div>
 
         <div className="block md:hidden">
-          {filteredOrderHistory.length === 0 ? (
-            <p className="type-body-sm text-muted-foreground text-center py-4">
-              No items match this filter
-            </p>
-          ) : (
-            <TableMobileList>
-              {filteredOrderHistory.map(
-                ({ orderItemID, menu, quantity, ordererEmail }, index) => (
-                  <TableMobileItem key={`mobile-${orderItemID}-${index}`}>
-                    <div className="flex items-center justify-between">
-                      <span className="type-label text-muted-foreground">
-                        {`#${orderItemID}`}
-                      </span>
-                      <span className="type-body-sm text-muted-foreground">
-                        {menu.category ?? "—"}
-                      </span>
-                    </div>
-                    <span className="type-body text-foreground">
-                      {menu.nameKor}
-                    </span>
-                    <div className="flex items-center justify-between">
-                      <span className="type-body-sm text-muted-foreground">
-                        {`Qty ${quantity} · $${menu.price.toFixed(2)}`}
-                      </span>
-                      <span className="type-body text-foreground">
-                        {`$${(menu.price * quantity).toFixed(2)}`}
-                      </span>
-                    </div>
-                    <span className="type-caption text-muted-foreground">
-                      {ordererEmail}
-                    </span>
-                  </TableMobileItem>
-                )
-              )}
-            </TableMobileList>
-          )}
+          <MobileList rows={filteredOrderHistory} isLoading={false} />
         </div>
       </div>
 
