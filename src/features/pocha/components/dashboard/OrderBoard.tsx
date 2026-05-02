@@ -141,14 +141,17 @@ export default function OrderBoard({
             </div>
 
             {items.length === 0 ? (
-              // Mirror OrderItemCard's atom structure (Card + CardContent +
-              // CardFooter min-h-[2.5rem]) so the empty slot's height matches
-              // a real card naturally — no magic min-h on the column.
+              // Empty slot mirrors OrderItemCard's structure (Card +
+              // CardContent + CardFooter with a Promote-shaped Button) so the
+              // height matches a real card by composition. CardContent grows
+              // (flex-1) to absorb any extra grid-cell height so the icon +
+              // caption stay vertically centered; the invisible Button sizes
+              // the footer to a real Button's height — no magic min-h.
               <Card
-                className="h-full w-full !border-dashed bg-transparent"
+                className="flex h-full w-full flex-col !border-dashed bg-transparent"
                 aria-label={`${STATUS_LABEL[status]} column empty`}
               >
-                <CardContent className="flex flex-col items-center justify-center gap-2 text-center">
+                <CardContent className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
                   <Icon
                     name="check"
                     size="md"
@@ -159,7 +162,17 @@ export default function OrderBoard({
                     {EMPTY_COPY[status]}
                   </p>
                 </CardContent>
-                <CardFooter className="min-h-[2.5rem]" />
+                <CardFooter className="justify-end">
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="invisible"
+                    tabIndex={-1}
+                    aria-hidden
+                  >
+                    Promote
+                  </Button>
+                </CardFooter>
               </Card>
             ) : (
               <ul className="flex flex-col gap-2">
