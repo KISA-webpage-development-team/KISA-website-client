@@ -1,6 +1,6 @@
 "use client";
 
-import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
+import { LoadingSpinner } from "@umichkisa-ds/web";
 import useDashboardOrderSocket from "@/features/pocha/hooks/useDashboardOrderSocket";
 import FoodOrderGrid from "@/features/pocha/components/dashboard/FoodOrderGrid";
 import DrinkOrderGrid from "@/features/pocha/components/dashboard/DrinkOrderGrid";
@@ -53,9 +53,7 @@ export default function OrderDashboard({
   });
 
   if (status === "loading") {
-    return (
-      <LoadingSpinner fullScreen={false} label="주문 정보를 가져오는중..." />
-    );
+    return <LoadingSpinner label="주문 정보를 가져오는중..." showLabel />;
   }
 
   return (
