@@ -16,9 +16,6 @@ import {
 
 import useAdmin from "@/lib/next-auth/useAdmin";
 
-// ui components
-// NotAuthorized is a legacy carry-over (Phase 4+ scope) — DS migration deferred.
-import NotAuthorized from "@/components/ui/feedback/NotAuthorized";
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import useDashboardOrders from "@/features/pocha/hooks/useDashboardOrders";
 import OrderDashboard from "@/features/pocha/components/dashboard/OrderDashboard";
@@ -90,7 +87,7 @@ export default function DashboardPage() {
   }, [ordersHook.immediatePrepOrders, ordersHook.notImmediatePrepOrders]);
 
   if (adminStatus === "loading" || pochaIDStatus === "loading") {
-    return <LoadingSpinner />;
+    return <LoadingSpinner label="대시보드를 불러오는 중..." showLabel />;
   }
 
   if (pochaIDStatus === "error") {
@@ -99,7 +96,7 @@ export default function DashboardPage() {
 
   // only admin can view this page
   if (!isAdmin) {
-    return <NotAuthorized />;
+    return <StatusView fullScreen variant="not-authorized" />;
   }
 
   return (
