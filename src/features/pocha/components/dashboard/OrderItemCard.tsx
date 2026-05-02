@@ -9,7 +9,7 @@
 // onLongPress, updateOrderItemStatusUI) and keep the `order` reference stable
 // across WS messages / polls for the memo to be effective.
 
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   Button,
   Card,
@@ -78,6 +78,13 @@ function OrderItemCardImpl({
     pointerStartRef.current = null;
   }, []);
 
+  // Cancel any in-flight long-press timer on unmount — the card can disappear
+  // mid-press when a status update removes it from its column, and a fired
+  // timer would call onLongPress with a dead id.
+  useEffect(() => {
+    return () => clearLongPressTimer();
+  }, [clearLongPressTimer]);
+
   const handlePromote = useCallback(async () => {
     if (inFlightRef.current) return;
     inFlightRef.current = true;
@@ -131,6 +138,18 @@ function OrderItemCardImpl({
   const handlePointerEnd = useCallback(() => {
     clearLongPressTimer();
   }, [clearLongPressTimer]);
+
+  // --- Right-click: parity with long-press in non-select mode; suppress native menu in both modes. ---
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if (isSelectMode) return;
+      if (!onLongPress) return;
+      longPressFiredRef.current = true;
+      onLongPress(orderItemID);
+    },
+    [isSelectMode, onLongPress, orderItemID]
+  );
 
   // --- Card root click: in select-mode toggles; otherwise no-op (Promote button owns interaction). ---
   const handleCardClick = useCallback(() => {
@@ -192,6 +211,7 @@ function OrderItemCardImpl({
         onPointerUp={handlePointerEnd}
         onPointerLeave={handlePointerEnd}
         onPointerCancel={handlePointerEnd}
+        onContextMenu={handleContextMenu}
         onClick={handleCardClick}
         {...a11yProps}
       >
