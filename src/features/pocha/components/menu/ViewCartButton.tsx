@@ -1,7 +1,8 @@
 /*
   ViewCartButton
-  - Always-visible footer CTA on the menu tab.
-  - Full-width, edge-to-edge, with safe-area-inset-bottom padding.
+  - Floating footer CTA on the menu tab. No backing dock — the Button
+    is distinguishable on its own.
+  - Full-width with safe-area-inset-bottom padding.
   - Label-only "View Cart" — no count, no total.
 */
 
@@ -23,7 +24,7 @@ export default function ViewCartButton({ pochaID }: ViewCartButtonProps) {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-30 bg-surface px-4 pt-3 border-t border-border"
+      className="fixed bottom-0 left-0 right-0 z-30 px-4 pt-3 pointer-events-none"
       style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
     >
       <Button
@@ -31,7 +32,7 @@ export default function ViewCartButton({ pochaID }: ViewCartButtonProps) {
         size="lg"
         onClick={handleViewCart}
         disabled={pochaID === undefined}
-        className="w-full"
+        className="w-full pointer-events-auto shadow-lg"
       >
         View Cart
       </Button>

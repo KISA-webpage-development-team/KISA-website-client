@@ -63,18 +63,17 @@ export default function MenuListItem({
         {/* Menu Info */}
         <div className="flex flex-col items-start justify-center text-left gap-1">
           <span
-            className={`type-label ${
+            className={`type-body ${
               outOfStock
                 ? "text-muted-foreground line-through"
                 : "text-foreground"
             }`}
           >
-            {nameEng}
+            {nameKor} · {nameEng}
           </span>
-          <span className="type-caption text-muted-foreground">{nameKor}</span>
           <div className="flex flex-row items-center gap-2 mt-1">
             <span
-              className={`type-body-sm ${
+              className={`type-body ${
                 outOfStock ? "text-error" : "text-foreground"
               }`}
             >

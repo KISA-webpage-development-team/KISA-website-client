@@ -11,6 +11,7 @@ import {
   TabsTrigger,
   TabsContent,
   Skeleton,
+  Container,
 } from "@umichkisa-ds/web";
 import HomeHeading from "@/features/pocha/components/home/HomeHeading";
 import MenuList from "@/features/pocha/components/menu/MenuList";
@@ -139,7 +140,11 @@ export default function PochaPage() {
       onValueChange={handleTabChange}
       className="md:hidden flex flex-col min-h-screen relative !gap-0"
     >
-      <section className="flex flex-col min-h-screen relative !gap-0">
+      <Container
+        as="section"
+        size="sm"
+        className="flex flex-col min-h-screen relative !gap-0"
+      >
         {/* Cherry blossom branch -- spring theme only */}
         {CherryBlossomBranch && (
           <div className="absolute top-0 left-0 z-[40] w-full">
@@ -189,7 +194,7 @@ export default function PochaPage() {
             <OrderList pochaID={pochaInfo?.pochaID} />
           </TabsContent>
         </div>
-      </section>
+      </Container>
     </Tabs>
   );
 }

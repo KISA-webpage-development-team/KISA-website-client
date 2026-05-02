@@ -79,29 +79,27 @@ export default function MenuItemDetail({
               />
             </figure>
 
-            {/* Title + secondary Korean line */}
-            <div className="flex flex-col gap-1">
-              <SheetTitle className="type-h2 text-foreground">
-                {selectedMenu.nameEng}
-              </SheetTitle>
-              <SheetDescription className="type-body-sm text-muted-foreground">
-                {selectedMenu.nameKor}
-              </SheetDescription>
-            </div>
+            {/* Title — Korean · English */}
+            <SheetTitle className="type-h2 text-foreground">
+              {selectedMenu.nameKor} · {selectedMenu.nameEng}
+            </SheetTitle>
+            <SheetDescription className="sr-only">
+              {selectedMenu.nameEng}
+            </SheetDescription>
 
             {/* Total price */}
             <div className="flex flex-row items-baseline gap-2">
               <span className="type-h3 text-foreground">
                 ${(selectedMenu.price * quantity).toFixed(2)}
               </span>
-              <span className="type-caption text-muted-foreground">
+              <span className="type-body text-muted-foreground">
                 ${selectedMenu.price.toFixed(2)} each
               </span>
             </div>
 
             {/* Quantity stepper */}
             <div className="flex items-center justify-between bg-surface-subtle rounded-md px-4 py-3">
-              <span className="type-label text-foreground">
+              <span className="type-body text-foreground">
                 Quantity{" "}
                 <span className="text-muted-foreground">/ 수량</span>
               </span>
