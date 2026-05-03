@@ -12,7 +12,7 @@ export default function CartList({
   handleQuantityChange,
 }: CartListProps) {
   return (
-    <ul className="flex flex-col py-2 px-2">
+    <ul className="flex flex-col divide-y divide-border">
       {Object.entries(cart).map(([menuid, item]) => (
         <CartListItem
           key={menuid}
