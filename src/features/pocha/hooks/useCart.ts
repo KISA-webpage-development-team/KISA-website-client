@@ -24,19 +24,11 @@ import { toast } from "@umichkisa-ds/web";
 import { getUserCart } from "@/apis/pocha/queries";
 import { changeItemInCart } from "@/apis/pocha/mutations";
 import { Cart } from "@/types/pocha";
+import { cartToTotalAmount } from "@/features/pocha/utils/cartToAmount";
 import { HookStatus } from "./types";
 
 const REJECT_TOAST = "Insufficient stock";
 const DEBOUNCE_MS = 1000;
-
-const cartToTotalAmount = (cart: Cart | undefined): number => {
-  if (!cart) return 0;
-  const total = Object.values(cart).reduce(
-    (sum, item) => sum + item.menu.price * item.quantity,
-    0
-  );
-  return Math.round(total * 100) / 100;
-};
 
 const cartKey = (email: string, pochaID: number): string | null =>
   email && pochaID ? `pocha/cart/${email}/${pochaID}` : null;
