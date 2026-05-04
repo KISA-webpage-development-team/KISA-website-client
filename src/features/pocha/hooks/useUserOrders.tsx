@@ -1,8 +1,4 @@
-import {
-  getUserOrders,
-  getPochaOrders,
-  getUserClosedOrders,
-} from "@/apis/pocha/queries";
+import { getUserOrders, getUserClosedOrders } from "@/apis/pocha/queries";
 import { OrderHistory, OrderItem, Orders, OrderStatus } from "@/types/pocha";
 import { useCallback, useEffect, useRef, useState } from "react";
 

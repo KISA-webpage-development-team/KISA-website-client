@@ -8,7 +8,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { Badge, Icon } from "@umichkisa-ds/web";
+import { Badge } from "@umichkisa-ds/web";
 
 import { OrderItem, OrderStatus } from "@/types/pocha";
 import { getMenuImagePath } from "@/features/pocha/utils/getImagePath";
