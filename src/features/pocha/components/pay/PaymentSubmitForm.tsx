@@ -2,27 +2,27 @@
 
 // [UI]
 // - PaymentElement from Stripe (built-in component)
-// - Total Price + Transaction Fee Display
-// - Submit Button
+// - Pay summary rows (subtotal / service fee / total)
+// - Footnote
+// - Sticky-bottom submit button (in form so Stripe submit-in-form invariant holds)
 
-// [NOTE] I wanted to make a separate component only for the form.
-// However, built-in PaymentElement component requires submit button to be included in the form to display error msgs
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   useStripe,
   useElements,
   PaymentElement,
 } from "@stripe/react-stripe-js";
-import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
-import { useRouter } from "next/navigation";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import PaySummaryCard from "./PaySummaryCard";
-import { LoadingSpinner } from "@/components/ui/feedback";
+import PayButton from "./PayButton";
+import { LoadingSpinner } from "@umichkisa-ds/web";
 
 // hooks
 import useStripePayment from "../../hooks/useStripePayment";
-import PayButton from "./PayButton";
+
+const PAYMENT_ELEMENT_OPTIONS = {
+  layout: "accordion" as const,
+  paymentMethodOrder: ["apple_pay", "google_pay", "card"],
+};
 
 interface PaymentSubmitFormProps {
   amount: number;
@@ -62,68 +62,51 @@ export default function PaymentSubmitForm({
     ageCheckRequired
   );
 
-  // useEffect(() => {
-  //   const createPaymentIntent = async () => {
-  //     // fetch client secret from server
-  //     fetch("/api/create-payment-intent", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         amount: convertToSubcurrency(totalPrice),
-  //         customer: {
-  //           email: userEmail,
-  //           name: fullname,
-  //         },
-  //       }),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         setClientSecret(data.clientSecret);
-  //       });
-  //   };
-
-  //   if (userEmail && fullname && totalPrice) {
-  //     if (!clientSecret) {
-  //     createPaymentIntent();
-  //     }
-  //   }
-  // }, [totalPrice, userEmail, fullname, clientSecret]);
-
-  // if (!clientSecret || !stripe || !elements) {
   if (!stripe || !elements) {
     return (
-      <LoadingSpinner fullScreen={false} label="결제 정보를 가져오는 중..." />
+      <div className="flex justify-center py-10">
+        <LoadingSpinner size="md" label="Loading payment details..." />
+      </div>
     );
   }
 
   return (
     <form
       onSubmit={handlePaymentSubmit}
-      className="relative w-full
-    flex flex-col gap-4
-    bg-white rounded-md py-4"
+      className="relative flex flex-col flex-1 min-h-0"
     >
-      {/* Payment form input */}
-      {/* {clientSecret && ( */}
-      <PaymentElement
-        options={{
-          layout: "accordion",
-          paymentMethodOrder: ["apple_pay", "google_pay", "card"],
-        }}
-      />
-      {/* )} */}
-      {/*?*/}
-      {/* Total Price + Transaction fee display */}
-      <PaySummaryCard amount={amount} fee={fee} totalPrice={totalPrice} />
+      {/* Scroll area — dim/lock during payment in flight */}
+      <div
+        className={`flex flex-col gap-6 px-4 pt-4 pb-32 ${
+          paymentLoading ? "opacity-60 pointer-events-none" : ""
+        }`}
+        aria-busy={paymentLoading}
+      >
+        <PaymentElement options={PAYMENT_ELEMENT_OPTIONS} />
 
-      {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}
+        <PaySummaryCard amount={amount} fee={fee} totalPrice={totalPrice} />
 
-      {/* Submit button (sticky on the bottom) */}
-      <PayButton loading={paymentLoading} totalPrice={totalPrice} />
+        <p className="type-caption text-muted-foreground">
+          *A service fee is charged by Stripe and consists of a $0.30 flat fee
+          plus 3.1% of the order amount.
+        </p>
+      </div>
+
+      {/* Sticky-bottom action bar with inline error above the button */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 backdrop-blur px-4 pt-3 flex flex-col gap-2"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
+      >
+        {errorMessage && (
+          <p
+            role="alert"
+            className="type-caption text-error"
+          >
+            {errorMessage}
+          </p>
+        )}
+        <PayButton loading={paymentLoading} />
+      </div>
     </form>
   );
 }
-
-// [NOTE]: need better refactoring
