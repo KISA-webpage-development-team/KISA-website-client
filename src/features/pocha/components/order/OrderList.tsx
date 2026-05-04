@@ -178,7 +178,7 @@ export default function OrderList({ pochaID }: OrderListProps) {
             <Accordion type="single">
               <AccordionItem value="past-orders">
                 <AccordionTrigger>
-                  <span className="type-label text-foreground">
+                  <span className="text-muted-foreground">
                     Past orders ({closedOrders.length})
                   </span>
                 </AccordionTrigger>
