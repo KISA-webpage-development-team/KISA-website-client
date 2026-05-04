@@ -1,25 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Button, Icon, Switch, toast } from "@umichkisa-ds/web";
 import { useAuth, MOCK_SESSION } from "@/lib/auth/authContext";
 import usePochaID from "@/features/pocha/hooks/usePochaID";
+import { getUserOrders } from "@/apis/pocha/queries";
+import { changeOrderItemStatus } from "@/apis/pocha/mutations";
 import type { OrderItem } from "@/types/pocha";
 
 const DASHBOARD_PATH = "/pocha/dashboard";
+const POCHA_HOME_PATH = "/pocha";
 
 export function MockAuthToggle() {
   const { isMockMode, isAuthenticated, isAdmin, toggle, toggleIsAdmin } =
     useAuth();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { pochaID } = usePochaID();
   const [isSimulating, setIsSimulating] = useState(false);
+  const [isPromoting, setIsPromoting] = useState(false);
 
   if (!isMockMode) return null;
 
   const onDashboard = pathname === DASHBOARD_PATH;
+  const onOrdersTab =
+    pathname === POCHA_HOME_PATH && searchParams.get("tab") === "orders";
   const showSimulateButton = isAuthenticated && isAdmin && onDashboard;
+  const showPromoteButton = isAuthenticated && onOrdersTab;
 
   const handleSimulate = async () => {
     if (pochaID == null) {
@@ -47,6 +55,44 @@ export function MockAuthToggle() {
       toast.error("주문 추가에 실패했습니다");
     } finally {
       setIsSimulating(false);
+    }
+  };
+
+  const handlePromote = async () => {
+    if (pochaID == null) {
+      toast.error("활성 포차를 찾을 수 없습니다");
+      return;
+    }
+
+    setIsPromoting(true);
+    try {
+      const orders = await getUserOrders(
+        MOCK_SESSION.user!.email,
+        pochaID,
+        MOCK_SESSION.token!
+      );
+      const openPool = [
+        ...(orders?.pending ?? []),
+        ...(orders?.preparing ?? []),
+        ...(orders?.ready ?? []),
+      ];
+      if (openPool.length === 0) {
+        toast.error("진행 중인 주문이 없습니다");
+        return;
+      }
+      const oldest = openPool.reduce((a, b) =>
+        a.orderItemID < b.orderItemID ? a : b
+      );
+      const result = await changeOrderItemStatus(oldest.orderItemID);
+      if (result === undefined) {
+        throw new Error("change-status returned undefined");
+      }
+      toast.success("주문 상태가 변경되었습니다");
+    } catch (error) {
+      console.error("Simulate promote error:", error);
+      toast.error("주문 상태 변경에 실패했습니다");
+    } finally {
+      setIsPromoting(false);
     }
   };
 
@@ -91,6 +137,17 @@ export function MockAuthToggle() {
         >
           <Icon name="plus" size="sm" />
           Simulate order
+        </Button>
+      )}
+      {showPromoteButton && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handlePromote}
+          disabled={isPromoting}
+        >
+          <Icon name="arrow-right" size="sm" />
+          Simulate promote
         </Button>
       )}
     </div>

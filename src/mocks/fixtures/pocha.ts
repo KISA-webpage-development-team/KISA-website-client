@@ -141,7 +141,7 @@ export const mockPochaMenus: Record<number, MenuByCategory[]> = {
           category: "food",
           description: "Spicy rice cakes",
           price: 10,
-          stock: 25,
+          stock: 3,
           isImmediatePrep: false,
           ageCheckRequired: false,
         },
@@ -354,3 +354,61 @@ export const mockOrderItems: OrderItem[] = [
   _make(10, "closed", 302, 1),
   _make(11, "closed", 207, 1),
 ];
+
+// USER-FACING ----------------------------------------------------------------
+
+/**
+ * Default mock user — matches `MOCK_SESSION.user.email` in
+ * `src/lib/auth/authContext.tsx`. Used to seed both `mockUserCart` and
+ * `mockUserOrders` so the user-facing /pocha routes have non-empty data
+ * on first load.
+ */
+export const MOCK_USER_EMAIL = "tester@umich.edu";
+
+/**
+ * Seed cart entries keyed by `${email}:${pochaID}`. Handler converts to
+ * an in-memory store on `seedCarts()`. Default user has a small cart
+ * for the active pocha (pochaID=1) so /pocha/cart isn't empty on first
+ * visit during dev.
+ */
+export const mockUserCart: Record<string, Record<number, { menu: MenuItem; quantity: number }>> = {
+  [`${MOCK_USER_EMAIL}:1`]: {
+    101: { menu: { ..._menuByID[101]! }, quantity: 1 }, // 소주
+    201: { menu: { ..._menuByID[201]! }, quantity: 2 }, // 떡볶이
+  },
+};
+
+/**
+ * Default-user orders for the active pocha (pochaID=1) — distributed
+ * across pending/preparing/ready/closed so /pocha?tab=orders is
+ * non-empty on first load. Appended to `mockOrderItems` so the
+ * dashboard fixtures stay intact and `resetOrderStore()` re-seeds both.
+ *
+ * `_makeFor` mirrors `_make` but lets the caller pin the orderer email.
+ */
+const _makeFor = (
+  i: number,
+  status: OrderStatusLiteral,
+  menuID: number,
+  quantity: number,
+  email: string,
+  name: string
+): OrderItem => ({
+  orderItemID: mockOrderItemIDStart + mockOrderItems.length + i,
+  status: status as unknown as OrderItem["status"],
+  menu: { ..._menuByID[menuID]! },
+  quantity,
+  ordererName: name,
+  ordererEmail: email,
+});
+
+export const mockUserOrders: OrderItem[] = [
+  _makeFor(0, "pending", 202, 1, MOCK_USER_EMAIL, "Tester"), // 김밥
+  _makeFor(1, "preparing", 207, 1, MOCK_USER_EMAIL, "Tester"), // 어묵탕
+  _makeFor(2, "ready", 103, 1, MOCK_USER_EMAIL, "Tester"), // 콜라
+  _makeFor(3, "ready", 205, 1, MOCK_USER_EMAIL, "Tester"), // 계란말이
+  _makeFor(4, "closed", 102, 2, MOCK_USER_EMAIL, "Tester"), // 맥주
+  _makeFor(5, "closed", 204, 1, MOCK_USER_EMAIL, "Tester"), // 파전
+];
+
+mockOrderItems.push(...mockUserOrders);

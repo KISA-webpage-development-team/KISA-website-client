@@ -1,5 +1,3 @@
-import { PochaTab } from "@/types/pocha";
-
 /**
  * @desc update the URL with the selected tab
  * @example "/pocha?tab=menu" <-> "/pocha?tab=orders"

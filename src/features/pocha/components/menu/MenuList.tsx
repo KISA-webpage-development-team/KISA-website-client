@@ -1,95 +1,120 @@
 /*
  * MenuList
  * - fetch necessary data for menu list (menuList, underAge)
- * - process data for MenuListItem
  * - render MenuListItems for each category
+ * - owns the selected-menu state for the detail Sheet
  */
 
 import React, { memo, useState } from "react";
 
 import MenuListItem from "./MenuListItem";
-import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
+import MenuItemDetail from "./MenuItemDetail";
+import { Skeleton, StatusView } from "@umichkisa-ds/web";
 
 // Hooks
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/lib/auth/authContext";
 import useMenu from "../../hooks/useMenu";
 import useUserAge from "../../hooks/useUserAge";
 
 // Types
-import { UserSession } from "@/lib/next-auth/types";
-import { MenuItem } from "@/types/pocha";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import MenuItemDetail from "./MenuItemDetail";
+import { MenuItem, Cart } from "@/types/pocha";
 
 interface MenuListProps {
   pochaid: number | undefined;
+  cart: Cart | undefined;
 }
 
-function MenuList({ pochaid }: MenuListProps) {
-  const { data: session } = useSession() as {
-    data: UserSession | null;
-    status: string;
-  };
+function MenuListSkeleton() {
+  return (
+    <div className="w-full flex flex-col py-5 mb-16 gap-6">
+      {Array.from({ length: 2 }).map((_, c) => (
+        <div key={c} className="flex flex-col gap-2">
+          <Skeleton className="h-6 w-32" />
+          <div className="flex flex-col gap-4 mt-1">
+            {Array.from({ length: 3 }).map((__, r) => (
+              <div key={r} className="flex flex-row items-center gap-4 py-2">
+                <Skeleton
+                  variant="rectangular"
+                  className="h-24 w-24 rounded-md"
+                />
+                <div className="flex flex-col gap-2 flex-1">
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-1/3" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-  // fetch menu and user age (for under age check)
-  // [NOTE] useMenu and useUserAge uses SWR for better UX
-  // to learn more about SWR, visit https://swr.vercel.app/ko or ask @retz8
+function MenuList({ pochaid, cart }: MenuListProps) {
+  const { session } = useAuth();
+
   const { menuList, status: menuStatus } = useMenu(pochaid, session?.token);
   const { underAge, status: userStatus } = useUserAge(session);
   const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null);
 
-  
   if (menuStatus === "loading" || userStatus === "loading") {
-    return <LoadingSpinner fullScreen={false} label="메뉴를 가져오는 중..." />;
+    return <MenuListSkeleton />;
   }
 
-  if (menuStatus === "error") {
-    throw new Error("Error fetching menu");
-  }
-
-  if (userStatus === "error") {
-    throw new Error("Error fetching user info");
-  }
-
-  // IF menu is selected, show the menu detail
-  if (selectedMenu) {
+  if (menuStatus === "error" || userStatus === "error") {
     return (
-      <MenuItemDetail
-        session={session}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-        pochaid={pochaid}
+      <StatusView
+        variant="error"
+        title="Could not load menu"
+        description="메뉴를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+      />
+    );
+  }
+
+  if (!menuList || menuList.length === 0) {
+    return (
+      <StatusView
+        variant="not-found"
+        icon="menu"
+        title="No menu items yet"
+        description="아직 등록된 메뉴가 없습니다."
       />
     );
   }
 
   return (
-    <div className="w-full flex flex-col items-center py-5 mb-16 gap-4">
-      {menuList?.map(({ category, menusList }, categoryIdx) => (
-        // menu list by category
-        <div
-          key={`${category}-${categoryIdx}`}
-          className="w-full flex flex-col"
-        >
-          <span
-            className={`${sejongHospitalBold.className} text-xl text-black`}
+    <>
+      <div className="w-full flex flex-col items-center mb-20 gap-6">
+        {menuList.map(({ category, menusList }, categoryIdx) => (
+          <div
+            key={`${category}-${categoryIdx}`}
+            className="w-full flex flex-col"
           >
-            {category}
-          </span>
-          <ul className="mt-1 flex flex-col divide-y-2 divide-gray-200">
-            {menusList.map((menu, menuIdx) => (
-              <MenuListItem
-                key={`${menu.menuID}-${menuIdx}`}
-                menu={menu}
-                underAge={underAge}
-                setSelectedMenu={setSelectedMenu}
-                isPriority={categoryIdx === 0 && menuIdx < 3}
-              />
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
+            <span className="type-h3 text-foreground">{category}</span>
+            <ul className="mt-1 flex flex-col divide-y divide-border">
+              {menusList.map((menu, menuIdx) => (
+                <MenuListItem
+                  key={`${menu.menuID}-${menuIdx}`}
+                  menu={menu}
+                  underAge={!!underAge}
+                  existingCartQty={cart?.[menu.menuID]?.quantity ?? 0}
+                  setSelectedMenu={setSelectedMenu}
+                  isPriority={categoryIdx === 0 && menuIdx < 3}
+                />
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <MenuItemDetail
+        key={selectedMenu?.menuID ?? "closed"}
+        session={session ?? undefined}
+        selectedMenu={selectedMenu}
+        onClose={() => setSelectedMenu(null)}
+        pochaid={pochaid}
+      />
+    </>
   );
 }
 

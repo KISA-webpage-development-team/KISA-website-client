@@ -14,7 +14,7 @@ import {
 import OrderItemCard from "@/features/pocha/components/dashboard/OrderItemCard";
 import { OrderStatus, Orders } from "@/types/pocha";
 import { useBatchPromote } from "@/features/pocha/hooks/useBatchPromote";
-import { headerTone } from "./_shared/statusTone";
+import { headerTone } from "@/features/pocha/utils/statusTone";
 
 export type ColumnStatus = "pending" | "preparing" | "ready";
 

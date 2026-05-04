@@ -1,47 +1,63 @@
-import PochaCloseIcon from "@/components/ui/icon/PochaCloseIcon";
-import { OrderItem } from "@/types/pocha";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import { sejongHospitalLight } from "@/utils/fonts/textFonts";
+/**
+ * OrderTicketModal
+ * - DS Sheet (mobile bottom-sheet): celebratory pickup ticket.
+ * - Single-purpose surface: huge orderItemID, "Order Ready" label,
+ *   menu name + quantity, close affordance (built into SheetContent).
+ * - Driven by `orderItem` (open when non-null) + `onClose`.
+ */
+
 import React from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetDescription,
+  Badge,
+} from "@umichkisa-ds/web";
+
+import { OrderItem } from "@/types/pocha";
+
+interface OrderTicketModalProps {
+  orderItem: OrderItem | null;
+  onClose: () => void;
+}
 
 export default function OrderTicketModal({
   orderItem,
-  setIsOpenModal,
-}: {
-  orderItem: OrderItem;
-  setIsOpenModal: (isOpen: boolean) => void;
-}) {
-  const { orderItemID, menu } = orderItem;
+  onClose,
+}: OrderTicketModalProps) {
+  const open = orderItem !== null;
 
-  const handleCloseModal = () => {
-    setIsOpenModal(false);
+  const handleOpenChange = (next: boolean) => {
+    if (!next) onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-[99999] bg-black/30">
-      <div className="relative z-[100000] w-full h-full flex items-center justify-center">
-        <div
-          className="relative flex flex-col items-center justify-center
-         space-y-4 bg-white rounded-lg shadow-md text-black
-         border-2 border-[#71717A] h-[30%] aspect-[8/5]"
-        >
-          <button
-            className="absolute top-[1rem] right-[1rem]"
-            onClick={handleCloseModal}
-          >
-            <PochaCloseIcon size="extra-large" />
-          </button>
-          <span className={`text-lg ${sejongHospitalBold.className}`}>
-            Order Ready!
-          </span>
-          <span
-            className={`text-4xl ${sejongHospitalBold.className}`}
-          >{`#${orderItemID}`}</span>
-          <span className={`text-lg font-medium`}>
-            {menu.nameKor} is ready for pickup
-          </span>
-        </div>
-      </div>
-    </div>
+    <Sheet open={open} onOpenChange={handleOpenChange}>
+      <SheetContent showCloseButton showHandle>
+        {orderItem ? (
+          <div className="flex flex-col items-center text-center gap-4 px-4 pb-8 pt-2">
+            <Badge variant="success" size="md">
+              Order Ready
+            </Badge>
+
+            <SheetTitle className="text-5xl!">
+              #{orderItem.orderItemID}
+            </SheetTitle>
+
+            <SheetDescription className="text-foreground text-2xl!">
+              {orderItem.menu?.nameKor} · {orderItem.menu?.nameEng}
+                {" "}× {orderItem.quantity}
+            </SheetDescription>
+
+            <p className="type-body text-foreground">
+              Show this number at the counter to pick up your order.
+            </p>
+          </div>
+        ) : (
+          <SheetTitle className="sr-only">Order ticket</SheetTitle>
+        )}
+      </SheetContent>
+    </Sheet>
   );
 }

@@ -1,98 +1,148 @@
 /*
  * useCart.ts
- * - fetch cart by user email and pochaID
+ * - SWR-backed cart hook (Pattern A: useSWR + mutate() + per-menu accumulator
+ *   over a per-menu 1s debouncer).
+ * - One SWR key per (email, pochaID) → consumers (/pocha MenuList,
+ *   MenuItemDetail, /pocha/cart) auto-dedupe the GET.
+ * - **Server contract is delta-based** (`KISA-website-server/.../cart.py`):
+ *   POST /api/v2/pocha/cart accepts `quantity` as the increment (+N inserts
+ *   N rows or increments; -N deletes N). Coalesced taps must therefore sum
+ *   their deltas, not send the latest absolute total.
+ * - Per-menuID debouncer lets the user edit menu A and menu B in parallel
+ *   without one tap stomping the other (a single shared debouncer would only
+ *   keep the latest call's args).
+ * - On settle-reject (network OR `isStocked: false`) we toast and revalidate
+ *   to overwrite the now-wrong optimistic UI. On success we skip revalidate
+ *   so the user doesn't see a flicker — optimistic already matches server.
  */
-// useCart.tsx (responsible for managing cart data and state)
-import { useState, useEffect, useCallback } from "react";
+
+import { useEffect, useRef } from "react";
+import useSWR, { useSWRConfig } from "swr";
+import { debounce, type DebouncedFunc } from "lodash";
+import { toast } from "@umichkisa-ds/web";
+
 import { getUserCart } from "@/apis/pocha/queries";
 import { changeItemInCart } from "@/apis/pocha/mutations";
 import { Cart } from "@/types/pocha";
-import { debounce } from "lodash";
+import { cartToTotalAmount } from "@/features/pocha/utils/cartToAmount";
 import { HookStatus } from "./types";
 
-const cartToTotalAmount = (cart: Cart) => {
-  if (!cart) return 0;
+const REJECT_TOAST = "Insufficient stock";
+const DEBOUNCE_MS = 1000;
 
-  return Array.from(Object.values(cart))
-    .reduce((total, item) => total + item.menu.price * item.quantity, 0)
-    .toFixed(2);
-};
+const cartKey = (email: string, pochaID: number): string | null =>
+  email && pochaID ? `pocha/cart/${email}/${pochaID}` : null;
 
-const useCart = (email: string, pochaID: number) => {
-  const [cart, setCart] = useState<Cart>();
-  const [totalAmount, setTotalAmount] = useState<number>(0);
+const useCart = (email: string | undefined, pochaID: number | undefined) => {
+  const safeEmail = email ?? "";
+  const safePochaID = pochaID ?? 0;
+  const key = cartKey(safeEmail, safePochaID);
 
-  const [status, setStatus] = useState<HookStatus>("loading");
-  const [error, setError] = useState<string>();
+  const { mutate: globalMutate } = useSWRConfig();
 
-  const fetchCart = useCallback(async () => {
-    setStatus("loading");
-    try {
-      const fetchedCart = await getUserCart(email, pochaID);
-      setCart(fetchedCart);
-      setTotalAmount(cartToTotalAmount(fetchedCart));
-      setStatus("success");
-    } catch (err) {
-      setError("Failed to load cart data");
-      setStatus("error");
-    }
-  }, [email, pochaID]);
-
-  // Automatically fetch cart data on mount inside the hook
-  useEffect(() => {
-    if (email && pochaID) {
-      fetchCart();
-    }
-  }, [email, pochaID, fetchCart]);
-
-  // update item's quantity in UI (optimistic UI)
-  const updateQuantityUI = (menuid: number, newQuantity: number) => {
-    setCart((prevCart) => {
-      const updatedCart = {
-        ...prevCart,
-        [menuid]: {
-          ...prevCart[menuid],
-          quantity: prevCart[menuid].quantity + newQuantity,
-        },
-      };
-      // immediately update total amount
-
-      setTotalAmount(cartToTotalAmount(updatedCart));
-      return updatedCart;
-    });
-  };
-
-  // Debounced API call for updating cart items
-  const debouncedChangeItemInCart = debounce(
-    async (menuid: number, newQuantity: number) => {
-      try {
-        await changeItemInCart(email, pochaID, {
-          menuID: menuid,
-          quantity: newQuantity,
-        });
-      } catch (error) {
-        console.error("Error updating cart item", error);
-        setError("Failed to update cart");
-        fetchCart(); // Revert the cart state on failure
-      }
-    },
-    1000
+  const { data, error, isLoading, mutate } = useSWR<Cart | undefined>(
+    key,
+    () => getUserCart(safeEmail, safePochaID)
   );
 
-  // Optimistic UI Update + Total 즉시 업데이트
-  const handleQuantityChange = (menuid: number, newQuantity: number) => {
-    // [NOTE] UI is updated here first
-    // API call is made in the debouncedChangeItemInCart function,
-    // so most of the time, UI and database will be synced
-    updateQuantityUI(menuid, newQuantity);
+  const cart = data;
+  const totalAmount = cartToTotalAmount(cart);
 
-    debouncedChangeItemInCart(menuid, newQuantity);
+  const status: HookStatus = error
+    ? "error"
+    : isLoading || (!data && !error && key)
+      ? "loading"
+      : "success";
+
+  // Per-menuID accumulator + debouncer maps. Both ref-pinned so they survive
+  // re-renders.
+  const pendingDeltaRef = useRef<Map<number, number>>(new Map());
+  const debouncerMapRef = useRef<
+    Map<number, DebouncedFunc<() => Promise<void>>>
+  >(new Map());
+
+  // Stable ref the debounced closure reads from — avoids rebuilding
+  // debouncers when email/pochaID/key change identity but not value.
+  const ctxRef = useRef({ email: safeEmail, pochaID: safePochaID, key });
+  ctxRef.current = { email: safeEmail, pochaID: safePochaID, key };
+
+  // On key change (signed-out → signed-in, account switch, pocha switch) the
+  // debounced closures are still valid (they read ctxRef live), but pending
+  // deltas were accumulated against the OLD key. Flush them out under the
+  // outgoing identity, then reset.
+  useEffect(() => {
+    return () => {
+      for (const d of debouncerMapRef.current.values()) d.flush();
+      debouncerMapRef.current.clear();
+      pendingDeltaRef.current.clear();
+    };
+  }, [key]);
+
+  const handleQuantityChange = (menuid: number, delta: number) => {
+    if (!key) return;
+
+    // Optimistic UI: only when the row already exists. For "Add to Cart"
+    // from MenuItemDetail (no row yet) we cannot fabricate the `menu`
+    // snapshot the cart shape requires; the post-settle revalidate populates
+    // the row instead.
+    mutate(
+      (prev) => {
+        const base = prev ?? ({} as Cart);
+        const existing = base[menuid];
+        if (!existing) return base;
+        return {
+          ...base,
+          [menuid]: { ...existing, quantity: existing.quantity + delta },
+        };
+      },
+      { revalidate: false }
+    );
+
+    pendingDeltaRef.current.set(
+      menuid,
+      (pendingDeltaRef.current.get(menuid) ?? 0) + delta
+    );
+
+    let d = debouncerMapRef.current.get(menuid);
+    if (!d) {
+      d = debounce(async () => {
+        const acc = pendingDeltaRef.current.get(menuid) ?? 0;
+        pendingDeltaRef.current.set(menuid, 0);
+        if (acc === 0) return;
+        const { email: e, pochaID: p, key: k } = ctxRef.current;
+        if (!k) return;
+        try {
+          const res = await changeItemInCart(e, p, {
+            menuID: menuid,
+            quantity: acc,
+          });
+          if (!res || res.isStocked === false) {
+            toast.error(REJECT_TOAST);
+          }
+          // Always revalidate to reconcile optimistic with server truth.
+          // (Flicker risk on rapid-tap-during-fetch is narrow; correctness
+          // matters more — server may have clamped or merged with another
+          // session.)
+          globalMutate(k);
+        } catch (err) {
+          console.error("Error updating cart item", err);
+          toast.error(REJECT_TOAST);
+          globalMutate(k);
+        }
+      }, DEBOUNCE_MS);
+      debouncerMapRef.current.set(menuid, d);
+    }
+    d();
+  };
+
+  const fetchCart = async () => {
+    await mutate();
   };
 
   return {
     cart,
     status,
-    error,
+    error: error ? "Failed to load cart data" : undefined,
     totalAmount,
     handleQuantityChange,
     fetchCart,

@@ -1,19 +1,26 @@
 import React from "react";
-import PochaButton from "../shared/PochaButton";
+import { useRouter } from "next/navigation";
+import { Button } from "@umichkisa-ds/web";
 
 type PaymentProps = {
-  pochaid: number;
+  pochaID: number;
 };
 
-export default function ProceedToPaymentButton({ pochaid }: PaymentProps) {
+export default function ProceedToPaymentButton({ pochaID }: PaymentProps) {
+  const router = useRouter();
+
   const handlePaymentClick = () => {
-    const queryParams = `pochaid=${pochaid}`;
-    window.location.href = `/pocha/pay?${queryParams}`;
+    router.push(`/pocha/pay?pochaid=${pochaID}`);
   };
 
   return (
-    <div className="w-full flex justify-center">
-      <PochaButton label="Checkout" onClick={handlePaymentClick} />
-    </div>
+    <Button
+      variant="primary"
+      size="lg"
+      onClick={handlePaymentClick}
+      className="w-full pointer-events-auto shadow-lg"
+    >
+      Proceed to payment
+    </Button>
   );
 }

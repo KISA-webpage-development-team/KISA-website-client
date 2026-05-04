@@ -1,10 +1,9 @@
-import {
-  getUserOrders,
-  getPochaOrders,
-  getUserClosedOrders,
-} from "@/apis/pocha/queries";
+import { getUserOrders, getUserClosedOrders } from "@/apis/pocha/queries";
 import { OrderHistory, OrderItem, Orders, OrderStatus } from "@/types/pocha";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
+const MOCK_POLL_INTERVAL_MS = 1500;
 
 /*
   @desc get the next status of the order item
@@ -49,32 +48,53 @@ const useUserOrdersMap = (email: string, token: string, pochaID: number) => {
     "loading"
   );
 
-  useEffect(() => {
-    const fetchUserOrders = async () => {
-      try {
-        const res = await getUserOrders(email, pochaID, token);
+  const isMountedRef = useRef(true);
 
-        const closedRes = await getUserClosedOrders(email, pochaID, token);
+  const fetchUserOrders = useCallback(async () => {
+    try {
+      const [res, closedRes] = await Promise.all([
+        getUserOrders(email, pochaID, token),
+        getUserClosedOrders(email, pochaID, token),
+      ]);
 
-        const orders = {
-          ...res,
-          closed: closedRes.closed,
-        };
+      if (!isMountedRef.current) return;
 
-        setOrdersMap(convertOrdersToMap(orders));
-        setStatus("success");
-      } catch (error) {
-        console.error("Error fetching orders: ", error);
-        setStatus("error");
-      }
-    };
+      const orders = {
+        ...res,
+        closed: closedRes.closed,
+      };
 
-    if (pochaID && token) {
-      fetchUserOrders();
+      setOrdersMap(convertOrdersToMap(orders));
+      setStatus("success");
+    } catch (error) {
+      if (!isMountedRef.current) return;
+      console.error("Error fetching orders: ", error);
+      setStatus("error");
     }
   }, [email, pochaID, token]);
 
-  return { ordersMap, status, setOrdersMap, setStatus };
+  useEffect(() => {
+    isMountedRef.current = true;
+    if (pochaID && token) {
+      fetchUserOrders();
+    }
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [pochaID, token, fetchUserOrders]);
+
+  // Mock-mode polling: WS is short-circuited in mock, so poll for status
+  // changes triggered by Simulate Promote (or any other mock mutation).
+  useEffect(() => {
+    if (!IS_MOCK_MODE) return;
+    if (!pochaID || !token) return;
+    const id = setInterval(() => {
+      fetchUserOrders();
+    }, MOCK_POLL_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [pochaID, token, fetchUserOrders]);
+
+  return { ordersMap, status, setOrdersMap, setStatus, refetch: fetchUserOrders };
 };
 
 /**
@@ -83,7 +103,7 @@ const useUserOrdersMap = (email: string, token: string, pochaID: number) => {
  */
 
 const useUserOrders = (email: string, token: string, pochaID: number) => {
-  const { ordersMap, status, setOrdersMap, setStatus } = useUserOrdersMap(
+  const { ordersMap, status, setOrdersMap, setStatus, refetch } = useUserOrdersMap(
     email,
     token,
     pochaID
@@ -113,16 +133,16 @@ const useUserOrders = (email: string, token: string, pochaID: number) => {
   };
 
   const pendingOrders = Array.from(ordersMap.values()).filter(
-    (order) => order.status === "pending"
+    (order) => order.status === OrderStatus.PENDING
   );
   const preparingOrders = Array.from(ordersMap.values()).filter(
-    (order) => order.status === "preparing"
+    (order) => order.status === OrderStatus.PREPARING
   );
   const readyOrders = Array.from(ordersMap.values()).filter(
-    (order) => order.status === "ready"
+    (order) => order.status === OrderStatus.READY
   );
   const closedOrders = Array.from(ordersMap.values()).filter(
-    (order) => order.status === "closed"
+    (order) => order.status === OrderStatus.CLOSED
   );
 
   return {
@@ -133,6 +153,7 @@ const useUserOrders = (email: string, token: string, pochaID: number) => {
     readyOrders,
     closedOrders,
     status,
+    refetch,
   };
 };
 

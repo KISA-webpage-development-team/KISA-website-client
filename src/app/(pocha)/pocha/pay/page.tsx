@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import { useSession } from "next-auth/react";
-import { UserSession } from "@/lib/next-auth/types";
-import PaymentSubmitForm from "@/features/pocha/components/pay/PaymentSubmitForm";
+import React, { useEffect, useMemo } from "react";
+import dynamic from "next/dynamic";
+import { useAuth } from "@/lib/auth/authContext";
 
 // Stripe
 import { Elements } from "@stripe/react-stripe-js"; // stripe payment element
@@ -12,25 +11,74 @@ import convertToSubcurrency from "@/lib/stripe/convertToSubcurrency";
 
 import { useRouter } from "next/navigation";
 import usePay from "@/features/pocha/hooks/usePay";
-import { LoadingSpinner } from "@/components/ui/feedback";
-import { StatusView } from "@umichkisa-ds/web";
+import { Container, Skeleton, StatusView } from "@umichkisa-ds/web";
 import usePochaID from "@/features/pocha/hooks/usePochaID";
-import PochaBackHeading from "@/features/pocha/components/shared/PochaBackHeading";
-import PochaHorizontalDivider from "@/features/pocha/components/shared/PochaHorizontalDivider";
+import BackHeader from "@/features/pocha/components/shared/BackHeader";
+import FloatingCTA from "@/features/pocha/components/shared/FloatingCTA";
 import useUserAge from "@/features/pocha/hooks/useUserAge";
 
+const PaymentSubmitForm = dynamic(
+  () => import("@/features/pocha/components/pay/PaymentSubmitForm"),
+  { ssr: false }
+);
+
+function PayPageSkeleton() {
+  return (
+    <>
+      <a
+        href="#main-content"
+        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-4 focus-visible:left-4 focus-visible:z-50 focus-visible:rounded-md focus-visible:bg-surface focus-visible:px-4 focus-visible:py-2 focus-visible:type-label focus-visible:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
+      >
+        Skip to main content
+      </a>
+      <Container
+        as="main"
+        id="main-content"
+        size="sm"
+        className="flex flex-col min-h-screen"
+      >
+        <div className="relative flex items-center justify-center py-3">
+        <Skeleton className="h-6 w-16" />
+      </div>
+
+      <div className="flex flex-col gap-6 pt-4 pb-32">
+        {/* Summary rows */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-12" />
+          </div>
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-12" />
+          </div>
+          <div className="mt-3 pt-3 border-t border-border flex items-center justify-between">
+            <Skeleton className="h-5 w-16" />
+            <Skeleton className="h-5 w-16" />
+          </div>
+        </div>
+
+        {/* Footnote */}
+        <Skeleton className="h-3 w-3/4" />
+      </div>
+
+      {/* Floating button placeholder */}
+      <FloatingCTA>
+        <Skeleton className="h-12 w-full rounded-md" />
+      </FloatingCTA>
+    </Container>
+    </>
+  );
+}
+
 export default function PayPage() {
-  const { data: session, status: sessionStatus } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  const { session } = useAuth();
 
   const router = useRouter();
 
   const {
     pochaID,
     status: pochaIDStatus,
-    error: pochaIDError,
     noPocha,
   } = usePochaID();
 
@@ -44,8 +92,17 @@ export default function PayPage() {
 
   const { underAge, status: userAgeStatus, fullname } = useUserAge(session);
 
+  const elementsOptions = useMemo(
+    () => ({
+      mode: "payment" as const,
+      amount: totalPrice ? convertToSubcurrency(totalPrice) : 0,
+      currency: "usd",
+      setup_future_usage: "off_session" as const,
+    }),
+    [totalPrice]
+  );
+
   const isLoading =
-    sessionStatus === "loading" ||
     pochaIDStatus === "loading" ||
     payReadyStatus === "loading" ||
     userAgeStatus === "loading";
@@ -55,6 +112,13 @@ export default function PayPage() {
     userAgeStatus === "error" ||
     !totalPrice;
 
+  // `hasError` includes `!totalPrice`, which is true during the loading
+  // window before `usePay` resolves. Gate the redirect on `!isLoading` so
+  // we don't bounce out mid-load.
+  useEffect(() => {
+    if (!isLoading && hasError) router.push("/pocha");
+  }, [isLoading, hasError, router]);
+
   // Short-circuit before the loading check — usePay stalls on null pochaID,
   // so the page would otherwise spin forever when there is no ongoing pocha.
   if (noPocha) {
@@ -63,32 +127,32 @@ export default function PayPage() {
         fullScreen
         variant="not-found"
         icon="calendar"
-        title="진행 중인 포차가 없습니다"
+        title="No pocha in progress"
         description="다음 포차가 시작되면 결제를 진행할 수 있습니다."
       />
     );
   }
 
-  if (isLoading) return <LoadingSpinner />;
-  if (hasError) {
-    router.push("/pocha");
-    return null;
-  }
+  if (isLoading) return <PayPageSkeleton />;
+  if (hasError) return <PayPageSkeleton />;
 
   return (
-    <section className="!gap-0">
-      <PochaBackHeading title="Pay" />
-      <PochaHorizontalDivider />
-
-      <Elements
-        stripe={stripePromise}
-        options={{
-          mode: "payment",
-          amount: convertToSubcurrency(totalPrice), // dollars to cents, stripe accepts in the most basic? currency unit
-          currency: "usd",
-          setup_future_usage: "off_session",
-        }}
+    <>
+      <a
+        href="#main-content"
+        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-4 focus-visible:left-4 focus-visible:z-50 focus-visible:rounded-md focus-visible:bg-surface focus-visible:px-4 focus-visible:py-2 focus-visible:type-label focus-visible:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
       >
+        Skip to main content
+      </a>
+      <Container
+        as="main"
+        id="main-content"
+        size="sm"
+        className="flex flex-col min-h-screen"
+      >
+      <BackHeader title="Pay" />
+
+      <Elements stripe={stripePromise} options={elementsOptions}>
         <PaymentSubmitForm
           amount={amount}
           fee={fee}
@@ -100,6 +164,7 @@ export default function PayPage() {
           fullname={fullname}
         />
       </Elements>
-    </section>
+      </Container>
+    </>
   );
 }

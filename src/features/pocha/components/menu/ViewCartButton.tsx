@@ -1,35 +1,39 @@
 /*
   ViewCartButton
-  - Button to view cart
-  - Navigates to cart page with pochaID
+  - Floating footer CTA on the menu tab.
+  - Label-only "View Cart" — no count, no total.
 */
 
 import React from "react";
-import PochaButton from "../shared/PochaButton";
-import PochaCartIcon from "@/components/ui/icon/PochaCartIcon";
+import { useRouter } from "next/navigation";
+import { Button } from "@umichkisa-ds/web";
+import FloatingCTA from "@/features/pocha/components/shared/FloatingCTA";
 
 interface ViewCartButtonProps {
-  pochaID: number;
+  pochaID: number | undefined;
+  onBeforeNavigate?: () => void;
 }
 
-export default function ViewCartButton({ pochaID }: ViewCartButtonProps) {
+export default function ViewCartButton({ pochaID, onBeforeNavigate }: ViewCartButtonProps) {
+  const router = useRouter();
+
   const handleViewCart = () => {
-    // navigate to cart page with pochaID
-    const queryParams = `pochaid=${pochaID}`;
-    window.location.href = `/pocha/cart?${queryParams}`;
+    if (pochaID === undefined) return;
+    onBeforeNavigate?.();
+    router.push(`/pocha/cart?pochaid=${pochaID}`);
   };
 
   return (
-    <div
-      className="fixed bottom-0 left-0 w-full flex justify-center bg-transparent
-     pb-5 z-30"
-    >
-      <PochaButton
-        label="View Cart"
-        icon={<PochaCartIcon />}
+    <FloatingCTA>
+      <Button
+        variant="primary"
+        size="lg"
         onClick={handleViewCart}
-        widthPercentage={75}
-      />
-    </div>
+        disabled={pochaID === undefined}
+        className="w-full pointer-events-auto shadow-lg"
+      >
+        View Cart
+      </Button>
+    </FloatingCTA>
   );
 }

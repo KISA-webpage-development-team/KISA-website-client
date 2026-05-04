@@ -3,6 +3,9 @@ import { FormEvent, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { checkCartStock, notifyPayResult } from "@/apis/pocha/mutations";
 import { useRouter } from "next/navigation";
+import { ageGateResolve } from "../utils/ageGateResolve";
+
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
 
 const useStripePayment = (
   pochaID: number,
@@ -27,7 +30,8 @@ const useStripePayment = (
 
   /** Step 2: Check User Age */
   const checkUserUnderAge = () => {
-    if (ageCheckRequired && underAge) {
+    const result = ageGateResolve({ ageCheckRequired, underAge });
+    if (!result.allowed) {
       throw new Error("미성년자는 주류를 주문할 수 없습니다.");
     }
   };
@@ -46,6 +50,16 @@ const useStripePayment = (
 
   /** Step 4: Process Payment */
   const processPayment = async () => {
+    if (IS_MOCK_MODE) {
+      const res = await notifyPayResult(userEmail, pochaID, {
+        result: "success",
+      });
+      if (!res) throw new Error("Error while updating cart status");
+      router.push(
+        `/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`
+      );
+      return;
+    }
     try {
       // step 1. 고객 생성 또는 기존 고객 확인
       const customerResponse = await fetch("/api/create-customer", {
@@ -132,15 +146,6 @@ const useStripePayment = (
         throw new Error("Error while updating cart status");
       }
 
-      // store necessary data in localStorage
-      localStorage.setItem(
-        "paymentMethodId",
-        paymentIntent.payment_method as string
-      );
-      localStorage.setItem("customerName", fullname);
-      localStorage.setItem("customerEmail", userEmail);
-      localStorage.setItem("customerID", customerID);
-
       alert("결제가 완료되었습니다.");
 
       router.push(`/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`);
@@ -170,8 +175,10 @@ const useStripePayment = (
     }
 
     try {
-      // Step 1: validate payment form
-      await validatePaymentForm();
+      // Step 1: validate payment form (Stripe form only — skipped in mock mode)
+      if (!IS_MOCK_MODE) {
+        await validatePaymentForm();
+      }
 
       // Step 2: check user age
       checkUserUnderAge();

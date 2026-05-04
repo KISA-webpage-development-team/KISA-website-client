@@ -1,6 +1,12 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { setupServer } from "msw/node";
-import { pochaHandlers, resetOrderStore, resetPochaStore } from "../pocha";
+import {
+  pochaHandlers,
+  resetCartStore,
+  resetOrderStore,
+  resetPochaStore,
+} from "../pocha";
+import { MOCK_USER_EMAIL } from "../../fixtures/pocha";
 
 const server = setupServer(...pochaHandlers);
 
@@ -31,6 +37,7 @@ afterEach(() => {
   server.resetHandlers();
   resetPochaStore();
   resetOrderStore();
+  resetCartStore();
 });
 afterAll(() => server.close());
 
@@ -457,6 +464,362 @@ describe("MSW pocha dashboard handlers", () => {
       // The previously-mutated id is back to its original (non-closed) bucket.
       const all = [...after.pending, ...after.preparing, ...after.ready];
       expect(all.some((o: { orderItemID: number }) => o.orderItemID === id)).toBe(true);
+    });
+  });
+});
+
+describe("MSW pocha user-facing handlers", () => {
+  const POCHA_ID = 1;
+  const EMAIL = MOCK_USER_EMAIL;
+  const enc = (s: string) => encodeURIComponent(s);
+
+  describe("GET /pocha/cart/:email/:pochaID/", () => {
+    it("returns the seeded cart as an object keyed by menuID for the default user", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(typeof body).toBe("object");
+      expect(Array.isArray(body)).toBe(false);
+      // Seeded with at least one menu line; each entry has { menu, quantity }.
+      const entries = Object.entries(body);
+      expect(entries.length).toBeGreaterThan(0);
+      for (const [key, val] of entries) {
+        expect(Number.isFinite(Number(key))).toBe(true);
+        const v = val as { menu: { menuID: number }; quantity: number };
+        expect(typeof v.quantity).toBe("number");
+        expect(typeof v.menu.menuID).toBe("number");
+        expect(Number(key)).toBe(v.menu.menuID);
+      }
+    });
+
+    it("returns {} for an email with no cart entry", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc("nobody@umich.edu")}/${POCHA_ID}/`
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body).toEqual({});
+    });
+  });
+
+  describe("POST /pocha/cart/:email/:pochaID/", () => {
+    it("adds a new item when not in cart (positive quantity) and returns isStocked=true", async () => {
+      const NEW_MENU = 202; // 김밥 — not in seeded cart
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ menuID: NEW_MENU, quantity: 1 }),
+        }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.isStocked).toBe(true);
+      expect(typeof body.message).toBe("string");
+
+      const cart = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      expect(cart[NEW_MENU].quantity).toBe(1);
+    });
+
+    it("increments existing item's quantity (positive quantity)", async () => {
+      const SOJU = 101; // seeded with quantity=1
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ menuID: SOJU, quantity: 2 }),
+        }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.isStocked).toBe(true);
+
+      const cart = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      expect(cart[SOJU].quantity).toBe(3);
+    });
+
+    it("decrements existing item's quantity (negative quantity)", async () => {
+      const TTEOK = 201; // seeded with quantity=2
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ menuID: TTEOK, quantity: -1 }),
+        }
+      );
+      expect(res.status).toBe(200);
+      const cart = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      expect(cart[TTEOK].quantity).toBe(1);
+    });
+
+    it("removes item when decrement brings quantity ≤ 0", async () => {
+      const SOJU = 101; // seeded with quantity=1
+      await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ menuID: SOJU, quantity: -1 }),
+      });
+      const cart = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      expect(SOJU in cart).toBe(false);
+    });
+
+    it("returns 409 with isStocked=false when add would exceed menu stock", async () => {
+      const SOJU = 101; // seeded stock=40, cart already has 1
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ menuID: SOJU, quantity: 100 }),
+        }
+      );
+      expect(res.status).toBe(409);
+      const body = await res.json();
+      expect(body.isStocked).toBe(false);
+      expect(typeof body.message).toBe("string");
+    });
+  });
+
+  describe("PUT /pocha/payment/:email/:pochaID/check-stock/", () => {
+    it("returns { isStocked: true } when every cart line ≤ menu stock", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/payment/${enc(EMAIL)}/${POCHA_ID}/check-stock/`,
+        { method: "PUT" }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.isStocked).toBe(true);
+    });
+
+    it("returns { isStocked: false } when any cart line exceeds menu stock", async () => {
+      // Drain stock for the seeded soju (101) below the cart quantity.
+      await fetch("http://localhost/pocha/dashboard/change-stock/", {
+        method: "PUT",
+        headers: { ...AUTH_HEADER, "Content-Type": "application/json" },
+        body: JSON.stringify({ menuID: 101, quantity: 0 }),
+      });
+      const res = await fetch(
+        `http://localhost/pocha/payment/${enc(EMAIL)}/${POCHA_ID}/check-stock/`,
+        { method: "PUT" }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.isStocked).toBe(false);
+    });
+  });
+
+  describe("GET /pocha/order/:email/:pochaID/", () => {
+    it("returns Orders shape filtered to non-closed orders for that email (with auth)", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/order/${enc(EMAIL)}/${POCHA_ID}/`,
+        { headers: AUTH_HEADER }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(Array.isArray(body.pending)).toBe(true);
+      expect(Array.isArray(body.preparing)).toBe(true);
+      expect(Array.isArray(body.ready)).toBe(true);
+      const all = [...body.pending, ...body.preparing, ...body.ready];
+      expect(all.length).toBeGreaterThan(0);
+      for (const o of all) {
+        expect(o.ordererEmail).toBe(EMAIL);
+        expect(o.status).not.toBe("closed");
+      }
+    });
+
+    it("returns 401 without Authorization", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/order/${enc(EMAIL)}/${POCHA_ID}/`
+      );
+      expect(res.status).toBe(401);
+    });
+  });
+
+  describe("GET /pocha/order/:email/:pochaID/closed/", () => {
+    it("returns { closed } filtered to closed orders for that email", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/order/${enc(EMAIL)}/${POCHA_ID}/closed/`,
+        { headers: AUTH_HEADER }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(Array.isArray(body.closed)).toBe(true);
+      expect(body.closed.length).toBeGreaterThan(0);
+      for (const o of body.closed) {
+        expect(o.ordererEmail).toBe(EMAIL);
+        expect(o.status).toBe("closed");
+      }
+    });
+  });
+
+  describe("GET /pocha/cart/:email/:pochaID/checkout-info/", () => {
+    it("returns { amount, ageCheckRequired } summed over the user's cart", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/checkout-info/`,
+        { headers: AUTH_HEADER }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      // Seeded: soju (8 * 1) + tteokbokki (10 * 2) = 28
+      expect(body.amount).toBe(28);
+      // Soju has ageCheckRequired=true
+      expect(body.ageCheckRequired).toBe("true");
+    });
+
+    it("returns ageCheckRequired='false' when no cart line requires age check", async () => {
+      // Replace cart: drop both seeded items (one negative each), add coke (103).
+      await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ menuID: 101, quantity: -1 }),
+        }
+      );
+      await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ menuID: 201, quantity: -2 }),
+        }
+      );
+      await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ menuID: 103, quantity: 2 }),
+        }
+      );
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/checkout-info/`,
+        { headers: AUTH_HEADER }
+      );
+      const body = await res.json();
+      expect(body.amount).toBe(6);
+      expect(body.ageCheckRequired).toBe("false");
+    });
+
+    it("returns 401 without Authorization", async () => {
+      const res = await fetch(
+        `http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/checkout-info/`
+      );
+      expect(res.status).toBe(401);
+    });
+  });
+
+  describe("PUT /pocha/payment/:email/:pochaID/pay-result/", () => {
+    it("on success: drains cart into pending OrderItems, decrements stock, clears cart, returns { ok: true }", async () => {
+      // Snapshot pre-state.
+      const cartBefore = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      const cartLines = Object.values(
+        cartBefore as Record<string, { menu: { menuID: number; stock: number }; quantity: number }>
+      );
+      expect(cartLines.length).toBeGreaterThan(0);
+
+      const sojuBefore = await (
+        await fetch(`http://localhost/pocha/menu/${POCHA_ID}/`, { headers: AUTH_HEADER })
+      ).json();
+      const sojuStockBefore = sojuBefore
+        .flatMap((g: { menusList: { menuID: number; stock: number }[] }) => g.menusList)
+        .find((m: { menuID: number }) => m.menuID === 101).stock;
+
+      const dashBefore = await (
+        await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`, { headers: AUTH_HEADER })
+      ).json();
+      const pendingCountBefore = dashBefore.pending.length;
+
+      const res = await fetch(
+        `http://localhost/pocha/payment/${enc(EMAIL)}/${POCHA_ID}/pay-result/`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ result: "success" }),
+        }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.ok).toBe(true);
+
+      // Cart cleared.
+      const cartAfter = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      expect(cartAfter).toEqual({});
+
+      // Stock decremented (soju was in cart with quantity 1).
+      const menusAfter = await (
+        await fetch(`http://localhost/pocha/menu/${POCHA_ID}/`, { headers: AUTH_HEADER })
+      ).json();
+      const sojuStockAfter = menusAfter
+        .flatMap((g: { menusList: { menuID: number; stock: number }[] }) => g.menusList)
+        .find((m: { menuID: number }) => m.menuID === 101).stock;
+      expect(sojuStockAfter).toBe(sojuStockBefore - 1);
+
+      // Dashboard pending grew by cartLines.length, all newly-pending lines are tester's.
+      const dashAfter = await (
+        await fetch(`http://localhost/pocha/dashboard/${POCHA_ID}/`, { headers: AUTH_HEADER })
+      ).json();
+      expect(dashAfter.pending.length).toBe(pendingCountBefore + cartLines.length);
+    });
+
+    it("on failure: cart preserved, returns { ok: true }", async () => {
+      const before = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      const res = await fetch(
+        `http://localhost/pocha/payment/${enc(EMAIL)}/${POCHA_ID}/pay-result/`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ result: "failure" }),
+        }
+      );
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.ok).toBe(true);
+      const after = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      expect(after).toEqual(before);
+    });
+  });
+
+  describe("resetCartStore()", () => {
+    it("re-seeds the cart store from mockUserCart", async () => {
+      // Mutate: empty out the seeded soju line.
+      await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ menuID: 101, quantity: -1 }),
+      });
+      const mid = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      expect(101 in mid).toBe(false);
+
+      resetCartStore();
+
+      const after = await (
+        await fetch(`http://localhost/pocha/cart/${enc(EMAIL)}/${POCHA_ID}/`)
+      ).json();
+      expect(after[101].quantity).toBe(1);
     });
   });
 });
