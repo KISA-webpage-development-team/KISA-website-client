@@ -16,7 +16,7 @@ import {
 import { OrderItem, OrderStatus } from "@/types/pocha";
 import { useLongPress } from "@/features/pocha/hooks/useLongPress";
 import { usePromoteOrderItem } from "@/features/pocha/hooks/usePromoteOrderItem";
-import { getCardTone } from "@/features/pocha/_shared/statusTone";
+import { getCardTone } from "@/features/pocha/utils/statusTone";
 
 interface OrderItemCardProps {
   order: OrderItem;
