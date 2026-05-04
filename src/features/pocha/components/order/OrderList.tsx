@@ -32,9 +32,7 @@ interface OrderListProps {
 }
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="type-h3 text-foreground">{children}</h2>
-  );
+  return <h2 className="type-h3 text-foreground">{children}</h2>;
 }
 
 function SkeletonRow() {
@@ -89,10 +87,7 @@ export default function OrderList({ pochaID }: OrderListProps) {
   if (ordersStatus === "error") {
     return (
       <div className="flex flex-col w-full px-4 py-3 gap-4">
-        <Alert
-          variant="error"
-          title="Couldn't load your orders"
-        >
+        <Alert variant="error" title="Couldn't load your orders">
           Something went wrong fetching your orders. Please try again.
         </Alert>
         <Button variant="secondary" size="md" onClick={handleRetry}>
@@ -151,9 +146,10 @@ export default function OrderList({ pochaID }: OrderListProps) {
         )}
 
         {/* ----- In progress ----- */}
-        {hasActive && (
-          <section className="flex flex-col gap-3">
-            <SectionHeading>In progress</SectionHeading>
+
+        <section className="flex flex-col gap-3">
+          <SectionHeading>In progress</SectionHeading>
+          {hasActive ? (
             <ul className="flex flex-col gap-3">
               {activeInProgress.map((orderItem) => (
                 <InProgressOrderRow
@@ -162,17 +158,14 @@ export default function OrderList({ pochaID }: OrderListProps) {
                 />
               ))}
             </ul>
-          </section>
-        )}
+          ) : (
+            <p className="type-body text-muted-foreground">No active orders</p>
+          )}
+        </section>
 
         {/* ----- Past orders (collapsed footer) ----- */}
         {hasPast && (
           <section className="flex flex-col gap-3">
-            {!hasActive && (
-              <p className="type-caption text-muted-foreground">
-                No active orders
-              </p>
-            )}
             <Accordion type="single">
               <AccordionItem value="past-orders">
                 <AccordionTrigger>
@@ -196,10 +189,7 @@ export default function OrderList({ pochaID }: OrderListProps) {
         )}
       </div>
 
-      <OrderTicketModal
-        orderItem={selectedOrder}
-        onClose={handleCloseTicket}
-      />
+      <OrderTicketModal orderItem={selectedOrder} onClose={handleCloseTicket} />
     </>
   );
 }
