@@ -20,10 +20,13 @@ const MockAuthToggle = IS_MOCK_MODE
     )
   : null;
 
-// In mock mode the next-auth middleware is a no-op (see middleware.ts), so
-// /pocha/* routes only get gated client-side. This wraps every /pocha page
-// with a single auth check; admin pages keep their own role gate on top.
-function PochaAuthGate({ children }: { children: ReactNode }) {
+// Mock-only auth gate. In prod, next-auth middleware (`src/middleware.ts`)
+// gates `/pocha/:path*` server-side — any request that reaches a /pocha
+// page is already authenticated, so a client-side gate would just flicker
+// the "not logged in" StatusView during the next-auth session-loading
+// window. In mock mode the middleware is a no-op, so /pocha/* routes need
+// this client-side fallback. Admin pages keep their own role gate on top.
+function MockAuthGate({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
   const pathname = usePathname();
 
@@ -48,18 +51,20 @@ export default function PochaLayout({ children }) {
   const isDashboard = pathname.includes('/dashboard');
   const isManage = pathname.includes('/manage');
   const isHistory = pathname.includes('/history');
+
+  const body =
+    isDashboard || isManage || isHistory ? (
+      <div className='w-full'>{children}</div>
+    ) : (
+      <OnlyMobileView className='h-full overflow-visible'>
+        {children}
+      </OnlyMobileView>
+    );
+
   return (
     <SessionProvider>
       <AuthContextProvider initialSession={null}>
-        <PochaAuthGate>
-          {isDashboard || isManage || isHistory ? (
-            <div className='w-full'>{children}</div>
-          ) : (
-            <OnlyMobileView className='h-full overflow-visible'>
-              {children}
-            </OnlyMobileView>
-          )}
-        </PochaAuthGate>
+        {IS_MOCK_MODE ? <MockAuthGate>{body}</MockAuthGate> : body}
         {MockAuthToggle && <MockAuthToggle />}
       </AuthContextProvider>
     </SessionProvider>
