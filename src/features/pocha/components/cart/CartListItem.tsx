@@ -44,7 +44,6 @@ export default function CartListItem({
     handleQuantityChange(menuid, -1);
   };
 
-  // pastiche-unresolved-doubt: server stock-reject inline-red treatment ({ isStocked: false } from changeItemInCart) cannot be surfaced from this row without modifying useCart.handleQuantityChange — useCart is out of `## Files` for lane 4.4a. Defer to lane 4.4b or expand 4.4a scope.
   return (
     <li className="flex items-center py-4 gap-3">
       <figure className="relative h-20 w-20 flex-shrink-0">

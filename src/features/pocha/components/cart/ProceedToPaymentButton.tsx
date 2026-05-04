@@ -3,14 +3,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "@umichkisa-ds/web";
 
 type PaymentProps = {
-  pochaid: number;
+  pochaID: number;
 };
 
-export default function ProceedToPaymentButton({ pochaid }: PaymentProps) {
+export default function ProceedToPaymentButton({ pochaID }: PaymentProps) {
   const router = useRouter();
 
   const handlePaymentClick = () => {
-    router.push(`/pocha/pay?pochaid=${pochaid}`);
+    router.push(`/pocha/pay?pochaid=${pochaID}`);
   };
 
   return (

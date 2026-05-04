@@ -34,7 +34,7 @@ const useUserAge = (session: UserSession | null) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
       revalidateOnMount: true,
-      dedupingInterval: 60 * 10000 * 1, // 1 min
+      dedupingInterval: 10 * 60 * 1000, // 10 min
     }
   );
 

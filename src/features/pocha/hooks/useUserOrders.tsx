@@ -94,7 +94,7 @@ const useUserOrdersMap = (email: string, token: string, pochaID: number) => {
     return () => clearInterval(id);
   }, [pochaID, token, fetchUserOrders]);
 
-  return { ordersMap, status, setOrdersMap, setStatus };
+  return { ordersMap, status, setOrdersMap, setStatus, refetch: fetchUserOrders };
 };
 
 /**
@@ -103,7 +103,7 @@ const useUserOrdersMap = (email: string, token: string, pochaID: number) => {
  */
 
 const useUserOrders = (email: string, token: string, pochaID: number) => {
-  const { ordersMap, status, setOrdersMap, setStatus } = useUserOrdersMap(
+  const { ordersMap, status, setOrdersMap, setStatus, refetch } = useUserOrdersMap(
     email,
     token,
     pochaID
@@ -133,16 +133,16 @@ const useUserOrders = (email: string, token: string, pochaID: number) => {
   };
 
   const pendingOrders = Array.from(ordersMap.values()).filter(
-    (order) => order.status === "pending"
+    (order) => order.status === OrderStatus.PENDING
   );
   const preparingOrders = Array.from(ordersMap.values()).filter(
-    (order) => order.status === "preparing"
+    (order) => order.status === OrderStatus.PREPARING
   );
   const readyOrders = Array.from(ordersMap.values()).filter(
-    (order) => order.status === "ready"
+    (order) => order.status === OrderStatus.READY
   );
   const closedOrders = Array.from(ordersMap.values()).filter(
-    (order) => order.status === "closed"
+    (order) => order.status === OrderStatus.CLOSED
   );
 
   return {
@@ -153,6 +153,7 @@ const useUserOrders = (email: string, token: string, pochaID: number) => {
     readyOrders,
     closedOrders,
     status,
+    refetch,
   };
 };
 

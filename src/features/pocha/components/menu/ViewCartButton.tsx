@@ -11,13 +11,15 @@ import FloatingCTA from "@/features/pocha/components/shared/FloatingCTA";
 
 interface ViewCartButtonProps {
   pochaID: number | undefined;
+  onBeforeNavigate?: () => void;
 }
 
-export default function ViewCartButton({ pochaID }: ViewCartButtonProps) {
+export default function ViewCartButton({ pochaID, onBeforeNavigate }: ViewCartButtonProps) {
   const router = useRouter();
 
   const handleViewCart = () => {
     if (pochaID === undefined) return;
+    onBeforeNavigate?.();
     router.push(`/pocha/cart?pochaid=${pochaID}`);
   };
 

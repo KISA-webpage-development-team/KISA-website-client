@@ -63,6 +63,7 @@ export default function OrderList({ pochaID }: OrderListProps) {
     readyOrders,
     closedOrders,
     status: ordersStatus,
+    refetch,
   } = useUserOrders(session?.user?.email, session?.token, pochaID);
 
   useUserOrderSocket({
@@ -81,10 +82,7 @@ export default function OrderList({ pochaID }: OrderListProps) {
   const handleCloseTicket = () => setSelectedOrder(null);
 
   const handleRetry = () => {
-    // Re-mounting via reload is the simplest correct retry: the data
-    // layer (useUserOrders / useUserOrderSocket) does its own bootstrap.
-    // Lane 4.3b owns the data layer; richer retry hooks belong there.
-    if (typeof window !== "undefined") window.location.reload();
+    refetch();
   };
 
   // ------- Error state -------
