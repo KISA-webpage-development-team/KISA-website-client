@@ -1,11 +1,20 @@
+/**
+ * CartListItem
+ * - One row in the cart list. Mobile-only.
+ * - Quantity stepper: at qty=1 the decrement icon swaps to a "remove" affordance
+ *   (single remove path is decrement-to-zero; no separate X button).
+ * - When quantity === menu.stock, the `+` is disabled and an inline red `Max`
+ *   hint shows on the row.
+ */
+
 import React from "react";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
 import Image from "next/image";
+import { IconButton } from "@umichkisa-ds/web";
 import { CartItem } from "@/types/pocha";
-import PochaMinusIcon from "@/components/ui/icon/PochaMinusIcon";
-import PochaPlusIcon from "@/components/ui/icon/PochaPlusIcon";
-import PochaTrashIcon from "@/components/ui/icon/PochaTrashIcon";
-import { getMenuImagePath } from "@/features/pocha/utils/getImagePath";
+import {
+  defaultImageURL,
+  getMenuImagePath,
+} from "@/features/pocha/utils/getImagePath";
 
 type CartListItemProps = {
   item: CartItem;
@@ -18,84 +27,82 @@ export default function CartListItem({
   menuid,
   handleQuantityChange,
 }: CartListItemProps) {
+  if (!item || item.quantity === 0) {
+    return null;
+  }
+
+  const { menu, quantity } = item;
+  const atStockCap = quantity >= menu.stock;
+  const lineTotal = menu.price * quantity;
+
   const incrementQuantity = () => {
+    if (atStockCap) return;
     handleQuantityChange(menuid, 1);
   };
 
   const decrementQuantity = () => {
-    // Default quantity starts at 1.
-    if (item.quantity > 0) {
-      handleQuantityChange(menuid, -1);
-    }
+    handleQuantityChange(menuid, -1);
   };
 
-  const removeItemFromCart = () => {
-    handleQuantityChange(menuid, -item.quantity);
-  };
-
-  if (!item || item.quantity === 0) {
-    return <></>;
-  }
-
+  // pastiche-unresolved-doubt: server stock-reject inline-red treatment ({ isStocked: false } from changeItemInCart) cannot be surfaced from this row without modifying useCart.handleQuantityChange — useCart is out of `## Files` for lane 4.4a. Defer to lane 4.4b or expand 4.4a scope.
   return (
-    <li className="flex items-center py-4 border-b border-[#CACACA]">
-      <figure className="relative h-[5rem] w-[5rem] flex-shrink-0 rounded-full border-gray-300 shadow-md">
+    <li className="flex items-center py-4 gap-3">
+      <figure className="relative h-20 w-20 flex-shrink-0">
         <Image
-          src={getMenuImagePath(menuid)}
-          alt={item.menu.nameEng}
+          src={getMenuImagePath(menuid) || defaultImageURL}
+          alt={menu.nameEng}
           fill
-          sizes="(max-width: 768px) 20vw"
-          className="rounded-[15px] border-gray-300 object-cover"
+          sizes="80px"
+          className="rounded-md border-border object-cover"
         />
       </figure>
 
-      <div className="flex flex-col flex-grow gap-1 ml-3">
-        <span className={`${sejongHospitalBold.className} text-black`}>
-          {item?.menu?.nameKor} {item?.menu?.nameEng}
+      <div className="flex flex-col flex-grow gap-1 min-w-0">
+        <span className="type-body text-foreground truncate">
+          {menu.nameKor} · {menu.nameEng}
         </span>
-        <span className={`${sejongHospitalBold.className} text-gray-500`}>
-          ${(item?.menu?.price * item.quantity).toFixed(2)}
+        <span className="type-body-sm text-muted-foreground">
+          ${menu.price.toFixed(2)} × {quantity} · ${lineTotal.toFixed(2)}
         </span>
+        {atStockCap && (
+          <span className="type-caption text-error">
+            Max · 재고 {menu.stock}개
+          </span>
+        )}
       </div>
 
-      {/* counter logic */}
-      <div
-        className="flex items-center justify-between ml-1
-      border-2 border-[#CACACA] rounded-full shadow-md
-      px-[0.65rem] py-[0.2rem] gap-[1rem]"
-      >
-        {/* Decrement Button */}
-        {item.quantity > 1 ? (
-          <button
-            className={`${sejongHospitalBold.className}  rounded-full `}
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {quantity > 1 ? (
+          <IconButton
+            icon="minus"
+            aria-label="Decrease quantity"
+            size="sm"
+            variant="secondary"
             onClick={decrementQuantity}
-          >
-            <PochaMinusIcon size="small" />
-          </button>
+          />
         ) : (
-          <button
-            onClick={removeItemFromCart}
-            className=" 
-             rounded-full"
-          >
-            <PochaTrashIcon size="small" />
-          </button>
+          <IconButton
+            icon="trash-2"
+            aria-label="Remove from cart"
+            size="sm"
+            variant="secondary"
+            onClick={decrementQuantity}
+          />
         )}
-
-        {/* Quantity Display */}
         <span
-          className={`${sejongHospitalBold.className} font-semibold text-black`}
+          className="type-body text-foreground w-6 text-center"
+          aria-live="polite"
         >
-          {item.quantity}
+          {quantity}
         </span>
-
-        {/* Increment Button */}
-        <button
+        <IconButton
+          icon="plus"
+          aria-label="Increase quantity"
+          size="sm"
+          variant="secondary"
           onClick={incrementQuantity}
-          className={`${sejongHospitalBold.className}   rounded-full`}
-        >
-          <PochaPlusIcon size="small" />
-        </button>
+          disabled={atStockCap}
+        />
       </div>
     </li>
   );
