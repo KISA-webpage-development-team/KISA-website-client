@@ -146,15 +146,6 @@ const useStripePayment = (
         throw new Error("Error while updating cart status");
       }
 
-      // store necessary data in localStorage
-      localStorage.setItem(
-        "paymentMethodId",
-        paymentIntent.payment_method as string
-      );
-      localStorage.setItem("customerName", fullname);
-      localStorage.setItem("customerEmail", userEmail);
-      localStorage.setItem("customerID", customerID);
-
       alert("결제가 완료되었습니다.");
 
       router.push(`/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`);
