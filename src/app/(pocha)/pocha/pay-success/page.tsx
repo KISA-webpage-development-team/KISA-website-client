@@ -1,170 +1,80 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import React, { useEffect } from "react";
-import Image from "next/image";
-import { useState } from "react";
-import PochaButton from "@/features/pocha/components/shared/PochaButton";
-// import TipModal from "@/features/pocha/components/pay/TipModal";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button, Container, Icon } from "@umichkisa-ds/web";
 
 export default function PaySuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // extract tip-success from searchParams
-  const tipCompleted = searchParams.get("tip_completed");
   const pochaID = searchParams.get("pochaid");
   const amount = searchParams.get("amount");
 
-  // [WIP] tip-related states
-  const [showTipModal, setShowTipModal] = useState(true);
-  const [paymentMethodId, setPaymentMethodId] = useState<string>();
-  const [customerName, setCustomerName] = useState<string>();
-  const [customerEmail, setCustomerEmail] = useState<string>();
-  const [customerID, setCustomerID] = useState<string>();
-
+  // Redirect guard: required URL params missing.
   useEffect(() => {
-    if (tipCompleted) {
-      setShowTipModal(false);
+    if (!pochaID || !amount) {
+      router.replace("/pocha");
     }
-  }, [tipCompleted]);
+  }, [pochaID, amount, router]);
 
-  // decode stripe token to process tip payment
+  // Back-navigation guard: this is a terminal screen — intercept the back
+  // button and route to the pocha home instead of the previous pay flow.
   useEffect(() => {
-    const storedPaymentMethodId = localStorage.getItem("paymentMethodId");
-    const storedCustomerName = localStorage.getItem("customerName");
-    const storedCustomerEmail = localStorage.getItem("customerEmail");
-    const storedCustomerID = localStorage.getItem("customerID");
-
-    if (storedPaymentMethodId && storedCustomerName && storedCustomerEmail) {
-      setPaymentMethodId(storedPaymentMethodId);
-      setCustomerName(storedCustomerName);
-      setCustomerEmail(storedCustomerEmail);
-      setCustomerID(storedCustomerID);
-    } else {
-      if (!showTipModal) {
-        return;
-      } else {
-        router.replace("/pocha");
-        return;
-      }
-    }
-  }, [router, showTipModal]);
-
-  useEffect(() => {
-    if (tipCompleted) {
-      setShowTipModal(false);
-    }
-  }, [tipCompleted]);
-
-  // decode stripe token to process tip payment
-  useEffect(() => {
-    const storedPaymentMethodId = localStorage.getItem("paymentMethodId");
-    const storedCustomerName = localStorage.getItem("customerName");
-    const storedCustomerEmail = localStorage.getItem("customerEmail");
-    const storedCustomerID = localStorage.getItem("customerID");
-
-    if (storedPaymentMethodId && storedCustomerName && storedCustomerEmail) {
-      setPaymentMethodId(storedPaymentMethodId);
-      setCustomerName(storedCustomerName);
-      setCustomerEmail(storedCustomerEmail);
-      setCustomerID(storedCustomerID);
-    } else {
-      if (!showTipModal) {
-        return;
-      } else {
-        router.replace("/pocha");
-        return;
-      }
-    }
-  }, [router, showTipModal]);
-
-  useEffect(() => {
-    // Add a new entry to prevent direct back navigation
     window.history.pushState({ from: "pay-success" }, "", window.location.href);
 
-    // Handle the popstate (back/forward button) event
     const handlePopState = () => {
-      // Navigate to /pocha instead of going back
       router.replace("/pocha");
     };
 
     window.addEventListener("popstate", handlePopState);
-
-    // Cleanup listener on component unmount
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
   }, [router]);
 
-  const directToMenuList = () => {
-    setTimeout(() => {
-      router.push("/pocha");
-    }, 150);
-  };
-
-  const directToOrders = () => {
-    setTimeout(() => {
-      router.push("/pocha?tab=orders");
-    }, 150);
-  };
-
-  if (!tipCompleted && (!pochaID || !amount)) {
-    window.location.href = "/pocha";
-  }
-
   return (
-    <section
-      className="flex flex-col justify-center items-center h-full
-    gap-6"
-    >
-      {/* {showTipModal && paymentMethodId && (
-        <TipModal
-          totalPrice={parseFloat(amount)}
-          paymentMethodId={paymentMethodId}
-          customerName={customerName}
-          customerEmail={customerEmail}
-          customerID={customerID}
-          onClose={() => setShowTipModal(false)}
-        />
-      )} */}
-      <span
-        className={`${sejongHospitalBold.className} text-center text-black text-2xl`}
+    <>
+      <a
+        href="#main-content"
+        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-4 focus-visible:left-4 focus-visible:z-50 focus-visible:rounded-md focus-visible:bg-surface focus-visible:px-4 focus-visible:py-2 focus-visible:type-label focus-visible:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
       >
-        결제가 완료되었습니다
-      </span>
-      <figure
-        className="relative w-[12rem] h-[12rem] 
-      flex justify-center items-center flex-shrink-0 -z-10"
+        Skip to main content
+      </a>
+      <Container
+        as="main"
+        id="main-content"
+        size="sm"
+        className="flex flex-col min-h-screen"
       >
-        <Image
-          src={`/images/check_circle.png`}
-          alt="Success Icon"
-          fill
-          sizes="12rem"
-          className="object-contain"
-        />
-      </figure>
-      {!showTipModal && (
-        <span className={`${sejongHospitalBold.className} text-lg text-center`}>
-          팁을 주셔서 감사합니다! Thank you for the tip!
-        </span>
-      )}
-      <div className="flex flex-col items-center gap-4 w-full">
-        <PochaButton
-          label="주문 내역 보기"
-          onClick={directToOrders}
-          widthPercentage={85}
-        />
-
-        <PochaButton
-          label="홈으로 돌아가기"
-          onClick={directToMenuList}
-          widthPercentage={85}
-        />
-      </div>
-    </section>
+        <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-8">
+          <div className="text-success">
+            <Icon name="circle-check" size="xl" />
+          </div>
+          <div className="flex flex-col items-center gap-2 text-center">
+            <h1 className="type-h1 text-foreground">Payment complete</h1>
+            <p className="type-body text-foreground">
+              Your order is being prepared.
+            </p>
+          </div>
+          <div className="flex w-full flex-col gap-4 pt-2">
+            <Button
+              variant="primary"
+              className="w-full"
+              onClick={() => router.push("/pocha?tab=orders")}
+            >
+              View orders
+            </Button>
+            <Button
+              variant="secondary"
+              className="w-full"
+              onClick={() => router.push("/pocha")}
+            >
+              Order more
+            </Button>
+          </div>
+        </div>
+      </Container>
+    </>
   );
-  //TEST
 }
