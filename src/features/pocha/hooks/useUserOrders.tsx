@@ -4,7 +4,10 @@ import {
   getUserClosedOrders,
 } from "@/apis/pocha/queries";
 import { OrderHistory, OrderItem, Orders, OrderStatus } from "@/types/pocha";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
+const MOCK_POLL_INTERVAL_MS = 1500;
 
 /*
   @desc get the next status of the order item
@@ -49,30 +52,51 @@ const useUserOrdersMap = (email: string, token: string, pochaID: number) => {
     "loading"
   );
 
+  const isMountedRef = useRef(true);
+
+  const fetchUserOrders = useCallback(async () => {
+    try {
+      const [res, closedRes] = await Promise.all([
+        getUserOrders(email, pochaID, token),
+        getUserClosedOrders(email, pochaID, token),
+      ]);
+
+      if (!isMountedRef.current) return;
+
+      const orders = {
+        ...res,
+        closed: closedRes.closed,
+      };
+
+      setOrdersMap(convertOrdersToMap(orders));
+      setStatus("success");
+    } catch (error) {
+      if (!isMountedRef.current) return;
+      console.error("Error fetching orders: ", error);
+      setStatus("error");
+    }
+  }, [email, pochaID, token]);
+
   useEffect(() => {
-    const fetchUserOrders = async () => {
-      try {
-        const res = await getUserOrders(email, pochaID, token);
-
-        const closedRes = await getUserClosedOrders(email, pochaID, token);
-
-        const orders = {
-          ...res,
-          closed: closedRes.closed,
-        };
-
-        setOrdersMap(convertOrdersToMap(orders));
-        setStatus("success");
-      } catch (error) {
-        console.error("Error fetching orders: ", error);
-        setStatus("error");
-      }
-    };
-
+    isMountedRef.current = true;
     if (pochaID && token) {
       fetchUserOrders();
     }
-  }, [email, pochaID, token]);
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [pochaID, token, fetchUserOrders]);
+
+  // Mock-mode polling: WS is short-circuited in mock, so poll for status
+  // changes triggered by Simulate Promote (or any other mock mutation).
+  useEffect(() => {
+    if (!IS_MOCK_MODE) return;
+    if (!pochaID || !token) return;
+    const id = setInterval(() => {
+      fetchUserOrders();
+    }, MOCK_POLL_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [pochaID, token, fetchUserOrders]);
 
   return { ordersMap, status, setOrdersMap, setStatus };
 };
