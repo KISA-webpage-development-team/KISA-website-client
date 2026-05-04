@@ -28,10 +28,10 @@ export default function PaySummaryCard({
 
       <Divider orientation="horizontal" className="my-1"/>
 
-      <div className="flex items-center justify-between type-h4 text-foreground">
+      <div className="flex items-center justify-between type-h2 text-foreground">
         <span>Total</span>
         <span>
-          <strong>${totalPrice}</strong>
+          ${totalPrice}
         </span>
       </div>
 

@@ -18,24 +18,7 @@ import ProceedToPaymentButton from "@/features/pocha/components/cart/ProceedToPa
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import useCart from "@/features/pocha/hooks/useCart";
 import { useAuth } from "@/lib/auth/authContext";
-
-function CartPageHeader() {
-  const router = useRouter();
-
-  return (
-    <header className="relative flex items-center justify-center py-3">
-      <IconButton
-        icon="chevron-left"
-        aria-label="Back"
-        size="md"
-        variant="tertiary"
-        onClick={() => router.back()}
-        className="absolute left-2"
-      />
-      <h1 className="type-h3 text-foreground">Cart</h1>
-    </header>
-  );
-}
+import BackHeader from "@/features/pocha/components/shared/BackHeader";
 
 function CartPageSkeleton() {
   return (
@@ -113,7 +96,7 @@ export default function PochaCartPage() {
         size="sm"
         className="flex flex-col min-h-screen !gap-0"
       >
-        <CartPageHeader />
+        <BackHeader title="Cart" />
         <StatusView
           variant="error"
           title="Could not load cart"
@@ -138,7 +121,7 @@ export default function PochaCartPage() {
       size="sm"
       className="flex flex-col min-h-screen !gap-0"
     >
-      <CartPageHeader />
+      <BackHeader title="Cart"/>
 
       {isEmpty ? (
         <EmptyCartAlert />

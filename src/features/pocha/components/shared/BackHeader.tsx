@@ -19,7 +19,7 @@ export default function BackHeader({ title }: BackHeaderProps) {
         size="lg"
         variant="tertiary"
         onClick={() => router.back()}
-        className="absolute left-0"
+        className="absolute left-0 !p-0"
       />
       <h1 className="type-h3 text-foreground">{title}</h1>
     </header>
