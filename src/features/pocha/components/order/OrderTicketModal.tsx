@@ -41,15 +41,13 @@ export default function OrderTicketModal({
               Order Ready
             </Badge>
 
-            <SheetTitle className="type-display text-success">
+            <SheetTitle className="text-5xl!">
               #{orderItem.orderItemID}
             </SheetTitle>
 
-            <SheetDescription className="type-h2 text-foreground">
+            <SheetDescription className="text-foreground text-2xl!">
               {orderItem.menu?.nameKor} · {orderItem.menu?.nameEng}
-              <span className="type-h2 text-muted-foreground">
                 {" "}× {orderItem.quantity}
-              </span>
             </SheetDescription>
 
             <p className="type-body text-foreground">
