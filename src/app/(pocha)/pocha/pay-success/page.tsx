@@ -49,7 +49,7 @@ export default function PaySuccessPage() {
       >
         <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-8">
           <div className="text-success">
-            <Icon name="circle-check" size="xl" />
+            <Icon name="circle-check" size="xl" className="!h-16 !w-16" />
           </div>
           <div className="flex flex-col items-center gap-2 text-center">
             <h1 className="type-h1 text-foreground">Payment complete</h1>
