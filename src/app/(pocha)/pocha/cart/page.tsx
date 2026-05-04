@@ -127,7 +127,7 @@ export default function PochaCartPage() {
             <CartList cart={cart} handleQuantityChange={handleQuantityChange} />
           </div>
           <FloatingCTA>
-            <ProceedToPaymentButton pochaid={pochaID} />
+            <ProceedToPaymentButton pochaID={pochaID} />
           </FloatingCTA>
         </>
       )}

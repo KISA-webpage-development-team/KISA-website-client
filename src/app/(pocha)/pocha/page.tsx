@@ -183,22 +183,17 @@ export default function PochaPage() {
         </div>
 
         {/* Main content area (scrollable) */}
-        <div
-          className="flex-1"
-          onClick={
-            POCHA_THEME === "spring"
-              ? (e) => {
-                  const btn = (e.target as HTMLElement).closest("button");
-                  if (btn?.textContent?.includes("View Cart")) {
-                    setSwayTrigger((prev) => prev + 1);
-                  }
-                }
-              : undefined
-          }
-        >
+        <div className="flex-1">
           <TabsContent value="menu" className="flex flex-col">
             <MenuList pochaid={pochaInfo?.pochaID} cart={cart} />
-            <ViewCartButton pochaID={pochaInfo?.pochaID} />
+            <ViewCartButton
+              pochaID={pochaInfo?.pochaID}
+              onBeforeNavigate={
+                POCHA_THEME === "spring"
+                  ? () => setSwayTrigger((prev) => prev + 1)
+                  : undefined
+              }
+            />
           </TabsContent>
           <TabsContent value="orders">
             <OrderList pochaID={pochaInfo?.pochaID} />

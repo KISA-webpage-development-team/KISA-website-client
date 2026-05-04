@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useAuth } from "@/lib/auth/authContext";
 
@@ -126,11 +126,12 @@ export default function PayPage() {
     );
   }
 
+  useEffect(() => {
+    if (hasError) router.push("/pocha");
+  }, [hasError, router]);
+
   if (isLoading) return <PayPageSkeleton />;
-  if (hasError) {
-    router.push("/pocha");
-    return null;
-  }
+  if (hasError) return <PayPageSkeleton />;
 
   return (
     <>
