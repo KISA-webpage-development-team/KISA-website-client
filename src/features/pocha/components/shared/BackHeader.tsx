@@ -16,10 +16,10 @@ export default function BackHeader({ title }: BackHeaderProps) {
       <IconButton
         icon="chevron-left"
         aria-label="Back"
-        size="md"
+        size="lg"
         variant="tertiary"
         onClick={() => router.back()}
-        className="absolute left-2"
+        className="absolute left-0"
       />
       <h1 className="type-h3 text-foreground">{title}</h1>
     </header>

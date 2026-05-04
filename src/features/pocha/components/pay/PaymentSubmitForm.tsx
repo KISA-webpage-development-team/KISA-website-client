@@ -77,7 +77,7 @@ export default function PaymentSubmitForm({
     >
       {/* Scroll area — dim/lock during payment in flight */}
       <div
-        className={`flex flex-col gap-6 px-4 pt-4 pb-32 ${
+        className={`flex flex-col gap-6 pt-4 pb-32 ${
           paymentLoading ? "opacity-60 pointer-events-none" : ""
         }`}
         aria-busy={paymentLoading}
