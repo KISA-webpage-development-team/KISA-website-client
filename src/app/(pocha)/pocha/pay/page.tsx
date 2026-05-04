@@ -112,6 +112,10 @@ export default function PayPage() {
     userAgeStatus === "error" ||
     !totalPrice;
 
+  useEffect(() => {
+    if (hasError) router.push("/pocha");
+  }, [hasError, router]);
+
   // Short-circuit before the loading check — usePay stalls on null pochaID,
   // so the page would otherwise spin forever when there is no ongoing pocha.
   if (noPocha) {
@@ -125,10 +129,6 @@ export default function PayPage() {
       />
     );
   }
-
-  useEffect(() => {
-    if (hasError) router.push("/pocha");
-  }, [hasError, router]);
 
   if (isLoading) return <PayPageSkeleton />;
   if (hasError) return <PayPageSkeleton />;
