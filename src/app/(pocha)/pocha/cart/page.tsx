@@ -128,7 +128,9 @@ export default function PochaCartPage() {
     );
   }
 
-  const isEmpty = !cart || Object.keys(cart).length === 0;
+  const isEmpty =
+    !cart ||
+    Object.values(cart).every((item) => !item || item.quantity === 0);
 
   return (
     <Container
