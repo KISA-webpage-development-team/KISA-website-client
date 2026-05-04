@@ -135,7 +135,7 @@ export default function OrderList({ pochaID }: OrderListProps) {
 
   return (
     <>
-      <div className="flex flex-col w-full px-4 py-3 gap-6">
+      <div className="flex flex-col w-full gap-6">
         {/* ----- Ready for pickup ----- */}
         {hasReady && (
           <section className="flex flex-col gap-3">
