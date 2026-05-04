@@ -1,13 +1,11 @@
 'use client';
 
 import { ReactNode } from 'react';
-import OnlyMobileView from '@/components/ui/feedback/OnlyMobileView';
-import { sejongHospitalLight } from '@/utils/fonts/textFonts';
 import { SessionProvider } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { AuthContextProvider, useAuth } from '@/lib/auth/authContext';
 import { MockAuthToggle } from '@/mocks/MockAuthToggle';
-import { StatusView } from '@umichkisa-ds/web';
+import { OnlyMobileView, StatusView } from '@umichkisa-ds/web';
 import LoginButton from '@/components/layout/header/LoginButton';
 
 // In mock mode the next-auth middleware is a no-op (see middleware.ts), so
@@ -45,19 +43,9 @@ export default function PochaLayout({ children }) {
           {isDashboard || isManage || isHistory ? (
             <div className='w-full'>{children}</div>
           ) : (
-            <>
-              {/* This message only shows on larger screens */}
-              <div className='hidden md:block'>
-                <OnlyMobileView />
-              </div>
-              {/* Main content for mobile screens */}
-              <div
-                className={`md:hidden h-full
-                 ${sejongHospitalLight.className} overflow-visible`}
-              >
-                {children}
-              </div>
-            </>
+            <OnlyMobileView className='h-full overflow-visible'>
+              {children}
+            </OnlyMobileView>
           )}
         </PochaAuthGate>
         <MockAuthToggle />
