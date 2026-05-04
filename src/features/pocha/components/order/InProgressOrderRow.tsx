@@ -114,7 +114,7 @@ export default function InProgressOrderRow({
         <figure className="relative w-12 h-12 flex-shrink-0 rounded-md overflow-hidden">
           <Image
             src={getMenuImagePath(menu?.menuID)}
-            alt={menu?.nameEng ?? menu?.nameKor ?? ""}
+            alt={menu?.nameEng ?? ""}
             fill
             sizes="48px"
             className="object-cover"
@@ -129,7 +129,7 @@ export default function InProgressOrderRow({
                 #{orderItemID}
               </span>
               <span className="type-body text-foreground truncate">
-                {menu?.nameEng ?? menu?.nameKor}
+                {menu?.nameKor} · {menu?.nameEng}
               </span>
             </div>
             <Badge variant={badge.variant} size="sm">

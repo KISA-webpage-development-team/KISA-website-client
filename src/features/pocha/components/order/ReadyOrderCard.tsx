@@ -37,7 +37,7 @@ export default function ReadyOrderCard({
         hoverable
         role="button"
         tabIndex={0}
-        aria-label={`Order #${orderItemID} ready for pickup — ${menu?.nameEng ?? menu?.nameKor}`}
+        aria-label={`Order #${orderItemID} ready for pickup — ${menu?.nameKor} ${menu?.nameEng}`}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         className="border-success cursor-pointer w-full"
@@ -47,7 +47,7 @@ export default function ReadyOrderCard({
           <figure className="relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden">
             <Image
               src={getMenuImagePath(menu?.menuID)}
-              alt={menu?.nameEng ?? menu?.nameKor ?? ""}
+              alt={menu?.nameEng ?? ""}
               fill
               sizes="64px"
               className="object-cover"
@@ -66,7 +66,7 @@ export default function ReadyOrderCard({
             </div>
             <div className="type-h2 text-foreground">#{orderItemID}</div>
             <div className="type-body text-foreground truncate">
-              {menu?.nameEng ?? menu?.nameKor}
+              {menu?.nameKor} · {menu?.nameEng}
               <span className="text-muted-foreground"> × {quantity}</span>
             </div>
           </div>
