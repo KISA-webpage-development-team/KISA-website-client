@@ -1,12 +1,24 @@
 'use client';
 
 import { ReactNode } from 'react';
+import dynamic from 'next/dynamic';
 import { SessionProvider } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { AuthContextProvider, useAuth } from '@/lib/auth/authContext';
-import { MockAuthToggle } from '@/mocks/MockAuthToggle';
 import { OnlyMobileView, StatusView } from '@umichkisa-ds/web';
 import LoginButton from '@/components/layout/header/LoginButton';
+
+// Dev-only toggle. Build-time gate: when NEXT_PUBLIC_MOCK_API !== "1",
+// the ternary collapses to null and the entire MockAuthToggle module
+// (plus its `/_mock/spawn-order/` strings) is tree-shaken from the prod
+// pocha layout chunk.
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === '1';
+const MockAuthToggle = IS_MOCK_MODE
+  ? dynamic(
+      () => import('@/mocks/MockAuthToggle').then((m) => m.MockAuthToggle),
+      { ssr: false }
+    )
+  : null;
 
 // In mock mode the next-auth middleware is a no-op (see middleware.ts), so
 // /pocha/* routes only get gated client-side. This wraps every /pocha page
@@ -48,7 +60,7 @@ export default function PochaLayout({ children }) {
             </OnlyMobileView>
           )}
         </PochaAuthGate>
-        <MockAuthToggle />
+        {MockAuthToggle && <MockAuthToggle />}
       </AuthContextProvider>
     </SessionProvider>
   );

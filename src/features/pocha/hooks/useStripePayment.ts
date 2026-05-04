@@ -1,6 +1,7 @@
 // hooks/useStripePayment.ts
 import { FormEvent, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
+import { toast } from "@umichkisa-ds/web";
 import { checkCartStock, notifyPayResult } from "@/apis/pocha/mutations";
 import { useRouter } from "next/navigation";
 import { ageGateResolve } from "../utils/ageGateResolve";
@@ -146,11 +147,11 @@ const useStripePayment = (
         throw new Error("Error while updating cart status");
       }
 
-      alert("결제가 완료되었습니다.");
+      toast.success("결제가 완료되었습니다.");
 
       router.push(`/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`);
     } catch (error) {
-      alert("결제 오류가 발생했습니다. 카드 정보를 확인해주세요");
+      toast.error("결제 오류가 발생했습니다. 카드 정보를 확인해주세요");
       setErrorMessage(error.message || "결제 실패");
       // notify pay result with failure
       const res = await notifyPayResult(userEmail, pochaID, {
