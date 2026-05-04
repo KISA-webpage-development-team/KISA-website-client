@@ -18,7 +18,7 @@ export default function ProceedToPaymentButton({ pochaid }: PaymentProps) {
       variant="primary"
       size="lg"
       onClick={handlePaymentClick}
-      className="w-full"
+      className="w-full pointer-events-auto shadow-lg"
     >
       Proceed to payment
     </Button>

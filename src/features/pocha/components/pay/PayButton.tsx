@@ -17,7 +17,7 @@ export default function PayButton({ loading }: PayButtonProps) {
       variant="primary"
       size="lg"
       disabled={loading}
-      className="w-full"
+      className="w-full pointer-events-auto shadow-lg"
     >
       {loading ? (
         <span className="inline-flex items-center gap-2">

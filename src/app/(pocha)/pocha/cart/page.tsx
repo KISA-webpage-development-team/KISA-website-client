@@ -12,13 +12,13 @@ import {
 
 import EmptyCartAlert from "@/features/pocha/components/cart/EmptyCartAlert";
 import CartList from "@/features/pocha/components/cart/CartList";
-import CartTotalSummary from "@/features/pocha/components/cart/CartTotalSummary";
 import ProceedToPaymentButton from "@/features/pocha/components/cart/ProceedToPaymentButton";
 
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import useCart from "@/features/pocha/hooks/useCart";
 import { useAuth } from "@/lib/auth/authContext";
 import BackHeader from "@/features/pocha/components/shared/BackHeader";
+import FloatingCTA from "@/features/pocha/components/shared/FloatingCTA";
 
 function CartPageSkeleton() {
   return (
@@ -42,12 +42,9 @@ function CartPageSkeleton() {
           </div>
         ))}
       </div>
-      <div
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface px-4 pt-3"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
-      >
+      <FloatingCTA>
         <Skeleton className="h-12 w-full rounded-md" />
-      </div>
+      </FloatingCTA>
     </Container>
   );
 }
@@ -66,7 +63,6 @@ export default function PochaCartPage() {
     cart,
     status: cartStatus,
     error: cartError,
-    totalAmount,
     handleQuantityChange,
     fetchCart,
   } = useCart(session?.user?.email, pochaID);
@@ -130,15 +126,9 @@ export default function PochaCartPage() {
           <div className="flex-grow pb-40">
             <CartList cart={cart} handleQuantityChange={handleQuantityChange} />
           </div>
-          <div
-            className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface px-4 pt-3 flex flex-col gap-3"
-            style={{
-              paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)",
-            }}
-          >
-            <CartTotalSummary totalAmount={totalAmount} />
+          <FloatingCTA>
             <ProceedToPaymentButton pochaid={pochaID} />
-          </div>
+          </FloatingCTA>
         </>
       )}
     </Container>

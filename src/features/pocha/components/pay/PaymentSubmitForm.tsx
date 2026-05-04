@@ -15,6 +15,7 @@ import {
 import PaySummaryCard from "./PaySummaryCard";
 import PayButton from "./PayButton";
 import { LoadingSpinner } from "@umichkisa-ds/web";
+import FloatingCTA from "@/features/pocha/components/shared/FloatingCTA";
 
 // hooks
 import useStripePayment from "../../hooks/useStripePayment";
@@ -87,21 +88,18 @@ export default function PaymentSubmitForm({
         <PaySummaryCard amount={amount} fee={fee} totalPrice={totalPrice} />
       </div>
 
-      {/* Sticky-bottom action bar with inline error above the button */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 backdrop-blur px-4 pt-3 flex flex-col gap-2"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
-      >
-        {errorMessage && (
+      {/* Floating action footer with inline error above the button */}
+      <FloatingCTA>
+        {errorMessage ? (
           <p
             role="alert"
-            className="type-caption text-error"
+            className="type-caption text-error pointer-events-auto"
           >
             {errorMessage}
           </p>
-        )}
+        ) : null}
         <PayButton loading={paymentLoading} />
-      </div>
+      </FloatingCTA>
     </form>
   );
 }

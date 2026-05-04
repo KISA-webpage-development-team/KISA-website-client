@@ -14,6 +14,7 @@ import usePay from "@/features/pocha/hooks/usePay";
 import { Container, Skeleton, StatusView } from "@umichkisa-ds/web";
 import usePochaID from "@/features/pocha/hooks/usePochaID";
 import BackHeader from "@/features/pocha/components/shared/BackHeader";
+import FloatingCTA from "@/features/pocha/components/shared/FloatingCTA";
 import useUserAge from "@/features/pocha/hooks/useUserAge";
 
 const PaymentSubmitForm = dynamic(
@@ -40,10 +41,7 @@ function PayPageSkeleton() {
         <Skeleton className="h-6 w-16" />
       </div>
 
-      <div className="flex flex-col gap-6 px-4 pt-4 pb-32">
-        {/* Stripe region block */}
-        <Skeleton variant="rectangular" className="h-64 w-full rounded-md" />
-
+      <div className="flex flex-col gap-6 pt-4 pb-32">
         {/* Summary rows */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
@@ -64,13 +62,10 @@ function PayPageSkeleton() {
         <Skeleton className="h-3 w-3/4" />
       </div>
 
-      {/* Sticky button placeholder */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface px-4 pt-3"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
-      >
+      {/* Floating button placeholder */}
+      <FloatingCTA>
         <Skeleton className="h-12 w-full rounded-md" />
-      </div>
+      </FloatingCTA>
     </Container>
     </>
   );

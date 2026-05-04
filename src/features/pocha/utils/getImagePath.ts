@@ -1,5 +1,8 @@
+
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
+
 export const getMenuImagePath = (menuID: number) => {
-  if (!menuID) {
+  if (!menuID || IS_MOCK_MODE) {
     return defaultImageURL;
   }
 

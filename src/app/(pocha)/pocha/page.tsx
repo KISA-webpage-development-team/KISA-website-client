@@ -59,19 +59,19 @@ function HomeShellSkeleton() {
         className="flex flex-col min-h-screen relative !gap-0"
       >
       {/* Heading skeleton */}
-      <div className="flex flex-col items-center px-4 pt-2 gap-2">
+      <div className="flex flex-col items-center pt-2 gap-2">
         <Skeleton className="h-7 w-40" />
         <Skeleton className="h-4 w-64" />
       </div>
 
       {/* Tab strip skeleton */}
-      <div className="flex gap-4 px-4 py-3">
+      <div className="flex gap-4 py-3">
         <Skeleton className="h-8 flex-1" />
         <Skeleton className="h-8 flex-1" />
       </div>
 
       {/* Menu row skeletons */}
-      <div className="flex flex-col gap-4 px-4 py-2">
+      <div className="flex flex-col gap-4 py-2">
         {Array.from({ length: 5 }).map((_, idx) => (
           <div key={idx} className="flex flex-row items-center gap-4 py-2">
             <Skeleton variant="rectangular" className="h-24 w-24 rounded-md" />

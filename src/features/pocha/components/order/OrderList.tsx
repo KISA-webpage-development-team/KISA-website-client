@@ -40,7 +40,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 function SkeletonRow() {
   return (
     <li className="list-none">
-      <div className="flex items-start gap-4 rounded-md border border-border bg-surface p-4">
+      <div className="flex items-start gap-4 rounded-md border border-border bg-surface">
         <Skeleton variant="rectangular" className="w-12 h-12 rounded-md" />
         <div className="flex-1 flex flex-col gap-2">
           <Skeleton variant="rectangular" className="h-4 w-2/3" />

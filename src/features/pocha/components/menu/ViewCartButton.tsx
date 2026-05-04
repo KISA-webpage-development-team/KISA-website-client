@@ -1,14 +1,13 @@
 /*
   ViewCartButton
-  - Floating footer CTA on the menu tab. No backing dock — the Button
-    is distinguishable on its own.
-  - Full-width with safe-area-inset-bottom padding.
+  - Floating footer CTA on the menu tab.
   - Label-only "View Cart" — no count, no total.
 */
 
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@umichkisa-ds/web";
+import FloatingCTA from "@/features/pocha/components/shared/FloatingCTA";
 
 interface ViewCartButtonProps {
   pochaID: number | undefined;
@@ -23,10 +22,7 @@ export default function ViewCartButton({ pochaID }: ViewCartButtonProps) {
   };
 
   return (
-    <div
-      className="fixed bottom-0 left-0 right-0 z-30 px-4 pt-3 pointer-events-none"
-      style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
-    >
+    <FloatingCTA>
       <Button
         variant="primary"
         size="lg"
@@ -36,6 +32,6 @@ export default function ViewCartButton({ pochaID }: ViewCartButtonProps) {
       >
         View Cart
       </Button>
-    </div>
+    </FloatingCTA>
   );
 }
