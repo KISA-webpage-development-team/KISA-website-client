@@ -1,19 +1,32 @@
 import React from "react";
-import PochaButton from "../shared/PochaButton";
+import { Button, LoadingSpinner } from "@umichkisa-ds/web";
+
+// Domain action component for the pay form's submit affordance.
+// Encapsulates the payment-loading state. Lane 4.5b extends this with
+// mock-mode branching (POST pay-result vs Stripe submit) — keeping the
+// branch inside this component rather than at the call-site.
 
 interface PayButtonProps {
   loading: boolean;
-  totalPrice: number;
 }
 
-export default function PayButton({ loading, totalPrice }: PayButtonProps) {
+export default function PayButton({ loading }: PayButtonProps) {
   return (
-    <div className="w-full">
-      <PochaButton
-        label={!loading ? `Pay $${totalPrice}` : "Loading..."}
-        disabled={loading}
-        type="submit" // ✅ 폼의 제출을 트리거
-      />
-    </div>
+    <Button
+      type="submit"
+      variant="primary"
+      size="lg"
+      disabled={loading}
+      className="w-full"
+    >
+      {loading ? (
+        <span className="inline-flex items-center gap-2">
+          <LoadingSpinner size="sm" />
+          Processing...
+        </span>
+      ) : (
+        "Pay"
+      )}
+    </Button>
   );
 }
