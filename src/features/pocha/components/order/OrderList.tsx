@@ -1,15 +1,55 @@
-import React from "react";
-import { sejongHospitalBold } from "@/utils/fonts/textFonts";
-import useUserOrders from "../../hooks/useUserOrders";
-import { useAuth } from "@/lib/auth/authContext";
+/**
+ * OrderList
+ * - Sectioned single-scroll: Ready (cards) > In progress (rows) > Past (collapsed).
+ * - No filter tabs. Sections with zero items are omitted.
+ * - Loading shows skeleton rows in the In-progress slot.
+ * - Empty (no orders) shows a centered hint, no CTA.
+ * - Errors show an inline Alert with a Retry affordance.
+ */
 
-import PochaOrderItem from "./PochaOrderItem";
-import { Tabs, Tab } from "@nextui-org/react"; // Using Tabs
+import React, { useState } from "react";
+import {
+  Alert,
+  Skeleton,
+  Button,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@umichkisa-ds/web";
+
+import useUserOrders from "../../hooks/useUserOrders";
 import useUserOrderSocket from "../../hooks/useUserOrderSocket";
-import LoadingSpinner from "@/components/ui/feedback/LoadingSpinner";
+import { useAuth } from "@/lib/auth/authContext";
+import { OrderItem } from "@/types/pocha";
+
+import ReadyOrderCard from "./ReadyOrderCard";
+import InProgressOrderRow from "./InProgressOrderRow";
+import OrderTicketModal from "./OrderTicketModal";
 
 interface OrderListProps {
   pochaID: number;
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="type-h3 text-foreground">{children}</h2>
+  );
+}
+
+function SkeletonRow() {
+  return (
+    <li className="list-none">
+      <div className="flex items-start gap-4 rounded-md border border-border bg-surface p-4">
+        <Skeleton variant="rectangular" className="w-12 h-12 rounded-md" />
+        <div className="flex-1 flex flex-col gap-2">
+          <Skeleton variant="rectangular" className="h-4 w-2/3" />
+          <Skeleton variant="rectangular" className="h-3 w-1/3" />
+          <Skeleton variant="rectangular" className="h-3 w-full" />
+        </div>
+      </div>
+    </li>
+  );
 }
 
 export default function OrderList({ pochaID }: OrderListProps) {
@@ -33,89 +73,135 @@ export default function OrderList({ pochaID }: OrderListProps) {
     addNewOrderItem,
   });
 
-  // UI Rendering ----------------------------------------------
+  const [selectedOrder, setSelectedOrder] = useState<OrderItem | null>(null);
+
+  const handleOpenTicket = (orderItem: OrderItem) => {
+    setSelectedOrder(orderItem);
+  };
+  const handleCloseTicket = () => setSelectedOrder(null);
+
+  const handleRetry = () => {
+    // Re-mounting via reload is the simplest correct retry: the data
+    // layer (useUserOrders / useUserOrderSocket) does its own bootstrap.
+    // Lane 4.3b owns the data layer; richer retry hooks belong there.
+    if (typeof window !== "undefined") window.location.reload();
+  };
+
+  // ------- Error state -------
+  if (ordersStatus === "error") {
+    return (
+      <div className="flex flex-col w-full px-4 py-3 gap-4">
+        <Alert
+          variant="error"
+          title="Couldn't load your orders"
+        >
+          Something went wrong fetching your orders. Please try again.
+        </Alert>
+        <Button variant="secondary" size="md" onClick={handleRetry}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
+  // ------- Loading state -------
   if (ordersStatus === "loading") {
     return (
-      <LoadingSpinner fullScreen={false} label="주문 목록 가져오는중..." />
+      <div className="flex flex-col w-full px-4 py-3 gap-4">
+        <SectionHeading>In progress</SectionHeading>
+        <ul className="flex flex-col gap-3">
+          <SkeletonRow />
+          <SkeletonRow />
+          <SkeletonRow />
+        </ul>
+      </div>
+    );
+  }
+
+  const activeInProgress = [...preparingOrders, ...pendingOrders];
+  const hasReady = readyOrders.length > 0;
+  const hasActive = activeInProgress.length > 0;
+  const hasPast = closedOrders.length > 0;
+  const totallyEmpty = !hasReady && !hasActive && !hasPast;
+
+  // ------- Wholly empty state -------
+  if (totallyEmpty) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full px-4 py-12 text-center">
+        <p className="type-body text-muted-foreground">No orders yet.</p>
+      </div>
     );
   }
 
   return (
-    <div className="flex flex-col w-full h-full py-[0.6rem]">
-      {/* Tabs for Order Status */}
-      <Tabs
-        className={`${sejongHospitalBold.className} w-full`}
-        size="md"
-        fullWidth
-        aria-label="Order Status"
-        radius="sm"
-      >
-        {/* All Tab */}
-        <Tab key="all" title="All">
-          {(() => {
-            // An array that combines all 3: pending, preparing, ready.
-            const allOrders = [
-              ...readyOrders,
-              ...preparingOrders,
-              ...pendingOrders,
-              ...closedOrders,
-            ];
+    <>
+      <div className="flex flex-col w-full px-4 py-3 gap-6">
+        {/* ----- Ready for pickup ----- */}
+        {hasReady && (
+          <section className="flex flex-col gap-3">
+            <SectionHeading>Ready for pickup</SectionHeading>
+            <ul className="flex flex-col gap-3">
+              {readyOrders.map((orderItem) => (
+                <ReadyOrderCard
+                  key={orderItem.orderItemID}
+                  orderItem={orderItem}
+                  onOpen={handleOpenTicket}
+                />
+              ))}
+            </ul>
+          </section>
+        )}
 
-            // If allOrders array length = 0 --> No order request has been made.
-            return allOrders.length === 0 ? (
-              <div className="text-center mt-4">
-                You haven&apos;t placed any orders yet.
-              </div>
-            ) : (
-              // Else
-              <ul className="self-stretch flex flex-col gap-[1rem]">
-                {allOrders.map((orderItem) => (
-                  <PochaOrderItem
-                    key={orderItem.orderItemID}
-                    orderItem={orderItem}
-                  />
-                ))}
-              </ul>
-            );
-          })()}
-        </Tab>
+        {/* ----- In progress ----- */}
+        {hasActive && (
+          <section className="flex flex-col gap-3">
+            <SectionHeading>In progress</SectionHeading>
+            <ul className="flex flex-col gap-3">
+              {activeInProgress.map((orderItem) => (
+                <InProgressOrderRow
+                  key={orderItem.orderItemID}
+                  orderItem={orderItem}
+                />
+              ))}
+            </ul>
+          </section>
+        )}
 
-        {/* Pending Tab */}
-        <Tab key="pending" title="Pending">
-          <ul className="self-stretch flex flex-col gap-[1rem]">
-            {pendingOrders?.map((orderItem, idx) => (
-              <PochaOrderItem
-                key={orderItem.orderItemID}
-                orderItem={orderItem}
-              />
-            ))}
-          </ul>
-        </Tab>
+        {/* ----- Past orders (collapsed footer) ----- */}
+        {hasPast && (
+          <section className="flex flex-col gap-3">
+            {!hasActive && (
+              <p className="type-caption text-muted-foreground">
+                No active orders
+              </p>
+            )}
+            <Accordion type="single">
+              <AccordionItem value="past-orders">
+                <AccordionTrigger>
+                  <span className="type-label text-foreground">
+                    Past orders ({closedOrders.length})
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <ul className="flex flex-col gap-3 pt-2">
+                    {closedOrders.map((orderItem) => (
+                      <InProgressOrderRow
+                        key={orderItem.orderItemID}
+                        orderItem={orderItem}
+                      />
+                    ))}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </section>
+        )}
+      </div>
 
-        {/* Preparing Tab */}
-        <Tab key="preparing" title="Preparing">
-          <ul className="self-stretch flex flex-col gap-[1rem]">
-            {preparingOrders?.map((orderItem, idx) => (
-              <PochaOrderItem
-                key={orderItem.orderItemID}
-                orderItem={orderItem}
-              />
-            ))}
-          </ul>
-        </Tab>
-
-        {/* Ready Tab */}
-        <Tab key="ready" title="Ready">
-          <ul className="self-stretch flex flex-col gap-[1rem]">
-            {readyOrders?.map((orderItem, idx) => (
-              <PochaOrderItem
-                key={orderItem.orderItemID}
-                orderItem={orderItem}
-              />
-            ))}
-          </ul>
-        </Tab>
-      </Tabs>
-    </div>
+      <OrderTicketModal
+        orderItem={selectedOrder}
+        onClose={handleCloseTicket}
+      />
+    </>
   );
 }
