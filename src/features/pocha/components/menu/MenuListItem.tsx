@@ -2,6 +2,10 @@
  * MenuListItem
  * - Displays a menu item row.
  * - Underage users see alcohol items dimmed with a "21+" badge and disabled button.
+ * - Low-stock hint `재고 N개 남음` shows when stock is in (0, 3] AND the user
+ *   has fewer of this item in their cart than the remaining stock. Once the
+ *   user is at-cap (existingCartQty >= stock) the row stays unchanged — the
+ *   detail sheet handles the at-cap state.
  */
 
 import { MenuItem } from "@/types/pocha";
@@ -11,11 +15,13 @@ import {
   defaultImageURL,
   getMenuImagePath,
 } from "@/features/pocha/utils/getImagePath";
+import { isLowStock } from "@/features/pocha/utils/isLowStock";
 import Image from "next/image";
 
 interface MenuItemCardProps {
   menu: MenuItem;
   underAge: boolean;
+  existingCartQty: number;
   setSelectedMenu: (menu: MenuItem) => void;
   isPriority?: boolean;
 }
@@ -23,13 +29,20 @@ interface MenuItemCardProps {
 export default function MenuListItem({
   menu,
   underAge,
+  existingCartQty,
   setSelectedMenu,
   isPriority = false,
 }: MenuItemCardProps) {
   const { menuID, nameEng, nameKor, price, ageCheckRequired, stock } = menu;
 
   const notForUnderAge = ageCheckRequired && underAge;
-  const outOfStock = stock === 0;
+
+  // Cart-aware remaining stock. Hint shows only when remaining is in (0, 3]
+  // — naturally suppresses at-cap (remaining=0) so the sheet's at-cap state
+  // handles that signal exclusively.
+  const remainingStock = Math.max(0, stock - existingCartQty);
+  const outOfStock = remainingStock === 0;
+  const showLowStockHint = isLowStock(remainingStock);
   const disabled = notForUnderAge || outOfStock;
 
   const handleMenuClick = () => {
@@ -63,7 +76,7 @@ export default function MenuListItem({
         {/* Menu Info */}
         <div className="flex flex-col items-start justify-center text-left gap-1">
           <span
-            className={`type-body font-semibold! ${
+            className={`type-label ${
               outOfStock
                 ? "text-muted-foreground line-through"
                 : "text-foreground"
@@ -85,6 +98,11 @@ export default function MenuListItem({
               </Badge>
             )}
           </div>
+          {showLowStockHint && (
+            <Badge variant="warning" size="sm">
+              Only {remainingStock} left
+            </Badge>
+          )}
         </div>
       </button>
     </li>

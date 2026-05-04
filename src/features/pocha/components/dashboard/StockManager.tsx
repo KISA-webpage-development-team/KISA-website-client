@@ -36,6 +36,7 @@ import {
   toast,
 } from "@umichkisa-ds/web";
 import useMenu from "../../hooks/useMenu";
+import { isLowStock } from "../../utils/isLowStock";
 import type { MenuItem } from "@/types/pocha";
 
 interface StockManagerProps {
@@ -104,16 +105,12 @@ function StockCell({
   );
 }
 
-function isLow(stock: number) {
-  return stock >= 1 && stock <= 3;
-}
-
 function matchFilter(filter: StockFilter, stock: number) {
   switch (filter) {
     case "in":
       return stock > 0;
     case "low":
-      return isLow(stock);
+      return isLowStock(stock);
     case "sold-out":
       return stock === 0;
     case "all":
@@ -155,7 +152,7 @@ export default function StockManager({ pochaID, token }: StockManagerProps) {
     for (const row of flatRows) {
       all += 1;
       if (row.stock > 0) inStock += 1;
-      if (isLow(row.stock)) low += 1;
+      if (isLowStock(row.stock)) low += 1;
       if (row.stock === 0) soldOut += 1;
     }
     return { all, inStock, low, soldOut };

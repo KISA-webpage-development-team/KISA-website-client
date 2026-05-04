@@ -141,7 +141,7 @@ export const mockPochaMenus: Record<number, MenuByCategory[]> = {
           category: "food",
           description: "Spicy rice cakes",
           price: 10,
-          stock: 25,
+          stock: 3,
           isImmediatePrep: false,
           ageCheckRequired: false,
         },

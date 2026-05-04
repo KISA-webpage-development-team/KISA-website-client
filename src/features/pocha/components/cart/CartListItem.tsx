@@ -66,7 +66,7 @@ export default function CartListItem({
         </span>
         {atStockCap && (
           <span className="type-caption text-error">
-            Max · 재고 {menu.stock}개
+            Max · {menu.stock} in stock
           </span>
         )}
       </div>
