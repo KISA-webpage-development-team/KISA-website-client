@@ -85,11 +85,6 @@ export default function PaymentSubmitForm({
         <PaymentElement options={PAYMENT_ELEMENT_OPTIONS} />
 
         <PaySummaryCard amount={amount} fee={fee} totalPrice={totalPrice} />
-
-        <p className="type-caption text-muted-foreground">
-          *A service fee is charged by Stripe and consists of a $0.30 flat fee
-          plus 3.1% of the order amount.
-        </p>
       </div>
 
       {/* Sticky-bottom action bar with inline error above the button */}
