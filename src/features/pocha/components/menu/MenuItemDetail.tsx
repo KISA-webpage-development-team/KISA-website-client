@@ -151,7 +151,7 @@ export default function MenuItemDetail({
 
             {(fullyAtCap || atStepperCap) && (
               <span className="type-caption text-error">
-                Max · 재고 {stock}개
+                Max · Only {remaining} left
               </span>
             )}
 
@@ -163,9 +163,7 @@ export default function MenuItemDetail({
                 disabled={fullyAtCap}
                 className="w-full"
               >
-                {fullyAtCap
-                  ? "최대 수량 도달 · Stock cap reached"
-                  : "Add to Cart"}
+                {fullyAtCap ? "Stock cap reached" : "Add to Cart"}
               </Button>
             </SheetFooter>
           </div>

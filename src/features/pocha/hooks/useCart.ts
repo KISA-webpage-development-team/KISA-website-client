@@ -1,21 +1,24 @@
 /*
  * useCart.ts
- * - SWR-backed cart hook (Pattern A: useSWR + mutate() + ref-stable debounce).
- * - One key per (email, pochaID) pair → SWR auto-dedupes when multiple
- *   consumers (e.g. /pocha page MenuList + MenuItemDetail) call useCart in
- *   parallel.
- * - `handleQuantityChange` does an immediate optimistic mutate, then schedules
- *   a debounced API call. Preserves the 1s debounce contract from the legacy
- *   implementation. The debouncer is stored in a ref of a useMemo so it is
- *   stable across renders (the legacy code rebuilt it every render, defeating
- *   the debounce).
- * - On settle-reject (network error OR `{ isStocked: false }` server response)
- *   we surface a toast and revalidate via `mutate(key)`.
+ * - SWR-backed cart hook (Pattern A: useSWR + mutate() + per-menu accumulator
+ *   over a per-menu 1s debouncer).
+ * - One SWR key per (email, pochaID) → consumers (/pocha MenuList,
+ *   MenuItemDetail, /pocha/cart) auto-dedupe the GET.
+ * - **Server contract is delta-based** (`KISA-website-server/.../cart.py`):
+ *   POST /api/v2/pocha/cart accepts `quantity` as the increment (+N inserts
+ *   N rows or increments; -N deletes N). Coalesced taps must therefore sum
+ *   their deltas, not send the latest absolute total.
+ * - Per-menuID debouncer lets the user edit menu A and menu B in parallel
+ *   without one tap stomping the other (a single shared debouncer would only
+ *   keep the latest call's args).
+ * - On settle-reject (network OR `isStocked: false`) we toast and revalidate
+ *   to overwrite the now-wrong optimistic UI. On success we skip revalidate
+ *   so the user doesn't see a flicker — optimistic already matches server.
  */
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import useSWR, { useSWRConfig } from "swr";
-import { debounce } from "lodash";
+import { debounce, type DebouncedFunc } from "lodash";
 import { toast } from "@umichkisa-ds/web";
 
 import { getUserCart } from "@/apis/pocha/queries";
@@ -23,7 +26,8 @@ import { changeItemInCart } from "@/apis/pocha/mutations";
 import { Cart } from "@/types/pocha";
 import { HookStatus } from "./types";
 
-const REJECT_TOAST = "재고가 부족합니다 · Insufficient stock";
+const REJECT_TOAST = "Insufficient stock";
+const DEBOUNCE_MS = 1000;
 
 const cartToTotalAmount = (cart: Cart | undefined): number => {
   if (!cart) return 0;
@@ -31,9 +35,6 @@ const cartToTotalAmount = (cart: Cart | undefined): number => {
     (sum, item) => sum + item.menu.price * item.quantity,
     0
   );
-  // toFixed returns a string; legacy hook stored .toFixed(2) into a `number`
-  // state slot which only worked because of TS coercion at the boundary.
-  // Round to two decimal places numerically here so consumers stay typed.
   return Math.round(total * 100) / 100;
 };
 
@@ -61,105 +62,85 @@ const useCart = (email: string | undefined, pochaID: number | undefined) => {
       ? "loading"
       : "success";
 
-  // Ref-stable debouncer. useMemo runs once at mount (empty deps); useRef
-  // pins the resulting debounced function across re-renders so all callers
-  // share the same internal timer. Avoids the legacy per-render bug where
-  // the debouncer was rebuilt every render and never coalesced taps.
-  // The debounced function is created once at mount and pinned across
-  // renders via the ref. Closing over `globalMutate` is intentional — SWR's
-  // `mutate` is referentially stable from `useSWRConfig`, so the closure
-  // never goes stale. We deliberately do NOT include it as a dep.
-  const debouncedRef = useRef(
-    useMemo(
-      () =>
-        debounce(
-          async (
-            opts: {
-              email: string;
-              pochaID: number;
-              menuID: number;
-              cumulativeQuantity: number;
-              key: string;
-            }
-          ) => {
-            try {
-              const res = await changeItemInCart(
-                opts.email,
-                opts.pochaID,
-                {
-                  menuID: opts.menuID,
-                  quantity: opts.cumulativeQuantity,
-                }
-              );
-              if (!res || res.isStocked === false) {
-                toast.error(REJECT_TOAST);
-                globalMutate(opts.key);
-                return;
-              }
-              // Confirm with a background revalidate so optimistic UI lines
-              // up with server truth (e.g. server-side clamping).
-              globalMutate(opts.key);
-            } catch (err) {
-              console.error("Error updating cart item", err);
-              toast.error(REJECT_TOAST);
-              globalMutate(opts.key);
-            }
-          },
-          1000
-        ),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      []
-    )
-  );
+  // Per-menuID accumulator + debouncer maps. Both ref-pinned so they survive
+  // re-renders.
+  const pendingDeltaRef = useRef<Map<number, number>>(new Map());
+  const debouncerMapRef = useRef<
+    Map<number, DebouncedFunc<() => Promise<void>>>
+  >(new Map());
 
-  // Cancel any in-flight debounced call when the hook tears down so we
-  // don't fire stale writes after unmount or a key change.
+  // Stable ref the debounced closure reads from — avoids rebuilding
+  // debouncers when email/pochaID/key change identity but not value.
+  const ctxRef = useRef({ email: safeEmail, pochaID: safePochaID, key });
+  ctxRef.current = { email: safeEmail, pochaID: safePochaID, key };
+
+  // On key change (signed-out → signed-in, account switch, pocha switch) the
+  // debounced closures are still valid (they read ctxRef live), but pending
+  // deltas were accumulated against the OLD key. Flush them out under the
+  // outgoing identity, then reset.
   useEffect(() => {
-    const debounced = debouncedRef.current;
     return () => {
-      debounced.cancel();
+      for (const d of debouncerMapRef.current.values()) d.flush();
+      debouncerMapRef.current.clear();
+      pendingDeltaRef.current.clear();
     };
-  }, []);
+  }, [key]);
 
-  // Optimistic UI: synchronous mutate, then debounced API call.
-  // `delta` is the +1 / -1 (or batch quantity) requested by the caller,
-  // matching the legacy `handleQuantityChange(menuid, newQuantity)` shape.
   const handleQuantityChange = (menuid: number, delta: number) => {
     if (!key) return;
 
-    let nextQuantityForMenu = 0;
+    // Optimistic UI: only when the row already exists. For "Add to Cart"
+    // from MenuItemDetail (no row yet) we cannot fabricate the `menu`
+    // snapshot the cart shape requires; the post-settle revalidate populates
+    // the row instead.
     mutate(
       (prev) => {
         const base = prev ?? ({} as Cart);
         const existing = base[menuid];
-        const currentQty = existing?.quantity ?? 0;
-        const nextQty = currentQty + delta;
-        nextQuantityForMenu = nextQty;
-
-        if (!existing) {
-          // No row yet → caller is "Add to Cart" from MenuItemDetail. We
-          // can't fabricate a `menu` snapshot here, so leave the cache as
-          // is and rely on the post-settle revalidate to populate the row.
-          return base;
-        }
+        if (!existing) return base;
         return {
           ...base,
-          [menuid]: {
-            ...existing,
-            quantity: nextQty,
-          },
+          [menuid]: { ...existing, quantity: existing.quantity + delta },
         };
       },
       { revalidate: false }
     );
 
-    debouncedRef.current({
-      email: safeEmail,
-      pochaID: safePochaID,
-      menuID: menuid,
-      cumulativeQuantity: nextQuantityForMenu,
-      key,
-    });
+    pendingDeltaRef.current.set(
+      menuid,
+      (pendingDeltaRef.current.get(menuid) ?? 0) + delta
+    );
+
+    let d = debouncerMapRef.current.get(menuid);
+    if (!d) {
+      d = debounce(async () => {
+        const acc = pendingDeltaRef.current.get(menuid) ?? 0;
+        pendingDeltaRef.current.set(menuid, 0);
+        if (acc === 0) return;
+        const { email: e, pochaID: p, key: k } = ctxRef.current;
+        if (!k) return;
+        try {
+          const res = await changeItemInCart(e, p, {
+            menuID: menuid,
+            quantity: acc,
+          });
+          if (!res || res.isStocked === false) {
+            toast.error(REJECT_TOAST);
+          }
+          // Always revalidate to reconcile optimistic with server truth.
+          // (Flicker risk on rapid-tap-during-fetch is narrow; correctness
+          // matters more — server may have clamped or merged with another
+          // session.)
+          globalMutate(k);
+        } catch (err) {
+          console.error("Error updating cart item", err);
+          toast.error(REJECT_TOAST);
+          globalMutate(k);
+        }
+      }, DEBOUNCE_MS);
+      debouncerMapRef.current.set(menuid, d);
+    }
+    d();
   };
 
   const fetchCart = async () => {

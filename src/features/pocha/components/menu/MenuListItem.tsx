@@ -36,14 +36,14 @@ export default function MenuListItem({
   const { menuID, nameEng, nameKor, price, ageCheckRequired, stock } = menu;
 
   const notForUnderAge = ageCheckRequired && underAge;
-  const outOfStock = stock === 0;
-  const disabled = notForUnderAge || outOfStock;
 
-  // Show the low-stock hint only when stock is in (0, 3] AND the user
-  // hasn't already reserved all of it in the cart. At-cap suppresses the
-  // hint to avoid double-signalling (the sheet's at-cap state handles it).
-  const showLowStockHint =
-    isLowStock(stock) && existingCartQty < stock;
+  // Cart-aware remaining stock. Hint shows only when remaining is in (0, 3]
+  // — naturally suppresses at-cap (remaining=0) so the sheet's at-cap state
+  // handles that signal exclusively.
+  const remainingStock = Math.max(0, stock - existingCartQty);
+  const outOfStock = remainingStock === 0;
+  const showLowStockHint = isLowStock(remainingStock);
+  const disabled = notForUnderAge || outOfStock;
 
   const handleMenuClick = () => {
     setSelectedMenu(menu);
@@ -100,7 +100,7 @@ export default function MenuListItem({
           </div>
           {showLowStockHint && (
             <Badge variant="warning" size="sm">
-              재고 {stock}개 남음
+              Only {remainingStock} left
             </Badge>
           )}
         </div>
