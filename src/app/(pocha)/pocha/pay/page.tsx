@@ -112,9 +112,12 @@ export default function PayPage() {
     userAgeStatus === "error" ||
     !totalPrice;
 
+  // `hasError` includes `!totalPrice`, which is true during the loading
+  // window before `usePay` resolves. Gate the redirect on `!isLoading` so
+  // we don't bounce out mid-load.
   useEffect(() => {
-    if (hasError) router.push("/pocha");
-  }, [hasError, router]);
+    if (!isLoading && hasError) router.push("/pocha");
+  }, [isLoading, hasError, router]);
 
   // Short-circuit before the loading check — usePay stalls on null pochaID,
   // so the page would otherwise spin forever when there is no ongoing pocha.
