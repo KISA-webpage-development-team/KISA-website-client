@@ -17,10 +17,11 @@ import useMenu from "../../hooks/useMenu";
 import useUserAge from "../../hooks/useUserAge";
 
 // Types
-import { MenuItem } from "@/types/pocha";
+import { MenuItem, Cart } from "@/types/pocha";
 
 interface MenuListProps {
   pochaid: number | undefined;
+  cart: Cart | undefined;
 }
 
 function MenuListSkeleton() {
@@ -49,7 +50,7 @@ function MenuListSkeleton() {
   );
 }
 
-function MenuList({ pochaid }: MenuListProps) {
+function MenuList({ pochaid, cart }: MenuListProps) {
   const { session } = useAuth();
 
   const { menuList, status: menuStatus } = useMenu(pochaid, session?.token);
@@ -96,6 +97,7 @@ function MenuList({ pochaid }: MenuListProps) {
                   key={`${menu.menuID}-${menuIdx}`}
                   menu={menu}
                   underAge={!!underAge}
+                  existingCartQty={cart?.[menu.menuID]?.quantity ?? 0}
                   setSelectedMenu={setSelectedMenu}
                   isPriority={categoryIdx === 0 && menuIdx < 3}
                 />

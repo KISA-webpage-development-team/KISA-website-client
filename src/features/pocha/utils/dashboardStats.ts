@@ -1,5 +1,6 @@
 import type { OrderItem, MenuByCategory } from "@/types/pocha";
 import { OrderStatus } from "@/types/pocha";
+import { isLowStock } from "./isLowStock";
 
 export interface DashboardStats {
   active: number;
@@ -25,7 +26,7 @@ export function computeStats(
   for (const cat of menus) {
     for (const m of cat.menusList) {
       if (m.stock === 0) soldOut++;
-      else if (m.stock <= 3) lowStock++;
+      else if (isLowStock(m.stock)) lowStock++;
     }
   }
 

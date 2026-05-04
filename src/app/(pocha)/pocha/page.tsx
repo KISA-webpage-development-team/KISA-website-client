@@ -22,6 +22,8 @@ import { POCHA_THEME } from "@/features/pocha/featureFlag";
 // hooks
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import usePocha from "@/features/pocha/hooks/usePocha";
+import useCart from "@/features/pocha/hooks/useCart";
+import { useAuth } from "@/lib/auth/authContext";
 
 // types
 import { PochaTab } from "@/types/pocha";
@@ -103,6 +105,10 @@ export default function PochaPage() {
   const [swayTrigger, setSwayTrigger] = useState(0);
 
   const { pochaInfo, status, error } = usePocha();
+  const { session } = useAuth();
+  // SWR-deduped: MenuItemDetail also calls useCart with the same key, so this
+  // does not double-fetch.
+  const { cart } = useCart(session?.user?.email, pochaInfo?.pochaID);
 
   if (status === "loading") {
     return <HomeShellSkeleton />;
@@ -191,7 +197,7 @@ export default function PochaPage() {
           }
         >
           <TabsContent value="menu" className="flex flex-col">
-            <MenuList pochaid={pochaInfo?.pochaID} />
+            <MenuList pochaid={pochaInfo?.pochaID} cart={cart} />
             <ViewCartButton pochaID={pochaInfo?.pochaID} />
           </TabsContent>
           <TabsContent value="orders">

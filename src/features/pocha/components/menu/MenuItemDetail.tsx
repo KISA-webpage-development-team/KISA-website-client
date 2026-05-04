@@ -2,6 +2,11 @@
  * MenuItemDetail
  * - DS Sheet (mobile bottom-sheet) showing the selected menu item.
  * - User picks a quantity, taps "Add to Cart"; we wire to useCart.handleQuantityChange.
+ * - Stepper caps at `stock - existingCartQty` so the user can never queue a
+ *   request the server would reject. Inline red `Max · 재고 N개` shows at cap.
+ * - At-cap state (`existingCartQty >= stock`): sheet opens read-only —
+ *   stepper sits at 1, both `+`/`−` disabled, "Add to Cart" copy swaps to
+ *   `최대 수량 도달 · Stock cap reached` and the button is disabled.
  * - Sheet closes on success. Dismissal: backdrop tap, swipe-down, close X.
  */
 
@@ -39,26 +44,41 @@ export default function MenuItemDetail({
 }: MenuItemDetailProps) {
   const open = selectedMenu !== null;
 
-  const { handleQuantityChange } = useCart(
+  const { cart, handleQuantityChange } = useCart(
     session?.user?.email ?? "",
     pochaid ?? 0
   );
 
+  const existingCartQty: number = selectedMenu
+    ? cart?.[selectedMenu.menuID]?.quantity ?? 0
+    : 0;
+
+  const stock = selectedMenu?.stock ?? 0;
+  // Available capacity for *this* sheet session, on top of what's already
+  // reserved in the cart. `remaining <= 0` ⇒ user is fully at-cap.
+  const remaining = Math.max(0, stock - existingCartQty);
+  const fullyAtCap = !!selectedMenu && existingCartQty >= stock;
+
   const [quantity, setQuantity] = useState<number>(1);
+
+  const atStepperCap = !fullyAtCap && quantity >= remaining;
 
   const handleOpenChange = (next: boolean) => {
     if (!next) onClose();
   };
 
-  const handleIncrement = () => setQuantity((q) => q + 1);
+  const handleIncrement = () => {
+    setQuantity((q) => (q < remaining ? q + 1 : q));
+  };
   const handleDecrement = () => {
     setQuantity((q) => (q > 1 ? q - 1 : 1));
   };
 
   const handleAddToCart = () => {
-    if (!selectedMenu) return;
+    if (!selectedMenu || fullyAtCap) return;
     // useCart.handleQuantityChange does an optimistic UI update synchronously
     // and debounces the API call internally — no async surface to await.
+    // Server-reject toast (if any) is fired from inside useCart.
     handleQuantityChange(selectedMenu.menuID, quantity);
     onClose();
   };
@@ -110,10 +130,11 @@ export default function MenuItemDetail({
                   size="sm"
                   variant="secondary"
                   onClick={handleDecrement}
-                  disabled={quantity === 1}
+                  disabled={fullyAtCap || quantity === 1}
                 />
                 <span
                   className="type-body text-foreground w-6 text-center"
+                  aria-live="polite"
                 >
                   {quantity}
                 </span>
@@ -123,18 +144,28 @@ export default function MenuItemDetail({
                   size="sm"
                   variant="secondary"
                   onClick={handleIncrement}
+                  disabled={fullyAtCap || atStepperCap}
                 />
               </div>
             </div>
+
+            {(fullyAtCap || atStepperCap) && (
+              <span className="type-caption text-error">
+                Max · 재고 {stock}개
+              </span>
+            )}
 
             <SheetFooter className="!mt-2">
               <Button
                 variant="primary"
                 size="lg"
                 onClick={handleAddToCart}
+                disabled={fullyAtCap}
                 className="w-full"
               >
-                Add to Cart
+                {fullyAtCap
+                  ? "최대 수량 도달 · Stock cap reached"
+                  : "Add to Cart"}
               </Button>
             </SheetFooter>
           </div>
