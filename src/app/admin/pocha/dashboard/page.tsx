@@ -22,8 +22,8 @@ import OrderHistoryTable from "@/features/pocha/components/dashboard/OrderHistor
 import StockManager from "@/features/pocha/components/dashboard/StockManager";
 import DashboardStatsStrip from "@/features/pocha/components/dashboard/DashboardStatsStrip";
 import { updateURLWithTab } from "@/features/pocha/utils/updateURL";
-import { useDashboardSelectMode } from "./useDashboardSelectMode";
-import BulkPromoteToggle from "./BulkPromoteToggle";
+import { useDashboardSelectMode } from "@/features/pocha/hooks/useDashboardSelectMode";
+import BulkPromoteToggle from "@/components/shared/admin/BulkPromoteToggle";
 
 // types
 import { PochaDashboardTab } from "@/types/pocha";
