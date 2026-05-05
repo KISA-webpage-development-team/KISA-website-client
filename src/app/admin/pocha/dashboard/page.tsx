@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -9,8 +9,6 @@ import {
   TabsTrigger,
   TabsContent,
   Container,
-  Button,
-  Icon,
   StatusView,
   buttonVariants,
 } from "@umichkisa-ds/web";
@@ -24,6 +22,8 @@ import OrderHistoryTable from "@/features/pocha/components/dashboard/OrderHistor
 import StockManager from "@/features/pocha/components/dashboard/StockManager";
 import DashboardStatsStrip from "@/features/pocha/components/dashboard/DashboardStatsStrip";
 import { updateURLWithTab } from "@/features/pocha/utils/updateURL";
+import { useDashboardSelectMode } from "./useDashboardSelectMode";
+import BulkPromoteToggle from "./BulkPromoteToggle";
 
 // types
 import { PochaDashboardTab } from "@/types/pocha";
@@ -31,7 +31,7 @@ import { PochaDashboardTab } from "@/types/pocha";
 export default function DashboardPage() {
   // fetch necessary information for the dashboard
   // each hook fetches with GET request
-  const { isAdmin, email, token, status: adminStatus } = useAdmin();
+  const { email, token } = useAdmin();
   const {
     pochaID,
     status: pochaIDStatus,
@@ -40,8 +40,12 @@ export default function DashboardPage() {
   } = usePochaID();
 
   const searchParams = useSearchParams();
+  const VALID_TABS: PochaDashboardTab[] = ["orders", "stock", "history"];
+  const rawTab = searchParams.get("tab");
   const initialTab: PochaDashboardTab =
-    (searchParams.get("tab") as PochaDashboardTab) || "orders";
+    rawTab && (VALID_TABS as string[]).includes(rawTab)
+      ? (rawTab as PochaDashboardTab)
+      : "orders";
 
   // Controlled tab state — drives whether the Bulk-promote toggle renders
   // (only meaningful on Orders tab) and lets us auto-exit select mode on
@@ -58,37 +62,10 @@ export default function DashboardPage() {
 
   // Page-level select mode (lifted from OrderDashboard so the Bulk-promote
   // toggle can live on the same row as Tabs instead of inside the food grid).
-  const [selectMode, setSelectMode] = useState(false);
-  const [isPromotingFood, setIsPromotingFood] = useState(false);
-  const [isPromotingDrink, setIsPromotingDrink] = useState(false);
-  const isPromoting = isPromotingFood || isPromotingDrink;
-
-  const handleToggleSelectMode = useCallback(() => {
-    if (isPromoting) return;
-    setSelectMode((prev) => !prev);
-  }, [isPromoting]);
-
-  const handleEnterSelectMode = useCallback(() => {
-    if (isPromoting) return;
-    setSelectMode(true);
-  }, [isPromoting]);
-
-  // Switching away from Orders tab → exit select mode (the grids' existing
-  // selectMode-false effect clears their selectedIds).
-  useEffect(() => {
-    if (currentTab !== "orders" && selectMode) {
-      setSelectMode(false);
-    }
-  }, [currentTab, selectMode]);
+  const select = useDashboardSelectMode(currentTab);
 
   if (pochaIDStatus === "error") {
     throw new Error(pochaIDError);
-  }
-
-  // Auth resolved + not admin → block. Gated on adminStatus === "success" so
-  // we don't flash NotAuthorized while the session is still loading.
-  if (adminStatus === "success" && !isAdmin) {
-    return <StatusView fullScreen variant="not-authorized" />;
   }
 
   // 204 from /pocha/status-info — backend signals there is no ongoing pocha
@@ -104,7 +81,7 @@ export default function DashboardPage() {
         description="다음 포차가 시작되면 이 곳에서 주문을 확인할 수 있습니다."
         action={
           <Link
-            href="/pocha/manage"
+            href="/admin/pocha/manage"
             className={buttonVariants({ variant: "primary", size: "md" })}
           >
             포차 관리로 이동
@@ -140,27 +117,11 @@ export default function DashboardPage() {
               <TabsTrigger value="history">History</TabsTrigger>
             </TabsList>
             {currentTab === "orders" && (
-              <div className="flex items-center gap-4">
-                <span className="type-body-sm text-muted-foreground hidden sm:inline">
-                  {selectMode
-                    ? "Tap cards to select"
-                    : "Promote multiple at once"}
-                </span>
-                <Button
-                  variant={selectMode ? "primary" : "secondary"}
-                  size="md"
-                  onClick={handleToggleSelectMode}
-                  disabled={isPromoting}
-                  aria-pressed={selectMode}
-                >
-                  <Icon
-                    name={selectMode ? "check" : "circle-check"}
-                    size="sm"
-                    aria-hidden
-                  />
-                  {selectMode ? "Done" : "Bulk promote"}
-                </Button>
-              </div>
+              <BulkPromoteToggle
+                selectMode={select.selectMode}
+                disabled={select.isPromoting}
+                onToggle={select.handleToggle}
+              />
             )}
           </div>
 
@@ -170,10 +131,10 @@ export default function DashboardPage() {
               email={email ?? ""}
               token={token ?? ""}
               ordersHook={ordersHook}
-              selectMode={selectMode}
-              onEnterSelectMode={handleEnterSelectMode}
-              onPromotingFoodChange={setIsPromotingFood}
-              onPromotingDrinkChange={setIsPromotingDrink}
+              selectMode={select.selectMode}
+              onEnterSelectMode={select.handleEnter}
+              onPromotingFoodChange={select.setIsPromotingFood}
+              onPromotingDrinkChange={select.setIsPromotingDrink}
             />
           </TabsContent>
           <TabsContent value="stock">
