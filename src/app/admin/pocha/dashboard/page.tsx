@@ -40,8 +40,12 @@ export default function DashboardPage() {
   } = usePochaID();
 
   const searchParams = useSearchParams();
+  const VALID_TABS: PochaDashboardTab[] = ["orders", "stock", "history"];
+  const rawTab = searchParams.get("tab");
   const initialTab: PochaDashboardTab =
-    (searchParams.get("tab") as PochaDashboardTab) || "orders";
+    rawTab && (VALID_TABS as string[]).includes(rawTab)
+      ? (rawTab as PochaDashboardTab)
+      : "orders";
 
   // Controlled tab state — drives whether the Bulk-promote toggle renders
   // (only meaningful on Orders tab) and lets us auto-exit select mode on
