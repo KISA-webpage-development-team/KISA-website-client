@@ -53,13 +53,15 @@ export default function AdminHubAppsList() {
           rel="noopener noreferrer"
           className="group block rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
         >
-          <Card hoverable className="flex-row items-center gap-4">
-            <Icon name={app.icon} size="md" />
+          <Card hoverable className="flex-row items-start gap-4">
+            <span className="type-h4 flex h-[1lh] items-center">
+              <Icon name={app.icon} size="md" />
+            </span>
             <CardHeader className="flex-1">
               <CardTitle as="h3">{app.title}</CardTitle>
               <CardDescription>{app.sub}</CardDescription>
             </CardHeader>
-            <span className="text-muted-foreground group-hover:text-foreground">
+            <span className="type-h4 flex h-[1lh] items-center text-muted-foreground group-hover:text-foreground">
               <Icon name="external-link" size="sm" />
             </span>
           </Card>
