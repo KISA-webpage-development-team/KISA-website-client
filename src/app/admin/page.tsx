@@ -30,7 +30,7 @@ export default function AdminHubPage() {
 
   return (
     <Container as="main" size="xl" className="py-12">
-      <div className="flex min-h-[calc(100dvh-12rem)] items-center">
+      <div className="flex min-h-[calc(100dvh-12rem)] items-stretch">
         {/* Crossfade swap container — both modes rendered as siblings, stacked
             in the same grid cell so the larger one reserves height. */}
         <div className="relative grid w-full">
@@ -43,7 +43,11 @@ export default function AdminHubPage() {
             ].join(" ")}
             style={{ transitionDuration: `${SWAP_MS}ms` }}
           >
-            <Grid columns={{ base: 1, md: 2, lg: 3 }} gap="component">
+            <Grid
+              columns={{ base: 1, md: 2, lg: 3 }}
+              gap="component"
+              className="h-full auto-rows-fr"
+            >
               <AdminHubHero
                 ref={defaultToggleRef}
                 mode="default"
@@ -62,7 +66,11 @@ export default function AdminHubPage() {
             ].join(" ")}
             style={{ transitionDuration: `${SWAP_MS}ms` }}
           >
-            <Grid columns={{ base: 1, md: 2, lg: 3 }} gap="component">
+            <Grid
+              columns={{ base: 1, md: 2, lg: 3 }}
+              gap="component"
+              className="h-full auto-rows-fr"
+            >
               <AdminHubHero
                 ref={appsToggleRef}
                 mode="apps"
