@@ -1,17 +1,23 @@
 'use client';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@umichkisa-ds/web';
 import { UserSession } from '@/lib/next-auth/types';
-import { sejongHospitalBold } from '@/utils/fonts/textFonts';
 import LoginButton from '@/components/layout/header/LoginButton';
 import UserInfo from '@/components/layout/header/UserInfo';
 import useAdmin from '@/lib/next-auth/useAdmin';
 import PreviousPochaList from '@/features/pocha/components/manage/PreviousPochaList';
 import OrderHistoryTable from '@/features/pocha/components/dashboard/OrderHistoryTable';
-import OrderDashboard from '@/features/pocha/components/dashboard/OrderDashboard';
 import { PochaInfoWithoutStatus } from '@/types/pocha';
+
 export default function HistoryPage() {
-  const { data: session, status: sessionStatus } = useSession() as {
+  const { data: session } = useSession() as {
     data: UserSession | undefined;
     status: string;
   };
@@ -20,11 +26,9 @@ export default function HistoryPage() {
     useState<PochaInfoWithoutStatus | null>(null);
 
   return (
-    <section className='px-2 max-w-screen-2xl mx-auto mb-10'>
-      <div className='flex items-center justify-between gap-4 mb-6'>
-        <h1 className={`${sejongHospitalBold.className} text-3xl`}>
-          포차 주문 기록
-        </h1>
+    <section className='mx-auto mb-10 w-full max-w-screen-2xl px-2'>
+      <div className='mb-6 flex items-center justify-between gap-4'>
+        <h1 className='type-h1 text-foreground'>포차 주문 기록</h1>
         <div className='flex items-center gap-4'>
           {session?.user?.email && session.user.name && session.user.image && (
             <UserInfo
@@ -50,34 +54,50 @@ export default function HistoryPage() {
         <div className='basis-2/3'>
           {selectedPocha ? (
             <div className='flex flex-col gap-6'>
-              <div className='bg-white p-6 rounded-lg shadow'>
-                <h2 className={`${sejongHospitalBold.className} text-2xl mb-2`}>
-                  {selectedPocha.title}
-                </h2>
-                <p className='text-gray-600 mb-2'>
-                  {selectedPocha.description}
-                </p>
-                <div className='text-sm text-gray-500'>
-                  <div>
-                    시작:{' '}
-                    {new Date(selectedPocha.startDate).toLocaleString('ko-KR')}
-                  </div>
-                  <div>
-                    종료:{' '}
-                    {new Date(selectedPocha.endDate).toLocaleString('ko-KR')}
-                  </div>
-                </div>
-              </div>
-{/* PochaHistoryTable로 교체 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle as='h2'>{selectedPocha.title}</CardTitle>
+                  {selectedPocha.description && (
+                    <CardDescription>
+                      {selectedPocha.description}
+                    </CardDescription>
+                  )}
+                </CardHeader>
+                <CardContent>
+                  <dl className='type-caption flex flex-col gap-2 text-[--color-muted-foreground]'>
+                    <div className='flex gap-2'>
+                      <dt>시작</dt>
+                      <dd>
+                        {new Date(selectedPocha.startDate).toLocaleString(
+                          'ko-KR',
+                        )}
+                      </dd>
+                    </div>
+                    <div className='flex gap-2'>
+                      <dt>종료</dt>
+                      <dd>
+                        {new Date(selectedPocha.endDate).toLocaleString(
+                          'ko-KR',
+                        )}
+                      </dd>
+                    </div>
+                  </dl>
+                </CardContent>
+              </Card>
+
               <OrderHistoryTable
                 token={token || ''}
                 pochaID={selectedPocha.pochaID}
               />
             </div>
           ) : (
-            <div className='flex items-center justify-center h-64 bg-gray-50 rounded-lg'>
-              <p className='text-gray-500'>왼쪽에서 포차를 선택하세요</p>
-            </div>
+            <Card>
+              <CardContent>
+                <p className='type-body flex h-64 items-center justify-center text-[--color-muted-foreground]'>
+                  왼쪽에서 포차를 선택하세요
+                </p>
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>
