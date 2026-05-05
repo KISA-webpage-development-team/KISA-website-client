@@ -19,7 +19,7 @@ const COPY = {
   apps: {
     title: "KISA가 운영하는 서비스",
     subtitle:
-      "KISA가 미시간대 학생들에게 제공하는 모든 사용자용 서비스를 한곳에서 살펴보세요.",
+      "KISA가 미시간대학교 학생들에게 제공하는 모든 사용자용 서비스를 한곳에서 살펴보세요.",
     toggle: "← 관리자 홈으로 돌아가기",
   },
 } as const;
@@ -31,7 +31,7 @@ const COPY = {
  */
 const AdminHubHero = forwardRef<HTMLButtonElement, Props>(function AdminHubHero(
   { mode, onToggle },
-  ref
+  ref,
 ) {
   const copy = COPY[mode];
 
