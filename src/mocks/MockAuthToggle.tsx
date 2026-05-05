@@ -9,7 +9,7 @@ import { getUserOrders } from "@/apis/pocha/queries";
 import { changeOrderItemStatus } from "@/apis/pocha/mutations";
 import type { OrderItem } from "@/types/pocha";
 
-const DASHBOARD_PATH = "/pocha/dashboard";
+const DASHBOARD_PATH = "/admin/pocha/dashboard";
 const POCHA_HOME_PATH = "/pocha";
 
 export function MockAuthToggle() {

@@ -24,6 +24,25 @@ const nextConfig = {
       }
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/pocha/manage",
+        destination: "/admin/pocha/manage",
+        permanent: true,
+      },
+      {
+        source: "/pocha/dashboard",
+        destination: "/admin/pocha/dashboard",
+        permanent: true,
+      },
+      {
+        source: "/pocha/history",
+        destination: "/admin/pocha/history",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { UserSession } from '@/lib/next-auth/types';
 import { sejongHospitalBold } from '@/utils/fonts/textFonts';
-import { LoadingSpinner, NotAuthorized } from '@/components/ui/feedback';
 import LoginButton from '@/components/layout/header/LoginButton';
 import UserInfo from '@/components/layout/header/UserInfo';
 import useAdmin from '@/lib/next-auth/useAdmin';
@@ -16,17 +15,9 @@ export default function HistoryPage() {
     data: UserSession | undefined;
     status: string;
   };
-  const { isAdmin, token, status: adminStatus } = useAdmin();
+  const { token } = useAdmin();
   const [selectedPocha, setSelectedPocha] =
     useState<PochaInfoWithoutStatus | null>(null);
-
-  if (adminStatus === 'loading') {
-    return <LoadingSpinner />;
-  }
-
-  if (!isAdmin) {
-    return <NotAuthorized />;
-  }
 
   return (
     <section className='px-2 max-w-screen-2xl mx-auto mb-10'>
