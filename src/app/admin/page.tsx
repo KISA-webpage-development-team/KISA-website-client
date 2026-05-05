@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Container } from "@umichkisa-ds/web";
+import { Container, Grid } from "@umichkisa-ds/web";
 import AdminHubHero from "@/components/layout/admin/AdminHubHero";
 import AdminHubCards from "@/components/layout/admin/AdminHubCards";
 import AdminHubAppsList from "@/components/layout/admin/AdminHubAppsList";
@@ -43,14 +43,14 @@ export default function AdminHubPage() {
             ].join(" ")}
             style={{ transitionDuration: `${SWAP_MS}ms` }}
           >
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Grid columns={{ base: 1, md: 2, lg: 3 }} gap="component">
               <AdminHubHero
                 ref={defaultToggleRef}
                 mode="default"
                 onToggle={() => setMode("apps")}
               />
               <AdminHubCards />
-            </div>
+            </Grid>
           </section>
 
           {/* APPS MODE — same 3-col grid, hero[0,0] + 3 app cards */}
@@ -62,14 +62,14 @@ export default function AdminHubPage() {
             ].join(" ")}
             style={{ transitionDuration: `${SWAP_MS}ms` }}
           >
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Grid columns={{ base: 1, md: 2, lg: 3 }} gap="component">
               <AdminHubHero
                 ref={appsToggleRef}
                 mode="apps"
                 onToggle={() => setMode("default")}
               />
               <AdminHubAppsList />
-            </div>
+            </Grid>
           </section>
         </div>
       </div>
