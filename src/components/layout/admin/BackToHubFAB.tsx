@@ -41,12 +41,135 @@
  *   avoid hydration mismatch.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { Ref, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@umichkisa-ds/web";
 import { readFromHubFlag } from "@/lib/admin/fromHubFlag";
 
 const SHRUNK_KEY = "kisa.admin.fab.shrunk";
+
+const EDGE_TAB_CLASS = [
+  // Position: stuck to the left edge, vertically centered-ish low.
+  "fixed bottom-8 left-0 z-40",
+  // Visual: thin sliver protruding from the edge.
+  "flex h-10 w-5 items-center justify-center",
+  "rounded-r-md bg-brand-primary text-brand-foreground",
+  "border border-l-0 border-border-strong",
+  // Motion: respect reduced-motion (instant under reduce).
+  "transition-[transform,background-color] duration-200 ease-out",
+  "motion-reduce:transition-none",
+  "hover:translate-x-0.5 hover:bg-brand-accent hover:text-foreground",
+  // Focus indicator (mandatory per WISDOM).
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2",
+].join(" ");
+
+const PILL_SHELL_CLASS = [
+  "group fixed bottom-4 left-4 z-40",
+  "flex items-center",
+  // Pill shell: navy background, maize-on-hover via children styles.
+  "rounded-full bg-brand-primary text-brand-foreground",
+  "shadow-md",
+  // Smooth shape transitions when label collapses/expands.
+  "transition-[padding,gap] duration-200 ease-out",
+  "motion-reduce:transition-none",
+  // Bottom offset respects future safe-area-inset wrappers.
+  "[padding-bottom:env(safe-area-inset-bottom,0px)]",
+].join(" ");
+
+const LINK_BASE_CLASS = [
+  "flex items-center gap-2",
+  // Touch target ≥ 44px and pill shape.
+  "h-11 rounded-full",
+  "type-label",
+  "transition-[padding,background-color,color] duration-200 ease-out",
+  "motion-reduce:transition-none",
+  "hover:bg-brand-accent hover:text-foreground",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
+].join(" ");
+
+// Padding shifts when collapsed so the icon centers in a circle.
+const LINK_COLLAPSED_PADDING_CLASS =
+  "px-3 group-hover:pl-4 group-hover:pr-4 group-focus-within:pl-4 group-focus-within:pr-4";
+const LINK_EXPANDED_PADDING_CLASS = "pl-4 pr-3";
+
+// Hidden at rest; revealed when group is hovered or any descendant has focus.
+const LABEL_COLLAPSED_CLASS =
+  "max-w-0 overflow-hidden opacity-0 group-hover:max-w-[12rem] group-hover:opacity-100 group-focus-within:max-w-[12rem] group-focus-within:opacity-100 transition-[max-width,opacity] duration-200 ease-out motion-reduce:transition-none";
+
+const SHRINK_BUTTON_CLASS = [
+  "ml-1 mr-2 flex h-7 w-7 items-center justify-center rounded-full",
+  "text-brand-foreground/80",
+  "transition-colors duration-200 ease-out motion-reduce:transition-none",
+  "hover:bg-brand-primary-hover hover:text-brand-foreground",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
+].join(" ");
+
+function EdgeTab({
+  onRestore,
+  buttonRef,
+}: {
+  onRestore: () => void;
+  buttonRef: Ref<HTMLButtonElement>;
+}) {
+  return (
+    <button
+      ref={buttonRef}
+      type="button"
+      onClick={onRestore}
+      aria-label="관리자 홈 바로가기 다시 보이기"
+      className={EDGE_TAB_CLASS}
+    >
+      <Icon name="chevron-right" size="sm" />
+    </button>
+  );
+}
+
+function HubPill({
+  defaultCollapsed,
+  onShrink,
+  linkRef,
+}: {
+  defaultCollapsed: boolean;
+  onShrink: () => void;
+  linkRef: Ref<HTMLAnchorElement>;
+}) {
+  const linkPaddingClass = defaultCollapsed
+    ? LINK_COLLAPSED_PADDING_CLASS
+    : LINK_EXPANDED_PADDING_CLASS;
+  return (
+    // Expanded/collapsed pill. The collapsed variant hides the label at rest
+    // and reveals it on hover/focus-within via group-hover / group-focus-within.
+    // The Link is the nav target; the shrink button is a SIBLING (not nested)
+    // so its activation never triggers navigation.
+    <div className={PILL_SHELL_CLASS}>
+      <Link
+        ref={linkRef}
+        href="/admin"
+        aria-label="관리자 홈으로 돌아가기"
+        className={`${LINK_BASE_CLASS} ${linkPaddingClass}`}
+      >
+        <Icon name="arrow-left" size="sm" className="flex-shrink-0" />
+        <span
+          className={`whitespace-nowrap ${
+            defaultCollapsed ? LABEL_COLLAPSED_CLASS : ""
+          }`}
+        >
+          관리자 홈
+        </span>
+      </Link>
+
+      {/* Shrink affordance — sibling button, NOT nested in the Link. */}
+      <button
+        type="button"
+        onClick={onShrink}
+        aria-label="관리자 홈 바로가기 숨기기"
+        className={SHRINK_BUTTON_CLASS}
+      >
+        <Icon name="x" size="xs" />
+      </button>
+    </div>
+  );
+}
 
 export interface BackToHubFABProps {
   /**
@@ -94,101 +217,13 @@ export default function BackToHubFAB({ defaultCollapsed }: BackToHubFABProps) {
     requestAnimationFrame(() => linkRef.current?.focus());
   };
 
-  if (shrunk) {
-    return (
-      <button
-        ref={edgeTabRef}
-        type="button"
-        onClick={handleRestore}
-        aria-label="관리자 홈 바로가기 다시 보이기"
-        className={[
-          // Position: stuck to the left edge, vertically centered-ish low.
-          "fixed bottom-8 left-0 z-40",
-          // Visual: thin sliver protruding from the edge.
-          "flex h-10 w-5 items-center justify-center",
-          "rounded-r-md bg-brand-primary text-brand-foreground",
-          "border border-l-0 border-border-strong",
-          // Motion: respect reduced-motion (instant under reduce).
-          "transition-[transform,background-color] duration-200 ease-out",
-          "motion-reduce:transition-none",
-          "hover:translate-x-0.5 hover:bg-brand-accent hover:text-foreground",
-          // Focus indicator (mandatory per WISDOM).
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2",
-        ].join(" ")}
-      >
-        <Icon name="chevron-right" size="sm" />
-      </button>
-    );
-  }
-
-  // Expanded/collapsed pill. The collapsed variant hides the label at rest
-  // and reveals it on hover/focus-within via group-hover / group-focus-within.
-  // The Link is the nav target; the shrink button is a SIBLING (not nested)
-  // so its activation never triggers navigation.
-  return (
-    <div
-      className={[
-        "group fixed bottom-4 left-4 z-40",
-        "flex items-center",
-        // Pill shell: navy background, maize-on-hover via children styles.
-        "rounded-full bg-brand-primary text-brand-foreground",
-        "shadow-md",
-        // Smooth shape transitions when label collapses/expands.
-        "transition-[padding,gap] duration-200 ease-out",
-        "motion-reduce:transition-none",
-        // Bottom offset respects future safe-area-inset wrappers.
-        "[padding-bottom:env(safe-area-inset-bottom,0px)]",
-      ].join(" ")}
-    >
-      <Link
-        ref={linkRef}
-        href="/admin"
-        aria-label="관리자 홈으로 돌아가기"
-        className={[
-          "flex items-center gap-2",
-          // Touch target ≥ 44px and pill shape.
-          "h-11 rounded-full",
-          // Padding shifts when collapsed so the icon centers in a circle.
-          defaultCollapsed
-            ? "px-3 group-hover:pl-4 group-hover:pr-4 group-focus-within:pl-4 group-focus-within:pr-4"
-            : "pl-4 pr-3",
-          "type-label",
-          "transition-[padding,background-color,color] duration-200 ease-out",
-          "motion-reduce:transition-none",
-          "hover:bg-brand-accent hover:text-foreground",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
-        ].join(" ")}
-      >
-        <Icon name="arrow-left" size="sm" className="flex-shrink-0" />
-        <span
-          className={[
-            "whitespace-nowrap",
-            defaultCollapsed
-              ? // Hidden at rest; revealed when group is hovered or any
-                // descendant has focus.
-                "max-w-0 overflow-hidden opacity-0 group-hover:max-w-[12rem] group-hover:opacity-100 group-focus-within:max-w-[12rem] group-focus-within:opacity-100 transition-[max-width,opacity] duration-200 ease-out motion-reduce:transition-none"
-              : "",
-          ].join(" ")}
-        >
-          관리자 홈
-        </span>
-      </Link>
-
-      {/* Shrink affordance — sibling button, NOT nested in the Link. */}
-      <button
-        type="button"
-        onClick={handleShrink}
-        aria-label="관리자 홈 바로가기 숨기기"
-        className={[
-          "ml-1 mr-2 flex h-7 w-7 items-center justify-center rounded-full",
-          "text-brand-foreground/80",
-          "transition-colors duration-200 ease-out motion-reduce:transition-none",
-          "hover:bg-brand-primary-hover hover:text-brand-foreground",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
-        ].join(" ")}
-      >
-        <Icon name="x" size="xs" />
-      </button>
-    </div>
+  return shrunk ? (
+    <EdgeTab onRestore={handleRestore} buttonRef={edgeTabRef} />
+  ) : (
+    <HubPill
+      defaultCollapsed={defaultCollapsed}
+      onShrink={handleShrink}
+      linkRef={linkRef}
+    />
   );
 }
