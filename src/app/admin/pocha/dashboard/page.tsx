@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -9,8 +9,6 @@ import {
   TabsTrigger,
   TabsContent,
   Container,
-  Button,
-  Icon,
   StatusView,
   buttonVariants,
 } from "@umichkisa-ds/web";
@@ -24,6 +22,8 @@ import OrderHistoryTable from "@/features/pocha/components/dashboard/OrderHistor
 import StockManager from "@/features/pocha/components/dashboard/StockManager";
 import DashboardStatsStrip from "@/features/pocha/components/dashboard/DashboardStatsStrip";
 import { updateURLWithTab } from "@/features/pocha/utils/updateURL";
+import { useDashboardSelectMode } from "./useDashboardSelectMode";
+import BulkPromoteToggle from "./BulkPromoteToggle";
 
 // types
 import { PochaDashboardTab } from "@/types/pocha";
@@ -62,28 +62,7 @@ export default function DashboardPage() {
 
   // Page-level select mode (lifted from OrderDashboard so the Bulk-promote
   // toggle can live on the same row as Tabs instead of inside the food grid).
-  const [selectMode, setSelectMode] = useState(false);
-  const [isPromotingFood, setIsPromotingFood] = useState(false);
-  const [isPromotingDrink, setIsPromotingDrink] = useState(false);
-  const isPromoting = isPromotingFood || isPromotingDrink;
-
-  const handleToggleSelectMode = useCallback(() => {
-    if (isPromoting) return;
-    setSelectMode((prev) => !prev);
-  }, [isPromoting]);
-
-  const handleEnterSelectMode = useCallback(() => {
-    if (isPromoting) return;
-    setSelectMode(true);
-  }, [isPromoting]);
-
-  // Switching away from Orders tab → exit select mode (the grids' existing
-  // selectMode-false effect clears their selectedIds).
-  useEffect(() => {
-    if (currentTab !== "orders" && selectMode) {
-      setSelectMode(false);
-    }
-  }, [currentTab, selectMode]);
+  const select = useDashboardSelectMode(currentTab);
 
   if (pochaIDStatus === "error") {
     throw new Error(pochaIDError);
@@ -138,27 +117,11 @@ export default function DashboardPage() {
               <TabsTrigger value="history">History</TabsTrigger>
             </TabsList>
             {currentTab === "orders" && (
-              <div className="flex items-center gap-4">
-                <span className="type-body-sm text-muted-foreground hidden sm:inline">
-                  {selectMode
-                    ? "Tap cards to select"
-                    : "Promote multiple at once"}
-                </span>
-                <Button
-                  variant={selectMode ? "primary" : "secondary"}
-                  size="md"
-                  onClick={handleToggleSelectMode}
-                  disabled={isPromoting}
-                  aria-pressed={selectMode}
-                >
-                  <Icon
-                    name={selectMode ? "check" : "circle-check"}
-                    size="sm"
-                    aria-hidden
-                  />
-                  {selectMode ? "Done" : "Bulk promote"}
-                </Button>
-              </div>
+              <BulkPromoteToggle
+                selectMode={select.selectMode}
+                disabled={select.isPromoting}
+                onToggle={select.handleToggle}
+              />
             )}
           </div>
 
@@ -168,10 +131,10 @@ export default function DashboardPage() {
               email={email ?? ""}
               token={token ?? ""}
               ordersHook={ordersHook}
-              selectMode={selectMode}
-              onEnterSelectMode={handleEnterSelectMode}
-              onPromotingFoodChange={setIsPromotingFood}
-              onPromotingDrinkChange={setIsPromotingDrink}
+              selectMode={select.selectMode}
+              onEnterSelectMode={select.handleEnter}
+              onPromotingFoodChange={select.setIsPromotingFood}
+              onPromotingDrinkChange={select.setIsPromotingDrink}
             />
           </TabsContent>
           <TabsContent value="stock">
