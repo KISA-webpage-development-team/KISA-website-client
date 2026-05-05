@@ -16,8 +16,6 @@ export default function AdminHubPage() {
   const defaultToggleRef = useRef<HTMLButtonElement>(null);
   const appsToggleRef = useRef<HTMLButtonElement>(null);
 
-  // Focus the matching toggle in the new mode after a swap.
-  // Skip on initial mount so the page doesn't auto-steal focus on load.
   useEffect(() => {
     if (!didMountRef.current) {
       didMountRef.current = true;
@@ -31,61 +29,49 @@ export default function AdminHubPage() {
   const isDefault = mode === "default";
 
   return (
-    <Container as="main" size="xl" className="py-8 lg:py-12">
-      {/* Crossfade swap container — both modes rendered as siblings; the inactive
-          one is hidden via opacity + pointer-events + aria-hidden. Height is
-          reserved by the larger of the two via grid stacking, so toggling
-          neither pops layout nor triggers scrollbar shifts. */}
-      <div className="relative grid">
-        {/* DEFAULT MODE */}
-        <section
-          aria-hidden={!isDefault}
-          className={[
-            "col-start-1 row-start-1 transition-opacity duration-[250ms] motion-reduce:transition-none",
-            isDefault
-              ? "opacity-100"
-              : "pointer-events-none opacity-0",
-          ].join(" ")}
-          style={{ transitionDuration: `${SWAP_MS}ms` }}
-        >
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-1">
+    <Container as="main" size="xl" className="py-12">
+      <div className="flex min-h-[calc(100dvh-12rem)] items-center">
+        {/* Crossfade swap container — both modes rendered as siblings, stacked
+            in the same grid cell so the larger one reserves height. */}
+        <div className="relative grid w-full">
+          {/* DEFAULT MODE — 3×2 grid: hero[0,0] + 5 tool cards */}
+          <section
+            aria-hidden={!isDefault}
+            className={[
+              "col-start-1 row-start-1 transition-opacity motion-reduce:transition-none",
+              isDefault ? "opacity-100" : "pointer-events-none opacity-0",
+            ].join(" ")}
+            style={{ transitionDuration: `${SWAP_MS}ms` }}
+          >
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               <AdminHubHero
                 ref={defaultToggleRef}
                 mode="default"
                 onToggle={() => setMode("apps")}
               />
-            </div>
-            <div className="lg:col-span-2">
               <AdminHubCards />
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* APPS MODE */}
-        <section
-          aria-hidden={isDefault}
-          className={[
-            "col-start-1 row-start-1 transition-opacity duration-[250ms] motion-reduce:transition-none",
-            !isDefault
-              ? "opacity-100"
-              : "pointer-events-none opacity-0",
-          ].join(" ")}
-          style={{ transitionDuration: `${SWAP_MS}ms` }}
-        >
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-1">
+          {/* APPS MODE — same 3-col grid, hero[0,0] + 3 app cards */}
+          <section
+            aria-hidden={isDefault}
+            className={[
+              "col-start-1 row-start-1 transition-opacity motion-reduce:transition-none",
+              !isDefault ? "opacity-100" : "pointer-events-none opacity-0",
+            ].join(" ")}
+            style={{ transitionDuration: `${SWAP_MS}ms` }}
+          >
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               <AdminHubHero
                 ref={appsToggleRef}
                 mode="apps"
                 onToggle={() => setMode("default")}
               />
-            </div>
-            <div className="lg:col-span-2">
               <AdminHubAppsList />
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </Container>
   );
