@@ -11,6 +11,7 @@ import {
   Icon,
   type IconName,
 } from "@umichkisa-ds/web";
+import { setFromHubFlag } from "@/lib/admin/fromHubFlag";
 
 type LiveTool = {
   kind: "live";
@@ -64,14 +65,6 @@ const TOOLS: Tool[] = [
     icon: "ticket",
   },
 ];
-
-function setFromHubFlag() {
-  try {
-    sessionStorage.setItem("kisa.admin.fromHub", "1");
-  } catch {
-    // sessionStorage may be unavailable (private mode); FAB simply won't render.
-  }
-}
 
 /**
  * Renders the 5 admin tool cards as siblings (Fragment) so each card

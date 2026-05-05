@@ -8,10 +8,12 @@
  * Q3, Q6); this FAB is the only way to close the navigation loop.
  *
  * Visibility contract:
- *   The FAB only renders when sessionStorage["kisa.admin.fromHub"] === "1".
- *   That flag is set by `/admin/layout.tsx` on hub mount and persists for the
- *   session. FAB-click is pure navigation — it does NOT clear the flag. The
- *   flag clears only on tab close (sessionStorage default behavior).
+ *   The FAB only renders when the `kisa.admin.fromHub` sessionStorage flag
+ *   is "1". The flag is owned by `lib/admin/fromHubFlag.ts` and written by
+ *   two callers: `/admin/layout.tsx` on hub mount, and `AdminHubCards`
+ *   preemptively on tool-card click. FAB-click is pure navigation — it does
+ *   NOT clear the flag. The flag clears only on tab close (sessionStorage
+ *   default behavior).
  *
  * Dashboard-bulk-promote-collision contract:
  *   The dashboard route at `/admin/pocha/dashboard` ships a
@@ -26,12 +28,13 @@
  *   render in a duplicated admin sub-page tab even though the user did not
  *   navigate from the hub *in that tab*. Accepted; do not over-engineer.
  *
- * SessionStorage keys owned by this component:
- *   - `kisa.admin.fromHub`   — set by /admin/layout.tsx on hub mount; read
- *                              here to gate visibility. Never written here.
- *   - `kisa.admin.fab.shrunk` — set/cleared here when the user shrinks the
- *                              FAB to an edge-tab (or restores it). Persists
- *                              the shrunk state for the rest of the session.
+ * SessionStorage keys:
+ *   - `kisa.admin.fromHub`   — owned by `lib/admin/fromHubFlag.ts`; read here
+ *                              via `readFromHubFlag()` to gate visibility.
+ *   - `kisa.admin.fab.shrunk` — owned by this component; set/cleared when
+ *                              the user shrinks the FAB to an edge-tab (or
+ *                              restores it). Persists the shrunk state for
+ *                              the rest of the session.
  *
  * SSR / hydration:
  *   sessionStorage is read inside useEffect; first render returns null to
@@ -41,8 +44,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@umichkisa-ds/web";
+import { readFromHubFlag } from "@/lib/admin/fromHubFlag";
 
-const FROM_HUB_KEY = "kisa.admin.fromHub";
 const SHRUNK_KEY = "kisa.admin.fab.shrunk";
 
 export interface BackToHubFABProps {
@@ -69,9 +72,8 @@ export default function BackToHubFAB({ defaultCollapsed }: BackToHubFABProps) {
   const edgeTabRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
-    const hub = sessionStorage.getItem(FROM_HUB_KEY) === "1";
     const isShrunk = sessionStorage.getItem(SHRUNK_KEY) === "1";
-    setFromHub(hub);
+    setFromHub(readFromHubFlag());
     setShrunk(isShrunk);
     setHydrated(true);
   }, []);
