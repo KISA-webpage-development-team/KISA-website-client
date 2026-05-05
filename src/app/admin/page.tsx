@@ -57,7 +57,8 @@ export default function AdminHubPage() {
             </Grid>
           </section>
 
-          {/* APPS MODE — same 3-col grid, hero[0,0] + 3 app cards */}
+          {/* APPS MODE — asymmetric: hero on the left, vertical list of
+              horizontal app cards on the right (NOT a grid of cards). */}
           <section
             aria-hidden={isDefault}
             className={[
@@ -66,18 +67,16 @@ export default function AdminHubPage() {
             ].join(" ")}
             style={{ transitionDuration: `${SWAP_MS}ms` }}
           >
-            <Grid
-              columns={{ base: 1, md: 2, lg: 3 }}
-              gap="component"
-              className="auto-rows-fr"
-            >
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <AdminHubHero
                 ref={appsToggleRef}
                 mode="apps"
                 onToggle={() => setMode("default")}
               />
-              <AdminHubAppsList />
-            </Grid>
+              <div className="lg:col-span-2">
+                <AdminHubAppsList />
+              </div>
+            </div>
           </section>
         </div>
       </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { Fragment } from "react";
 import {
   Card,
   CardDescription,
@@ -39,36 +38,33 @@ const APPS: AppRow[] = [
 ];
 
 /**
- * Renders the 3 user-facing app rows as sibling cards (Fragment) so each
- * occupies its own cell of the parent hub grid in apps mode.
+ * Vertical list of horizontal app cards. Each row shows: icon (left),
+ * title + description (middle, flex-1), external-link glyph (right).
+ * Apps mode is intentionally a list ("pick a destination"), not a grid.
  */
 export default function AdminHubAppsList() {
   return (
-    <Fragment>
+    <div className="flex flex-col gap-4">
       {APPS.map((app) => (
         <a
           key={app.title}
           href={app.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="group block h-full rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+          className="group block rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
         >
-          <Card hoverable className="h-full justify-between">
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex size-10 items-center justify-center rounded-md border border-border bg-background text-foreground shadow-sm">
-                <Icon name={app.icon} size="sm" />
-              </div>
-              <span className="text-muted-foreground group-hover:text-foreground">
-                <Icon name="external-link" size="sm" />
-              </span>
-            </div>
-            <CardHeader>
+          <Card hoverable className="flex-row items-center gap-4">
+            <Icon name={app.icon} size="md" />
+            <CardHeader className="flex-1">
               <CardTitle as="h3">{app.title}</CardTitle>
               <CardDescription>{app.sub}</CardDescription>
             </CardHeader>
+            <span className="text-muted-foreground group-hover:text-foreground">
+              <Icon name="external-link" size="sm" />
+            </span>
           </Card>
         </a>
       ))}
-    </Fragment>
+    </div>
   );
 }

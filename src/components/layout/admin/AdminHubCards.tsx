@@ -73,14 +73,6 @@ function setFromHubFlag() {
   }
 }
 
-function CardIconBadge({ name }: { name: IconName }) {
-  return (
-    <div className="flex size-10 items-center justify-center rounded-md border border-border bg-background text-foreground shadow-sm">
-      <Icon name={name} size="sm" />
-    </div>
-  );
-}
-
 /**
  * Renders the 5 admin tool cards as siblings (Fragment) so each card
  * occupies its own cell of the parent hub grid alongside the hero cell.
@@ -98,7 +90,7 @@ export default function AdminHubCards() {
               className="group block h-full rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
             >
               <Card hoverable className="h-full justify-between">
-                <CardIconBadge name={tool.icon} />
+                <Icon name={tool.icon} size="md" />
                 <CardHeader>
                   <CardTitle as="h3">{tool.title}</CardTitle>
                   <CardDescription>{tool.sub}</CardDescription>
@@ -116,7 +108,7 @@ export default function AdminHubCards() {
           >
             <Card className="h-full justify-between">
               <div className="flex items-start justify-between gap-2">
-                <CardIconBadge name={tool.icon} />
+                <Icon name={tool.icon} size="md" />
                 <Badge variant="outline" size="sm">
                   준비 중
                 </Badge>
