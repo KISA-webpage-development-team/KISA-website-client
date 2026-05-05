@@ -49,9 +49,9 @@ export default function HistoryPage() {
 
         {/* Right: Order History for Selected Pocha */}
         <div className="basis-2/3 flex flex-col gap-4">
-          {/* Spacer to align right-pane content with left-pane card list (mirrors PreviousPochaList heading row height) */}
+          {/* Mirror PreviousPochaList heading row height to keep panes top-aligned. */}
           <div aria-hidden className="invisible flex items-center gap-2">
-            <h2 className="type-h2 font-semibold">spacer</h2>
+            <span className="type-h2 font-semibold">&nbsp;</span>
           </div>
           {selectedPocha ? (
             <div className="flex flex-col gap-6">
