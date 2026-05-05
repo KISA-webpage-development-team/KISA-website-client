@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { SessionProvider } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -8,6 +8,7 @@ import { AuthContextProvider, useAuth } from "@/lib/auth/authContext";
 import { LoadingSpinner, StatusView } from "@umichkisa-ds/web";
 import LoginButton from "@/components/layout/header/LoginButton";
 import useAdmin from "@/lib/next-auth/useAdmin";
+import BackToHubFAB from "@/components/layout/admin/BackToHubFAB";
 
 // Dev-only toggle. Build-time gate: when NEXT_PUBLIC_MOCK_API !== "1",
 // the ternary collapses to null and the entire MockAuthToggle module is
@@ -61,9 +62,25 @@ function AdminGate({ children }: { children: ReactNode }) {
 }
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
+  // Latch the `kisa.admin.fromHub` flag on hub mount. Persists for the
+  // session (sessionStorage clears on tab close). Only the hub sets it;
+  // BackToHubFAB only reads it.
+  useEffect(() => {
+    if (pathname === "/admin") {
+      sessionStorage.setItem("kisa.admin.fromHub", "1");
+    }
+  }, [pathname]);
+
+  // Dashboard collapses by default to avoid colliding with the dashboard's
+  // sticky bulk-promote action bar. All other admin routes default expanded.
+  const defaultCollapsed = pathname.startsWith("/admin/pocha/dashboard");
+
   const body = (
     <AdminGate>
       <div className="w-full">{children}</div>
+      <BackToHubFAB defaultCollapsed={defaultCollapsed} />
     </AdminGate>
   );
 
