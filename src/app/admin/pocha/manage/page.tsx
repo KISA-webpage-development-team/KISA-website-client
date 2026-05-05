@@ -8,7 +8,6 @@ import {
   CardContent,
   Container,
   LoadingSpinner,
-  StatusView,
 } from "@umichkisa-ds/web";
 
 // ui components
@@ -41,7 +40,7 @@ function PochaManagePageContent() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogMode, setDialogMode] = useState<"create" | "update">("create");
 
-  const { isAdmin, token, status: adminStatus } = useAdmin();
+  const { token } = useAdmin();
   const {
     pochaInfo,
     status: pochaStatus,
@@ -57,7 +56,7 @@ function PochaManagePageContent() {
     [menuList]
   );
 
-  const isLoading = adminStatus === "loading" || pochaStatus === "loading";
+  const isLoading = pochaStatus === "loading";
   // pochaInfo can now be null (204 from /pocha/status-info) in addition to
   // the legacy `{}` shape. Treat both as "no ongoing pocha".
   const noPochaAvailable =
@@ -94,11 +93,6 @@ function PochaManagePageContent() {
 
   if (pochaFetchError) {
     throw new Error(pochaFetchError);
-  }
-
-  // only admin can view this page
-  if (!isAdmin) {
-    return <StatusView fullScreen variant="not-authorized" />;
   }
 
   return (

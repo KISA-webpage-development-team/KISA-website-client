@@ -31,7 +31,7 @@ import { PochaDashboardTab } from "@/types/pocha";
 export default function DashboardPage() {
   // fetch necessary information for the dashboard
   // each hook fetches with GET request
-  const { isAdmin, email, token, status: adminStatus } = useAdmin();
+  const { email, token } = useAdmin();
   const {
     pochaID,
     status: pochaIDStatus,
@@ -85,12 +85,6 @@ export default function DashboardPage() {
     throw new Error(pochaIDError);
   }
 
-  // Auth resolved + not admin → block. Gated on adminStatus === "success" so
-  // we don't flash NotAuthorized while the session is still loading.
-  if (adminStatus === "success" && !isAdmin) {
-    return <StatusView fullScreen variant="not-authorized" />;
-  }
-
   // 204 from /pocha/status-info — backend signals there is no ongoing pocha
   // right now. Not an error, not loading; render a dedicated empty state
   // with a CTA into /pocha/manage so admins can create/schedule one.
@@ -104,7 +98,7 @@ export default function DashboardPage() {
         description="다음 포차가 시작되면 이 곳에서 주문을 확인할 수 있습니다."
         action={
           <Link
-            href="/pocha/manage"
+            href="/admin/pocha/manage"
             className={buttonVariants({ variant: "primary", size: "md" })}
           >
             포차 관리로 이동
