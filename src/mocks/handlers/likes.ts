@@ -50,12 +50,9 @@ export const likesHandlers = [
     return HttpResponse.json({ likesCount: countLikes(commentid, "comment") });
   }),
 
-  /**
-   * GET /likes/:id/?email&target — has the user liked this target?
-   * 200 with the like record when found; 404 when not.
-   * `getLikeByUser` ignores the body on errors and treats undefined as "not
-   * liked", so a 404 surfaces as a clean falsy in calling code.
-   */
+  // GET /likes/:id/?email&target — always 200 with { liked: boolean }, matching
+  // the prod server contract (`bulletin/likes.py:like_or_not`). Consumers read
+  // `response.data.liked` (see `features/bulletin-board/hooks/useLike.ts`).
   http.get("*/likes/:id/", ({ request, params }) => {
     if (!request.headers.get("Authorization")) return unauthorized();
 
@@ -70,11 +67,7 @@ export const likesHandlers = [
     }
 
     const id = Number(params.id);
-    const record = findLike(id, email, target);
-    if (!record) {
-      return HttpResponse.json({ error: "not found" }, { status: 404 });
-    }
-    return HttpResponse.json(record);
+    return HttpResponse.json({ liked: Boolean(findLike(id, email, target)) });
   }),
 
   /**

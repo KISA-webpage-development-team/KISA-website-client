@@ -39,7 +39,7 @@ const url = (
 
 describe("MSW likes handlers", () => {
   describe("GET /likes/:id/ — has-user-liked check", () => {
-    it("returns truthy data when the user has liked the target post", async () => {
+    it("returns { liked: true } when the user has liked the target post", async () => {
       const res = await fetch(
         url(`/likes/${SEED_LIKED_POSTID}/`, {
           email: SEED_USER,
@@ -49,12 +49,10 @@ describe("MSW likes handlers", () => {
       );
       expect(res.status).toBe(200);
       const body = await res.json();
-      expect(body).toBeTruthy();
-      expect(body.email).toBe(SEED_USER);
-      expect(body.target).toBe("post");
+      expect(body.liked).toBe(true);
     });
 
-    it("returns 404 when the user has not liked the target post", async () => {
+    it("returns { liked: false } when the user has not liked the target post", async () => {
       const res = await fetch(
         url(`/likes/${SEED_UNLIKED_POSTID}/`, {
           email: SEED_USER,
@@ -62,10 +60,12 @@ describe("MSW likes handlers", () => {
         }),
         { headers: AUTH }
       );
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.liked).toBe(false);
     });
 
-    it("returns truthy data when the user has liked the target comment", async () => {
+    it("returns { liked: true } when the user has liked the target comment", async () => {
       const res = await fetch(
         url(`/likes/${SEED_LIKED_COMMENTID}/`, {
           email: SEED_USER,
@@ -75,10 +75,10 @@ describe("MSW likes handlers", () => {
       );
       expect(res.status).toBe(200);
       const body = await res.json();
-      expect(body.target).toBe("comment");
+      expect(body.liked).toBe(true);
     });
 
-    it("returns 404 when the user has not liked the target comment", async () => {
+    it("returns { liked: false } when the user has not liked the target comment", async () => {
       const res = await fetch(
         url(`/likes/${SEED_UNLIKED_COMMENTID}/`, {
           email: SEED_USER,
@@ -86,7 +86,9 @@ describe("MSW likes handlers", () => {
         }),
         { headers: AUTH }
       );
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.liked).toBe(false);
     });
 
     it("discriminates targets — post-like on id N is not the same as comment-like on id N", async () => {
@@ -98,7 +100,9 @@ describe("MSW likes handlers", () => {
         }),
         { headers: AUTH }
       );
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.liked).toBe(false);
     });
 
     it("returns 401 when Authorization header is missing", async () => {
@@ -183,6 +187,7 @@ describe("MSW likes handlers", () => {
         { headers: AUTH }
       );
       expect(lookup.status).toBe(200);
+      expect((await lookup.json()).liked).toBe(true);
     });
 
     it("adds a comment like and routes to the comment count, not the post count", async () => {
@@ -266,7 +271,8 @@ describe("MSW likes handlers", () => {
         }),
         { headers: AUTH }
       );
-      expect(lookup.status).toBe(404);
+      expect(lookup.status).toBe(200);
+      expect((await lookup.json()).liked).toBe(false);
     });
 
     it("returns 401 when Authorization header is missing", async () => {
@@ -313,6 +319,7 @@ describe("MSW likes handlers", () => {
         { headers: AUTH }
       );
       expect(otherLookup.status).toBe(200);
+      expect((await otherLookup.json()).liked).toBe(true);
     });
   });
 
