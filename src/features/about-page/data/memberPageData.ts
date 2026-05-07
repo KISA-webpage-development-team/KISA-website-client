@@ -1,5 +1,23 @@
+// Type for a single board member entry.
+// `isLead` flags a sub-team lead within their cohort row.
+export type Member = {
+  name: string;
+  major: string;
+  year: string;
+  role: string[];
+  isLead?: boolean;
+};
+
+// Each cohort is grouped by tier; the page flattens operations + public_relations
+// into a single grid and keeps presidents as a separate elevated row.
+export type Cohort = {
+  presidents: Member[];
+  operations: Member[];
+  public_relations: Member[];
+};
+
 // president, operations, public_relations are destructured from members object
-const members_2025 = {
+const members_2025: Cohort = {
   presidents: [
     {
       name: "Jin Wook Shin",
@@ -224,7 +242,7 @@ const members_2025 = {
   ],
 };
 
-const members_2024 = {
+const members_2024: Cohort = {
   // Presidents
   presidents: [
     {
@@ -436,7 +454,7 @@ const members_2024 = {
   ],
 };
 
-const members_2023 = {
+const members_2023: Cohort = {
   // Presidents
   presidents: [
     {
