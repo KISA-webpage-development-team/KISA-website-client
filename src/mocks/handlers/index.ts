@@ -6,6 +6,7 @@ import { pochaHandlers } from "./pocha";
 import { boardsHandlers } from "./boards";
 import { postsHandlers } from "./posts";
 import { commentsHandlers } from "./comments";
+import { likesHandlers } from "./likes";
 
 /**
  * MSW request handlers.
@@ -20,4 +21,5 @@ export const handlers: RequestHandler[] = [
   ...boardsHandlers,
   ...postsHandlers,
   ...commentsHandlers,
+  ...likesHandlers,
 ];
