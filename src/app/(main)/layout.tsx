@@ -8,7 +8,11 @@ import authOptions from "@/lib/next-auth/authOptions";
 import { MockAuthToggle } from "@/mocks/MockAuthToggle";
 import Providers from "./Providers";
 
-export default async function MainLayout({ children }: { children: ReactNode }) {
+export default async function MainLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const session = await getServerSession(authOptions);
 
   return (
@@ -22,7 +26,7 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
           <Header />
         </header>
 
-        <Container as="main" size="xl" className="relative h-full pt-3! md:pt-6! flex-1">
+        <Container as="main" size="xl" className="flex-1">
           {children}
         </Container>
 
