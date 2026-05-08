@@ -16,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" style={{ fontFamily: "var(--font-pretendard)" }}>
+    <html lang="en" className="h-full" style={{ fontFamily: "var(--font-pretendard)" }}>
       <head>
         <link
           rel="stylesheet"
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
       </head>
-      <body className="flex flex-col">
+      <body className="h-full flex flex-col">
         <MSWProvider>
           <div className="flex-1 flex flex-col w-full">{children}</div>
         </MSWProvider>
