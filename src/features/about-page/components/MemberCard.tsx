@@ -36,7 +36,7 @@ export default function MemberCard({
           {role.map((pill) => (
             <Badge
               key={pill}
-              variant="outline"
+              variant="default"
               className={
                 isLead
                   ? "bg-brand-accent-subtle text-brand-primary border-brand-accent"
