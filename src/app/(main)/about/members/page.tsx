@@ -39,9 +39,7 @@ const sortedYears = Object.keys(membersData).sort().reverse();
 // "Vice President - PR", "Vice President Lead" — we render only the
 // rank label, never the team suffix.
 function presidentBadgeLabel(role: string): string {
-  return role.toLowerCase().includes("vice")
-    ? "VICE PRESIDENT"
-    : "PRESIDENT";
+  return role.toLowerCase().includes("vice") ? "VICE PRESIDENT" : "PRESIDENT";
 }
 
 function PresidentCard({ member }: { member: Member }) {
@@ -82,7 +80,7 @@ export default function MembersPage() {
   const totalCount = cohort.presidents.length + flatMembers.length;
 
   return (
-    <Container as="section">
+    <section>
       <div className="flex flex-col gap-6">
         {/* Page header — title + Korean subtitle, with year picker right-aligned */}
         <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -146,6 +144,6 @@ export default function MembersPage() {
           ))}
         </Grid>
       </div>
-    </Container>
+    </section>
   );
 }

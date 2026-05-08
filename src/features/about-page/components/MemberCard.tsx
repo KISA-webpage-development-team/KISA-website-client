@@ -21,7 +21,7 @@ export default function MemberCard({
   isLead,
 }: MemberCardProps) {
   return (
-    <Card className="h-full">
+    <Card hoverable className="h-full">
       <CardHeader>
         <CardTitle as="h3">
           {name}
@@ -33,21 +33,16 @@ export default function MemberCard({
       <CardContent className="flex flex-col gap-4">
         <Divider />
         <div className="flex flex-wrap gap-2">
-          {/*
-            Lead marker pill — maize-filled override (not in standard Badge
-            variants). Composed against the brand color tokens directly so the
-            "Lead" treatment reads as a structural badge, not a decorative one.
-          */}
-          {isLead ? (
-            <Badge
-              variant="brand"
-              className="bg-brand-accent text-brand-primary"
-            >
-              Lead
-            </Badge>
-          ) : null}
           {role.map((pill) => (
-            <Badge key={pill} variant="outline">
+            <Badge
+              key={pill}
+              variant="outline"
+              className={
+                isLead
+                  ? "bg-brand-accent-subtle text-brand-primary border-brand-accent"
+                  : ""
+              }
+            >
               {pill}
             </Badge>
           ))}

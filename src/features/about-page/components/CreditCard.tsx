@@ -32,14 +32,14 @@ export default function CreditCard({ contributor }: { contributor: Contributor }
   const range = yearRangeTag(years);
 
   return (
-    <Card className="flex h-full flex-col">
+    <Card hoverable className="flex h-full flex-col">
       <CardHeader>
         <CardTitle as="h3">
           {name}
         </CardTitle>
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="default">{role}</Badge>
-          <Badge variant="outline">{range}</Badge>
+          <Badge variant="default">{range}</Badge>
         </div>
       </CardHeader>
 
@@ -57,17 +57,14 @@ export default function CreditCard({ contributor }: { contributor: Contributor }
         >
           {email}
         </Link>
-        {/*
-          Unified gray icon row — DS Icon inherits color via currentColor from
-          this wrapper's text-muted-foreground, no per-icon overrides needed.
-        */}
-        <div className="flex items-center gap-4 text-muted-foreground">
+        <div className="flex items-center gap-4">
           {github ? (
             <Link
               href={github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${name} on GitHub`}
+              className="text-muted-foreground hover:text-brand-primary transition-colors"
             >
               <Icon name="github" size="md" />
             </Link>
@@ -78,11 +75,16 @@ export default function CreditCard({ contributor }: { contributor: Contributor }
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${name} on LinkedIn`}
+              className="text-muted-foreground hover:text-brand-primary transition-colors"
             >
               <Icon name="linkedin" size="md" />
             </Link>
           ) : null}
-          <Link href={`mailto:${email}`} aria-label={`Email ${name}`}>
+          <Link
+            href={`mailto:${email}`}
+            aria-label={`Email ${name}`}
+            className="text-muted-foreground hover:text-brand-primary transition-colors"
+          >
             <Icon name="mail" size="md" />
           </Link>
         </div>

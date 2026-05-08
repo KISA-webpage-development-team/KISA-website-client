@@ -1,11 +1,11 @@
-import { Container, Grid } from "@umichkisa-ds/web";
+import { Grid } from "@umichkisa-ds/web";
 
 import CreditCard from "@/features/about-page/components/CreditCard";
 import { credits } from "@/features/about-page/data/memberCreditData";
 
 export default function CreditsPage() {
   return (
-    <Container as="section">
+    <section>
       <div className="flex flex-col gap-6">
         {/* Page header — title + Korean subtitle */}
         <header className="flex flex-col gap-2">
@@ -35,6 +35,6 @@ export default function CreditsPage() {
           ))}
         </Grid>
       </div>
-    </Container>
+    </section>
   );
 }

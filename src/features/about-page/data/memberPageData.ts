@@ -93,7 +93,6 @@ const members_2025: Cohort = {
 
     // Finance
     {
-      isLead: true,
       name: "Junhee Han",
       major: "Mechanical Engineering / Chemical Engineering",
       year: "2028",
