@@ -4,6 +4,7 @@
 import React from "react";
 import AboutMainText from "@/features/about-page/components/AboutMainText";
 import KisaAll from "@/features/about-page/components/KisaAll";
+import { Container } from "@umichkisa-ds/web";
 
 export const metadata = {
   title: "소개",
@@ -13,10 +14,7 @@ export const metadata = {
 
 export default function KisaPage() {
   return (
-    <section
-      className="flex flex-col mb-16 md:mb-24 lg:mb-32
-"
-    >
+    <section>
       {/* link is for Kepler adobe font */}
       <div className="flex justify-center w-screen bg-[#00274C] self-center">
         <KisaAll />
