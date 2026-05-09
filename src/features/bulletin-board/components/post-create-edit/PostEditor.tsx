@@ -112,8 +112,8 @@ export default function PostEditor({
 
       <TextEditorField token={token} />
 
-      <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="flex flex-col gap-3 md:min-w-[280px]">
+      <div className="mt-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-3">
           {isAdmin && !isBoardAnnouncement && <AnnouncementField />}
           {mode === "create" && isEveryKisa && <AnonymousField />}
         </div>
@@ -146,7 +146,7 @@ function AnnouncementField() {
     "isAnnouncement",
   );
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex items-center gap-3">
       <span className="type-body-sm text-foreground">공지사항</span>
       <Checkbox
         name={inputProps.name}
@@ -163,7 +163,7 @@ function AnonymousField() {
     "anonymous",
   );
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex items-center gap-3">
       <span className="type-body-sm text-foreground">익명 여부</span>
       <RadioGroup
         value={(value as string) ?? "non-anonymous"}
