@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import { Grid } from "@umichkisa-ds/web";
-
 import {
   eventsPageData,
   type EventRecord,
@@ -26,18 +24,25 @@ const EVENT_IMAGE_IDS = new Set([
   "yearbook",
 ]);
 
-function EventCard({ event, index }: { event: EventRecord; index: number }) {
+function EventRow({ event, index }: { event: EventRecord; index: number }) {
   const hasImage = EVENT_IMAGE_IDS.has(event.id);
 
   return (
-    <article className="flex flex-col gap-4">
-      <figure className="relative w-full aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle">
+    <article className="flex flex-col md:flex-row gap-8 md:items-start">
+      {/* Copy — left */}
+      <div className="flex flex-col gap-4 md:flex-1 md:min-w-0">
+        <h2 className="type-h2 text-foreground">{event.title}</h2>
+        <p className="type-body text-foreground">{event.desc}</p>
+      </div>
+
+      {/* Image — right */}
+      <figure className="relative w-full max-w-xs aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle md:shrink-0">
         {hasImage ? (
           <Image
             src={`/events/${event.id}.png`}
             alt={event.imageTitle}
             fill
-            sizes="(min-width: 1024px) 540px, (min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 768px) 320px, 100vw"
             className="object-cover"
             priority={index === 0}
           />
@@ -49,26 +54,24 @@ function EventCard({ event, index }: { event: EventRecord; index: number }) {
           </div>
         )}
       </figure>
-      <h2 className="type-h2 text-foreground">{event.title}</h2>
-      <p className="type-body text-foreground">{event.desc}</p>
     </article>
   );
 }
 
 export default function EventsPage() {
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-20">
       {/* Page header */}
       <header>
         <h1 className="type-h1 text-foreground">활동 소개</h1>
       </header>
 
-      {/* Event grid */}
-      <Grid columns={{ base: 1, md: 2 }} gap="section">
+      {/* Event list */}
+      <div className="flex flex-col gap-16">
         {eventsPageData.map((event, i) => (
-          <EventCard key={event.id} event={event} index={i} />
+          <EventRow key={event.id} event={event} index={i} />
         ))}
-      </Grid>
+      </div>
     </section>
   );
 }
