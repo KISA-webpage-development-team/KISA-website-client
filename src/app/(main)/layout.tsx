@@ -5,6 +5,7 @@ import Footer from "@/components/layout/footer/Footer";
 import { getServerSession } from "next-auth";
 import { Container } from "@umichkisa-ds/web";
 import authOptions from "@/lib/next-auth/authOptions";
+import PochaLiveBanner from "@/features/home/components/PochaLiveBanner";
 import { MockAuthToggle } from "@/mocks/MockAuthToggle";
 import Providers from "./Providers";
 
@@ -25,6 +26,8 @@ export default async function MainLayout({
         >
           <Header />
         </header>
+
+        <PochaLiveBanner />
 
         <Container
           as="main"

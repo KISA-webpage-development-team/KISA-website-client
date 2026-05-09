@@ -13,7 +13,10 @@ function dismissalKey(pochaID: number): string {
 }
 
 /**
- * Conditional live-pocha banner pinned to the top of the home page.
+ * Site-wide live-pocha banner pinned full-bleed directly under the Header.
+ *
+ * Single thin row: pulse dot · "포차 진행중" · pocha title · 입장하기 CTA · X.
+ * The title shrinks/truncates so the whole bar fits one line down to 375px.
  *
  * Pocha info is fetched client-side via `usePocha` so MSW (browser-only
  * service worker) can intercept the request in mock mode. Dismissal persists
@@ -52,39 +55,36 @@ export default function PochaLiveBanner() {
     <div
       role="region"
       aria-label="포차 진행 안내"
-      className="flex flex-col gap-3 rounded-lg border border-brand-primary bg-brand-accent text-brand-primary p-4 md:flex-row md:items-center md:justify-between md:gap-4 md:p-5"
+      className="flex w-full items-center gap-3 border-b border-brand-primary/20 bg-brand-accent px-4 py-2 text-brand-primary md:px-8"
     >
-      <div className="flex items-start gap-3">
-        <span
-          aria-hidden="true"
-          className="mt-0.5 inline-flex size-2 shrink-0 rounded-full bg-brand-primary motion-safe:animate-pulse"
-        />
-        <div className="flex flex-col gap-1">
-          <p className="type-h3 text-brand-primary">포차 진행중</p>
-          {pochaInfo.title ? (
-            <p className="type-body text-brand-primary">{pochaInfo.title}</p>
-          ) : null}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 self-end md:self-auto">
-        <LinkButton
-          href="/pocha"
-          variant="primary"
-          size="md"
-          className="inline-flex items-center gap-2"
-        >
-          입장하기
-          <Icon name="arrow-right" size="sm" />
-        </LinkButton>
-        <IconButton
-          icon="x"
-          aria-label="배너 닫기"
-          variant="tertiary"
-          size="sm"
-          onClick={handleDismiss}
-        />
-      </div>
+      <span
+        aria-hidden="true"
+        className="inline-flex size-2 shrink-0 rounded-full bg-brand-primary motion-safe:animate-pulse"
+      />
+      <span className="type-body-sm shrink-0 !font-semibold">포차 진행중</span>
+      {pochaInfo.title ? (
+        <span className="type-body-sm min-w-0 flex-1 truncate text-brand-primary/90">
+          {pochaInfo.title}
+        </span>
+      ) : (
+        <span className="flex-1" />
+      )}
+      <LinkButton
+        href="/pocha"
+        variant="primary"
+        size="sm"
+        className="inline-flex shrink-0 items-center gap-1"
+      >
+        입장하기
+        <Icon name="arrow-right" size="xs" />
+      </LinkButton>
+      <IconButton
+        icon="x"
+        aria-label="배너 닫기"
+        variant="tertiary"
+        size="sm"
+        onClick={handleDismiss}
+      />
     </div>
   );
 }
