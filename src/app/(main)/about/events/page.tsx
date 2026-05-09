@@ -60,7 +60,7 @@ function EventRow({ event, index }: { event: EventRecord; index: number }) {
 
 export default function EventsPage() {
   return (
-    <section className="flex flex-col gap-20">
+    <section className="flex flex-col gap-6">
       {/* Page header */}
       <header>
         <h1 className="type-h1 text-foreground">활동 소개</h1>
