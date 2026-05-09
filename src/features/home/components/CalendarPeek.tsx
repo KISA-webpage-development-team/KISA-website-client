@@ -80,7 +80,7 @@ export default function CalendarPeek() {
       </header>
 
       <div className="flex flex-col gap-6 lg:flex-row lg:items-stretch">
-        <div className="w-full type-body-sm lg:basis-2/3">
+        <div className="home-calendar-peek w-full type-body-sm lg:basis-2/3">
           <FullCalendarInner
             // Re-key on view change forces a remount so FullCalendar picks up
             // the new initialView (its imperative API would also work but
