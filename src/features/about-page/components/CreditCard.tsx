@@ -26,17 +26,19 @@ function yearRangeTag(years: string[]): string {
   return `${earliestStart}-${latestEnd}`;
 }
 
-export default function CreditCard({ contributor }: { contributor: Contributor }) {
+export default function CreditCard({
+  contributor,
+}: {
+  contributor: Contributor;
+}) {
   const { name, email, role, description, github, linkedin, years } =
     contributor;
   const range = yearRangeTag(years);
 
   return (
-    <Card hoverable className="flex h-full flex-col">
+    <Card className="flex h-full flex-col">
       <CardHeader>
-        <CardTitle as="h3">
-          {name}
-        </CardTitle>
+        <CardTitle as="h3">{name}</CardTitle>
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="default">{role}</Badge>
           <Badge variant="default">{range}</Badge>

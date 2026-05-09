@@ -21,11 +21,9 @@ export default function MemberCard({
   isLead,
 }: MemberCardProps) {
   return (
-    <Card hoverable className="h-full">
+    <Card className="h-full">
       <CardHeader>
-        <CardTitle as="h3">
-          {name}
-        </CardTitle>
+        <CardTitle as="h3">{name}</CardTitle>
         <p className="type-caption text-muted-foreground">
           {`${major} | ${year}`}
         </p>
