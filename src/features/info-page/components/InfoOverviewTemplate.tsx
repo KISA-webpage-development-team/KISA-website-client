@@ -46,14 +46,14 @@ export default function InfoOverviewTemplate({ data, resolveItemHref }: Props) {
   const { infoType, infoTitle, pageIntro, sections } = data;
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-6 md:gap-10 lg:gap-14">
       {/* Page hero */}
-      <header className="flex flex-col gap-4">
-        <h1 className="type-display">{infoTitle}</h1>
+      <header className="flex flex-col gap-2">
+        <h1 className="type-h1">{infoTitle}</h1>
         {pageIntro?.length ? (
           <div className="flex flex-col gap-2">
             {pageIntro.map((paragraph, idx) => (
-              <p key={idx} className="type-body text-muted-foreground">
+              <p key={idx} className="type-body text-foreground">
                 {paragraph}
               </p>
             ))}
@@ -62,18 +62,15 @@ export default function InfoOverviewTemplate({ data, resolveItemHref }: Props) {
       </header>
 
       {/* Sections */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-20 w-full">
         {sections.map((section, sectionIdx) => (
           <section
             key={section.sectionName}
             aria-labelledby={`section-${section.sectionName}`}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 w-full"
           >
             <header className="flex flex-col gap-2">
-              <h2
-                id={`section-${section.sectionName}`}
-                className="type-h2"
-              >
+              <h2 id={`section-${section.sectionName}`} className="type-h2">
                 {section.sectionText}
               </h2>
               {section.sectionIntro && (
@@ -83,7 +80,11 @@ export default function InfoOverviewTemplate({ data, resolveItemHref }: Props) {
               )}
             </header>
 
-            <Grid columns={{ base: 2, md: 2, lg: 3 }} gap="component">
+            <Grid
+              columns={{ base: 2, md: 2, lg: 3 }}
+              gap="section"
+              className="w-full"
+            >
               {section.contentList.map((item, itemIdx) => {
                 const href = resolveItemHref
                   ? resolveItemHref(section, item)
@@ -96,34 +97,31 @@ export default function InfoOverviewTemplate({ data, resolveItemHref }: Props) {
                     href={href}
                     className="block focus-visible:outline-2 focus-visible:outline-[var(--color-focus-ring)] rounded-md"
                   >
-                    <Card hoverable className="overflow-hidden">
-                      <div className="relative aspect-square w-full">
-                        <Image
-                          src={src}
-                          alt=""
-                          fill
-                          sizes="(min-width: 1024px) 33vw, 50vw"
-                          priority={isAboveFold}
-                          className="object-cover"
-                        />
-                        {/* Legibility scrim + label */}
-                        <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/70 via-black/20 to-transparent">
-                          <CardContent className="w-full">
-                            <div className="flex flex-col gap-1 text-white">
-                              {item.title.split("\n").map((line, idx) => (
-                                <span key={idx} className="type-label">
-                                  {line}
-                                </span>
-                              ))}
-                              {item.subtitle && (
-                                <span className="type-caption opacity-90">
-                                  {item.subtitle}
-                                </span>
-                              )}
-                            </div>
-                          </CardContent>
-                        </div>
-                      </div>
+                    <Card
+                      hoverable
+                      className="relative aspect-square w-full overflow-hidden"
+                    >
+                      <Image
+                        src={src}
+                        alt={item.title.replace(/\n/g, " ")}
+                        fill
+                        priority={isAboveFold}
+                        className="absolute inset-0 object-cover"
+                      />
+                      {/* Legibility scrim */}
+                      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+                      <CardContent className="relative z-10 flex flex-col items-center justify-center gap-1 text-center text-white">
+                        {item.title.split("\n").map((line, idx) => (
+                          <span key={idx} className="type-h3">
+                            {line}
+                          </span>
+                        ))}
+                        {item.subtitle && (
+                          <span className="type-body opacity-90">
+                            {item.subtitle}
+                          </span>
+                        )}
+                      </CardContent>
                     </Card>
                   </Link>
                 );
