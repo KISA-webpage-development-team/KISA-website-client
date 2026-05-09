@@ -125,53 +125,47 @@ export default function CommentItem({
     if (isCommentAuthor && anonymous) {
       return (
         <Link href={`/users/${email}`} className="hover:underline">
-          <span className="type-label text-foreground">{`${fullname}(익명)`}</span>
+          <span className="type-body text-foreground">{`${fullname}(익명)`}</span>
         </Link>
       );
     }
     if (isCommentAuthor || !anonymous) {
       return (
         <Link href={`/users/${email}`} className="hover:underline">
-          <span className="type-label text-foreground">{fullname}</span>
+          <span className="type-body text-foreground">{fullname}</span>
         </Link>
       );
     }
     if (isPostAuthor) {
       return (
-        <span className="type-label text-foreground">{`익명${commentAuthorMap.get(
+        <span className="type-body text-foreground">{`익명${commentAuthorMap.get(
           email,
         )}(글쓴이)`}</span>
       );
     }
     return (
-      <span className="type-label text-foreground">{`익명${commentAuthorMap.get(
+      <span className="type-body text-foreground">{`익명${commentAuthorMap.get(
         email,
       )}`}</span>
     );
   };
 
   // Own-comment affordance: subtle navy left-border stripe.
-  const ownStripeClass = isCommentAuthor
-    ? "border-l-2 border-brand-primary pl-3"
-    : "pl-3 border-l-2 border-transparent";
+  const ownStripeClass = isCommentAuthor ? "!text-brand-primary-mid" : "";
 
   return (
     <div className="flex flex-col">
       <div className="flex">
         {isCommentOfComment && (
           <span className="text-muted-foreground">
-            <Icon
-              name="reply"
-              size="sm"
-              className="mr-1 mt-1 -scale-x-100"
-            />
+            <Icon name="reply" size="sm" className="mr-2 mt-1 -scale-x-100" />
           </span>
         )}
 
-        <div className={`flex w-full flex-col gap-1 ${ownStripeClass}`}>
+        <div className={`flex w-full flex-col ${ownStripeClass}`}>
           {/* Row 1: identity + meta + actions */}
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex flex-wrap items-center gap-2 type-caption text-muted-foreground">
+          <div className="flex items-start justify-between gap-1">
+            <div className="flex flex-wrap items-center gap-2 text-muted-foreground">
               {canSeeText ? (
                 <>{renderCommentAuthor()}</>
               ) : (
@@ -183,15 +177,11 @@ export default function CommentItem({
               <span aria-hidden="true">·</span>
               <span>{formatRelativeTime(created)}</span>
               {showSecretIcon && (
-                <Icon
-                  name="lock"
-                  size="xs"
-                  label="비밀 댓글"
-                />
+                <Icon name="lock" size="xs" label="비밀 댓글" />
               )}
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center">
               {isEveryKisa && !secret && !isTemp && (
                 <GoBlueButton
                   targetType="comment"
@@ -244,9 +234,7 @@ export default function CommentItem({
                 )}
               </>
             ) : (
-              <span className="text-muted-foreground">
-                비밀 댓글입니다.
-              </span>
+              <span className="text-muted-foreground">비밀 댓글입니다.</span>
             )}
           </div>
         </div>
@@ -271,11 +259,7 @@ export default function CommentItem({
       {openReplyEditor && session && (
         <div className="mt-2 mb-3 ml-6 flex items-start gap-2">
           <span className="text-muted-foreground">
-            <Icon
-              name="reply"
-              size="sm"
-              className="mt-2 -scale-x-100"
-            />
+            <Icon name="reply" size="sm" className="mt-2 -scale-x-100" />
           </span>
           <div className="flex-1">
             <CommentEditor

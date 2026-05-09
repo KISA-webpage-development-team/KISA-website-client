@@ -10,7 +10,6 @@
 // Owns: post fetch, session, capability gate, and CommentsProvider wiring.
 
 import React from "react";
-import { useSession } from "next-auth/react";
 
 import { LoadingSpinner, StatusView } from "@umichkisa-ds/web";
 
@@ -27,6 +26,7 @@ import { UserSession } from "@/lib/next-auth/types";
 import { CommentsProvider } from "@/features/bulletin-board/contexts/CommentsContext";
 import { getBoardCapability } from "@/features/bulletin-board/config/boardCapabilities";
 import useAdmin from "@/lib/next-auth/useAdmin";
+import { useAuth } from "@/lib/auth/authContext";
 
 type PostDetailClientProps = {
   postid: number;
@@ -37,20 +37,15 @@ export default function PostDetailClient({
   postid,
   initialDeleteOpen = false,
 }: PostDetailClientProps) {
-  // Single subscription point for session + admin status across the post tree.
-  // Both flow downward as props / context so PostView, PostButtonBar, and
-  // every CommentItem don't each subscribe to NextAuth independently.
-  const { data: session, status: sessionStatus } = useSession() as {
-    data: UserSession | undefined;
-    status: string;
-  };
+  // Mock-aware auth surface (also handles real next-auth session). Single
+  // subscription point so PostView, PostButtonBar, and every CommentItem
+  // don't each subscribe.
+  const { session, isAuthenticated } = useAuth();
   const { isAdmin } = useAdmin();
 
   const { post, isLoading: isPostLoading, error } = usePost(postid);
 
-  const isLoading = isPostLoading || sessionStatus === "loading";
-
-  if (isLoading) {
+  if (isPostLoading) {
     return <LoadingSpinner />;
   }
 
@@ -80,7 +75,7 @@ export default function PostDetailClient({
 
       <PostView
         post={post}
-        session={session ?? null}
+        session={(session as UserSession | null) ?? null}
         isAdmin={isAdmin}
         initialDeleteOpen={initialDeleteOpen}
       />
@@ -88,8 +83,8 @@ export default function PostDetailClient({
       {(studyGroupPost || canComment) && (
         <CommentsProvider
           value={{
-            session,
-            isAuthenticated: sessionStatus === "authenticated",
+            session: (session as UserSession | undefined) ?? undefined,
+            isAuthenticated,
             isAdmin,
             isEveryKisa: isEveryKisaBoard(post.type),
             postid: post.postid,

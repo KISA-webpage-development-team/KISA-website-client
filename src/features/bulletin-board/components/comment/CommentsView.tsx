@@ -102,10 +102,10 @@ export default function CommentsView({ commentsCount }: CommentsViewProps) {
       <Divider />
 
       {/* 1. Header */}
-      <h2 className="type-h3 text-foreground">
+      <h3 className="type-h4 text-foreground">
         댓글{" "}
         <span className="text-muted-foreground">{displayedCommentsCount}</span>
-      </h2>
+      </h3>
 
       {/* 2. Top-level composer (authenticated only). */}
       {isAuthenticated && (
@@ -137,17 +137,19 @@ export default function CommentsView({ commentsCount }: CommentsViewProps) {
             아직 댓글이 없습니다.
           </p>
         )}
-      {!isLoading && commentsStatus !== "error" && renderedComments.length > 0 && (
-        <CommentsList
-          comments={renderedComments}
-          refreshComments={refreshComments}
-          onCommentAdded={handleCommentAdded}
-          onCommentDeleted={handleCommentDeleted}
-          onOptimisticAdd={handleOptimisticAdd}
-          onOptimisticReplace={handleOptimisticReplace}
-          onOptimisticRollback={handleOptimisticRollback}
-        />
-      )}
+      {!isLoading &&
+        commentsStatus !== "error" &&
+        renderedComments.length > 0 && (
+          <CommentsList
+            comments={renderedComments}
+            refreshComments={refreshComments}
+            onCommentAdded={handleCommentAdded}
+            onCommentDeleted={handleCommentDeleted}
+            onOptimisticAdd={handleOptimisticAdd}
+            onOptimisticReplace={handleOptimisticReplace}
+            onOptimisticRollback={handleOptimisticRollback}
+          />
+        )}
     </section>
   );
 }
