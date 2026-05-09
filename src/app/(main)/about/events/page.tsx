@@ -1,7 +1,4 @@
-import { Fragment } from "react";
-
 import Image from "next/image";
-import { Divider } from "@umichkisa-ds/web";
 
 import {
   eventsPageData,
@@ -29,14 +26,13 @@ const EVENT_IMAGE_IDS = new Set([
 
 function EventRow({ event, index }: { event: EventRecord; index: number }) {
   const hasImage = EVENT_IMAGE_IDS.has(event.id);
-  const imageSide =
-    index % 2 === 0 ? "md:order-last" : "md:order-first";
+  const imageSide = index % 2 === 0 ? "md:order-last" : "md:order-first";
 
   return (
     <article className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
       {/* Image / placeholder */}
       <div className={`md:col-span-6 ${imageSide}`}>
-        <figure className="relative w-full aspect-[4/3] overflow-hidden rounded-md border border-border bg-surface-subtle">
+        <figure className="relative w-full aspect-[16/9] overflow-hidden rounded-md border border-border bg-surface-subtle">
           {hasImage ? (
             <Image
               src={`/events/${event.id}.png`}
@@ -72,26 +68,14 @@ export default function EventsPage() {
   return (
     <section className="flex flex-col gap-20">
       {/* Page header */}
-      <header className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div className="flex flex-col gap-3">
-          <p className="type-caption text-muted-foreground tracking-widest uppercase">
-            WHAT WE DO · 활동 소개
-          </p>
-          <h1 className="type-display text-foreground">활동 소개</h1>
-        </div>
-        <p className="type-body text-muted-foreground max-w-md">
-          매 학기 주최하는 정기 이벤트부터 한 해 단위 프로젝트까지, KISA가
-          이어가는 활동들을 한곳에 모았습니다.
-        </p>
+      <header>
+        <h1 className="type-display text-foreground">활동 소개</h1>
       </header>
 
       {/* Event list */}
       <div className="flex flex-col gap-16">
         {eventsPageData.map((event, i) => (
-          <Fragment key={event.id}>
-            <EventRow event={event} index={i} />
-            {i < eventsPageData.length - 1 && <Divider />}
-          </Fragment>
+          <EventRow key={event.id} event={event} index={i} />
         ))}
       </div>
     </section>
