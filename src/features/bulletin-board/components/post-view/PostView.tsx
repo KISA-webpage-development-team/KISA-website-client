@@ -1,42 +1,39 @@
-// [UI]
-// 1. Post Title Bar: title + isAnnouncement
-// 2. Post Owner Bar: fullname + created + readCount + commentsCount
-// 3. Post Content: text
-// 4. Edit + Delete + List Buttons
+// PostView
+// 1. Title bar (with announcement badge)
+// 2. Owner bar (author + meta)
+// 3. Body
+// 4. Action bar (list / edit / delete / like)
 
 import React from "react";
 
-// sub-ui components
+import { Divider } from "@umichkisa-ds/web";
+
 import PostTitleBar from "./PostTitleBar";
 import PostOwnerBar from "./PostOwnerBar";
 import PostContent from "./PostContent";
 import PostButtonBar from "./PostButtonBar";
 
-// TODO: final_refactor_src -> @components
-import { LoadingSpinner } from "@/components/ui/feedback";
-import { HorizontalDivider } from "@/components/ui/divider";
-
-// Libs
 import ReactCookieProvider from "@/lib/react-cookie/provider";
-import { useSession } from "next-auth/react";
 
-// types
 import { UserSession } from "@/lib/next-auth/types";
 import { Post } from "@/types/post";
 
-// hooks
 import usePostReadCount from "@/features/bulletin-board/hooks/usePostReadCount";
 
 type PostViewProps = {
   post: Post;
+  session: UserSession | null;
+  isAdmin: boolean;
+  /** When true, the delete confirm Dialog mounts open. */
+  initialDeleteOpen?: boolean;
 };
 
-export default function PostView({ post }: PostViewProps) {
-  const { data: session, status } = useSession() as {
-    data: UserSession | null;
-    status: string;
-  };
-
+export default function PostView({
+  post,
+  session,
+  isAdmin,
+  initialDeleteOpen = false,
+}: PostViewProps) {
   const didRead = usePostReadCount(post.postid);
 
   const {
@@ -53,20 +50,11 @@ export default function PostView({ post }: PostViewProps) {
     anonymous,
   } = post;
 
-  if (status === "loading") {
-    return <LoadingSpinner />;
-  }
-
   return (
     <ReactCookieProvider>
-      <div className="w-full flex flex-col self-stretch">
-        <div
-          className="w-full flex flex-col 
-        pt-1 pb-2 gap-1"
-        >
-          {/* 1. Post Title Bar */}
+      <article className="flex w-full flex-col">
+        <header className="flex flex-col gap-2 pb-4">
           <PostTitleBar isAnnouncement={isAnnouncement} title={title} />
-          {/* 2. Post Owner Bar */}
           <PostOwnerBar
             email={email}
             fullname={fullname}
@@ -75,23 +63,23 @@ export default function PostView({ post }: PostViewProps) {
             commentsCount={commentsCount}
             anonymous={anonymous}
           />
-        </div>
+        </header>
 
-        <HorizontalDivider color="gray" />
+        <Divider />
 
-        {/* 3. Post Content */}
         <PostContent text={text} />
 
-        {/* 4. Post Buttons: Edit + Delete + List Buttons */}
+        <Divider />
+
         <PostButtonBar
           email={email}
           session={session}
+          isAdmin={isAdmin}
           type={type}
           postid={postid}
+          initialDeleteOpen={initialDeleteOpen}
         />
-
-        <HorizontalDivider />
-      </div>
+      </article>
     </ReactCookieProvider>
   );
 }

@@ -9,6 +9,7 @@ import { UserSession } from "@/lib/next-auth/types";
 export type CommentsContextValue = {
   session: UserSession | undefined;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   isEveryKisa: boolean;
   postAuthorEmail: string;
   postid: number;

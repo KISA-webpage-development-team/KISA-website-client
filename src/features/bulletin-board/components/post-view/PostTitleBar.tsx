@@ -1,4 +1,5 @@
 import React from "react";
+import { Badge } from "@umichkisa-ds/web";
 
 type PostTitleBarProps = {
   isAnnouncement: boolean;
@@ -10,16 +11,13 @@ export default function PostTitleBar({
   title,
 }: PostTitleBarProps) {
   return (
-    <h2
-      className="flex justify-start font-medium text-black
-    text-lg sm:text-xl md:text-2xl"
-    >
-      {isAnnouncement ? (
-        <span className="text-blue-700 font-bold mr-1">{`[공지]`}</span>
-      ) : (
-        <></>
+    <h1 className="type-h2 text-foreground flex flex-wrap items-center gap-2">
+      {isAnnouncement && (
+        <Badge variant="brand" size="sm">
+          공지
+        </Badge>
       )}
-      {title}
-    </h2>
+      <span>{title}</span>
+    </h1>
   );
 }
