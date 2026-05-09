@@ -11,7 +11,11 @@ export default function SponsorBanner({ sponsor }) {
   };
 
   return (
-    <Link href={url} className="flex justify-center" target="_blank">
+    <Link
+      href={url}
+      className="flex justify-center transition-transform hover:scale-[1.02]"
+      target="_blank"
+    >
       <Image
         alt={title}
         src={getBannerImagePath(id)}
