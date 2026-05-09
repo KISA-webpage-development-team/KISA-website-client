@@ -162,10 +162,10 @@ export default function CommentItem({
           </span>
         )}
 
-        <div className={`flex w-full flex-col ${ownStripeClass}`}>
-          {/* Row 1: identity + meta + actions */}
-          <div className="flex items-start justify-between gap-1">
-            <div className="flex flex-wrap items-center gap-2 type-body-sm text-muted-foreground">
+        <div className={`flex w-full flex-col`}>
+          {/* Row 1: identity + meta + actions (single row, icon-only actions) */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex min-w-0 flex-wrap items-center gap-2 type-body-sm text-muted-foreground">
               {canSeeText ? (
                 <>{renderCommentAuthor()}</>
               ) : (
@@ -181,7 +181,7 @@ export default function CommentItem({
               )}
             </div>
 
-            <div className="flex items-center">
+            <div className="flex shrink-0 items-center gap-1 md:gap-2 lg:gap-3">
               {isEveryKisa && !secret && !isTemp && (
                 <GoBlueButton
                   targetType="comment"
@@ -190,40 +190,40 @@ export default function CommentItem({
                 />
               )}
               {canEdit && !isTemp && (
-                <Button
-                  variant="tertiary"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={() => setOpenEditEditor((o) => !o)}
-                  aria-label={openEditEditor ? "Cancel edit" : "Edit comment"}
+                  aria-label={openEditEditor ? "수정 취소" : "수정"}
+                  className="inline-flex p-1 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
-                  {openEditEditor ? "취소" : "수정"}
-                </Button>
+                  <Icon name={openEditEditor ? "x" : "pencil"} size="sm" />
+                </button>
               )}
               {canDelete && !isTemp && (
-                <Button
-                  variant="tertiary"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={() => setDeleteOpen(true)}
-                  aria-label="Delete comment"
+                  aria-label="삭제"
+                  className="inline-flex p-1 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-error"
                 >
-                  삭제
-                </Button>
+                  <Icon name="trash-2" size="sm" />
+                </button>
               )}
               {canReply && !isTemp && (
-                <Button
-                  variant="tertiary"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={handleOpenReply}
-                  aria-label={openReplyEditor ? "Close reply editor" : "Reply"}
+                  aria-label={openReplyEditor ? "답글 닫기" : "답글"}
+                  className="inline-flex p-1 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
-                  {openReplyEditor ? "닫기" : "답글"}
-                </Button>
+                  <Icon name={openReplyEditor ? "x" : "reply"} size="sm" />
+                </button>
               )}
             </div>
           </div>
 
           {/* Row 2: body */}
-          <div className="type-body-sm text-foreground">
+          <div className={`type-body-sm text-foreground ${ownStripeClass}`}>
             {canSeeText ? (
               <>
                 {text}

@@ -75,22 +75,24 @@ export default function GoBlueButton({
         </div>
       );
     case "comment":
-      // Comment UI: compact icon button + small count
+      // Comment UI: compact 28×28 icon button + adjacent count.
+      // Plain <button> (not DS Button) so it lines up with neighboring
+      // icon-only action buttons in the comment action row.
       return (
         <div className={`${className} inline-flex items-center gap-1`}>
-          <Button
-            variant="tertiary"
-            size="sm"
+          <button
+            type="button"
             onClick={handleLike}
             disabled={isLoading}
             aria-label={didLike ? "좋아요 취소" : "좋아요"}
             aria-pressed={didLike ?? undefined}
+            className="inline-flex p-1 gap-1 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-michigan-blue disabled:cursor-not-allowed"
           >
             <LikeIcon size="small" fill={didLike} />
             {likeCount !== null && likeCount > 0 && (
-              <span className="text-foreground">{likeCount}</span>
+              <span className="type-body-sm text-foreground">{likeCount}</span>
             )}
-          </Button>
+          </button>
         </div>
       );
     default:
