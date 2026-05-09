@@ -16,7 +16,7 @@ export default function InfoCheckListPage() {
       className="flex flex-col gap-8 md:gap-10 lg:gap-12 !p-0"
     >
       {/* Page hero */}
-      <header className="flex flex-col gap-4 text-center">
+      <header className="flex flex-col w-full gap-4 text-center items-center">
         <h1 className="type-h1">Things to Do · 처음 와서 할 일</h1>
         <p className="type-body text-foreground max-w-prose">
           우선 미시간 대학교에 합격하신 것을 축하드립니다. Offer Letter 를 받고
