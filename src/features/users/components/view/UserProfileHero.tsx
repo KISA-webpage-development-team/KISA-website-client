@@ -81,23 +81,23 @@ export default function UserProfileHero({
         name={user.fullname}
       />
 
-      <div className="flex flex-1 flex-col gap-4">
+      <div className="flex flex-1 flex-col items-center gap-4 text-center md:items-start md:text-left">
         <div className="flex flex-col gap-1">
           <h1 className="type-h1 tracking-tight text-foreground">{user.fullname}</h1>
           <p className="type-body text-muted-foreground">{user.major}</p>
         </div>
 
         <ul className="flex flex-col gap-2">
-          <li className="flex items-center gap-2 type-body text-foreground">
+          <li className="flex items-center justify-center gap-2 type-body text-foreground md:justify-start">
             <Icon name="mail" size="sm" />
             <span>{user.email}</span>
           </li>
-          <li className="flex items-center gap-2 type-body text-foreground">
+          <li className="flex items-center justify-center gap-2 type-body text-foreground md:justify-start">
             <Icon name="graduation-cap" size="sm" />
             <span>{`Class of ${user.gradYear}`}</span>
           </li>
           {linkedinHandle ? (
-            <li className="flex items-center gap-2 type-body text-foreground">
+            <li className="flex items-center justify-center gap-2 type-body text-foreground md:justify-start">
               <Icon name="linkedin" size="sm" />
               <a
                 href={user.linkedin}
@@ -112,15 +112,13 @@ export default function UserProfileHero({
         </ul>
 
         {isSelf ? (
-          <div>
-            <LinkButton
-              variant="secondary"
-              size="sm"
-              href={`/users/edit/${encodeURIComponent(email)}`}
-            >
-              정보 수정
-            </LinkButton>
-          </div>
+          <LinkButton
+            variant="secondary"
+            size="sm"
+            href={`/users/edit/${encodeURIComponent(email)}`}
+          >
+            정보 수정
+          </LinkButton>
         ) : null}
       </div>
     </div>

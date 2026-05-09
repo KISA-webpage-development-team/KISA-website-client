@@ -68,7 +68,13 @@ export default function UserEditFormCard({
   // We mount the Form unconditionally once user data is available so that
   // defaultValues are stable for react-hook-form (it doesn't reset when
   // defaultValues change after mount).
-  if (isLoading) return <LoadingSpinner label="불러오는 중..." />;
+  if (isLoading) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <LoadingSpinner label="불러오는 중..." />
+      </div>
+    );
+  }
 
   if (error || !user) {
     return (
