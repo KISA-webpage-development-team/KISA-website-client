@@ -2,7 +2,18 @@
 
 import Link from "next/link";
 
-import { Card, CardContent, Icon, Skeleton } from "@umichkisa-ds/web";
+import {
+  Icon,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableMobileItem,
+  TableMobileList,
+  TableRow,
+} from "@umichkisa-ds/web";
 
 import { SWRProvider } from "@/lib/swr/providers";
 import { useBoardPosts } from "@/apis/boards/swrHooks";
@@ -20,85 +31,238 @@ function boardIndexHref(type: BoardType): string {
   return isEveryKisaBoard(type) ? `/everykisa/${type}` : `/boards/${type}`;
 }
 
-function postDetailHref(post: SimplePost): string {
-  const base = isEveryKisaBoard(post.type) ? "/everykisa" : "/boards";
-  return `${base}/${post.type}/${post.postid}`;
+function postHref(postid: number): string {
+  return `/posts/${postid}`;
 }
 
-function PostRow({ post }: { post: SimplePost }) {
+interface BoardColumnProps {
+  type: BoardType;
+}
+
+function BoardHeader({ type }: { type: BoardType }) {
   return (
-    <li>
+    <header className="flex items-baseline justify-between">
       <Link
-        href={postDetailHref(post)}
-        className="group flex items-center justify-between gap-3 rounded-md px-2 py-2 hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+        href={boardIndexHref(type)}
+        className="group inline-flex items-center gap-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
       >
-        <span className="type-body line-clamp-1 flex-1 text-foreground group-hover:underline">
-          {post.title}
-        </span>
-        <span className="type-caption flex shrink-0 items-center gap-3 text-muted-foreground">
-          <span className="hidden md:inline">
-            {post.anonymous ? "익명" : post.fullname}
-          </span>
-          <span>{formatDateOrTime(post.created)}</span>
-          {post.commentsCount > 0 ? (
-            <span className="inline-flex items-center gap-1">
-              <Icon name="message-square" size="xs" />
-              {post.commentsCount}
-            </span>
-          ) : null}
+        <h3 className="type-h3 text-foreground group-hover:underline">
+          {getKoreanBoardType(type)}
+        </h3>
+        <span className="text-muted-foreground">
+          <Icon name="arrow-right" size="sm" />
         </span>
       </Link>
-    </li>
+    </header>
   );
 }
 
-function BoardColumn({ type }: { type: BoardType }) {
-  const { posts, isLoading } = useBoardPosts(type, PREVIEW_LIMIT, 0);
+function PreviewDesktopTable({
+  type,
+  posts,
+}: {
+  type: BoardType;
+  posts: SimplePost[];
+}) {
+  const isEveryKisa = isEveryKisaBoard(type);
 
   return (
-    <Card aria-label={getKoreanBoardType(type)}>
-      <CardContent className="flex flex-col gap-3 p-5">
-        <header className="flex items-baseline justify-between">
-          <Link
-            href={boardIndexHref(type)}
-            className="group inline-flex items-center gap-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
-          >
-            <h3 className="type-h3 text-foreground group-hover:underline">
-              {getKoreanBoardType(type)}
-            </h3>
-            <span className="text-muted-foreground">
-              <Icon name="arrow-right" size="sm" />
-            </span>
-          </Link>
-        </header>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>제목</TableHead>
+          {!isEveryKisa && (
+            <TableHead className="w-28 text-center">글쓴이</TableHead>
+          )}
+          <TableHead className="w-28 text-center">작성일</TableHead>
+          {isEveryKisa && (
+            <TableHead className="w-16 text-center">추천</TableHead>
+          )}
+          <TableHead className="w-16 text-center">조회</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {posts.map((post) => (
+          <PreviewDesktopRow
+            key={post.postid}
+            post={post}
+            isEveryKisa={isEveryKisa}
+          />
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
 
-        {isLoading ? (
-          <ul className="flex flex-col gap-2">
-            {Array.from({ length: PREVIEW_LIMIT }).map((_, i) => (
-              <li key={i} className="px-2 py-2">
-                <Skeleton className="h-5 w-full" />
-              </li>
+function PreviewDesktopRow({
+  post,
+  isEveryKisa,
+}: {
+  post: SimplePost;
+  isEveryKisa: boolean;
+}) {
+  const {
+    postid,
+    title,
+    fullname,
+    created,
+    readCount,
+    commentsCount,
+    anonymous,
+    likesCount,
+  } = post;
+
+  return (
+    <TableRow>
+      <TableCell>
+        <Link
+          href={postHref(postid)}
+          className="type-body line-clamp-1 text-foreground hover:underline"
+        >
+          {title}
+          {commentsCount > 0 && (
+            <span className="ml-1 type-body-sm text-error">
+              {`[${commentsCount}]`}
+            </span>
+          )}
+        </Link>
+      </TableCell>
+      {!isEveryKisa && (
+        <TableCell className="text-center type-body-sm text-muted-foreground">
+          {anonymous ? "" : fullname}
+        </TableCell>
+      )}
+      <TableCell className="text-center type-body-sm text-muted-foreground">
+        {formatDateOrTime(created)}
+      </TableCell>
+      {isEveryKisa && (
+        <TableCell className="text-center type-body-sm text-muted-foreground">
+          {likesCount ?? 0}
+        </TableCell>
+      )}
+      <TableCell className="text-center type-body-sm text-muted-foreground">
+        {readCount}
+      </TableCell>
+    </TableRow>
+  );
+}
+
+function PreviewMobileList({
+  type,
+  posts,
+}: {
+  type: BoardType;
+  posts: SimplePost[];
+}) {
+  const isEveryKisa = isEveryKisaBoard(type);
+
+  return (
+    <TableMobileList>
+      {posts.map((post) => (
+        <TableMobileItem key={post.postid}>
+          <Link
+            href={postHref(post.postid)}
+            className="flex flex-col gap-1"
+          >
+            <div className="flex items-baseline gap-1">
+              <span className="type-body line-clamp-1 text-foreground">
+                {post.title}
+              </span>
+              {post.commentsCount > 0 && (
+                <span className="type-body-sm text-error">
+                  {`[${post.commentsCount}]`}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2 type-caption text-muted-foreground">
+              <span>{formatDateOrTime(post.created)}</span>
+              {!isEveryKisa && !post.anonymous && <span>{post.fullname}</span>}
+              <span>조회 {post.readCount}</span>
+              {isEveryKisa && <span>추천 {post.likesCount ?? 0}</span>}
+            </div>
+          </Link>
+        </TableMobileItem>
+      ))}
+    </TableMobileList>
+  );
+}
+
+function PreviewSkeleton({ isEveryKisa }: { isEveryKisa: boolean }) {
+  const desktopColCount = isEveryKisa ? 4 : 4;
+
+  return (
+    <>
+      <div className="hidden md:block">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {Array.from({ length: desktopColCount }).map((_, i) => (
+                <TableHead key={i}>
+                  <Skeleton className="h-4 w-12" />
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Array.from({ length: PREVIEW_LIMIT }).map((_, rowIdx) => (
+              <TableRow key={rowIdx}>
+                {Array.from({ length: desktopColCount }).map((_, colIdx) => (
+                  <TableCell key={colIdx}>
+                    <Skeleton className="h-4 w-full" />
+                  </TableCell>
+                ))}
+              </TableRow>
             ))}
-          </ul>
-        ) : posts && posts.length > 0 ? (
-          <ul className="flex flex-col">
-            {posts.slice(0, PREVIEW_LIMIT).map((post) => (
-              <PostRow key={post.postid} post={post} />
-            ))}
-          </ul>
-        ) : (
-          <p className="type-body px-2 py-4 text-muted-foreground">
-            아직 게시글이 없습니다.
-          </p>
-        )}
-      </CardContent>
-    </Card>
+          </TableBody>
+        </Table>
+      </div>
+      <div className="block md:hidden">
+        <TableMobileList>
+          {Array.from({ length: PREVIEW_LIMIT }).map((_, idx) => (
+            <TableMobileItem key={idx}>
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-3 w-1/2" />
+            </TableMobileItem>
+          ))}
+        </TableMobileList>
+      </div>
+    </>
+  );
+}
+
+function BoardColumn({ type }: BoardColumnProps) {
+  const { posts, isLoading } = useBoardPosts(type, PREVIEW_LIMIT, 0);
+  const visible = (posts ?? []).slice(0, PREVIEW_LIMIT);
+  const isEveryKisa = isEveryKisaBoard(type);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <BoardHeader type={type} />
+
+      {isLoading ? (
+        <PreviewSkeleton isEveryKisa={isEveryKisa} />
+      ) : visible.length > 0 ? (
+        <>
+          <div className="hidden md:block">
+            <PreviewDesktopTable type={type} posts={visible} />
+          </div>
+          <div className="block md:hidden">
+            <PreviewMobileList type={type} posts={visible} />
+          </div>
+        </>
+      ) : (
+        <p className="type-body px-2 py-4 text-muted-foreground">
+          아직 게시글이 없습니다.
+        </p>
+      )}
+    </div>
   );
 }
 
 /**
  * Two-column board preview surfaced on the home page — 자유게시판 (community)
- * + 취업공고 (job-announcement). Stacks on mobile, side-by-side on desktop.
+ * + 취업공고 (job-announcement). Uses the same `Table` + `TableMobileList`
+ * atoms as `BoardTemplate` so the preview matches the full-board look.
  *
  * Posts are fetched client-side via SWR so the mock-mode MSW worker can
  * intercept the requests; server-side RSC fetches bypass the browser-only
@@ -111,7 +275,7 @@ export default function BoardsPreview() {
         <header className="flex flex-col gap-1">
           <h2 className="type-h2 text-foreground">최근 게시글</h2>
         </header>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
           <BoardColumn type={BoardType.Community} />
           <BoardColumn type={BoardType.JobAnnouncement} />
         </div>

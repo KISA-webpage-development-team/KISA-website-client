@@ -34,7 +34,7 @@ function buildCarouselImageUrl(item: CarouselItem): string {
 export default function FeaturedCarousel() {
   const items = useMemo<CarouselItem[]>(
     () => mergeCarouselData(getInstagramItems(), staticHomeCarousel),
-    []
+    [],
   );
   const [active, setActive] = useState(0);
   const activeRef = useRef(0);
@@ -91,7 +91,7 @@ export default function FeaturedCarousel() {
   return (
     <div className="flex w-full flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
       {/* Image */}
-      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-lg bg-surface-subtle lg:basis-[55%]">
+      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-lg bg-surface-subtle lg:basis-[40%]">
         {items.map((item, index) => {
           const isActive = index === active;
           return (
