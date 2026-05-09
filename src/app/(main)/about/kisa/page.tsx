@@ -51,12 +51,6 @@ export default function KisaPage() {
     <section className="flex flex-col gap-24 md:gap-32 lg:gap-36">
       {/* Editorial hero */}
       <div className="flex flex-col items-center gap-2 md:gap-4 lg:gap-6 text-center">
-        <h1 className="type-display text-foreground max-w-3xl">
-          미시간의 한인 학생들,
-          <br />
-          함께 만드는 공동체.
-        </h1>
-
         {/* Group photo */}
         <figure className="w-full mt-4">
           <div className="relative w-full overflow-hidden rounded-lg border border-border bg-surface-subtle aspect-[2400/1050]">
@@ -83,7 +77,7 @@ export default function KisaPage() {
       {/* 인사말 — two-column with stats sidebar */}
       <div
         aria-labelledby="greeting-heading"
-        className="flex flex-col md:flex-row gap-10 w-full"
+        className="flex flex-col md:flex-row gap-10 w-full -mt-12"
       >
         {/* Sidebar — stats */}
         <aside className="md:w-64 md:shrink-0">
