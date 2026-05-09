@@ -10,24 +10,18 @@ export const metadata: Metadata = {
 
 export default function InfoCheckListPage() {
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-8 md:gap-10 lg:gap-12">
       {/* Page hero */}
-      <header className="flex flex-col gap-2">
-        <h1 className="type-h1">Things to Do</h1>
-        <p className="type-body text-foreground">처음 와서 할 일</p>
-      </header>
-
-      {/* Intro */}
-      <Container size="prose" className="flex flex-col gap-4">
-        <p className="type-body text-foreground">
-          신입생이 입학 전에 해야 할 일 — 우선 미시간 대학교에 합격하신 것을
-          축하드립니다. Offer Letter 를 받고 어떤 것부터 해야 될지 막막하실
-          여러분들을 위해 타임라인 예시와 어떤 것을 해야 하는지 정리했습니다.
-          대부분의 것들을 작성했지만 해마다 필요한 정보 및 제출해야 할 서류가
-          다를 수 있기에 정확한 정보는 꼭 학교 공식 이메일 혹은 웹사이트를
-          통해서 확인해 주시기 바랍니다.
+      <header className="flex flex-col gap-4 text-center">
+        <h1 className="type-h1">Things to Do · 처음 와서 할 일</h1>
+        <p className="type-body text-foreground max-w-prose">
+          우선 미시간 대학교에 합격하신 것을 축하드립니다. Offer Letter 를 받고
+          어떤 것부터 해야 될지 막막하실 여러분들을 위해 타임라인 예시와 어떤
+          것을 해야 하는지 정리했습니다. 대부분의 것들을 작성했지만 해마다
+          필요한 정보 및 제출해야 할 서류가 다를 수 있기에 정확한 정보는 꼭 학교
+          공식 이메일 혹은 웹사이트를 통해서 확인해 주시기 바랍니다.
         </p>
-      </Container>
+      </header>
 
       {/* Checklist accordion */}
       <CheckList />

@@ -67,7 +67,7 @@ function JobsCuratorDynamicContent() {
   return (
     <>
       {/* Category heading */}
-      <div className="mt-2 md:mt-0">
+      <div className="mt-2 md:mt-6">
         <JobCategoryDropdown />
       </div>
 
