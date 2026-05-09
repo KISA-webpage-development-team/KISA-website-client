@@ -160,10 +160,7 @@ function PreviewMobileList({
     <TableMobileList>
       {posts.map((post) => (
         <TableMobileItem key={post.postid}>
-          <Link
-            href={postHref(post.postid)}
-            className="flex flex-col gap-1"
-          >
+          <Link href={postHref(post.postid)} className="flex flex-col gap-1">
             <div className="flex items-baseline gap-1">
               <span className="type-body line-clamp-1 text-foreground">
                 {post.title}
@@ -236,7 +233,7 @@ function BoardColumn({ type }: BoardColumnProps) {
   const isEveryKisa = isEveryKisaBoard(type);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-1">
       <BoardHeader type={type} />
 
       {isLoading ? (
@@ -271,8 +268,8 @@ function BoardColumn({ type }: BoardColumnProps) {
 export default function BoardsPreview() {
   return (
     <SWRProvider>
-      <div className="flex flex-col gap-4">
-        <header className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
+        <header className="hidden" aria-hidden="true">
           <h2 className="type-h2 text-foreground">최근 게시글</h2>
         </header>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">

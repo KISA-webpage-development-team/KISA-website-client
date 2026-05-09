@@ -7,7 +7,7 @@ import SponsorStrip from "@/features/home/components/SponsorStrip";
 
 export default function HomePage() {
   return (
-    <section className="flex flex-col gap-8 md:gap-12">
+    <section className="flex flex-col gap-8 md:gap-10">
       <PochaLiveBanner />
       <FeaturedCarousel />
       <BoardsPreview />
