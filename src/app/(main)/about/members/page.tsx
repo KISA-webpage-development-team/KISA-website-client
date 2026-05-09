@@ -80,70 +80,66 @@ export default function MembersPage() {
   const totalCount = cohort.presidents.length + flatMembers.length;
 
   return (
-    <section>
-      <div className="flex flex-col gap-6">
-        {/* Page header — title + Korean subtitle, with year picker right-aligned */}
-        <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div className="flex flex-col gap-2">
-            <h1 className="type-display text-foreground">
-              {selectedYear} Board
-            </h1>
-            <p className="type-body text-muted-foreground">학생회 조직도</p>
-          </div>
-          <div className="w-full md:w-auto">
-            <Select value={selectedYear} onValueChange={setSelectedYear}>
-              <SelectTrigger
-                aria-label="Select cohort year"
-                className="w-full md:w-40"
-              />
-              <SelectContent>
-                {sortedYears.map((year) => (
-                  <SelectItem key={year} value={year}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </header>
-
-        {/* Presidents tier — elevated navy cards, maize badge override */}
-        <Grid
-          columns={{ base: 1, md: 2 }}
-          gap="component"
-          aria-label="Presidents"
-        >
-          {cohort.presidents.map((p) => (
-            <PresidentCard key={p.name} member={p} />
-          ))}
-        </Grid>
-
-        {/* Members section header */}
-        <div className="flex items-baseline justify-between">
-          <h2 className="type-h2 text-foreground">Members</h2>
-          <p className="type-caption text-muted-foreground">
-            {totalCount} people
-          </p>
+    <section className="flex flex-col gap-6">
+      {/* Page header — title + Korean subtitle, with year picker right-aligned */}
+      <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-2">
+          <h1 className="type-h1 text-foreground">{selectedYear} Board</h1>
+          <p className="type-body text-muted-foreground">학생회 조직도</p>
         </div>
-
-        {/* Members grid — flat, no sub-team headings */}
-        <Grid
-          columns={{ base: 1, md: 2, lg: 3 }}
-          gap="component"
-          aria-label="Members"
-        >
-          {flatMembers.map((m) => (
-            <MemberCard
-              key={`${m.name}-${m.role.join("-")}`}
-              name={m.name}
-              major={m.major}
-              year={m.year}
-              role={m.role}
-              isLead={m.isLead}
+        <div className="w-full md:w-auto">
+          <Select value={selectedYear} onValueChange={setSelectedYear}>
+            <SelectTrigger
+              aria-label="Select cohort year"
+              className="w-full md:w-40"
             />
-          ))}
-        </Grid>
+            <SelectContent>
+              {sortedYears.map((year) => (
+                <SelectItem key={year} value={year}>
+                  {year}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </header>
+
+      {/* Presidents tier — elevated navy cards, maize badge override */}
+      <Grid
+        columns={{ base: 1, md: 2 }}
+        gap="component"
+        aria-label="Presidents"
+      >
+        {cohort.presidents.map((p) => (
+          <PresidentCard key={p.name} member={p} />
+        ))}
+      </Grid>
+
+      {/* Members section header */}
+      <div className="flex items-baseline justify-between">
+        <h2 className="type-h2 text-foreground">Members</h2>
+        <p className="type-caption text-muted-foreground">
+          {totalCount} people
+        </p>
       </div>
+
+      {/* Members grid — flat, no sub-team headings */}
+      <Grid
+        columns={{ base: 1, md: 2, lg: 3 }}
+        gap="component"
+        aria-label="Members"
+      >
+        {flatMembers.map((m) => (
+          <MemberCard
+            key={`${m.name}-${m.role.join("-")}`}
+            name={m.name}
+            major={m.major}
+            year={m.year}
+            role={m.role}
+            isLead={m.isLead}
+          />
+        ))}
+      </Grid>
     </section>
   );
 }

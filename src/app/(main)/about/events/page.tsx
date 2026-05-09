@@ -4,6 +4,7 @@ import {
   eventsPageData,
   type EventRecord,
 } from "@/features/about-page/data/eventsPageData";
+import { Container } from "@umichkisa-ds/web";
 
 export const metadata = {
   title: "활동 소개",
@@ -28,7 +29,7 @@ function EventRow({ event, index }: { event: EventRecord; index: number }) {
   const hasImage = EVENT_IMAGE_IDS.has(event.id);
 
   return (
-    <article className="flex flex-col md:flex-row gap-8 md:items-start">
+    <article className="flex flex-col md:flex-row gap-8 md:gap-12 lg:gap-16 items-center md:items-start">
       {/* Copy — left */}
       <div className="flex flex-col gap-4 md:flex-1 md:min-w-0">
         <h2 className="type-h2 text-foreground">{event.title}</h2>
@@ -36,13 +37,13 @@ function EventRow({ event, index }: { event: EventRecord; index: number }) {
       </div>
 
       {/* Image — right */}
-      <figure className="relative w-full max-w-xs aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle md:shrink-0">
+      <figure className="relative w-full max-w-[220px] aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle md:shrink-0">
         {hasImage ? (
           <Image
             src={`/events/${event.id}.png`}
             alt={event.imageTitle}
             fill
-            sizes="(min-width: 768px) 320px, 100vw"
+            sizes="(min-width: 768px) 220px, 100vw"
             className="object-cover"
             priority={index === 0}
           />
@@ -60,7 +61,7 @@ function EventRow({ event, index }: { event: EventRecord; index: number }) {
 
 export default function EventsPage() {
   return (
-    <section className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 !p-0">
       {/* Page header */}
       <header>
         <h1 className="type-h1 text-foreground">활동 소개</h1>
@@ -72,6 +73,6 @@ export default function EventsPage() {
           <EventRow key={event.id} event={event} index={i} />
         ))}
       </div>
-    </section>
+    </div>
   );
 }

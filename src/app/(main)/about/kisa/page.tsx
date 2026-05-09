@@ -145,12 +145,6 @@ export default function KisaPage() {
             수 있도록 기회의 장을 형성하고, 더 나아가 필요에 따라 국내외 정세에
             대한 미시간 한인학생들의 목소리를 대변하는 것을 목표로 합니다.
           </p>
-
-          <p className="type-body text-muted-foreground">
-            앞으로도 KISA는 미시간에서 만나는 모든 한인 학생들이 서로에게 든든한
-            버팀목이 되어줄 수 있도록, 더 따뜻하고 단단한 커뮤니티를 만들어
-            가겠습니다.
-          </p>
         </div>
       </div>
 
