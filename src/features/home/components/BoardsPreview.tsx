@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Card, CardContent, Icon, Skeleton } from "@umichkisa-ds/web";
 
+import { SWRProvider } from "@/lib/swr/providers";
 import { useBoardPosts } from "@/apis/boards/swrHooks";
 import { BoardType } from "@/types/board";
 import { SimplePost } from "@/types/post";
@@ -105,14 +106,16 @@ function BoardColumn({ type }: { type: BoardType }) {
  */
 export default function BoardsPreview() {
   return (
-    <div className="flex flex-col gap-4">
-      <header className="flex flex-col gap-1">
-        <h2 className="type-h2 text-foreground">최근 게시글</h2>
-      </header>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <BoardColumn type={BoardType.Community} />
-        <BoardColumn type={BoardType.JobAnnouncement} />
+    <SWRProvider>
+      <div className="flex flex-col gap-4">
+        <header className="flex flex-col gap-1">
+          <h2 className="type-h2 text-foreground">최근 게시글</h2>
+        </header>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <BoardColumn type={BoardType.Community} />
+          <BoardColumn type={BoardType.JobAnnouncement} />
+        </div>
       </div>
-    </div>
+    </SWRProvider>
   );
 }

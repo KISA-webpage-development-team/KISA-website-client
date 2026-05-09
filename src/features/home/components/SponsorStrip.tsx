@@ -53,7 +53,7 @@ export default function SponsorStrip() {
           href={SPONSOR_FORM_URL}
           target="_blank"
           rel="noopener noreferrer"
-          variant="secondary"
+          variant="primary"
           size="md"
           className="inline-flex items-center gap-2"
         >

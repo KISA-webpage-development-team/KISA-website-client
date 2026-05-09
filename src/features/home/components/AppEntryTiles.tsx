@@ -49,13 +49,8 @@ export default function AppEntryTiles() {
             className="group rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
           >
             <Card hoverable className="h-full">
-              <CardContent className="flex items-center gap-4 p-5">
-                <span
-                  aria-hidden="true"
-                  className="inline-flex size-12 shrink-0 items-center justify-center rounded-md bg-brand-accent-subtle text-brand-primary"
-                >
-                  <Icon name={tile.icon} size="lg" />
-                </span>
+              <CardContent className="flex items-center gap-6 p-5">
+                <Icon name={tile.icon} size="lg" />
                 <div className="flex flex-1 flex-col gap-1">
                   <p className="type-h3 text-foreground">{tile.title}</p>
                   <p className="type-body-sm text-muted-foreground">
