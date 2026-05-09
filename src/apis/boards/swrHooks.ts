@@ -147,6 +147,29 @@ export function useBoardPosts(
 // }
 
 /**
+ * @desc Fetch the pinned announcements in a board
+ * @route GET /boards/{boardType}/announcements/
+ */
+export function useBoardAnnouncements(
+  boardType: BoardType,
+  options: SWRConfiguration = immutableOption
+): {
+  announcements: SimplePost[] | undefined;
+  isLoading: boolean;
+  error: CustomAxiosError | undefined;
+} {
+  const url = `/boards/${boardType}/announcements/`;
+
+  const { data, error, isLoading } = useSWR(url, options);
+
+  return {
+    announcements: data?.results,
+    isLoading,
+    error: error,
+  };
+}
+
+/**
  * @desc Fetch the number of posts in a board
  * @route GET /boards/{boardType}/count/
  */

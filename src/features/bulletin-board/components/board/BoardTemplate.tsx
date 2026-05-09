@@ -20,7 +20,11 @@ import {
   ToggleGroup,
 } from "@umichkisa-ds/web";
 
-import { useBoardPostNum, useBoardPosts } from "@/apis/boards/swrHooks";
+import {
+  useBoardAnnouncements,
+  useBoardPostNum,
+  useBoardPosts,
+} from "@/apis/boards/swrHooks";
 import { BoardType } from "@/types/board";
 import { SimplePost } from "@/types/post";
 import {
@@ -37,8 +41,6 @@ const SKELETON_ROW_COUNT = 8;
 
 type Props = {
   boardType: BoardType;
-  /** Pinned posts fetched server-side; rendered on page 1 only. */
-  announcements: SimplePost[];
   /** 1-indexed page from URL. */
   page: number;
   /** Page size from URL. */
@@ -59,7 +61,6 @@ type Props = {
  */
 export default function BoardTemplate({
   boardType,
-  announcements,
   page,
   size,
 }: Props) {
@@ -87,6 +88,11 @@ export default function BoardTemplate({
     isLoading: isPostNumFetching,
     error: postNumError,
   } = useBoardPostNum(boardType);
+  const {
+    announcements,
+    isLoading: isAnnouncementsFetching,
+    error: announcementsError,
+  } = useBoardAnnouncements(boardType);
 
   const buildHref = useCallback(
     (next: Partial<{ page: number; size: number }>) => {
@@ -131,8 +137,9 @@ export default function BoardTemplate({
   // The starting (largest) post number for the current page, descending.
   const postStartIdx = (totalPostNum ?? 0) - size * apiPage;
 
-  const isLoading = isPostsFetching || isPostNumFetching;
-  const isError = Boolean(postsError || postNumError);
+  const isLoading =
+    isPostsFetching || isPostNumFetching || isAnnouncementsFetching;
+  const isError = Boolean(postsError || postNumError || announcementsError);
 
   const showAnnouncements = page === 1 ? (announcements ?? []) : [];
   const isEmpty =
