@@ -1,10 +1,15 @@
+"use client";
+
 // /users/edit/[email] — self-only profile editor.
 //
 // Auth gates (preserved verbatim):
-//   - getSession() → if no session, render <NotLogin />.
+//   - useAuth() session → if no session, render <NotLogin />.
 //   - session.user.email !== decodedEmail → <NotAuthorized />.
+//
+// Client component: session is read via AuthContext so mock-mode (sessionStorage-backed
+// MOCK_SESSION) and real next-auth both flow through the same boundary.
 
-import { getSession } from "@/lib/next-auth/getSession";
+import { useAuth } from "@/lib/auth/authContext";
 
 import UserEditFormCard from "@/features/users/components/edit/UserEditFormCard";
 import { NotAuthorized, NotLogin } from "@/components/ui/feedback";
@@ -15,8 +20,8 @@ type UserEditPageProps = {
   };
 };
 
-export default async function UserEditPage({ params }: UserEditPageProps) {
-  const session = await getSession();
+export default function UserEditPage({ params }: UserEditPageProps) {
+  const { session } = useAuth();
 
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);

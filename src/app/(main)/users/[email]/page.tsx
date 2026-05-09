@@ -1,13 +1,18 @@
+"use client";
+
 // /users/[email] — member-directory profile.
 // Hybrid surface: hero card + activity board (posts/comments tabs).
 //
 // Auth gates (preserved verbatim):
-//   - getSession() → if no session, render <NotLogin />.
+//   - useAuth() session → if no session, render <NotLogin />.
 //   - if decodedEmail.includes(KISA_EMAIL) && !session.user.email.includes(KISA_EMAIL)
 //     → <NotAuthorized /> (KISA-org email rule).
+//
+// Client component: session is read via AuthContext so mock-mode (sessionStorage-backed
+// MOCK_SESSION) and real next-auth both flow through the same boundary.
 
 import { KISA_EMAIL } from "@/constants/email";
-import { getSession } from "@/lib/next-auth/getSession";
+import { useAuth } from "@/lib/auth/authContext";
 
 import UserProfileHero from "@/features/users/components/view/UserProfileHero";
 import UserActivityBoard from "@/features/users/components/view/UserActivityBoard";
@@ -20,8 +25,8 @@ type UserViewPageProps = {
   };
 };
 
-export default async function UserViewPage({ params }: UserViewPageProps) {
-  const session = await getSession();
+export default function UserViewPage({ params }: UserViewPageProps) {
+  const { session } = useAuth();
 
   // [NOTE] email on the URL is encoded; decode for fetch + comparison.
   const { email } = params;
