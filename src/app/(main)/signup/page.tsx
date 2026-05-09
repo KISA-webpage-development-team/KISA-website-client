@@ -217,7 +217,11 @@ export default function SignUpPage() {
   };
 
   return (
-    <Container className="flex w-full flex-col gap-6" as="section" size="sm">
+    <Container
+      className="flex w-full flex-col gap-6 !p-0"
+      as="section"
+      size="sm"
+    >
       {/* Compact text hero */}
       <header className="flex flex-col gap-2 text-center">
         <h1 className="type-h1 text-foreground">Welcome to KISA</h1>
