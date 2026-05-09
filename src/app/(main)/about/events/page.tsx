@@ -30,32 +30,27 @@ function EventCard({ event, index }: { event: EventRecord; index: number }) {
   const hasImage = EVENT_IMAGE_IDS.has(event.id);
 
   return (
-    <article className="flex flex-col sm:flex-row gap-6 sm:items-start">
-      {/* Copy — left */}
-      <div className="flex flex-col gap-3 sm:flex-1 sm:min-w-0">
-        <h2 className="type-h2 text-foreground">{event.title}</h2>
-        <p className="type-body text-foreground">{event.desc}</p>
-      </div>
-
-      {/* Image — right */}
-      <figure className="relative w-32 sm:w-40 aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle sm:shrink-0">
+    <article className="flex flex-col gap-4">
+      <figure className="relative w-full aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle">
         {hasImage ? (
           <Image
             src={`/events/${event.id}.png`}
             alt={event.imageTitle}
             fill
-            sizes="160px"
+            sizes="(min-width: 1024px) 540px, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
             priority={index === 0}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="type-body-sm text-muted-foreground text-center px-2">
+            <span className="type-h3 text-muted-foreground">
               {event.imageTitle}
             </span>
           </div>
         )}
       </figure>
+      <h2 className="type-h2 text-foreground">{event.title}</h2>
+      <p className="type-body text-foreground">{event.desc}</p>
     </article>
   );
 }
