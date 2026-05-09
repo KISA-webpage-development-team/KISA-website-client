@@ -26,40 +26,29 @@ const EVENT_IMAGE_IDS = new Set([
 
 function EventRow({ event, index }: { event: EventRecord; index: number }) {
   const hasImage = EVENT_IMAGE_IDS.has(event.id);
-  const imageSide = index % 2 === 0 ? "md:order-last" : "md:order-first";
 
   return (
-    <article className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
-      {/* Image / placeholder */}
-      <div className={`md:col-span-6 ${imageSide}`}>
-        <figure className="relative w-full aspect-[16/9] overflow-hidden rounded-md border border-border bg-surface-subtle">
-          {hasImage ? (
-            <Image
-              src={`/events/${event.id}.png`}
-              alt={event.imageTitle}
-              fill
-              sizes="(min-width: 1024px) 600px, (min-width: 768px) 50vw, 100vw"
-              className="object-contain"
-              priority={index === 0}
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="type-h3 text-muted-foreground">
-                {event.imageTitle}
-              </span>
-            </div>
-          )}
-        </figure>
-      </div>
-
-      {/* Copy */}
-      <div className="md:col-span-6 flex flex-col gap-4">
-        <span className="type-caption text-muted-foreground tracking-widest uppercase">
-          {String(index + 1).padStart(2, "0")} / {event.imageTitle}
-        </span>
-        <h2 className="type-h2 text-foreground">{event.title}</h2>
-        <p className="type-body text-foreground">{event.desc}</p>
-      </div>
+    <article className="flex flex-col gap-4">
+      <h2 className="type-h2 text-foreground">{event.title}</h2>
+      <figure className="relative w-full max-w-md aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle">
+        {hasImage ? (
+          <Image
+            src={`/events/${event.id}.png`}
+            alt={event.imageTitle}
+            fill
+            sizes="(min-width: 768px) 448px, 100vw"
+            className="object-cover"
+            priority={index === 0}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="type-h3 text-muted-foreground">
+              {event.imageTitle}
+            </span>
+          </div>
+        )}
+      </figure>
+      <p className="type-body text-foreground">{event.desc}</p>
     </article>
   );
 }
@@ -69,7 +58,7 @@ export default function EventsPage() {
     <section className="flex flex-col gap-20">
       {/* Page header */}
       <header>
-        <h1 className="type-display text-foreground">활동 소개</h1>
+        <h1 className="type-h1 text-foreground">활동 소개</h1>
       </header>
 
       {/* Event list */}
