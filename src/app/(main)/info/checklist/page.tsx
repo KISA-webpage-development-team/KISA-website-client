@@ -10,7 +10,11 @@ export const metadata: Metadata = {
 
 export default function InfoCheckListPage() {
   return (
-    <section className="flex flex-col gap-8 md:gap-10 lg:gap-12">
+    <Container
+      as="section"
+      size="md"
+      className="flex flex-col gap-8 md:gap-10 lg:gap-12 !p-0"
+    >
       {/* Page hero */}
       <header className="flex flex-col gap-4 text-center">
         <h1 className="type-h1">Things to Do · 처음 와서 할 일</h1>
@@ -25,6 +29,6 @@ export default function InfoCheckListPage() {
 
       {/* Checklist accordion */}
       <CheckList />
-    </section>
+    </Container>
   );
 }
