@@ -6,12 +6,16 @@ import axios, { AxiosError } from "axios";
 import { useForm, Form } from "@umichkisa-ds/form";
 import {
   Button,
+  Container,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogTitle,
   Divider,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
   toast,
 } from "@umichkisa-ds/web";
 import { signIn } from "next-auth/react";
@@ -64,6 +68,13 @@ const TERMS: TermSpec[] = [
 const URL_PATTERN = /^https?:\/\/[^\s]+$/i;
 const UMICH_EMAIL_PATTERN = /^[^\s@]+@umich\.edu$/i;
 
+// Graduation year window — matches users/edit/[email] precedent.
+const CURRENT_YEAR = new Date().getFullYear();
+const GRAD_YEARS: number[] = Array.from(
+  { length: 6 + 8 + 1 }, // currentYear-6 .. currentYear+8
+  (_, i) => CURRENT_YEAR - 6 + i,
+);
+
 export default function SignUpPage() {
   const router = useRouter();
 
@@ -98,11 +109,10 @@ export default function SignUpPage() {
   // is still clickable before the disabled state flushes.
   const submittingRef = useRef(false);
 
-  const handleScroll = (key: TermKey) =>
-    (event: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll =
+    (key: TermKey) => (event: React.UIEvent<HTMLDivElement>) => {
       const el = event.currentTarget;
-      const atBottom =
-        el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
       if (atBottom && !termScrolled[key]) {
         setTermScrolled((prev) => ({ ...prev, [key]: true }));
       }
@@ -135,7 +145,7 @@ export default function SignUpPage() {
     setSubmitting(true);
     try {
       const res = await axios.get(
-        `${BACKEND_URL}/auth/userExists/${encodeURIComponent(values.email)}`
+        `${BACKEND_URL}/auth/userExists/${encodeURIComponent(values.email)}`,
       );
       if (res.status === 200) {
         setSubmitting(false);
@@ -145,7 +155,7 @@ export default function SignUpPage() {
       // Non-200, non-throw (rare): treat as ambiguous — surface error.
       setSubmitting(false);
       toast.error(
-        "회원가입 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
+        "회원가입 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
       );
     } catch (err) {
       const axiosErr = err as AxiosError;
@@ -157,7 +167,7 @@ export default function SignUpPage() {
       }
       setSubmitting(false);
       toast.error(
-        "회원가입 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
+        "회원가입 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
       );
     }
   };
@@ -194,9 +204,7 @@ export default function SignUpPage() {
       }
       toast.error("회원가입에 실패했습니다.");
     } catch {
-      toast.error(
-        "회원가입에 실패했습니다. 잠시 후 다시 시도해주세요."
-      );
+      toast.error("회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.");
     } finally {
       submittingRef.current = false;
       setSubmitting(false);
@@ -209,8 +217,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <section className="flex w-full flex-col gap-6">
-     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+    <Container className="flex w-full flex-col gap-6" as="section" size="sm">
       {/* Compact text hero */}
       <header className="flex flex-col gap-2 text-center">
         <h1 className="type-h1 text-foreground">Welcome to KISA</h1>
@@ -226,9 +233,6 @@ export default function SignUpPage() {
       >
         {/* Identity */}
         <fieldset className="flex flex-col gap-4">
-          <legend className="type-label text-muted-foreground">
-            Identity
-          </legend>
           <Form.Input
             name="name"
             label="Name"
@@ -258,9 +262,6 @@ export default function SignUpPage() {
 
         {/* Academic */}
         <fieldset className="flex flex-col gap-4">
-          <legend className="type-label text-muted-foreground">
-            Academic
-          </legend>
           <Form.Input
             name="major"
             label="Major"
@@ -273,28 +274,26 @@ export default function SignUpPage() {
             placeholder="Select your birthdate"
             rules={{ required: "Please select your birthdate." }}
           />
-          <Form.Input
+          <Form.Select
             name="gradYear"
             label="Graduation Year"
-            type="number"
-            placeholder="ex) 2026"
-            rules={{
-              required: "Please enter your graduation year.",
-              pattern: {
-                value: /^\d{4}$/,
-                message: "Please enter a 4-digit year.",
-              },
-            }}
-          />
+            rules={{ required: "Please select your graduation year." }}
+          >
+            <SelectTrigger placeholder="Select your graduation year" />
+            <SelectContent>
+              {GRAD_YEARS.map((year) => (
+                <SelectItem key={year} value={String(year)}>
+                  {year}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Form.Select>
         </fieldset>
 
         <Divider />
 
         {/* Optional */}
         <fieldset className="flex flex-col gap-4">
-          <legend className="type-label text-muted-foreground">
-            Optional
-          </legend>
           <Form.Input
             name="linkedin"
             label="LinkedIn URL"
@@ -313,12 +312,12 @@ export default function SignUpPage() {
 
         {/* Terms */}
         <fieldset className="flex flex-col gap-4">
-          <legend className="type-label text-muted-foreground">Terms</legend>
           {TERMS.map((term) => (
             <TermRow
               key={term.key}
               term={term}
               onOpen={() => setOpenTerm(term.key)}
+              hasReviewed={termScrolled[term.key]}
             />
           ))}
         </fieldset>
@@ -333,7 +332,6 @@ export default function SignUpPage() {
           {submitting ? "Signing up..." : "Sign Up"}
         </Button>
       </Form>
-     </div>
 
       {/* Per-term Dialog with scroll-to-bottom gate on the agree button */}
       {TERMS.map((term) => (
@@ -354,10 +352,7 @@ export default function SignUpPage() {
               {term.text}
             </div>
             <DialogFooter>
-              <Button
-                variant="secondary"
-                onClick={() => setOpenTerm(null)}
-              >
+              <Button variant="secondary" onClick={() => setOpenTerm(null)}>
                 닫기
               </Button>
               <Button
@@ -408,10 +403,7 @@ export default function SignUpPage() {
             계속해주세요.
           </DialogDescription>
           <DialogFooter>
-            <Button
-              variant="secondary"
-              onClick={() => setExistsOpen(false)}
-            >
+            <Button variant="secondary" onClick={() => setExistsOpen(false)}>
               취소
             </Button>
             <Button variant="primary" onClick={handleAlreadyExistsSignIn}>
@@ -420,46 +412,50 @@ export default function SignUpPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </section>
+    </Container>
   );
 }
 
 /**
- * A single term row on the form: a Form.Checkbox bound to RHF (so it gates
- * submit via the `required` rule), plus a "약관 보기" trigger that opens the
- * full text Dialog. The checkbox itself is disabled until the user has either
- * scrolled the Dialog to the bottom OR clicked the "동의합니다" button — but
- * we render it always-visible so the agreed state is legible at a glance.
+ * A single term row on the form: title on top, then checkbox + "View Terms"
+ * button on a single row. The checkbox is disabled until the user has opened
+ * the Dialog and scrolled to the bottom (`hasReviewed`) — this enforces that
+ * users actually review the terms before consenting. The Dialog's "동의합니다"
+ * primary also auto-checks the checkbox via setValue.
  */
 function TermRow({
   term,
   onOpen,
+  hasReviewed,
 }: {
   term: TermSpec;
   onOpen: () => void;
+  hasReviewed: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-2 rounded-md border border-border bg-surface p-4">
-      <div className="flex items-start justify-between gap-4">
-        <p className="type-body text-foreground">{term.label}</p>
+    <div className="flex flex-col gap-3">
+      <p className="type-body-sm text-foreground !font-semibold">
+        {term.label}
+      </p>
+      <div className="flex items-center justify-between gap-4">
+        <Form.Checkbox
+          name={term.fieldName}
+          label={term.checkboxLabel}
+          disabled={!hasReviewed}
+          rules={{
+            validate: (value: boolean) => value || "약관에 동의해주세요.",
+          }}
+        />
         <Button
-          variant="tertiary"
+          variant="secondary"
           size="sm"
           type="button"
           onClick={onOpen}
           className="shrink-0"
         >
-          약관 보기
+          View Terms
         </Button>
       </div>
-      <Form.Checkbox
-        name={term.fieldName}
-        label={term.checkboxLabel}
-        rules={{
-          validate: (value: boolean) =>
-            value || "약관에 동의해주세요.",
-        }}
-      />
     </div>
   );
 }
