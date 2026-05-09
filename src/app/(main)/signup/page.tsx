@@ -1,8 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import axios, { AxiosError } from "axios";
+import { useState } from "react";
 import { useForm, Form } from "@umichkisa-ds/form";
 import {
   Button,
@@ -16,15 +14,15 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  toast,
 } from "@umichkisa-ds/web";
 import { signIn } from "next-auth/react";
 
-import { BACKEND_URL } from "@/constants/env";
 import {
   personalInfoTerm,
   websiteTerm,
 } from "@/features/users/data/termCondition";
+import { getGradYearOptions } from "@/features/users/data/gradYears";
+import { useSignupSubmission } from "./useSignupSubmission";
 
 type SignUpFormValues = {
   name: string;
@@ -68,15 +66,18 @@ const TERMS: TermSpec[] = [
 const URL_PATTERN = /^https?:\/\/[^\s]+$/i;
 const UMICH_EMAIL_PATTERN = /^[^\s@]+@umich\.edu$/i;
 
-// Graduation year window — matches users/edit/[email] precedent.
-const CURRENT_YEAR = new Date().getFullYear();
-const GRAD_YEARS: number[] = Array.from(
-  { length: 6 + 8 + 1 }, // currentYear-6 .. currentYear+8
-  (_, i) => CURRENT_YEAR - 6 + i,
-);
+const GRAD_YEARS = getGradYearOptions();
 
 export default function SignUpPage() {
-  const router = useRouter();
+  const {
+    submitting,
+    confirmOpen,
+    setConfirmOpen,
+    existsOpen,
+    setExistsOpen,
+    precheck,
+    submit,
+  } = useSignupSubmission();
 
   const methods = useForm<SignUpFormValues>({
     mode: "onTouched",
@@ -100,14 +101,6 @@ export default function SignUpPage() {
     website: false,
   });
   const [openTerm, setOpenTerm] = useState<TermKey | null>(null);
-
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [existsOpen, setExistsOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  // Guards against double-clicks on the confirm Dialog primary — `submitting`
-  // is set inside an async handler, leaving a small window where the button
-  // is still clickable before the disabled state flushes.
-  const submittingRef = useRef(false);
 
   const handleScroll =
     (key: TermKey) => (event: React.UIEvent<HTMLDivElement>) => {
@@ -137,43 +130,11 @@ export default function SignUpPage() {
     setOpenTerm(null);
   };
 
-  // Step 1: precheck via /auth/userExists/. The endpoint returns 200 for
-  // existing users and 404 for new. Only 404 proceeds — every other failure
-  // mode (network, 5xx, missing response) surfaces as an error toast so we
-  // don't silently fall through to a POST behind a failed precheck.
   const onSubmit = async (values: SignUpFormValues) => {
-    setSubmitting(true);
-    try {
-      const res = await axios.get(
-        `${BACKEND_URL}/auth/userExists/${encodeURIComponent(values.email)}`,
-      );
-      if (res.status === 200) {
-        setSubmitting(false);
-        setExistsOpen(true);
-        return;
-      }
-      // Non-200, non-throw (rare): treat as ambiguous — surface error.
-      setSubmitting(false);
-      toast.error(
-        "회원가입 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
-      );
-    } catch (err) {
-      const axiosErr = err as AxiosError;
-      if (axiosErr?.response?.status === 404) {
-        // New user — open confirmation Dialog.
-        setSubmitting(false);
-        setConfirmOpen(true);
-        return;
-      }
-      setSubmitting(false);
-      toast.error(
-        "회원가입 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
-      );
-    }
+    await precheck(values.email);
   };
 
   const handleConfirmedSubmit = async () => {
-    if (submittingRef.current) return;
     const values = methods.getValues();
     const bornDate = values.bornDate;
     if (!bornDate) {
@@ -182,7 +143,7 @@ export default function SignUpPage() {
       return;
     }
 
-    const payload = {
+    await submit({
       fullname: values.name,
       email: values.email,
       bornYear: bornDate.getFullYear(),
@@ -191,24 +152,7 @@ export default function SignUpPage() {
       major: values.major || null,
       gradYear: values.gradYear ? Number(values.gradYear) : null,
       linkedin: values.linkedin ? values.linkedin : null,
-    };
-
-    submittingRef.current = true;
-    setSubmitting(true);
-    try {
-      const res = await axios.post(`${BACKEND_URL}/auth/signup/`, payload);
-      if (res.status === 201) {
-        setConfirmOpen(false);
-        router.push(`/signup/${encodeURIComponent(values.name)}`);
-        return;
-      }
-      toast.error("회원가입에 실패했습니다.");
-    } catch {
-      toast.error("회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.");
-    } finally {
-      submittingRef.current = false;
-      setSubmitting(false);
-    }
+    });
   };
 
   const handleAlreadyExistsSignIn = () => {

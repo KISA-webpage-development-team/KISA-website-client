@@ -184,8 +184,10 @@ function PreviewMobileList({
   );
 }
 
-function PreviewSkeleton({ isEveryKisa }: { isEveryKisa: boolean }) {
-  const desktopColCount = isEveryKisa ? 4 : 4;
+function PreviewSkeleton() {
+  // Both BoardsPreview variants render 4 desktop columns
+  // (title + author/likes + date + reads).
+  const desktopColCount = 4;
 
   return (
     <>
@@ -237,7 +239,7 @@ function BoardColumn({ type }: BoardColumnProps) {
       <BoardHeader type={type} />
 
       {isLoading ? (
-        <PreviewSkeleton isEveryKisa={isEveryKisa} />
+        <PreviewSkeleton />
       ) : visible.length > 0 ? (
         <>
           <div className="hidden md:block">

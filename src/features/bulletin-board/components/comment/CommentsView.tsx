@@ -13,7 +13,10 @@ import CommentEditor from "./CommentEditor";
 import CommentsList from "./CommentsList";
 
 import { useComments } from "@/features/bulletin-board/hooks/useComments";
-import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
+import {
+  CommentsMutationsProvider,
+  useCommentsContext,
+} from "@/features/bulletin-board/contexts/CommentsContext";
 import { Comment } from "@/types/comment";
 
 type CommentsViewProps = {
@@ -95,61 +98,67 @@ export default function CommentsView({ commentsCount }: CommentsViewProps) {
   const handleCommentAdded = useCallback(() => setDelta((d) => d + 1), []);
   const handleCommentDeleted = useCallback(() => setDelta((d) => d - 1), []);
 
+  const mutations = useMemo(
+    () => ({
+      refreshComments,
+      onCommentAdded: handleCommentAdded,
+      onCommentDeleted: handleCommentDeleted,
+      onOptimisticAdd: handleOptimisticAdd,
+      onOptimisticReplace: handleOptimisticReplace,
+      onOptimisticRollback: handleOptimisticRollback,
+    }),
+    [
+      refreshComments,
+      handleCommentAdded,
+      handleCommentDeleted,
+      handleOptimisticAdd,
+      handleOptimisticReplace,
+      handleOptimisticRollback,
+    ],
+  );
+
   const isLoading = commentsStatus === "loading";
 
   return (
-    <section className="flex flex-col gap-3 self-stretch py-4">
-      <Divider />
+    <CommentsMutationsProvider value={mutations}>
+      <section className="flex flex-col gap-3 self-stretch py-4">
+        <Divider />
 
-      {/* 1. Header */}
-      <h3 className="type-h4 text-foreground">
-        댓글{" "}
-        <span className="text-muted-foreground">{displayedCommentsCount}</span>
-      </h3>
+        {/* 1. Header */}
+        <h3 className="type-h4 text-foreground">
+          댓글{" "}
+          <span className="text-muted-foreground">
+            {displayedCommentsCount}
+          </span>
+        </h3>
 
-      {/* 2. Top-level composer (authenticated only). */}
-      {isAuthenticated && (
-        <CommentEditor
-          mode="create"
-          refreshComments={refreshComments}
-          onCommentAdded={handleCommentAdded}
-          onOptimisticAdd={handleOptimisticAdd}
-          onOptimisticReplace={handleOptimisticReplace}
-          onOptimisticRollback={handleOptimisticRollback}
-        />
-      )}
+        {/* 2. Top-level composer (authenticated only). */}
+        {isAuthenticated && <CommentEditor mode="create" />}
 
-      {/* 3. List / states */}
-      {isLoading && (
-        <p className="type-body-sm text-muted-foreground">
-          댓글을 불러오는 중입니다.
-        </p>
-      )}
-      {!isLoading && commentsStatus === "error" && (
-        <Alert variant="error" title="댓글을 불러오지 못했습니다">
-          {error || "다시 시도해주세요."}
-        </Alert>
-      )}
-      {!isLoading &&
-        commentsStatus !== "error" &&
-        renderedComments.length === 0 && (
+        {/* 3. List / states */}
+        {isLoading && (
           <p className="type-body-sm text-muted-foreground">
-            아직 댓글이 없습니다.
+            댓글을 불러오는 중입니다.
           </p>
         )}
-      {!isLoading &&
-        commentsStatus !== "error" &&
-        renderedComments.length > 0 && (
-          <CommentsList
-            comments={renderedComments}
-            refreshComments={refreshComments}
-            onCommentAdded={handleCommentAdded}
-            onCommentDeleted={handleCommentDeleted}
-            onOptimisticAdd={handleOptimisticAdd}
-            onOptimisticReplace={handleOptimisticReplace}
-            onOptimisticRollback={handleOptimisticRollback}
-          />
+        {!isLoading && commentsStatus === "error" && (
+          <Alert variant="error" title="댓글을 불러오지 못했습니다">
+            {error || "다시 시도해주세요."}
+          </Alert>
         )}
-    </section>
+        {!isLoading &&
+          commentsStatus !== "error" &&
+          renderedComments.length === 0 && (
+            <p className="type-body-sm text-muted-foreground">
+              아직 댓글이 없습니다.
+            </p>
+          )}
+        {!isLoading &&
+          commentsStatus !== "error" &&
+          renderedComments.length > 0 && (
+            <CommentsList comments={renderedComments} />
+          )}
+      </section>
+    </CommentsMutationsProvider>
   );
 }

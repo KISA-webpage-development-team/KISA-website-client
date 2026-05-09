@@ -18,33 +18,25 @@ import GoBlueButton from "@/features/bulletin-board/components/shared/GoBlueButt
 
 import { deleteComment } from "@/apis/comments/mutations";
 import { formatRelativeTime } from "@/utils/formats/date";
-import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
+import {
+  useCommentsContext,
+  useCommentsMutations,
+} from "@/features/bulletin-board/contexts/CommentsContext";
 
 import { Comment } from "@/types/comment";
 
 type CommentItemProps = {
   comment: Comment;
-  refreshComments: () => void;
   commentAuthorMap: Map<string, number>;
-  onCommentAdded?: () => void;
-  onCommentDeleted?: () => void;
-  onOptimisticAdd?: (temp: Comment) => void;
-  onOptimisticReplace?: (tempId: number, server: Comment | null) => void;
-  onOptimisticRollback?: (tempId: number) => void;
 };
 
 export default function CommentItem({
   comment,
-  refreshComments,
   commentAuthorMap,
-  onCommentAdded,
-  onCommentDeleted,
-  onOptimisticAdd,
-  onOptimisticReplace,
-  onOptimisticRollback,
 }: CommentItemProps) {
   const { session, isAdmin, isEveryKisa, postAuthorEmail } =
     useCommentsContext();
+  const { refreshComments, onCommentDeleted } = useCommentsMutations();
   const pathname = usePathname();
 
   const {
@@ -112,7 +104,7 @@ export default function CommentItem({
     const res = await deleteComment(commentid, session?.token);
     if (res?.success) {
       refreshComments();
-      onCommentDeleted?.();
+      onCommentDeleted();
       setDeleteOpen(false);
       setIsDeleteLoading(false);
     } else {
@@ -249,7 +241,6 @@ export default function CommentItem({
             curCommentId={commentid}
             initialText={text}
             secret={secret}
-            refreshComments={refreshComments}
             setOpen={setOpenEditEditor}
           />
         </div>
@@ -267,12 +258,7 @@ export default function CommentItem({
               commentid={commentid}
               curCommentId={commentid}
               secret={secret}
-              refreshComments={refreshComments}
               setOpen={setOpenReplyEditor}
-              onCommentAdded={onCommentAdded}
-              onOptimisticAdd={onOptimisticAdd}
-              onOptimisticReplace={onOptimisticReplace}
-              onOptimisticRollback={onOptimisticRollback}
             />
           </div>
         </div>
@@ -311,13 +297,7 @@ export default function CommentItem({
             <CommentItem
               key={`subComment-${subComment.commentid}`}
               comment={subComment}
-              refreshComments={refreshComments}
               commentAuthorMap={commentAuthorMap}
-              onCommentAdded={onCommentAdded}
-              onCommentDeleted={onCommentDeleted}
-              onOptimisticAdd={onOptimisticAdd}
-              onOptimisticReplace={onOptimisticReplace}
-              onOptimisticRollback={onOptimisticRollback}
             />
           ))}
         </div>

@@ -81,8 +81,8 @@ export default function FeaturedCarousel() {
   const handleDotClick = (index: number) => {
     // Reset all bar widths and the cycle clock so the new active bar starts
     // from zero immediately.
-    progressRefs.current.forEach((bar, i) => {
-      if (bar) bar.style.width = i === index ? "0%" : "0%";
+    progressRefs.current.forEach((bar) => {
+      if (bar) bar.style.width = "0%";
     });
     startRef.current = performance.now();
     setActive(index);

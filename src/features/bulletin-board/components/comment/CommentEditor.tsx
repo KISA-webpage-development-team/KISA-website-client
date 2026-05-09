@@ -11,7 +11,10 @@ import {
 
 import { createComment, updateComment } from "@/apis/comments/mutations";
 import { Comment, NewCommentBody } from "@/types/comment";
-import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
+import {
+  useCommentsContext,
+  useCommentsMutations,
+} from "@/features/bulletin-board/contexts/CommentsContext";
 
 type CommentEditorProps = {
   mode: "create" | "update" | "reply";
@@ -25,18 +28,8 @@ type CommentEditorProps = {
   initialText?: string;
   /** Existing secret flag, used in update mode to disable the checkbox. */
   secret?: boolean;
-  refreshComments: () => void;
   /** Generic close callback — used by parent to close edit/reply editors. */
   setOpen?: (value: boolean) => void;
-  /**
-   * Optimistic-add hooks. `onOptimisticAdd` inserts a temp comment
-   * immediately; `onOptimisticReplace` swaps it for the server response;
-   * `onOptimisticRollback` removes it on failure.
-   */
-  onOptimisticAdd?: (temp: Comment) => void;
-  onOptimisticReplace?: (tempId: number, server: Comment | null) => void;
-  onOptimisticRollback?: (tempId: number) => void;
-  onCommentAdded?: () => void;
 };
 
 let nextTempId = -1;
@@ -52,14 +45,16 @@ export default function CommentEditor({
   placeholder = "댓글을 입력해주세요",
   initialText,
   secret,
-  refreshComments,
   setOpen = () => {},
-  onOptimisticAdd,
-  onOptimisticReplace,
-  onOptimisticRollback,
-  onCommentAdded = () => {},
 }: CommentEditorProps) {
   const { session, isEveryKisa, postid } = useCommentsContext();
+  const {
+    refreshComments,
+    onCommentAdded,
+    onOptimisticAdd,
+    onOptimisticReplace,
+    onOptimisticRollback,
+  } = useCommentsMutations();
 
   const [text, setText] = useState<string>(initialText ?? "");
 
@@ -112,21 +107,21 @@ export default function CommentEditor({
       childComments: [],
       likesCount: 0,
     };
-    onOptimisticAdd?.(tempComment);
+    onOptimisticAdd(tempComment);
     onCommentAdded();
 
     const res = await createComment(postid, data, session?.token);
 
     if (res) {
       // Refresh from server so the temp is replaced with the real comment.
-      onOptimisticReplace?.(tempId, (res as Comment) ?? null);
+      onOptimisticReplace(tempId, (res as Comment) ?? null);
       refreshComments();
       setOpen(false);
       setText("");
       setAnonymousValue("none");
       setIsSubmitting(false);
     } else {
-      onOptimisticRollback?.(tempId);
+      onOptimisticRollback(tempId);
       setIsSubmitting(false);
       toast.error("댓글 등록에 실패했습니다.");
     }

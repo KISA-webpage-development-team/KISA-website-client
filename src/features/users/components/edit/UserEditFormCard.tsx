@@ -29,6 +29,7 @@ import { useSWRConfig } from "swr";
 
 import { updateUser } from "@/apis/users/mutations";
 import { useUser } from "@/apis/users/swrHooks";
+import { getGradYearOptions } from "@/features/users/data/gradYears";
 
 type UserEditFormCardProps = {
   email: string;
@@ -42,11 +43,7 @@ interface UserEditFormValues {
   linkedin: string;
 }
 
-const CURRENT_YEAR = new Date().getFullYear();
-const GRAD_YEARS: number[] = Array.from(
-  { length: 6 + 8 + 1 }, // currentYear-6 .. currentYear+8
-  (_, i) => CURRENT_YEAR - 6 + i,
-);
+const GRAD_YEARS = getGradYearOptions();
 
 const majorRules = {
   required: "전공을 입력해주세요.",

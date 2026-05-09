@@ -7,23 +7,9 @@ import { Comment } from "@/types/comment";
 
 type CommentsListProps = {
   comments: Comment[];
-  refreshComments: () => void;
-  onCommentAdded?: () => void;
-  onCommentDeleted?: () => void;
-  onOptimisticAdd?: (temp: Comment) => void;
-  onOptimisticReplace?: (tempId: number, server: Comment | null) => void;
-  onOptimisticRollback?: (tempId: number) => void;
 };
 
-export default function CommentsList({
-  comments,
-  refreshComments,
-  onCommentAdded,
-  onCommentDeleted,
-  onOptimisticAdd,
-  onOptimisticReplace,
-  onOptimisticRollback,
-}: CommentsListProps) {
+export default function CommentsList({ comments }: CommentsListProps) {
   const { session } = useCommentsContext();
 
   const sessionEmail = session?.user?.email;
@@ -38,13 +24,7 @@ export default function CommentsList({
         <li key={`comment-${comment.commentid}`}>
           <CommentItem
             comment={comment}
-            refreshComments={refreshComments}
             commentAuthorMap={commentAuthorMap}
-            onCommentAdded={onCommentAdded}
-            onCommentDeleted={onCommentDeleted}
-            onOptimisticAdd={onOptimisticAdd}
-            onOptimisticReplace={onOptimisticReplace}
-            onOptimisticRollback={onOptimisticRollback}
           />
         </li>
       ))}

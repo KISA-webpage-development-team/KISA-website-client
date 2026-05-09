@@ -17,6 +17,7 @@
  */
 
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { Form, useFormField, useFormStatus } from "@umichkisa-ds/form";
 import {
   Checkbox,
@@ -69,18 +70,21 @@ export default function PostEditor({
   curPostId = null,
   mode,
 }: PostEditorProps) {
+  const router = useRouter();
   const { isAdmin, status: adminStatus } = useAdmin();
+  const numericPostId = curPostId ? Number(curPostId) : null;
   const { form, isEveryKisa, buildPayload } = usePostEditorForm({
     userName,
     userEmail,
     boardType,
-    curPostId: curPostId ? Number(curPostId) : null,
+    curPostId: numericPostId,
     mode,
   });
   const { submit } = usePostSubmit({
     mode,
-    postid: curPostId ? Number(curPostId) : null,
+    postid: numericPostId,
     token,
+    onSuccess: ({ href }) => router.push(href),
   });
 
   if (adminStatus === "loading") {
