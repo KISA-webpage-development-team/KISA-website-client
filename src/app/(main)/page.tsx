@@ -1,22 +1,50 @@
-// sub-ui components
-import HomeCarousel from "@/features/home-sponsor/components/HomeCarousel";
-import QuickLinks from "@/features/home-sponsor/components/QuickLinks";
-import BoardsSummary from "@/features/home-sponsor/components/BoardsSummary";
-import SchoolCalendar from "@/features/home-sponsor/components/SchoolCalendar";
-import SponsorCarousel from "@/features/home-sponsor/components/SponsorCarousel";
+import { getBoardPosts } from "@/apis/boards/queries";
+import { getPochaInfo } from "@/apis/pocha/queries";
+import { BoardType } from "@/types/board";
 
-export default function Home() {
+import AppEntryTiles from "@/features/home/components/AppEntryTiles";
+import BoardsPreview from "@/features/home/components/BoardsPreview";
+import CalendarPeek from "@/features/home/components/CalendarPeek";
+import FeaturedCarousel from "@/features/home/components/FeaturedCarousel";
+import PochaLiveBanner from "@/features/home/components/PochaLiveBanner";
+import SponsorStrip from "@/features/home/components/SponsorStrip";
+
+const BOARD_PREVIEW_LIMIT = 10 as const;
+
+export default async function HomePage() {
+  // Fetch initial data in parallel on the server so the home page paints with
+  // boards rows and pocha state already present — eliminates client-side
+  // request waterfalls for surfaces that are above-the-fold.
+  const [pochaInfo, communityPosts, jobPosts] = await Promise.all([
+    getPochaInfo(new Date()).catch(() => null),
+    getBoardPosts(BoardType.Community, BOARD_PREVIEW_LIMIT, 0).catch(
+      () => undefined
+    ),
+    getBoardPosts(BoardType.JobAnnouncement, BOARD_PREVIEW_LIMIT, 0).catch(
+      () => undefined
+    ),
+  ]);
+
   return (
-    <section
-      className="h-full w-full 
-    flex flex-col items-center
-     gap-8 md:gap-8 -mt-2"
-    >
-      <HomeCarousel />
-      <BoardsSummary />
-      <SponsorCarousel />
-      <SchoolCalendar />
-      <QuickLinks />
+    <section className="flex flex-col gap-12 md:gap-16">
+      <PochaLiveBanner initialPochaInfo={pochaInfo} />
+
+      <FeaturedCarousel />
+
+      <div className="rounded-lg bg-surface-subtle p-5 md:p-8">
+        <BoardsPreview
+          communityPosts={communityPosts}
+          jobPosts={jobPosts}
+        />
+      </div>
+
+      <CalendarPeek />
+
+      <div className="rounded-lg bg-surface-subtle p-5 md:p-8">
+        <AppEntryTiles />
+      </div>
+
+      <SponsorStrip />
     </section>
   );
 }
