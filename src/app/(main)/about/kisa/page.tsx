@@ -48,9 +48,9 @@ const PILLARS: Pillar[] = [
 
 export default function KisaPage() {
   return (
-    <section className="flex flex-col gap-32lg:gap-36">
+    <section className="flex flex-col gap-24 md:gap-32 lg:gap-36">
       {/* Editorial hero */}
-      <div className="flex flex-col items-center gap-6 text-center">
+      <div className="flex flex-col items-center gap-2 md:gap-4 lg:gap-6 text-center">
         <p className="type-caption text-muted-foreground tracking-widest uppercase">
           SINCE 1998 · 소개
         </p>
@@ -159,15 +159,15 @@ export default function KisaPage() {
         aria-labelledby="what-we-do-heading"
         className="flex flex-col gap-4 md:gap-6 lg:gap-8 "
       >
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col md:flex-row justify-between gap-3">
           <h2 id="what-we-do-heading" className="type-h1 text-foreground">
             KISA가 하는 일
           </h2>
+          <p className="type-body text-muted-foreground md:self-end">
+            커뮤니티 형성, 정보 제공, 그리고 미시간 한인 학생들의 목소리를
+            대변하는 것 — 학생회의 활동은 크게 네 갈래로 정리됩니다.
+          </p>
         </div>
-        <p className="type-body text-muted-foreground md:self-end">
-          커뮤니티 형성, 정보 제공, 그리고 미시간 한인 학생들의 목소리를
-          대변하는 것 — 학생회의 활동은 크게 네 갈래로 정리됩니다.
-        </p>
 
         <Grid columns={{ base: 1, md: 2, lg: 4 }} gap="component">
           {PILLARS.map((p) => (

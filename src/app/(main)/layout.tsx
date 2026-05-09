@@ -29,7 +29,7 @@ export default async function MainLayout({
         <Container
           as="main"
           size="xl"
-          className="relative h-full py-6! md:py-14! lg:py-16! flex-1"
+          className="relative h-full flex-1 py-6! md:py-14! lg:py-16!"
         >
           {children}
         </Container>
