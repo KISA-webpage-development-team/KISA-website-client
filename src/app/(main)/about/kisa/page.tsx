@@ -1,5 +1,12 @@
 import Image from "next/image";
-import { Card, CardContent, Grid } from "@umichkisa-ds/web";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Grid,
+} from "@umichkisa-ds/web";
 
 export const metadata = {
   title: "소개",
@@ -41,9 +48,9 @@ const PILLARS: Pillar[] = [
 
 export default function KisaPage() {
   return (
-    <section className="flex flex-col gap-20">
+    <section className="flex flex-col gap-32lg:gap-36">
       {/* Editorial hero */}
-      <header className="flex flex-col items-center gap-6 text-center">
+      <div className="flex flex-col items-center gap-6 text-center">
         <p className="type-caption text-muted-foreground tracking-widest uppercase">
           SINCE 1998 · 소개
         </p>
@@ -52,39 +59,34 @@ export default function KisaPage() {
           <br />
           함께 만드는 공동체.
         </h1>
-        <p className="type-body text-muted-foreground max-w-xl">
-          KISA는 미시간 대학교 한인 학부생들이 모여 만든 자치 학생회입니다.
-          1998년 설립 이래 5,000명 가량의 한인 학생들의 캠퍼스 생활을
-          지원해왔습니다.
-        </p>
-      </header>
 
-      {/* Group photo */}
-      <figure className="w-full">
-        <div className="relative w-full overflow-hidden rounded-lg border border-border bg-surface-subtle aspect-[2400/1050]">
-          <Image
-            src="/kisa_all_2025-2026.png"
-            alt="KISA 2025-2026 단체 사진"
-            fill
-            sizes="(min-width: 1024px) 1280px, 100vw"
-            className="object-cover"
-            priority
-          />
-        </div>
-        <figcaption className="mt-3 flex items-center justify-between">
-          <span className="type-caption text-muted-foreground uppercase">
-            FIG. 01 / KISA 2025-26
-          </span>
-          <span className="type-caption text-muted-foreground">
-            University of Michigan, Ann Arbor
-          </span>
-        </figcaption>
-      </figure>
+        {/* Group photo */}
+        <figure className="w-full mt-4">
+          <div className="relative w-full overflow-hidden rounded-lg border border-border bg-surface-subtle aspect-[2400/1050]">
+            <Image
+              src="/kisa_all_2025-2026.png"
+              alt="KISA 2025-2026 단체 사진"
+              fill
+              sizes="(min-width: 1024px) 1280px, 100vw"
+              className="object-cover"
+              priority
+            />
+          </div>
+          <figcaption className="mt-3 flex items-center justify-between">
+            <span className="type-caption text-muted-foreground uppercase">
+              KISA 2025-26
+            </span>
+            <span className="type-caption text-muted-foreground">
+              University of Michigan, Ann Arbor
+            </span>
+          </figcaption>
+        </figure>
+      </div>
 
       {/* 인사말 — two-column with stats sidebar */}
-      <section
+      <div
         aria-labelledby="greeting-heading"
-        className="flex flex-col md:flex-row gap-10"
+        className="flex flex-col md:flex-row gap-10 w-full"
       >
         {/* Sidebar — stats */}
         <aside className="md:w-64 md:shrink-0">
@@ -108,7 +110,7 @@ export default function KisaPage() {
         </aside>
 
         {/* Main column — narrative copy + mission pull-quote */}
-        <div className="flex flex-col gap-8 md:flex-1 md:min-w-0">
+        <div className="flex flex-col gap-4 md:gap-6 lg:gap-8 w-full md:min-w-0">
           <h2 id="greeting-heading" className="type-h1 text-foreground">
             인사말
           </h2>
@@ -150,42 +152,39 @@ export default function KisaPage() {
             가겠습니다.
           </p>
         </div>
-      </section>
+      </div>
 
       {/* What we do — KISA가 하는 일 */}
-      <section
+      <div
         aria-labelledby="what-we-do-heading"
-        className="flex flex-col gap-8"
+        className="flex flex-col gap-4 md:gap-6 lg:gap-8 "
       >
-        <header className="grid grid-cols-1 md:grid-cols-12 gap-8">
-          <div className="md:col-span-6 flex flex-col gap-3">
-            <p className="type-caption text-muted-foreground tracking-widest uppercase">
-              WHAT WE DO
-            </p>
-            <h2 id="what-we-do-heading" className="type-h1 text-foreground">
-              KISA가 하는 일
-            </h2>
-          </div>
-          <p className="md:col-span-6 type-body text-muted-foreground md:self-end">
-            커뮤니티 형성, 정보 제공, 그리고 미시간 한인 학생들의 목소리를
-            대변하는 것 — 학생회의 활동은 크게 네 갈래로 정리됩니다.
-          </p>
-        </header>
+        <div className="flex flex-col gap-3">
+          <h2 id="what-we-do-heading" className="type-h1 text-foreground">
+            KISA가 하는 일
+          </h2>
+        </div>
+        <p className="type-body text-muted-foreground md:self-end">
+          커뮤니티 형성, 정보 제공, 그리고 미시간 한인 학생들의 목소리를
+          대변하는 것 — 학생회의 활동은 크게 네 갈래로 정리됩니다.
+        </p>
 
         <Grid columns={{ base: 1, md: 2, lg: 4 }} gap="component">
           {PILLARS.map((p) => (
             <Card key={p.index}>
-              <CardContent className="flex flex-col gap-4 py-6">
+              <CardHeader>
                 <span className="type-caption text-muted-foreground">
                   {p.index}
                 </span>
-                <h3 className="type-h3 text-foreground">{p.title}</h3>
-                <p className="type-body-sm text-muted-foreground">{p.desc}</p>
+                <CardTitle as="h3">{p.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{p.desc}</CardDescription>
               </CardContent>
             </Card>
           ))}
         </Grid>
-      </section>
+      </div>
     </section>
   );
 }
