@@ -145,7 +145,7 @@ export default function BoardTemplate({ boardType, page, size }: Props) {
     showAnnouncements.length === 0;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3 md:gap-2">
       {/* Header — title + CTA */}
       <header className="flex items-center justify-between gap-4">
         <h1 className="type-h2 text-brand-primary">

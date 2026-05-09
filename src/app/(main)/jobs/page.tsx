@@ -65,7 +65,7 @@ function JobsCuratorDynamicContent() {
   const isKorea = country === "KR";
 
   return (
-    <>
+    <div className="flex flex-col gap-2 mt-4">
       {/* Category heading */}
       <div className="mt-2 md:mt-6">
         <JobCategoryDropdown />
@@ -99,7 +99,7 @@ function JobsCuratorDynamicContent() {
           />
         )}
       </div>
-    </>
+    </div>
   );
 }
 
