@@ -23,7 +23,10 @@ import {
 import { useBoardPostNum, useBoardPosts } from "@/apis/boards/swrHooks";
 import { BoardType } from "@/types/board";
 import { SimplePost } from "@/types/post";
-import { isEveryKisaBoard, getKoreanBoardType } from "@/utils/formats/boardType";
+import {
+  isEveryKisaBoard,
+  getKoreanBoardType,
+} from "@/utils/formats/boardType";
 import { formatDateOrTime } from "@/utils/formats/date";
 import useAdmin from "@/lib/next-auth/useAdmin";
 import { useAuth } from "@/lib/auth/authContext";
@@ -92,7 +95,7 @@ export default function BoardTemplate({
       if (next.size !== undefined) params.set("size", String(next.size));
       return `${pathname}?${params.toString()}`;
     },
-    [pathname, searchParams]
+    [pathname, searchParams],
   );
 
   const handlePageChange = useCallback(
@@ -101,7 +104,7 @@ export default function BoardTemplate({
         router.push(buildHref({ page: nextPage }));
       });
     },
-    [router, buildHref]
+    [router, buildHref],
   );
 
   const handleSizeChange = useCallback(
@@ -113,7 +116,7 @@ export default function BoardTemplate({
         router.push(buildHref({ size: Number(value), page: 1 }));
       });
     },
-    [router, buildHref]
+    [router, buildHref],
   );
 
   const showCreateButton =
@@ -126,13 +129,12 @@ export default function BoardTemplate({
     : Math.max(1, Math.ceil(totalPostNum / size));
 
   // The starting (largest) post number for the current page, descending.
-  const postStartIdx =
-    (totalPostNum ?? 0) - size * apiPage;
+  const postStartIdx = (totalPostNum ?? 0) - size * apiPage;
 
   const isLoading = isPostsFetching || isPostNumFetching;
   const isError = Boolean(postsError || postNumError);
 
-  const showAnnouncements = page === 1 ? announcements ?? [] : [];
+  const showAnnouncements = page === 1 ? (announcements ?? []) : [];
   const isEmpty =
     !isLoading &&
     !isError &&
@@ -140,7 +142,7 @@ export default function BoardTemplate({
     showAnnouncements.length === 0;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       {/* Header — title + CTA */}
       <header className="flex items-center justify-between gap-4">
         <h1 className="type-h1 text-brand-primary">
@@ -160,10 +162,7 @@ export default function BoardTemplate({
       {isLoading ? (
         <BoardSkeleton />
       ) : isError ? (
-        <StatusView
-          variant="error"
-          title="게시글을 불러오는데 실패했습니다"
-        />
+        <StatusView variant="error" title="게시글을 불러오는데 실패했습니다" />
       ) : isEmpty ? (
         <StatusView variant="not-found" title="아직 게시글이 없습니다" />
       ) : (
@@ -301,7 +300,9 @@ function BoardDesktopRow({
     <TableRow className={isAnnouncement ? "bg-surface-subtle" : undefined}>
       <TableCell className="text-center">
         {isAnnouncement ? (
-          <Badge variant="brand" size="sm">공지</Badge>
+          <Badge variant="brand" size="sm">
+            공지
+          </Badge>
         ) : (
           <span className="type-body-sm text-muted-foreground">{postNum}</span>
         )}
@@ -392,7 +393,9 @@ function BoardMobileRow({
       <Link href={`/posts/${postid}`} className="flex flex-col gap-1">
         <div className="flex items-baseline gap-1">
           {isAnnouncement && (
-            <Badge variant="brand" size="sm">공지</Badge>
+            <Badge variant="brand" size="sm">
+              공지
+            </Badge>
           )}
           <span
             className={
