@@ -19,7 +19,9 @@ import {
   Avatar,
   Icon,
   LoadingSpinner,
+  SelectContent,
   SelectItem,
+  SelectTrigger,
   StatusView,
   toast,
 } from "@umichkisa-ds/web";
@@ -181,11 +183,14 @@ function UserEditFormBody({
           label="졸업년도 (Graduation Year)"
           rules={gradYearRules}
         >
-          {GRAD_YEARS.map((year) => (
-            <SelectItem key={year} value={String(year)}>
-              {year}
-            </SelectItem>
-          ))}
+          <SelectTrigger placeholder="졸업년도 선택" />
+          <SelectContent>
+            {GRAD_YEARS.map((year) => (
+              <SelectItem key={year} value={String(year)}>
+                {year}
+              </SelectItem>
+            ))}
+          </SelectContent>
         </Form.Select>
 
         <Form.Input
