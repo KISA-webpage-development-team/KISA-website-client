@@ -156,9 +156,15 @@ body {
 
 /* ── FullCalendar toolbar title — render with DS type-h4 instead of the
        library's default oversized heading. Scoped to .home-calendar-peek so
-       this override only applies to the home page CalendarPeek surface. ── */
+       this override only applies to the home page CalendarPeek surface.
+       Values mirror DS .type-h4 (font/size/weight/line-height); @apply
+       can't reach the DS utility because it's registered in the
+       ds-components layer. ── */
 .home-calendar-peek .fc-toolbar-title {
-  @apply type-h4;
+  font-family: var(--font-pretendard);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.375;
 }
 
 /* ── Cherry Blossom Branch animations ── */

@@ -213,7 +213,7 @@ function PreviewSkeleton({ isEveryKisa }: { isEveryKisa: boolean }) {
           </TableBody>
         </Table>
       </div>
-      <div className="block md:hidden">
+      <div className="-mx-4 block md:hidden">
         <TableMobileList>
           {Array.from({ length: PREVIEW_LIMIT }).map((_, idx) => (
             <TableMobileItem key={idx}>
@@ -243,7 +243,7 @@ function BoardColumn({ type }: BoardColumnProps) {
           <div className="hidden md:block">
             <PreviewDesktopTable type={type} posts={visible} />
           </div>
-          <div className="block md:hidden">
+          <div className="-mx-4 block md:hidden">
             <PreviewMobileList type={type} posts={visible} />
           </div>
         </>
