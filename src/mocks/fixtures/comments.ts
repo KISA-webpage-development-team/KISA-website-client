@@ -8,7 +8,6 @@ const EVERYKISA_BOARDS: ReadonlySet<BoardType> = new Set([
   BoardType.Concern,
   BoardType.Academic,
   BoardType.Career,
-  BoardType.LivingQA,
 ]);
 
 /**

@@ -2,7 +2,6 @@
 
 import React from "react";
 import BoardTableRow from "@/features/bulletin-board/components/board/BoardTableRow";
-import "@/app/(main)/boards/board.css";
 import { SimplePost } from "@/types/post";
 
 // for now, just use any type
