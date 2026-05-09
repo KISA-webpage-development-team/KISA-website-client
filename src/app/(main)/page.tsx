@@ -6,7 +6,7 @@ import SponsorStrip from "@/features/home/components/SponsorStrip";
 
 export default function HomePage() {
   return (
-    <section className="flex flex-col gap-8 md:gap-10">
+    <section className="flex flex-col gap-16 md:gap-10">
       <FeaturedCarousel />
       <BoardsPreview />
       <CalendarPeek />
