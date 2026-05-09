@@ -52,7 +52,7 @@ export default function KisaPage() {
       {/* Editorial hero */}
       <div className="flex flex-col items-center gap-2 md:gap-4 lg:gap-6 text-center">
         {/* Group photo */}
-        <figure className="w-full mt-4">
+        <figure className="w-full">
           <div className="relative w-full overflow-hidden rounded-lg border border-border bg-surface-subtle aspect-[2400/1050]">
             <Image
               src="/kisa_all_2025-2026.png"
