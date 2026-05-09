@@ -195,11 +195,11 @@ export default function BoardTemplate({
             />
           </div>
 
-          {/* Page-size selector + Pagination — centered pagination,
-              size selector anchored left on desktop (게시판 convention).
-              Stacked column on mobile. */}
-          <div className="relative flex flex-col-reverse items-center gap-4 md:block">
-            <div className="md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2">
+          {/* Pagination — centered. Size selector is desktop-only,
+              anchored to the absolute left (게시판 convention). Mobile
+              hides the selector entirely (defaults to 10). */}
+          <div className="relative flex justify-center">
+            <div className="hidden md:block md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2">
               <ToggleGroup
                 type="single"
                 value={String(size)}
@@ -211,13 +211,11 @@ export default function BoardTemplate({
                 aria-label="페이지당 게시글 수"
               />
             </div>
-            <div className="flex justify-center md:w-full">
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            </div>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </>
       )}
@@ -319,7 +317,7 @@ function BoardDesktopRow({
         >
           {title}
           {commentsCount > 0 && (
-            <span className="ml-1 type-body-sm text-brand-primary">
+            <span className="ml-1 type-body-sm text-error">
               {`[${commentsCount}]`}
             </span>
           )}
@@ -406,7 +404,7 @@ function BoardMobileRow({
             {title}
           </span>
           {commentsCount > 0 && (
-            <span className="type-body-sm text-brand-primary">
+            <span className="type-body-sm text-error">
               {`[${commentsCount}]`}
             </span>
           )}
