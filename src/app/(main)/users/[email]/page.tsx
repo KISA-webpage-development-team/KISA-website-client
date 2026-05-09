@@ -1,18 +1,16 @@
-// "/users/[email]"
+// /users/[email] — member-directory profile.
+// Hybrid surface: hero card + activity board (posts/comments tabs).
+//
+// Auth gates (preserved verbatim):
+//   - getSession() → if no session, render <NotLogin />.
+//   - if decodedEmail.includes(KISA_EMAIL) && !session.user.email.includes(KISA_EMAIL)
+//     → <NotAuthorized /> (KISA-org email rule).
 
-// [UI]
-// UserProfile: User's profile information including image, name, major, etc
-// UserBoard: User's posts and comments with toggle bar to switch between them
-
-// [Rendering method] SSR (container) + CSR (components)
-// [Auth Middleware applied]
-import React from "react";
 import { KISA_EMAIL } from "@/constants/email";
 import { getSession } from "@/lib/next-auth/getSession";
 
-// UI
-import UserProfile from "@/features/users/components/view/UserProfile";
-import UserBoard from "@/features/users/components/view/UserBoard";
+import UserProfileHero from "@/features/users/components/view/UserProfileHero";
+import UserActivityBoard from "@/features/users/components/view/UserActivityBoard";
 
 import { NotLogin, NotAuthorized } from "@/components/ui/feedback";
 
@@ -23,12 +21,9 @@ type UserViewPageProps = {
 };
 
 export default async function UserViewPage({ params }: UserViewPageProps) {
-  // [NOTE] getSession() is a function based on next-auth
-  // no need to handle missing session because of the auth middleware
   const session = await getSession();
 
-  // [NOTE] email on the URL is encoded
-  // need to decodeURIComponent to get the correct value
+  // [NOTE] email on the URL is encoded; decode for fetch + comparison.
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);
 
@@ -36,7 +31,7 @@ export default async function UserViewPage({ params }: UserViewPageProps) {
     return <NotLogin />;
   }
 
-  // [Business Logic]: Only KISA email is allowed to access KISA's user page
+  // [Business Logic] Only KISA email is allowed to access KISA's user page.
   if (
     decodedEmail.includes(KISA_EMAIL) &&
     !session?.user?.email.includes(KISA_EMAIL)
@@ -45,9 +40,14 @@ export default async function UserViewPage({ params }: UserViewPageProps) {
   }
 
   return (
-    <section>
-      <UserProfile email={decodedEmail} session={session} />
-      <UserBoard email={decodedEmail} session={session} />
+    <section className="flex flex-col gap-6">
+      <UserProfileHero
+        email={decodedEmail}
+        token={session.token}
+        sessionEmail={session.user.email}
+        sessionImage={session.user.image}
+      />
+      <UserActivityBoard email={decodedEmail} token={session.token} />
     </section>
   );
 }

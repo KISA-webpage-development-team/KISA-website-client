@@ -1,7 +1,12 @@
-import React from "react";
-import UserEditClient from "@/features/users/components/edit/UserEditClient";
+// /users/edit/[email] — self-only profile editor.
+//
+// Auth gates (preserved verbatim):
+//   - getSession() → if no session, render <NotLogin />.
+//   - session.user.email !== decodedEmail → <NotAuthorized />.
+
 import { getSession } from "@/lib/next-auth/getSession";
 
+import UserEditFormCard from "@/features/users/components/edit/UserEditFormCard";
 import { NotAuthorized, NotLogin } from "@/components/ui/feedback";
 
 type UserEditPageProps = {
@@ -11,12 +16,8 @@ type UserEditPageProps = {
 };
 
 export default async function UserEditPage({ params }: UserEditPageProps) {
-  // [NOTE] getSession() is a function based on next-auth
-  // no need to handle missing session because of the auth middleware
   const session = await getSession();
 
-  // [NOTE] email on the URL is encoded
-  // need to decodeURIComponent to get the correct value
   const { email } = params;
   const decodedEmail = decodeURIComponent(email);
 
@@ -24,14 +25,18 @@ export default async function UserEditPage({ params }: UserEditPageProps) {
     return <NotLogin />;
   }
 
-  // [Business Logic]: Only the user can edit their own information
+  // [Business Logic] Only the user can edit their own information.
   if (session?.user.email !== decodedEmail) {
     return <NotAuthorized />;
   }
 
   return (
     <section>
-      <UserEditClient email={decodedEmail} session={session} />
+      <UserEditFormCard
+        email={decodedEmail}
+        token={session.token}
+        sessionImage={session.user.image}
+      />
     </section>
   );
 }
