@@ -45,7 +45,7 @@ interface UserEditFormValues {
 const CURRENT_YEAR = new Date().getFullYear();
 const GRAD_YEARS: number[] = Array.from(
   { length: 6 + 8 + 1 }, // currentYear-6 .. currentYear+8
-  (_, i) => CURRENT_YEAR - 6 + i
+  (_, i) => CURRENT_YEAR - 6 + i,
 );
 
 const majorRules = {
@@ -105,7 +105,7 @@ export default function UserEditFormCard({
             typeof key[0] === "string" &&
             key[0] === `/users/${email}/`,
           undefined,
-          { revalidate: true }
+          { revalidate: true },
         );
         router.push(`/users/${encodeURIComponent(email)}`);
       }}
@@ -142,7 +142,7 @@ function UserEditFormBody({
           gradYear: parseInt(values.gradYear, 10),
           linkedin: values.linkedin,
         },
-        token
+        token,
       );
 
       if (!res) {
@@ -157,7 +157,7 @@ function UserEditFormBody({
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+    <div className="mx-auto flex w-full flex-col items-center gap-6">
       {/* Read-only header */}
       <div className="flex flex-col items-center gap-4 md:flex-row md:items-center md:gap-6">
         <Avatar size="lg" src={sessionImage} name={fullname} />
@@ -171,11 +171,7 @@ function UserEditFormBody({
       </div>
 
       {/* Editable fields */}
-      <Form
-        form={methods}
-        onSubmit={onSubmit}
-        className="flex flex-col gap-6"
-      >
+      <Form form={methods} onSubmit={onSubmit} className="w-full">
         <Form.Input
           name="major"
           label="전공 (Major)"

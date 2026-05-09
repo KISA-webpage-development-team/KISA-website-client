@@ -226,11 +226,7 @@ export default function SignUpPage() {
         </p>
       </header>
 
-      <Form
-        form={methods}
-        onSubmit={onSubmit}
-        className="flex w-full flex-col gap-6"
-      >
+      <Form form={methods} onSubmit={onSubmit}>
         {/* Identity */}
         <fieldset className="flex flex-col gap-4">
           <Form.Input

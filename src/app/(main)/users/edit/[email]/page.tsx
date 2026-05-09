@@ -13,6 +13,7 @@ import { useAuth } from "@/lib/auth/authContext";
 
 import UserEditFormCard from "@/features/users/components/edit/UserEditFormCard";
 import { NotAuthorized, NotLogin } from "@/components/ui/feedback";
+import { Container } from "@umichkisa-ds/web";
 
 type UserEditPageProps = {
   params: {
@@ -36,12 +37,12 @@ export default function UserEditPage({ params }: UserEditPageProps) {
   }
 
   return (
-    <section>
+    <Container as="section" size="sm" className="!p-0 h-full flex items-center">
       <UserEditFormCard
         email={decodedEmail}
         token={session.token}
         sessionImage={session.user.image}
       />
-    </section>
+    </Container>
   );
 }
