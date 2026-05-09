@@ -51,9 +51,6 @@ export default function KisaPage() {
     <section className="flex flex-col gap-24 md:gap-32 lg:gap-36">
       {/* Editorial hero */}
       <div className="flex flex-col items-center gap-2 md:gap-4 lg:gap-6 text-center">
-        <p className="type-caption text-muted-foreground tracking-widest uppercase">
-          SINCE 1998 · 소개
-        </p>
         <h1 className="type-display text-foreground max-w-3xl">
           미시간의 한인 학생들,
           <br />
