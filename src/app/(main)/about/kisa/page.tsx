@@ -53,8 +53,9 @@ export default function KisaPage() {
           함께 만드는 공동체.
         </h1>
         <p className="type-body text-muted-foreground max-w-xl">
-          KISA는 미시간 대학교 한인 학부생들이 모여 만든 자치 학생회입니다. 1998년
-          설립 이래 5,000명 가량의 한인 학생들의 캠퍼스 생활을 지원해왔습니다.
+          KISA는 미시간 대학교 한인 학부생들이 모여 만든 자치 학생회입니다.
+          1998년 설립 이래 5,000명 가량의 한인 학생들의 캠퍼스 생활을
+          지원해왔습니다.
         </p>
       </header>
 
@@ -71,7 +72,7 @@ export default function KisaPage() {
           />
         </div>
         <figcaption className="mt-3 flex items-center justify-between">
-          <span className="type-caption text-muted-foreground tracking-widest uppercase">
+          <span className="type-caption text-muted-foreground uppercase">
             FIG. 01 / KISA 2025-26
           </span>
           <span className="type-caption text-muted-foreground">
@@ -83,10 +84,10 @@ export default function KisaPage() {
       {/* 인사말 — two-column with stats sidebar */}
       <section
         aria-labelledby="greeting-heading"
-        className="grid grid-cols-1 md:grid-cols-12 gap-10"
+        className="flex flex-col md:flex-row gap-10"
       >
         {/* Sidebar — stats */}
-        <aside className="md:col-span-3 lg:col-span-3">
+        <aside className="md:w-64 md:shrink-0">
           <dl className="flex flex-col">
             {STATS.map((stat, i) => (
               <div
@@ -107,7 +108,7 @@ export default function KisaPage() {
         </aside>
 
         {/* Main column — narrative copy + mission pull-quote */}
-        <div className="md:col-span-9 lg:col-span-9 flex flex-col gap-8">
+        <div className="flex flex-col gap-8 md:flex-1 md:min-w-0">
           <h2 id="greeting-heading" className="type-h1 text-foreground">
             인사말
           </h2>
@@ -128,7 +129,8 @@ export default function KisaPage() {
             <p className="type-h3 text-brand-primary">
               &ldquo;KISA is a student-driven organization dedicated to
               empowering Korean international students by fostering a tight-knit
-              community and providing valuable opportunities and resources.&rdquo;
+              community and providing valuable opportunities and
+              resources.&rdquo;
             </p>
             <cite className="type-caption text-muted-foreground tracking-widest uppercase not-italic">
               — KISA Mission Statement
