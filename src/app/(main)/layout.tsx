@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import dynamic from "next/dynamic";
 
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
@@ -6,8 +7,17 @@ import { getServerSession } from "next-auth";
 import { Container } from "@umichkisa-ds/web";
 import authOptions from "@/lib/next-auth/authOptions";
 import PochaLiveBanner from "@/features/home/components/PochaLiveBanner";
-import { MockAuthToggle } from "@/mocks/MockAuthToggle";
 import Providers from "./Providers";
+
+// Dev-only toggle. Build-time gate: when NEXT_PUBLIC_MOCK_API !== "1",
+// the ternary collapses to null and the entire MockAuthToggle module
+// is tree-shaken from the prod (main) layout chunk.
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_MOCK_API === "1";
+const MockAuthToggle = IS_MOCK_MODE
+  ? dynamic(() =>
+      import("@/mocks/MockAuthToggle").then((m) => m.MockAuthToggle)
+    )
+  : null;
 
 export default async function MainLayout({
   children,
@@ -41,7 +51,7 @@ export default async function MainLayout({
           <Footer />
         </footer>
 
-        <MockAuthToggle />
+        {MockAuthToggle && <MockAuthToggle />}
       </div>
     </Providers>
   );
