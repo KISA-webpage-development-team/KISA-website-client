@@ -91,7 +91,7 @@ export default function FeaturedCarousel() {
   return (
     <div className="flex w-full flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
       {/* Image */}
-      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-lg bg-surface-subtle lg:basis-[40%]">
+      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-md bg-surface-subtle lg:basis-[40%]">
         {items.map((item, index) => {
           const isActive = index === active;
           return (
