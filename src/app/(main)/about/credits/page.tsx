@@ -3,6 +3,12 @@ import { Grid } from "@umichkisa-ds/web";
 import CreditCard from "@/features/about-page/components/CreditCard";
 import { credits } from "@/features/about-page/data/memberCreditData";
 
+export const metadata = {
+  title: "Credits",
+  description:
+    "UMich KISA 웹사이트를 만들어 온 기여자들을 소개합니다. 학기마다 새로운 빌더가 합류합니다.",
+};
+
 export default function CreditsPage() {
   return (
     <section className="flex flex-col gap-6">
