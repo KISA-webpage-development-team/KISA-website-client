@@ -1,11 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import { Icon } from "@umichkisa-ds/web";
 
-// sub-ui components
-import VerticalDivider from "@/components/ui/divider/VerticalDivider";
-import { ClockIcon } from "@/components/ui/icon";
-
-// utils
 import { formatRelativeTime, formatDateTimeString } from "@/utils/formats/date";
 
 type PostOwnerBarProps = {
@@ -25,48 +21,42 @@ export default function PostOwnerBar({
   commentsCount,
   anonymous,
 }: PostOwnerBarProps) {
-  // for accessibility
   const linkLabel = `View ${fullname}'s profile`;
+  const displayName = anonymous ? "익명" : fullname;
 
   return (
-    <div
-      className="flex justify-between items-center 
-    text-xs sm:text-sm "
-    >
-      {/* left: fullname + created */}
+    <div className="flex flex-wrap items-center justify-between gap-2 type-caption text-muted-foreground">
+      {/* Left: author + time */}
       <div className="flex items-center gap-2">
-        <Link href={`/users/${email}`} title={linkLabel} aria-label={linkLabel}>
-          <p className="font-semibold hover:underline">
-            {anonymous ? "익명" : fullname}
-          </p>
-        </Link>
-
-        <VerticalDivider size="small" />
-        <div className="flex items-center gap-1">
-          <ClockIcon />
-          <p className="text-gray-600 hidden sm:block">
-            {formatDateTimeString(created)}
-          </p>
-          <p className="text-gray-600 block sm:hidden">
-            {formatRelativeTime(created)}
-          </p>
-        </div>
+        {anonymous ? (
+          <span className="type-label text-foreground">{displayName}</span>
+        ) : (
+          <Link
+            href={`/users/${email}`}
+            title={linkLabel}
+            aria-label={linkLabel}
+            className="type-label text-foreground hover:underline"
+          >
+            {displayName}
+          </Link>
+        )}
+        <span aria-hidden="true">·</span>
+        <span className="inline-flex items-center gap-1">
+          <Icon name="clock-9" size="xs" />
+          <span className="hidden md:inline">{formatDateTimeString(created)}</span>
+          <span className="md:hidden">{formatRelativeTime(created)}</span>
+        </span>
       </div>
 
-      {/* right: readCount, (추천수, 댓글수) */}
-      <div
-        className="flex items-center 
-      gap-2 text-gray-600"
-      >
-        <div className="flex items-center gap-1">
-          <p>조회</p>
-          <p className="text-black">{`${readCount}`}</p>
-        </div>
-        <VerticalDivider size="small" />
-        <div className="flex items-center gap-1">
-          <p>댓글</p>
-          <p className="text-black">{`${commentsCount}`}</p>
-        </div>
+      {/* Right: read + comments */}
+      <div className="flex items-center gap-3">
+        <span>
+          조회 <span className="text-foreground">{readCount}</span>
+        </span>
+        <span aria-hidden="true">·</span>
+        <span>
+          댓글 <span className="text-foreground">{commentsCount}</span>
+        </span>
       </div>
     </div>
   );
