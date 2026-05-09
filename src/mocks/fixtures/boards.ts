@@ -6,7 +6,6 @@ const EVERYKISA_BOARDS: ReadonlySet<BoardType> = new Set([
   BoardType.Concern,
   BoardType.Academic,
   BoardType.Career,
-  BoardType.LivingQA,
 ]);
 
 export function isEverykisaBoard(board: BoardType): boolean {
@@ -225,28 +224,6 @@ const TITLES_BY_BOARD: Record<BoardType, ReadonlyArray<string>> = {
     "테크 인턴 vs 컨설팅 인턴",
     "박사 후 진로 고민",
   ],
-  [BoardType.LivingQA]: [
-    "Ann Arbor 운전면허 시험",
-    "처음 와서 핸드폰 개통 어디서?",
-    "한국에서 송금하는 법",
-    "은행계좌 어디가 좋을까요",
-    "건강보험 가입 방법",
-    "치과 추천해주세요",
-    "한국 식자재 어디서 사세요",
-    "여름방학 인턴 갈때 짐 보관?",
-    "Costco vs Sam's Club",
-    "차 보험 어디가 싸요?",
-    "한국 음식 배달 가능한 곳",
-    "주차권 어디서 사나요",
-    "겨울옷 어디서 사세요?",
-    "한국 책 어디서 빌려요",
-    "여름철 모기 퇴치법",
-    "전기/가스 셋업 어떻게?",
-    "택배 받는 법",
-    "버스 패스 어디서 사요",
-    "Detroit 공항 가는 법",
-    "한국으로 돌아갈 때 짐 보내기",
-  ],
 };
 
 const ANN_TITLES_BY_BOARD: Record<BoardType, ReadonlyArray<string>> = {
@@ -285,10 +262,6 @@ const ANN_TITLES_BY_BOARD: Record<BoardType, ReadonlyArray<string>> = {
   [BoardType.Career]: [
     "[필독] 취업·진로 게시판 이용 안내",
     "[필독] 면접 후기 작성 시 유의사항",
-  ],
-  [BoardType.LivingQA]: [
-    "[필독] 생활 Q&A 게시판 안내",
-    "[필독] 자주 묻는 질문 모음",
   ],
 };
 
@@ -347,7 +320,6 @@ const ALL_BOARDS: BoardType[] = [
   BoardType.Concern,
   BoardType.Academic,
   BoardType.Career,
-  BoardType.LivingQA,
 ];
 
 export const mockBoardPosts: Record<BoardType, SimplePost[]> = ALL_BOARDS.reduce(

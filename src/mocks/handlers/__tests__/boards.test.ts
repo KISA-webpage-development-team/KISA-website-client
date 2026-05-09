@@ -19,7 +19,6 @@ const ALL_BOARDS: BoardType[] = [
   BoardType.Concern,
   BoardType.Academic,
   BoardType.Career,
-  BoardType.LivingQA,
 ];
 
 const EVERYKISA_BOARDS: BoardType[] = [
@@ -27,7 +26,6 @@ const EVERYKISA_BOARDS: BoardType[] = [
   BoardType.Concern,
   BoardType.Academic,
   BoardType.Career,
-  BoardType.LivingQA,
 ];
 
 const NON_EVERYKISA_BOARDS: BoardType[] = [

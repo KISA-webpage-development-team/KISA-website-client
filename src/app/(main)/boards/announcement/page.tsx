@@ -1,47 +1,39 @@
 import React from "react";
-import BoardBar from "@/features/bulletin-board/components/board/BoardBar";
 import { getBoardAnnouncements } from "@/apis/boards/queries";
-import BoardClient from "@/features/bulletin-board/components/board/BoardClient";
+import BoardTemplate from "@/features/bulletin-board/components/board/BoardTemplate";
 import { BoardType } from "@/types/board";
 
 type AnnouncementPageProps = {
   searchParams?: {
-    size?: number;
-    page?: number;
+    size?: string;
+    page?: string;
   };
 };
 
+const DEFAULT_PAGE_SIZE = 10;
+
+/**
+ * Server-rendered route shell. Pinned announcements are fetched here (rarely
+ * change, no client interaction) and passed into the client `BoardTemplate`,
+ * which owns paginated post fetching via SWR.
+ */
 export default async function AnnouncementPage({
   searchParams,
 }: AnnouncementPageProps) {
-  const { size, page } = searchParams;
-
   const boardType = BoardType.Announcement;
-  // 공지사항은 Server Side이기 때문에 완전한 실시간 데이터가 아니다.
-  // 공지사항 게시글의 특성상 실시간으로 완전한 싱크 (지속적인 api call)이 필요하지 않다.
   const announcements = await getBoardAnnouncements(boardType);
-  // console.log(announcements);
 
-  // // test
-  // if (!announcements) {
-  //   return <></>;
-  // }
+  const size = searchParams?.size ? Number(searchParams.size) : DEFAULT_PAGE_SIZE;
+  const page = searchParams?.page ? Number(searchParams.page) : 1;
+
   return (
     <section>
-      {/* 게시판 search bar */}
-      <header className="w-full">
-        <BoardBar boardType={boardType} />
-      </header>
-      {/* 게시판 table */}
-      {/* API happens in BoardTable client component */}
-      <article className="board_table_wrapper">
-        <BoardClient
-          boardType={boardType}
-          announcements={announcements}
-          size={size ? Number(size) : 10}
-          page={page ? Number(page) : 1}
-        />
-      </article>
+      <BoardTemplate
+        boardType={boardType}
+        announcements={announcements}
+        size={size}
+        page={page}
+      />
     </section>
   );
 }

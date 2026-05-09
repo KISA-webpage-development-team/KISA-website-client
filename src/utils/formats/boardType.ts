@@ -10,7 +10,6 @@ const boardTypeMap = {
   concern: "고민게시판",
   academic: "공부게시판",
   career: "취업·진로",
-  livingqa: "생활 Q&A",
   "": "일반",
 };
 
@@ -19,7 +18,6 @@ const everyKisaBoards = new Set([
   "concern",
   "academic",
   "career",
-  "livingqa",
 ]);
 
 const announcementBoards = ["announcement", "job-announcement"];
