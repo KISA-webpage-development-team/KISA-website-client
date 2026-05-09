@@ -59,11 +59,7 @@ type Props = {
  *
  * Never branch on `boardType` directly here.
  */
-export default function BoardTemplate({
-  boardType,
-  page,
-  size,
-}: Props) {
+export default function BoardTemplate({ boardType, page, size }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -152,7 +148,7 @@ export default function BoardTemplate({
     <div className="flex flex-col gap-4">
       {/* Header — title + CTA */}
       <header className="flex items-center justify-between gap-4">
-        <h1 className="type-h1 text-brand-primary">
+        <h1 className="type-h2 text-brand-primary">
           {getKoreanBoardType(boardType)}
         </h1>
         {showCreateButton && (
