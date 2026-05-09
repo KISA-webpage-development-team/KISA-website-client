@@ -18,7 +18,13 @@
 
 import dynamic from "next/dynamic";
 import { Form, useFormField, useFormStatus } from "@umichkisa-ds/form";
-import { LoadingSpinner, RadioItem, StatusView } from "@umichkisa-ds/web";
+import {
+  Checkbox,
+  LoadingSpinner,
+  RadioGroup,
+  RadioItem,
+  StatusView,
+} from "@umichkisa-ds/web";
 
 import useAdmin from "@/lib/next-auth/useAdmin";
 import { isAnnouncementBoard } from "@/utils/formats/boardType";
@@ -106,11 +112,9 @@ export default function PostEditor({
 
       <TextEditorField token={token} />
 
-      <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-row flex-wrap items-center gap-4 md:gap-6">
-          {isAdmin && !isBoardAnnouncement && (
-            <Form.Checkbox name="isAnnouncement" label="공지사항" text="공지사항" />
-          )}
+      <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-3 md:min-w-[280px]">
+          {isAdmin && !isBoardAnnouncement && <AnnouncementField />}
           {mode === "create" && isEveryKisa && <AnonymousField />}
         </div>
 
@@ -137,17 +141,40 @@ function TextEditorField({ token }: { token: string | undefined }) {
   );
 }
 
-function AnonymousField() {
+function AnnouncementField() {
+  const { value, inputProps } = useFormField<PostEditorFormValues, "isAnnouncement">(
+    "isAnnouncement",
+  );
   return (
-    <Form.Radio
-      name="anonymous"
-      label="익명 여부"
-      className="flex flex-row gap-4"
-      orientation="horizontal"
-    >
-      <RadioItem value="non-anonymous" text="실명" />
-      <RadioItem value="anonymous" text="익명" />
-    </Form.Radio>
+    <div className="flex items-center justify-between gap-4">
+      <span className="type-body-sm text-foreground">공지사항</span>
+      <Checkbox
+        name={inputProps.name}
+        checked={!!value}
+        onChange={(e) => inputProps.onChange(e.target.checked)}
+        onBlur={inputProps.onBlur}
+      />
+    </div>
+  );
+}
+
+function AnonymousField() {
+  const { value, inputProps } = useFormField<PostEditorFormValues, "anonymous">(
+    "anonymous",
+  );
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <span className="type-body-sm text-foreground">익명 여부</span>
+      <RadioGroup
+        value={(value as string) ?? "non-anonymous"}
+        onValueChange={(v) => inputProps.onChange(v)}
+        orientation="horizontal"
+        className="flex flex-row gap-4"
+      >
+        <RadioItem value="non-anonymous" text="실명" />
+        <RadioItem value="anonymous" text="익명" />
+      </RadioGroup>
+    </div>
   );
 }
 
