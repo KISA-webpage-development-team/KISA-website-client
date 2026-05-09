@@ -184,9 +184,10 @@ export default function BoardTemplate({ boardType, page, size }: Props) {
             />
           </div>
 
-          {/* Mobile list */}
+          {/* Mobile list — escapes Container's mobile p-4 so rows reach
+              viewport edges; TableMobileItem's px-4 keeps content gutter. */}
           <div
-            className={`block md:hidden ${
+            className={`-mx-4 block md:hidden ${
               isPending ? "opacity-60 transition-opacity" : ""
             }`}
           >
