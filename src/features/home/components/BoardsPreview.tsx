@@ -273,8 +273,8 @@ export default function BoardsPreview() {
           <h2 className="type-h2 text-foreground">최근 게시글</h2>
         </header>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-          <BoardColumn type={BoardType.Community} />
           <BoardColumn type={BoardType.JobAnnouncement} />
+          <BoardColumn type={BoardType.Community} />
         </div>
       </div>
     </SWRProvider>
