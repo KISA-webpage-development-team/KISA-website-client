@@ -125,26 +125,26 @@ export default function CommentItem({
     if (isCommentAuthor && anonymous) {
       return (
         <Link href={`/users/${email}`} className="hover:underline">
-          <span className="type-body text-foreground">{`${fullname}(익명)`}</span>
+          <span className="type-body-sm text-foreground">{`${fullname}(익명)`}</span>
         </Link>
       );
     }
     if (isCommentAuthor || !anonymous) {
       return (
         <Link href={`/users/${email}`} className="hover:underline">
-          <span className="type-body text-foreground">{fullname}</span>
+          <span className="type-body-sm text-foreground">{fullname}</span>
         </Link>
       );
     }
     if (isPostAuthor) {
       return (
-        <span className="type-body text-foreground">{`익명${commentAuthorMap.get(
+        <span className="type-body-sm text-foreground">{`익명${commentAuthorMap.get(
           email,
         )}(글쓴이)`}</span>
       );
     }
     return (
-      <span className="type-body text-foreground">{`익명${commentAuthorMap.get(
+      <span className="type-body-sm text-foreground">{`익명${commentAuthorMap.get(
         email,
       )}`}</span>
     );
@@ -165,7 +165,7 @@ export default function CommentItem({
         <div className={`flex w-full flex-col ${ownStripeClass}`}>
           {/* Row 1: identity + meta + actions */}
           <div className="flex items-start justify-between gap-1">
-            <div className="flex flex-wrap items-center gap-2 text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 type-body-sm text-muted-foreground">
               {canSeeText ? (
                 <>{renderCommentAuthor()}</>
               ) : (
@@ -223,7 +223,7 @@ export default function CommentItem({
           </div>
 
           {/* Row 2: body */}
-          <div className="type-body text-foreground">
+          <div className="type-body-sm text-foreground">
             {canSeeText ? (
               <>
                 {text}

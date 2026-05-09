@@ -68,7 +68,7 @@ export default function GoBlueButton({
           </Button>
 
           {likeCount !== null && likeCount > 0 && (
-            <span className="inline-flex items-center justify-center rounded-md border border-brand-primary px-4 py-2 type-body-sm text-brand-primary">
+            <span className="inline-flex !font-sejong-bold items-center justify-center rounded-md border border-brand-primary px-3 py-1.5 type-body-sm text-brand-primary !font-semibold">
               {likeCount}
             </span>
           )}

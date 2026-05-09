@@ -25,7 +25,7 @@ export default function PostOwnerBar({
   const displayName = anonymous ? "익명" : fullname;
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 type-caption text-muted-foreground">
+    <div className="flex flex-wrap items-center justify-between gap-2 type-body-sm text-muted-foreground">
       {/* Left: author + time */}
       <div className="flex items-center gap-2">
         {anonymous ? (
@@ -43,7 +43,9 @@ export default function PostOwnerBar({
         <span aria-hidden="true">·</span>
         <span className="inline-flex items-center gap-1">
           <Icon name="clock-9" size="xs" />
-          <span className="hidden md:inline">{formatDateTimeString(created)}</span>
+          <span className="hidden md:inline">
+            {formatDateTimeString(created)}
+          </span>
           <span className="md:hidden">{formatRelativeTime(created)}</span>
         </span>
       </div>

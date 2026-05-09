@@ -69,8 +69,6 @@ export default function PostView({
 
         <PostContent text={text} />
 
-        <Divider />
-
         <PostButtonBar
           email={email}
           session={session}
