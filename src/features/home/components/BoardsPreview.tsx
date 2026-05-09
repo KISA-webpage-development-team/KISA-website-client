@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 
-import { Card, CardContent, Icon } from "@umichkisa-ds/web";
+import { Card, CardContent, Icon, Skeleton } from "@umichkisa-ds/web";
 
+import { useBoardPosts } from "@/apis/boards/swrHooks";
 import { BoardType } from "@/types/board";
 import { SimplePost } from "@/types/post";
 import { formatDateOrTime } from "@/utils/formats/date";
@@ -11,11 +14,6 @@ import {
 } from "@/utils/formats/boardType";
 
 const PREVIEW_LIMIT = 6;
-
-interface BoardsPreviewProps {
-  communityPosts: SimplePost[] | undefined;
-  jobPosts: SimplePost[] | undefined;
-}
 
 function boardIndexHref(type: BoardType): string {
   return isEveryKisaBoard(type) ? `/everykisa/${type}` : `/boards/${type}`;
@@ -53,13 +51,8 @@ function PostRow({ post }: { post: SimplePost }) {
   );
 }
 
-interface BoardColumnProps {
-  type: BoardType;
-  posts: SimplePost[] | undefined;
-}
-
-function BoardColumn({ type, posts }: BoardColumnProps) {
-  const visible = posts?.slice(0, PREVIEW_LIMIT) ?? [];
+function BoardColumn({ type }: { type: BoardType }) {
+  const { posts, isLoading } = useBoardPosts(type, PREVIEW_LIMIT, 0);
 
   return (
     <Card aria-label={getKoreanBoardType(type)}>
@@ -78,9 +71,17 @@ function BoardColumn({ type, posts }: BoardColumnProps) {
           </Link>
         </header>
 
-        {visible.length > 0 ? (
+        {isLoading ? (
+          <ul className="flex flex-col gap-2">
+            {Array.from({ length: PREVIEW_LIMIT }).map((_, i) => (
+              <li key={i} className="px-2 py-2">
+                <Skeleton className="h-5 w-full" />
+              </li>
+            ))}
+          </ul>
+        ) : posts && posts.length > 0 ? (
           <ul className="flex flex-col">
-            {visible.map((post) => (
+            {posts.slice(0, PREVIEW_LIMIT).map((post) => (
               <PostRow key={post.postid} post={post} />
             ))}
           </ul>
@@ -98,24 +99,19 @@ function BoardColumn({ type, posts }: BoardColumnProps) {
  * Two-column board preview surfaced on the home page — 자유게시판 (community)
  * + 취업공고 (job-announcement). Stacks on mobile, side-by-side on desktop.
  *
- * Posts are server-fetched in `(main)/page.tsx` and passed as props so the
- * preview is in the SSR HTML; this component is an RSC.
+ * Posts are fetched client-side via SWR so the mock-mode MSW worker can
+ * intercept the requests; server-side RSC fetches bypass the browser-only
+ * service worker.
  */
-export default function BoardsPreview({
-  communityPosts,
-  jobPosts,
-}: BoardsPreviewProps) {
+export default function BoardsPreview() {
   return (
     <div className="flex flex-col gap-4">
       <header className="flex flex-col gap-1">
         <h2 className="type-h2 text-foreground">최근 게시글</h2>
       </header>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <BoardColumn type={BoardType.Community} posts={communityPosts} />
-        <BoardColumn
-          type={BoardType.JobAnnouncement}
-          posts={jobPosts}
-        />
+        <BoardColumn type={BoardType.Community} />
+        <BoardColumn type={BoardType.JobAnnouncement} />
       </div>
     </div>
   );

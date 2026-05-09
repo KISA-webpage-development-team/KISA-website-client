@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Icon, IconButton, LinkButton } from "@umichkisa-ds/web";
 
-import type { PochaInfo } from "@/types/pocha";
+import usePocha from "@/features/pocha/hooks/usePocha";
 
 const STORAGE_KEY_PREFIX = "kisa.pocha.banner.dismissed.";
 
@@ -12,42 +12,35 @@ function dismissalKey(pochaID: number): string {
   return `${STORAGE_KEY_PREFIX}${pochaID}`;
 }
 
-interface PochaLiveBannerProps {
-  initialPochaInfo: PochaInfo | null;
-}
-
 /**
  * Conditional live-pocha banner pinned to the top of the home page.
  *
- * Server-fetched pocha info is passed in; the banner does no client-side
- * fetching. Dismissal persists per pochaID in localStorage so a brand-new
- * pocha event re-shows the banner; the same event stays dismissed across
- * reloads.
+ * Pocha info is fetched client-side via `usePocha` so MSW (browser-only
+ * service worker) can intercept the request in mock mode. Dismissal persists
+ * per pochaID in localStorage so a brand-new pocha event re-shows the
+ * banner; the same event stays dismissed across reloads.
  */
-export default function PochaLiveBanner({
-  initialPochaInfo,
-}: PochaLiveBannerProps) {
-  const ongoing =
-    initialPochaInfo?.ongoing === true ? initialPochaInfo : null;
-
+export default function PochaLiveBanner() {
+  const { pochaInfo, status } = usePocha();
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    if (!ongoing) return;
+    if (status !== "success" || !pochaInfo?.ongoing) return;
     try {
-      const stored = window.localStorage.getItem(dismissalKey(ongoing.pochaID));
+      const stored = window.localStorage.getItem(dismissalKey(pochaInfo.pochaID));
       if (stored === "1") setDismissed(true);
     } catch {
       // localStorage unavailable — leave dismissed=false so banner shows.
     }
-  }, [ongoing]);
+  }, [status, pochaInfo?.ongoing, pochaInfo?.pochaID]);
 
-  if (!ongoing) return null;
+  if (status !== "success") return null;
+  if (!pochaInfo?.ongoing) return null;
   if (dismissed) return null;
 
   const handleDismiss = () => {
     try {
-      window.localStorage.setItem(dismissalKey(ongoing.pochaID), "1");
+      window.localStorage.setItem(dismissalKey(pochaInfo.pochaID), "1");
     } catch {
       // localStorage unavailable (private mode etc.) — drop silently;
       // banner will hide for the session anyway.
@@ -68,8 +61,8 @@ export default function PochaLiveBanner({
         />
         <div className="flex flex-col gap-1">
           <p className="type-h3 text-brand-primary">포차 진행중</p>
-          {ongoing.title ? (
-            <p className="type-body text-brand-primary">{ongoing.title}</p>
+          {pochaInfo.title ? (
+            <p className="type-body text-brand-primary">{pochaInfo.title}</p>
           ) : null}
         </div>
       </div>
