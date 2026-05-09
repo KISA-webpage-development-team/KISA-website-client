@@ -1,98 +1,92 @@
-import { useState, useEffect } from "react";
-import { getPost } from "@/apis/posts/queries";
+"use client";
+
+import { useEffect } from "react";
+import { useForm } from "@umichkisa-ds/form";
+
+import { usePost } from "@/apis/posts/swrHooks";
 import { isEveryKisaBoard } from "@/utils/formats/boardType";
-import { NewPostBody, UpdatePostBody } from "@/types/post";
 import { BoardType } from "@/types/board";
+import { NewPostBody, UpdatePostBody } from "@/types/post";
+
+export interface PostEditorFormValues {
+  title: string;
+  text: string;
+  isAnnouncement: boolean;
+  /** Only meaningful when mode === "create" && isEveryKisaBoard(boardType). */
+  anonymous: string;
+}
 
 interface UsePostEditorFormProps {
-  session: any;
+  userName: string;
+  userEmail: string;
   boardType: string;
   curPostId?: number | null;
   mode: "create" | "update";
 }
 
+type PostEditorForm = ReturnType<typeof useForm<PostEditorFormValues>>;
+
 export function usePostEditorForm({
-  session,
+  userName,
+  userEmail,
   boardType,
   curPostId = null,
   mode,
-}: UsePostEditorFormProps) {
+}: UsePostEditorFormProps): {
+  form: PostEditorForm;
+  isEveryKisa: boolean;
+  buildPayload: (values: PostEditorFormValues) => NewPostBody | UpdatePostBody;
+} {
   const isEveryKisa = isEveryKisaBoard(boardType);
-  const [title, setTitle] = useState<string>("");
-  const [text, setText] = useState<string>("");
-  const [isAnnouncement, setIsAnnouncement] = useState<boolean>(false);
-  const [anonymousValue, setAnonymousValue] = useState<string>("none");
-  const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(true);
 
-  // Fetch initial post if editing
-  useEffect(() => {
-    const fetchInitialPost = async (postid: number) => {
-      try {
-        const res = await getPost(postid);
-        setTitle(res.title);
-        setText(res.text);
-        setIsAnnouncement(res.isAnnouncement);
-      } catch (error) {
-        console.log("Error occured while fetching post: ", error);
-      }
-    };
-    if (curPostId) {
-      fetchInitialPost(curPostId);
-    }
-  }, [curPostId]);
+  const form = useForm<PostEditorFormValues>({
+    mode: "onTouched",
+    defaultValues: {
+      title: "",
+      text: "",
+      isAnnouncement: false,
+      anonymous: "non-anonymous",
+    },
+  });
 
-  // Validation
-  useEffect(() => {
-    if (isEveryKisa && mode === "create" && anonymousValue === "none") {
-      setIsSubmitBtnDisabled(true);
-      return;
-    }
-    if (title?.length === 0) {
-      setIsSubmitBtnDisabled(true);
-      return;
-    }
-    if (text?.length === 0 || text === "<p><br></p>") {
-      setIsSubmitBtnDisabled(true);
-      return;
-    }
-    setIsSubmitBtnDisabled(false);
-  }, [title, text, boardType, anonymousValue, isEveryKisa, mode]);
+  // Hydrate form when editing — SWR dedups + caches across remounts.
+  const { post } = usePost(
+    mode === "update" && curPostId ? Number(curPostId) : 0,
+  );
 
   useEffect(() => {
-    if (text === "") setIsSubmitBtnDisabled(true);
-  }, [text]);
+    if (mode !== "update" || !post) return;
+    form.reset({
+      title: post.title ?? "",
+      text: post.text ?? "",
+      isAnnouncement: !!post.isAnnouncement,
+      anonymous: "non-anonymous",
+    });
+    // form.reset is referentially stable per RHF
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [post, mode]);
 
-  // formData for create/update
-  const formData: NewPostBody | UpdatePostBody =
+  // Mode-aware payload mapping (preserves the original ternary verbatim).
+  const buildPayload = (
+    values: PostEditorFormValues,
+  ): NewPostBody | UpdatePostBody =>
     mode === "create"
       ? {
           type: boardType as BoardType,
-          title: title,
-          fullname: session?.user.name,
-          email: session?.user.email,
-          text: text,
-          isAnnouncement,
-          anonymous: isEveryKisa ? anonymousValue === "anonymous" : false,
+          title: values.title,
+          fullname: userName,
+          email: userEmail,
+          text: values.text,
+          isAnnouncement: values.isAnnouncement,
+          anonymous: isEveryKisa ? values.anonymous === "anonymous" : false,
           readCount: 0,
         }
       : {
           type: boardType as BoardType,
-          title: title,
-          text: text,
-          isAnnouncement,
+          title: values.title,
+          text: values.text,
+          isAnnouncement: values.isAnnouncement,
         };
 
-  return {
-    title,
-    setTitle,
-    text,
-    setText,
-    isAnnouncement,
-    setIsAnnouncement,
-    anonymousValue,
-    setAnonymousValue,
-    isSubmitBtnDisabled,
-    formData,
-    isEveryKisa,
-  };
+  return { form, isEveryKisa, buildPayload };
 }

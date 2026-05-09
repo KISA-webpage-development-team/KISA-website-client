@@ -1,13 +1,9 @@
-import dynamic from "next/dynamic";
 import { getServerSession } from "next-auth";
+import { StatusView } from "@umichkisa-ds/web";
 
-// ui components
-import BoardTitle from "@/features/bulletin-board/components/shared/BoardTitle";
-
-// auth
 import authOptions from "@/lib/next-auth/authOptions";
-
-// types
+import BoardTitle from "@/features/bulletin-board/components/shared/BoardTitle";
+import PostEditor from "@/features/bulletin-board/components/post-create-edit/PostEditor";
 import { BoardType } from "@/types/board";
 
 type PageProps = {
@@ -19,17 +15,6 @@ type PageProps = {
   };
 };
 
-// need to force PostEditor to be rendered on client-side
-// I don't know why NextJS doesn't automatically render it on client-side
-// this will remove the error "document is not defined"
-const PostEditor = dynamic(
-  () =>
-    import("@/features/bulletin-board/components/post-create-edit/PostEditor"),
-  {
-    ssr: false,
-  }
-);
-
 export default async function PostUpdatePage({
   params,
   searchParams,
@@ -39,29 +24,27 @@ export default async function PostUpdatePage({
   const { postid } = params;
 
   if (!board_type) {
-    return <>존재하지 않는 페이지입니다</>;
+    return (
+      <section>
+        <StatusView
+          variant="not-found"
+          title="존재하지 않는 페이지입니다"
+        />
+      </section>
+    );
   }
 
   return (
-    <section>
-      {/* Board Title */}
+    <section className="flex flex-col gap-6">
       <BoardTitle boardType={board_type} />
-
-      {/* Text Editor */}
-
-      <div className="grow w-full">
-        <PostEditor
-          session={session}
-          boardType={board_type}
-          curPostId={postid}
-          mode="update"
-        />
-      </div>
+      <PostEditor
+        userName={session?.user?.name ?? ""}
+        userEmail={session?.user?.email ?? ""}
+        token={session?.token}
+        boardType={board_type}
+        curPostId={postid}
+        mode="update"
+      />
     </section>
   );
 }
-// [NOTE on rendering method]
-// This page is rendered as SSR (Server Side Rendering) dynamically.
-// * current post data is fetched with useEffect to keep it updated
-// Client-Side Components like BoardTitle and Editor are rendered and
-// become interactive in the browser after the initial HTML is loaded
