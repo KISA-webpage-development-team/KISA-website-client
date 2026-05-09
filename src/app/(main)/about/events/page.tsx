@@ -28,15 +28,21 @@ function EventRow({ event, index }: { event: EventRecord; index: number }) {
   const hasImage = EVENT_IMAGE_IDS.has(event.id);
 
   return (
-    <article className="flex flex-col gap-4">
-      <h2 className="type-h2 text-foreground">{event.title}</h2>
-      <figure className="relative w-full max-w-md aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle">
+    <article className="flex flex-col md:flex-row gap-8 md:items-start">
+      {/* Copy — left */}
+      <div className="flex flex-col gap-4 md:flex-1 md:min-w-0">
+        <h2 className="type-h2 text-foreground">{event.title}</h2>
+        <p className="type-body text-foreground">{event.desc}</p>
+      </div>
+
+      {/* Image — right */}
+      <figure className="relative w-full max-w-xs aspect-square overflow-hidden rounded-md border border-border bg-surface-subtle md:shrink-0">
         {hasImage ? (
           <Image
             src={`/events/${event.id}.png`}
             alt={event.imageTitle}
             fill
-            sizes="(min-width: 768px) 448px, 100vw"
+            sizes="(min-width: 768px) 320px, 100vw"
             className="object-cover"
             priority={index === 0}
           />
@@ -48,7 +54,6 @@ function EventRow({ event, index }: { event: EventRecord; index: number }) {
           </div>
         )}
       </figure>
-      <p className="type-body text-foreground">{event.desc}</p>
     </article>
   );
 }
