@@ -91,7 +91,7 @@ const userPosts: Record<string, UserBoardPost[]> = {
       postid: 20002,
       title: "디트로이트 공항 픽업 같이 하실 분",
       created: "2026-03-28T18:05:00",
-      type: BoardType.LivingQA,
+      type: BoardType.Community,
       fullname: "김민준",
       email: "tester@umich.edu",
       readCount: 92,

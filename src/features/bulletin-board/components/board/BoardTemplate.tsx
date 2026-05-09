@@ -195,23 +195,29 @@ export default function BoardTemplate({
             />
           </div>
 
-          {/* Page-size selector + Pagination */}
-          <div className="flex flex-col-reverse items-center gap-4 md:flex-row md:items-center md:justify-between">
-            <ToggleGroup
-              type="single"
-              value={String(size)}
-              onValueChange={handleSizeChange}
-              items={PAGE_SIZE_OPTIONS.map((option) => ({
-                value: option,
-                label: option,
-              }))}
-              aria-label="페이지당 게시글 수"
-            />
-            <Pagination
-              page={page}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+          {/* Page-size selector + Pagination — centered pagination,
+              size selector anchored left on desktop (게시판 convention).
+              Stacked column on mobile. */}
+          <div className="relative flex flex-col-reverse items-center gap-4 md:block">
+            <div className="md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2">
+              <ToggleGroup
+                type="single"
+                value={String(size)}
+                onValueChange={handleSizeChange}
+                items={PAGE_SIZE_OPTIONS.map((option) => ({
+                  value: option,
+                  label: option,
+                }))}
+                aria-label="페이지당 게시글 수"
+              />
+            </div>
+            <div className="flex justify-center md:w-full">
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
           </div>
         </>
       )}
