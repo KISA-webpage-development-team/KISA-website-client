@@ -228,40 +228,40 @@ const TITLES_BY_BOARD: Record<BoardType, ReadonlyArray<string>> = {
 
 const ANN_TITLES_BY_BOARD: Record<BoardType, ReadonlyArray<string>> = {
   [BoardType.JobAnnouncement]: [
-    "[필독] 2026 채용 공고 게시 가이드",
-    "[필독] Career Fair 일정 공지",
+    "2026 채용 공고 게시 가이드",
+    "Career Fair 일정 공지",
   ],
   [BoardType.Announcement]: [
-    "[필독] 학생회 공지사항 게시 규정",
-    "[필독] 2026 학생회 임원 명단",
+    "학생회 공지사항 게시 규정",
+    "2026 학생회 임원 명단",
   ],
   [BoardType.BuyAndSell]: [
-    "[필독] 사고팔기 게시판 이용 규정",
-    "[필독] 사기방지 안내",
+    "사고팔기 게시판 이용 규정",
+    "사기방지 안내",
   ],
   [BoardType.Housing]: [
-    "[필독] 하우징 게시판 이용 안내",
-    "[필독] 룸메 매칭 가이드",
+    "하우징 게시판 이용 안내",
+    "룸메 매칭 가이드",
   ],
   [BoardType.Sponsor]: [
-    "[필독] 스폰서 게시판 안내",
-    "[필독] 스폰서 등록 방법",
+    "스폰서 게시판 안내",
+    "스폰서 등록 방법",
   ],
   [BoardType.Community]: [
-    "[필독] 자유게시판 이용 규정",
-    "[필독] 익명글 작성 가이드",
+    "자유게시판 이용 규정",
+    "익명글 작성 가이드",
   ],
   [BoardType.Concern]: [
-    "[필독] 고민게시판 이용 규정",
-    "[필독] 심리상담 리소스 모음",
+    "고민게시판 이용 규정",
+    "심리상담 리소스 모음",
   ],
   [BoardType.Academic]: [
-    "[필독] 공부게시판 이용 규정",
-    "[필독] 학업 자료 공유 규정",
+    "공부게시판 이용 규정",
+    "학업 자료 공유 규정",
   ],
   [BoardType.Career]: [
-    "[필독] 취업·진로 게시판 이용 안내",
-    "[필독] 면접 후기 작성 시 유의사항",
+    "취업·진로 게시판 이용 안내",
+    "면접 후기 작성 시 유의사항",
   ],
 };
 
