@@ -1,12 +1,17 @@
-// static data for
-// /about/events   page.js
+// Static records consumed 1:1 by /about/events.
+// id           — slug; matches `/public/events/<id>.png` when an image exists
+// imageTitle   — caption rendered on the image card
+// title        — section heading
+// desc         — paragraph copy
 
-// id: image id
-// imageTitle: image에 올라가는 텍스트
-// title: section title
-// desc: section description
+export type EventRecord = {
+  id: string;
+  imageTitle: string;
+  title: string;
+  desc: string;
+};
 
-const eventsPageData = [
+export const eventsPageData: EventRecord[] = [
   {
     id: "recruiting",
     imageTitle: "Recruiting",
@@ -47,14 +52,12 @@ const eventsPageData = [
     id: "yearbook",
     imageTitle: "Yearbook",
     title: "Yearbook",
-    desc: "2022년 가을 학기부터 시작된 ‘KISA Yearbook’은 한 해의 졸업자분들을 대상으로 그동안의 학교생활을 돌아보는 졸업앨범을 만들어 선물하는 프로젝트입니다. 이어북은 모집 기간동안 이어북 참여에 지원하는 모든 졸업예정자분들께 헌정되며, 참여자 분들과의 인터뷰를 통해 그동안 학교에서 겪어온 개개인의 모든 경험과 추억을 기록합니다. 머지않아 졸업을 앞두고 있는 학생 분들이라면 다년간의 학교생활을 한 권의 앨범으로 만들어 간직할 수 있는 기회를 놓치지 마시길 바랍니다!",
+    desc: "2022년 가을 학기부터 시작된 'KISA Yearbook'은 한 해의 졸업자분들을 대상으로 그동안의 학교생활을 돌아보는 졸업앨범을 만들어 선물하는 프로젝트입니다. 이어북은 모집 기간동안 이어북 참여에 지원하는 모든 졸업예정자분들께 헌정되며, 참여자 분들과의 인터뷰를 통해 그동안 학교에서 겪어온 개개인의 모든 경험과 추억을 기록합니다. 머지않아 졸업을 앞두고 있는 학생 분들이라면 다년간의 학교생활을 한 권의 앨범으로 만들어 간직할 수 있는 기회를 놓치지 마시길 바랍니다!",
   },
   {
     id: "small_group",
     imageTitle: "소그룹",
     title: "소그룹",
-    desc: "2023년 가을 학기 처음 시작된 프로젝트인 ‘소그룹'은 한인 학생들이 서로 간의 취미와 관심사를 공유하고 친목을 도모할 수 있는 기회를 제공하는 것을 목표로 합니다. 매 학기 초, 소그룹 개설 신청서 작성 기간을 공지하면, 학생들은 최소 3명의 최초 인원을 모집하여 자유롭게 소그룹 개설을 신청할 수 있습니다. (단, 규정의 조약을 어기지 않는 경우에 한해) 키사의 역할은 소그룹을 심사하고 원활히 개설될 수 있도록 홍보 및 지원을 하는 데에 있습니다.",
+    desc: "2023년 가을 학기 처음 시작된 프로젝트인 '소그룹'은 한인 학생들이 서로 간의 취미와 관심사를 공유하고 친목을 도모할 수 있는 기회를 제공하는 것을 목표로 합니다. 매 학기 초, 소그룹 개설 신청서 작성 기간을 공지하면, 학생들은 최소 3명의 최초 인원을 모집하여 자유롭게 소그룹 개설을 신청할 수 있습니다. (단, 규정의 조약을 어기지 않는 경우에 한해) 키사의 역할은 소그룹을 심사하고 원활히 개설될 수 있도록 홍보 및 지원을 하는 데에 있습니다.",
   },
 ];
-
-export { eventsPageData };
