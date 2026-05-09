@@ -1,10 +1,19 @@
-// /info/checklist page.js에 사용되는 리스트 데이터
-
+// /info/checklist page에 사용되는 리스트 데이터
+//
 // title: 체크리스트 항목의 제목
-// desc: 체크리시트 항목의 설명 (드롭다운 형태로 표시, html 형식)
+// desc:  체크리스트 항목의 설명 (Accordion 내부에 펼쳐서 표시, JSX)
 
-const checkListData = [
+import type { ReactNode } from "react";
+
+export type CheckListItem = {
+  id: string;
+  title: string;
+  desc: ReactNode;
+};
+
+export const checkListData: CheckListItem[] = [
   {
+    id: "passport-flight",
     title: "새 여권 발급 및 항공권 구매하기 (~4/30)",
     desc: (
       <p>
@@ -23,6 +32,7 @@ const checkListData = [
     ),
   },
   {
+    id: "housing-vaccine",
     title:
       "Housing Application 제출하기 & COVID-19 백신 접종 증명서 1차 & 2차 제출하기 (~5/4)",
     desc: (
@@ -67,6 +77,7 @@ const checkListData = [
     ),
   },
   {
+    id: "bank-statement-i20",
     title: "잔고증명서 발급 및 I-20 신청하기 (~5/31)",
     desc: (
       <p>
@@ -87,6 +98,7 @@ const checkListData = [
     ),
   },
   {
+    id: "advising-virtual-ot",
     title: "Advising Date 신청하기 (~5/31) & Virtual OT Course 듣기 (~6/6)",
     desc: (
       <p>
@@ -107,6 +119,7 @@ const checkListData = [
     ),
   },
   {
+    id: "placement-exams",
     title: "Online Placement Exams 풀기 (~6/6)",
     desc: (
       <p>
@@ -118,6 +131,7 @@ const checkListData = [
     ),
   },
   {
+    id: "pre-advising-activities",
     title: "Academic Unit's pre-advising activities (~6/6)",
     desc: (
       <p>
@@ -139,6 +153,7 @@ const checkListData = [
     ),
   },
   {
+    id: "course-registration",
     title: "Acadamic Advising Meeting 후 수강신청하기 (7/19~7/25)",
     desc: (
       <p>
@@ -153,6 +168,7 @@ const checkListData = [
     ),
   },
   {
+    id: "f1-visa",
     title: "I-20 받고 F-1 비자 신청하기 (~8/)",
     desc: (
       <p>
@@ -179,6 +195,7 @@ const checkListData = [
     ),
   },
   {
+    id: "in-person-ot",
     title: "In-person OT 듣기 (Late August)",
     desc: (
       <p>
@@ -189,6 +206,7 @@ const checkListData = [
     ),
   },
   {
+    id: "departure",
     title: "출국하기 (Late August)",
     desc: (
       <p>
@@ -201,6 +219,7 @@ const checkListData = [
     ),
   },
   {
+    id: "dtw-to-campus",
     title: "DTW (디트로이트 공항)에서 학교 Campus 로 오기",
     desc: (
       <p>
@@ -221,6 +240,7 @@ const checkListData = [
     ),
   },
   {
+    id: "move-in",
     title: "기숙사 Move-in 하기 (8/24~29)",
     desc: (
       <p>
@@ -241,6 +261,7 @@ const checkListData = [
     ),
   },
   {
+    id: "bank-account",
     title: "은행계좌 만들기",
     desc: (
       <p>
@@ -291,6 +312,7 @@ const checkListData = [
     ),
   },
   {
+    id: "uniqname",
     title: "UM Uniqname 받기",
     desc: (
       <p>
@@ -309,6 +331,7 @@ const checkListData = [
     ),
   },
   {
+    id: "mcard",
     title: "학생증 (M-Card) 받기",
     desc: (
       <p>
@@ -335,6 +358,7 @@ const checkListData = [
     ),
   },
   {
+    id: "drivers-license",
     title: "운전면허 / Michigan ID",
     desc: (
       <p>
@@ -359,6 +383,7 @@ const checkListData = [
     ),
   },
   {
+    id: "ssn",
     title: "Social Security Number",
     desc: (
       <p>
@@ -387,5 +412,3 @@ const checkListData = [
     ),
   },
 ];
-
-export { checkListData };
