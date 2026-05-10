@@ -163,7 +163,7 @@ export default function BoardTemplate({ boardType, page, size }: Props) {
       </header>
 
       {isLoading ? (
-        <BoardSkeleton />
+        <BoardSkeleton isEveryKisa={isEveryKisa} />
       ) : isError ? (
         <StatusView variant="error" title="게시글을 불러오는데 실패했습니다" />
       ) : isEmpty ? (
@@ -427,8 +427,10 @@ function BoardMobileRow({
   );
 }
 
-function BoardSkeleton() {
-  const desktopColCount = 5;
+function BoardSkeleton({ isEveryKisa }: { isEveryKisa: boolean }) {
+  // Title rows alternate widths so the skeleton doesn't read as a uniform
+  // grid — mimics the natural variance in real post titles.
+  const titleWidths = ["w-3/4", "w-2/3", "w-5/6", "w-1/2"];
 
   return (
     <>
@@ -436,21 +438,57 @@ function BoardSkeleton() {
         <Table>
           <TableHeader>
             <TableRow>
-              {Array.from({ length: desktopColCount }).map((_, i) => (
-                <TableHead key={i}>
-                  <Skeleton className="h-4 w-12" />
+              <TableHead className="w-16 text-center">
+                <Skeleton className="mx-auto h-4 w-8" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-4 w-12" />
+              </TableHead>
+              {!isEveryKisa && (
+                <TableHead className="w-28 text-center">
+                  <Skeleton className="mx-auto h-4 w-12" />
                 </TableHead>
-              ))}
+              )}
+              <TableHead className="w-28 text-center">
+                <Skeleton className="mx-auto h-4 w-12" />
+              </TableHead>
+              {isEveryKisa && (
+                <TableHead className="w-16 text-center">
+                  <Skeleton className="mx-auto h-4 w-8" />
+                </TableHead>
+              )}
+              <TableHead className="w-16 text-center">
+                <Skeleton className="mx-auto h-4 w-8" />
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {Array.from({ length: SKELETON_ROW_COUNT }).map((_, rowIdx) => (
               <TableRow key={rowIdx}>
-                {Array.from({ length: desktopColCount }).map((_, colIdx) => (
-                  <TableCell key={colIdx}>
-                    <Skeleton className="h-4 w-full" />
+                <TableCell className="text-center">
+                  <Skeleton className="mx-auto h-4 w-6" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton
+                    className={`h-4 ${titleWidths[rowIdx % titleWidths.length]}`}
+                  />
+                </TableCell>
+                {!isEveryKisa && (
+                  <TableCell className="text-center">
+                    <Skeleton className="mx-auto h-4 w-16" />
                   </TableCell>
-                ))}
+                )}
+                <TableCell className="text-center">
+                  <Skeleton className="mx-auto h-4 w-16" />
+                </TableCell>
+                {isEveryKisa && (
+                  <TableCell className="text-center">
+                    <Skeleton className="mx-auto h-4 w-6" />
+                  </TableCell>
+                )}
+                <TableCell className="text-center">
+                  <Skeleton className="mx-auto h-4 w-8" />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
