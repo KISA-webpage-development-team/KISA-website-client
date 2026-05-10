@@ -46,7 +46,11 @@ export default function PostDetailClient({
   const { post, isLoading: isPostLoading, error } = usePost(postid);
 
   if (isPostLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error || !post) {
