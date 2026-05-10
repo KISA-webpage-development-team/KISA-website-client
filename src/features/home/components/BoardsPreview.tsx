@@ -26,6 +26,9 @@ import {
 } from "@/utils/formats/boardType";
 
 const PREVIEW_LIMIT = 6;
+// Backend rejects arbitrary page sizes (only 10/20/30). Fetch the smallest
+// valid size and slice down to PREVIEW_LIMIT for the home preview.
+const FETCH_SIZE = 10;
 
 function boardIndexHref(type: BoardType): string {
   return isEveryKisaBoard(type) ? `/everykisa/${type}` : `/boards/${type}`;
@@ -230,7 +233,7 @@ function PreviewSkeleton() {
 }
 
 function BoardColumn({ type }: BoardColumnProps) {
-  const { posts, isLoading } = useBoardPosts(type, PREVIEW_LIMIT, 0);
+  const { posts, isLoading } = useBoardPosts(type, FETCH_SIZE, 0);
   const visible = (posts ?? []).slice(0, PREVIEW_LIMIT);
   const isEveryKisa = isEveryKisaBoard(type);
 

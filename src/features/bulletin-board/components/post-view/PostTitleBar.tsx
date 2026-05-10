@@ -12,7 +12,7 @@ export default function PostTitleBar({
 }: PostTitleBarProps) {
   return (
     <h1 className="type-h2 text-foreground flex flex-wrap items-center gap-2">
-      {isAnnouncement && (
+      {!!isAnnouncement && (
         <Badge variant="brand" size="sm">
           공지
         </Badge>

@@ -75,7 +75,7 @@ export default function CommentItem({
   const canSeeText = isCommentAuthor || !secret || viewerIsPostAuthor;
 
   // Lock icon shown only to the post author and the comment author.
-  const showSecretIcon = secret && (viewerIsPostAuthor || isCommentAuthor);
+  const showSecretIcon = !!secret && (viewerIsPostAuthor || isCommentAuthor);
 
   // Optimistic-temp comment guard: temp ids are negative.
   const isTemp = commentid < 0;
@@ -148,7 +148,7 @@ export default function CommentItem({
   return (
     <div className="flex flex-col">
       <div className="flex">
-        {isCommentOfComment && (
+        {!!isCommentOfComment && (
           <span className="text-muted-foreground">
             <Icon name="reply" size="sm" className="mr-2 mt-1 -scale-x-100" />
           </span>
