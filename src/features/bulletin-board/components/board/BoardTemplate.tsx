@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Badge,
-  LinkButton,
+  Button,
   Pagination,
   Skeleton,
   StatusView,
@@ -17,6 +17,7 @@ import {
   TableMobileItem,
   TableMobileList,
   TableRow,
+  toast,
   ToggleGroup,
 } from "@umichkisa-ds/web";
 
@@ -121,10 +122,31 @@ export default function BoardTemplate({ boardType, page, size }: Props) {
     [router, buildHref],
   );
 
-  const showCreateButton =
-    adminStatus === "success" &&
-    isAuthenticated &&
-    (capability.adminPostOnly ? isAdmin : true);
+  // For admin-only boards, hide the CTA from non-admins (they can never post,
+  // so showing a button that always toasts "관리자 전용" would be misleading).
+  // For normal boards, always render the CTA — gating happens on click so the
+  // header layout doesn't wiggle while auth resolves, and the button doubles
+  // as a sign-in entry point.
+  const showCreateButton = capability.adminPostOnly
+    ? adminStatus === "success" && isAuthenticated && isAdmin
+    : true;
+
+  const handleCreateClick = useCallback(() => {
+    if (!isAuthenticated) {
+      toast.error("로그인이 필요한 기능입니다.", {
+        action: {
+          label: "로그인",
+          onClick: () => {
+            window.location.href = `/signin?callbackUrl=${encodeURIComponent(
+              pathname ?? "/",
+            )}`;
+          },
+        },
+      });
+      return;
+    }
+    router.push(`/posts/create/${boardType}`);
+  }, [isAuthenticated, pathname, router, boardType]);
 
   const totalPages = !totalPostNum
     ? 1
@@ -152,13 +174,9 @@ export default function BoardTemplate({ boardType, page, size }: Props) {
           {getKoreanBoardType(boardType)}
         </h1>
         {showCreateButton && (
-          <LinkButton
-            href={`/posts/create/${boardType}`}
-            variant="primary"
-            size="sm"
-          >
+          <Button variant="primary" size="sm" onClick={handleCreateClick}>
             글쓰기
-          </LinkButton>
+          </Button>
         )}
       </header>
 
