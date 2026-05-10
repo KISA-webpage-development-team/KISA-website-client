@@ -45,7 +45,7 @@ export default function UserProfileHero({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-8">
-        <Skeleton variant="circular" className="h-24 w-24 md:h-32 md:w-32" />
+        <Skeleton variant="circular" className="h-14 w-14" />
         <div className="flex flex-1 flex-col gap-4">
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-32" />
