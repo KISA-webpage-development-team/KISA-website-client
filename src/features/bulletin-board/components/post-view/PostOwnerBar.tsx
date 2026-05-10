@@ -11,6 +11,8 @@ type PostOwnerBarProps = {
   readCount: number;
   commentsCount: number;
   anonymous: boolean;
+  /** Viewer is the post author — used to surface "익명(나)" affordance. */
+  isOwnPost?: boolean;
 };
 
 export default function PostOwnerBar({
@@ -20,9 +22,14 @@ export default function PostOwnerBar({
   readCount,
   commentsCount,
   anonymous,
+  isOwnPost = false,
 }: PostOwnerBarProps) {
   const linkLabel = `View ${fullname}'s profile`;
-  const displayName = anonymous ? "익명" : fullname;
+  const displayName = anonymous
+    ? isOwnPost
+      ? "익명(나)"
+      : "익명"
+    : fullname;
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-2 type-body-sm text-muted-foreground">

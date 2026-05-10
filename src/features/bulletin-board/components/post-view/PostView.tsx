@@ -62,6 +62,7 @@ export default function PostView({
             readCount={didRead ? Number(readCount) + 1 : readCount}
             commentsCount={commentsCount}
             anonymous={anonymous}
+            isOwnPost={session?.user?.email === email}
           />
         </header>
 
