@@ -125,7 +125,7 @@ export default function FeaturedCarousel() {
 
       {/* Title + description + progress dots */}
       <div className="flex flex-1 flex-col gap-6">
-        <div className="relative min-h-[10rem] md:min-h-[12rem]">
+        <div className="relative min-h-[10rem] overflow-hidden md:min-h-[12rem]">
           {items.map((item, index) => {
             const isActive = index === active;
             return (
@@ -138,8 +138,10 @@ export default function FeaturedCarousel() {
                     : "pointer-events-none opacity-0"
                 }`}
               >
-                <h2 className="type-h2 text-foreground">{item.title}</h2>
-                <div className="type-body text-muted-foreground line-clamp-5">
+                <h2 className="type-h2 text-foreground line-clamp-2">
+                  {item.title}
+                </h2>
+                <div className="type-body text-muted-foreground line-clamp-3 md:line-clamp-5">
                   {item.desc}
                 </div>
               </div>
