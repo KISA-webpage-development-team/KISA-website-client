@@ -62,12 +62,8 @@ export default function PostButtonBar({
   };
 
   return (
-    <div className="flex w-full items-center justify-between py-3">
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={onClickBackToList}
-      >
+    <div className="flex w-full items-center justify-between">
+      <Button variant="secondary" size="sm" onClick={onClickBackToList}>
         목록
       </Button>
 

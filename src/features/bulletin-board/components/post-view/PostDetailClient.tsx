@@ -70,7 +70,7 @@ export default function PostDetailClient({
     !isAnnouncementBoard(post.type);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       <BoardTitle boardType={post.type} size="small" />
 
       <PostView

@@ -11,7 +11,7 @@ type PostContentProps = {
 export default function PostContent({ text }: PostContentProps) {
   return (
     <div
-      className="type-body text-foreground min-h-16 py-4"
+      className="type-body text-foreground min-h-24 py-4"
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(String(text)),
       }}

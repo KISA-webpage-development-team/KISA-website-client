@@ -53,7 +53,7 @@ export default function PostView({
   return (
     <ReactCookieProvider>
       <article className="flex w-full flex-col">
-        <header className="flex flex-col gap-2 pb-4">
+        <header className="flex flex-col gap-1 pb-4">
           <PostTitleBar isAnnouncement={isAnnouncement} title={title} />
           <PostOwnerBar
             email={email}
