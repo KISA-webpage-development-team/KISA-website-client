@@ -1,57 +1,51 @@
-"use client";
-
-import { Card, CardBody } from "@nextui-org/card";
-import Image from "next/image";
-import React from "react";
 import {
-  sejongHospitalBold,
-  sejongHospitalLight,
-} from "@/utils/fonts/textFonts";
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Badge,
+  Divider,
+} from "@umichkisa-ds/web";
 
-export default function MemberCard({ role, name, major, year }) {
+import type { Member } from "@/features/about-page/data/memberPageData";
+
+type MemberCardProps = Pick<Member, "name" | "major" | "year" | "role"> & {
+  isLead?: boolean;
+};
+
+export default function MemberCard({
+  name,
+  major,
+  year,
+  role,
+  isLead,
+}: MemberCardProps) {
   return (
-    <Card className="flex flex-col md:py-4 bg-[#eeeeee] shadow-none h-full">
-      <CardBody className="flex flex-row md:flex-col items-center gap-1 overflow-visible py-2 h-full">
-        <Image
-          alt="Profile Images"
-          className="w-24 h-24 md:w-60 md:h-60 rounded-full object-cover"
-          src="/kisa_logo_2026.png"
-          width={200}
-          height={200}
-        />
-
-        <div className="flex flex-col justify-center items-center w-full">
-          {/* Name & Major Section (Ensures they are centered) */}
-          <div className="flex flex-col items-center text-center">
-            <span
-              className={`${sejongHospitalBold.className} text-lg sm:text-2xl`}
+    <Card className="h-full">
+      <CardHeader>
+        <CardTitle as="h3">{name}</CardTitle>
+        <p className="type-caption text-muted-foreground">
+          {`${major} | ${year}`}
+        </p>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
+        <Divider />
+        <div className="flex flex-wrap gap-2">
+          {role.map((pill) => (
+            <Badge
+              key={pill}
+              variant="default"
+              className={
+                isLead
+                  ? "bg-brand-accent-subtle text-brand-primary border-brand-accent"
+                  : ""
+              }
             >
-              {name}
-            </span>
-            <span
-              className={`${sejongHospitalLight.className} text-sm sm:text-lg md:text-lg mt-1`}
-            >
-              {`${major} | ${year}`}
-            </span>
-          </div>
-
-          {/* Role Container (Centered & aligned properly) */}
-          <div className="flex flex-col items-center justify-center w-full ">
-            {Array.isArray(role) ? (
-              role.map((r, index) => (
-                <span
-                  key={index}
-                  className={`${sejongHospitalBold.className}  text-[#31506E] sm:text-lg`}
-                >
-                  {r}
-                </span>
-              ))
-            ) : (
-              <span>{role}</span>
-            )}
-          </div>
+              {pill}
+            </Badge>
+          ))}
         </div>
-      </CardBody>
+      </CardContent>
     </Card>
   );
 }

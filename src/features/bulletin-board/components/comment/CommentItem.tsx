@@ -1,43 +1,44 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { deleteComment } from "@/apis/comments/mutations";
+import { usePathname } from "next/navigation";
 
-// sub-ui components
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  Icon,
+  toast,
+} from "@umichkisa-ds/web";
+
 import CommentEditor from "./CommentEditor";
 import GoBlueButton from "@/features/bulletin-board/components/shared/GoBlueButton";
-import CustomImageButton from "@/components/ui/button/CustomImageButton";
-import PencilIcon from "@/components/ui/icon/PencilIcon";
-import TrashcanIcon from "@/components/ui/icon/TrashcanIcon";
-import CommentIcon from "@/components/ui/icon/CommentIcon";
-import ReplyIcon from "@/components/ui/icon/ReplyIcon";
 
-// utils
+import { deleteComment } from "@/apis/comments/mutations";
 import { formatRelativeTime } from "@/utils/formats/date";
+import {
+  useCommentsContext,
+  useCommentsMutations,
+} from "@/features/bulletin-board/contexts/CommentsContext";
 
-// apis
-import SecretIcon from "@/components/ui/icon/SecretIcon";
-
-// types
 import { Comment } from "@/types/comment";
-
-import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
 
 type CommentItemProps = {
   comment: Comment;
-  refreshComments: () => void;
   commentAuthorMap: Map<string, number>;
-  onCommentAdded?: () => void;
-  onCommentDeleted?: () => void;
 };
 
 export default function CommentItem({
   comment,
-  refreshComments,
   commentAuthorMap,
-  onCommentAdded,
-  onCommentDeleted,
 }: CommentItemProps) {
-  const { session, isEveryKisa, postAuthorEmail } = useCommentsContext();
+  const { session, isAdmin, isEveryKisa, postAuthorEmail } =
+    useCommentsContext();
+  const { refreshComments, onCommentDeleted } = useCommentsMutations();
+  const pathname = usePathname();
+
   const {
     commentid,
     email,
@@ -50,223 +51,257 @@ export default function CommentItem({
     secret,
   } = comment;
 
-  // states for reply editor
+  // Local UI state
   const [openReplyEditor, setOpenReplyEditor] = useState(false);
-  const [openCommentEditor, setOpenCommentEditor] = useState(false);
-  // states for delete comment
+  const [openEditEditor, setOpenEditEditor] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
-  // derived states
-  const isCommentAuthor = session?.user?.email === comment.email;
-  const isPostAuthor = postAuthorEmail === comment.email;
+  const userEmail = session?.user?.email;
+  const isCommentAuthor = userEmail === email;
+  const isPostAuthor = postAuthorEmail === email;
+  const viewerIsPostAuthor = userEmail === postAuthorEmail;
 
+  // Capability gates -----------------------------------------------------
   const canEdit = isCommentAuthor;
-  const canDelete = isCommentAuthor;
-  const canReply = !(
-    secret &&
-    !(session?.user?.email === postAuthorEmail) &&
-    !isCommentAuthor
-  );
-  const canSeeText =
-    isCommentAuthor || !secret || session?.user?.email === postAuthorEmail;
-  const showSecretIcon =
-    secret && (session?.user?.email === postAuthorEmail || isCommentAuthor);
+  // New: admin can delete any comment in addition to its author.
+  const canDelete = isCommentAuthor || isAdmin;
 
-  const handleOpenReplyEditor = () => {
-    // session이 존재하지 않으면, 로그인 필수 모달을 띄워야 함
+  // Reply gate, expressed positively. On a secret comment, only the secret
+  // author or the post author may reply; otherwise anyone signed-in may reply.
+  const canReply = !secret || isCommentAuthor || viewerIsPostAuthor;
+
+  // Visibility of the body text on a secret comment.
+  const canSeeText = isCommentAuthor || !secret || viewerIsPostAuthor;
+
+  // Lock icon shown only to the post author and the comment author.
+  const showSecretIcon = secret && (viewerIsPostAuthor || isCommentAuthor);
+
+  // Optimistic-temp comment guard: temp ids are negative.
+  const isTemp = commentid < 0;
+
+  // Handlers -------------------------------------------------------------
+  const handleOpenReply = () => {
     if (!session) {
-      window.alert("로그인이 필요한 기능입니다.");
+      toast.error("로그인이 필요한 기능입니다.", {
+        action: {
+          label: "로그인",
+          onClick: () => {
+            window.location.href = `/signin?callbackUrl=${encodeURIComponent(
+              pathname ?? "/",
+            )}`;
+          },
+        },
+      });
       return;
     }
-
-    setOpenReplyEditor(!openReplyEditor);
+    setOpenReplyEditor((open) => !open);
   };
 
-  const handleOpenCommentEditor = () => {
-    setOpenCommentEditor(!openCommentEditor);
-  };
-
-  const handleCommentDelete = async () => {
+  const handleConfirmDelete = async () => {
+    if (isDeleteLoading) return;
     setIsDeleteLoading(true);
     const res = await deleteComment(commentid, session?.token);
     if (res?.success) {
-      // modify states after comment has been deleted
       refreshComments();
-      onCommentDeleted?.();
+      onCommentDeleted();
+      setDeleteOpen(false);
       setIsDeleteLoading(false);
     } else {
-      // error handling
-      console.log("comment deletion failed");
+      setIsDeleteLoading(false);
+      toast.error("댓글 삭제에 실패했습니다.");
     }
   };
 
-  /**
-   * @desc Renders the author of the comment following anonymous logic
-   *
-   */
   const renderCommentAuthor = () => {
     if (isCommentAuthor && anonymous) {
       return (
-        <Link href={`/users/${email}`}>
-          <span className="font-semibold hover:underline">{`${fullname}(익명)`}</span>
+        <Link href={`/users/${email}`} className="hover:underline">
+          <span className="type-body-sm text-foreground">{`${fullname}(익명)`}</span>
         </Link>
-      );
-    } else if (isCommentAuthor || !anonymous) {
-      return (
-        <Link href={`/users/${email}`}>
-          <span className="font-semibold hover:underline">{fullname}</span>
-        </Link>
-      );
-    } else if (isPostAuthor) {
-      return (
-        <span className="font-semibold">{`익명${commentAuthorMap.get(
-          email
-        )}(글쓴이)`}</span>
-      );
-    } else {
-      return (
-        <span className="font-semibold">{`익명${commentAuthorMap.get(
-          email
-        )}`}</span>
       );
     }
+    if (isCommentAuthor || !anonymous) {
+      return (
+        <Link href={`/users/${email}`} className="hover:underline">
+          <span className="type-body-sm text-foreground">{fullname}</span>
+        </Link>
+      );
+    }
+    if (isPostAuthor) {
+      return (
+        <span className="type-body-sm text-foreground">{`익명${commentAuthorMap.get(
+          email,
+        )}(글쓴이)`}</span>
+      );
+    }
+    return (
+      <span className="type-body-sm text-foreground">{`익명${commentAuthorMap.get(
+        email,
+      )}`}</span>
+    );
   };
+
+  // Own-comment affordance: subtle navy left-border stripe.
+  const ownStripeClass = isCommentAuthor ? "!text-brand-primary-mid" : "";
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center">
-        {isCommentOfComment ? (
-          <ReplyIcon type="flip" className="-translate-y-2" />
-        ) : null}
+      <div className="flex">
+        {isCommentOfComment && (
+          <span className="text-muted-foreground">
+            <Icon name="reply" size="sm" className="mr-2 mt-1 -scale-x-100" />
+          </span>
+        )}
 
-        {/* Comment contents */}
-        <div
-          className={`flex flex-col w-full gap-1 md:gap-0
-          ${isCommentOfComment && "pl-2"}`}
-        >
-          <div className="flex items-center justify-between">
-            {/* 1. Name + Time */}
-            <div
-              className="flex items-center gap-1 md:gap-2
-            text-sm md:text-base"
-            >
+        <div className={`flex w-full flex-col`}>
+          {/* Row 1: identity + meta + actions (single row, icon-only actions) */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex min-w-0 flex-wrap items-center gap-2 type-body-sm text-muted-foreground">
               {canSeeText ? (
-                <>
-                  {renderCommentAuthor()}
-                  <p className="text-gray-500">{formatRelativeTime(created)}</p>
-                </>
+                <>{renderCommentAuthor()}</>
               ) : (
-                <>
-                  <SecretIcon />
-
-                  <p className="text-gray-500">{formatRelativeTime(created)}</p>
-                </>
+                <span className="inline-flex items-center gap-1 type-label text-muted-foreground">
+                  <Icon name="lock" size="xs" />
+                  비밀 댓글
+                </span>
               )}
-
-              {showSecretIcon ? <SecretIcon /> : null}
+              <span aria-hidden="true">·</span>
+              <span>{formatRelativeTime(created)}</span>
+              {showSecretIcon && (
+                <Icon name="lock" size="xs" label="비밀 댓글" />
+              )}
             </div>
 
-            {/* 2. Buttons */}
-            <div className="flex">
-              {isEveryKisa && !secret && (
+            <div className="flex shrink-0 items-center gap-1 md:gap-2 lg:gap-3">
+              {isEveryKisa && !secret && !isTemp && (
                 <GoBlueButton
                   targetType="comment"
                   id={commentid}
                   session={session}
                 />
               )}
-              {canEdit && canDelete && (
-                <>
-                  <CustomImageButton
-                    type="tertiary"
-                    background="none"
-                    text={`${openCommentEditor ? "취소" : "수정"}`}
-                    icon={<PencilIcon color="gray" noResize />}
-                    onClick={handleOpenCommentEditor}
-                  />
-                  <CustomImageButton
-                    type="tertiary"
-                    background="none"
-                    icon={<TrashcanIcon color="gray" noResize />}
-                    text={isDeleteLoading ? "삭제중..." : "삭제"}
-                    onClick={handleCommentDelete}
-                    disabled={isDeleteLoading}
-                  />
-                </>
+              {canEdit && !isTemp && (
+                <button
+                  type="button"
+                  onClick={() => setOpenEditEditor((o) => !o)}
+                  aria-label={openEditEditor ? "수정 취소" : "수정"}
+                  className="inline-flex p-1 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  <Icon name={openEditEditor ? "x" : "pencil"} size="sm" />
+                </button>
               )}
-              {canReply && (
-                <>
-                  <CustomImageButton
-                    type="tertiary"
-                    background="none"
-                    icon={<CommentIcon color="gray" noResize />}
-                    text={`${openReplyEditor ? "닫기" : "답글"}`}
-                    onClick={handleOpenReplyEditor}
-                  />
-                </>
+              {canDelete && !isTemp && (
+                <button
+                  type="button"
+                  onClick={() => setDeleteOpen(true)}
+                  aria-label="삭제"
+                  className="inline-flex p-1 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-error"
+                >
+                  <Icon name="trash-2" size="sm" />
+                </button>
+              )}
+              {canReply && !isTemp && (
+                <button
+                  type="button"
+                  onClick={handleOpenReply}
+                  aria-label={openReplyEditor ? "답글 닫기" : "답글"}
+                  className="inline-flex p-1 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  <Icon name={openReplyEditor ? "x" : "reply"} size="sm" />
+                </button>
               )}
             </div>
           </div>
-          {/* 3. Text */}
-          <div
-            className={`${
-              isCommentAuthor && "text-blue-500"
-            } pt-1 pb-3 text-sm md:text-base
-            text-wrap `}
-          >
-            {/* 텍스트 자체가 보이는 경우: 유저가 댓글 작성자일때, 시크릿이 아닐때, 유저가 포스트 작성자일때*/}
-            {canSeeText ? text : <p className="italic">비밀 댓글입니다.</p>}
-            {/* 로그인한 사람이, 포스트 작성자 + 비밀댓글 = 자물쇠  */}
-            {/* 로그인한 사람이, 댓글 작성자 + 비밀댓글 = 자물쇠 */}
+
+          {/* Row 2: body */}
+          <div className={`type-body-sm text-foreground ${ownStripeClass}`}>
+            {canSeeText ? (
+              <>
+                {text}
+                {isTemp && (
+                  <span className="ml-2 type-caption text-muted-foreground">
+                    전송 중…
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-muted-foreground">비밀 댓글입니다.</span>
+            )}
           </div>
         </div>
       </div>
-      {/* Comment Editor from buttons */}
-      {/* - Edit Reply */}
-      {openCommentEditor && session && (
-        <div className="mb-4">
+
+      {/* Inline edit composer */}
+      {openEditEditor && session && (
+        <div className="mt-2 mb-3 pl-3">
           <CommentEditor
             mode="update"
             commentid={commentid}
             curCommentId={commentid}
-            placeholder={text}
+            initialText={text}
             secret={secret}
-            refreshComments={refreshComments}
-            setOpenCommentEditor={setOpenCommentEditor}
+            setOpen={setOpenEditEditor}
           />
         </div>
       )}
+
+      {/* Inline reply composer */}
       {openReplyEditor && session && (
-        <div className="ml-8 mb-4 flex items-center gap-4">
-          <ReplyIcon type="flip" />
-          <CommentEditor
-            mode="reply"
-            commentid={commentid}
-            curCommentId={commentid}
-            secret={secret}
-            refreshComments={refreshComments}
-            setOpenCommentEditor={setOpenReplyEditor}
-            onCommentAdded={onCommentAdded}
-          />
-        </div>
-      )}
-      {/* 대댓글 */}
-      {childComments &&
-        childComments.length > 0 &&
-        childComments.map((subComment, idx) => (
-          <div
-            key={`subComment-${subComment.commentid}`}
-            className="ml-3 md:ml-4"
-          >
-            <CommentItem
-              comment={subComment}
-              refreshComments={refreshComments}
-              commentAuthorMap={commentAuthorMap}
-              onCommentAdded={onCommentAdded}
-              onCommentDeleted={onCommentDeleted}
+        <div className="mt-2 mb-3 ml-6 flex items-start gap-2">
+          <span className="text-muted-foreground">
+            <Icon name="reply" size="sm" className="mt-2 -scale-x-100" />
+          </span>
+          <div className="flex-1">
+            <CommentEditor
+              mode="reply"
+              commentid={commentid}
+              curCommentId={commentid}
+              secret={secret}
+              setOpen={setOpenReplyEditor}
             />
           </div>
-        ))}
+        </div>
+      )}
+
+      {/* Delete confirm */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogContent size="sm">
+          <DialogTitle>댓글을 삭제하시겠습니까?</DialogTitle>
+          <DialogDescription>
+            삭제된 댓글은 복구할 수 없습니다.
+          </DialogDescription>
+          <DialogFooter>
+            <Button
+              variant="secondary"
+              onClick={() => setDeleteOpen(false)}
+              disabled={isDeleteLoading}
+            >
+              취소
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleConfirmDelete}
+              disabled={isDeleteLoading}
+            >
+              {isDeleteLoading ? "삭제중..." : "삭제"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Replies (single-level nesting) */}
+      {childComments && childComments.length > 0 && (
+        <div className="ml-4 mt-2 flex flex-col gap-2">
+          {childComments.map((subComment) => (
+            <CommentItem
+              key={`subComment-${subComment.commentid}`}
+              comment={subComment}
+              commentAuthorMap={commentAuthorMap}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

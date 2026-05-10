@@ -16,7 +16,7 @@ const argv = yargs(process.argv)
   .option("commit", { type: "boolean", default: false })
   .option("output", {
     type: "string",
-    default: "src/features/home-sponsor/data/instagramCarousel.generated.json",
+    default: "src/features/home/data/instagramCarousel.generated.json",
   })
   .parseSync();
 

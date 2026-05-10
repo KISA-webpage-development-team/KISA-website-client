@@ -6,14 +6,12 @@ type PostContentProps = {
   text: string;
 };
 
-// DOMPurify sanitizes HTML and prevents XSS attacks
-
+// DOMPurify sanitizes HTML and prevents XSS attacks.
+// Rich-text rendering (quill snow CSS) is unchanged from prior implementation.
 export default function PostContent({ text }: PostContentProps) {
   return (
     <div
-      className="!px-0 !py-3 
-       text-sm md:text-base
-       min-h-16"
+      className="type-body text-foreground min-h-16 py-4"
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(String(text)),
       }}

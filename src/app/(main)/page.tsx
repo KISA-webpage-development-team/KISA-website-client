@@ -1,22 +1,17 @@
-// sub-ui components
-import HomeCarousel from "@/features/home-sponsor/components/HomeCarousel";
-import QuickLinks from "@/features/home-sponsor/components/QuickLinks";
-import BoardsSummary from "@/features/home-sponsor/components/BoardsSummary";
-import SchoolCalendar from "@/features/home-sponsor/components/SchoolCalendar";
-import SponsorCarousel from "@/features/home-sponsor/components/SponsorCarousel";
+import AppEntryTiles from "@/features/home/components/AppEntryTiles";
+import BoardsPreview from "@/features/home/components/BoardsPreview";
+import CalendarPeek from "@/features/home/components/CalendarPeek";
+import FeaturedCarousel from "@/features/home/components/FeaturedCarousel";
+import SponsorStrip from "@/features/home/components/SponsorStrip";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <section
-      className="h-full w-full 
-    flex flex-col items-center
-     gap-8 md:gap-8 -mt-2"
-    >
-      <HomeCarousel />
-      <BoardsSummary />
-      <SponsorCarousel />
-      <SchoolCalendar />
-      <QuickLinks />
+    <section className="flex flex-col gap-16 md:gap-10">
+      <FeaturedCarousel />
+      <BoardsPreview />
+      <CalendarPeek />
+      <AppEntryTiles />
+      <SponsorStrip />
     </section>
   );
 }

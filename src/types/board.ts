@@ -12,7 +12,6 @@ export enum BoardType {
   Concern = "concern",
   Academic = "academic",
   Career = "career",
-  LivingQA = "livingqa",
 }
 
 export enum KoreanBoardType {
@@ -26,5 +25,4 @@ export enum KoreanBoardType {
   Concern = "고민게시판",
   Academic = "공부게시판",
   Career = "취업·진로",
-  LivingQnA = "생활 Q&A",
 }

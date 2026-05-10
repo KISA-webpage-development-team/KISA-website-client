@@ -14,18 +14,20 @@ export default function TextEditor({ token, text, setText }: TextEditorProps) {
   // Refers to the ReactQuill component when passed to the ref prop
   const reactQuillRef: any = useRef(null);
 
-  // Add event listener to the quill container for image drop
+  // Bind drop/paste handlers to Quill's contentEditable root via the
+  // ReactQuill ref. Querying `document.querySelector(".quill")` races with
+  // Quill's own mount and the cleanup throws if the query returned null,
+  // which corrupts the dynamically-imported component on strict-mode remounts
+  // and leaves the editor blank on first load.
   useEffect(() => {
-    const quillContainer = document.querySelector(".quill");
-    if (quillContainer) {
-      quillContainer.addEventListener("drop", imageDropHandler);
-      quillContainer.addEventListener("paste", imagePasteHandler);
-    }
+    const root = reactQuillRef.current?.getEditor()?.root;
+    if (!root) return;
 
-    // Cleanup: remove event listener from DOM when dismounted
+    root.addEventListener("drop", imageDropHandler);
+    root.addEventListener("paste", imagePasteHandler);
     return () => {
-      quillContainer.removeEventListener("drop", imageDropHandler);
-      quillContainer.removeEventListener("paste", imagePasteHandler);
+      root.removeEventListener("drop", imageDropHandler);
+      root.removeEventListener("paste", imagePasteHandler);
     };
   }, []);
 

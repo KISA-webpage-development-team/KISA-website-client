@@ -1,4 +1,7 @@
-import { useState } from "react";
+"use client";
+
+import { toast } from "@umichkisa-ds/web";
+
 import { createPost, updatePost } from "@/apis/posts/mutations";
 import { isEveryKisaBoard } from "@/utils/formats/boardType";
 import { NewPostBody, UpdatePostBody } from "@/types/post";
@@ -6,52 +9,53 @@ import { NewPostBody, UpdatePostBody } from "@/types/post";
 interface UsePostSubmitProps {
   mode: "create" | "update";
   postid?: number | null;
-  formData: NewPostBody | UpdatePostBody;
   token?: string;
+  /**
+   * Called with the destination href after a successful create/update. The
+   * caller decides how to navigate (e.g. `next/navigation` `router.push`) so
+   * we keep client cache + transitions instead of a hard reload.
+   */
+  onSuccess: (target: { href: string }) => void;
 }
 
+/**
+ * Returns a `submit(payload)` function suitable for plugging into
+ * react-hook-form's `handleSubmit` flow. Submitting state is owned by RHF
+ * (`form.formState.isSubmitting`); this hook performs the network call,
+ * surfaces toasts on failure, and delegates navigation to `onSuccess`.
+ */
 export function usePostSubmit({
   mode,
   postid,
-  formData,
   token,
+  onSuccess,
 }: UsePostSubmitProps) {
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async () => {
+  const submit = async (payload: NewPostBody | UpdatePostBody) => {
     if (mode === "create") {
       try {
-        setLoading(true);
-        await createPost(formData as NewPostBody, token);
-        setLoading(false);
-        if (isEveryKisaBoard(formData.type)) {
-          window.location.href = `/everykisa/${formData.type}`;
-        } else {
-          window.location.href = `/boards/${formData.type}`;
-        }
+        await createPost(payload as NewPostBody, token);
+        const href = isEveryKisaBoard(payload.type)
+          ? `/everykisa/${payload.type}`
+          : `/boards/${payload.type}`;
+        onSuccess({ href });
       } catch (error) {
-     
-        window.alert("게시글 작성에 실패했습니다.");
-        setLoading(false);
+        toast.error("게시글 작성에 실패했습니다.");
+        throw error;
       }
-    } else if (mode === "update") {
+    } else {
       if (!postid) {
-        window.alert("게시글 수정에 실패했습니다.");
+        toast.error("게시글 수정에 실패했습니다.");
         return;
       }
       try {
-        setLoading(true);
-
-        await updatePost(postid, formData, token);
-        setLoading(false);
-        window.location.href = `/posts/${postid}`;
+        await updatePost(Number(postid), payload, token);
+        onSuccess({ href: `/posts/${postid}` });
       } catch (error) {
-      console.log('여기가 문제2')
-        window.alert("게시글 수정에 실패했습니다.");
-        setLoading(false);
+        toast.error("게시글 수정에 실패했습니다.");
+        throw error;
       }
     }
   };
 
-  return { loading, handleSubmit };
+  return { submit };
 }

@@ -1,38 +1,26 @@
 import React from "react";
-import BoardBar from "@/features/bulletin-board/components/board/BoardBar";
-import BoardClient from "@/features/bulletin-board/components/board/BoardClient";
-import { getBoardAnnouncements } from "@/apis/boards/queries";
+import BoardTemplate from "@/features/bulletin-board/components/board/BoardTemplate";
 import { BoardType } from "@/types/board";
 
-type SponsorProps = {
+type SponsorBoardPageProps = {
   searchParams?: {
-    size?: number;
-    page?: number;
+    size?: string;
+    page?: string;
   };
 };
 
-export default async function SponsorPage({ searchParams }: SponsorProps) {
-  const { size, page } = searchParams;
+const DEFAULT_PAGE_SIZE = 10;
 
+export default function SponsorBoardPage({
+  searchParams,
+}: SponsorBoardPageProps) {
   const boardType = BoardType.Sponsor;
-  const announcements = await getBoardAnnouncements(boardType);
+  const size = searchParams?.size ? Number(searchParams.size) : DEFAULT_PAGE_SIZE;
+  const page = searchParams?.page ? Number(searchParams.page) : 1;
 
   return (
     <section>
-      {/* 게시판 search bar */}
-      <header className="w-full">
-        <BoardBar boardType={boardType} />
-      </header>
-      {/* 게시판 table */}
-      {/* API happens in BoardTable client component */}
-      <article className="board_table_wrapper">
-        <BoardClient
-          boardType={boardType}
-          announcements={announcements}
-          size={size ? Number(size) : 10}
-          page={page ? Number(page) : 1}
-        />
-      </article>
+      <BoardTemplate boardType={boardType} size={size} page={page} />
     </section>
   );
 }
