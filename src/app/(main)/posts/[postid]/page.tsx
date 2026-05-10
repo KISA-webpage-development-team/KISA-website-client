@@ -13,7 +13,7 @@ type PageProps = {
 
 export default function PostViewPage({ params }: PageProps) {
   return (
-    <section>
+    <section className="w-full h-full">
       <PostDetailClient postid={Number(params.postid)} />
     </section>
   );
