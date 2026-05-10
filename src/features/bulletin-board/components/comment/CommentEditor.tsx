@@ -69,7 +69,11 @@ export default function CommentEditor({
   );
 
   const isTextEmpty = text.trim().length === 0;
-  const isAnonymousNotSelected = isEveryKisa && anonymousValue === "none";
+  // Anonymous radio is only rendered in create/reply mode (see JSX below);
+  // in update mode the original anonymous flag is locked, so don't gate
+  // submit on it — otherwise the 댓글 등록 button stays disabled forever.
+  const isAnonymousNotSelected =
+    isEveryKisa && mode !== "update" && anonymousValue === "none";
   const isSubmitDisabled =
     isTextEmpty || isAnonymousNotSelected || isSubmitting;
 
