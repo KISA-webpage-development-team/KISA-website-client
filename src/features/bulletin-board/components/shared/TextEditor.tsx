@@ -146,6 +146,11 @@ export default function TextEditor({ token, text, setText }: TextEditorProps) {
             "Helvetica Neue", Arial, sans-serif;
         }
 
+        /* Reasonable writable area before content forces growth */
+        .quill-wrapper .ql-editor {
+          min-height: 360px;
+        }
+
         /* Match the toolbar font size */
         .quill-wrapper .ql-toolbar {
           font-size: 16px;
