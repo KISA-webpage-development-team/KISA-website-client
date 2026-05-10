@@ -34,6 +34,7 @@ import {
   usePostEditorForm,
 } from "@/features/bulletin-board/hooks/usePostEditorForm";
 import { usePostSubmit } from "@/features/bulletin-board/hooks/usePostSubmit";
+import { usePost } from "@/apis/posts/swrHooks";
 
 // TextEditor uses ReactQuill — must be client-only.
 const TextEditor = dynamic(
@@ -87,6 +88,11 @@ export default function PostEditor({
     onSuccess: ({ href }) => router.push(href),
   });
 
+  // SWR dedupes against usePostEditorForm's identical request; no extra fetch.
+  const { post: gatedPost, isLoading: isGateLoading } = usePost(
+    mode === "update" && numericPostId ? numericPostId : 0,
+  );
+
   if (adminStatus === "loading") {
     return (
       <div className="flex w-full justify-center py-12">
@@ -96,6 +102,20 @@ export default function PostEditor({
   }
   if (isAnnouncementBoard(boardType) && isAdmin === false) {
     return <StatusView variant="not-authorized" />;
+  }
+  // Author-only edit gate: admins can delete others' posts but not edit them
+  // (otherwise the author byline becomes ambiguous after an admin edit).
+  if (mode === "update") {
+    if (isGateLoading || !gatedPost) {
+      return (
+        <div className="flex w-full justify-center py-12">
+          <LoadingSpinner />
+        </div>
+      );
+    }
+    if (gatedPost.email !== userEmail) {
+      return <StatusView variant="not-authorized" />;
+    }
   }
 
   const onSubmit = async (values: PostEditorFormValues) => {
