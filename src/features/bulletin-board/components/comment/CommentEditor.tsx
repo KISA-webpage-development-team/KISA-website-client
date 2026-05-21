@@ -1,144 +1,169 @@
 import React, { ChangeEvent, useState } from "react";
+
+import {
+  Button,
+  Checkbox,
+  RadioGroup,
+  RadioItem,
+  Textarea,
+  toast,
+} from "@umichkisa-ds/web";
+
 import { createComment, updateComment } from "@/apis/comments/mutations";
-import { NewCommentBody } from "@/types/comment";
-import { CustomButton } from "@/components/ui/button";
-import { Radio, RadioGroup } from "@nextui-org/react";
-import { cn } from "@/utils/styles/cn";
-import { useCommentsContext } from "@/features/bulletin-board/contexts/CommentsContext";
+import { Comment, NewCommentBody } from "@/types/comment";
+import {
+  useCommentsContext,
+  useCommentsMutations,
+} from "@/features/bulletin-board/contexts/CommentsContext";
 
 type CommentEditorProps = {
   mode: "create" | "update" | "reply";
+  /** Parent comment id when mode = "reply". 0 for top-level. */
   commentid?: number;
+  /** Comment being edited when mode = "update". */
   curCommentId?: number | null;
+  /** Visible placeholder for the textarea. Display only — never seeds value. */
   placeholder?: string;
+  /** Initial textarea value (used in update mode to seed the existing text). */
+  initialText?: string;
+  /** Existing secret flag, used in update mode to disable the checkbox. */
   secret?: boolean;
-  refreshComments: () => void;
-  setOpenCommentEditor?: (value: boolean) => void;
-  onCommentAdded?: () => void;
+  /** Generic close callback — used by parent to close edit/reply editors. */
+  setOpen?: (value: boolean) => void;
 };
+
+let nextTempId = -1;
+function makeTempId(): number {
+  // Negative ids are guaranteed non-collision with backend ids (always > 0).
+  return nextTempId--;
+}
 
 export default function CommentEditor({
   mode,
   commentid = 0,
   curCommentId = null,
   placeholder = "댓글을 입력해주세요",
+  initialText,
   secret,
-  refreshComments,
-  setOpenCommentEditor = () => {},
-  onCommentAdded = () => {},
+  setOpen = () => {},
 }: CommentEditorProps) {
   const { session, isEveryKisa, postid } = useCommentsContext();
+  const {
+    refreshComments,
+    onCommentAdded,
+    onOptimisticAdd,
+    onOptimisticReplace,
+    onOptimisticRollback,
+  } = useCommentsMutations();
 
-  // comment content
-  const [text, setText] = useState<string>(
-    placeholder === "댓글을 입력해주세요" ? "" : placeholder
-  );
+  const [text, setText] = useState<string>(initialText ?? "");
 
-  // anonymous checkbox state
+  // anonymous radio state — everykisa boards only.
+  // "none" = unselected (submit disabled), "anonymous" / "non-anonymous" = chosen.
   const [anonymousValue, setAnonymousValue] = useState<string>("none");
 
-  // state to prevent multiple comment submissions at the same time
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const isTextEmpty = text.length === 0;
-  const isAnonymousNotSelected = isEveryKisa && anonymousValue === "none";
+  const [secretChecked, setSecretChecked] = useState<boolean>(
+    mode === "update" ? Boolean(secret) : false,
+  );
+
+  const isTextEmpty = text.trim().length === 0;
+  // Anonymous radio is only rendered in create/reply mode (see JSX below);
+  // in update mode the original anonymous flag is locked, so don't gate
+  // submit on it — otherwise the 댓글 등록 button stays disabled forever.
+  const isAnonymousNotSelected =
+    isEveryKisa && mode !== "update" && anonymousValue === "none";
   const isSubmitDisabled =
     isTextEmpty || isAnonymousNotSelected || isSubmitting;
-
-  const [checked, setChecked] = useState<boolean>(
-    mode === "update" ? secret : false
-  );
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setText(e.target.value);
 
+  const handleSecretChange = (e: ChangeEvent<HTMLInputElement>) =>
+    setSecretChecked(e.target.checked);
+
   /**
-   * @desc Submit new comment (POST)
+   * Submit a new comment (POST). Performs an optimistic insert and rolls back
+   * on failure.
    */
   const handleSubmitComment = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    // 일반 댓글 + 답글
     const data: NewCommentBody = {
       email: session?.user.email,
       fullname: session?.user.name,
-      text: text,
-      isCommentOfComment: commentid === 0 ? false : true,
+      text,
+      isCommentOfComment: commentid !== 0,
       parentCommentid: commentid,
       anonymous: isEveryKisa ? anonymousValue === "anonymous" : false,
-      secret: checked,
+      secret: secretChecked,
     };
-    // send post api call to create comment with postid
+
+    // Build a local temp comment for optimistic insert.
+    const tempId = makeTempId();
+    const tempComment: Comment = {
+      ...data,
+      commentid: tempId,
+      postid,
+      created: new Date().toISOString(),
+      childComments: [],
+      likesCount: 0,
+    };
+    onOptimisticAdd(tempComment);
+    onCommentAdded();
+
     const res = await createComment(postid, data, session?.token);
 
     if (res) {
-      // modify states after new comment has been submitted
-      onCommentAdded(); // Optimistically update comments count
+      // Refresh from server so the temp is replaced with the real comment.
+      onOptimisticReplace(tempId, (res as Comment) ?? null);
       refreshComments();
-      setOpenCommentEditor(false);
+      setOpen(false);
       setText("");
-
-      setIsSubmitting(false);
       setAnonymousValue("none");
-
-      window.alert("댓글이 등록되었습니다.");
+      setIsSubmitting(false);
     } else {
-      window.alert("댓글 등록에 실패했습니다.");
-      // error handling
-      // console.log("comment creation failed");
+      onOptimisticRollback(tempId);
+      setIsSubmitting(false);
+      toast.error("댓글 등록에 실패했습니다.");
     }
   };
 
   /**
-   * @desc Submit updated comment (PUT)
+   * Submit an edit (PUT).
    */
   const handleSubmitUpdate = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    // send update api call
-    const data = {
-      text: text,
-    };
-
-    const res = await updateComment(curCommentId, data, session?.token);
+    const res = await updateComment(curCommentId, { text }, session?.token);
     if (res) {
       refreshComments();
-      setOpenCommentEditor(false);
+      setOpen(false);
       setIsSubmitting(false);
-
-      window.alert("댓글이 수정되었습니다.");
     } else {
-      // error handling
-      console.log("comment update failed");
+      setIsSubmitting(false);
+      toast.error("댓글 수정에 실패했습니다.");
     }
   };
 
   const handleSubmit =
     mode === "update" ? handleSubmitUpdate : handleSubmitComment;
 
-  const handleSecretChecked = () => {
-    setChecked(!checked);
-  };
-
   return (
-    <div
-      className="flex flex-col sm:flex-row
-    items-end sm:items-center w-full"
-    >
-      <textarea
+    <div className="flex w-full flex-col gap-2">
+      <Textarea
         value={text}
         onChange={handleTextChange}
-        className="w-full h-20 
-             sm:h-32
-             border border-gray-300 rounded-md p-3
-              text-sm md:text-base
-              focus:outline-michigan-blue resize-none"
         placeholder={placeholder}
+        rows={3}
+        className="resize-none"
         onKeyDown={(e) => {
           if (
             e.key === "Enter" &&
+            !e.shiftKey &&
             e.target === document.activeElement &&
             !isSubmitDisabled
           ) {
@@ -148,94 +173,41 @@ export default function CommentEditor({
         }}
       />
 
-      <div
-        className="w-full sm:w-1/6 sm:h-full
-        pt-2
-        flex sm:flex-col justify-between
-      flex-row md:pl-2"
-      >
-        {/* If isEveryKisa, show anonymous checkbox options */}
-        {isEveryKisa && (
-          <>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        {/* Identity / privacy controls — mutually exclusive by board kind. */}
+        <div className="flex items-center">
+          {isEveryKisa && mode !== "update" && (
             <RadioGroup
-              className="hidden
-              sm:flex gap-1"
-              defaultValue="none"
               value={anonymousValue}
               onValueChange={setAnonymousValue}
+              className="flex flex-row gap-3"
+              aria-label="작성자 표시 방식"
             >
-              <Radio value="anonymous">익명</Radio>
-              <Radio value="non-anonymous">실명</Radio>
-              <Radio
-                value="none"
-                classNames={{
-                  base: cn("hidden"),
-                }}
-              >
-                선택 안함
-              </Radio>
+              <RadioItem value="anonymous" text="익명" />
+              <RadioItem value="non-anonymous" text="실명" />
             </RadioGroup>
-            <RadioGroup
-              className="flex sm:hidden w-1/4"
-              size="sm"
-              defaultValue="none"
-              value={anonymousValue}
-              onValueChange={setAnonymousValue}
-            >
-              <Radio value="anonymous">익명</Radio>
-              <Radio value="non-anonymous">실명</Radio>
-              <Radio
-                value="none"
-                classNames={{
-                  base: cn("hidden"),
-                }}
-              >
-                선택 안함
-              </Radio>
-            </RadioGroup>
-          </>
-        )}
-        {!isEveryKisa && (
-          <div
-            className="flex h-full
-          items-center md:items-end md:pb-3"
-          >
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                className="w-3 md:w-4 h-3 md:h-4
-                 md:ml-[3px] "
-                id="secret"
-                name="secret"
-                checked={checked}
-                onClick={handleSecretChecked}
-                disabled={mode === "update"}
-              />
-              <label
-                htmlFor="secret"
-                className="
-              text-sm md:text-base
-              ml-[9px]"
-              >
-                비밀댓글
-              </label>
-            </div>
-          </div>
-        )}
+          )}
+          {!isEveryKisa && (
+            <Checkbox
+              id="secret"
+              name="secret"
+              checked={secretChecked}
+              onChange={handleSecretChange}
+              disabled={mode === "update"}
+              text="비밀댓글"
+            />
+          )}
+        </div>
 
-        {/* If isEveryKisa, anonymousValue should be selected */}
-        <CustomButton
+        <Button
+          variant="primary"
+          size="sm"
           disabled={isSubmitDisabled}
           onClick={handleSubmit}
-          text={isSubmitting ? "..." : "댓글 등록"}
-          className="w-fit md:w-full h-fit md:h-fit"
-        />
+        >
+          {isSubmitting ? "등록 중" : "댓글 등록"}
+        </Button>
       </div>
     </div>
   );
 }
-// git switch onboarding
-// git pull origin onboarding // update된 코드를 가져온다
-
-// git switch devteam
-// git merge onboarding

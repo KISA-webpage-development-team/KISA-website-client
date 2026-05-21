@@ -21,11 +21,20 @@ const useAdmin = () => {
     status: string;
   };
 
-  const [status, setStatus] = useState<string>(sessionStatus);
+  const [status, setStatus] = useState<string>("loading");
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
+    if (sessionStatus === "loading") return;
+
+    // Unauthenticated: resolve to non-admin so callers stop showing a spinner.
+    if (!session) {
+      setIsAdmin(false);
+      setStatus("success");
+      return;
+    }
+
     const fetchIsAdmin = async () => {
       try {
         const res = await getIsAdmin(session?.user.email, session?.token);
@@ -43,10 +52,8 @@ const useAdmin = () => {
       }
     };
 
-    if (session) {
-      fetchIsAdmin();
-    }
-  }, [session]);
+    fetchIsAdmin();
+  }, [session, sessionStatus]);
 
   if (mock.isMockMode) {
     return {

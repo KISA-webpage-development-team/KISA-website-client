@@ -1,5 +1,8 @@
 // GoBlueButton for post
 
+import { usePathname } from "next/navigation";
+import { Button, toast } from "@umichkisa-ds/web";
+
 import LikeIcon from "@/components/ui/icon/LikeIcon";
 import useLike, {
   LikeTargetType,
@@ -19,19 +22,25 @@ export default function GoBlueButton({
   session = null,
   className = "",
 }: GoBlueButtonProps) {
+  const pathname = usePathname();
   const { didLike, likeCount, isLoading, like, unlike } = useLike(
     targetType,
     id,
-    session
+    session,
   );
 
   const handleLike = async () => {
     if (!session?.token) {
-      window.alert("로그인이 필요한 기능입니다.");
-      if (targetType === "post") {
-        window.location.href =
-          "/signin" + "?callbackUrl=" + window.location.href;
-      }
+      toast.error("로그인이 필요한 기능입니다.", {
+        action: {
+          label: "로그인",
+          onClick: () => {
+            window.location.href = `/signin?callbackUrl=${encodeURIComponent(
+              pathname ?? "/",
+            )}`;
+          },
+        },
+      });
       return;
     }
     if (isLoading) return;
@@ -45,65 +54,45 @@ export default function GoBlueButton({
 
   switch (targetType) {
     case "post":
-      // Post UI: large button with text and count
+      // Post UI: prominent CTA button with text label + adjacent count chip
       return (
-        <div className="flex items-center gap-2 h-8 md:h-10">
-          <button
-            className={`${className} 
-      inline-flex items-center justify-center self-center
-    px-4 gap-1 h-full
-    bg-[#00274c] border border-[#00274c] 
-    text-[#ffcb05] text-sm md:text-base
-    hover:bg-[#00274c] hover:border-[#ffcb05]
-    rounded-md
-      `}
+        <div className={`${className} flex items-center gap-2`}>
+          <Button
+            variant="primary"
+            size="sm"
             onClick={handleLike}
             disabled={isLoading}
           >
             <LikeIcon size="small" fill={didLike} color="maize" />
-            <span
-              className=" font-bold 
-          text-sm md:text-base"
-            >
-              {didLike ? "취소" : "GO BLUE!"}
-            </span>
-          </button>
+            <span>{didLike ? "취소" : "GO BLUE!"}</span>
+          </Button>
 
           {likeCount !== null && likeCount > 0 && (
-            <span
-              className="[#00274c]
-      inline-flex items-center justify-center self-center
-    px-2 md:px-3 h-full
-     border-2 border-[#00274c]
-    text-[#00274c] text-sm md:text-lg
-    rounded-md font-bold"
-            >
+            <span className="inline-flex !font-sejong-bold items-center justify-center rounded-md border border-brand-primary px-3 py-1.5 type-body-sm text-brand-primary !font-semibold">
               {likeCount}
             </span>
           )}
         </div>
       );
     case "comment":
-      // Comment UI: compact icon button and count
+      // Comment UI: compact 28×28 icon button + adjacent count.
+      // Plain <button> (not DS Button) so it lines up with neighboring
+      // icon-only action buttons in the comment action row.
       return (
-        <div
-          className={`${className} 
-      inline-flex items-center self-center gap-1 
-      rounded-md
-      `}
-        >
+        <div className={`${className} inline-flex items-center gap-1`}>
           <button
+            type="button"
             onClick={handleLike}
-            className={`disabled:cursor-not-allowed`}
             disabled={isLoading}
+            aria-label={didLike ? "좋아요 취소" : "좋아요"}
+            aria-pressed={didLike ?? undefined}
+            className="inline-flex p-1 gap-1 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-michigan-blue disabled:cursor-not-allowed"
           >
             <LikeIcon size="small" fill={didLike} />
+            {likeCount !== null && likeCount > 0 && (
+              <span className="type-body-sm text-foreground">{likeCount}</span>
+            )}
           </button>
-          {likeCount !== null && likeCount > 0 && (
-            <span className="text-xs md:text-sm text-michigan-light-blue">
-              {likeCount}
-            </span>
-          )}
         </div>
       );
     default:

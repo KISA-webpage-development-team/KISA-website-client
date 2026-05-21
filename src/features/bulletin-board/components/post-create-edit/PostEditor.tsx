@@ -1,119 +1,214 @@
 "use client";
 
-// EditorClient.tsx
-// : wrapper of the Text Editor components for "creating" and "updating" posts
+/**
+ * PostEditor — shared create/update editor for bulletin-board posts.
+ *
+ * Layout (top-down, single column):
+ *   1. Title (Form.Input, required, length > 0)
+ *   2. Body (ReactQuill via TextEditor — wired into RHF via useFormField)
+ *   3. Action row:
+ *        left:  AnnouncementCheckbox (admin && !announcement-board)
+ *               + Anonymous radio (create && everykisa)
+ *        right: Submit (Form.Button, primary, disableWhenInvalid)
+ *
+ * State / submit ownership lives in usePostEditorForm + usePostSubmit.
+ * TextEditor is preserved verbatim — only its text/setText props are bridged
+ * into the RHF "text" field via useFormField.
+ */
 
-// [UI]
-// - title input
-// - text editor (reactquill)
-// - announcement checkbox (admin) | submit button
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { Form, useFormField, useFormStatus } from "@umichkisa-ds/form";
+import {
+  Checkbox,
+  LoadingSpinner,
+  RadioGroup,
+  RadioItem,
+  StatusView,
+} from "@umichkisa-ds/web";
 
-import React from "react";
-import { Radio, RadioGroup } from "@nextui-org/react";
-
-// sub-ui components
-import PostTitleInput from "./PostTitleInput";
-import AnnouncementCheckbox from "./AnnouncementCheckbox";
-import PostSubmitButton from "./PostSubmitButton";
-import TextEditor from "@/features/bulletin-board/components/shared/TextEditor";
-import { LoadingSpinner, NotAuthorized } from "@/components/ui/feedback";
-
-// utils
-import { isAnnouncementBoard } from "@/utils/formats/boardType";
-import { cn } from "@/utils/styles/cn";
 import useAdmin from "@/lib/next-auth/useAdmin";
-import { usePostEditorForm } from "@/features/bulletin-board/hooks/usePostEditorForm";
+import { isAnnouncementBoard } from "@/utils/formats/boardType";
+import {
+  PostEditorFormValues,
+  usePostEditorForm,
+} from "@/features/bulletin-board/hooks/usePostEditorForm";
+import { usePostSubmit } from "@/features/bulletin-board/hooks/usePostSubmit";
+import { usePost } from "@/apis/posts/swrHooks";
+
+// TextEditor uses ReactQuill — must be client-only.
+const TextEditor = dynamic(
+  () => import("@/features/bulletin-board/components/shared/TextEditor"),
+  { ssr: false },
+);
+
+type PostEditorProps = {
+  userName: string;
+  userEmail: string;
+  token: string | undefined;
+  boardType: string;
+  curPostId?: number | string | null;
+  mode: "create" | "update";
+};
+
+const titleRules = {
+  required: "제목을 입력해주세요.",
+  validate: (v: string) =>
+    (typeof v === "string" && v.length > 0) || "제목을 입력해주세요.",
+};
+
+const textRules = {
+  validate: (v: string) =>
+    (typeof v === "string" && v !== "" && v !== "<p><br></p>") ||
+    "내용을 입력해주세요.",
+};
 
 export default function PostEditor({
-  session,
+  userName,
+  userEmail,
+  token,
   boardType,
   curPostId = null,
   mode,
-}) {
+}: PostEditorProps) {
+  const router = useRouter();
   const { isAdmin, status: adminStatus } = useAdmin();
-
-  // Use custom hook for form state and logic
-  const {
-    title,
-    setTitle,
-    text,
-    setText,
-    isAnnouncement,
-    setIsAnnouncement,
-    anonymousValue,
-    setAnonymousValue,
-    isSubmitBtnDisabled,
-    formData,
-    isEveryKisa,
-  } = usePostEditorForm({
-    session,
+  const numericPostId = curPostId ? Number(curPostId) : null;
+  const { form, isEveryKisa, buildPayload } = usePostEditorForm({
+    userName,
+    userEmail,
     boardType,
-    curPostId,
+    curPostId: numericPostId,
     mode,
   });
+  const { submit } = usePostSubmit({
+    mode,
+    postid: numericPostId,
+    token,
+    onSuccess: ({ href }) => router.push(href),
+  });
 
-  // Exception Handling -------------------------------------------------------
+  // SWR dedupes against usePostEditorForm's identical request; no extra fetch.
+  const { post: gatedPost, isLoading: isGateLoading } = usePost(
+    mode === "update" && numericPostId ? numericPostId : 0,
+  );
+
   if (adminStatus === "loading") {
-    return <LoadingSpinner />;
+    return (
+      <div className="flex w-full justify-center py-12">
+        <LoadingSpinner />
+      </div>
+    );
   }
   if (isAnnouncementBoard(boardType) && isAdmin === false) {
-    return <NotAuthorized />;
+    return <StatusView variant="not-authorized" />;
   }
-  // ---------------------------------------------------------------------------
-  return (
-    <div className="flex flex-col h-full gap-4">
-      <PostTitleInput title={title} setTitle={setTitle} />
-      {isAdmin !== null && (
-        <TextEditor token={session?.token} text={text} setText={setText} />
-      )}
+  // Author-only edit gate: admins can delete others' posts but not edit them
+  // (otherwise the author byline becomes ambiguous after an admin edit).
+  if (mode === "update") {
+    if (isGateLoading || !gatedPost) {
+      return (
+        <div className="flex w-full justify-center py-12">
+          <LoadingSpinner />
+        </div>
+      );
+    }
+    if (gatedPost.email !== userEmail) {
+      return <StatusView variant="not-authorized" />;
+    }
+  }
 
-      <div
-        className={`flex
-      ${isAdmin ? "w-full justify-between" : "justify-end"}
-      mt-20 md:mt-12`}
-      >
-        <div
-          className="flex flex-row items-center 
-        gap-4 sm:gap-8"
-        >
-          {isAdmin && (
-            <AnnouncementCheckbox
-              isBoardAnnouncement={isAnnouncementBoard(boardType)}
-              isAnnouncement={isAnnouncement}
-              setIsAnnouncement={setIsAnnouncement}
-            />
-          )}
-          {/* If isEveryKisa, show anonymous checkbox options */}
-          {isEveryKisa && mode === "create" && (
-            <RadioGroup
-              className="flex gap-1"
-              orientation="horizontal"
-              defaultValue="none"
-              value={anonymousValue}
-              onValueChange={setAnonymousValue}
-            >
-              <Radio value="anonymous">익명</Radio>
-              <Radio value="non-anonymous">실명</Radio>
-              <Radio
-                value="none"
-                classNames={{
-                  base: cn("hidden"),
-                }}
-              >
-                선택 안함
-              </Radio>
-            </RadioGroup>
-          )}
+  const onSubmit = async (values: PostEditorFormValues) => {
+    await submit(buildPayload(values));
+  };
+
+  const isBoardAnnouncement = isAnnouncementBoard(boardType);
+
+  return (
+    <Form form={form} onSubmit={onSubmit} className="flex flex-col gap-4">
+      <Form.Input
+        name="title"
+        label="제목"
+        type="text"
+        rules={titleRules}
+        placeholder="제목을 입력해주세요"
+      />
+
+      <TextEditorField token={token} />
+
+      <div className="mt-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-3">
+          {isAdmin && !isBoardAnnouncement && <AnnouncementField />}
+          {mode === "create" && isEveryKisa && <AnonymousField />}
         </div>
 
-        <PostSubmitButton
-          disabled={isSubmitBtnDisabled}
-          token={session?.token}
-          mode={mode}
-          postid={mode === "create" ? null : curPostId}
-          formData={formData}
-        />
+        <SubmitButton mode={mode} />
       </div>
+    </Form>
+  );
+}
+
+// --- bridges ---------------------------------------------------------------
+
+function TextEditorField({ token }: { token: string | undefined }) {
+  const { value, inputProps } = useFormField<PostEditorFormValues, "text">(
+    "text",
+    textRules,
+  );
+
+  return (
+    <TextEditor
+      token={token}
+      text={(value as string) ?? ""}
+      setText={inputProps.onChange as (s: string) => void}
+    />
+  );
+}
+
+function AnnouncementField() {
+  const { value, inputProps } = useFormField<PostEditorFormValues, "isAnnouncement">(
+    "isAnnouncement",
+  );
+  return (
+    <div className="flex items-center gap-3">
+      <span className="type-body-sm text-foreground">공지사항</span>
+      <Checkbox
+        name={inputProps.name}
+        checked={!!value}
+        onChange={(e) => inputProps.onChange(e.target.checked)}
+        onBlur={inputProps.onBlur}
+      />
     </div>
+  );
+}
+
+function AnonymousField() {
+  const { value, inputProps } = useFormField<PostEditorFormValues, "anonymous">(
+    "anonymous",
+  );
+  return (
+    <div className="flex items-center gap-3">
+      <span className="type-body-sm text-foreground">익명 여부</span>
+      <RadioGroup
+        value={(value as string) ?? "non-anonymous"}
+        onValueChange={(v) => inputProps.onChange(v)}
+        orientation="horizontal"
+        className="flex flex-row gap-4"
+      >
+        <RadioItem value="non-anonymous" text="실명" />
+        <RadioItem value="anonymous" text="익명" />
+      </RadioGroup>
+    </div>
+  );
+}
+
+// Isolated to localize re-renders to the button only.
+function SubmitButton({ mode }: { mode: "create" | "update" }) {
+  const { isSubmitting } = useFormStatus();
+  const label = mode === "create" ? "등록" : "수정";
+  return (
+    <Form.Button type="submit" variant="primary" disableWhenInvalid>
+      {isSubmitting ? "처리 중..." : label}
+    </Form.Button>
   );
 }

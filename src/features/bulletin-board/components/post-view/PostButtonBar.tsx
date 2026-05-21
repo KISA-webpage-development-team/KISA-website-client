@@ -1,47 +1,55 @@
-// 1. List Button [Always]
-// 2. Edit Button [Only when the user is the author]
-// 3. Delete Button [Only when the user is the author]
+// 1. List Button (always)
+// 2. GoBlue (everykisa boards only)
+// 3. Edit Button (post author only)
+// 4. Delete Button (post author OR admin) — opens confirm Dialog
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-// sub-ui components
-import { PencilIcon, TrashcanIcon, ListIcon } from "@/components/ui/icon";
-import CustomImageButton from "@/components/ui/button/CustomImageButton";
-import GoBlueButton from "@/features/bulletin-board/components/shared/GoBlueButton";
+import { Button } from "@umichkisa-ds/web";
 
-// utils
+import GoBlueButton from "@/features/bulletin-board/components/shared/GoBlueButton";
+import PostDeleteDialog from "@/features/bulletin-board/components/post-delete/PostDeleteDialog";
+
 import { isEveryKisaBoard } from "@/utils/formats/boardType";
 
-// types
 import { UserSession } from "@/lib/next-auth/types";
 import { BoardType } from "@/types/board";
 
 type PostButtonBarProps = {
-  email: string; // post email
+  email: string; // post author's email
   session?: UserSession | null;
+  isAdmin: boolean;
   type: BoardType;
   postid: number;
+  /**
+   * When true, the delete confirmation Dialog mounts open on first render.
+   * Used by the /posts/delete/[board]/[postid] route to surface the
+   * confirm overlay over the post page on inbound link.
+   */
+  initialDeleteOpen?: boolean;
 };
 
 export default function PostButtonBar({
   email,
   session = null,
+  isAdmin,
   type,
   postid,
+  initialDeleteOpen = false,
 }: PostButtonBarProps) {
-  const route = useRouter();
+  const router = useRouter();
 
   const isEveryKisa = isEveryKisaBoard(type);
   const isAuthor = session?.user?.email === email;
+  const canEdit = isAuthor;
+  const canDelete = isAuthor || isAdmin;
 
-  const OnClickBackToList = () => {
-    // [TODO]: fix back to list logic
-    // need to change this to just "go back"
-    // This is very interesting, when user navigates to post from non-list page, just "going back" is not enough
-    // for now, it is just going back to the board page without remembering pageNum and pageSize
-    // maybe this is because of misuse of SWR caching
+  const [deleteOpen, setDeleteOpen] = useState(initialDeleteOpen);
 
+  const onClickBackToList = () => {
+    // Hard reload preserved intentionally — SWR cache wedge prevents
+    // router.push from refreshing the list correctly.
     if (isEveryKisaBoard(type)) {
       window.location.href = `/everykisa/${type}`;
     } else {
@@ -50,52 +58,49 @@ export default function PostButtonBar({
   };
 
   const onClickPostUpdate = () => {
-    route.push(`/posts/update/${postid}?board_type=${type}`);
-  };
-
-  const onClickPostDelete = () => {
-    route.push(`/posts/delete/${type}/${postid}`);
+    router.push(`/posts/update/${postid}?board_type=${type}`);
   };
 
   return (
-    <div
-      className="
-    w-full flex justify-between py-2 sm:py-4"
-    >
-      {/* List Button */}
-      <CustomImageButton
-        type="secondary"
-        icon={<ListIcon />}
-        text="목록"
-        onClick={OnClickBackToList}
-      />
+    <div className="flex w-full items-center justify-between">
+      <Button variant="secondary" size="sm" onClick={onClickBackToList}>
+        목록
+      </Button>
+
       <div className="flex items-center gap-2">
-        {/* Go Blue Button */}
         {isEveryKisa && (
           <GoBlueButton targetType="post" id={postid} session={session} />
         )}
 
-        {/* Edit + Delete Button */}
-        {isAuthor && (
-          <div className="flex items-center gap-2">
-            <CustomImageButton
-              type="secondary"
-              icon={<PencilIcon color="gray" />}
-              text="수정"
-              onClick={onClickPostUpdate}
-              aria-label="Edit post"
-            />
-            <CustomImageButton
-              type="secondary"
-              icon={<TrashcanIcon color="gray" />}
-              text="삭제"
-              onClick={onClickPostDelete}
-              aria-label="Delete post"
-            />
-          </div>
+        {canEdit && (
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onClickPostUpdate}
+            aria-label="Edit post"
+          >
+            수정
+          </Button>
+        )}
+        {canDelete && (
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => setDeleteOpen(true)}
+            aria-label="Delete post"
+          >
+            삭제
+          </Button>
         )}
       </div>
-      {/* </div> */}
+
+      <PostDeleteDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        postid={postid}
+        boardType={type}
+        token={session?.token}
+      />
     </div>
   );
 }

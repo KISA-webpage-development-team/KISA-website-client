@@ -2,7 +2,6 @@
 
 import { ReactNode } from "react";
 import { SWRTokenProvider } from "@/lib/swr/providers";
-import "./posts.css";
 import { SessionProvider } from "next-auth/react";
 
 interface LayoutProps {

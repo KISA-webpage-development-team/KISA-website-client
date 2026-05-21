@@ -159,7 +159,9 @@ export const pochaHandlers = [
       (p) => p.startDate.getTime() <= date.getTime() && date.getTime() <= p.endDate.getTime()
     );
     if (!active) return HttpResponse.json({});
-    return HttpResponse.json(active);
+    // PochaInfo carries an `ongoing` flag for consumers (e.g. home banner);
+    // a pocha matched by date range is by definition ongoing.
+    return HttpResponse.json({ ...active, ongoing: true });
   }),
 
   http.get(/\/pocha\/previous\/?(\?.*)?$/, ({ request }) => {

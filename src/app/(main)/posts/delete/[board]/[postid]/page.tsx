@@ -1,8 +1,9 @@
-// this page lets user to confirm deletion of a post
+// Delete-confirm route — back-compat surface for inbound links.
+// Mounts the same post-detail surface with the delete-confirm Dialog open
+// over the post page. Cancel from the dialog returns the user to the post.
+
 import React from "react";
-import PostDeleteClient from "@/features/bulletin-board/components/post-delete/PostDeleteClient";
-import { getServerSession } from "next-auth";
-import authOptions from "@/lib/next-auth/authOptions";
+import PostDetailClient from "@/features/bulletin-board/components/post-view/PostDetailClient";
 import { BoardType } from "@/types/board";
 
 type PageProps = {
@@ -12,15 +13,13 @@ type PageProps = {
   };
 };
 
-export default async function DeleteConfirmPage({ params }: PageProps) {
-  const session = await getServerSession(authOptions);
-  const { board, postid } = params; // post title
-
+export default function DeleteConfirmPage({ params }: PageProps) {
   return (
-    <section className="items-center justify-center gap-4">
-      <h1>게시물을 삭제하시겠습니까?</h1>
-      {/* Actual delete api call happens here */}
-      <PostDeleteClient session={session} boardType={board} postid={postid} />
+    <section>
+      <PostDetailClient
+        postid={Number(params.postid)}
+        initialDeleteOpen
+      />
     </section>
   );
 }

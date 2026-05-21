@@ -25,9 +25,7 @@ export default function JobsCuratorPage() {
     <section>
       {/* Info contents (static guide) — keeps its own local Tabs state; decoupled
           from the jobs-list country filter by business decision. */}
-      <div className="mt-12 mb-12">
-        <JobApplicationInfoContents />
-      </div>
+      <JobApplicationInfoContents />
 
       {/* Dynamic job section — errors isolated here; context scope is local. */}
       <JobsCuratorProvider>
@@ -57,7 +55,7 @@ function JobsCuratorDynamicContent() {
   const { filteredJobs: kisaJobs, hasKisaJobs } = useKisaJobs(queryParams);
   const jobs = useMemo(
     () => (hasKisaJobs ? [...kisaJobs, ...apiJobs] : apiJobs),
-    [kisaJobs, hasKisaJobs, apiJobs]
+    [kisaJobs, hasKisaJobs, apiJobs],
   );
 
   if (status === "error") {
@@ -67,9 +65,9 @@ function JobsCuratorDynamicContent() {
   const isKorea = country === "KR";
 
   return (
-    <>
+    <div className="flex flex-col gap-2 mt-4">
       {/* Category heading */}
-      <div className="mt-2 md:mt-0">
+      <div className="mt-2 md:mt-6">
         <JobCategoryDropdown />
       </div>
 
@@ -101,7 +99,7 @@ function JobsCuratorDynamicContent() {
           />
         )}
       </div>
-    </>
+    </div>
   );
 }
 

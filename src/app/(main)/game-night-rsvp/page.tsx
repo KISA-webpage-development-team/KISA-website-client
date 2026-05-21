@@ -21,7 +21,6 @@ export default function GameNightRSVPPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement actual submission logic (e.g., API call)
-    console.log("Form submitted:", formData);
     alert("RSVP submitted! Thank you.");
   };
 
