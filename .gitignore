@@ -4,6 +4,7 @@
 .agents
 .claude
 .vscode
+.superpowers
 
 # dependencies
 /node_modules

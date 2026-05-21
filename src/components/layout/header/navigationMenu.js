@@ -114,6 +114,10 @@ const menu = [
     name: "취업 가이드북",
     href: "/jobs",
   },
+  {
+    name: "강의평",
+    href: "/courses",
+  },
 ];
 
 export default menu;

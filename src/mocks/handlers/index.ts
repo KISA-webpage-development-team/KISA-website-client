@@ -3,6 +3,7 @@ import { jobsHandlers } from "./jobs";
 import { authHandlers } from "./auth";
 import { usersHandlers } from "./users";
 import { pochaHandlers } from "./pocha";
+import { coursesHandlers } from "./courses";
 
 /**
  * MSW request handlers.
@@ -14,4 +15,5 @@ export const handlers: RequestHandler[] = [
   ...authHandlers,
   ...usersHandlers,
   ...pochaHandlers,
+  ...coursesHandlers,
 ];
