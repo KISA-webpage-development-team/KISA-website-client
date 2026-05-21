@@ -149,6 +149,8 @@ export default function TextEditor({ token, text, setText }: TextEditorProps) {
         /* Reasonable writable area before content forces growth */
         .quill-wrapper .ql-editor {
           min-height: 360px;
+          max-height: 750px;
+          overflow-y: auto;
         }
 
         /* Match the toolbar font size */
