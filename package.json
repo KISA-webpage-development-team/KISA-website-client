@@ -49,7 +49,7 @@
     "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.23.6",
-    "heroui-cli": "^1.2.3",
+    "heroui-cli": "^3.0.2",
     "ip-cidr": "4.0.2",
     "isomorphic-dompurify": "2.11.0",
     "jsonwebtoken": "9.0.2",
