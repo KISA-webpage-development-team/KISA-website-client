@@ -1,6 +1,6 @@
 # KISA Website Frontend
 
-## Tech Stacks
+## Tech Stack
 
 - **Framework**: NextJS (^14.2.4)
 - **Styling**: TailwindCSS
