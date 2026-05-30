@@ -1,7 +1,9 @@
 // Job posting data structure
 
 // TODO: need to add more sources in the future
-export type JobSource = "wanted-api" | "kisa";
+// "wanted-api" is the legacy live-fetch source; the DB-backed serve endpoint
+// emits "wanted" and "superrookie" (and "kisa" once KISA jobs move to the DB).
+export type JobSource = "wanted-api" | "wanted" | "superrookie" | "kisa";
 export interface Job {
   jobID: number;
   company: string;

@@ -32,7 +32,10 @@ export default function JobPostingCard({
   const getSourceLogo = (source: JobSource) => {
     switch (source) {
       case "wanted-api":
+      case "wanted":
         return "/jobs/wanted_logo.png";
+      case "superrookie":
+        return "/jobs/superrookie_logo.png";
       case "kisa":
         return "/kisa_logo.png";
       default:
