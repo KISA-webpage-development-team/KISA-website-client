@@ -51,10 +51,14 @@ jobs:
       - name: Open draft PR or request Codex review
         env:
           GH_TOKEN: ${{ secrets.CLAUDE_PR_PAT }}
+          REPO: ${{ github.repository }}
           BRANCH: ${{ steps.claude.outputs.branch_name }}
           BASE: ${{ github.event.repository.default_branch }}
           ISSUE_PR_URL: ${{ github.event.issue.pull_request.url }}
           ISSUE_PR_NUM: ${{ github.event.issue.number }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           set -euo pipefail
           if [ -z "${GH_TOKEN:-}" ]; then
@@ -82,19 +86,64 @@ jobs:
             exit 0
           fi
 
-          TITLE="Claude: ${BRANCH}"
-          if [ -f /tmp/pr_title.txt ]; then
-            TITLE="$(head -n 1 /tmp/pr_title.txt)"
+          BASE="${BASE:-main}"
+
+          # Classify risk deterministically from the changed files (does not depend
+          # on Claude). Any sensitive path -> human-required; large diff -> complex;
+          # otherwise simple. The sensitive set mirrors CLAUDE.md's "always
+          # human-required" list. This is the human gate, so it is conservative.
+          COMPARE="$(gh api "repos/${REPO}/compare/${BASE}...${BRANCH}" 2>/dev/null || echo '{}')"
+          FILES="$(printf '%s' "$COMPARE" | jq -r '.files[]?.filename' 2>/dev/null || true)"
+          NUM_FILES="$(printf '%s\n' "$FILES" | grep -c . || true)"
+          CHANGED_LINES="$(printf '%s' "$COMPARE" | jq -r '[.files[]?.changes] | add // 0' 2>/dev/null || echo 0)"
+
+          SENSITIVE_RE='(^|/)(\.github/|\.env|\.eslintrc|next\.config|vercel\.json|Dockerfile|package(-lock)?\.json|yarn\.lock|pnpm-lock\.yaml)|src/constants/env|stripe|payment|checkout|/pocha/|order|auth|jwt|admin|session|middleware|secret|credential|migration'
+
+          if [ "${NUM_FILES:-0}" -eq 0 ]; then
+            # Could not determine the diff; fail safe to human-required.
+            RISK="human-required"
+          elif printf '%s\n' "$FILES" | grep -iqE "$SENSITIVE_RE"; then
+            RISK="human-required"
+          elif [ "${NUM_FILES:-0}" -gt 5 ] || [ "${CHANGED_LINES:-0}" -gt 150 ]; then
+            RISK="complex"
+          else
+            RISK="simple"
           fi
-          if [ ! -f /tmp/pr_body.md ]; then
-            {
-              echo "Automated draft PR created by Claude Code."
+          echo "Classified risk: $RISK (files=$NUM_FILES, changed_lines=$CHANGED_LINES)"
+
+          # Title: prefer the triggering issue title; fall back to the branch.
+          TITLE="${ISSUE_TITLE:-}"
+          [ -z "$TITLE" ] && TITLE="Claude: ${BRANCH}"
+
+          BODY_FILE="$(mktemp)"
+          {
+            echo "Risk level: ${RISK}"
+            echo
+            echo "## Summary"
+            if [ -n "${ISSUE_NUM:-}" ]; then
+              echo "Automated change by Claude Code for #${ISSUE_NUM}."
+            else
+              echo "Automated change by Claude Code."
+            fi
+            if [ -n "${ISSUE_BODY:-}" ]; then
               echo
-              echo "Risk level: human-required (risk not reported by Claude; defaulting to human review)."
-            } > /tmp/pr_body.md
-          fi
-          URL="$(gh pr create --draft --base "${BASE:-main}" --head "$BRANCH" \
-            --title "$TITLE" --body-file /tmp/pr_body.md)"
+              echo "### Request"
+              printf '%s\n' "${ISSUE_BODY:0:1000}"
+            fi
+            echo
+            echo "## Files changed (${NUM_FILES})"
+            if [ -n "$FILES" ]; then
+              printf '%s\n' "$FILES" | sed 's/^/- /'
+            else
+              echo "- (could not determine changed files)"
+            fi
+            echo
+            echo "---"
+            echo "_Risk classified automatically from changed paths. Codex review requested below. A human owner reviews and merges; nothing is auto-merged._"
+          } > "$BODY_FILE"
+
+          URL="$(gh pr create --draft --base "$BASE" --head "$BRANCH" \
+            --title "$TITLE" --body-file "$BODY_FILE")"
           echo "Opened draft PR: $URL"
           # Ask the official Codex GitHub app to review (works even while draft).
           gh pr comment "$URL" --body "@codex review"

@@ -101,15 +101,18 @@ so you do not run `gh label` yourself. The levels are:
 Do NOT run `gh pr create` yourself. After you commit and push your branch, an
 automated workflow step opens a **draft** PR for you (using a token that lets the
 review workflows trigger) and then requests a Codex review with an `@codex review`
-comment. Hand off the PR title and body by writing two files:
+comment.
 
-- `/tmp/pr_title.txt` — a single line: the PR title.
-- `/tmp/pr_body.md` — the PR description. It MUST contain a line of the exact
-  form `Risk level: simple` (or `complex`, or `human-required`), plus a short
-  summary, the reason, the files touched, and the checks you ran with results.
+You do not set the risk level or write the PR body. The workflow classifies risk
+**deterministically from the files you changed**: any sensitive path (see "Always
+mark `human-required`") makes the PR `human-required`; a large diff makes it
+`complex`; otherwise `simple`. The matching label is applied automatically.
 
-If you do not write these files the PR is still opened, but with a generic body
-and defaulted to `human-required`.
+What this means for you: keep each PR small and scoped to one concern, and do not
+casually touch sensitive paths (`.github/`, `package.json`/lockfiles,
+`src/constants/env.ts`, anything under `pocha`, or files matching auth / payment /
+stripe / admin / secret / migration) unless that is the actual task — doing so
+routes the PR to mandatory human review.
 
 ### Responding to a Codex fix request
 Codex (the `@codex` GitHub reviewer) reviews each PR and only flags serious
