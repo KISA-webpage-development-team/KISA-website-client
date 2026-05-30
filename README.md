@@ -14,7 +14,7 @@
 
 ---
 
-### 1. run following command to install necessary packages
+### 1. run the following command to install necessary packages
 
 `npm install`
 
