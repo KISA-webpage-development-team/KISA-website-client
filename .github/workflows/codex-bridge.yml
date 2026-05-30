@@ -1,0 +1,114 @@
+name: Codex bridge
+
+# Watches the official Codex GitHub review (the @codex app, billed to your
+# ChatGPT/Codex plan). When Codex leaves serious feedback on a PR, this posts
+# "@claude fix Codex feedback" using CLAUDE_PR_PAT so Claude pushes a fix to the
+# same PR branch. Codex only flags P0/P1, so any findings are treated as serious.
+#
+# Safeguards:
+# - Never merges anything.
+# - Skips PRs whose declared risk level is `human-required`.
+# - One automated fix round per PR, guarded by the `claude-fix-requested` label.
+on:
+  pull_request_review:
+    types: [submitted]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Maybe request a Claude fix
+        env:
+          GH_TOKEN: ${{ secrets.CLAUDE_PR_PAT }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          # Codex review bot login. Override with repo variable CODEX_BOT_LOGIN if
+          # your installation posts under a different account.
+          CODEX_BOT: ${{ vars.CODEX_BOT_LOGIN }}
+          REVIEW_AUTHOR: ${{ github.event.review.user.login }}
+          REVIEW_STATE: ${{ github.event.review.state }}
+          REVIEW_BODY: ${{ github.event.review.body }}
+          REVIEW_PR: ${{ github.event.pull_request.number }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          COMMENT_PR_URL: ${{ github.event.issue.pull_request.url }}
+          COMMENT_PR: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "CLAUDE_PR_PAT not set; skipping bridge."
+            exit 0
+          fi
+          CODEX_BOT="${CODEX_BOT:-chatgpt-codex-connector[bot]}"
+
+          # Resolve author / body / state / PR number from the triggering event.
+          if [ "$EVENT" = "pull_request_review" ]; then
+            AUTHOR="${REVIEW_AUTHOR:-}"
+            BODY="${REVIEW_BODY:-}"
+            STATE="${REVIEW_STATE:-}"
+            PR="${REVIEW_PR:-}"
+          else
+            if [ -z "${COMMENT_PR_URL:-}" ]; then
+              echo "issue_comment is not on a PR; skipping."
+              exit 0
+            fi
+            AUTHOR="${COMMENT_AUTHOR:-}"
+            BODY="${COMMENT_BODY:-}"
+            STATE=""
+            PR="${COMMENT_PR:-}"
+          fi
+
+          # Only react to Codex. (Logged so you can confirm the exact bot login and
+          # set the CODEX_BOT_LOGIN variable if this default is wrong.)
+          if [ "$AUTHOR" != "$CODEX_BOT" ]; then
+            echo "Event author '$AUTHOR' is not the Codex bot ('$CODEX_BOT'); skipping."
+            exit 0
+          fi
+
+          STATE="$(printf '%s' "$STATE" | tr '[:upper:]' '[:lower:]')"
+          if [ "$STATE" = "approved" ]; then
+            echo "Codex approved; nothing to fix."
+            exit 0
+          fi
+
+          # Serious if Codex requested changes or the text flags P0/P1 (the only
+          # severities Codex surfaces) or otherwise signals blocking issues.
+          SERIOUS=0
+          [ "$STATE" = "changes_requested" ] && SERIOUS=1
+          if printf '%s' "$BODY" | grep -iqE '(\bP0\b|\bP1\b|critical|blocker|blocking|changes requested)'; then
+            SERIOUS=1
+          fi
+          if [ "$SERIOUS" -ne 1 ]; then
+            echo "No serious (P0/P1) Codex findings detected; nothing to do."
+            exit 0
+          fi
+
+          # Skip human-required PRs (read risk from the PR body; race-free vs labels).
+          PR_BODY="$(gh pr view "$PR" -R "$REPO" --json body --jq '.body' || true)"
+          RISK="$(printf '%s' "$PR_BODY" \
+            | grep -ioE 'risk level:[[:space:]]*`?(simple|complex|human-required)`?' \
+            | head -n 1 | grep -ioE '(simple|complex|human-required)' \
+            | head -n 1 | tr '[:upper:]' '[:lower:]' || true)"
+          if [ "$RISK" = "human-required" ]; then
+            echo "PR #$PR is human-required; deferring to a human (no auto-fix)."
+            exit 0
+          fi
+
+          # Loop guard: at most one automated fix round per PR.
+          if gh pr view "$PR" -R "$REPO" --json labels --jq '.labels[].name' | grep -qx 'claude-fix-requested'; then
+            echo "PR #$PR already has 'claude-fix-requested'; not requesting another fix."
+            exit 0
+          fi
+
+          gh label create claude-fix-requested -R "$REPO" --color 5319e7 \
+            --description "Codex requested changes; one automated Claude fix round triggered" --force >/dev/null 2>&1 || true
+          gh pr edit "$PR" -R "$REPO" --add-label claude-fix-requested
+          gh pr comment "$PR" -R "$REPO" --body "@claude fix Codex feedback. Address the Codex review comments in this PR, add or update tests if needed, and push the fix to this same PR branch. Do not open a new PR and do not merge."
+          echo "Requested a Claude fix on PR #$PR."

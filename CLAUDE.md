@@ -99,8 +99,9 @@ so you do not run `gh label` yourself. The levels are:
 
 ### Opening the pull request
 Do NOT run `gh pr create` yourself. After you commit and push your branch, an
-automated workflow step opens the PR for you (using a token that lets the review
-workflows trigger). Hand off the PR title and body by writing two files:
+automated workflow step opens a **draft** PR for you (using a token that lets the
+review workflows trigger) and then requests a Codex review with an `@codex review`
+comment. Hand off the PR title and body by writing two files:
 
 - `/tmp/pr_title.txt` — a single line: the PR title.
 - `/tmp/pr_body.md` — the PR description. It MUST contain a line of the exact
@@ -109,6 +110,18 @@ workflows trigger). Hand off the PR title and body by writing two files:
 
 If you do not write these files the PR is still opened, but with a generic body
 and defaulted to `human-required`.
+
+### Responding to a Codex fix request
+Codex (the `@codex` GitHub reviewer) reviews each PR and only flags serious
+(P0/P1) issues. When that happens, an automated bridge posts a comment of the
+form "@claude fix Codex feedback ..." on the PR. When you are triggered by such a
+comment:
+
+- Work on the PR's existing branch. Do NOT create a new branch or a new PR.
+- Address every Codex review comment; add or update tests where appropriate.
+- Run the checks (see below), then push your fixes to the same PR branch.
+- Do not mark the PR ready for review and do not merge — that is the human owner's
+  decision. A fresh Codex review is requested automatically after your push.
 
 ### Always mark `human-required`
 Mark the PR `human-required` if it touches any of:
