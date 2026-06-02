@@ -9,6 +9,25 @@ export interface JobsResponse {
   hasMore?: boolean;
 }
 
+function buildJobSearchParams(queryParams: JobListQueryParams) {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(queryParams).forEach(([key, value]) => {
+    if (value === undefined || value === null) return;
+
+    if (Array.isArray(value)) {
+      if (value.length > 0) {
+        searchParams.set(key, value.join(","));
+      }
+      return;
+    }
+
+    searchParams.set(key, String(value));
+  });
+
+  return searchParams.toString();
+}
+
 /**
  * @desc Fetch jobs internship data
  * @route GET /jobs/?category=developer
@@ -16,9 +35,8 @@ export interface JobsResponse {
  * NOTE: not completed yet
  */
 export async function getJobs(queryParams: JobListQueryParams) {
-  const url = `/jobs/?${new URLSearchParams(
-    queryParams as Record<string, string>
-  ).toString()}`;
+  const queryString = buildJobSearchParams(queryParams);
+  const url = queryString ? `/jobs/?${queryString}` : "/jobs/";
 
   try {
     const response = await client.get(url);

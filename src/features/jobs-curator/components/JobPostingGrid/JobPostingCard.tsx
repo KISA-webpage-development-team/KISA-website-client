@@ -35,7 +35,7 @@ export default function JobPostingCard({
       case "wanted":
         return "/jobs/wanted_logo.png";
       case "superrookie":
-        return "/jobs/superrookie_logo.png";
+        return "/jobs/superrookie_logo.svg";
       case "kisa":
         return "/kisa_logo.png";
       default:
