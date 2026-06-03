@@ -17,7 +17,11 @@ HEAD="${2:?head ref/sha required}"
 : "${REPO:?REPO env (owner/repo) required}"
 : "${GH_TOKEN:?GH_TOKEN env (contents:read) required}"
 
-CMP="$(gh api "repos/${REPO}/compare/${BASE}...${HEAD}" 2>/dev/null || true)"
+# URL-encode each ref so the compare path is robust to slashes (e.g.
+# claude/issue-123-foo) and any other URL-unsafe characters in a branch name.
+# The "..." basehead separator stays literal between the two encoded refs.
+enc() { jq -rn --arg s "$1" '$s | @uri'; }
+CMP="$(gh api "repos/${REPO}/compare/$(enc "$BASE")...$(enc "$HEAD")" 2>/dev/null || true)"
 [ -n "$CMP" ] || { echo "human-required"; exit 0; }
 
 # The compare endpoint returns the changed-file list only on the first page and
