@@ -1,0 +1,35 @@
+# pastiche config — adopter-owned. Edit freely.
+# `/pastiche-sync` re-reads this file and regenerates FACT/adapters accordingly.
+# Field reference: docs/config.md
+
+platform: claude-code
+
+packages:
+  - name: "@umichkisa-ds/web"
+    types: ./node_modules/@umichkisa-ds/web/dist/index.d.ts
+  - name: "@umichkisa-ds/form"
+    types: ./node_modules/@umichkisa-ds/form/dist/index.d.ts
+
+tokens:
+  - node_modules/@umichkisa-ds/web/src/styles/index.css
+
+design_md_reference: ./DESIGN.md
+
+typecheck_command: npx tsc --noEmit
+
+build_command: npm run build
+
+setup_progress:
+  action-buttons: done
+  forms-input-collection: done
+  feedback-status: done
+  overlays: done
+  navigation-wayfinding: done
+  content-display: done
+  layout-page-structure: done
+  date-time-selection: done
+  iconography: done
+  visual-hierarchy: done
+  domain-specific-patterns: done
+  brand-identity: done
+  general-wisdom: done
