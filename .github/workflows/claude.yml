@@ -17,12 +17,18 @@ on:
 jobs:
   claude:
     # Require "@claude" AND a trusted actor; gates out drive-by non-collaborators.
+    # Exclude "allow-ai-fix": that phrase is the codex-bridge consent signal and must
+    # NOT start Claude directly -- only the bridge may post the vetted "@claude fix..."
+    # after its current-head Codex-finding and loop-guard checks pass.
     if: |
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') &&
+        !contains(github.event.comment.body, 'allow-ai-fix') &&
         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') &&
+        !contains(github.event.comment.body, 'allow-ai-fix') &&
         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude') &&
+        !contains(github.event.review.body, 'allow-ai-fix') &&
         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) &&
         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
