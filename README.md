@@ -51,6 +51,23 @@ npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-
 # make sure you install it locally only for claude code using Symlinks
 ```
 
+### Pastiche
+
+use [pastiche plugin](https://github.com/retz8/pastiche) to **implement UI without design**
+
+open Claude Code session
+
+```bash
+/plugin marketplace add retz8/pastiche
+/plugin install pastiche@pastiche-marketplace
+```
+
+then run
+
+```bash
+/pastiche <task>
+```
+
 ## Pocha Theme Toggle
 
 The pocha app supports seasonal themes. To switch between spring and default:
@@ -60,6 +77,7 @@ Edit `src/features/pocha/featureFlag.ts` and set `POCHA_THEME` to `"spring"` or 
 ---
 
 ## Insta2Carousel
+
 Automated Pipeline for Instagram Posts -> Home Carousel UI
 
 [Docs Link](./docs/insta2carousel.md)
