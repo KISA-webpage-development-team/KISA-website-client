@@ -5,16 +5,22 @@ name: Codex bridge
 # "@claude fix Codex feedback" using CLAUDE_PR_PAT so Claude pushes a fix to the
 # same PR branch. Codex only flags P0/P1, so any findings are treated as serious.
 #
+# Two ways a fix gets requested:
+#   1. Codex posts a serious (P0/P1 / changes_requested) finding, AND the PR's
+#      effective risk is `simple`/`complex`.
+#   2. A trusted human (OWNER/MEMBER/COLLABORATOR, not a bot) comments
+#      "@claude allow-ai-fix <head-sha>" on the PR conversation -- the active
+#      override for `human-required`/unclassified PRs. This path only fires when
+#      Codex has actually left a serious finding ON THE CURRENT HEAD.
+#
 # Safeguards:
 # - Never merges anything.
 # - Risk = the stricter of the PR body's declared level and a fresh diff
 #   classification run from the DEFAULT-BRANCH classifier (a PR cannot weaken
-#   its own risk). Only `simple`/`complex` auto-fix.
-# - `human-required` / unclassified PRs are deferred UNLESS a trusted human
-#   (OWNER/MEMBER/COLLABORATOR, not a bot) comments "@claude allow-ai-fix <head-sha>"
-#   where <head-sha> is a prefix of the current head SHA. Binding consent to the
-#   exact commit means it can't carry to a new head and can't be forged via a
-#   backdated commit date. A label is not used because Claude holds issues:write.
+#   its own risk).
+# - Opt-in consent is bound to the exact head SHA (a >=7-char prefix), so it
+#   can't carry to a new head and can't be forged via a backdated commit date.
+#   A label is not used because Claude holds issues:write and could self-apply.
 # - One automated fix round per PR, guarded by the `claude-fix-requested` label.
 on:
   pull_request_review:
@@ -95,30 +101,8 @@ jobs:
             PR="${ISSUE_COMMENT_PR:-}"
           fi
 
-          # Only react to Codex. (Logged so you can confirm the exact bot login and
-          # set the CODEX_BOT_LOGIN variable if this default is wrong.)
-          if [ "$AUTHOR" != "$CODEX_BOT" ]; then
-            echo "Event author '$AUTHOR' is not the Codex bot ('$CODEX_BOT'); skipping."
-            exit 0
-          fi
-
-          STATE="$(printf '%s' "$STATE" | tr '[:upper:]' '[:lower:]')"
-          if [ "$STATE" = "approved" ]; then
-            echo "Codex approved; nothing to fix."
-            exit 0
-          fi
-
-          # Serious if Codex requested changes or the text flags P0/P1 (the only
-          # severities Codex surfaces) or otherwise signals blocking issues.
-          SERIOUS=0
-          [ "$STATE" = "changes_requested" ] && SERIOUS=1
-          if printf '%s' "$BODY" | grep -iqE '(\bP0\b|\bP1\b|critical|blocker|blocking|changes requested)'; then
-            SERIOUS=1
-          fi
-          if [ "$SERIOUS" -ne 1 ]; then
-            echo "No serious (P0/P1) Codex findings detected; nothing to do."
-            exit 0
-          fi
+          # PR-level context needed by both trigger paths.
+          read -r BASE_SHA HEAD_SHA < <(gh api "repos/$REPO/pulls/$PR" --jq '"\(.base.sha) \(.head.sha)"')
 
           # Effective risk = stricter of (body-declared) and (fresh diff classification
           # via the DEFAULT-BRANCH classifier). A hand-edited body can't talk it down.
@@ -127,7 +111,6 @@ jobs:
             | grep -ioE 'risk level:[[:space:]]*`?(simple|complex|human-required)`?' \
             | head -n 1 | grep -ioE '(simple|complex|human-required)' \
             | head -n 1 | tr '[:upper:]' '[:lower:]' || true)"
-          read -r BASE_SHA HEAD_SHA < <(gh api "repos/$REPO/pulls/$PR" --jq '"\(.base.sha) \(.head.sha)"')
           DIFF_RISK="human-required"
           if [ -f .github/scripts/classify-risk.sh ]; then
             DIFF_RISK="$(bash .github/scripts/classify-risk.sh "$BASE_SHA" "$HEAD_SHA" || echo human-required)"
@@ -136,12 +119,11 @@ jobs:
           if [ "$(rank "$DIFF_RISK")" -ge "$(rank "$BODY_RISK")" ]; then RISK="$DIFF_RISK"; else RISK="$BODY_RISK"; fi
           echo "Risk: body='${BODY_RISK:-<none>}' diff='$DIFF_RISK' -> effective='$RISK'"
 
-          # Tamper-resistant opt-in BOUND TO THE EXACT HEAD COMMIT: a trusted human
-          # (OWNER/MEMBER/COLLABORATOR, not a bot) must comment
-          # "@claude allow-ai-fix <head-sha>" where <head-sha> is a >=7-char prefix of
-          # the current head SHA. Consent cannot carry to a different head, and -- unlike
-          # a committer-date comparison -- cannot be forged via a backdated commit. A
-          # label is deliberately NOT used (Claude holds issues:write and could self-apply).
+          # Opt-in BOUND TO THE EXACT HEAD COMMIT: a trusted human (OWNER/MEMBER/
+          # COLLABORATOR, not a bot) commented "@claude allow-ai-fix <head-sha>" on the
+          # PR conversation, where <head-sha> is a >=7-char prefix of the current head SHA.
+          # We scan ALL conversation comments (not just the triggering event) so this is
+          # reachable on the human's OWN comment event, not only on a later Codex event.
           OPT_IN=no
           # HEAD_SHA is a GitHub-issued hex SHA; safe to embed as a jq literal.
           OPT_IN_JQ='
@@ -155,20 +137,60 @@ jobs:
             OPT_IN=yes
           fi
 
-          # Only auto-fix `simple`/`complex`. `human-required` and unclassified PRs
-          # are deferred unless a trusted human opted in (above) for this exact head.
-          case "$RISK" in
-            simple|complex)
-              ;;
-            *)
-              if [ "$OPT_IN" = "yes" ]; then
-                echo "PR #$PR is '${RISK:-<none>}' but a trusted human approved '@claude allow-ai-fix' for head ${HEAD_SHA:0:12}; permitting one fix."
-              else
-                echo "PR #$PR is '${RISK:-<none>}'; deferring to a human (comment '@claude allow-ai-fix ${HEAD_SHA:0:12}' to permit one automated fix for this exact commit)."
-                exit 0
-              fi
-              ;;
-          esac
+          # Is the triggering event itself a serious Codex finding?
+          CODEX_SERIOUS=0
+          if [ "$AUTHOR" = "$CODEX_BOT" ]; then
+            STATE="$(printf '%s' "$STATE" | tr '[:upper:]' '[:lower:]')"
+            if [ "$STATE" = "approved" ]; then
+              echo "Codex approved; nothing to fix."
+              exit 0
+            fi
+            # Codex only surfaces P0/P1, so changes_requested or P0/P1 text is serious.
+            if [ "$STATE" = "changes_requested" ] || printf '%s' "$BODY" | grep -iqE '(\bP0\b|\bP1\b|critical|blocker|blocking|changes requested)'; then
+              CODEX_SERIOUS=1
+            fi
+          fi
+
+          # Does Codex have a serious finding ON THE CURRENT HEAD? Reviews and inline
+          # comments carry a commit_id we can bind to HEAD_SHA (issue-comment summaries do
+          # not, so they don't count). This gates the human opt-in path: a human may only
+          # authorize fixing findings that actually exist for this exact commit.
+          codex_flagged_head() {
+            local n
+            n="$( {
+              gh api "repos/$REPO/pulls/$PR/reviews" --paginate --jq '
+                [ .[] | select(.user.login=="'"$CODEX_BOT"'" and .commit_id=="'"$HEAD_SHA"'"
+                    and ((.state|ascii_upcase=="CHANGES_REQUESTED") or ((.body//"")|test("\\bP0\\b|\\bP1\\b|critical|blocker|blocking";"i")))) ] | length' 2>/dev/null
+              gh api "repos/$REPO/pulls/$PR/comments" --paginate --jq '
+                [ .[] | select(.user.login=="'"$CODEX_BOT"'" and .commit_id=="'"$HEAD_SHA"'") ] | length' 2>/dev/null
+            } | awk '{s+=$1} END{print s+0}')"
+            [ "${n:-0}" -gt 0 ]
+          }
+
+          # Decide whether to request a fix.
+          if [ "$CODEX_SERIOUS" = "1" ]; then
+            case "$RISK" in
+              simple|complex)
+                echo "Serious Codex finding on a '$RISK' PR; will request a fix." ;;
+              *)
+                if [ "$OPT_IN" = "yes" ]; then
+                  echo "Serious Codex finding on '${RISK:-<none>}' PR with a trusted opt-in for head ${HEAD_SHA:0:12}; will request a fix."
+                else
+                  echo "PR #$PR is '${RISK:-<none>}'; deferring to a human (comment '@claude allow-ai-fix ${HEAD_SHA:0:12}' on the PR to permit one automated fix for this exact commit)."
+                  exit 0
+                fi ;;
+            esac
+          elif [ "$OPT_IN" = "yes" ]; then
+            # Human opt-in is the trigger; only honour it if Codex actually flagged this head.
+            if ! codex_flagged_head; then
+              echo "Trusted opt-in present for head ${HEAD_SHA:0:12}, but no serious Codex finding on this head; nothing to fix."
+              exit 0
+            fi
+            echo "Trusted human opt-in for head ${HEAD_SHA:0:12} with an existing Codex finding; will request a fix."
+          else
+            echo "Event author '$AUTHOR' is not Codex and no trusted opt-in matches head ${HEAD_SHA:0:12}; skipping."
+            exit 0
+          fi
 
           # Loop guard: at most one automated fix round per PR.
           if gh pr view "$PR" -R "$REPO" --json labels --jq '.labels[].name' | grep -qx 'claude-fix-requested'; then

@@ -39,8 +39,10 @@ FILES="$(printf '%s' "$CMP" | jq -r '.files[] | .filename, (.previous_filename /
 [ -n "$FILES" ] || { echo "human-required"; exit 0; }
 
 # Sensitive paths -> always human-required. Pattern kept in one variable so it
-# cannot be accidentally line-wrapped.
-SENSITIVE='(^\.github/|(^|/)package(-lock)?\.json$|(^|/)yarn\.lock$|(^|/)pnpm-lock\.yaml$|src/constants/env|pocha|auth|jwt|admin|payment|stripe|secret|migration)'
+# cannot be accidentally line-wrapped. Covers this repo's real trust boundaries:
+# CI config, dependency manifests, env/secrets, the NextAuth middleware, ALL
+# server API routes (src/app/api/**), and auth/payment/upload-adjacent modules.
+SENSITIVE='(^\.github/|(^|/)package(-lock)?\.json$|(^|/)yarn\.lock$|(^|/)pnpm-lock\.yaml$|src/constants/env|(^|/)src/middleware\.(ts|js)$|(^|/)src/app/api/|(^|/)src/apis/|pocha|auth|jwt|admin|payment|stripe|cloudinary|customer|secret|migration)'
 if printf '%s\n' "$FILES" | grep -qiE "$SENSITIVE"; then
   echo "human-required"; exit 0
 fi
