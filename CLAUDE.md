@@ -87,29 +87,29 @@ Being invoked via `@claude` is explicit authorization to commit to a working bra
 - Never auto-merge. Codex review and the human owner decide.
 - Write a clear PR description with: a short summary of the change, the reason, the files touched, and the checks you ran with their results.
 
-### Risk level (required on every PR)
-Every PR MUST declare a risk level. You declare it by including a line of the
-exact form `Risk level: <level>` in the PR body (see "Opening the pull request"
-below). A workflow reads that line and applies the matching label automatically,
-so you do not run `gh label` yourself. The levels are:
+### Risk level (classified automatically)
+You do NOT set the risk level and you do NOT run `gh label`. After your branch is
+pushed, a workflow step classifies the PR deterministically from its changed files
+(`.github/scripts/classify-risk.sh`) and applies the matching label; any
+`Risk level:` line you put in the PR body is stripped and replaced. The levels are:
 
 - `simple` — small, low-risk, well-contained change (copy, styling, isolated bug fix) with passing checks.
 - `complex` — multi-file or non-trivial logic change. Review more deeply, add or update tests, and run all checks before recommending approval.
-- `human-required` — touches a sensitive area (see below). Do not present it as safe to auto-approve; flag it for human review.
+- `human-required` — touches a sensitive area (see below). Flagged for human review; never presented as safe to auto-approve.
 
 ### Opening the pull request
 Do NOT run `gh pr create` yourself. After you commit and push your branch, an
 automated workflow step opens a **draft** PR for you (using a token that lets the
 review workflows trigger) and then requests a Codex review with an `@codex review`
-comment. Hand off the PR title and body by writing two files:
+comment. The PR title is set automatically; you do not provide one.
 
-- `/tmp/pr_title.txt` — a single line: the PR title.
-- `/tmp/pr_body.md` — the PR description. It MUST contain a line of the exact
-  form `Risk level: simple` (or `complex`, or `human-required`), plus a short
-  summary, the reason, the files touched, and the checks you ran with results.
+Hand off the PR description by writing `/tmp/pr_body.md`: a short summary, the
+reason, the files touched, and the checks you ran with results. Do NOT add a
+`Risk level:` line — risk is classified automatically (see "Risk level" above)
+and any such line is stripped and replaced.
 
-If you do not write these files the PR is still opened, but with a generic body
-and defaulted to `human-required`.
+If you do not write `/tmp/pr_body.md` the PR is still opened with a generic body;
+the risk level is classified from the diff either way.
 
 ### Responding to a Codex fix request
 Codex (the `@codex` GitHub reviewer) reviews each PR and only flags serious
@@ -123,14 +123,17 @@ comment:
 - Do not mark the PR ready for review and do not merge — that is the human owner's
   decision. A fresh Codex review is requested automatically after your push.
 
-### Always mark `human-required`
-Mark the PR `human-required` if it touches any of:
+### Sensitive areas (auto-classified `human-required`)
+The classifier marks a PR `human-required` automatically when it touches any of
+these — you do not mark it yourself, but be aware these areas always get human
+review and are never auto-fixed without explicit human opt-in:
 - payments / Stripe / Pocha order state
 - auth / JWT / admin permissions
 - database migrations or schema changes
 - secrets, credentials, or environment variables (including `src/constants/env.ts`)
 - deployment config or GitHub Actions workflows (`.github/`)
 - dependency upgrades (`package.json`, lockfiles)
+- the NextAuth middleware (`src/middleware.ts`) and server API routes (`src/app/api/`)
 - anything security-sensitive
 
 ### Checks before opening or updating a PR
