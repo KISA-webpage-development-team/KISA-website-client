@@ -11,9 +11,10 @@ name: Codex bridge
 #   classification run from the DEFAULT-BRANCH classifier (a PR cannot weaken
 #   its own risk). Only `simple`/`complex` auto-fix.
 # - `human-required` / unclassified PRs are deferred UNLESS a trusted human
-#   (OWNER/MEMBER/COLLABORATOR, not a bot) comments "@claude allow-ai-fix" after
-#   the current head commit (per-push consent; a label is not used because Claude
-#   itself holds issues:write).
+#   (OWNER/MEMBER/COLLABORATOR, not a bot) comments "@claude allow-ai-fix <head-sha>"
+#   where <head-sha> is a prefix of the current head SHA. Binding consent to the
+#   exact commit means it can't carry to a new head and can't be forged via a
+#   backdated commit date. A label is not used because Claude holds issues:write.
 # - One automated fix round per PR, guarded by the `claude-fix-requested` label.
 on:
   pull_request_review:
@@ -135,20 +136,21 @@ jobs:
           if [ "$(rank "$DIFF_RISK")" -ge "$(rank "$BODY_RISK")" ]; then RISK="$DIFF_RISK"; else RISK="$BODY_RISK"; fi
           echo "Risk: body='${BODY_RISK:-<none>}' diff='$DIFF_RISK' -> effective='$RISK'"
 
-          # Tamper-resistant, PER-PUSH opt-in: a trusted human (OWNER/MEMBER/COLLABORATOR,
-          # not a bot) must comment "@claude allow-ai-fix" AND that comment must be newer
-          # than the current head commit -- so consent never carries over after the branch
-          # changes. A label is deliberately NOT used (Claude holds issues:write and could
-          # self-apply one).
+          # Tamper-resistant opt-in BOUND TO THE EXACT HEAD COMMIT: a trusted human
+          # (OWNER/MEMBER/COLLABORATOR, not a bot) must comment
+          # "@claude allow-ai-fix <head-sha>" where <head-sha> is a >=7-char prefix of
+          # the current head SHA. Consent cannot carry to a different head, and -- unlike
+          # a committer-date comparison -- cannot be forged via a backdated commit. A
+          # label is deliberately NOT used (Claude holds issues:write and could self-apply).
           OPT_IN=no
-          HEAD_DATE="$(gh api "repos/$REPO/commits/$HEAD_SHA" --jq '.commit.committer.date')"
-          # HEAD_DATE is a GitHub-issued ISO-8601 timestamp; safe to embed as a jq literal.
-          OPT_IN_JQ='.[] | select(
-              (.author_association=="OWNER" or .author_association=="MEMBER" or .author_association=="COLLABORATOR")
-              and .user.type!="Bot"
-              and (.body | test("@claude[[:space:]]+allow-ai-fix";"i"))
-              and ((.created_at|fromdateiso8601) > ("'"$HEAD_DATE"'"|fromdateiso8601))
-            ) | .id'
+          # HEAD_SHA is a GitHub-issued hex SHA; safe to embed as a jq literal.
+          OPT_IN_JQ='
+            .[]
+            | select((.author_association=="OWNER" or .author_association=="MEMBER" or .author_association=="COLLABORATOR") and .user.type!="Bot")
+            | ((.body // "") | ascii_downcase) as $b
+            | (($b | capture("@claude[[:space:]]+allow-ai-fix[[:space:]]+(?<sha>[0-9a-f]{7,40})")?) | .sha) as $sha
+            | select($sha != null and ("'"$HEAD_SHA"'" | ascii_downcase | startswith($sha)))
+            | $sha'
           if gh api "repos/$REPO/issues/$PR/comments" --paginate --jq "$OPT_IN_JQ" | grep -q .; then
             OPT_IN=yes
           fi
@@ -160,9 +162,9 @@ jobs:
               ;;
             *)
               if [ "$OPT_IN" = "yes" ]; then
-                echo "PR #$PR is '${RISK:-<none>}' but a trusted human commented '@claude allow-ai-fix'; permitting one fix."
+                echo "PR #$PR is '${RISK:-<none>}' but a trusted human approved '@claude allow-ai-fix' for head ${HEAD_SHA:0:12}; permitting one fix."
               else
-                echo "PR #$PR is '${RISK:-<none>}'; deferring to a human (comment '@claude allow-ai-fix' AFTER the latest commit to permit one automated fix)."
+                echo "PR #$PR is '${RISK:-<none>}'; deferring to a human (comment '@claude allow-ai-fix ${HEAD_SHA:0:12}' to permit one automated fix for this exact commit)."
                 exit 0
               fi
               ;;

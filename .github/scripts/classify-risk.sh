@@ -20,7 +20,18 @@ HEAD="${2:?head ref/sha required}"
 CMP="$(gh api "repos/${REPO}/compare/${BASE}...${HEAD}" 2>/dev/null || true)"
 [ -n "$CMP" ] || { echo "human-required"; exit 0; }
 
-FILES="$(printf '%s' "$CMP" | jq -r '.files[].filename // empty')"
+# The compare endpoint returns the changed-file list only on the first page and
+# caps it at 300 files for the whole comparison, so a larger diff could hide a
+# sensitive path outside the visible set. Fail closed when we hit the cap.
+# https://docs.github.com/en/rest/commits/commits#compare-two-commits
+NFILES="$(printf '%s' "$CMP" | jq '.files | length')"
+if [ "${NFILES:-0}" -ge 300 ]; then
+  echo "human-required"; exit 0
+fi
+
+# Classify both the new path AND the renamed-from path (previous_filename): a
+# rename OUT of a sensitive path must still count as sensitive.
+FILES="$(printf '%s' "$CMP" | jq -r '.files[] | .filename, (.previous_filename // empty)')"
 [ -n "$FILES" ] || { echo "human-required"; exit 0; }
 
 # Sensitive paths -> always human-required. Pattern kept in one variable so it
@@ -30,7 +41,7 @@ if printf '%s\n' "$FILES" | grep -qiE "$SENSITIVE"; then
   echo "human-required"; exit 0
 fi
 
-NFILES="$(printf '%s\n' "$FILES" | grep -c . || true)"
+# Size-based: use the real changed-file count (NFILES, not the rename-doubled list).
 CHANGES="$(printf '%s' "$CMP" | jq -r '[.files[] | (.additions + .deletions)] | add // 0')"
 if [ "${NFILES:-0}" -gt 5 ] || [ "${CHANGES:-0}" -gt 150 ]; then
   echo "complex"
