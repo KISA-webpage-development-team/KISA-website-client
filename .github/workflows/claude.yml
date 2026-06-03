@@ -16,12 +16,16 @@ on:
 
 jobs:
   claude:
-    # Only run when the "@claude" trigger phrase is present.
+    # Require "@claude" AND a trusted actor; gates out drive-by non-collaborators.
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') &&
+        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') &&
+        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude') &&
+        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) &&
+        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -51,6 +55,7 @@ jobs:
       - name: Open draft PR or request Codex review
         env:
           GH_TOKEN: ${{ secrets.CLAUDE_PR_PAT }}
+          REPO: ${{ github.repository }}
           BRANCH: ${{ steps.claude.outputs.branch_name }}
           BASE: ${{ github.event.repository.default_branch }}
           ISSUE_PR_URL: ${{ github.event.issue.pull_request.url }}
@@ -83,16 +88,24 @@ jobs:
           fi
 
           TITLE="Claude: ${BRANCH}"
-          if [ -f /tmp/pr_title.txt ]; then
-            TITLE="$(head -n 1 /tmp/pr_title.txt)"
+          # Deterministic risk from the pushed diff (REPO/GH_TOKEN inherited from step env).
+          RISK="$(bash .github/scripts/classify-risk.sh "${BASE:-main}" "$BRANCH")"
+          echo "Computed risk level: $RISK"
+          # Preserve Claude's summary/checks if it wrote a body; else a short intro.
+          if [ -f /tmp/pr_body.md ]; then
+            BODY_SRC="$(cat /tmp/pr_body.md)"
+          else
+            BODY_SRC="Automated draft PR created by Claude Code."
           fi
-          if [ ! -f /tmp/pr_body.md ]; then
-            {
-              echo "Automated draft PR created by Claude Code."
-              echo
-              echo "Risk level: human-required (risk not reported by Claude; defaulting to human review)."
-            } > /tmp/pr_body.md
-          fi
+          # Strip any pre-existing "Risk level:" line so ours is authoritative.
+          BODY_SRC="$(printf '%s\n' "$BODY_SRC" | grep -viE '^[[:space:]]*risk level:' || true)"
+          {
+            printf '%s\n' "$BODY_SRC"
+            echo
+            echo "Risk level: ${RISK}"
+            echo
+            echo "_Risk classified deterministically from the diff; the bridge re-verifies from the default-branch classifier before any automated fix._"
+          } > /tmp/pr_body.md
           URL="$(gh pr create --draft --base "${BASE:-main}" --head "$BRANCH" \
             --title "$TITLE" --body-file /tmp/pr_body.md)"
           echo "Opened draft PR: $URL"

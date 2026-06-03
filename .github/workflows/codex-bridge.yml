@@ -7,8 +7,13 @@ name: Codex bridge
 #
 # Safeguards:
 # - Never merges anything.
-# - Only auto-triggers when the PR's declared risk level is `simple` or
-#   `complex`. Skips `human-required` and PRs with no declared risk.
+# - Risk = the stricter of the PR body's declared level and a fresh diff
+#   classification run from the DEFAULT-BRANCH classifier (a PR cannot weaken
+#   its own risk). Only `simple`/`complex` auto-fix.
+# - `human-required` / unclassified PRs are deferred UNLESS a trusted human
+#   (OWNER/MEMBER/COLLABORATOR, not a bot) comments "@claude allow-ai-fix" after
+#   the current head commit (per-push consent; a label is not used because Claude
+#   itself holds issues:write).
 # - One automated fix round per PR, guarded by the `claude-fix-requested` label.
 on:
   pull_request_review:
@@ -27,6 +32,14 @@ jobs:
   bridge:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout default branch (trusted classifier source)
+        uses: actions/checkout@v4
+        with:
+          # Pin to the default branch -- NEVER the PR merge ref -- so a PR that
+          # edits classify-risk.sh cannot influence its own risk decision.
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 1
+
       - name: Maybe request a Claude fix
         env:
           GH_TOKEN: ${{ secrets.CLAUDE_PR_PAT }}
@@ -106,24 +119,52 @@ jobs:
             exit 0
           fi
 
-          # Only auto-fix when the PR declares risk as `simple` or `complex`.
-          # `human-required` and PRs with no declared risk are deferred to a human.
-          # (Read risk from the PR body; race-free vs labels.)
+          # Effective risk = stricter of (body-declared) and (fresh diff classification
+          # via the DEFAULT-BRANCH classifier). A hand-edited body can't talk it down.
           PR_BODY="$(gh pr view "$PR" -R "$REPO" --json body --jq '.body' || true)"
-          RISK="$(printf '%s' "$PR_BODY" \
+          BODY_RISK="$(printf '%s' "$PR_BODY" \
             | grep -ioE 'risk level:[[:space:]]*`?(simple|complex|human-required)`?' \
             | head -n 1 | grep -ioE '(simple|complex|human-required)' \
             | head -n 1 | tr '[:upper:]' '[:lower:]' || true)"
+          read -r BASE_SHA HEAD_SHA < <(gh api "repos/$REPO/pulls/$PR" --jq '"\(.base.sha) \(.head.sha)"')
+          DIFF_RISK="human-required"
+          if [ -f .github/scripts/classify-risk.sh ]; then
+            DIFF_RISK="$(bash .github/scripts/classify-risk.sh "$BASE_SHA" "$HEAD_SHA" || echo human-required)"
+          fi
+          rank() { case "$1" in human-required) echo 3;; complex) echo 2;; simple) echo 1;; *) echo 0;; esac; }
+          if [ "$(rank "$DIFF_RISK")" -ge "$(rank "$BODY_RISK")" ]; then RISK="$DIFF_RISK"; else RISK="$BODY_RISK"; fi
+          echo "Risk: body='${BODY_RISK:-<none>}' diff='$DIFF_RISK' -> effective='$RISK'"
+
+          # Tamper-resistant, PER-PUSH opt-in: a trusted human (OWNER/MEMBER/COLLABORATOR,
+          # not a bot) must comment "@claude allow-ai-fix" AND that comment must be newer
+          # than the current head commit -- so consent never carries over after the branch
+          # changes. A label is deliberately NOT used (Claude holds issues:write and could
+          # self-apply one).
+          OPT_IN=no
+          HEAD_DATE="$(gh api "repos/$REPO/commits/$HEAD_SHA" --jq '.commit.committer.date')"
+          # HEAD_DATE is a GitHub-issued ISO-8601 timestamp; safe to embed as a jq literal.
+          OPT_IN_JQ='.[] | select(
+              (.author_association=="OWNER" or .author_association=="MEMBER" or .author_association=="COLLABORATOR")
+              and .user.type!="Bot"
+              and (.body | test("@claude[[:space:]]+allow-ai-fix";"i"))
+              and ((.created_at|fromdateiso8601) > ("'"$HEAD_DATE"'"|fromdateiso8601))
+            ) | .id'
+          if gh api "repos/$REPO/issues/$PR/comments" --paginate --jq "$OPT_IN_JQ" | grep -q .; then
+            OPT_IN=yes
+          fi
+
+          # Only auto-fix `simple`/`complex`. `human-required` and unclassified PRs
+          # are deferred unless a trusted human opted in (above) for this exact head.
           case "$RISK" in
             simple|complex)
               ;;
-            human-required)
-              echo "PR #$PR is human-required; deferring to a human (no auto-fix)."
-              exit 0
-              ;;
             *)
-              echo "PR #$PR has no declared risk level ('${RISK:-<none>}'); deferring to a human (no auto-fix)."
-              exit 0
+              if [ "$OPT_IN" = "yes" ]; then
+                echo "PR #$PR is '${RISK:-<none>}' but a trusted human commented '@claude allow-ai-fix'; permitting one fix."
+              else
+                echo "PR #$PR is '${RISK:-<none>}'; deferring to a human (comment '@claude allow-ai-fix' AFTER the latest commit to permit one automated fix)."
+                exit 0
+              fi
               ;;
           esac
 
