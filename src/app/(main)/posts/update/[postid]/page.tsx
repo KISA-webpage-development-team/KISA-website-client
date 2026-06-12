@@ -7,12 +7,12 @@ import PostEditor from "@/features/bulletin-board/components/post-create-edit/Po
 import { BoardType } from "@/types/board";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     postid: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     board_type: BoardType;
-  };
+  }>;
 };
 
 export default async function PostUpdatePage({
@@ -20,8 +20,8 @@ export default async function PostUpdatePage({
   searchParams,
 }: PageProps) {
   const session = await getServerSession(authOptions);
-  const { board_type } = searchParams;
-  const { postid } = params;
+  const { board_type } = await searchParams;
+  const { postid } = await params;
 
   if (!board_type) {
     return (

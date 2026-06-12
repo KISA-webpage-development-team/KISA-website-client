@@ -40,11 +40,17 @@ describe("useInfiniteJobs", () => {
       jobs: [j(1)],
       next: "/n",
     });
-    vi.spyOn(queries, "getJobsByNextUrl").mockRejectedValue(new Error("net"));
+    const nextSpy = vi
+      .spyOn(queries, "getJobsByNextUrl")
+      .mockRejectedValue(new Error("net"));
     const { result } = renderHook(() => useInfiniteJobs(params));
     await waitFor(() => expect(result.current.hasMore).toBe(true));
-    act(() => result.current.loadMore());
-    await waitFor(() => expect(result.current.loadMoreError).toBeDefined());
+    // loadMore no-ops until the render snapshot exposes nextUrl, so retry
+    // inside waitFor (the hook's isLoadingMore guard makes this idempotent).
+    await waitFor(() => {
+      if (nextSpy.mock.calls.length === 0) act(() => result.current.loadMore());
+      expect(result.current.loadMoreError).toBeDefined();
+    });
     expect(result.current.status).toBe("success");
     expect(result.current.jobs).toHaveLength(1);
   });
@@ -74,13 +80,18 @@ describe("useInfiniteJobs", () => {
     vi.spyOn(queries, "getJobs")
       .mockResolvedValueOnce({ jobs: [j(1)], next: "/n" })
       .mockResolvedValueOnce({ jobs: [j(2)], next: null });
-    vi.spyOn(queries, "getJobsByNextUrl").mockImplementationOnce(() => nextPromise as any);
+    const nextSpy = vi
+      .spyOn(queries, "getJobsByNextUrl")
+      .mockImplementationOnce(() => nextPromise as any);
 
     const { result, rerender } = renderHook(({ p }) => useInfiniteJobs(p), { initialProps: { p: params } });
     await waitFor(() => expect(result.current.hasMore).toBe(true));
 
-    act(() => result.current.loadMore());
-    await waitFor(() => expect(result.current.isLoadingMore).toBe(true));
+    // Same stale-snapshot retry as above.
+    await waitFor(() => {
+      if (nextSpy.mock.calls.length === 0) act(() => result.current.loadMore());
+      expect(result.current.isLoadingMore).toBe(true);
+    });
 
     // Filter changes mid-flight
     rerender({ p: { ...params, category: "developer" } });

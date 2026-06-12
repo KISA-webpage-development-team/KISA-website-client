@@ -11,6 +11,8 @@
 // Client component: session is read via AuthContext so mock-mode (sessionStorage-backed
 // MOCK_SESSION) and real next-auth both flow through the same boundary.
 
+import { use } from "react";
+
 import { KISA_EMAIL } from "@/constants/email";
 import { useAuth } from "@/lib/auth/authContext";
 
@@ -20,16 +22,16 @@ import UserActivityBoard from "@/features/users/components/view/UserActivityBoar
 import { NotLogin, NotAuthorized } from "@/components/ui/feedback";
 
 type UserViewPageProps = {
-  params: {
+  params: Promise<{
     email: string;
-  };
+  }>;
 };
 
 export default function UserViewPage({ params }: UserViewPageProps) {
   const { session } = useAuth();
 
   // [NOTE] email on the URL is encoded; decode for fetch + comparison.
-  const { email } = params;
+  const { email } = use(params);
   const decodedEmail = decodeURIComponent(email);
 
   if (!session) {

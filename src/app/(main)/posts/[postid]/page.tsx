@@ -6,15 +6,16 @@
 import PostDetailClient from "@/features/bulletin-board/components/post-view/PostDetailClient";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     postid: string;
-  };
+  }>;
 };
 
-export default function PostViewPage({ params }: PageProps) {
+export default async function PostViewPage({ params }: PageProps) {
+  const { postid } = await params;
   return (
     <section className="w-full h-full">
-      <PostDetailClient postid={Number(params.postid)} />
+      <PostDetailClient postid={Number(postid)} />
     </section>
   );
 }

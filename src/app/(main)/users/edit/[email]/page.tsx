@@ -9,6 +9,8 @@
 // Client component: session is read via AuthContext so mock-mode (sessionStorage-backed
 // MOCK_SESSION) and real next-auth both flow through the same boundary.
 
+import { use } from "react";
+
 import { useAuth } from "@/lib/auth/authContext";
 
 import UserEditFormCard from "@/features/users/components/edit/UserEditFormCard";
@@ -16,15 +18,15 @@ import { NotAuthorized, NotLogin } from "@/components/ui/feedback";
 import { Container } from "@umichkisa-ds/web";
 
 type UserEditPageProps = {
-  params: {
+  params: Promise<{
     email: string;
-  };
+  }>;
 };
 
 export default function UserEditPage({ params }: UserEditPageProps) {
   const { session } = useAuth();
 
-  const { email } = params;
+  const { email } = use(params);
   const decodedEmail = decodeURIComponent(email);
 
   if (!session) {
