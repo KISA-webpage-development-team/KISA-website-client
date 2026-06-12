@@ -1,6 +1,6 @@
 import React from "react";
 import DOMPurify from "isomorphic-dompurify";
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 
 type PostContentProps = {
   text: string;
