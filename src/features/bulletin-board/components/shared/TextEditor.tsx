@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useEffect } from "react";
-import "react-quill/dist/quill.snow.css";
-import ReactQuill from "react-quill";
+import "react-quill-new/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
 import { postPresignedURL, getPresignedURL } from "@/apis/images/queries";
 import { putImageToS3 } from "@/apis/images/mutations";
 
