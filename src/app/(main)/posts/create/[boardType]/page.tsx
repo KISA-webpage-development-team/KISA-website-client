@@ -6,14 +6,14 @@ import PostEditor from "@/features/bulletin-board/components/post-create-edit/Po
 import { BoardType } from "@/types/board";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     boardType: BoardType;
-  };
+  }>;
 };
 
 export default async function CreatePostPage({ params }: PageProps) {
   const session = await getServerSession(authOptions);
-  const { boardType } = params;
+  const { boardType } = await params;
 
   return (
     <section className="flex flex-col gap-6">

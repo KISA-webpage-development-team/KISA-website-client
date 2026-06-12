@@ -7,17 +7,18 @@ import PostDetailClient from "@/features/bulletin-board/components/post-view/Pos
 import { BoardType } from "@/types/board";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     board: BoardType;
     postid: string;
-  };
+  }>;
 };
 
-export default function DeleteConfirmPage({ params }: PageProps) {
+export default async function DeleteConfirmPage({ params }: PageProps) {
+  const { postid } = await params;
   return (
     <section>
       <PostDetailClient
-        postid={Number(params.postid)}
+        postid={Number(postid)}
         initialDeleteOpen
       />
     </section>

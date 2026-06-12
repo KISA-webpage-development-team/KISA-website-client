@@ -3,11 +3,14 @@ import { LinkButton } from "@umichkisa-ds/web";
 import SignInButton from "./SignInButton";
 
 type SignUpSuccessPageProps = {
-  params: { name: string };
+  params: Promise<{ name: string }>;
 };
 
-export default function SignUpSuccessPage({ params }: SignUpSuccessPageProps) {
-  const decodedName = decodeURIComponent(params.name);
+export default async function SignUpSuccessPage({
+  params,
+}: SignUpSuccessPageProps) {
+  const { name } = await params;
+  const decodedName = decodeURIComponent(name);
 
   return (
     <section className="flex h-full items-center justify-center">
