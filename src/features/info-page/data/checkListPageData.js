@@ -1,389 +1,590 @@
 // /info/checklist page.js에 사용되는 리스트 데이터
 
-// title: 체크리스트 항목의 제목
-// desc: 체크리시트 항목의 설명 (드롭다운 형태로 표시, html 형식)
+// title: 체크리스트 항목의 제목 (앞 번호는 CheckListItem이 자동으로 붙입니다)
+// desc: 체크리스트 항목의 설명 (드롭다운 형태로 표시, JSX 형식)
+
+import { sejongHospitalBold } from "@/utils/fonts/textFonts";
+
+// desc 내부에서 재사용하는 스타일
+const subHeading = `${sejongHospitalBold.className} block mt-5 first:mt-0 text-lg md:text-xl`;
+const groupHeading = `${sejongHospitalBold.className} block mt-6 first:mt-0 text-lg md:text-xl text-michigan-blue`;
+const taskHeading = `${sejongHospitalBold.className} block mt-4 text-base md:text-lg`;
+const paragraph = "mt-2 leading-relaxed";
+const list = "list-disc pl-5 mt-2 space-y-1 leading-relaxed";
+const link = "text-michigan-blue underline";
 
 const checkListData = [
   {
-    title: "새 여권 발급 및 항공권 구매하기 (~4/30)",
+    title: "합격 수락 직후 — 제일 먼저",
     desc: (
-      <p>
-        (1) 여권 발급은 최대 7일 소요되며 기존에 여권이 있는데도 4년 이상
-        남아있지 않다면 여권 갱신을 추천드립니다. 미국 F1 VISA 는 한 번 발급받게
-        된다면 항상 여권에 붙어있기에 여권이 만료된다면 매 출입국 시 여권 2권을
-        지니고 다니거나 F1 VISA 를 새로 발급받아야 합니다. 모든 과정을
-        반복하려면 번거롭기에 여권을 새로 발급받는 것이 가장 좋습니다.
-        <br />
-        <br />
-        (2) 항공권은 일찍 구매하면 구매할수록 좋습니다. 비행기 가격이 상시로
-        올라가며 한 번 올라간 비행기표 값은 떨어지지 않습니다. 3개월~6개월 미리
-        구매를 해 두신다면 왕복 190만 원 정도에서 구매를 하실 수 있으며 한 달 전
-        혹은 3주 전에 구매를 한다면 왕복 400만원 이상으로 가격이 치솟게 됩니다.
-      </p>
+      <>
+        <p className={subHeading}>Uniqname 생성 및 계정 활성화</p>
+        <ul className={list}>
+          <li>
+            Deposit을 납부하면 보통 1~2일 이내에 학교 ITS로부터 ‘OTID(One-Time
+            Identifier, 10자리 번호)’가 담긴 안내 메일이 발송됩니다. 이 OTID와
+            본인의 고유 학번인 ‘UMID(8자리 번호)’로 본인만의 계정인 ‘Uniqname’을
+            만들게 됩니다.
+          </li>
+          <li>
+            이렇게 만든 Uniqname은 앞으로 비자 발급, 기숙사 배정, 수강신청 등 모든
+            학교 행정 시스템에 로그인하는 아이디가 되며, 동시에 미시간 대학교 공식
+            이메일 주소(uniqname@umich.edu)로 사용됩니다.
+          </li>
+          <li>
+            Uniqname을 만들 때 비밀번호 설정을 완료하셔야 합니다. 과정을 중간에
+            멈추거나 창을 닫으면 계정이 잠겨버려, 학교 ITS 부서에 직접 전화를 걸어
+            복구해야 하는 번거로운 일이 발생할 수 있습니다.
+          </li>
+        </ul>
+
+        <p className={subHeading}>미시간 공식 이메일(UMICH) 상시 확인</p>
+        <ul className={list}>
+          <li>
+            Uniqname을 생성한 순간부터 학교의 모든 공식 소통은 개인 메일이 아닌
+            미시간 대학교 이메일로만 이루어집니다.
+          </li>
+          <li>
+            미국 입국에 필요한 비자 서류(I-20) 안내, 신입생 오리엔테이션 일정,
+            수강신청 가이드 등이 모두 이 메일로만 발송됩니다. 따라서 방학 기간 동안
+            매일 이메일을 확인하는 것을 권장합니다. 중요한 공지나 서류 제출
+            데드라인을 놓치게 되면 입학 첫 학기 스케줄에 큰 차질이 생길 수 있으니
+            각별히 유의해 주세요.
+          </li>
+        </ul>
+
+        <p className={subHeading}>여권 유효기간 확인 및 재발급</p>
+        <ul className={list}>
+          <li>
+            미국 입국 및 비자 발급을 위해서는 미국 입국 예정일을 기준으로 여권
+            유효기간이 최소 ‘6개월 이상’ 남아 있어야 합니다. 기간이 얼마 남지
+            않았다면 지금 바로 가까운 구청이나 외교부를 통해 여권 재발급을
+            신청하시기 바랍니다.
+          </li>
+        </ul>
+      </>
     ),
   },
   {
-    title:
-      "Housing Application 제출하기 & COVID-19 백신 접종 증명서 1차 & 2차 제출하기 (~5/4)",
+    title: "I-20 받기 — F-1 비자 신청을 위한 필수 서류",
     desc: (
-      <p>
-        (1) 대부분의 신입생이 학교를 입학하면 기숙사를 신청합니다. 기숙사
-        신청서도 마찬가지로 일찍 하면 할수록 좋은 방의 배정될 확률이 올라갑니다.
-        랜덤이긴 하지만 늦게 제출하면 남는 방에 배정이 됩니다. 최대한 빠르게
-        룸메이트를 찾아서 하우징 애플리케이션을 제출하길 바랍니다. 저는 마감일
-        2일 전에 제출을 하여 룸메이트가 랜덤으로 배정이 되었습니다. 운이 좋게 그
-        친구와 잘 맞았지만 다른 친구들의 얘기를 들어보면 룸메이트 때문에
-        고생하는 일이 많아서 스트레스를 많이 받는 것 같았습니다. 룸메이트를
-        선택할 때는 대화 잘 통하는 것도 좋지만 최대한 수면 패턴이 맞고 생활
-        방식이 비슷한 학생과 같이 룸메이트를 하면 갈등이 많이 생기지 않는 것
-        같습니다.
-        <br />
-        <br />
-        (2) 룸메이트를 찾는데 어려움을 겪고 계시다면 추천드리는 2가지 방법:
-        <br />
-        Instagram Page: 해당년도 “umich myc” 인스타 페이지 확인 후, 신입으로
-        들어오는 학생들 중 룸메를 찾고 있는 학생들이 게시물을 올렸을 겁니다. 그
-        중 마음에 드는 친구를 골라서 연락하시는 것도 방법입니다. (ex. Insta
-        Address: umich2028myc)
-        <br />
-        <br />
-        Meet Your Class Website: (https://www.meetyourclass.com/) 자신의
-        프로필을 만들며 회원가입을 한 후, 학교를 University of Michigan으로 고른
-        뒤, 룸메이트 신청을 해보시는 것도 방법입니다. 리스트를 살펴본 후, 관심
-        있는 친구에게 연락을 남겨놓으시면 됩니다. 웹사이트 내에 문자 기능이
-        포함되어 있습니다.
-        <br />
-        <br />
-        (3) 현재는 코로나 백신 접종 증명서를 제출해야 되는지 모르겠지만 저희
-        때는 한창 코로나가 유행이었기 때문에 백신 접종 증명서를 제출해야
-        했습니다. 혹시나 이 외에도 유행하는 전염병 및 기본적으로 제출을 해야
-        하는 건강 상의 서류가 있다면 웹사이트 확인을 통해서 제출해 주시기
-        바랍니다.
-        <br />
-        <br />
-        (4) 대부분의 건강 접종 증명서는 한국 본인 거주지 관할 지역의
-        동사무소에서 발급받을 수 있습니다.
-      </p>
+      <>
+        <p className={paragraph}>
+          F-1 비자를 신청하려면 먼저 미시간 대학교에서 발급하는 I-20를 준비해야
+          해요! I-20가 발급되지 않으면 F-1 비자 신청을 진행할 수 없습니다.
+        </p>
+
+        <p className={subHeading}>재정증명 서류 준비</p>
+        <p className={paragraph}>
+          I-20를 발급받기 위해서는 첫 1년 동안의 학비와 생활비를 충당할 수 있다는
+          재정 증명이 필요해요. 보통 영문 은행 잔고 증명서, 후원자의 재직증명서,
+          또는 장학금 증명서 등을 제출할 수 있습니다.
+        </p>
+        <p className={paragraph}>재정 서류를 준비할 때는 다음 사항을 꼭 확인해 주세요.</p>
+        <ul className={list}>
+          <li>
+            재정 후원자의 이름이 Sponsor’s Certification of Financial Support에
+            서명한 사람과 일치해야 합니다.
+          </li>
+          <li>서류는 영문 공식 문서여야 합니다.</li>
+          <li>서류는 발급일 기준 1년 이내여야 합니다.</li>
+          <li>
+            증명 금액은 Financial Resources Statement (FRS)에 적힌 첫 1년 비용
+            이상이어야 합니다.
+          </li>
+          <li>주식, 투자 계좌, 증권 등의 형태는 재정 증명으로 인정되지 않습니다.</li>
+        </ul>
+
+        <p className={subHeading}>I-20 신청</p>
+        <p className={paragraph}>
+          학부 신입생의 경우, 입학 후 받은 안내에 따라 Enrollment Connect에서 필요한
+          서류를 업로드하면 됩니다. 제출해야 하는 주요 서류는 다음과 같습니다: FRS,
+          Sponsor’s Certification of Financial Support, 공식 재정 증빙 서류, 여권
+          사본.
+        </p>
+        <p className={paragraph}>
+          서류 검토와 I-20 발급에는 약 2주 이상의 시간이 걸릴 수 있고, 서류 수정이
+          필요한 경우 추가시간이 소요될 수 있으므로 가능한 한 일찍 제출하는 것을
+          추천드립니다.
+        </p>
+
+        <p className={subHeading}>필요한 서류 확인 방법</p>
+        <p className={paragraph}>
+          정확한 서류 목록은{" "}
+          <a
+            className={link}
+            href="https://teamdynamix.umich.edu/TDClient/154/Portal/KB/Article/7606/Requirements-Before-I-20-Can-Be-Issued"
+            target="_blank"
+            rel="noopener"
+          >
+            Requirements Before I-20 Can Be Issued
+          </a>
+          , 그리고{" "}
+          <a
+            className={link}
+            href="https://internationalcenter.umich.edu/isss/new-transfer-students"
+            target="_blank"
+            rel="noopener"
+          >
+            International Center 신입생 페이지
+          </a>{" "}
+          내에서 확인할 수 있습니다.
+        </p>
+      </>
     ),
   },
   {
-    title: "잔고증명서 발급 및 I-20 신청하기 (~5/31)",
+    title: "Housing 신청 & 건강 서류 준비",
     desc: (
-      <p>
-        (1) 유학생은 잔고 증명서를 제출해야 합니다. 이는 학교에 학비를 충분히 낼
-        자격이 있다는 것을 보여줌으로써 제출하실 때 최소 8만 달러(1년 치 학비)가
-        통장에 있어야 합니다. 부모님 혹은 본인 계좌에 8만 달러가 있다면 은행에
-        가셔서 잔고 증명서 영문으로 발급 부탁하시면 바로 발급해 주십니다. 해당
-        계좌에서는 하루간 입출금이 불가능하니 이점 참고해 주시기 바랍니다.
-        <br />
-        <br />
-        (2) 출입국 할 때 I-20 라는 서류가 가장 중요합니다. 해당 서류는 출국할
-        때에도 프린트 물을 공항에 가져가셔야 합니다. (일종의 신원 확인 서류/통행
-        서류) Offer letter 를 받자마자 I-20 신청서를 제출해야 합니다. 국제
-        학생들이 많기 때문에 뒤늦게 제출한다면 뒤에 있는 모든 절차가 느려져서
-        비자 받는 것 혹은 기숙사 이사하는 것까지도 일정이 불확실해져서
-        조급해집니다.
-      </p>
+      <>
+        <p className={paragraph}>
+          기숙사 신청과 건강 관련 서류 제출은 비자 준비와 동시에 진행할 수 있어요.
+          특히 기숙사는 신청 시기와 마감일이 중요하기 때문에, 입학을 확정했다면
+          가능한 한 빨리 확인하고 준비하는 것을 추천합니다.
+        </p>
+
+        <p className={subHeading}>Housing Application</p>
+        <p className={paragraph}>
+          신입생의 경우 미시간에 도착하기 전에 거주할 곳을 미리 정해두는 것을
+          권장합니다. U-M Housing 신청은 enrollment deposit을 낸 후 안내 이메일을
+          통해 진행할 수 있으며, application에서는 선호하는 룸 타입이나 생활 환경 등을
+          입력하게 됩니다.
+        </p>
+        <p className={paragraph}>
+          First-year housing application은 보통 봄에 열리고, 마감일 이후에는 선착순으로
+          배정될 수 있습니다. 또한 application에 기재한 선호 사항이 항상 보장되는 것은
+          아니기 때문에, 정확한 일정과 절차는 매년 U-M Housing 웹사이트에서 확인하는
+          것이 가장 안전합니다. 2026년 기준으로는 first-year housing application이 4월
+          2일에 열리고 5월 11일 11:59 PM EDT에 마감된다고 안내되어 있습니다.
+        </p>
+
+        <p className={subHeading}>예방접종 증명 제출</p>
+        <p className={paragraph}>
+          Michigan Housing에 거주하는 학생은 예방접종 기록을 제출해야 합니다. 현재
+          U-M 안내에 따르면 제출 대상에는 다음 백신 기록이 포함됩니다: MMR, MenACWY,
+          Meningitis B, Polio, Tdap, Varicella.
+        </p>
+        <p className={paragraph}>
+          예방접종 기록은 U-M의 Vax Viewer를 통해 제출하게 됩니다. 접종을 완료하지
+          않았거나 기록을 제출할 수 없는 경우에도, 관련 양식 또는 attestation을 제출해야
+          합니다. 기록 확인에는 시간이 걸릴 수 있고, 확인이 완료되지 않으면 housing
+          contract를 받는 데 문제가 생길 수 있으므로 기숙사 신청 후 가능한 한 빨리
+          제출하는 것이 좋습니다.
+        </p>
+      </>
     ),
   },
   {
-    title: "Advising Date 신청하기 (~5/31) & Virtual OT Course 듣기 (~6/6)",
+    title: "학사 준비",
     desc: (
-      <p>
-        (1) 행정 상의 서류가 어느 정도 되었다면 학교 수강 신청도 해야 하는데
-        Advising Date 때 신청 가능합니다. 따라서 Advising Date 는 일찍 신청하면
-        신청할수록 좋습니다. 원하는 수업을 다른 사람보다 일찍 선택할 수
-        있습니다. 어떤 과목을 들어야 할지 모르거나 어떤 학점을 이수 받았는지
-        확인하고 싶다면 해당 날짜에 Advisor 과 확인하면 됩니다.
-        <br />
-        <br />
-        (2) Virtual OT 에서는 학교에서 어떻게 시스템 (Wolverine Access 및
-        Canvas) 사용하고 어떠한 규칙을 가지고 있으며 어떠한 리소스를 활용해 줄
-        수 있는지 자세히 설명해 줍니다. 여기에서는 누구도 알려주지 않은 꿀팁들이
-        많이 있으니 잘 들어놓으면 도움이 많이 됩니다. (가끔가다가 귀찮아서 스킵
-        하시는 분도 있는데 스킵 한다면 나중에 알고 후회하는 부분들이 있기 때문에
-        꼭 잘 들어놓으시길 바랍니다.)
-      </p>
+      <>
+        <p className={paragraph}>비자 준비를 하는 동안 함께 진행해야 하는 부분입니다!</p>
+
+        <p className={subHeading}>Advising 일정 신청 & Virtual Orientation</p>
+        <p className={paragraph}>
+          보통 5~6월 사이에 진행됩니다. International Center에서 신입 유학생을 위한
+          오리엔테이션과 여러 워크숍을 운영하는데, 캠퍼스 생활, 이민 관련 정보, 학교
+          자원 등 핵심적인 내용을 다루기 때문에 미리 들어두면 확실히 도움이 됩니다.
+        </p>
+
+        <p className={subHeading}>Online Placement Exam</p>
+        <p className={paragraph}>
+          보통 6월 초까지가 마감입니다. 수학 및 외국어 배치고사 결과에 따라 수강할 수
+          있는 과목이 달라질 수 있으므로, 충분한 시간을 가지고 응시하는 것을
+          추천드립니다. 추가로, 한국에서 초등학교 또는 중·고등학교를 졸업하셨다면
+          Advisor에게 문의하여 외국어 시험을 면제받을 수 있는지 확인해 보시는 것을
+          추천드립니다.
+        </p>
+
+        <p className={subHeading}>학과 Pre-advising → Advising Meeting → 수강 신청</p>
+        <p className={paragraph}>
+          Canvas에서 학과 Pre-advising 모듈을 완료한 뒤 Advising Meeting을 진행하고,
+          이후 수강 신청을 하면 됩니다. 보통 7월 중·하순에 진행되며, 인기가 많은 수업은
+          금방 마감되기 때문에 최대한 일찍 완료해 두는 것을 추천드립니다.
+        </p>
+      </>
     ),
   },
   {
-    title: "Online Placement Exams 풀기 (~6/6)",
+    title: "F-1 비자 신청 & 입국 준비",
     desc: (
-      <p>
-        각 단과대마다 어떠한 시험을 봐야 하는지 다릅니다. 본인 웹사이트에서
-        확인한 후 시험 치르시길 바랍니다. 정말 큰 영향이 없는 시험들이 있고 학점
-        이수를 결정하는 시험들도 간혹 있기에 Advisor 께 문의하여 시험 준비하시면
-        됩니다.
-      </p>
+      <>
+        <p className={paragraph}>I-20를 받은 뒤부터는 속도가 중요해집니다.</p>
+
+        <p className={subHeading}>SEVIS 비용 납부 & 비자 인터뷰 예약</p>
+        <p className={paragraph}>
+          I-20를 받으면 SEVIS I-901 비용을 납부하고 주한미국대사관 비자 인터뷰를
+          예약합니다. 여름 성수기에는 예약이 금방 마감되기 때문에 I-20를 받자마자 바로
+          예약하는 것을 추천드립니다.
+        </p>
+
+        <p className={subHeading}>비자 인터뷰 준비</p>
+        <p className={paragraph}>
+          International Center에 F/J 비자 인터뷰 준비 영상이 마련되어 있습니다. 또한
+          미국 비자 대기 시간은 시기마다 크게 달라질 수 있으니 미리 확인해 두는 것을
+          추천드립니다.
+        </p>
+
+        <p className={subHeading}>항공권 구매</p>
+        <p className={paragraph}>
+          항공권은 비자 발급이 지연될 가능성을 고려해 비자 승인이 완료된 후 확정하는
+          것이 안전합니다. 인천(ICN) → 디트로이트(DTW) 노선은 보통 대한항공과 델타항공
+          공동운항이며, 기숙사 입주 가능 기간(보통 8월 하순)에 맞춰 도착 일정을 잡으시면
+          됩니다.
+        </p>
+
+        <p className={subHeading}>입국할 때 꼭 필요한 것</p>
+        <p className={paragraph}>
+          여권, F-1 비자, 서명된 I-20, 입학 및 재정 관련 서류 사본은 반드시 챙겨주세요.
+          또한, 입국 후 며칠 동안 사용할 식비와 공항에서 캠퍼스까지 이동할 때 사용할
+          교통비 정도의 현금도 준비해 두는 것을 추천드립니다.
+        </p>
+      </>
     ),
   },
   {
-    title: "Academic Unit's pre-advising activities (~6/6)",
+    title: "도착하고 첫 주 — 우선순위 순서대로",
     desc: (
-      <p>
-        (1) Canvas Setting <br />
-        (2) Academic Planning and Interest Survey <br />
-        (3) Before Advising Day: Checklist, Majors & Minors, Honor Code,
-        Involvement <br />
-        (4) Academic Advising Day <br />
-        (5) After Advising Day: Resources
-        <br />
-        <br /> 학교에서 공부해야 할 때의 조언들을 모아놓은 활동입니다. 여러 가지
-        좋은 정보 많이 알려 주니 무조건 기존에 예약해 놓은 Advising date 전에
-        완성해야 합니다. 완성을 하지 않는다면 Advising Date 가 연기되고 수강
-        신청 또한 연기가 되는데, 모든 1차 Advising Date 과 완료된 후에 재예약을
-        받기 때문에 순서가 엄청 밀려납니다. (필자는 가장 빠른 6월에 예약을
-        하였으나 해당 activities 를 완료하지 못하여 참석을 못 했고 모두가 다 한
-        후에 7월 중순 정도에 남은 수업 들을 눈물로 주워 담았습니다.)
-      </p>
+      <>
+        <p className={groupHeading}>출국 전</p>
+
+        <p className={taskHeading}>0. Pre-Departure Orientation(PDO) 참석 (선택)</p>
+        <p className={paragraph}>
+          출국 전 본국에서 열리는 대면 오리엔테이션으로, U-M 재학생·졸업생·International
+          Center 스태프에게 직접 질문할 수 있는 자리입니다. 2026년 서울 행사는 6월
+          19일입니다.
+        </p>
+
+        <p className={groupHeading}>도착 후 첫 주 (우선순위 순)</p>
+
+        <p className={taskHeading}>1. 의무 이민 체크인(Mandatory Immigration Check-In)</p>
+        <p className={paragraph}>
+          신규 F-1/J-1 학생은 합법적 이민 신분 유지를 위해 International Center와의
+          이민 체크인을 반드시 완료해야 합니다. 이는 권장이 아니라 연방 규정상 의무이며,
+          완료하지 않으면 합법 이민 신분을 잃을 수 있습니다.
+        </p>
+        <ul className={list}>
+          <li>미국에 도착한 이후에 진행해야 합니다.</li>
+          <li>
+            보통 I-20/DS-2019의 프로그램 시작일 약 30일 전에 umich.edu 이메일로 체크인
+            안내와 절차가 전송되며, 해당 메일에 본인 학기용 정확한 링크가 포함되어
+            있습니다.
+          </li>
+          <li>
+            International Center의 Canvas 체크인 코스를 이수하고 이민 서류 스캔본을
+            제출하면 완료됩니다. 어떤 서류가 필요한지는 코스 안에서 안내합니다.
+          </li>
+          <li>체크인을 완료해야 미시간 운전면허와 SSN 신청이 가능합니다.</li>
+        </ul>
+
+        <p className={taskHeading}>2. 대면 오리엔테이션(In-Person Orientation)</p>
+        <p className={paragraph}>오리엔테이션은 크게 두 가지로 나뉩니다.</p>
+        <ul className={list}>
+          <li>
+            <strong>Go Blue Orientation (필수):</strong> Office of New Student
+            Programs(ONSP)가 주관하며, 가상과 대면 요소가 결합된 하이브리드 방식으로
+            모든 신입·편입 학부생에게 필수입니다. 여름·가을 입학생은 보통 4월에 U-M
+            이메일로 등록 안내를 받으며, 온라인 코스와 배치고사를 먼저 완료한 뒤 가상
+            학업 상담을 진행합니다.
+          </li>
+          <li>
+            <strong>International Student and Family Welcome Day (강력 권장):</strong>{" "}
+            International Center가 주관하는 대면 행사입니다. 2026년 8월 24일(월)에
+            열리며, 문화 적응·이민 신분 유지·건강보험 사용법 등을 안내하고 다른 신입
+            국제학생을 만날 수 있습니다. 교내 기숙사 계약자는 7월 1일까지 등록 시 8월
+            23일(일) 조기 입주가 가능합니다.
+          </li>
+        </ul>
+
+        <p className={taskHeading}>3. MCard(학생증) 발급</p>
+        <p className={paragraph}>
+          일반적으로 Michigan Union → Ground Floor → Union Tech Shop, 또는 North
+          Campus의 Pierpont Commons(2101 Bonisteel Blvd.)에 있는 MCard Center에서
+          학생증을 발급받을 수 있습니다. MCard 앞면에서는 8자리 UMID(학생 아이디)와 본인
+          신분을, 뒷면에서는 본인의 Uniqname을 확인할 수 있습니다.
+        </p>
+        <ul className={list}>
+          <li>
+            Uniqname은 본인의 학교 메일 @ 앞 아이디와 일치합니다. (예:
+            honggildong@umich.edu → Uniqname은 honggildong)
+          </li>
+          <li>
+            MCard를 발급받으면 캠퍼스의 파란 버스(학교 M 버스)와 하얀 버스(The Ride)를
+            무료로 이용할 수 있습니다.
+          </li>
+          <li>
+            Nursing처럼 별도로 발급하는 학과도 있으므로, 먼저 Union Tech Shop에 들러
+            확인한 뒤 별도 발급이 필요하면 본인 해당 학과에 연락하여 받으면 됩니다.
+          </li>
+        </ul>
+
+        <p className={taskHeading}>4. 학교 계정 세팅(Okta Verify)</p>
+        <p className={paragraph}>
+          Wolverine Access 등 학교 시스템 접속을 위한 계정을 설정합니다. 아이디는 본인의
+          Uniqname이며, 비밀번호는 본인이 직접 설정합니다. 참고로 2026년 2월부터 기존
+          Duo가 Okta Verify로 대체되었습니다.
+        </p>
+        <ul className={list}>
+          <li>wolverineaccess.umich.edu에 접속합니다.</li>
+          <li>Uniqname 또는 이메일을 입력합니다.</li>
+          <li>UMICH 비밀번호를 입력합니다.</li>
+          <li>
+            Okta Verify 셋업을 진행합니다. (핸드폰과 태블릿 두 기기 모두 설치하는 것을
+            권장합니다.)
+          </li>
+          <li>
+            셋업이 끝나면 해당 아이디와 비밀번호로 캠퍼스 내 MWireless 와이파이에 연결할
+            수 있습니다.
+          </li>
+        </ul>
+
+        <p className={taskHeading}>5. UM 건강보험 확인</p>
+        <p className={paragraph}>
+          국제학생은 UM 건강보험 가입이 필수이므로 반드시 확인해야 합니다. 이민 체크인을
+          완료하면 자동으로 BCN(Blue Care Network) 기반 국제학생 보험(IHI)에 가입됩니다.
+          보험 시작일은 I-20/DS-2019의 프로그램 시작일입니다.
+        </p>
+        <ul className={list}>
+          <li>
+            가입되면 enrollee ID(가입자 번호)가 담긴 이메일이 발송되며, 안내에 따라 BCN
+            회원 계정을 만들면 가상 보험카드를 확인할 수 있습니다.
+          </li>
+          <li>
+            실물 카드는 Wolverine Access에 등록된 주소로 우편 발송되므로, 본인 주소가
+            정확히 등록되어 있는지 확인해야 합니다.
+          </li>
+        </ul>
+
+        <p className={taskHeading}>6. 은행 계좌 개설</p>
+        <p className={paragraph}>
+          국제학생도 SSN 없이 여권과 I-20만으로 계좌를 개설할 수 있는 은행이 많으므로,
+          도착 후 빠르게 진행하는 것이 좋습니다.
+        </p>
+        <ul className={list}>
+          <li>
+            캠퍼스 주변 주요 은행으로는 Chase, Bank of America, PNC, 그리고 미시간대
+            구성원 대상 신용조합인 University of Michigan Credit Union(UMCU)이 있습니다.
+          </li>
+          <li>
+            필요 서류는 보통 여권, I-20/비자, 미국 주소 증빙이며, 은행에 따라 보조
+            신분증을 요구하기도 합니다.
+          </li>
+          <li>
+            SSN이 없어도 개설 가능한 경우가 많으나 은행마다 정책이 다르므로, 방문 전에
+            해당 지점에 필요 서류를 확인하는 것을 권장합니다.
+          </li>
+        </ul>
+
+        <p className={taskHeading}>7. 휴대폰 개통</p>
+        <p className={paragraph}>
+          미국 도착 직후에는 신용 기록이 없으므로, 신용 조회가 필요 없는 선불(prepaid)
+          요금제가 개통이 가장 간편합니다.
+        </p>
+        <ul className={list}>
+          <li>
+            대형 통신사로는 T-Mobile, Verizon, AT&T가 있으나, 후불 요금제는 신용 조회나
+            SSN을 요구할 수 있습니다.
+          </li>
+          <li>
+            Mint Mobile, US Mobile, Visible 같은 저가 선불/MVNO는 eSIM으로 즉시 개통이
+            가능하며 신용 조회가 필요 없습니다.
+          </li>
+          <li>
+            한국 번호로 오는 인증 문자 수신이 필요하면, 미국 eSIM과 한국 SIM을
+            병행하거나 인증 앱을 활용하는 방법을 고려합니다.
+          </li>
+        </ul>
+
+        <p className={taskHeading}>8. 수업 시간표 확인</p>
+        <p className={paragraph}>
+          Wolverine Access → Students → Student Business → Student Center →
+          Backpack/Registration → My Class Schedule 경로에서 본인이 수강하는 수업과
+          시간표를 확인할 수 있습니다.
+        </p>
+        <ul className={list}>
+          <li>학기 시작 전 학교 이메일을 통해 수업별로 미리 준비해야 할 사항이 있는지 확인합니다.</li>
+        </ul>
+
+        <p className={taskHeading}>9. 교실 사전 답사</p>
+        <p className={paragraph}>
+          캠퍼스를 직접 돌아다니며 본인이 수업을 듣는 교실의 위치를 미리 둘러봅니다.
+        </p>
+
+        <p className={taskHeading}>10. 생필품 구매</p>
+        <p className={paragraph}>
+          Target, Kroger, Trader Joe’s 등의 마트에 들러 생필품과 필요한 물건을 미리
+          구매합니다.
+        </p>
+
+        <p className={groupHeading}>개강 후</p>
+
+        <p className={taskHeading}>11. Festifall 참석</p>
+        <p className={paragraph}>
+          미시간대 최대 규모의 동아리·캠퍼스 참여 박람회로, 동아리를 찾고 친구를 사귀기에
+          가장 좋은 자리입니다.
+        </p>
+        <ul className={list}>
+          <li>
+            900개가 넘는 학생 단체가 참여하며, 전체 목록은 Maize Pages에서 확인할 수
+            있습니다.
+          </li>
+          <li>
+            2026년 일정은 Festifall-North가 8월 31일(월) 오후 5–8시 Gerstacker
+            Grove(노스캠퍼스), Festifall-Central이 9월 2일(수) 오후 3–5시 및 6–8시 the
+            Diag(센트럴캠퍼스)에서 열립니다.
+          </li>
+        </ul>
+      </>
     ),
   },
   {
-    title: "Acadamic Advising Meeting 후 수강신청하기 (7/19~7/25)",
+    title: "중요 연락처",
     desc: (
-      <p>
-        위에서 언급했던 Advising Date 입니다. Orientation 을 Zoom 으로 다 같이
-        진행한 후 미리 선택했던 수업 들을 담아 수강 신청했습니다. KISA 에서 수강
-        신청을 돕기 위한 Course Evaluation Guide 도 제작했으니 신입생 환영회에
-        참석하신 후 자료 받으면 도움이 많이 될 것입니다. 7월 이후에도 학기
-        시작하고도 얼마든지 수업을 Add/ Drop 가능합니다. Advisor 과 미팅을 해도
-        좋고 한국인 선배들과 얘기해 보아도 좋으니 꼭 수업을 잘 신청하길
-        바랍니다.
-      </p>
+      <>
+        <p className={subHeading}>이민 체크인 · 비자 · 신분 문제</p>
+        <p className={paragraph}>International Center</p>
+        <ul className={list}>
+          <li>전화: 734-764-9310</li>
+          <li>위치: 1500 Student Activities Building, 515 E Jefferson St, Ann Arbor, MI 48109</li>
+          <li>
+            이메일:{" "}
+            <a className={link} href="mailto:icenter@umich.edu">
+              icenter@umich.edu
+            </a>
+          </li>
+          <li>체크인 안내 메일이 안 왔거나 SEVIS 관련 문제가 있을 때 여기로 연락하면 됩니다.</li>
+        </ul>
+
+        <p className={subHeading}>건강보험(IHI/BCN)</p>
+        <p className={paragraph}>International Center 보험 오피스</p>
+        <ul className={list}>
+          <li>
+            이메일:{" "}
+            <a className={link} href="mailto:ihi@umich.edu">
+              ihi@umich.edu
+            </a>
+          </li>
+          <li>전화: 734-647-2303 (메시지 남기면 보험 어드바이저가 회신)</li>
+          <li>가상 드롭인 상담도 운영합니다. 가입 여부·카드 발급 등 보험 관련 문의는 여기로.</li>
+        </ul>
+
+        <p className={subHeading}>학교 계정 · Okta Verify · MWireless 와이파이</p>
+        <p className={paragraph}>ITS Service Center</p>
+        <ul className={list}>
+          <li>전화: 734-764-HELP (734-764-4357)</li>
+          <li>채팅: chatsupport.it.umich.edu</li>
+          <li>로그인·2단계 인증·와이파이 문제는 여기.</li>
+        </ul>
+
+        <p className={subHeading}>MCard(학생증)</p>
+        <ul className={list}>
+          <li>발급은 Union Tech Shop 등 issuing station에서 진행합니다.</li>
+          <li>분실·교체·요금 관련: Shared Services Center (1000 Victors Way) — 734-615-2000</li>
+          <li>분실·도난 신고: DPSS — 734-763-1131</li>
+        </ul>
+
+        <p className={subHeading}>진료 · 건강 문제 (UHC, 구 UHS)</p>
+        <p className={paragraph}>University Health & Counseling</p>
+        <ul className={list}>
+          <li>전화: 734-764-8320</li>
+          <li>
+            이메일:{" "}
+            <a className={link} href="mailto:ContactUHC@med.umich.edu">
+              ContactUHC@med.umich.edu
+            </a>
+          </li>
+          <li>위치: 207 Fletcher Street</li>
+          <li>학생은 보통 여기를 먼저 이용하면 비용이 절감됩니다.</li>
+        </ul>
+
+        <p className={subHeading}>오리엔테이션 (Go Blue Orientation)</p>
+        <p className={paragraph}>Office of New Student Programs (ONSP)</p>
+        <ul className={list}>
+          <li>
+            웹사이트:{" "}
+            <a className={link} href="https://onsp.umich.edu" target="_blank" rel="noopener">
+              onsp.umich.edu
+            </a>
+          </li>
+          <li>
+            등록 안내는 보통 U-M 이메일로 오므로 메일을 자주 확인하는 게 좋습니다. (별도
+            직통 번호는 사이트에서 확인하세요.)
+          </li>
+        </ul>
+
+        <p className={subHeading}>안전 · 긴급</p>
+        <ul className={list}>
+          <li>DPSS (캠퍼스 안전·경찰): 734-763-1131</li>
+        </ul>
+
+        <p className={subHeading}>KISA</p>
+        <ul className={list}>
+          <li>
+            이메일:{" "}
+            <a className={link} href="mailto:umichkisa@gmail.com">
+              umichkisa@gmail.com
+            </a>
+          </li>
+        </ul>
+      </>
     ),
   },
   {
-    title: "I-20 받고 F-1 비자 신청하기 (~8/)",
+    title: "혼자 끙끙대지 마세요, 우리가 다 겪어봤습니다",
     desc: (
-      <p>
-        해당 절차가 가장 복잡합니다. 5월에 신청한 I-20 가 8월이 되어서야
-        나왔습니다. 그렇기에 비자도 늦게 신청할 수밖에 없었습니다. <br />
-        (1) SEVIS FEE 제출: 카드로 온라인 결제했던 것으로 기억합니다. <br />
-        (2) DS 160 작성 (약 90분 소요): 웹사이트가 따로 있습니다. 본인 정보를
-        모두 온라인으로 작성 및 제출하면 됩니다. <br />
-        (3) 인터뷰 비용 제출 (기업은행 방문 후 현금 제출): 주변 기업은행에 가서
-        안내받은 계좌에 입금을 했던 것으로 기억합니다. <br />
-        (4) 인터뷰 예약하기: 아무래도 해당 시즌에 출국하는 유학생들이 많다 보니
-        인터뷰 시간 예약하기가 힘들 수 있습니다. 최대한 빨리 진행을 하시는 게
-        좋습니다. <br />
-        (5) 서류 준비하기: 웹사이트에서 요청하는 서류들을 취합하여 서류 원본 및
-        사본을 준비하여 인터뷰 보는 곳에 가야 합니다. 제출 필수 서류가 누락되면
-        인터뷰를 다시 예약해야 할 수 있으니 인터뷰 전 빠짐없이 체크하고 가시길
-        바랍니다.
-        <br />
-        필자는 다행히 인터뷰를 일찍 보았고 비자가 4일 만에 나왔습니다. 사람이
-        얼마나 많으냐에 따라서 비자 발급되는 시간이 오래 걸릴 수 있습니다.
-        친구는 2~3주 만에 나왔다고 들었습니다 따라서 I-20 부터 모든 절차를
-        미리미리 준비를 해 두시고 하면 됩니다.
-      </p>
-    ),
-  },
-  {
-    title: "In-person OT 듣기 (Late August)",
-    desc: (
-      <p>
-        학교에서 오리엔테이션을 따로 제공합니다. 관련 이메일이 발송되고 날짜를
-        신청하여 오리엔테이션을 들을 수 있는데 학교의 기본적인 것들을 알려주며
-        점심 도시락도 제공합니다. 친구들을 사귈 수 좋은 기회입니다.
-      </p>
-    ),
-  },
-  {
-    title: "출국하기 (Late August)",
-    desc: (
-      <p>
-        모든 유학생들이 출국하는 이 시즌에 숙소는 예약이 많이 되어 있는 상태이기
-        때문에 혹시나 가족과 같이 방문을 하게 되신다면 사전에 숙소를 예약하시길
-        바랍니다. 방을 구하지 못하여 오래 머물지 못하시거나 학생은 도착했는데
-        짐을 놓을 곳이 없어서 번거로워하는 상황이 종종 있습니다. 여행 겸 타주에
-        방문하여 지내는 것도 일종의 방법이니 꼭 미리 예약하시길 바랍니다.
-      </p>
-    ),
-  },
-  {
-    title: "DTW (디트로이트 공항)에서 학교 Campus 로 오기",
-    desc: (
-      <p>
-        앤아버에서 가장 가까운 국제공항인 Detroit Metro Airport는 자동차로 약
-        25분 거리인 Romulus에 있습니다. KAL과 Delta 비행기의 경우 인천에서
-        Detroit까지 매일 직항 편이 있으며 아시아나와 UA의 경우 여러 경유 편이
-        있습니다. 직항 편은 약 12-13시간 정도 걸리며 경유편은 16-17시간 정도
-        걸립니다.
-        <br />
-        알고 있는 지인이 없는 경우, 보통 공항과 앤아버 사이를 운행하는 택시와
-        공항 셔틀버스 (Michigan Flyer-AirRide)를 이용합니다. 택시는 편도 $60-70
-        정도의 비용이 부과됩니다. 공항 셔틀버스의 경우 편도 $12의 비용이 들고
-        앤아버 시내에 정거장이 두 군데 있으며 (BTC, Blake Transit Center - 328
-        S. Fifth Ave와 Kensington Court Hotel - 610 Hilton Blvd.) BTC에서 앤아버
-        시내버스 (AAATA, Ann Arbor Area Transportation Authority)로 환승해
-        목적지에 가까운 정거장을 찾을 수 있습니다.
-      </p>
-    ),
-  },
-  {
-    title: "기숙사 Move-in 하기 (8/24~29)",
-    desc: (
-      <p>
-        마지막으로 기숙사 Move-in Date 도 미리 선택하여 당일에 Move-in 하면
-        됩니다. 기숙사는 먼저 예약해서 도착한 사람이 침대를 먼저 선택할 수
-        있습니다. 필자도 25일 정도에 예약을 하여 먼저 도착하였고 1년 동안 원하는
-        위치에서 잠들 수 있었습니다. 침대 위치가 생각보다 중요하니 꼭 미리
-        가시길 바랍니다. 대부분의 방이 엄청 넓지는 않기 때문에 보통 2층 침대를
-        만들어서 아래에 책상 혹은 짐을 두는 형태로 변형합니다. 마지막으로 기숙사
-        OT 도 마치면 대학교를 제대로 시작할 수 있는 발판이 마련됩니다!
-        <br />
-        <br />* International Center Check-in and Orientation Workshop
-        <br />
-        기존에는 International Center 에 방문 후 체크인을 해야 했지만 Canvas
-        Module 의 형식으로 체크인 프로세스가 개편되었습니다. 자세한 사항은
-        Canvas Module 내 내용을 확인해 주세요.
-      </p>
-    ),
-  },
-  {
-    title: "은행계좌 만들기",
-    desc: (
-      <p>
-        은행에 갈 때는 각종 신분증, I-20 과 처음 계좌를 열 수 있을 정도의
-        금전(현금 및 여행자수표 등)을 가지고 갑니다. 은행 계좌는 우선 여권과
-        I-20 만 있으면 문제없이 열 수 있고, 나중에 Social Security Number를 받게
-        되면, 은행에 알려서 개인정보를 갱신해야 합니다. 계좌를 개설 시
-        개인정보가 필요하므로, 만약 주소나 전화번호가 아직 없다면, 대신 우편물을
-        받을 수 있는 가까운 친구나 아는 사람의 주소나 전화번호를 사용하고 나중에
-        변경하면 됩니다. 현금카드(debit card)에 사용할 4자리 숫자인 PIN
-        (Personal Identification Number)을 알려주고 나면 은행 계좌 개설은 마무리
-        됩니다.
-        <br />
-        <br />
-        은행계좌는 크게 Savings account와 Checking account가 있습니다. Savings
-        account는 우리나라에서의 저축예금과 같으며 Checking account는 가계수표를
-        발행할 수 있는 당좌예금 계좌와 같다고 생각하면 됩니다. Savings account는
-        이자가 있으나 Checking account의 경우에는 이자가 붙지 않으며, 은행에
-        따라 계좌와 관련된 옵션이 다양하기 때문에 신청 시 잘 확인해 두어야
-        합니다. 예들 들면, 계좌잔고를 일정액 이상으로 유지하지 못할 경우,
-        일정액의 벌금이 부과될 수도 있고, 일정한 기간 동안 은행 계좌를 사용하지
-        않으면 일정액의 계좌관리비를 청구하는 경우도 있습니다. 미국에서 개인수표
-        personal check는 모든 일에 필요하므로, 반드시 checking account는 가지고
-        있어야 합니다.
-        <br />
-        <br />
-        Checking account를 열게 되면 우선 이름과 주소가 적혀있지 않은 임시 수표
-        책(Check book)을 받게 됩니다. 그리고 1-2주 정도 기다리면 이름과 주소가
-        적힌 수표책이 현금카드와 함께 배달됩니다. UM 학생들이 많이 사용하는
-        은행은 National City Bank, TCF Bank, Comerica Bank, PNC Bank, Chase
-        Bank, UM Credit Union 등이 있습니다. 이 중에서 PNC은 2015년 5월 1일부터
-        미시간 대학교와의 계약을 통해 학생증인 M-Card를 현금카드로 사용할 수
-        있습니다. UM Credit Union은 우리나라의 신용금고 같은 것인데, UM 학생에
-        대해 차나 집을 살 때 loan을 쉽게 받을 수 있고 신용카드의 발급이
-        용이하다는 장점이 있습니다.
-        <br />
-        <br />
-        미국의 은행 이자는 매우 낮으므로 (Saving account가 많아야 2-3 % 정도며
-        checking의 경우에는 아예 없거나 1% 정도), 금리보다는 사용의 편리성을
-        따져서 은행을 선택하는 것이 좋습니다. 즉, 자주 다니는 곳에 현금인출기나
-        은행 지점이 있는지(특히 차가 없는 사람의 경우), 무료로 수표나 현금
-        인출기를 사용할 수 있는 최소 비치액은 얼마나 되는지, Debit card는 언제
-        받을 수 있는지 (은행에 따라서는 약간의 신용이 쌓일 때까지 6개월정도
-        기다릴 것을 요구하는 곳도 있습니다) 등의 요인을 고려하면 좋습니다. 타행
-        소유의 ATM을 사용해 현금을 인출하는 경우 건당 $2-$3의 수수료가 부과됨을
-        유념해야 합니다.
-      </p>
-    ),
-  },
-  {
-    title: "UM Uniqname 받기",
-    desc: (
-      <p>
-        대부분의 UM 신입생들은 학교에서 받은 “one-time identifier,” UM ID
-        number, 그리고 자신의 생년월일을 이용해, Wolverineaccess로 접속함으로써
-        자신의 unique name과 password를 만들게 됩니다. 만약 미국에 도착한
-        당시까지도 자신의 unique name과 password이 없다면, Information
-        Technology Central Services (ITCS) Accounts Office를 방문해 만들어야
-        합니다. ITCS Accounts Office는 Michigan Union (530 S. State St.) 지하에
-        위치하고 있으며, 월-금 8-4:30분 사이에 방문하면 됩니다.
-        (http://its.umich.edu/help/) University of Michigan의 전산망은 크게
-        나누어서 ITD (Information Technology Division)와 CAEN (Computer Aided
-        Engineering Network)로 구분되는데 전자는 모든 학생들이 공유하는 전산망인
-        반면 후자는 공대 전용 전산망입니다.
-      </p>
-    ),
-  },
-  {
-    title: "학생증 (M-Card) 받기",
-    desc: (
-      <p>
-        http://www.mcard.umich.edu/ 전자회로가 내장되어 있는 UM의 학생증
-        M-Card는 신분증의 역할은 물론이고, 은행 현금인출기, 도서 대출카드,
-        도서관/컴퓨터실/기숙사의 Card Key, 체육시설 입실, 전화 카드, 기숙사 식당
-        이용 시 Entree plus point 적립, 커피/음료수 자판기의 동전 대용, 앤아버
-        시내 버스 탑승 카드 등에 다목적으로 사용됩니다.
-        <br />
-        <br />
-        M-Card를 발급 받기 위해서는 Central Campus에 위치한 Student Activity
-        Building(SAB, 515 E. Jefferson St.) 이나 North Campus의 Pierpont
-        Commons(2101 Bonisteel Blvd.)에 있는 Entree Plus Office로 찾아가야
-        합니다. 초기 신청 시 입학허가서에 표시되어 있는 UM ID number가 앞면에,
-        unique name이 뒷면에 찍혀 나옵니다. 신청 당시 디지털카메라로 사진을 찍게
-        되니, 차림새에 약간 신경을 써 두는 것이 좋습니다. 사진이 마음에 들지
-        않으면 얼마든지 부담없이 재촬영을 요구할 수 있습니다.
-        <br />
-        <br />
-        혹시라도 M-Card를 분실하셨거나 카드 인식이 잘 안된다면 (가끔 발생함),
-        Michigan Union 지하 1층에 Michigan Tech Shop을 방문하셔서 새로운 카드를
-        언제든지 재발급 받으실 수 있습니다.
-      </p>
-    ),
-  },
-  {
-    title: "운전면허 / Michigan ID",
-    desc: (
-      <p>
-        앤아버에서의 등교나 간단한 쇼핑은 걷기, 자전거 또는 대중교통수단과 학교
-        버스로 가능합니다. 그러나, 앤아버의 대중교통수단이 대도시만큼 편리하지는
-        않으므로 직접 차를 소유할 생각이 아니더라도 자동차 운전은 할 수 있는
-        것이 여러모로 편리합니다. 또 미국에서 운전면허증은 우리나라에서의
-        주민등록증과 같은 신분증으로 사용되므로 설령 운전을 하지 않을지라도
-        가지고 있는 것이 편리합니다. 운전면허증 만들 시, 한국에서 미리
-        국제면허증과 한국 운전면허증을 가지고 오면 운전 경험자로 인정되어서
-        미시간 운전면허증을 발급받을 수 있습니다. Secretary of State Office
-        웹사이트에 들어가서 먼저 잡아야 합니다. 예약 후 방문 시 지참 필요한
-        것들은 한국 운전면허증/국제 면허증, SSN, 여권, Proof of Michigan
-        residency 입니다. 미시간에 거주한다는 것을 증명하는 자료는 유틸리티 빌,
-        미시간 고등학교 또는 대학교 성적표, 건강보험 등등이 있습니다. 렌트카
-        운전을 전혀 하지 못하는 경우에는 Michigan State ID을 만들 것을 권합니다.
-        수표를 사용하거나, 술집에서 신분증 확인을 요구할 때 UM M-Card는
-        생년월일에 관한 정보를 담고 있지 않아서 인정받지 못하기 때문에 별도의
-        신분증이 없는 경우 항상 여권을 소지하고 다녀야 합니다. 운전면허증이나
-        Michigan State ID는 이런 수고를 덜어 줄 수 있습니다.
-      </p>
-    ),
-  },
-  {
-    title: "Social Security Number",
-    desc: (
-      <p>
-        Social Security Number(사회보장번호)는 미국에 살고 있는 사람으로서 경제
-        행위를 하거나 직장을 가지거나 공공기관 등을 이용하고자 할 때 반드시
-        필요합니다. 과거에는 유학 첫해에 인터네셔널센터를 통해 모든 유학생이
-        사회보장번호를 신청하고 발급받았으나, 9/11 이후 사회보장번호는 실제
-        학교에서 일을 하게 되는 시점에서만 발급받게 됩니다. 즉, 미국 유학 첫
-        해에 학교에서 장학금(fellowship)을 받는 경우에는 아직 사회보장번호를
-        발급받지 못하며, 교내 카페 알바, 도서관 알바 등 노동의 대가로
-        소득(income)을 얻는 경우에, 사회보장번호가 비로소 발급됩니다. 연말에
-        세금 정산 시 동반자의 번호도 필요합니다. 동반자의 경우 9/11 테러 이후
-        SSN을 받을 수 없도록 되었으므로 ITIN (Individual Taxpayer Identification
-        Number)을 대신 사용해야 됩니다. 따라서, 도착 즉시 신청할 필요는 없으나,
-        여유가 있을 때 가능한 속히 신청하는 것이 좋습니다. 신청 장소와
-        구비서류는 다음과 같습니다.
-        <br />
-        <br />
-        I-20 신청방법 <br />
-        신청 장소 : Federal Building The Social Security Administration office,
-        3971 Research Park Drive, Ann Arbor, MI 48108 필요한 서류 : 여권, 비자,
-        I-94, I-20 (혹은 IAP-66) 신청 후 일주일 정도 뒤에 신청양식에 기재한
-        주소로 SSN 이 적혀있는 작은 카드가 배달됩니다. 카드는 안전한 곳에 잘
-        두시고, 번호는 항상 기억하고 있는 것이 편리합니다.
-      </p>
+      <>
+        <p className={paragraph}>
+          KISA는 미시간에서 가장 큰 한인 학부생 단체입니다. 2000년부터 한인 학생들이 새
+          환경에 잘 적응하도록 돕는 게 우리가 제일 중요하게 생각하는 일입니다.
+        </p>
+
+        <p className={subHeading}>막히면 물어보기</p>
+        <p className={paragraph}>
+          위 절차 중에 막히는 게 있으면, 먼저 겪어본 선배한테 물어보는 게 제일 빠릅니다.
+        </p>
+        <p className={paragraph}>
+          신편입생 카카오톡 오픈채팅방:{" "}
+          <a className={link} href="https://open.kakao.com/o/g60OKyri" target="_blank" rel="noopener">
+            https://open.kakao.com/o/g60OKyri
+          </a>
+        </p>
+
+        <p className={subHeading}>도착 전후 행사</p>
+        <ul className={list}>
+          <li>
+            <strong>도착 전 (한국):</strong> 한국에서 열리는 PDO, 일락, 신편입생 환영회가
+            준비되어 있습니다.
+          </li>
+          <li>
+            <strong>도착 후 (앤아버):</strong> 개강 후에는 Festifall, 매스미팅, 개강포차
+            등을 통해 KISA 멤버들을 비롯한 다양한 한인 사람들과 연결될 수 있습니다.
+          </li>
+        </ul>
+
+        <p className={subHeading}>선배·동문 네트워크</p>
+        <p className={paragraph}>
+          전 세계에 퍼져 있는 한인 동문들과 연결되는 것도 KISA가 신경 쓰는 부분입니다.
+        </p>
+
+        <p className={subHeading}>가입 / 문의</p>
+        <p className={paragraph}>
+          보다 다양한 KISA의 소식과 가입 안내는 아래 공식 링크를 확인해 주세요.
+        </p>
+        <ul className={list}>
+          <li>
+            공식 웹사이트:{" "}
+            <a className={link} href="https://www.umichkisa.com/" target="_blank" rel="noopener">
+              https://www.umichkisa.com/
+            </a>
+          </li>
+          <li>
+            공식 인스타그램:{" "}
+            <a className={link} href="https://www.instagram.com/kisa_michigan/" target="_blank" rel="noopener">
+              https://www.instagram.com/kisa_michigan/
+            </a>
+          </li>
+        </ul>
+      </>
     ),
   },
 ];

@@ -31,7 +31,7 @@ mt-8 md:mt-10 lg:mt-12 w-11/12 md:w-10/12 lg:w-9/12 px-2 md:px-4 lg:px-6"
         <h1
           className={`${sejongHospitalBold.className} text-xl md:text-2xl lg:text-3xl`}
         >
-          신입생이 입학 전에 해야 할 일
+          미시간 신입생 가이드
         </h1>
         <p
           className={`${sejongHospitalLight.className} text-center text-base md:text-lg lg:text-xl`}
@@ -43,7 +43,7 @@ mt-8 md:mt-10 lg:mt-12 w-11/12 md:w-10/12 lg:w-9/12 px-2 md:px-4 lg:px-6"
           정확한 정보는 꼭 학교 공식 이메일 혹은 웹사이트를 통해서 확인해 주시기
           바랍니다.
           <br />
-          <br />* 아래 타임라인은 2022년 Fall 입학 기준으로 작성된 글입니다.
+          <br />* 아래 내용과 날짜는 2026년 입학 사이클을 기준으로 작성되었습니다.
         </p>
       </div>
 
