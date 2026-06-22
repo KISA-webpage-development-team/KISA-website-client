@@ -25,6 +25,9 @@ export default function InfoCheckListPage() {
           필요한 정보 및 제출해야 할 서류가 다를 수 있기에 정확한 정보는 꼭 학교
           공식 이메일 혹은 웹사이트를 통해서 확인해 주시기 바랍니다.
         </p>
+        <p className="text-sm text-foreground max-w-prose">
+          * 아래 내용과 날짜는 2026년 입학 사이클을 기준으로 작성되었습니다.
+        </p>
       </header>
 
       {/* Checklist accordion */}
