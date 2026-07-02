@@ -7,8 +7,6 @@ type CourseCardProps = {
 };
 
 export default function CourseCard({ course }: CourseCardProps) {
-  const ratingDisplay = course.averageProfessorRating.toFixed(1);
-
   return (
     <Link
       href={`/courses/${encodeURIComponent(course.code)}`}
@@ -20,12 +18,9 @@ export default function CourseCard({ course }: CourseCardProps) {
       <div className="mb-1 line-clamp-1 text-sm text-gray-600">
         {course.name}
       </div>
-      <div className="mb-3 text-xs text-gray-400">
+      <div className="text-xs text-gray-400">
         {course.department} · 리뷰 {course.reviewCount}개
       </div>
-      <span className="inline-block rounded-full bg-michigan-maize px-2 py-0.5 text-xs font-bold text-michigan-blue">
-        ★ {ratingDisplay}
-      </span>
     </Link>
   );
 }

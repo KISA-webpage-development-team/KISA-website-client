@@ -15,7 +15,6 @@ const defaultCommonInfo: CourseCommonInfo = {
   labAttendance: false,
   exam: "",
   workload: "5~10시간",
-  officeHours: "",
 };
 
 export function resetCourseStore(): void {
@@ -60,7 +59,6 @@ export const coursesHandlers = [
       labAttendance: body.labAttendance as boolean,
       exam: body.exam as string,
       workload: body.workload as CourseCommonInfo["workload"],
-      officeHours: body.officeHours as string,
     };
     const newReview: Review = {
       reviewid: nextReviewId++,

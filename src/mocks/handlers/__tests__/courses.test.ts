@@ -75,7 +75,6 @@ describe("MSW courses handlers", () => {
       workload: "5~10시간",
       courseComment: "테스트 리뷰입니다.",
       professors: [{ name: "Test Prof", rating: 4, comment: "좋아요" }],
-      officeHours: "월요일 오후 2시",
     };
 
     it("creates a review and returns 201", async () => {

@@ -8,21 +8,18 @@ const courses: SimpleCourse[] = [
     name: "Data Structures and Algorithms",
     department: "EECS",
     reviewCount: 3,
-    averageProfessorRating: 4.2,
   },
   {
     code: "MATH 116",
     name: "Calculus II",
     department: "Mathematics",
     reviewCount: 4,
-    averageProfessorRating: 3.1,
   },
   {
     code: "EECS 376",
     name: "Foundations of Computer Science",
     department: "EECS",
     reviewCount: 2,
-    averageProfessorRating: 3.8,
   },
 ];
 

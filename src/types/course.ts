@@ -13,7 +13,6 @@ interface SimpleCourse {
   name: string;
   department: string;
   reviewCount: number;
-  averageProfessorRating: number;
 }
 
 interface CourseCommonInfo {
@@ -23,7 +22,6 @@ interface CourseCommonInfo {
   labAttendance: boolean;
   exam: string;
   workload: Workload;
-  officeHours: string;
 }
 
 interface SimpleReview {
@@ -56,7 +54,6 @@ interface NewReviewBody {
   workload: Workload;
   courseComment: string;
   professors: Professor[];
-  officeHours: string;
 }
 
 interface JokboFile {

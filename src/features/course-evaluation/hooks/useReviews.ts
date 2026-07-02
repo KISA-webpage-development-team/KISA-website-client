@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useCourseReviews } from "@/apis/courses/swrHooks";
 import { likeReview } from "@/apis/courses/mutations";
-import type { Review } from "@/types/course";
+import type { CourseCommonInfo, Review } from "@/types/course";
 import type { CustomAxiosError } from "@/lib/axios/types";
 
 export interface UseReviewsReturn {
   reviews: Review[];
+  commonInfo: CourseCommonInfo;
   isLoading: boolean;
   error: CustomAxiosError | undefined;
   handleLike: (reviewid: number) => Promise<void>;
@@ -16,7 +17,7 @@ export function useReviews(
   courseCode: string,
   token: string | undefined
 ): UseReviewsReturn {
-  const { reviews: fetchedReviews, isLoading, error, refreshReviews } =
+  const { reviews: fetchedReviews, commonInfo, isLoading, error, refreshReviews } =
     useCourseReviews(courseCode);
 
   const [optimisticLikes, setOptimisticLikes] = useState<
@@ -55,5 +56,5 @@ export function useReviews(
     }
   }
 
-  return { reviews, isLoading, error, handleLike, refreshReviews };
+  return { reviews, commonInfo, isLoading, error, handleLike, refreshReviews };
 }

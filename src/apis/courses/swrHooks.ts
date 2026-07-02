@@ -47,7 +47,6 @@ const defaultCommonInfo: CourseCommonInfo = {
   labAttendance: false,
   exam: "",
   workload: "5~10시간",
-  officeHours: "",
 };
 
 export function useCourseReviews(

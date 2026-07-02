@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import { useTypedSession } from "@/lib/next-auth/useTypedSession";
 import { useCourse, useCourseJokbo } from "@/apis/courses/swrHooks";
 import { useReviews } from "@/features/course-evaluation/hooks/useReviews";
+import Link from "next/link";
 import CourseHeader from "@/features/course-evaluation/components/course-detail/CourseHeader";
+import CourseCommonInfoPanel from "@/features/course-evaluation/components/course-detail/CourseCommonInfoPanel";
 import CourseTabBar, {
   type CourseTab,
 } from "@/features/course-evaluation/components/course-detail/CourseTabBar";
@@ -25,6 +27,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
     useCourse(courseCode);
   const {
     reviews,
+    commonInfo,
     isLoading: reviewsLoading,
     error: reviewsError,
     handleLike,
@@ -62,7 +65,13 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
 
   return (
     <div className="flex flex-col gap-5 py-6">
-      <CourseHeader course={course} />
+      <Link href="/courses" className="text-sm text-gray-400 hover:text-michigan-blue">
+        &larr; 목록으로
+      </Link>
+      <div className="flex items-stretch justify-between gap-6">
+        <CourseHeader course={course} />
+        {reviews.length > 0 && <CourseCommonInfoPanel commonInfo={commonInfo} />}
+      </div>
       <CourseTabBar activeTab={activeTab} onTabChange={setActiveTab} />
       <div className="flex justify-end">{actionButton}</div>
       {tabContent}

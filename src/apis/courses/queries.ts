@@ -45,7 +45,7 @@ export async function getCourseReviews(
     const response = await client.get<CourseReviewsResponse>(url);
     return response.data;
   } catch {
-    return { commonInfo: { lectureAttendance: false, lectureRecording: false, groupWork: false, labAttendance: false, exam: "", workload: "5~10시간", officeHours: "" }, reviews: [] };
+    return { commonInfo: { lectureAttendance: false, lectureRecording: false, groupWork: false, labAttendance: false, exam: "", workload: "5~10시간" }, reviews: [] };
   }
 }
 

@@ -1,44 +1,43 @@
 import type { CourseCommonInfo, JokboFile, Review, SimpleCourse } from "@/types/course";
 
 export const mockCourses: SimpleCourse[] = [
-  { code: "EECS 281", name: "Data Structures and Algorithms", department: "EECS", reviewCount: 3, averageProfessorRating: 4.2 },
-  { code: "EECS 376", name: "Foundations of Computer Science", department: "EECS", reviewCount: 2, averageProfessorRating: 3.8 },
-  { code: "EECS 388", name: "Introduction to Computer Security", department: "EECS", reviewCount: 1, averageProfessorRating: 4.5 },
-  { code: "MATH 116", name: "Calculus II", department: "Mathematics", reviewCount: 4, averageProfessorRating: 3.1 },
-  { code: "EECS 482", name: "Introduction to Operating Systems", department: "EECS", reviewCount: 2, averageProfessorRating: 4.0 },
-  { code: "STATS 412", name: "Introduction to Probability and Statistics", department: "Statistics", reviewCount: 2, averageProfessorRating: 3.5 },
+  { code: "EECS 281", name: "Data Structures and Algorithms", department: "EECS", reviewCount: 3 },
+  { code: "EECS 376", name: "Foundations of Computer Science", department: "EECS", reviewCount: 2 },
+  { code: "EECS 388", name: "Introduction to Computer Security", department: "EECS", reviewCount: 1 },
+  { code: "MATH 116", name: "Calculus II", department: "Mathematics", reviewCount: 4 },
+  { code: "EECS 482", name: "Introduction to Operating Systems", department: "EECS", reviewCount: 2 },
+  { code: "STATS 412", name: "Introduction to Probability and Statistics", department: "Statistics", reviewCount: 2 },
+  { code: "MATH 215", name: "Calculus III", department: "Mathematics", reviewCount: 1 },
 ];
 
 export const mockCourseCommonInfo: Record<string, CourseCommonInfo> = {
   "EECS 281": {
     lectureAttendance: true, lectureRecording: true, groupWork: false, labAttendance: false,
     exam: "중간 1회, 기말 1회 (곡선 적용)", workload: "10~15시간",
-    officeHours: "화목 오후 3시~5시, 예약 없이 방문 가능",
   },
   "EECS 376": {
     lectureAttendance: true, lectureRecording: true, groupWork: false, labAttendance: false,
     exam: "중간 1회, 기말 1회", workload: "5~10시간",
-    officeHours: "월수 오후 2시~4시",
   },
   "EECS 388": {
     lectureAttendance: false, lectureRecording: true, groupWork: true, labAttendance: false,
     exam: "중간 1회, 기말 1회 (곡선 없음)", workload: "10~15시간",
-    officeHours: "화목 오전 11시~1시",
   },
   "MATH 116": {
     lectureAttendance: true, lectureRecording: false, groupWork: false, labAttendance: false,
     exam: "중간 2회, 기말 1회", workload: "5~10시간",
-    officeHours: "월수금 오후 1시~2시",
   },
   "EECS 482": {
     lectureAttendance: false, lectureRecording: true, groupWork: false, labAttendance: false,
     exam: "중간 1회, 기말 1회", workload: "15시간 이상",
-    officeHours: "월수 오후 4시~6시",
   },
   "STATS 412": {
     lectureAttendance: true, lectureRecording: true, groupWork: false, labAttendance: true,
     exam: "중간 2회, 기말 1회", workload: "5~10시간",
-    officeHours: "화목 오후 2시~4시",
+  },
+  "MATH 215": {
+    lectureAttendance: true, lectureRecording: true, groupWork: false, labAttendance: false,
+    exam: "중간 2회, 기말 1회", workload: "5~10시간",
   },
 };
 
@@ -102,6 +101,12 @@ export const mockReviews: Review[] = [
     courseComment: "확률론 기초를 탄탄히 다질 수 있는 좋은 과목입니다.",
     professors: [{ name: "Grace Yoon", rating: 4, comment: "친절하고 명확한 설명. 오피스아워 강력 추천합니다." }],
     likesCount: 3,
+  },
+  {
+    reviewid: 11, courseCode: "MATH 215", authorName: "익명", semester: "2024 Winter",
+    courseComment: "벡터 미적분학과 편미분 위주입니다. MATH 116보다 난이도가 높으니 미리 복습하고 오세요.",
+    professors: [{ name: "Henry Lim", rating: 4, comment: "풀이 설명이 깔끔하고 질문에 친절하게 답변해줍니다." }],
+    likesCount: 2,
   },
 ];
 

@@ -41,7 +41,6 @@ export default function WriteReviewModal({
       workload: "5~10시간",
       courseComment: "",
       professors: [{ name: "", rating: 5, comment: "" }],
-      officeHours: "",
     },
   });
 
@@ -160,15 +159,6 @@ export default function WriteReviewModal({
                 />
               </div>
             </div>
-
-            <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium text-gray-700">오피스아워</span>
-              <input
-                {...register("officeHours")}
-                placeholder="예: 화목 오후 3시~5시"
-                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-michigan-blue focus:outline-none"
-              />
-            </label>
 
             <label className="flex flex-col gap-1 text-sm">
               <span className="font-medium text-gray-700">강의 총평</span>
