@@ -59,7 +59,7 @@ export default function CoursesPage() {
   return (
     <div className="flex flex-col gap-6 py-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-michigan-blue">강의평</h1>
+        <h1 className="text-2xl font-bold text-michigan-blue">강의 평가</h1>
         <p className="mt-1 text-sm text-gray-500">
           수강할 강의의 솔직한 후기를 확인하세요
         </p>

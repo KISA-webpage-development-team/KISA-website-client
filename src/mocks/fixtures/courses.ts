@@ -13,7 +13,7 @@ export const mockCourses: SimpleCourse[] = [
 export const mockCourseCommonInfo: Record<string, CourseCommonInfo> = {
   "EECS 281": {
     lectureAttendance: true, lectureRecording: true, groupWork: false, labAttendance: false,
-    exam: "중간 1회, 기말 1회 (곡선 적용)", workload: "10~15시간",
+    exam: "중간 1회, 기말 1회", workload: "10~15시간",
   },
   "EECS 376": {
     lectureAttendance: true, lectureRecording: true, groupWork: false, labAttendance: false,
@@ -21,7 +21,7 @@ export const mockCourseCommonInfo: Record<string, CourseCommonInfo> = {
   },
   "EECS 388": {
     lectureAttendance: false, lectureRecording: true, groupWork: true, labAttendance: false,
-    exam: "중간 1회, 기말 1회 (곡선 없음)", workload: "10~15시간",
+    exam: "중간 1회, 기말 1회 ( 없음)", workload: "10~15시간",
   },
   "MATH 116": {
     lectureAttendance: true, lectureRecording: false, groupWork: false, labAttendance: false,

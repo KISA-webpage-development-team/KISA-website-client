@@ -115,7 +115,7 @@ const menu = [
     href: "/jobs",
   },
   {
-    name: "강의평",
+    name: "강의평가",
     href: "/courses",
   },
 ];

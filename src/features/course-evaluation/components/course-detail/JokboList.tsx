@@ -15,13 +15,14 @@ export default function JokboList({ files }: JokboListProps) {
     </div>
   );
 
-  if (isEmpty) return emptyContent;
+  /* if (isEmpty) */ return emptyContent;
 
-  return (
-    <div className="flex flex-col gap-2">
-      {files.map((file) => (
-        <JokboItem key={file.fileid} file={file} />
-      ))}
-    </div>
-  );
+  // 족보 기능 개발시
+  // return (
+  //   <div className="flex flex-col gap-2">
+  //     {files.map((file) => (
+  //       <JokboItem key={file.fileid} file={file} />
+  //     ))}
+  //   </div>
+  // );
 }
