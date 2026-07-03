@@ -17,7 +17,7 @@
     "insta:dry-run": "npx ts-node scripts/insta-to-carousel/cli.ts --dry-run"
   },
   "dependencies": {
-    "@babel/core": "7.26.0",
+    "@babel/core": "7.29.6",
     "@boiseitguru/cookie-cutter": "0.2.3",
     "@fullcalendar/core": "6.1.20",
     "@fullcalendar/daygrid": "6.1.20",
@@ -92,6 +92,7 @@
   "overrides": {
     "nodemailer": "^7.0.11",
     "postcss": "$postcss",
+    "undici": "^7.28.0",
     "ws": "^8.21.0"
   },
   "msw": {
