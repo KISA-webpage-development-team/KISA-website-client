@@ -56,7 +56,7 @@ const useMenu = (pochaID: number, token: string) => {
     await mutate(patch, { revalidate: false });
 
     try {
-      const res = await changeStock({ menuID, quantity });
+      const res = await changeStock({ menuID, quantity }, token);
       if (!res) {
         // Reconcile to server truth on silent failure.
         await mutate();

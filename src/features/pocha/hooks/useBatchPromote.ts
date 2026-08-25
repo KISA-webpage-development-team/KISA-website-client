@@ -13,6 +13,7 @@ import {
 
 interface UseBatchPromoteOptions {
   allItems: OrderItem[];
+  token: string;
   selectMode: boolean;
   onEnterSelectMode?: () => void;
   onPromotingChange?: (isPromoting: boolean) => void;
@@ -43,6 +44,7 @@ interface UseBatchPromoteReturn {
  */
 export function useBatchPromote({
   allItems,
+  token,
   selectMode,
   onEnterSelectMode,
   onPromotingChange,
@@ -136,7 +138,7 @@ export function useBatchPromote({
       }
 
       const results = await Promise.allSettled(
-        snapshot.map((o) => changeOrderItemStatus(o.orderItemID))
+        snapshot.map((o) => changeOrderItemStatus(o.orderItemID, token))
       );
 
       let failed = 0;
@@ -163,7 +165,7 @@ export function useBatchPromote({
       setIsPromoting(false);
       onPromotingChange?.(false);
     },
-    [updateOrderItemStatusUI, onPromotingChange]
+    [token, updateOrderItemStatusUI, onPromotingChange]
   );
 
   const handlePromoteClick = useCallback(() => {

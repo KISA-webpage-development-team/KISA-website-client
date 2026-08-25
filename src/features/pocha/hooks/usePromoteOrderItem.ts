@@ -17,6 +17,7 @@ interface UsePromoteOrderItemReturn {
  */
 export function usePromoteOrderItem(
   orderItemID: number,
+  token: string,
   updateOrderItemStatusUI: (id: number, status: OrderStatus) => void
 ): UsePromoteOrderItemReturn {
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ export function usePromoteOrderItem(
     inFlightRef.current = true;
     setLoading(true);
     try {
-      const res = await changeOrderItemStatus(orderItemID);
+      const res = await changeOrderItemStatus(orderItemID, token);
       if (!res) {
         toast.error("Failed to promote order. Try again.");
         return;
@@ -40,7 +41,7 @@ export function usePromoteOrderItem(
       inFlightRef.current = false;
       setLoading(false);
     }
-  }, [orderItemID, updateOrderItemStatusUI]);
+  }, [orderItemID, token, updateOrderItemStatusUI]);
 
   return { promote, loading };
 }

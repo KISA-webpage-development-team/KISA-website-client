@@ -65,7 +65,7 @@ export default function PochaCartPage() {
     error: cartError,
     handleQuantityChange,
     fetchCart,
-  } = useCart(session?.user?.email, pochaID);
+  } = useCart(session?.user?.email, pochaID, session?.token);
 
   // Short-circuit before the loading check — useCart stalls on null pochaID,
   // so the page would otherwise spin forever when there is no ongoing pocha.

@@ -30,19 +30,24 @@ import { HookStatus } from "./types";
 const REJECT_TOAST = "Insufficient stock";
 const DEBOUNCE_MS = 1000;
 
-const cartKey = (email: string, pochaID: number): string | null =>
-  email && pochaID ? `pocha/cart/${email}/${pochaID}` : null;
+const cartKey = (email: string, pochaID: number, token: string): string | null =>
+  email && pochaID && token ? `pocha/cart/${email}/${pochaID}` : null;
 
-const useCart = (email: string | undefined, pochaID: number | undefined) => {
+const useCart = (
+  email: string | undefined,
+  pochaID: number | undefined,
+  token: string | undefined
+) => {
   const safeEmail = email ?? "";
   const safePochaID = pochaID ?? 0;
-  const key = cartKey(safeEmail, safePochaID);
+  const safeToken = token ?? "";
+  const key = cartKey(safeEmail, safePochaID, safeToken);
 
   const { mutate: globalMutate } = useSWRConfig();
 
   const { data, error, isLoading, mutate } = useSWR<Cart | undefined>(
     key,
-    () => getUserCart(safeEmail, safePochaID)
+    () => getUserCart(safeEmail, safePochaID, safeToken)
   );
 
   const cart = data;
@@ -63,18 +68,30 @@ const useCart = (email: string | undefined, pochaID: number | undefined) => {
 
   // Stable ref the debounced closure reads from — avoids rebuilding
   // debouncers when email/pochaID/key change identity but not value.
-  const ctxRef = useRef({ email: safeEmail, pochaID: safePochaID, key });
-  ctxRef.current = { email: safeEmail, pochaID: safePochaID, key };
+  const ctxRef = useRef({
+    email: safeEmail,
+    pochaID: safePochaID,
+    token: safeToken,
+    key,
+  });
+  ctxRef.current = {
+    email: safeEmail,
+    pochaID: safePochaID,
+    token: safeToken,
+    key,
+  };
 
   // On key change (signed-out → signed-in, account switch, pocha switch) the
   // debounced closures are still valid (they read ctxRef live), but pending
   // deltas were accumulated against the OLD key. Flush them out under the
   // outgoing identity, then reset.
   useEffect(() => {
+    const debouncers = debouncerMapRef.current;
+    const pendingDeltas = pendingDeltaRef.current;
     return () => {
-      for (const d of debouncerMapRef.current.values()) d.flush();
-      debouncerMapRef.current.clear();
-      pendingDeltaRef.current.clear();
+      for (const d of debouncers.values()) d.flush();
+      debouncers.clear();
+      pendingDeltas.clear();
     };
   }, [key]);
 
@@ -109,13 +126,13 @@ const useCart = (email: string | undefined, pochaID: number | undefined) => {
         const acc = pendingDeltaRef.current.get(menuid) ?? 0;
         pendingDeltaRef.current.set(menuid, 0);
         if (acc === 0) return;
-        const { email: e, pochaID: p, key: k } = ctxRef.current;
+        const { email: e, pochaID: p, token: t, key: k } = ctxRef.current;
         if (!k) return;
         try {
           const res = await changeItemInCart(e, p, {
             menuID: menuid,
             quantity: acc,
-          });
+          }, t);
           if (!res || res.isStocked === false) {
             toast.error(REJECT_TOAST);
           }

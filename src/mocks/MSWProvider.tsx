@@ -11,6 +11,14 @@ export function MSWProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    if (!("serviceWorker" in navigator)) {
+      console.warn(
+        "[MSW] Service workers are unavailable in this browser/context. Mock API requests may not be intercepted."
+      );
+      setReady(true);
+      return;
+    }
+
     import("./browser").then(({ startWorkerOnce }) =>
       startWorkerOnce().then(() => {
         // On first SW install, `start()` resolves once the worker is activated,

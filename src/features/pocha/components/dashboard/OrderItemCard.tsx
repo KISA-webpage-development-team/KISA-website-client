@@ -20,6 +20,7 @@ import { getCardTone } from "@/features/pocha/utils/statusTone";
 
 interface OrderItemCardProps {
   order: OrderItem;
+  token: string;
   updateOrderItemStatusUI: (
     orderItemID: number,
     newStatus: OrderStatus
@@ -33,6 +34,7 @@ interface OrderItemCardProps {
 
 function OrderItemCardImpl({
   order,
+  token,
   updateOrderItemStatusUI,
   isSelectMode = false,
   isSelected = false,
@@ -46,6 +48,7 @@ function OrderItemCardImpl({
 
   const { promote, loading } = usePromoteOrderItem(
     orderItemID,
+    token,
     updateOrderItemStatusUI
   );
 

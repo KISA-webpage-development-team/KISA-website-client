@@ -98,6 +98,7 @@ export default function OrderDashboard({
       {/* 1. Food Orders */}
       <div className="md:basis-3/5">
         <FoodOrderGrid
+          token={token}
           orders={foodOrders}
           updateOrderItemStatusUI={updateOrderItemStatusUI}
           selectMode={selectMode}
@@ -108,6 +109,7 @@ export default function OrderDashboard({
       {/* 2. Drink Orders */}
       <div className="md:basis-2/5">
         <DrinkOrderGrid
+          token={token}
           orders={drinkOrders}
           updateOrderItemStatusUI={updateOrderItemStatusUI}
           selectMode={selectMode}

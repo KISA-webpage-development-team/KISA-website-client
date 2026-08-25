@@ -16,15 +16,16 @@ interface ChangeItemCartResponse {
 export async function changeItemInCart(
   email: string,
   pochaid: number,
-  body: AddItemToCartBody
+  body: AddItemToCartBody,
+  token: string
 ): Promise<ChangeItemCartResponse | undefined> {
   const url = `/pocha/cart/${email}/${pochaid}/`;
 
   try {
     const response = await client.post(url, body, {
-      // headers: {
-      //     Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response?.data;
   } catch (error) {
@@ -40,11 +41,16 @@ export async function changeItemInCart(
 export async function notifyPayResult(
   email: string,
   pochaid: number,
-  body: { result: "success" | "failure" }
+  body: { result: "success" | "failure" },
+  token: string
 ) {
   const url = `/pocha/payment/${email}/${pochaid}/pay-result/`;
   try {
-    const response = await client.put(url, body);
+    const response = await client.put(url, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return undefined;
@@ -56,11 +62,15 @@ export async function notifyPayResult(
  * @route PUT /pocha/dashboard/${orderItemId}/change-status/
  * @params no body
  */
-export async function changeOrderItemStatus(orderItemId: number) {
+export async function changeOrderItemStatus(orderItemId: number, token: string) {
   const url = `/pocha/dashboard/${orderItemId}/change-status/`;
 
   try {
-    const response = await client.put(url);
+    const response = await client.put(url, undefined, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return undefined;
@@ -73,11 +83,16 @@ export async function changeOrderItemStatus(orderItemId: number) {
  */
 export async function checkCartStock(
   email: string,
-  pochaid: number
+  pochaid: number,
+  token: string
 ): Promise<{ isStocked: boolean } | undefined> {
   const url = `/pocha/payment/${email}/${pochaid}/check-stock/`;
   try {
-    const response = await client.put(url);
+    const response = await client.put(url, undefined, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response?.data;
   } catch (error) {
@@ -102,11 +117,15 @@ interface ChangeStockBody {
  * @desc change stock of menu item
  * @route PUT /pocha/dashboard/change-stock/
  */
-export async function changeStock(body: ChangeStockBody) {
+export async function changeStock(body: ChangeStockBody, token: string) {
   const url = `/pocha/dashboard/change-stock/`;
 
   try {
-    const response = await client.put(url, body);
+    const response = await client.put(url, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return undefined;
