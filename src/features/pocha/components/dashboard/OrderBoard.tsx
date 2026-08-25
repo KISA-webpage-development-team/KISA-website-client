@@ -30,6 +30,7 @@ interface OrderBoardProps {
   /** Column header horizontal padding override (matches legacy spacing). */
   headerPaddingX?: "px-3" | "px-4";
   orders: Orders;
+  token: string;
   updateOrderItemStatusUI: (
     orderItemID: number,
     newStatus: OrderStatus
@@ -61,6 +62,7 @@ export default function OrderBoard({
   gridColumnsMd,
   headerPaddingX = "px-4",
   orders = { pending: [], preparing: [], ready: [] },
+  token,
   updateOrderItemStatusUI,
   selectMode,
   onEnterSelectMode,
@@ -95,6 +97,7 @@ export default function OrderBoard({
     setDialogOpen,
   } = useBatchPromote({
     allItems,
+    token,
     selectMode,
     onEnterSelectMode,
     onPromotingChange,
@@ -166,6 +169,7 @@ export default function OrderBoard({
               <ul className="flex flex-col gap-2">
                 {items.map((order) => (
                   <OrderItemCard
+                    token={token}
                     key={order.orderItemID}
                     order={order}
                     updateOrderItemStatusUI={updateOrderItemStatusUI}

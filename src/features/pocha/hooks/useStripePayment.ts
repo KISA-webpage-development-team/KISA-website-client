@@ -14,7 +14,8 @@ const useStripePayment = (
   userEmail: string,
   fullname: string,
   underAge: boolean,
-  ageCheckRequired: boolean
+  ageCheckRequired: boolean,
+  token: string
 ) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -40,7 +41,7 @@ const useStripePayment = (
   /** Step 3: Check Inventory */
   const checkCartInventory = async () => {
     try {
-      const res = await checkCartStock(userEmail, pochaID);
+      const res = await checkCartStock(userEmail, pochaID, token);
       if (!res?.isStocked) {
         throw new Error("재고가 부족합니다.");
       }
@@ -54,7 +55,7 @@ const useStripePayment = (
     if (IS_MOCK_MODE) {
       const res = await notifyPayResult(userEmail, pochaID, {
         result: "success",
-      });
+      }, token);
       if (!res) throw new Error("Error while updating cart status");
       router.push(
         `/pocha/pay-success?pochaid=${pochaID}&amount=${totalPrice}`
@@ -142,7 +143,7 @@ const useStripePayment = (
       // notify pay result with success
       const res = await notifyPayResult(userEmail, pochaID, {
         result: "success",
-      });
+      }, token);
       if (!res) {
         throw new Error("Error while updating cart status");
       }
@@ -156,7 +157,7 @@ const useStripePayment = (
       // notify pay result with failure
       const res = await notifyPayResult(userEmail, pochaID, {
         result: "failure",
-      });
+      }, token);
 
       if (!res) {
         throw new Error("Error while updating cart status");

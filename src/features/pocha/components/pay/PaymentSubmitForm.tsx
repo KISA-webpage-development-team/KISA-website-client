@@ -32,6 +32,7 @@ interface PaymentSubmitFormProps {
   pochaID: number;
   ageCheckRequired: boolean;
   userEmail: string;
+  token: string;
   underAge: boolean;
   fullname: string;
 }
@@ -43,6 +44,7 @@ export default function PaymentSubmitForm({
   pochaID,
   ageCheckRequired,
   userEmail,
+  token,
   underAge,
   fullname,
 }: PaymentSubmitFormProps) {
@@ -60,7 +62,8 @@ export default function PaymentSubmitForm({
     userEmail,
     fullname,
     underAge,
-    ageCheckRequired
+    ageCheckRequired,
+    token
   );
 
   if (!stripe || !elements) {

@@ -46,7 +46,8 @@ export default function MenuItemDetail({
 
   const { cart, handleQuantityChange } = useCart(
     session?.user?.email ?? "",
-    pochaid ?? 0
+    pochaid ?? 0,
+    session?.token
   );
 
   const existingCartQty: number = selectedMenu

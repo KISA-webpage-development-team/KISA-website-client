@@ -108,7 +108,7 @@ export default function PochaPage() {
   const { session } = useAuth();
   // SWR-deduped: MenuItemDetail also calls useCart with the same key, so this
   // does not double-fetch.
-  const { cart } = useCart(session?.user?.email, pochaInfo?.pochaID);
+  const { cart } = useCart(session?.user?.email, pochaInfo?.pochaID, session?.token);
 
   if (status === "loading") {
     return <HomeShellSkeleton />;

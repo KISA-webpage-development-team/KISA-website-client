@@ -93,11 +93,16 @@ export async function getPochaMenu(
  */
 export async function getUserCart(
   email: string,
-  pochaid: number
+  pochaid: number,
+  token: string
 ): Promise<Cart | undefined> {
   const url = `/pocha/cart/${email}/${pochaid}/`;
   try {
-    const response = await client.get(url);
+    const response = await client.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response?.data;
   } catch (error) {

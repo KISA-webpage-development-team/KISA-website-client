@@ -160,6 +160,7 @@ export default function PayPage() {
           pochaID={pochaID}
           ageCheckRequired={ageCheckRequired}
           userEmail={session?.user?.email}
+          token={session?.token}
           underAge={underAge}
           fullname={fullname}
         />

@@ -83,7 +83,7 @@ export function MockAuthToggle() {
       const oldest = openPool.reduce((a, b) =>
         a.orderItemID < b.orderItemID ? a : b
       );
-      const result = await changeOrderItemStatus(oldest.orderItemID);
+      const result = await changeOrderItemStatus(oldest.orderItemID, "mock-access-token");
       if (result === undefined) {
         throw new Error("change-status returned undefined");
       }

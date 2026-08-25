@@ -2,6 +2,7 @@ import { OrderStatus, Orders } from "@/types/pocha";
 import OrderBoard from "./OrderBoard";
 
 interface FoodOrderGridProps {
+  token: string;
   orders: Orders;
   updateOrderItemStatusUI: (
     orderItemID: number,
