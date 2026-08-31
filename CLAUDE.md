@@ -149,7 +149,9 @@ Being invoked via `@claude` is explicit authorization to commit to a working bra
 ### Working style
 - Create small, focused pull requests. One concern per PR.
 - Never push directly to `main`. Always work on a branch; the automation opens the PR (see "Opening the pull request").
-- Never auto-merge. Codex review and the human owner decide.
+- Never merge or mark a PR ready for review yourself. Codex review and the human
+  owner decide; a separate auto-merge workflow (OFF by default, repo variable
+  `AUTO_MERGE_ENABLED`) may merge `simple` PRs when the owner enables it.
 - Write a clear PR description with: a short summary of the change, the reason, the files touched, and the checks you ran with their results.
 
 ### Risk level (classified automatically)
