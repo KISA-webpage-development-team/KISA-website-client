@@ -45,7 +45,7 @@ export default function InfoDetailTemplate({ data }: Props) {
       {/* Stacked records — image left, content right */}
       <ul className="flex flex-col gap-16 md:gap-20 lg:gap-24 list-none p-0 m-0">
         {records.map((record) => {
-          const src = record.thumbnailSrc ?? `/images/${record.id}.png`;
+          const src = record.thumbnailSrc ?? `/images/${record.id}.webp`;
           return (
             <li
               key={record.id}
