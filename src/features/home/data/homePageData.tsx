@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 // hand-authored static items.
 //
 // Image lookup:
-//   - For non-`llm-collected-*` ids: /public/carousel/{id}.png
+//   - For non-`llm-collected-*` ids: /public/carousel/{id}.webp
 //   - For `llm-collected-*` ids (Instagram-generated): use `imageUrl` directly
 
 export interface CarouselItem {
