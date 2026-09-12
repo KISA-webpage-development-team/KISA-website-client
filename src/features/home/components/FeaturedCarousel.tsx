@@ -16,7 +16,7 @@ function buildCarouselImageUrl(item: CarouselItem): string {
   if (item.id.startsWith("llm-collected")) {
     return item.imageUrl ?? defaultImageURL;
   }
-  return `/carousel/${item.id}.png`;
+  return `/carousel/${item.id}.webp`;
 }
 
 /**

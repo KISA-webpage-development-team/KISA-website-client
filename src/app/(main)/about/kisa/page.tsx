@@ -55,7 +55,7 @@ export default function KisaPage() {
         <figure className="w-full">
           <div className="relative w-full overflow-hidden rounded-lg border border-border bg-surface-subtle aspect-[2400/1050]">
             <Image
-              src="/kisa_all_2025-2026.png"
+              src="/kisa_all_2025-2026.webp"
               alt="KISA 2025-2026 단체 사진"
               fill
               sizes="(min-width: 1024px) 1280px, 100vw"
