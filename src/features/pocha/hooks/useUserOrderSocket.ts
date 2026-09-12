@@ -52,8 +52,11 @@ const useUserOrderSocket = ({
     socketRef.current.on(
       "order-created",
       ({ newOrderItems }: { newOrderItems: OrderItem[] }) => {
-        // Process orders in batch instead of one by one
-        newOrderItems.forEach(addNewOrderItem);
+        // The server targets this socket's own room; keep the filter anyway so
+        // a regression there can't surface someone else's order here.
+        newOrderItems
+          .filter((item) => item.ordererEmail === email)
+          .forEach(addNewOrderItem);
       }
     );
 
