@@ -15,13 +15,20 @@ name: Codex bridge
 #
 # Safeguards:
 # - Never merges anything.
+# - Fork PRs are never bridged: "@claude fix" must not task Claude with
+#   branch content this repo's collaborators never wrote.
+# - One run per PR at a time (concurrency group below): Codex fans one review
+#   out into many near-simultaneous events, and the marker-comment idempotency
+#   check is read-then-write -- parallel runs would each start a fix round.
 # - Risk = the stricter of the PR body's declared level and a fresh diff
 #   classification run from the DEFAULT-BRANCH classifier (a PR cannot weaken
 #   its own risk).
 # - Opt-in consent is bound to the exact head SHA (a >=7-char prefix), so it
 #   can't carry to a new head and can't be forged via a backdated commit date.
 #   A label is not used because Claude holds issues:write and could self-apply.
-# - One automated fix round per PR, guarded by the `claude-fix-requested` label.
+# - Automated fix rounds are capped per PR (MAX_FIX_ROUNDS, default 3) and derived
+#   from marker comments; each head commit is fixed at most once. Past the cap the
+#   bridge escalates to a human instead of looping.
 on:
   pull_request_review:
     types: [submitted]
@@ -34,6 +41,13 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
+
+# Serialize per PR (one running + one queued; the queued run sees the marker
+# comment the first one posts and skips). cancel-in-progress stays false so an
+# in-flight decision is never killed mid-write.
+concurrency:
+  group: codex-bridge-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: false
 
 jobs:
   bridge:
@@ -55,6 +69,8 @@ jobs:
           # Codex review bot login. Override with repo variable CODEX_BOT_LOGIN if
           # your installation posts under a different account.
           CODEX_BOT: ${{ vars.CODEX_BOT_LOGIN }}
+          # Max automated fix rounds per PR before handing to a human (default 3).
+          MAX_FIX_ROUNDS: ${{ vars.MAX_FIX_ROUNDS }}
           # pull_request_review fields
           REVIEW_AUTHOR: ${{ github.event.review.user.login }}
           REVIEW_STATE: ${{ github.event.review.state }}
@@ -110,23 +126,20 @@ jobs:
             EVENT_COMMIT=""
           fi
 
-          # PR-level context needed by both trigger paths.
-          read -r BASE_SHA HEAD_SHA < <(gh api "repos/$REPO/pulls/$PR" --jq '"\(.base.sha) \(.head.sha)"')
+          # PR-level context needed by both trigger paths. Reject fork PRs
+          # outright: a fix request would run Claude (contents:write, API key)
+          # against branch content nobody in this repo wrote -- the loop only
+          # ever operates on same-repo claude/* branches.
+          read -r HEAD_SHA HEAD_REPO < <(gh api "repos/$REPO/pulls/$PR" --jq '"\(.head.sha) \(.head.repo.full_name)"')
+          if [ "$HEAD_REPO" != "$REPO" ]; then
+            echo "PR #$PR head is from '$HEAD_REPO' (fork); bridge only serves same-repo PRs."
+            exit 0
+          fi
 
           # Effective risk = stricter of (body-declared) and (fresh diff classification
           # via the DEFAULT-BRANCH classifier). A hand-edited body can't talk it down.
-          PR_BODY="$(gh pr view "$PR" -R "$REPO" --json body --jq '.body' || true)"
-          BODY_RISK="$(printf '%s' "$PR_BODY" \
-            | grep -ioE 'risk level:[[:space:]]*`?(simple|complex|human-required)`?' \
-            | head -n 1 | grep -ioE '(simple|complex|human-required)' \
-            | head -n 1 | tr '[:upper:]' '[:lower:]' || true)"
-          DIFF_RISK="human-required"
-          if [ -f .github/scripts/classify-risk.sh ]; then
-            DIFF_RISK="$(bash .github/scripts/classify-risk.sh "$BASE_SHA" "$HEAD_SHA" || echo human-required)"
-          fi
-          rank() { case "$1" in human-required) echo 3;; complex) echo 2;; simple) echo 1;; *) echo 0;; esac; }
-          if [ "$(rank "$DIFF_RISK")" -ge "$(rank "$BODY_RISK")" ]; then RISK="$DIFF_RISK"; else RISK="$BODY_RISK"; fi
-          echo "Risk: body='${BODY_RISK:-<none>}' diff='$DIFF_RISK' -> effective='$RISK'"
+          RISK="$(bash .github/scripts/effective-risk.sh "$PR" || echo human-required)"
+          echo "Effective risk: '$RISK'"
 
           # Opt-in BOUND TO THE EXACT HEAD COMMIT: a trusted human (OWNER/MEMBER/
           # COLLABORATOR, not a bot) commented "@claude allow-ai-fix <head-sha>" on the
@@ -164,6 +177,10 @@ jobs:
           # comments carry a commit_id we can bind to HEAD_SHA (issue-comment summaries do
           # not, so they don't count). This gates the human opt-in path: a human may only
           # authorize fixing findings that actually exist for this exact commit.
+          # DELIBERATE ASYMMETRY: inline comments count with NO keyword filter --
+          # Codex only leaves P0/P1 findings inline, so existence on the head is
+          # the signal. Don't "align" this with the keyword regex above; that one
+          # only classifies the TRIGGERING event.
           codex_flagged_head() {
             local n
             n="$( {
@@ -214,14 +231,34 @@ jobs:
             exit 0
           fi
 
-          # Loop guard: at most one automated fix round per PR.
-          if gh pr view "$PR" -R "$REPO" --json labels --jq '.labels[].name' | grep -qx 'claude-fix-requested'; then
-            echo "PR #$PR already has 'claude-fix-requested'; not requesting another fix."
+          # Loop guard: cap automated fix rounds per PR and never fire twice for the same
+          # head. Rounds are DERIVED from marker comments (no state stored outside GitHub),
+          # the same GitHub-derived-state model as the auto-task dispatcher.
+          MAX_ROUNDS="${MAX_FIX_ROUNDS:-3}"
+          ALL="$(gh api "repos/$REPO/issues/$PR/comments" --paginate --jq '.[].body' 2>/dev/null || true)"
+          # Count DISTINCT head=/round= markers, not raw occurrences: a human
+          # quote-reply of a fix comment copies the invisible marker verbatim
+          # and must not burn a round.
+          MARKERS="$(printf '%s' "$ALL" | grep -oE 'codex-bridge-fix head=[0-9a-f]+ round=[0-9]+' || true)"
+          ROUNDS="$(printf '%s\n' "$MARKERS" | sort -u | grep -c 'codex-bridge-fix' || true)"
+
+          # Idempotency: already asked for a fix on THIS exact head? (several Codex inline
+          # comments on one commit must not each start a round).
+          if printf '%s' "$ALL" | grep -q "head=$HEAD_SHA"; then
+            echo "Already requested a fix for head ${HEAD_SHA:0:12}; skipping duplicate."
             exit 0
           fi
 
-          gh label create claude-fix-requested -R "$REPO" --color 5319e7 \
-            --description "Codex requested changes; one automated Claude fix round triggered" --force >/dev/null 2>&1 || true
-          gh pr edit "$PR" -R "$REPO" --add-label claude-fix-requested
-          gh pr comment "$PR" -R "$REPO" --body "@claude fix Codex feedback. Address the Codex review comments in this PR, add or update tests if needed, and push the fix to this same PR branch. Do not open a new PR and do not merge."
-          echo "Requested a Claude fix on PR #$PR."
+          # Cap reached -> hand to a human (escalate once) and stop auto-fixing this PR.
+          if [ "${ROUNDS:-0}" -ge "$MAX_ROUNDS" ]; then
+            if ! printf '%s' "$ALL" | grep -q 'codex-bridge-escalated'; then
+              gh pr comment "$PR" -R "$REPO" --body "Automated fix loop hit its cap of $MAX_ROUNDS round(s) and Codex still has findings. Handing this PR to a human; no further automated fixes will be requested. <!-- codex-bridge-escalated -->"
+            fi
+            echo "Fix-round cap ($MAX_ROUNDS) reached on PR #$PR; escalated to a human."
+            exit 0
+          fi
+
+          # Request the next fix round. The @claude line triggers claude.yml; the invisible
+          # HTML marker records the head + round for the counter above.
+          gh pr comment "$PR" -R "$REPO" --body "@claude fix Codex feedback. Address the Codex review comments in this PR, add or update tests if needed, and push the fix to this same PR branch. Do not open a new PR and do not merge. <!-- codex-bridge-fix head=$HEAD_SHA round=$((ROUNDS+1)) -->"
+          echo "Requested Claude fix round $((ROUNDS+1))/$MAX_ROUNDS on PR #$PR (head ${HEAD_SHA:0:12})."

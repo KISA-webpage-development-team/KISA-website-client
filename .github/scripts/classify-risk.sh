@@ -38,12 +38,26 @@ fi
 FILES="$(printf '%s' "$CMP" | jq -r '.files[] | .filename, (.previous_filename // empty)')"
 [ -n "$FILES" ] || { echo "human-required"; exit 0; }
 
-# Sensitive paths -> always human-required. Pattern kept in one variable so it
-# cannot be accidentally line-wrapped. Covers this repo's real trust boundaries:
-# CI config, dependency manifests, env/secrets, the NextAuth middleware, ALL
-# server API routes (src/app/api/**), and auth/payment/upload-adjacent modules.
-SENSITIVE='(^\.github/|(^|/)package(-lock)?\.json$|(^|/)yarn\.lock$|(^|/)pnpm-lock\.yaml$|src/constants/env|(^|/)src/middleware\.(ts|js)$|(^|/)src/app/api/|(^|/)src/apis/|pocha|auth|jwt|admin|payment|stripe|cloudinary|customer|secret|migration)'
-if printf '%s\n' "$FILES" | grep -qiE "$SENSITIVE"; then
+# Sensitive paths -> always human-required. A universal BASE covers boundaries
+# true for any repo: CI/automation config, dependency manifests+lockfiles across
+# common ecosystems (npm/pip/go/cargo/gem), dotenv files, and the keywords
+# secret/auth/jwt/admin/payment/migration. Repo-specific boundaries are declared
+# in .github/auto/sensitive-paths.txt (one extended-regex fragment per line;
+# '#' comments and blank lines ignored) and OR-ed in. Absent/empty file -> base
+# only (still safe). SECURITY: that config, like this script, is read only from
+# the trusted default branch -- a PR must not weaken its own classification.
+SENSITIVE_BASE='(^\.github/|(^|/)(package(-lock)?\.json|yarn\.lock|pnpm-lock\.yaml|requirements\.txt|Pipfile(\.lock)?|go\.(mod|sum)|Cargo\.(toml|lock)|Gemfile(\.lock)?)$|(^|/)\.env|secret|auth|jwt|admin|payment|migration)'
+EXTRA="$(sed -E 's/#.*$//; s/^[[:space:]]+//; s/[[:space:]]+$//' "$(dirname "$0")/../auto/sensitive-paths.txt" 2>/dev/null | awk 'NF' | paste -sd'|' - || true)"
+if [ -n "$EXTRA" ]; then SENSITIVE="(${SENSITIVE_BASE}|${EXTRA})"; else SENSITIVE="$SENSITIVE_BASE"; fi
+# grep rc: 0=match, 1=no match, >=2=error (e.g. a malformed regex line in
+# sensitive-paths.txt). An error must fail CLOSED: inside a bare `if` it would
+# read as "no match" and one bad config line would silently disable the whole
+# sensitive check, built-in BASE patterns included.
+set +e
+printf '%s\n' "$FILES" | grep -qiE "$SENSITIVE"
+GREP_RC=$?
+set -e
+if [ "$GREP_RC" -ne 1 ]; then
   echo "human-required"; exit 0
 fi
 
