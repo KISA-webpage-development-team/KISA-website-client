@@ -89,7 +89,7 @@ export default function InfoOverviewTemplate({ data, resolveItemHref }: Props) {
                 const href = resolveItemHref
                   ? resolveItemHref(section, item)
                   : defaultResolveItemHref(infoType, section, item);
-                const src = item.thumbnailSrc ?? `/images/${item.id}.png`;
+                const src = item.thumbnailSrc ?? `/images/${item.id}.webp`;
                 const isAboveFold = sectionIdx === 0 && itemIdx < 3;
                 return (
                   <Link
