@@ -53,10 +53,11 @@ const TOOLS: Tool[] = [
     icon: "list",
   },
   {
-    kind: "coming-soon",
-    title: "Website CMS",
-    sub: "공식 홈페이지 콘텐츠를 직접 편집할 수 있도록 준비 중입니다.",
-    icon: "pencil",
+    kind: "live",
+    title: "Main Banner",
+    sub: "홈페이지 상단 메인 배너를 등록하고 순서와 게시 기간을 관리합니다.",
+    href: "/admin/website/carousel",
+    icon: "image",
   },
   {
     kind: "coming-soon",
