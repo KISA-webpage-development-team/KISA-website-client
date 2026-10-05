@@ -15,6 +15,7 @@ import {
   uploadMenuImage,
   deleteMenuImage,
 } from "@/apis/cloudinary/menuImage";
+import { prepareImageForUpload } from "@/utils/images/prepareImageForUpload";
 import {
   isSameMenu,
   hasMenuWithNameKor,
@@ -70,7 +71,14 @@ export default function PochaMenuItemForm({
       toast.error("로그인이 필요합니다.");
       throw new Error("Not logged in");
     }
-    return uploadMenuImage(file, session.token);
+    let prepared: File;
+    try {
+      prepared = await prepareImageForUpload(file);
+    } catch (prepareError) {
+      toast.error("이미지를 읽을 수 없습니다. 다른 파일을 선택해 주세요.");
+      throw prepareError;
+    }
+    return uploadMenuImage(prepared, session.token);
   };
 
   const handleRemove = async (publicId: string): Promise<void> => {
