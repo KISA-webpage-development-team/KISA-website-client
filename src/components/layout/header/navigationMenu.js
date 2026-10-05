@@ -57,10 +57,6 @@ const menu = [
         name: "식생활",
         href: "/info/restaurants",
       },
-      {
-        name: "KISA Picks",
-        href: "/info/kisa-picks",
-      },
     ],
   },
 
@@ -112,6 +108,11 @@ const menu = [
         href: "/everykisa/career",
       },
     ],
+  },
+
+  {
+    name: "KISA Picks",
+    href: "/info/kisa-picks",
   },
 
   {
