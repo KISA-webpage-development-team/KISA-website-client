@@ -18,6 +18,7 @@ type LiveItemListProps = {
   onResetToDateOrder: () => void;
   onDiscard: () => void;
   onSaveOrder: () => void;
+  onEdit: (carouselItem: AdminCarouselItem) => void;
   onArchive: (carouselItem: AdminCarouselItem) => void;
   onRemove: (carouselItem: AdminCarouselItem) => void;
 };
@@ -36,20 +37,16 @@ export default function LiveItemList({
   onResetToDateOrder,
   onDiscard,
   onSaveOrder,
+  onEdit,
   onArchive,
   onRemove,
 }: LiveItemListProps) {
-  const hasItems = carouselItems.length > 0;
+  const canReorder = carouselItems.length > 1;
   const isOverSoftLimit = carouselItems.length > LIVE_ITEM_SOFT_LIMIT;
   const lastIndex = carouselItems.length - 1;
 
-  if (!hasItems) {
-    return (
-      <p className="type-body-sm py-6 text-center text-muted-foreground">
-        게시 중인 항목이 없습니다.
-      </p>
-    );
-  }
+  // The preview above already shows the empty state.
+  if (carouselItems.length === 0) return null;
 
   return (
     <div className="flex flex-col gap-4">
@@ -63,37 +60,39 @@ export default function LiveItemList({
         </Alert>
       ) : null}
 
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <Button
-          variant="tertiary"
-          size="sm"
-          onClick={onResetToDateOrder}
-          disabled={isSavingOrder}
-        >
-          종료일 순으로 정렬
-        </Button>
-        {isDirty ? (
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={onDiscard}
-              disabled={isSavingOrder}
-            >
-              변경 취소
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={onSaveOrder}
-              disabled={isSavingOrder}
-            >
-              {isSavingOrder ? <LoadingSpinner size="sm" /> : null}
-              순서 저장
-            </Button>
-          </div>
-        ) : null}
-      </div>
+      {canReorder || isDirty ? (
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onResetToDateOrder}
+            disabled={isSavingOrder}
+          >
+            종료일 순으로 정렬
+          </Button>
+          {isDirty ? (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={onDiscard}
+                disabled={isSavingOrder}
+              >
+                변경 취소
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={onSaveOrder}
+                disabled={isSavingOrder}
+              >
+                {isSavingOrder ? <LoadingSpinner size="sm" /> : null}
+                순서 저장
+              </Button>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <Reorder.Group
         axis="y"
@@ -109,6 +108,7 @@ export default function LiveItemList({
             isLast={index === lastIndex}
             onMoveUp={onMoveUp}
             onMoveDown={onMoveDown}
+            onEdit={onEdit}
             onArchive={onArchive}
             onRemove={onRemove}
           />

@@ -8,9 +8,6 @@ type PageProps = {
 export default async function NewCarouselItemPage({ searchParams }: PageProps) {
   const { from } = await searchParams;
   return (
-    <CarouselItemFormView
-      mode="create"
-      sourceItemID={parseCarouselItemID(from)}
-    />
+    <CarouselItemFormView sourceItemID={parseCarouselItemID(from)} />
   );
 }

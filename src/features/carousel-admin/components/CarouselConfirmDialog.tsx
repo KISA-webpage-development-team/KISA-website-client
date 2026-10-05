@@ -42,7 +42,7 @@ const COPY: Record<
   archive: {
     title: "이 항목을 보관하시겠습니까?",
     description:
-      "홈페이지 캐러셀에서 내려가고 보관함으로 이동합니다. 보관함에서 다시 복원할 수 있습니다.",
+      "홈페이지 메인 배너에서 내려가고 보관함으로 이동합니다. 보관함에서 다시 복원할 수 있습니다.",
     confirm: "보관",
     pending: "보관 중...",
     success: "보관되었습니다.",
@@ -103,7 +103,7 @@ export default function CarouselConfirmDialog({
         </DialogDescription>
         {showsHideWarning ? (
           <Alert variant="warning" title="게시 중인 마지막 항목입니다.">
-            이 항목을 {copy.confirm}하면 홈페이지 캐러셀이 숨겨집니다.
+            이 항목을 {copy.confirm}하면 홈페이지 메인 배너가 숨겨집니다.
           </Alert>
         ) : null}
         <DialogFooter>

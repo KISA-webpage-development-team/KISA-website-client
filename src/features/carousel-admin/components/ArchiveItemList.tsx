@@ -3,16 +3,14 @@ import { Button, Card, FormItem, Input, LinkButton } from "@umichkisa-ds/web";
 
 import type { AdminCarouselItem } from "@/types/carousel";
 import CarouselItemSummary from "./CarouselItemSummary";
-import {
-  editCarouselItemHref,
-  templateCarouselItemHref,
-} from "./carouselAdminRoutes";
+import { templateCarouselItemHref } from "./carouselAdminRoutes";
 
 const SEARCH_INPUT_ID = "carousel-archive-search";
 
 type ArchiveItemListProps = {
   carouselItems: AdminCarouselItem[];
   onRestore: (carouselItem: AdminCarouselItem) => void;
+  onEdit: (carouselItem: AdminCarouselItem) => void;
   onRemove: (carouselItem: AdminCarouselItem) => void;
 };
 
@@ -23,6 +21,7 @@ type ArchiveItemListProps = {
 export default function ArchiveItemList({
   carouselItems,
   onRestore,
+  onEdit,
   onRemove,
 }: ArchiveItemListProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -63,7 +62,7 @@ export default function ArchiveItemList({
             <li key={carouselItem.carouselItemID}>
               <Card className="flex flex-col gap-4 md:flex-row md:items-center">
                 <CarouselItemSummary carouselItem={carouselItem} />
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center justify-end gap-2">
                   <Button
                     variant="secondary"
                     size="sm"
@@ -73,18 +72,18 @@ export default function ArchiveItemList({
                   </Button>
                   <LinkButton
                     href={templateCarouselItemHref(carouselItem.carouselItemID)}
-                    variant="tertiary"
+                    variant="secondary"
                     size="sm"
                   >
                     템플릿으로 사용
                   </LinkButton>
-                  <LinkButton
-                    href={editCarouselItemHref(carouselItem.carouselItemID)}
-                    variant="tertiary"
+                  <Button
+                    variant="secondary"
                     size="sm"
+                    onClick={() => onEdit(carouselItem)}
                   >
                     수정
-                  </LinkButton>
+                  </Button>
                   <Button
                     variant="destructive"
                     size="sm"

@@ -68,7 +68,7 @@ export default function CarouselRestoreDialog({
         <DialogTitle>이 항목을 복원하시겠습니까?</DialogTitle>
         <DialogDescription>
           {carouselItem ? `"${carouselItem.title}" ` : ""}
-          항목이 다시 홈페이지 캐러셀에 게시됩니다. 새 종료일을 고르거나 비워
+          항목이 다시 홈페이지 메인 배너에 게시됩니다. 새 종료일을 고르거나 비워
           두세요.
         </DialogDescription>
         <div

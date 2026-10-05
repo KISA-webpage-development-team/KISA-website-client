@@ -1,30 +1,20 @@
 "use client";
 
-import {
-  type FocusEvent,
-  type ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
+import { Button, IconButton } from "@umichkisa-ds/web";
 
 import { sanitizeCarouselHtml } from "@/lib/dompurify/sanitizeCarouselHtml";
 import type { CarouselItem } from "@/types/carousel";
 
 const ROTATION_MS = 10_000;
 
-type FeaturedCarouselAdminMode<T extends CarouselItem> = {
-  /** Actions shown under the description of the slide on screen. */
-  renderSlideActions: (item: T) => ReactNode;
-};
-
-type FeaturedCarouselProps<T extends CarouselItem> = {
-  items: T[];
+type FeaturedCarouselProps = {
+  items: CarouselItem[];
   /**
-   * Admin preview mode. Rotation pauses while the pointer or focus is inside,
-   * and clicking the image selects the slide instead of opening its link.
+   * Admin preview mode. Starts paused with previous / next / play controls,
+   * and clicking the image does not open its link.
    */
-  adminMode?: FeaturedCarouselAdminMode<T>;
+  adminMode?: boolean;
 };
 
 /**
@@ -39,37 +29,53 @@ type FeaturedCarouselProps<T extends CarouselItem> = {
  * React render) and the active-index update is a single setState per cycle.
  * Crossfades use Tailwind opacity transitions, no animation library.
  *
- * `adminMode` turns it into the admin preview: per-slide actions, rotation
- * paused while the pointer or focus is inside, and no link opening.
+ * The shown slide is tracked by item ID, so a reorder keeps the same item on
+ * screen and restarts its cycle.
+ *
+ * `adminMode` turns it into the admin preview: starts paused, adds previous /
+ * next / play-pause controls and a position counter, and no link opening.
  */
-export default function FeaturedCarousel<T extends CarouselItem>({
+export default function FeaturedCarousel({
   items,
-  adminMode,
-}: FeaturedCarouselProps<T>) {
-  const [active, setActive] = useState(0);
-  const [isPointerInside, setIsPointerInside] = useState(false);
-  const [isFocusInside, setIsFocusInside] = useState(false);
+  adminMode = false,
+}: FeaturedCarouselProps) {
+  const [activeID, setActiveID] = useState<number | null>(
+    items[0]?.carouselItemID ?? null,
+  );
+  const [isPlaying, setIsPlaying] = useState(!adminMode);
+  const itemsRef = useRef(items);
   const activeRef = useRef(0);
   const startRef = useRef(0);
-  const pausedRef = useRef(false);
+  const playingRef = useRef(isPlaying);
   const progressRefs = useRef<Array<HTMLSpanElement | null>>([]);
 
-  // The admin preview can lose items (archive, remove) while showing the last
-  // slide; fall back to the first one.
-  if (active >= items.length && active !== 0) {
-    setActive(0);
+  // The admin preview can lose the shown item (archive, remove); fall back to
+  // the first one and follow it from then on.
+  const activeIndex = items.findIndex(
+    (item) => item.carouselItemID === activeID,
+  );
+  if (activeIndex === -1 && items.length > 0) {
+    setActiveID(items[0].carouselItemID);
   }
-
-  const isAdminMode = adminMode !== undefined;
-  const isPaused = isAdminMode && (isPointerInside || isFocusInside);
+  const active = activeIndex === -1 ? 0 : activeIndex;
+  const orderKey = items.map((item) => item.carouselItemID).join(",");
 
   useEffect(() => {
+    itemsRef.current = items;
     activeRef.current = active;
-  }, [active]);
+  }, [items, active]);
+
+  // The admin preview hides its controls with a single item, so it holds still.
+  const isRotating = isPlaying && (!adminMode || items.length > 1);
 
   useEffect(() => {
-    pausedRef.current = isPaused;
-  }, [isPaused]);
+    playingRef.current = isRotating;
+  }, [isRotating]);
+
+  // A reorder restarts the shown item's cycle.
+  useEffect(() => {
+    startRef.current = performance.now();
+  }, [orderKey]);
 
   useEffect(() => {
     if (items.length === 0) return undefined;
@@ -79,7 +85,7 @@ export default function FeaturedCarousel<T extends CarouselItem>({
 
     const tick = (now: number) => {
       // While paused, shift the cycle start forward so the bar holds still.
-      if (pausedRef.current) startRef.current += now - lastFrame;
+      if (!playingRef.current) startRef.current += now - lastFrame;
       lastFrame = now;
       const fraction = Math.min((now - startRef.current) / ROTATION_MS, 1);
       const fillPct = fraction * 100;
@@ -90,7 +96,8 @@ export default function FeaturedCarousel<T extends CarouselItem>({
       if (fraction >= 1) {
         startRef.current = now;
         if (bar) bar.style.width = "0%";
-        setActive((prev) => (prev + 1) % items.length);
+        const next = itemsRef.current[(i + 1) % itemsRef.current.length];
+        setActiveID(next.carouselItemID);
       }
       frame = requestAnimationFrame(tick);
     };
@@ -101,43 +108,23 @@ export default function FeaturedCarousel<T extends CarouselItem>({
   if (items.length === 0) return null;
 
   const activeItem = items[active] ?? items[0];
-  const opensLink = !isAdminMode && activeItem.link !== null;
+  const opensLink = !adminMode && activeItem.link !== null;
 
   const handleImageClick = () => {
-    // In admin mode a click only selects the slide (focus pauses rotation).
     if (opensLink && activeItem.link) {
       window.open(activeItem.link, "_blank", "noopener,noreferrer");
     }
   };
 
-  const handleDotClick = (index: number) => {
-    // Reset all bar widths and the cycle clock so the new active bar starts
-    // from zero immediately.
-    progressRefs.current.forEach((bar) => {
-      if (bar) bar.style.width = "0%";
-    });
+  const select = (index: number) => {
+    // Restart the cycle clock so the new active bar starts from zero.
+    const wrapped = (index + items.length) % items.length;
     startRef.current = performance.now();
-    setActive(index);
+    setActiveID(items[wrapped].carouselItemID);
   };
 
-  const adminHandlers = isAdminMode
-    ? {
-        onMouseEnter: () => setIsPointerInside(true),
-        onMouseLeave: () => setIsPointerInside(false),
-        onFocus: () => setIsFocusInside(true),
-        onBlur: (event: FocusEvent<HTMLDivElement>) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) {
-            setIsFocusInside(false);
-          }
-        },
-      }
-    : {};
-
   return (
-    <div
-      className="flex w-full flex-col gap-6 lg:flex-row lg:items-center lg:gap-10"
-      {...adminHandlers}
-    >
+    <div className="flex w-full flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
       {/* Image */}
       <div className="relative aspect-[3/2] w-full overflow-hidden rounded-md bg-surface-subtle lg:basis-[40%]">
         {items.map((item, index) => {
@@ -173,7 +160,7 @@ export default function FeaturedCarousel<T extends CarouselItem>({
 
       {/* Title + description + progress dots */}
       <div className="flex flex-1 flex-col gap-6">
-        <div className="relative min-h-[10rem] overflow-hidden md:min-h-[12rem]">
+        <div className="relative min-h-[10rem] overflow-hidden md:min-h-[13rem]">
           {items.map((item, index) => {
             const isActive = index === active;
             return (
@@ -200,46 +187,73 @@ export default function FeaturedCarousel<T extends CarouselItem>({
           })}
         </div>
 
-        {adminMode ? (
-          <div className="flex flex-wrap items-center gap-2">
-            {adminMode.renderSlideActions(activeItem)}
-          </div>
-        ) : null}
-
-        {/* Progress / pagination */}
-        <div
-          className="flex flex-row gap-2"
-          role="tablist"
-          aria-label="추천 게시물 선택"
-        >
-          {items.map((item, index) => (
-            <button
-              key={`carousel-progress-${item.carouselItemID}`}
-              type="button"
-              role="tab"
-              aria-selected={active === index}
-              aria-label={`${item.title} 보기`}
-              className="flex-1 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
-              onClick={() => handleDotClick(index)}
-            >
-              <span
-                className="relative block h-1 w-full overflow-hidden rounded-full bg-surface-subtle"
-                role="progressbar"
-                aria-valuemin={0}
-                aria-valuemax={100}
+        {/* Progress / pagination, plus admin controls */}
+        <div className="flex items-center gap-3">
+          <div
+            className="flex flex-1 flex-row gap-2"
+            role="tablist"
+            aria-label="추천 게시물 선택"
+          >
+            {items.map((item, index) => (
+              <button
+                key={`carousel-progress-${item.carouselItemID}`}
+                type="button"
+                role="tab"
+                aria-selected={active === index}
+                aria-label={`${item.title} 보기`}
+                className="flex-1 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+                onClick={() => select(index)}
               >
                 <span
-                  ref={(el) => {
-                    progressRefs.current[index] = el;
-                  }}
-                  className="absolute inset-y-0 left-0 bg-brand-primary"
-                  style={{
-                    width: index < active ? "100%" : "0%",
-                  }}
-                />
+                  className="relative block h-1 w-full overflow-hidden rounded-full bg-surface-subtle"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <span
+                    ref={(el) => {
+                      progressRefs.current[index] = el;
+                    }}
+                    className="absolute inset-y-0 left-0 bg-brand-primary"
+                    // The active bar's width is driven by the animation frame.
+                    style={
+                      index === active
+                        ? undefined
+                        : { width: index < active ? "100%" : "0%" }
+                    }
+                  />
+                </span>
+              </button>
+            ))}
+          </div>
+          {adminMode && items.length > 1 ? (
+            <div className="flex shrink-0 items-center gap-1">
+              <IconButton
+                icon="chevron-left"
+                size="sm"
+                variant="tertiary"
+                aria-label="이전 배너"
+                onClick={() => select(active - 1)}
+              />
+              <span className="type-body-sm tabular-nums text-muted-foreground">
+                {`${active + 1} / ${items.length}`}
               </span>
-            </button>
-          ))}
+              <IconButton
+                icon="chevron-right"
+                size="sm"
+                variant="tertiary"
+                aria-label="다음 배너"
+                onClick={() => select(active + 1)}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsPlaying((playing) => !playing)}
+              >
+                {isPlaying ? "일시정지" : "재생"}
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

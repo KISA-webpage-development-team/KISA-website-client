@@ -66,7 +66,7 @@ export default function CarouselDescriptionEditor({
     <div
       ref={wrapperRef}
       data-invalid={invalid}
-      className="carousel-description-editor type-body text-foreground [&_.ql-toolbar]:rounded-t-md [&_.ql-container]:rounded-b-md [&_.ql-editor]:min-h-40"
+      className="carousel-description-editor type-body-sm text-foreground [&_.ql-toolbar]:rounded-t-md [&_.ql-container]:rounded-b-md [&_.ql-editor]:min-h-40"
     >
       <style jsx global>{`
         .carousel-description-editor .ql-toolbar.ql-snow {
@@ -79,9 +79,9 @@ export default function CarouselDescriptionEditor({
           font: inherit;
         }
 
-        .carousel-description-editor .ql-container.ql-snow:focus-within {
-          outline: 2px solid var(--color-focus-ring);
-          outline-offset: 2px;
+        .carousel-description-editor:focus-within .ql-toolbar.ql-snow,
+        .carousel-description-editor:focus-within .ql-container.ql-snow {
+          border-color: var(--color-brand-primary);
         }
 
         .carousel-description-editor[data-invalid="true"]
@@ -89,7 +89,13 @@ export default function CarouselDescriptionEditor({
           border-color: var(--color-error);
         }
 
+        .carousel-description-editor .ql-editor {
+          padding: 0.5rem 0.75rem;
+        }
+
         .carousel-description-editor .ql-editor.ql-blank::before {
+          left: 0.75rem;
+          right: 0.75rem;
           color: var(--color-muted-foreground);
           font-style: normal;
         }

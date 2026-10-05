@@ -101,26 +101,29 @@ Actions:
 
 ## 8. Admin UI
 
-- **Admin hub:** in `src/components/layout/admin/AdminHubCards.tsx`, the "Website CMS" coming-soon card becomes a live "Home Carousel" card with Korean subtext. It links to `/admin/website/carousel`. The hub keeps five cards.
+- **Admin hub:** in `src/components/layout/admin/AdminHubCards.tsx`, the "Website CMS" coming-soon card becomes a live "Main Banner" card with Korean subtext. It links to `/admin/website/carousel`. The hub keeps five cards.
+- **Wording:** Korean copy calls the carousel 메인 배너 (main banner).
 
 ### `/admin/website/carousel`
 
 - **Header:** page title and a **New item** button.
 - **Carousel preview, at the top:** the real `FeaturedCarousel` in an admin mode, rendering the live items.
   - **Order:** it follows the on-screen order, including unsaved reorders, and shows an "Unsaved order" badge until Save order or Discard.
-  - **Slide actions:** the shown slide offers **Edit**, **Archive**, **Remove** and **Open link**.
-  - **Rotation:** pauses while the pointer or keyboard focus is inside the preview, and resumes on leaving. Clicking a pagination bar jumps to that slide and pauses there. Clicking the image selects the slide instead of opening the link.
+  - **Controls:** previous and next buttons, a position counter, and a play/pause button. Clicking a pagination bar jumps to that slide. Clicking the image does not open the link. With a single live item the controls are hidden.
+  - **Rotation:** starts paused. Play rotates on the home page's interval.
+  - **Shown slide:** stays on the same item when the order changes. If that item leaves the live list, the preview falls back to the first item.
   - **Public page:** the home page renders `FeaturedCarousel` without admin mode.
   - **Empty:** when no item is live, the preview area shows the empty state: "No live items. The home page carousel is currently hidden.", with a New item button.
 - **Live and Archive tabs:**
   - **Live tab:**
     - **Rows:** each row has a thumbnail, title, end date or "No end date", "edited by … · date", and Edit, Archive and Remove actions.
-    - **Ordering controls:** described in section 4.
+    - **Ordering controls:** described in section 4. Hidden when only one item is live.
     - **Soft-limit warning:** shown above 6 live items.
   - **Archive tab:**
     - **List:** sorted by most recently archived or expired, with a title search box that filters in the browser over the full archive list, loaded once.
     - **Rows:** each row has Restore, Use as template, Edit and Remove actions.
 - **Dialogs:**
+  - **Edit:** the item form, without the slide preview. Opened from Edit on either tab.
   - **Restore:** asks for a new end date or none.
   - **Remove:** a confirmation.
   - **Archiving or removing the last live item:** the confirmation also says the home page carousel will be hidden.
@@ -129,10 +132,9 @@ Actions:
 
 - **Routes:**
   - `/admin/website/carousel/new`
-  - `/admin/website/carousel/[id]/edit`
   - `/admin/website/carousel/new?from={id}`, for use as template
 - **Layout:** the form is on the left. A live preview of the full slide is on the right, using the same slide markup as the home carousel so title and description clipping match. On mobile the two stack.
-- **Unsaved changes:** leaving with unsaved changes asks for confirmation.
+- **Unsaved changes:** leaving a form page or closing the edit dialog with unsaved changes asks for confirmation.
 
 Visual design is done with pastiche.
 

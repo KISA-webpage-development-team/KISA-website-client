@@ -22,13 +22,14 @@ import type { AdminCarouselItem } from "@/types/carousel";
 import { useCarouselOrder } from "../hooks/useCarouselOrder";
 import ArchiveItemList from "./ArchiveItemList";
 import CarouselConfirmDialog from "./CarouselConfirmDialog";
+import CarouselEditDialog from "./CarouselEditDialog";
 import CarouselPreview from "./CarouselPreview";
 import CarouselRestoreDialog from "./CarouselRestoreDialog";
 import LiveItemList from "./LiveItemList";
 import { NEW_CAROUSEL_ITEM_HREF } from "./carouselAdminRoutes";
 
 type ItemAction = {
-  kind: "archive" | "remove" | "restore";
+  kind: "edit" | "archive" | "remove" | "restore";
   carouselItem: AdminCarouselItem;
 };
 
@@ -36,7 +37,7 @@ const NO_ITEMS: AdminCarouselItem[] = [];
 
 /**
  * /admin/website/carousel — preview, Live and Archive tabs, and the
- * archive / remove / restore dialogs. Every mutation toasts, then
+ * edit / archive / remove / restore dialogs. Every mutation toasts, then
  * revalidates the admin list.
  */
 export default function CarouselAdminView() {
@@ -96,7 +97,7 @@ export default function CarouselAdminView() {
 
     if (hasLoadError) {
       return (
-        <Alert variant="error" title="캐러셀 항목을 불러오지 못했습니다.">
+        <Alert variant="error" title="배너 목록을 불러오지 못했습니다.">
           잠시 후 페이지를 새로고침해 주세요.
         </Alert>
       );
@@ -107,8 +108,6 @@ export default function CarouselAdminView() {
         <CarouselPreview
           carouselItems={liveOrder.items}
           isDirty={liveOrder.isDirty}
-          onArchive={openAction("archive")}
-          onRemove={openAction("remove")}
         />
 
         <Tabs defaultValue="live" variant="underline">
@@ -132,6 +131,7 @@ export default function CarouselAdminView() {
               onResetToDateOrder={liveOrder.resetToDateOrder}
               onDiscard={liveOrder.discard}
               onSaveOrder={handleSaveOrder}
+              onEdit={openAction("edit")}
               onArchive={openAction("archive")}
               onRemove={openAction("remove")}
             />
@@ -140,6 +140,7 @@ export default function CarouselAdminView() {
             <ArchiveItemList
               carouselItems={archiveItems}
               onRestore={openAction("restore")}
+              onEdit={openAction("edit")}
               onRemove={openAction("remove")}
             />
           </TabsContent>
@@ -152,7 +153,7 @@ export default function CarouselAdminView() {
     <Container as="section" size="lg">
       <div className="flex flex-col gap-6">
         <header className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="type-h1 text-foreground">홈 캐러셀 관리</h1>
+          <h1 className="type-h1 text-foreground">메인 배너 관리</h1>
           <LinkButton href={NEW_CAROUSEL_ITEM_HREF} variant="primary">
             새 항목 추가
           </LinkButton>
@@ -160,6 +161,11 @@ export default function CarouselAdminView() {
         {renderContent()}
       </div>
 
+      <CarouselEditDialog
+        carouselItem={actionItem("edit")}
+        token={token}
+        onClose={() => setItemAction(null)}
+      />
       <CarouselConfirmDialog
         kind="archive"
         carouselItem={actionItem("archive")}

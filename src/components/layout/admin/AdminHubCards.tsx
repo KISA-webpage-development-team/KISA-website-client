@@ -54,8 +54,8 @@ const TOOLS: Tool[] = [
   },
   {
     kind: "live",
-    title: "Home Carousel",
-    sub: "홈페이지 상단 캐러셀의 항목을 등록하고 순서와 게시 기간을 관리합니다.",
+    title: "Main Banner",
+    sub: "홈페이지 상단 메인 배너를 등록하고 순서와 게시 기간을 관리합니다.",
     href: "/admin/website/carousel",
     icon: "image",
   },
