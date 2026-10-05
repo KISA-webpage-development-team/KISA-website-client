@@ -3,6 +3,7 @@ import {
   CLOUDINARY_API_SECRET,
   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
 } from "@/lib/cloudinary/env";
+import { requireAdmin } from "@/lib/admin/requireAdmin";
 import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
@@ -12,6 +13,9 @@ cloudinary.config({
 });
 
 export async function POST(request: Request) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
