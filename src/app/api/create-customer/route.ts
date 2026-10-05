@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-import { STRIPE_SECRET_KEY } from "@/constants/env";
-
-const stripe = new Stripe(STRIPE_SECRET_KEY as string);
+import { getServerStripe } from "@/lib/stripe/serverStripe";
 
 export async function POST(request: NextRequest) {
   try {
+    const stripe = getServerStripe();
     const { email, name } = await request.json();
 
     let stripeCustomer;
