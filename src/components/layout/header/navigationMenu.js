@@ -112,7 +112,7 @@ const menu = [
 
   {
     name: "KISA Picks",
-    href: "/info/kisa-picks",
+    href: "/kisa-picks",
   },
 
   {
