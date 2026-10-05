@@ -1,10 +1,12 @@
-import { getServerStripe } from "@/lib/stripe/serverStripe";
+import { STRIPE_SECRET_KEY } from "@/constants/env";
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+
+const stripe = new Stripe(STRIPE_SECRET_KEY as string);
 
 // Tip Payment Intent 생성
 export async function POST(request: NextRequest) {
   try {
-    const stripe = getServerStripe();
     // customer: email, name
     const { paymentMethodID, customerID } = await request.json();
     console.log("customer: ", customerID);

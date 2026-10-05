@@ -1,11 +1,14 @@
-import { getServerStripe } from '@/lib/stripe/serverStripe';
+import { STRIPE_SECRET_KEY } from '@/constants/env';
 import { NextRequest, NextResponse } from 'next/server';
+
+// route only happens on the server, so it's safe to expose the secret key here
+import Stripe from 'stripe';
+const stripe = new Stripe(STRIPE_SECRET_KEY as string);
 
 // this route creates a payment intent with a given amount and returns the client secret
 // client secret is from new paymentIntent object
 export async function POST(request: NextRequest) {
   try {
-    const stripe = getServerStripe();
     const { amount, customerID } = await request.json();
 
     const paymentIntent = await stripe.paymentIntents.create({
