@@ -69,7 +69,7 @@ Actions:
 
 ## 5. Images
 
-- **Accepted files:** JPEG, PNG or WebP, up to about 10 MB.
+- **Accepted files:** JPEG, PNG or WebP of any size. Before upload, the browser shrinks an image to at most 1600px on the long edge (re-encoded as JPEG) whenever it is larger than that or over 4 MB.
 - **Upload:** the browser uploads to Cloudinary `temp/` through the existing Next.js Cloudinary routes (section 9, PR 1b). On save, the backend renames the image to `carousel/item-{id}` and stores its `public_id` and `version`.
 - **Cancel:** cancelling a form deletes its temp upload. Temp uploads left behind by a closed tab are not cleaned up.
 - **Replace:** replacing an image on edit deletes the previous Cloudinary image.

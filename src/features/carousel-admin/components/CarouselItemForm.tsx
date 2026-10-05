@@ -24,6 +24,7 @@ import {
   deleteCarouselTempImage,
   uploadCarouselImage,
 } from "@/apis/cloudinary/carouselImage";
+import { prepareImageForUpload } from "@/utils/images/prepareImageForUpload";
 import {
   createCarouselItem,
   updateCarouselItem,
@@ -44,13 +45,11 @@ const CarouselDescriptionEditor = dynamic(
 );
 
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 
 const IMAGE_UPLOAD_MESSAGES: FileUploadMessages = {
   clickToUpload: "눌러서 업로드",
   uploadLabel: "이미지 업로드",
   removeLabel: "이미지 삭제",
-  sizeExceeded: () => "10MB 이하의 이미지만 올릴 수 있습니다.",
   invalidType: () => "JPEG, PNG, WebP 이미지만 올릴 수 있습니다.",
   uploadFailed: "이미지 업로드에 실패했습니다.",
   removeFailed: "이미지를 삭제하지 못했습니다.",
@@ -268,14 +267,18 @@ export default function CarouselItemForm({
       toast.error("JPEG, PNG, WebP 이미지만 올릴 수 있습니다.");
       throw new Error("Unsupported image type");
     }
-    if (file.size > MAX_IMAGE_BYTES) {
-      toast.error("10MB 이하의 이미지만 올릴 수 있습니다.");
-      throw new Error("Image too large");
+
+    let prepared: File;
+    try {
+      prepared = await prepareImageForUpload(file);
+    } catch (prepareError) {
+      toast.error("이미지를 읽을 수 없습니다. 다른 파일을 선택해 주세요.");
+      throw prepareError;
     }
 
     let uploaded: FileUploadValue;
     try {
-      uploaded = await uploadCarouselImage(file, token);
+      uploaded = await uploadCarouselImage(prepared, token);
     } catch (uploadError) {
       toast.error("이미지 업로드에 실패했습니다.");
       throw uploadError;
@@ -400,7 +403,7 @@ export default function CarouselItemForm({
         htmlFor="carousel-item-image"
         label="이미지"
         required
-        description="JPEG, PNG, WebP · 최대 10MB · 3:2 비율로 잘려 보입니다."
+        description="JPEG, PNG, WebP · 큰 이미지는 자동으로 줄여서 올립니다 · 3:2 비율로 잘려 보입니다."
         error={errors.image?.message}
       >
         <FileUpload
@@ -409,7 +412,6 @@ export default function CarouselItemForm({
           onUpload={handleUpload}
           onRemove={handleImageRemove}
           accept={ACCEPTED_IMAGE_TYPES}
-          maxSize={MAX_IMAGE_BYTES}
           disabled={isSaving}
           messages={IMAGE_UPLOAD_MESSAGES}
         />
