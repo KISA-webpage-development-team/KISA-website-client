@@ -82,8 +82,7 @@ Next.js 14 App Router project (TypeScript, TailwindCSS) serving two apps under `
 ├── docs/      # project documentation
 ├── public/    # static assets served directly
 ├── scripts/   # one-off utility scripts
-├── src/       # application source (see @docs/general_guide.md for full breakdown)
-└── tests/     # test files
+└── src/       # application source (see @docs/general_guide.md for full breakdown)
 ```
 
 ## Task Instructions
