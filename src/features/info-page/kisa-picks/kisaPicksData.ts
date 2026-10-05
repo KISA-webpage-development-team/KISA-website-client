@@ -14,6 +14,7 @@ export type KisaPick = {
   lat: number;
   lng: number;
   note: string;
+  whatToOrder?: string[];
   tags: string[];
   image: string;
   mapsUrl: string;
@@ -37,6 +38,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2795276,
     lng: -83.7427536,
     note: "Reliable Korean BBQ and comfort food close to Central Campus.",
+    whatToOrder: ["Korean BBQ set", "Kimchi stew", "Seafood pancake"],
     tags: ["Korean", "Group meal", "Central"],
     image: "/images/tomukun_bbq.webp",
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Tomukun+BBQ+Ann+Arbor",
@@ -50,6 +52,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2795276,
     lng: -83.7427536,
     note: "Easy campus ramen/noodle stop when you want something warm and quick.",
+    whatToOrder: ["Tonkotsu ramen", "Miso ramen", "Bao or small plates"],
     tags: ["Noodles", "Casual", "Central"],
     image: "/images/tomukun_noodle_bar.webp",
     mapsUrl:
@@ -64,6 +67,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2787459,
     lng: -83.7399654,
     note: "Small spot with popcorn chicken, bento boxes, and easy Korean-style meals.",
+    whatToOrder: ["Popcorn chicken", "Bento box", "Bibimbap-style bowl"],
     tags: ["Korean", "Quick bite", "Casual"],
     image: "/images/hola_seoul.webp",
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Hola+Seoul+Ann+Arbor",
@@ -77,6 +81,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2422043,
     lng: -83.733998,
     note: "A farther Korean BBQ option when the group is willing to drive.",
+    whatToOrder: ["Korean BBQ", "Bulgogi", "Soondubu"],
     tags: ["Korean", "BBQ", "Worth the trip"],
     image: "/images/seoul_garden.webp",
     mapsUrl:
@@ -91,6 +96,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2787451,
     lng: -83.7400547,
     note: "Student-friendly Japanese/Korean-leaning comfort food near North University.",
+    whatToOrder: ["Bibimbap", "Udon", "Teriyaki bowl"],
     tags: ["Japanese", "Korean", "Central"],
     image: "/images/mama_satto.webp",
     mapsUrl:
@@ -105,6 +111,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2751505,
     lng: -83.7323054,
     note: "Classic South U Korean comfort food with generous portions.",
+    whatToOrder: ["Bulgogi", "Kimchi fried rice", "Soon tofu"],
     tags: ["Korean", "South U", "Casual"],
     image: "/images/kangs_restaurant.webp",
     mapsUrl:
@@ -119,6 +126,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2751514,
     lng: -83.7324922,
     note: "Korean fried chicken close to South U; good for casual group food.",
+    whatToOrder: ["Soy garlic chicken", "Spicy chicken", "Shareable wings"],
     tags: ["Korean", "Chicken", "South U"],
     image: "/images/noori_chicken.webp",
     mapsUrl:
@@ -133,6 +141,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2897924,
     lng: -83.7376753,
     note: "Korean market for groceries, pantry staples, and prepared side dishes.",
+    whatToOrder: ["Banchan", "Instant ramen", "Korean snacks"],
     tags: ["Korean market", "Groceries", "Essentials"],
     image: "/images/orange_market.webp",
     mapsUrl:
@@ -147,6 +156,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2830279,
     lng: -83.7467198,
     note: "Good value Thai food with multiple Ann Arbor locations.",
+    whatToOrder: ["Pad thai", "Drunken noodles", "Curry bowl"],
     tags: ["Thai", "Value", "Multi-location"],
     image: "/images/no_thai.webp",
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=No+Thai+Ann+Arbor",
@@ -160,6 +170,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2446818,
     lng: -83.7375348,
     note: "Sushi burritos and casual Japanese options south of campus.",
+    whatToOrder: ["Sushi burrito", "Poke-style bowl", "Tempura side"],
     tags: ["Japanese", "Sushi", "Worth the trip"],
     image: "/images/kanbu.webp",
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Kanbu+Ann+Arbor",
@@ -173,6 +184,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.3037636,
     lng: -83.7058163,
     note: "North-side Chinese restaurant near Plymouth Road.",
+    whatToOrder: ["Mapo tofu", "Noodle dish", "Shareable family-style plates"],
     tags: ["Chinese", "North Campus", "Worth the trip"],
     image: "/images/evergreen.webp",
     mapsUrl:
@@ -187,6 +199,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2777316,
     lng: -83.7424327,
     note: "Close-to-campus Chinese option with a practical, student-friendly feel.",
+    whatToOrder: ["Fried rice", "Noodle soup", "Shareable entree"],
     tags: ["Chinese", "Near Diag", "Casual"],
     image: "/images/asian_legend.webp",
     mapsUrl:
@@ -201,6 +214,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2792719,
     lng: -83.7416011,
     note: "Downtown ramen and Japanese small plates close to Central Campus.",
+    whatToOrder: ["Ramen", "Duck fat fried chicken", "Small plates"],
     tags: ["Japanese", "Ramen", "Downtown"],
     image: "/images/slurping_turtle.webp",
     mapsUrl:
@@ -215,6 +229,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2804063,
     lng: -83.7493606,
     note: "Downtown Cuban-inspired burgers and batidos; better for a planned meal.",
+    whatToOrder: ["Frita burger", "Batido", "Loaded fries"],
     tags: ["Downtown", "Burger", "Date spot"],
     image: "/images/frita_batidos.webp",
     mapsUrl:
@@ -229,6 +244,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2752067,
     lng: -83.7356682,
     note: "NY-style slices near campus; easy late-day food move.",
+    whatToOrder: ["Cheese slice", "Pepperoni slice", "White slice"],
     tags: ["Pizza", "Quick bite", "Central"],
     image: "/images/joes_pizza.webp",
     mapsUrl:
@@ -243,6 +259,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2797193,
     lng: -83.7513535,
     note: "Ann Arbor ice cream staple with a lot of flavors; worth the walk.",
+    whatToOrder: ["Seasonal scoop", "Waffle cone", "Split a flight"],
     tags: ["Dessert", "Kerrytown", "Date spot"],
     image: "/images/blank_slate.webp",
     mapsUrl:
@@ -257,6 +274,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2801,
     lng: -83.7481,
     note: "Downtown ice cream stop for dessert after dinner.",
+    whatToOrder: ["Seasonal scoop", "Milkshake", "Two-flavor cup"],
     tags: ["Dessert", "Downtown", "Ice cream"],
     image: "/images/milk_and_froth.webp",
     mapsUrl:
@@ -271,6 +289,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.27535,
     lng: -83.73515,
     note: "Bubble tea and dessert near South University.",
+    whatToOrder: ["Milk tea", "Fruit tea", "Dessert cup"],
     tags: ["Dessert", "Boba", "South U"],
     image: "/images/sweeting.webp",
     mapsUrl:
@@ -285,6 +304,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2784432,
     lng: -83.7412937,
     note: "Small coffee stop tucked into Nickels Arcade; best for slow campus breaks.",
+    whatToOrder: ["Pour-over", "Espresso drink", "Pastry"],
     tags: ["Coffee", "Study break", "Central"],
     image: "/images/comet_coffee.webp",
     mapsUrl:
@@ -299,6 +319,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2796696,
     lng: -83.7410006,
     note: "More polished sit-down option right by campus.",
+    whatToOrder: ["Brunch plate", "Pasta or bowl", "Shared appetizer"],
     tags: ["Sit-down", "State Street", "Brunch"],
     image: "/images/savas.webp",
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Sava%27s+Ann+Arbor",
@@ -312,6 +333,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2803277,
     lng: -83.7465775,
     note: "Polished downtown tapas and dinner spot.",
+    whatToOrder: ["Paella", "Patatas bravas", "Tapas to share"],
     tags: ["Downtown", "Date spot", "Sit-down"],
     image: "/images/aventura.webp",
     mapsUrl:
@@ -326,6 +348,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2795889,
     lng: -83.7442348,
     note: "Pizza, pasta, and a nicer downtown dinner feel.",
+    whatToOrder: ["Wood-fired pizza", "Pasta", "Shared salad"],
     tags: ["Italian", "Downtown", "Sit-down"],
     image: "/images/mani_osteria_bar.webp",
     mapsUrl:
@@ -340,6 +363,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.27995,
     lng: -83.74795,
     note: "Higher-end downtown dinner option for special occasions.",
+    whatToOrder: ["Seafood entree", "Asian-inspired small plate", "Chef-style special"],
     tags: ["Asian", "Downtown", "Special occasion"],
     image: "/images/pacific_rim_by_kana.webp",
     mapsUrl:
@@ -354,6 +378,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2846981,
     lng: -83.7451513,
     note: "Classic Ann Arbor deli; best saved for when you want the local institution.",
+    whatToOrder: ["Signature sandwich", "Pickle side", "Deli salad"],
     tags: ["Deli", "Kerrytown", "Worth the trip"],
     image: "/images/zingermans_delicatessen.webp",
     mapsUrl:
@@ -368,6 +393,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2831511,
     lng: -83.7486366,
     note: "Casual Peruvian option near Kerrytown and Main Street.",
+    whatToOrder: ["Lomo saltado", "Pollo dish", "Empanada"],
     tags: ["Peruvian", "Kerrytown", "Casual"],
     image: "/images/culantro.webp",
     mapsUrl:
@@ -382,6 +408,7 @@ export const kisaPicks: KisaPick[] = [
     lat: 42.2789296,
     lng: -83.7418442,
     note: "Burger and beer spot downtown; better for a group night than quick food.",
+    whatToOrder: ["Cosmik fries", "Burger", "Shareable appetizer"],
     tags: ["Drinks", "Downtown", "Group"],
     image: "/images/hop_cat.webp",
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=HopCat+Ann+Arbor",

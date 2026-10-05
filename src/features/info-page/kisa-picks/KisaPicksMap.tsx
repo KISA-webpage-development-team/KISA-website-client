@@ -21,6 +21,8 @@ import {
 import {
   Coffee,
   ExternalLink,
+  List,
+  Map as MapIcon,
   MapPin,
   Navigation,
   ShoppingBag,
@@ -37,6 +39,7 @@ import {
 } from "./kisaPicksData";
 
 type Filter = "all" | KisaPickCategory | "korean" | "asian" | "dessert";
+type ViewMode = "map" | "list";
 
 const filters: { id: Filter; label: string }[] = [
   { id: "all", label: "All" },
@@ -379,6 +382,7 @@ export default function KisaPicksMap() {
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
   const [activeFilter, setActiveFilter] = useState<Filter>("all");
+  const [viewMode, setViewMode] = useState<ViewMode>("map");
   const [selected, setSelected] = useState<KisaPick>(defaultPick);
   const [isMapReady, setIsMapReady] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
@@ -484,6 +488,18 @@ export default function KisaPicksMap() {
     });
   }
 
+  function showPickOnMap(pick: KisaPick) {
+    setSelected(pick);
+    setViewMode("map");
+    window.setTimeout(() => {
+      mapRef.current?.flyTo({
+        center: [pick.lng, pick.lat],
+        zoom: 15.2,
+        duration: 550,
+      });
+    }, 0);
+  }
+
   const SelectedIcon = categoryIcons[selected.category];
 
   return (
@@ -501,8 +517,34 @@ export default function KisaPicksMap() {
             Central and North Campus are highlighted so it is easier to orient.
           </p>
         </div>
-        <div className="type-body-sm text-muted-foreground">
-          {visiblePicks.length} spots shown
+        <div className="flex flex-col items-start gap-2 md:items-end">
+          <div className="inline-flex rounded-md border border-border bg-surface p-1 shadow-sm">
+            {(["map", "list"] as const).map((mode) => {
+              const Icon = mode === "map" ? MapIcon : List;
+              const isActive = viewMode === mode;
+              return (
+                <button
+                  key={mode}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => setViewMode(mode)}
+                  className={[
+                    "type-body-sm inline-flex items-center gap-2 rounded px-3 py-1.5 transition-colors",
+                    "focus-visible:outline-2 focus-visible:outline-focus-ring",
+                    isActive
+                      ? "bg-brand-primary text-brand-foreground"
+                      : "text-muted-foreground hover:bg-surface-muted hover:text-foreground",
+                  ].join(" ")}
+                >
+                  <Icon className="size-4" aria-hidden />
+                  {mode === "map" ? "Map" : "List"}
+                </button>
+              );
+            })}
+          </div>
+          <div className="type-body-sm text-muted-foreground">
+            {visiblePicks.length} spots shown
+          </div>
         </div>
       </header>
 
@@ -530,6 +572,99 @@ export default function KisaPicksMap() {
           })}
         </div>
 
+        {viewMode === "list" ? (
+          <div className="absolute inset-0 z-20 overflow-y-auto bg-surface-subtle/95 px-3 pb-6 pt-24 backdrop-blur-sm md:px-5">
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {visiblePicks.map((pick) => {
+                const PickIcon = categoryIcons[pick.category];
+                const isSelected = selected.id === pick.id;
+                return (
+                  <Card
+                    key={pick.id}
+                    className={[
+                      "gap-3 border-border bg-surface p-3 shadow-sm transition-colors",
+                      isSelected ? "border-brand-primary" : "",
+                    ].join(" ")}
+                  >
+                    <div className="relative aspect-[5/3] overflow-hidden rounded-md bg-surface-muted">
+                      <Image
+                        src={pick.image}
+                        alt={pick.name}
+                        fill
+                        sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
+                        className="object-cover"
+                      />
+                    </div>
+                    <CardHeader className="gap-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <CardTitle as="h2" className="line-clamp-none">
+                            {pick.name}
+                          </CardTitle>
+                          <p className="type-body-sm text-muted-foreground">
+                            {pick.area} · {categoryLabels[pick.category]}
+                          </p>
+                        </div>
+                        <PickIcon
+                          className="mt-1 size-5 shrink-0 text-info"
+                          aria-hidden
+                        />
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-3 overflow-visible">
+                      <p className="type-body-sm text-foreground">
+                        {pick.note}
+                      </p>
+                      {pick.whatToOrder?.length ? (
+                        <div className="rounded-md border border-border bg-surface-muted/70 p-3">
+                          <p className="type-caption font-semibold uppercase tracking-wide text-muted-foreground">
+                            What to order
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {pick.whatToOrder.map((item) => (
+                              <Badge key={item} variant="secondary" size="sm">
+                                {item}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+                      <div className="flex flex-wrap gap-1.5">
+                        {pick.tags.map((tag) => (
+                          <Badge key={tag} variant="outline" size="sm">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => showPickOnMap(pick)}
+                        >
+                          <Navigation className="size-4" aria-hidden />
+                          Show spot
+                        </Button>
+                        <a
+                          href={pick.mapsUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="type-body-sm inline-flex items-center justify-center gap-2 rounded-md border border-brand-primary bg-brand-primary px-3 py-2 font-semibold text-brand-foreground transition-colors hover:bg-brand-primary-hover"
+                        >
+                          Maps
+                          <ExternalLink className="size-4" aria-hidden />
+                        </a>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+
+        {viewMode === "map" ? (
         <aside className="absolute bottom-4 left-4 right-4 z-30 md:bottom-auto md:right-auto md:top-24 md:w-[330px]">
           <Card className="gap-3 border-border-strong bg-surface/95 p-3 shadow-lg backdrop-blur">
             <div className="relative aspect-[2/1] overflow-hidden rounded-md bg-surface-muted md:aspect-[16/9]">
@@ -559,6 +694,20 @@ export default function KisaPicksMap() {
             </CardHeader>
             <CardContent className="flex flex-col gap-3 overflow-visible">
               <p className="type-body-sm text-foreground">{selected.note}</p>
+              {selected.whatToOrder?.length ? (
+                <div className="rounded-md border border-border bg-surface-muted/70 p-3">
+                  <p className="type-caption font-semibold uppercase tracking-wide text-muted-foreground">
+                    What to order
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {selected.whatToOrder.map((item) => (
+                      <Badge key={item} variant="secondary" size="sm">
+                        {item}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
               <div className="flex flex-wrap gap-1.5">
                 {selected.tags.map((tag) => (
                   <Badge key={tag} variant="outline" size="sm">
@@ -595,29 +744,37 @@ export default function KisaPicksMap() {
             </CardContent>
           </Card>
         </aside>
+        ) : null}
 
-        <div className="absolute right-4 top-20 z-30 flex flex-col gap-2 md:bottom-24 md:top-auto">
+        {viewMode === "map" ? (
+        <div className="absolute right-4 top-20 z-30 flex flex-col gap-2 md:top-4">
           <Button
             variant="secondary"
             size="sm"
-            className="h-10 w-10 p-0"
+            className="h-10 w-10 border-border bg-surface/95 p-0 shadow-sm backdrop-blur"
             aria-label="Reset map view"
             onClick={resetMap}
           >
             <MapPin className="size-4" aria-hidden />
           </Button>
         </div>
+        ) : null}
 
-        <div className="absolute bottom-4 right-4 z-30 hidden rounded-md border border-border bg-surface/90 p-2 shadow-sm backdrop-blur md:block">
-          <div className="type-caption flex items-center gap-2 text-muted-foreground">
+        {viewMode === "map" ? (
+        <div className="absolute right-4 top-32 z-30 hidden rounded-md border border-border bg-surface/95 p-2 shadow-sm backdrop-blur md:block">
+          <p className="type-caption mb-1 font-semibold text-foreground">
+            Campus areas
+          </p>
+          <div className="type-caption flex items-center gap-2 whitespace-nowrap text-muted-foreground">
             <span className="h-3 w-3 rounded-sm bg-[#ffcb05]/40 ring-1 ring-[#b78b00]" />
             Central Campus
           </div>
-          <div className="type-caption mt-1 flex items-center gap-2 text-muted-foreground">
+          <div className="type-caption mt-1 flex items-center gap-2 whitespace-nowrap text-muted-foreground">
             <span className="h-3 w-3 rounded-sm bg-blue-500/25 ring-1 ring-blue-700" />
             North Campus
           </div>
         </div>
+        ) : null}
 
         <div
           ref={mapContainerRef}
