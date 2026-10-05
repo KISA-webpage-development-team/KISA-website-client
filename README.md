@@ -73,11 +73,3 @@ then run
 The pocha app supports seasonal themes. To switch between spring and default:
 
 Edit `src/features/pocha/featureFlag.ts` and set `POCHA_THEME` to `"spring"` or `"default"`.
-
----
-
-## Insta2Carousel
-
-Automated Pipeline for Instagram Posts -> Home Carousel UI
-
-[Docs Link](./docs/insta2carousel.md)
