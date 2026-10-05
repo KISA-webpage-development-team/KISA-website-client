@@ -7,6 +7,7 @@ import { boardsHandlers } from "./boards";
 import { postsHandlers } from "./posts";
 import { commentsHandlers } from "./comments";
 import { likesHandlers } from "./likes";
+import { carouselHandlers } from "./carousel";
 
 /**
  * MSW request handlers.
@@ -22,4 +23,5 @@ export const handlers: RequestHandler[] = [
   ...postsHandlers,
   ...commentsHandlers,
   ...likesHandlers,
+  ...carouselHandlers,
 ];
