@@ -67,6 +67,13 @@ const TOOLS: Tool[] = [
     icon: "layout-grid",
   },
   {
+    kind: "live",
+    title: "Course Evaluations",
+    sub: "KISA 코스 후기와 수업별 리뷰 데이터를 관리합니다.",
+    href: "/admin/website/course-evaluations",
+    icon: "list",
+  },
+  {
     kind: "coming-soon",
     title: "RSVP CMS",
     sub: "이벤트 RSVP와 참가자 명단을 관리하는 도구를 곧 제공합니다.",
