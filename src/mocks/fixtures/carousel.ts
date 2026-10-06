@@ -23,7 +23,7 @@ const base = (
   title: `Carousel item ${id}`,
   description: "<p>Description</p>",
   link: null,
-  imageUrl: "/kisa_all_2025-2026.webp",
+  imageUrl: "/26-27_kisa_all.webp",
   endDate: null,
   status: "live",
   position: null,

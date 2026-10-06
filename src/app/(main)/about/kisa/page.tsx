@@ -55,8 +55,8 @@ export default function KisaPage() {
         <figure className="w-full">
           <div className="relative w-full overflow-hidden rounded-lg border border-border bg-surface-subtle aspect-[2400/1050]">
             <Image
-              src="/kisa_all_2025-2026.webp"
-              alt="KISA 2025-2026 단체 사진"
+              src="/26-27_kisa_all.webp"
+              alt="KISA 2026-2027 단체 사진"
               fill
               sizes="(min-width: 1024px) 1280px, 100vw"
               className="object-cover"
@@ -65,7 +65,7 @@ export default function KisaPage() {
           </div>
           <figcaption className="mt-3 flex items-center justify-between">
             <span className="type-caption text-muted-foreground uppercase">
-              KISA 2025-26
+              KISA 2026-27
             </span>
             <span className="type-caption text-muted-foreground">
               University of Michigan, Ann Arbor
