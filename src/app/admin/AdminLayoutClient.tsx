@@ -8,7 +8,9 @@ import { AuthContextProvider, useAuth } from "@/lib/auth/authContext";
 import { LoadingSpinner, StatusView } from "@umichkisa-ds/web";
 import LoginButton from "@/components/layout/header/LoginButton";
 import useAdmin from "@/lib/next-auth/useAdmin";
-import BackToHubFAB from "@/components/layout/admin/BackToHubFAB";
+import BackToHubFAB, {
+  type BackTarget,
+} from "@/components/layout/admin/BackToHubFAB";
 import { setFromHubFlag } from "@/lib/admin/fromHubFlag";
 
 // Dev-only toggle. Build-time gate: when NEXT_PUBLIC_MOCK_API !== "1",
@@ -21,6 +23,18 @@ const MockAuthToggle = IS_MOCK_MODE
       { ssr: false }
     )
   : null;
+
+const HUB_TARGET: BackTarget = {
+  href: "/admin",
+  label: "관리자 홈",
+  ariaLabel: "관리자 홈으로 돌아가기",
+};
+
+const WEBSITE_CMS_TARGET: BackTarget = {
+  href: "/admin/website",
+  label: "Website CMS",
+  ariaLabel: "Website CMS로 돌아가기",
+};
 
 // Mock-only auth gate. In prod, next-auth middleware (`src/middleware.ts`)
 // gates `/admin/:path*` server-side — any request that reaches an /admin
@@ -79,10 +93,16 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
   // sticky bulk-promote action bar. All other admin routes default expanded.
   const defaultCollapsed = pathname.startsWith("/admin/pocha/dashboard");
 
+  // Back goes one level up: Website CMS sections return to /admin/website,
+  // everything else to the hub.
+  const backTarget = pathname.startsWith("/admin/website/")
+    ? WEBSITE_CMS_TARGET
+    : HUB_TARGET;
+
   const body = (
     <AdminGate>
       <div className="w-full">{children}</div>
-      <BackToHubFAB defaultCollapsed={defaultCollapsed} />
+      <BackToHubFAB target={backTarget} defaultCollapsed={defaultCollapsed} />
     </AdminGate>
   );
 
