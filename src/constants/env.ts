@@ -27,8 +27,13 @@ const useMockApi = process.env.NEXT_PUBLIC_MOCK_API === "1";
 // real API version means a future v3 backend bump won't silently change
 // dev-mock behavior. If MSW misses, the request 404s against the dev server
 // instead of CORS-failing against prod.
+// Server components run in Node, which cannot resolve a relative URL, so on
+// the server the prefix gets a placeholder origin; `src/mocks/node.ts`
+// intercepts those requests (started from `src/instrumentation.ts`).
 export const BACKEND_URL = useMockApi
-  ? "/_mock-api"
+  ? typeof window === "undefined"
+    ? "http://localhost/_mock-api"
+    : "/_mock-api"
   : useLocalBackend
     ? process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL
     : process.env.NEXT_PUBLIC_BACKEND_URL;
