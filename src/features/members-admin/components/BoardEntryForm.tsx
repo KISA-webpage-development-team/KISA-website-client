@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Form, useForm } from "@umichkisa-ds/form";
 import {
   Button,
+  Checkbox,
   DialogFooter,
   FormItem,
   LoadingSpinner,
@@ -20,6 +21,7 @@ import type {
 import RoleTagInput from "./RoleTagInput";
 
 const ROLES_ID = "board-entry-roles";
+const IS_LEAD_ID = "board-entry-is-lead";
 
 type BoardEntryFormValues = {
   name: string;
@@ -101,6 +103,7 @@ export default function BoardEntryForm({
   }, [isDirty, onDirtyChange]);
 
   const roles = watch("roles");
+  const isLead = watch("isLead");
 
   const handleRolesChange = (next: string[]) =>
     setValue("roles", next, {
@@ -189,17 +192,29 @@ export default function BoardEntryForm({
           label="구분"
           description="회장단은 임원진 소개 페이지 맨 위에 강조되어 표시됩니다."
           orientation="horizontal"
-          className="flex flex-row gap-4"
         >
           <RadioItem value="president" text="회장단" />
           <RadioItem value="member" text="임원" />
         </Form.Radio>
 
-        <Form.Checkbox
-          name="isLead"
-          label="팀장"
-          description="임원진 소개 페이지에서 역할 배지가 강조됩니다."
-        />
+        <div className="flex flex-col gap-2">
+          <Checkbox
+            id={IS_LEAD_ID}
+            text="팀장"
+            checked={isLead}
+            onChange={(event) =>
+              setValue("isLead", event.target.checked, { shouldDirty: true })
+            }
+            aria-describedby={`${IS_LEAD_ID}-description`}
+            disabled={isSaving}
+          />
+          <p
+            id={`${IS_LEAD_ID}-description`}
+            className="type-caption text-muted-foreground"
+          >
+            임원진 소개 페이지에서 역할 배지가 강조됩니다.
+          </p>
+        </div>
       </div>
 
       <DialogFooter>
