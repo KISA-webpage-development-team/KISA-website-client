@@ -54,10 +54,10 @@ const TOOLS: Tool[] = [
   },
   {
     kind: "live",
-    title: "Main Banner",
-    sub: "홈페이지 상단 메인 배너를 등록하고 순서와 게시 기간을 관리합니다.",
-    href: "/admin/website/carousel",
-    icon: "image",
+    title: "Website CMS",
+    sub: "메인 배너와 멤버 소개 등 홈페이지 콘텐츠를 관리합니다.",
+    href: "/admin/website",
+    icon: "layout-grid",
   },
   {
     kind: "coming-soon",

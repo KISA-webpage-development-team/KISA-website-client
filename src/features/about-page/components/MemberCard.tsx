@@ -7,17 +7,18 @@ import {
   Divider,
 } from "@umichkisa-ds/web";
 
-import type { Member } from "@/features/about-page/data/memberPageData";
+import type { BoardEntry } from "@/types/members";
 
-type MemberCardProps = Pick<Member, "name" | "major" | "year" | "role"> & {
-  isLead?: boolean;
-};
+type MemberCardProps = Pick<
+  BoardEntry,
+  "name" | "major" | "classYear" | "roles" | "isLead"
+>;
 
 export default function MemberCard({
   name,
   major,
-  year,
-  role,
+  classYear,
+  roles,
   isLead,
 }: MemberCardProps) {
   return (
@@ -25,13 +26,13 @@ export default function MemberCard({
       <CardHeader>
         <CardTitle as="h3">{name}</CardTitle>
         <p className="type-caption text-muted-foreground">
-          {`${major} | ${year}`}
+          {`${major} | ${classYear}`}
         </p>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <Divider />
         <div className="flex flex-wrap gap-2">
-          {role.map((pill) => (
+          {roles.map((pill) => (
             <Badge
               key={pill}
               variant="default"

@@ -1,7 +1,7 @@
 export const metadata = {
-  title: "임원진 소개",
+  title: "멤버 소개",
   description:
-    "현재 활동 중인 KISA 임원진과 역대 임원진을 학기별로 소개합니다.",
+    "현재 활동 중인 KISA 멤버와 역대 멤버를 학기별로 소개합니다.",
 };
 
 export default function MembersLayout({

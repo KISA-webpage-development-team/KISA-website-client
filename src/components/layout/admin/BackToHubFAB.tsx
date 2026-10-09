@@ -3,7 +3,9 @@
 /**
  * BackToHubFAB — KISA admin "back to hub" floating action button.
  *
- * The single navigation affordance back to `/admin` from any admin sub-page.
+ * The single navigation affordance back up from any admin sub-page: to
+ * `/admin`, or to `/admin/website` from a Website CMS section. The layout
+ * picks the target.
  * The hub-and-spoke admin shell rejects sidebars and top-bars (Phase 5 audit
  * Q3, Q6); this FAB is the only way to close the navigation loop.
  *
@@ -125,10 +127,12 @@ function EdgeTab({
 }
 
 function HubPill({
+  target,
   defaultCollapsed,
   onShrink,
   linkRef,
 }: {
+  target: BackTarget;
   defaultCollapsed: boolean;
   onShrink: () => void;
   linkRef: Ref<HTMLAnchorElement>;
@@ -144,8 +148,8 @@ function HubPill({
     <div className={PILL_SHELL_CLASS}>
       <Link
         ref={linkRef}
-        href="/admin"
-        aria-label="관리자 홈으로 돌아가기"
+        href={target.href}
+        aria-label={target.ariaLabel}
         className={`${LINK_BASE_CLASS} ${linkPaddingClass}`}
       >
         <Icon name="arrow-left" size="sm" className="flex-shrink-0" />
@@ -154,7 +158,7 @@ function HubPill({
             defaultCollapsed ? LABEL_COLLAPSED_CLASS : ""
           }`}
         >
-          관리자 홈
+          {target.label}
         </span>
       </Link>
 
@@ -171,7 +175,15 @@ function HubPill({
   );
 }
 
+export interface BackTarget {
+  href: string;
+  label: string;
+  ariaLabel: string;
+}
+
 export interface BackToHubFABProps {
+  /** Where the pill leads, one level up from the current admin page. */
+  target: BackTarget;
   /**
    * Resting state for the pill on this route.
    * - `false` (default for most routes): pill renders expanded (icon + label).
@@ -184,7 +196,10 @@ export interface BackToHubFABProps {
   defaultCollapsed: boolean;
 }
 
-export default function BackToHubFAB({ defaultCollapsed }: BackToHubFABProps) {
+export default function BackToHubFAB({
+  target,
+  defaultCollapsed,
+}: BackToHubFABProps) {
   // Pattern A SSR: hydrated=false on first render so we return null and avoid
   // hydration mismatch from sessionStorage reads.
   const [hydrated, setHydrated] = useState(false);
@@ -221,6 +236,7 @@ export default function BackToHubFAB({ defaultCollapsed }: BackToHubFABProps) {
     <EdgeTab onRestore={handleRestore} buttonRef={edgeTabRef} />
   ) : (
     <HubPill
+      target={target}
       defaultCollapsed={defaultCollapsed}
       onShrink={handleShrink}
       linkRef={linkRef}
