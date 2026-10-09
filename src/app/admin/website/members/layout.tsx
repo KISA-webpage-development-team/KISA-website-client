@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: { absolute: "UMich KISA | 임원진 관리" },
+  title: { absolute: "UMich KISA | 멤버 관리" },
   description:
     "Admin page for the KISA board members page — manage board years, entries and their order",
 };

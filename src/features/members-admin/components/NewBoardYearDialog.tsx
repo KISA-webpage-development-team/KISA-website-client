@@ -55,7 +55,7 @@ export default function NewBoardYearDialog({
       <DialogContent size="sm">
         <DialogTitle>새 연도 추가</DialogTitle>
         <DialogDescription>
-          게시 전 상태로 만들어집니다. 임원을 등록한 뒤 게시하세요.
+          게시 전 상태로 만들어집니다. 멤버를 등록한 뒤 게시하세요.
         </DialogDescription>
         {open ? (
           <NewBoardYearForm
@@ -130,7 +130,7 @@ function NewBoardYearForm({
       <Form.Select
         name="copyFrom"
         label="복사할 연도 (선택)"
-        description="선택한 연도의 임원을 그대로 복사해 시작합니다. 복사한 뒤 수정할 수 있습니다."
+        description="선택한 연도의 멤버를 그대로 복사해 시작합니다. 복사한 뒤 수정할 수 있습니다."
       >
         <SelectTrigger />
         <SelectContent>

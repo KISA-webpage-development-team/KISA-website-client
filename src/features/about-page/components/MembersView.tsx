@@ -35,7 +35,7 @@ export default function MembersView({ boardYears }: MembersViewProps) {
     return (
       <StatusView
         variant="error"
-        title="임원진 정보를 불러오지 못했습니다."
+        title="멤버 정보를 불러오지 못했습니다."
         description="잠시 후 다시 시도해 주세요."
         action={
           <Button
@@ -65,8 +65,8 @@ export default function MembersView({ boardYears }: MembersViewProps) {
         <StatusView
           variant="not-found"
           icon="user-round"
-          title="공개된 임원진이 없습니다."
-          description="임원진 소개가 곧 업데이트됩니다."
+          title="공개된 멤버가 없습니다."
+          description="멤버 소개가 곧 업데이트됩니다."
         />
       </section>
     );

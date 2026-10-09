@@ -6,7 +6,7 @@ import BoardEntryRow from "./BoardEntryRow";
 
 const TIER_LABEL: Record<BoardTier, string> = {
   president: "회장단",
-  member: "임원",
+  member: "멤버",
 };
 
 type BoardEntryListProps = {

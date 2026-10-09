@@ -65,7 +65,7 @@ export default function BoardEntryDialog({
         }}
       >
         <DialogContent size="md">
-          <DialogTitle>{entry ? "임원 정보 수정" : "임원 추가"}</DialogTitle>
+          <DialogTitle>{entry ? "멤버 정보 수정" : "멤버 추가"}</DialogTitle>
           {state ? (
             <BoardEntryForm
               key={entry?.boardMemberID ?? "new"}

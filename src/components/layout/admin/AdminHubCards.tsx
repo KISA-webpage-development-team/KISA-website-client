@@ -55,7 +55,7 @@ const TOOLS: Tool[] = [
   {
     kind: "live",
     title: "Website CMS",
-    sub: "메인 배너와 임원진 소개 등 홈페이지 콘텐츠를 관리합니다.",
+    sub: "메인 배너와 멤버 소개 등 홈페이지 콘텐츠를 관리합니다.",
     href: "/admin/website",
     icon: "layout-grid",
   },

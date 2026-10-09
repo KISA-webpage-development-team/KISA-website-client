@@ -100,7 +100,7 @@ export default function MembersAdminView() {
       const isStale = (saveError as CustomAxiosError).response?.status === 409;
       toast.error(
         isStale
-          ? "페이지를 불러온 뒤 이 연도의 임원이 바뀌었습니다. 목록을 다시 불러옵니다."
+          ? "페이지를 불러온 뒤 이 연도의 멤버가 바뀌었습니다. 목록을 다시 불러옵니다."
           : "순서 저장에 실패했습니다.",
       );
     }
@@ -119,7 +119,7 @@ export default function MembersAdminView() {
 
     if (hasLoadError) {
       return (
-        <Alert variant="error" title="임원진 목록을 불러오지 못했습니다.">
+        <Alert variant="error" title="멤버 목록을 불러오지 못했습니다.">
           잠시 후 페이지를 새로고침해 주세요.
         </Alert>
       );
@@ -130,8 +130,8 @@ export default function MembersAdminView() {
         <StatusView
           variant="not-found"
           icon="user-round"
-          title="등록된 임원진이 없습니다."
-          description="새 연도를 추가해 임원진을 등록하세요."
+          title="등록된 멤버가 없습니다."
+          description="새 연도를 추가해 멤버를 등록하세요."
           action={
             <Button variant="primary" onClick={() => setIsNewYearOpen(true)}>
               새 연도 추가
@@ -186,10 +186,10 @@ export default function MembersAdminView() {
     <Container as="section" size="lg">
       <div className="flex flex-col gap-6">
         <header className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="type-h1 text-foreground">임원진 관리</h1>
+          <h1 className="type-h1 text-foreground">멤버 관리</h1>
           {selectedYear ? (
             <Button variant="primary" onClick={openAddEntry}>
-              임원 추가
+              멤버 추가
             </Button>
           ) : null}
         </header>

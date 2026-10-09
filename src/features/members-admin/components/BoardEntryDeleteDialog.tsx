@@ -45,7 +45,7 @@ export default function BoardEntryDeleteDialog({
   return (
     <Dialog open={entry !== null} onOpenChange={onOpenChange}>
       <DialogContent size="sm">
-        <DialogTitle>이 임원을 삭제하시겠습니까?</DialogTitle>
+        <DialogTitle>이 멤버를 삭제하시겠습니까?</DialogTitle>
         <DialogDescription>
           {entry ? `"${entry.name}" ` : ""}
           항목이 영구적으로 삭제되며 복구할 수 없습니다.

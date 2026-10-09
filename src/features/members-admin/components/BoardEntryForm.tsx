@@ -190,11 +190,11 @@ export default function BoardEntryForm({
         <Form.Radio
           name="tier"
           label="구분"
-          description="회장단은 임원진 소개 페이지 맨 위에 강조되어 표시됩니다."
+          description="회장단은 멤버 소개 페이지 맨 위에 강조되어 표시됩니다."
           orientation="horizontal"
         >
           <RadioItem value="president" text="회장단" />
-          <RadioItem value="member" text="임원" />
+          <RadioItem value="member" text="멤버" />
         </Form.Radio>
 
         <div className="flex flex-col gap-2">
@@ -212,7 +212,7 @@ export default function BoardEntryForm({
             id={`${IS_LEAD_ID}-description`}
             className="type-caption text-muted-foreground"
           >
-            임원진 소개 페이지에서 역할 배지가 강조됩니다.
+            멤버 소개 페이지에서 역할 배지가 강조됩니다.
           </p>
         </div>
       </div>

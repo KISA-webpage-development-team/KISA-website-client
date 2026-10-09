@@ -39,7 +39,7 @@ const COPY: Record<
   unpublish: {
     title: "이 연도의 게시를 취소하시겠습니까?",
     description: (boardYear) =>
-      `"${boardYear.label}" 임원진이 임원진 소개 페이지에서 내려갑니다. 언제든 다시 게시할 수 있습니다.`,
+      `"${boardYear.label}" 멤버가 멤버 소개 페이지에서 내려갑니다. 언제든 다시 게시할 수 있습니다.`,
     confirm: "게시 취소",
     pending: "게시 취소 중...",
     success: "게시가 취소되었습니다.",
@@ -48,7 +48,7 @@ const COPY: Record<
   delete: {
     title: "이 연도를 삭제하시겠습니까?",
     description: (boardYear) =>
-      `"${boardYear.label}" 연도와 등록된 임원 ${boardYear.entries.length}명이 함께 영구적으로 삭제되며 복구할 수 없습니다.`,
+      `"${boardYear.label}" 연도와 등록된 멤버 ${boardYear.entries.length}명이 함께 영구적으로 삭제되며 복구할 수 없습니다.`,
     confirm: "삭제",
     pending: "삭제 중...",
     success: "삭제되었습니다.",
@@ -99,7 +99,7 @@ export default function BoardYearConfirmDialog({
         </DialogDescription>
         {showsEmptyPageWarning ? (
           <Alert variant="warning" title="게시 중인 마지막 연도입니다.">
-            게시를 취소하면 임원진 소개 페이지에 임원진이 표시되지 않습니다.
+            게시를 취소하면 멤버 소개 페이지에 멤버가 표시되지 않습니다.
           </Alert>
         ) : null}
         <DialogFooter>

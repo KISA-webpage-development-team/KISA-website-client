@@ -45,7 +45,7 @@ export default function BoardPreview({
         </div>
         {boardYear.published ? null : (
           <p className="type-caption text-muted-foreground">
-            게시 전이라 임원진 소개 페이지에는 아직 보이지 않습니다.
+            게시 전이라 멤버 소개 페이지에는 아직 보이지 않습니다.
           </p>
         )}
       </div>
@@ -55,11 +55,11 @@ export default function BoardPreview({
         <StatusView
           variant="not-found"
           icon="user-round"
-          title="등록된 임원이 없습니다."
-          description={`${boardYear.label} 임원진에 사람을 추가하세요.`}
+          title="등록된 멤버가 없습니다."
+          description={`${boardYear.label} 멤버를 추가하세요.`}
           action={
             <Button variant="secondary" onClick={onAddEntry}>
-              임원 추가
+              멤버 추가
             </Button>
           }
         />

@@ -29,7 +29,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: "Members",
-    sub: "연도별 임원진을 등록하고 순서를 정해 임원진 소개 페이지에 게시합니다.",
+    sub: "연도별 멤버를 등록하고 순서를 정해 멤버 소개 페이지에 게시합니다.",
     href: "/admin/website/members",
     icon: "user-round",
   },

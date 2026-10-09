@@ -103,7 +103,7 @@ A president-tier entry's badge reads **VICE PRESIDENT** if its first role contai
 
 ## 7. Admin UI
 
-- **Wording:** Korean copy calls the board roster 임원진.
+- **Wording:** Korean copy calls the board roster 멤버.
 
 ### Admin hub (`/admin`)
 
