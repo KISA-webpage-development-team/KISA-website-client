@@ -1,0 +1,22 @@
+# Per-repo trust boundaries for classify-risk.sh (KISA-website-client).
+#
+# One POSIX extended-regex fragment per line. Blank lines and '#' comments are
+# ignored. Every changed file path (and rename-source path) in a PR is matched
+# against these; any hit forces the PR to human-required (never auto-merged).
+#
+# classify-risk.sh already covers UNIVERSAL boundaries on its own, so do not
+# repeat them here:
+#   .github/, dependency manifests+lockfiles (npm/pip/go/cargo/gem), .env files,
+#   and the keywords: secret auth jwt admin payment migration
+#
+# This file is read from the DEFAULT branch only -- a PR cannot weaken its own
+# classification by editing it.
+
+src/constants/env                 # env constants module (src/constants/env.ts)
+(^|/)src/middleware\.(ts|js)$     # NextAuth middleware
+(^|/)src/app/api/                 # server API routes
+(^|/)src/apis/                    # API client layer
+pocha                             # Pocha order state / payments surface
+stripe                            # payments
+cloudinary                        # uploads
+customer                          # customer data
